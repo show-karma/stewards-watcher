@@ -2,17 +2,18 @@ import { Flex, Img, Text, Link, Button, Skeleton } from '@chakra-ui/react';
 import { GENERAL, THEME } from 'configs';
 import { useStewards } from 'contexts';
 import { FC } from 'react';
-import { getTimeFromNow, removeLinkPrefix } from 'utils';
+import { getTimeFromNow } from 'utils';
 import { Filters } from './Filters';
 
 export const Header: FC = () => {
   const { stewards, isLoading, lastUpdate } = useStewards();
-  const handledDAOUrl = removeLinkPrefix(GENERAL.DAO_URL);
-  const capitalizedDAOUrl =
-    handledDAOUrl.charAt(0).toUpperCase() + handledDAOUrl.slice(1);
 
   return (
-    <Flex px={{ base: '4' }} flexDir="column" w="max-content">
+    <Flex
+      px={{ base: '4' }}
+      flexDir="column"
+      w={{ base: 'full', xl: 'max-content' }}
+    >
       <Flex
         textAlign="start"
         w="full"
@@ -38,62 +39,66 @@ export const Header: FC = () => {
           {GENERAL.DAO_SUBDESCRIPTION}
         </Text>
         <Flex gap={['4', '8']} my={['2', '8']} flexWrap="wrap">
-          <Button
-            px="6"
-            py="4"
-            borderRadius="base"
-            bgColor={THEME.branding}
-            fontSize="md"
-            fontFamily="heading"
-            _hover={{
-              bgColor: THEME.branding,
-              opacity: 0.8,
-            }}
-            _focusVisible={{
-              bgColor: THEME.branding,
-              opacity: 0.8,
-            }}
-            _focusWithin={{
-              bgColor: THEME.branding,
-              opacity: 0.8,
-            }}
-            _focus={{
-              opacity: 0.8,
-            }}
-            _active={{
-              opacity: 0.8,
-            }}
-          >
-            View discussion
-          </Button>
-          <Button
-            px="6"
-            py="4"
-            borderRadius="base"
-            fontSize="md"
-            fontFamily="heading"
-            background="none"
-            borderWidth="1px"
-            borderColor={THEME.buttonText}
-            borderStyle="solid"
-            _hover={{
-              opacity: 0.8,
-            }}
-            _focusVisible={{
-              opacity: 0.8,
-            }}
-            _focusWithin={{
-              opacity: 0.8,
-            }}
-            _focus={{
-              opacity: 0.8,
-            }}
-            _active={{
-              opacity: 0.8,
-            }}
-          >
-            Learn more & Get Involved
-          </Button>
+          <Link href={GENERAL.GOVERNANCE_FORUM}>
+            <Button
+              px="6"
+              py="4"
+              borderRadius="base"
+              bgColor={THEME.branding}
+              fontSize="md"
+              fontFamily="heading"
+              _hover={{
+                bgColor: THEME.branding,
+                opacity: 0.8,
+              }}
+              _focusVisible={{
+                bgColor: THEME.branding,
+                opacity: 0.8,
+              }}
+              _focusWithin={{
+                bgColor: THEME.branding,
+                opacity: 0.8,
+              }}
+              _focus={{
+                opacity: 0.8,
+              }}
+              _active={{
+                opacity: 0.8,
+              }}
+            >
+              View discussion
+            </Button>
+          </Link>
+          <Link href={GENERAL.DAO_URL}>
+            <Button
+              px="6"
+              py="4"
+              borderRadius="base"
+              fontSize="md"
+              fontFamily="heading"
+              background="none"
+              borderWidth="1px"
+              borderColor={THEME.buttonText}
+              borderStyle="solid"
+              _hover={{
+                opacity: 0.8,
+              }}
+              _focusVisible={{
+                opacity: 0.8,
+              }}
+              _focusWithin={{
+                opacity: 0.8,
+              }}
+              _focus={{
+                opacity: 0.8,
+              }}
+              _active={{
+                opacity: 0.8,
+              }}
+            >
+              Learn more & Get Involved
+            </Button>
+          </Link>
         </Flex>
       </Flex>
       <Filters />
@@ -114,9 +119,20 @@ export const Header: FC = () => {
               </Text>
             </Link>
           </Text>
-          <Text fontSize="xs" color={THEME.subtitle}>
-            Last updated {getTimeFromNow(lastUpdate)}
-          </Text>
+          <Flex flexDir="row" gap="1" justifyContent="end">
+            <Text fontSize="xs" color={THEME.subtitle}>
+              Last updated
+            </Text>
+            {isLoading ? (
+              <Skeleton w="16" h="5">
+                00 hours ago
+              </Skeleton>
+            ) : (
+              <Text fontSize="xs" color={THEME.subtitle}>
+                {getTimeFromNow(lastUpdate)}
+              </Text>
+            )}
+          </Flex>
         </Flex>
       </Flex>
     </Flex>

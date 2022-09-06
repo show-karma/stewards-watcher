@@ -28,8 +28,8 @@ export const SearchFilter = () => {
         />
         <Input
           type="text"
-          placeholder="Type what you’re loking for..."
-          w={['full', '36.25rem']}
+          placeholder="Type what you’re looking for..."
+          w={{ base: 'full', xl: '36.25rem' }}
           onChange={event => handleSearch(event.target.value)}
           _focusVisible={{
             borderColor: THEME.branding,

@@ -30,6 +30,8 @@ export const PeriodFilter = () => {
         gap="4"
         fontFamily="heading"
         fontWeight="normal"
+        textAlign="left"
+        w={{ base: 'full', md: 'max-content' }}
       >
         {selectedPeriod}
       </MenuButton>
