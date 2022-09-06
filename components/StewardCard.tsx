@@ -11,7 +11,6 @@ import {
 } from '@chakra-ui/react';
 import { THEME } from 'configs';
 import { FC } from 'react';
-import { IconType } from 'react-icons';
 import { BsCalendar4, BsChat } from 'react-icons/bs';
 import { IoPersonOutline } from 'react-icons/io5';
 import { IoIosCheckboxOutline } from 'react-icons/io';
@@ -85,9 +84,7 @@ export const StewardCard: FC<IStewardCardProps> = props => {
             w={['12', '16']}
             borderRadius="full"
             src={getStewardImage(data.address)}
-            borderWidth="3px"
-            borderColor={THEME.branding}
-            borderStyle="solid"
+            boxShadow={`0px 0px 0px 2px ${THEME.branding}`}
           />
         ) : (
           <SkeletonCircle
@@ -142,7 +139,12 @@ export const StewardCard: FC<IStewardCardProps> = props => {
                 <Text color={THEME.title} fontSize="sm" fontWeight="medium">
                   {stat.title}
                 </Text>
-                <Text color={THEME.title} fontSize="lg" fontWeight="normal">
+                <Text
+                  color={THEME.title}
+                  fontFamily="heading"
+                  fontSize="lg"
+                  fontWeight="normal"
+                >
                   {stat.value}
                 </Text>
               </Flex>

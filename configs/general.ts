@@ -5,6 +5,7 @@ export const GENERAL = {
   DAO_SUBDESCRIPTION: `In an effort to boost transparency the MMM-Workstream have created this site with health cards for each Steward that display metrics and links on their involvement and engagement in the DAO.`,
   DAO_URL: 'https://www.optimism.io',
   GOVERNANCE_FORUM: 'https://www.optimism.io',
+  DAO_KARMA_ID: 'optimism',
   KARMA_DELEGATES_API: 'https://api.showkarma.xyz/api/',
   IMAGE_PREFIX_URL: 'https://cdn.stamp.fyi/avatar/eth:',
 };

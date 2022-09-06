@@ -3,7 +3,7 @@ export const THEME = {
   card: '#1a1e23',
   title: '#FFFFFF',
   subtitle: '#a0aec0',
-  text: '#4a5568',
+  text: '#FFFFFF',
   branding: '#ff0420',
   buttonText: '#FFFFFF',
 };

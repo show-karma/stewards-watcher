@@ -7,7 +7,12 @@ interface IMainLayout {
 }
 
 export const MainLayout: React.FC<IMainLayout> = ({ children }) => (
-  <Flex flexDir="column" minH="100vh" backgroundColor={THEME.background}>
+  <Flex
+    flexDir="column"
+    minH="100vh"
+    backgroundColor={THEME.background}
+    px={['0', '120']}
+  >
     {children}
   </Flex>
 );

@@ -33,6 +33,13 @@ export const theme = extendTheme({
         },
       },
     },
+    Menu: {
+      baseStyle: {
+        list: {
+          bgColor: THEME.background,
+        },
+      },
+    },
   },
   colors: {},
   styles: {
@@ -52,7 +59,7 @@ export const theme = extendTheme({
     }),
   },
   fonts: {
-    heading: `"Poppins", sans-serif`,
-    body: `"Open Sans", sans-serif`,
+    heading: `"Open Sans", sans-serif`,
+    body: `"Poppins", sans-serif`,
   },
 });

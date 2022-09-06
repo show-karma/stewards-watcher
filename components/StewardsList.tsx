@@ -1,4 +1,5 @@
-import { Flex, Spinner } from '@chakra-ui/react';
+/* eslint-disable no-nested-ternary */
+import { Flex, Spinner, Text } from '@chakra-ui/react';
 import { THEME } from 'configs';
 import { useStewards } from 'contexts';
 import { FC } from 'react';
@@ -19,11 +20,15 @@ export const StewardsList: FC = () => {
       my="8"
       px={{ base: '6' }}
     >
-      {isLoading
-        ? loadingArray.map((_, index) => <StewardCard key={+index} />)
-        : stewards.map((item, index) => (
-            <StewardCard key={+index} data={item} />
-          ))}
+      {isLoading ? (
+        loadingArray.map((_, index) => <StewardCard key={+index} />)
+      ) : stewards.length > 0 ? (
+        stewards.map((item, index) => <StewardCard key={+index} data={item} />)
+      ) : (
+        <Text align="center" textAlign="center">
+          No results found.
+        </Text>
+      )}
     </Flex>
   );
 };
