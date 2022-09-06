@@ -33,21 +33,6 @@ export const StewardsList: FC = () => {
           </Text>
         )}
       </Flex>
-      {!isLoading && hasMore && (
-        <Button
-          w="max-content"
-          my="8"
-          fontSize="xl"
-          px="8"
-          py="6"
-          bgColor={THEME.card}
-          _hover={{}}
-          _active={{}}
-          onClick={() => fetchNextStewards()}
-        >
-          Load more
-        </Button>
-      )}
     </Flex>
   );
 };
