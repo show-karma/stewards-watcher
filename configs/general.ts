@@ -2,7 +2,7 @@ export const GENERAL = {
   DAO: 'Optimism',
   DAO_DESCRIPTION: `The Stewards of Optimism DAO play a vital role in driving the Optimism
   ecosystem forward through their work in governance and workstreams.`,
-  DAO_SUBDESCRIPTION: `In an effort to boost transparency the MMM-Workstream have created this site with health cards for each Steward that display metrics and links on their involvement and engagement in the DAO.`,
+  DAO_SUBDESCRIPTION: `This site will help boost transparency with health cards for each Delegate that display metrics and links on their involvement and engagement in the DAO.`,
   DAO_URL: 'https://www.optimism.io',
   GOVERNANCE_FORUM: 'https://www.optimism.io',
   DAO_KARMA_ID: 'optimism',

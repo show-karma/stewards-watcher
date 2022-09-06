@@ -119,20 +119,22 @@ export const Header: FC = () => {
               </Text>
             </Link>
           </Text>
-          <Flex flexDir="row" gap="1" justifyContent="end">
-            <Text fontSize="xs" color={THEME.subtitle}>
-              Last updated
-            </Text>
-            {isLoading ? (
-              <Skeleton w="16" h="5">
-                00 hours ago
-              </Skeleton>
-            ) : (
+          {stewards.length > 0 && (
+            <Flex flexDir="row" gap="1" justifyContent="end">
               <Text fontSize="xs" color={THEME.subtitle}>
-                {getTimeFromNow(lastUpdate)}
+                Last updated
               </Text>
-            )}
-          </Flex>
+              {isLoading ? (
+                <Skeleton w="16" h="5">
+                  00 hours ago
+                </Skeleton>
+              ) : (
+                <Text fontSize="xs" color={THEME.subtitle}>
+                  {getTimeFromNow(lastUpdate)}
+                </Text>
+              )}
+            </Flex>
+          )}
         </Flex>
       </Flex>
     </Flex>

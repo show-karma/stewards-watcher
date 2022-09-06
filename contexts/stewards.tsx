@@ -1,5 +1,11 @@
 import { GENERAL } from 'configs';
-import React, { useContext, createContext, useState, useMemo } from 'react';
+import React, {
+  useContext,
+  createContext,
+  useState,
+  useMemo,
+  useCallback,
+} from 'react';
 import {
   IDelegate,
   IFilterStat,
@@ -21,6 +27,8 @@ interface IStewardProps {
   selectPeriod: (selectedPeriod: IFilterPeriod) => void;
   selectUserToFind: (selectedUserToFind: string) => void;
   lastUpdate: Date;
+  hasMore: boolean;
+  fetchNextStewards: () => Promise<void>;
 }
 
 export const StewardsContext = createContext({} as IStewardProps);
@@ -38,16 +46,18 @@ export const StewardsProvider: React.FC<ProviderProps> = ({ children }) => {
   const [order, setOrder] = useState<IFilterOrder>('desc');
   const [period, setPeriod] = useState<IFilterPeriod>('lifetime');
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
+  const [hasMore, setHasMore] = useState(false);
 
-  const fetchStewards = async () => {
+  const fetchStewards = async (_offset = offset) => {
     setLoading(true);
     try {
       const axiosClient = await axiosInstance.get(
-        `/dao/delegates?name=optimism&pageSize=${offset === 0 ? 10 : 20}${
+        `/dao/delegates?name=optimism&pageSize=10${
           userToFind && `name=${userToFind}`
-        }&offset=${offset}&order=${order}&field=${stat}&period=${period}`
+        }&offset=${_offset}&order=${order}&field=${stat}&period=${period}`
       );
       const { delegates } = axiosClient.data.data;
+      setHasMore(delegates.length === 10);
       setLastUpdate(delegates[0].stats[0].updatedAt);
 
       const stewardsList = delegates.map((item: IDelegate) => {
@@ -77,9 +87,51 @@ export const StewardsProvider: React.FC<ProviderProps> = ({ children }) => {
     }
   };
 
+  const fetchNextStewards = useCallback(async () => {
+    const newOffset = offset + 10;
+    setOffset(newOffset);
+    setLoading(true);
+    try {
+      const axiosClient = await axiosInstance.get(
+        `/dao/delegates?name=optimism&pageSize=10${
+          userToFind && `name=${userToFind}`
+        }&offset=${newOffset}&order=${order}&field=${stat}&period=${period}`
+      );
+      const { delegates } = axiosClient.data.data;
+      setHasMore(delegates.length === 10);
+      setLastUpdate(delegates[0].stats[0].updatedAt);
+
+      const stewardsList = delegates.forEach((item: IDelegate) => {
+        const fetchedPeriod = item.stats.find(
+          fetchedStat => fetchedStat.period === period
+        );
+
+        stewards.push({
+          address: item.publicAddress,
+          ensName: item.ensName,
+          forumActivity: fetchedPeriod?.forumActivityScore || 0,
+          stewardSince: item.joinDateAt || '-',
+          delegators: item.delegatorCount,
+          voteParticipation: {
+            onChain: fetchedPeriod?.onChainVotesPct || 0,
+            offChain: fetchedPeriod?.offChainVotesPct || 0,
+          },
+          votingWeight: item.delegatedVotes,
+          twitterHandle: item.twitterHandle,
+        });
+      });
+      setStewards(stewardsList);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   const findSteward = async () => {
     try {
       setLoading(true);
+      setHasMore(false);
       const axiosClient = await axiosInstance.get(
         `/dao/find-delegate?dao=${GENERAL.DAO_KARMA_ID}&user=${userToFind}`
       );
@@ -144,8 +196,20 @@ export const StewardsProvider: React.FC<ProviderProps> = ({ children }) => {
       userToFind,
       lastUpdate,
       selectUserToFind,
+      hasMore,
+      fetchNextStewards,
     };
-  }, [stewards, isLoading, stat, order, period, userToFind, lastUpdate]);
+  }, [
+    stewards,
+    isLoading,
+    stat,
+    order,
+    period,
+    userToFind,
+    lastUpdate,
+    hasMore,
+    fetchNextStewards,
+  ]);
 
   return (
     <StewardsContext.Provider value={providerValue}>
