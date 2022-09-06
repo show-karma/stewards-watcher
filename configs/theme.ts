@@ -5,4 +5,5 @@ export const THEME = {
   subtitle: '#a0aec0',
   text: '#4a5568',
   branding: '#ff0420',
+  buttonText: '#FFFFFF',
 };

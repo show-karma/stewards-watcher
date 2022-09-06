@@ -1,6 +1,8 @@
 import {
   Button,
   Flex,
+  Grid,
+  GridItem,
   Icon,
   Img,
   Skeleton,
@@ -68,82 +70,110 @@ export const StewardCard: FC<IStewardCardProps> = props => {
     <Flex
       bgColor={THEME.card}
       flexDir="column"
-      p="4"
+      px="8"
+      py="6"
       borderRadius="16"
-      w="max-content"
-      gap="4"
+      w={['full', '28rem']}
+      gap="8"
       boxShadow="0px 0px 10px 1px rgba(0,0,0,0.3)"
+      h="500"
     >
-      <Flex flexDir="row" gap="8">
+      <Flex flexDir="row" gap={['2', '8']} w="full" align="center">
         {data ? (
           <Img
-            h="24"
-            w="24"
-            borderRadius="12"
+            h={['12', '16']}
+            w={['12', '16']}
+            borderRadius="full"
             src={getStewardImage(data.address)}
+            borderWidth="3px"
+            borderColor={THEME.branding}
+            borderStyle="solid"
           />
         ) : (
-          <SkeletonCircle h="24" w="24" borderRadius="12" />
+          <SkeletonCircle
+            h={['12', '16']}
+            w={['14', '20']}
+            borderRadius="full"
+          />
         )}
-        <Flex flexDir="column" gap="0.5" justify="center">
+        <Flex
+          flexDir="column"
+          gap="0.5"
+          justify="center"
+          w="full"
+          textOverflow="ellipsis"
+          overflow="hidden"
+          whiteSpace="break-spaces"
+        >
           {data ? (
             <>
-              <Text color={THEME.title} fontSize="xl" fontWeight="medium">
+              <Text
+                color={THEME.title}
+                fontSize={['lg', 'xl']}
+                fontWeight="medium"
+              >
                 {data.ensName || shortAddress}
               </Text>
-              <Text color={THEME.branding} fontSize="xl">
+              <Text color={THEME.branding} fontSize={['lg', 'xl']}>
                 {shortAddress}
               </Text>
             </>
           ) : (
             <>
-              <Skeleton isLoaded={isLoaded} mr="10">
-                SkeletonText
-              </Skeleton>
-              <Skeleton isLoaded={isLoaded} mr="10">
-                SkeletonSubText
-              </Skeleton>
+              <Skeleton isLoaded={isLoaded}>SkeletonText</Skeleton>
+              <Skeleton isLoaded={isLoaded}>SkeletonSubText</Skeleton>
             </>
           )}
         </Flex>
       </Flex>
-      <Flex flexDir="column" color={THEME.title} gap="4">
-        {statIcons?.map((stat, index) => (
-          <Flex key={+index} align="center" gap="10" justify="space-between">
-            <Flex gap="5" align="center">
-              {isLoaded ? (
-                <Icon as={stat.icon} h="10" w="10" color={THEME.branding} />
-              ) : (
-                <SkeletonCircle isLoaded={isLoaded} h="10" w="10">
-                  SkeletonText
-                </SkeletonCircle>
-              )}
-              {isLoaded ? (
-                <Text color={THEME.title} fontSize="xl" fontWeight="medium">
+
+      <Grid gridTemplateColumns="1fr 1fr" w="full" gap="4">
+        {statIcons?.map((stat, index) =>
+          isLoaded ? (
+            <GridItem
+              key={+index}
+              alignContent="start"
+              gap="4"
+              flexDir="column"
+              w="max-content"
+            >
+              <Flex gap="1" flexDir="column">
+                <Icon as={stat.icon} h="6" w="6" color={THEME.branding} />
+                <Text color={THEME.title} fontSize="sm" fontWeight="medium">
                   {stat.title}
                 </Text>
-              ) : (
-                <Skeleton isLoaded={isLoaded} w="32" h="6">
+                <Text color={THEME.title} fontSize="lg" fontWeight="normal">
+                  {stat.value}
+                </Text>
+              </Flex>
+            </GridItem>
+          ) : (
+            <GridItem
+              key={+index}
+              alignContent="start"
+              gap="4"
+              flexDir="column"
+              w="full"
+            >
+              <Flex gap="1" flexDir="column" w="full">
+                <SkeletonCircle isLoaded={isLoaded} h="6" w="6">
+                  SkeletonText
+                </SkeletonCircle>
+                <Skeleton isLoaded={isLoaded} w="full" h="6">
                   SkeletonText
                 </Skeleton>
-              )}
-            </Flex>
-            {isLoaded ? (
-              <Text color={THEME.title} fontSize="xl" fontWeight="normal">
-                {stat.value}
-              </Text>
-            ) : (
-              <Skeleton isLoaded={isLoaded} w="20" h="6">
-                SkeletonText
-              </Skeleton>
-            )}
-          </Flex>
-        ))}
-      </Flex>
+                <Skeleton isLoaded={isLoaded} w="full" h="6">
+                  SkeletonText
+                </Skeleton>
+              </Flex>
+            </GridItem>
+          )
+        )}
+      </Grid>
       <Flex justify="center" align="center">
         {isLoaded ? (
           <Button
-            bgColor="red.800"
+            bgColor={THEME.branding}
             fontSize="xl"
             px="6"
             py="6"

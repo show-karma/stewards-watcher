@@ -4,7 +4,7 @@ import { useStewards } from 'contexts';
 import { FC } from 'react';
 import { StewardCard } from './StewardCard';
 
-const loadingArray = Array(5).fill(undefined);
+const loadingArray = Array(3).fill(undefined);
 
 export const StewardsList: FC = () => {
   const { stewards, isLoading } = useStewards();
@@ -15,9 +15,9 @@ export const StewardsList: FC = () => {
       gap="8"
       w="full"
       align="center"
-      justify="center"
+      justify="flex-start"
       my="8"
-      px={{ base: '4', lg: '8' }}
+      px={{ base: '6' }}
     >
       {isLoading
         ? loadingArray.map((_, index) => <StewardCard key={+index} />)
