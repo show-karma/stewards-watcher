@@ -72,7 +72,7 @@ export const StewardCard: FC<IStewardCardProps> = props => {
       px="8"
       py="6"
       borderRadius="16"
-      w={['full', '28rem']}
+      w={['full', '26rem']}
       gap="8"
       boxShadow="0px 0px 10px 1px rgba(0,0,0,0.3)"
       h="500"
