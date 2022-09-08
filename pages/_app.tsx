@@ -1,42 +1,46 @@
 import type { AppProps } from 'next/app';
 import { ColorHandler } from 'contexts';
 import Head from 'next/head';
+import { GENERAL } from 'configs';
 
 const MyApp = ({ Component, pageProps }: AppProps) => (
   <>
     <Head>
-      <title>{`Karma's Stewards Watcher`}</title>
-      <meta name="description" content="" />
+      <title>{GENERAL.METATAGS.TITLE}</title>
+      <meta name="description" content={GENERAL.METATAGS.DESCRIPTION} />
+
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content={GENERAL.METATAGS.URL} key="ogurl" />
       <meta
-        property="og:url"
-        content="https://watcher.showkarma.xyz"
-        key="ogurl"
+        property="og:image"
+        content={GENERAL.METATAGS.IMAGE}
+        key="ogimage"
       />
-      <meta property="og:image" content="/meta.png" key="ogimage" />
       <meta
         property="og:site_name"
-        content="Karma's Stewards Watcher"
+        content={GENERAL.METATAGS.DESCRIPTION}
         key="ogsitename"
       />
       <meta
         property="og:title"
-        content="Karma's Stewards Watcher"
+        content={GENERAL.METATAGS.DESCRIPTION}
         key="ogtitle"
       />
       <meta
         property="og:description"
-        content="Stewards Watcher made by Karma."
+        content={GENERAL.METATAGS.DESCRIPTION}
         key="ogdesc"
       />
-      <link rel="icon" href="/favicon.ico" />
+      <link rel="icon" href={GENERAL.METATAGS.FAVICON} />
+
       <meta property="twitter:card" content="summary_large_image" />
-      <meta property="twitter:url" content="https://watcher.showkarma.xyz" />
-      <meta property="twitter:title" content="Karma's Stewards Watcher" />
+      <meta property="twitter:url" content={GENERAL.METATAGS.URL} />
+      <meta property="twitter:title" content={GENERAL.METATAGS.DESCRIPTION} />
       <meta
         property="twitter:description"
-        content="Stewards Watcher made by Karma."
+        content={GENERAL.METATAGS.DESCRIPTION}
       />
-      <meta property="twitter:image" content="/meta.png" />
+      <meta property="twitter:image" content={GENERAL.METATAGS.IMAGE} />
     </Head>
     <ColorHandler cookies={pageProps.cookies}>
       <Component {...pageProps} />

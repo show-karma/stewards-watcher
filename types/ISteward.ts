@@ -10,4 +10,5 @@ export interface ISteward {
     offChain: number;
   };
   twitterHandle?: string;
+  updatedAt?: string;
 }

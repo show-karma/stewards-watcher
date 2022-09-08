@@ -8,4 +8,11 @@ export const GENERAL = {
   DAO_KARMA_ID: 'optimism',
   KARMA_DELEGATES_API: 'https://api.showkarma.xyz/api/',
   IMAGE_PREFIX_URL: 'https://cdn.stamp.fyi/avatar/eth:',
+  METATAGS: {
+    TITLE: `Optimism's Stewards Watcher`,
+    DESCRIPTION: `Stewards Watcher made by Optimism`,
+    IMAGE: '/meta/meta.png',
+    FAVICON: '/meta/favicon.ico',
+    URL: `https://watcher.optimism.io`,
+  },
 };

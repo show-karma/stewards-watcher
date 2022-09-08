@@ -1,11 +1,5 @@
 import { GENERAL } from 'configs';
-import React, {
-  useContext,
-  createContext,
-  useState,
-  useMemo,
-  useCallback,
-} from 'react';
+import React, { useContext, createContext, useState, useMemo } from 'react';
 import {
   IDelegate,
   IFilterStat,
@@ -40,6 +34,7 @@ interface ProviderProps {
 export const StewardsProvider: React.FC<ProviderProps> = ({ children }) => {
   const [stewards, setStewards] = useState<ISteward[]>([]);
   const [isLoading, setLoading] = useState(true);
+  const [isFetchingMore, setFetchingMore] = useState(false);
   const [userToFind, setUserToFind] = useState('');
   const [offset, setOffset] = useState(0);
   const [stat, setStat] = useState<IFilterStat>('forumScore');
@@ -77,6 +72,7 @@ export const StewardsProvider: React.FC<ProviderProps> = ({ children }) => {
           },
           votingWeight: item.delegatedVotes,
           twitterHandle: item.twitterHandle,
+          updatedAt: fetchedPeriod?.updatedAt,
         };
       });
       setStewards(stewardsList);
@@ -86,47 +82,6 @@ export const StewardsProvider: React.FC<ProviderProps> = ({ children }) => {
       setLoading(false);
     }
   };
-
-  const fetchNextStewards = useCallback(async () => {
-    const newOffset = offset + 10;
-    setOffset(newOffset);
-    setLoading(true);
-    try {
-      const axiosClient = await axiosInstance.get(
-        `/dao/delegates?name=optimism&pageSize=10${
-          userToFind && `name=${userToFind}`
-        }&offset=${newOffset}&order=${order}&field=${stat}&period=${period}`
-      );
-      const { delegates } = axiosClient.data.data;
-      setHasMore(delegates.length === 10);
-      setLastUpdate(delegates[0].stats[0].updatedAt);
-
-      const stewardsList = delegates.forEach((item: IDelegate) => {
-        const fetchedPeriod = item.stats.find(
-          fetchedStat => fetchedStat.period === period
-        );
-
-        stewards.push({
-          address: item.publicAddress,
-          ensName: item.ensName,
-          forumActivity: fetchedPeriod?.forumActivityScore || 0,
-          stewardSince: item.joinDateAt || '-',
-          delegators: item.delegatorCount,
-          voteParticipation: {
-            onChain: fetchedPeriod?.onChainVotesPct || 0,
-            offChain: fetchedPeriod?.offChainVotesPct || 0,
-          },
-          votingWeight: item.delegatedVotes,
-          twitterHandle: item.twitterHandle,
-        });
-      });
-      setStewards(stewardsList);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
 
   const findSteward = async () => {
     try {
@@ -139,7 +94,6 @@ export const StewardsProvider: React.FC<ProviderProps> = ({ children }) => {
       if (!delegate) {
         throw new Error('No delegates found');
       }
-      setLastUpdate(delegate.stats[0].updatedAt);
       const fetchedPeriod = (delegate as IDelegate).stats.find(
         fetchedStat => fetchedStat.period === period
       );
@@ -156,6 +110,7 @@ export const StewardsProvider: React.FC<ProviderProps> = ({ children }) => {
           },
           votingWeight: delegate.delegatedVotes,
           twitterHandle: delegate.twitterHandle,
+          updatedAt: fetchedPeriod?.updatedAt,
         },
       ]);
     } catch (error) {
@@ -184,6 +139,48 @@ export const StewardsProvider: React.FC<ProviderProps> = ({ children }) => {
     const selectUserToFind = (selectedUserToFind: string) =>
       setUserToFind(selectedUserToFind);
 
+    const fetchNextStewards = async () => {
+      if (isFetchingMore) return;
+      const newOffset = offset + 1;
+      setOffset(newOffset);
+      setFetchingMore(true);
+      try {
+        const axiosClient = await axiosInstance.get(
+          `/dao/delegates?name=optimism&pageSize=10${
+            userToFind && `name=${userToFind}`
+          }&offset=${newOffset}&order=${order}&field=${stat}&period=${period}`
+        );
+        const { delegates } = axiosClient.data.data;
+        setHasMore(delegates.length === 10);
+        setLastUpdate(delegates[0].stats[0].updatedAt);
+
+        delegates.forEach((item: IDelegate) => {
+          const fetchedPeriod = item.stats.find(
+            fetchedStat => fetchedStat.period === period
+          );
+
+          stewards.push({
+            address: item.publicAddress,
+            ensName: item.ensName,
+            forumActivity: fetchedPeriod?.forumActivityScore || 0,
+            stewardSince: item.joinDateAt || '-',
+            delegators: item.delegatorCount,
+            voteParticipation: {
+              onChain: fetchedPeriod?.onChainVotesPct || 0,
+              offChain: fetchedPeriod?.offChainVotesPct || 0,
+            },
+            votingWeight: item.delegatedVotes,
+            twitterHandle: item.twitterHandle,
+            updatedAt: fetchedPeriod?.updatedAt || '-',
+          });
+        });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setFetchingMore(false);
+      }
+    };
+
     return {
       stewards,
       isLoading,
@@ -208,7 +205,8 @@ export const StewardsProvider: React.FC<ProviderProps> = ({ children }) => {
     userToFind,
     lastUpdate,
     hasMore,
-    fetchNextStewards,
+    isFetchingMore,
+    offset,
   ]);
 
   return (
