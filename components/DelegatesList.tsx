@@ -1,20 +1,20 @@
 /* eslint-disable no-nested-ternary */
 import { Flex, Spinner } from '@chakra-ui/react';
-import { useStewards } from 'contexts';
+import { useDelegates } from 'contexts';
 import { FC } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
-import { StewardCard } from './StewardCard';
+import { DelegateCard } from './DelegateCard';
 
 const loadingArray = Array(3).fill(undefined);
 
-export const StewardsList: FC = () => {
-  const { stewards, isLoading, fetchNextStewards, hasMore } = useStewards();
+export const DelegatesList: FC = () => {
+  const { delegates, isLoading, fetchNextDelegates, hasMore } = useDelegates();
 
   return (
     <Flex flexDir="column" align="center" px={{ base: '6' }}>
       <InfiniteScroll
         pageStart={0}
-        loadMore={fetchNextStewards}
+        loadMore={fetchNextDelegates}
         hasMore={hasMore}
         loader={
           <Flex width="full" py="16" align="center" justify="center">
@@ -32,14 +32,17 @@ export const StewardsList: FC = () => {
           my="8"
         >
           {isLoading
-            ? stewards.length <= 0
-              ? loadingArray.map((_, index) => <StewardCard key={+index} />)
-              : stewards.map((item, index) => (
-                  <StewardCard key={+index} data={item} />
+            ? delegates.length <= 0
+              ? loadingArray.map((_, index) => <DelegateCard key={+index} />)
+              : delegates.map((item, index) => (
+                  <DelegateCard
+                    key={`${item.address} + ${+index}`}
+                    data={item}
+                  />
                 ))
-            : stewards.length > 0
-            ? stewards.map((item, index) => (
-                <StewardCard key={+index} data={item} />
+            : delegates.length > 0
+            ? delegates.map((item, index) => (
+                <DelegateCard key={`${item.address} + ${+index}`} data={item} />
               ))
             : undefined}
         </Flex>

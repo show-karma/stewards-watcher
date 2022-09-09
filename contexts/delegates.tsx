@@ -5,12 +5,12 @@ import {
   IFilterStat,
   IFilterOrder,
   IFilterPeriod,
-  ISteward,
+  IDelegateFromAPI,
 } from 'types';
 import { axiosInstance } from 'utils';
 
-interface IStewardProps {
-  stewards: ISteward[];
+interface IDelegateProps {
+  delegates: IDelegate[];
   isLoading: boolean;
   stat: IFilterStat;
   order: IFilterOrder;
@@ -22,17 +22,17 @@ interface IStewardProps {
   selectUserToFind: (selectedUserToFind: string) => void;
   lastUpdate: Date;
   hasMore: boolean;
-  fetchNextStewards: () => Promise<void>;
+  fetchNextDelegates: () => Promise<void>;
 }
 
-export const StewardsContext = createContext({} as IStewardProps);
+export const DelegatesContext = createContext({} as IDelegateProps);
 
 interface ProviderProps {
   children: React.ReactNode;
 }
 
-export const StewardsProvider: React.FC<ProviderProps> = ({ children }) => {
-  const [stewards, setStewards] = useState<ISteward[]>([]);
+export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
+  const [delegates, setDelegates] = useState<IDelegate[]>([]);
   const [isLoading, setLoading] = useState(true);
   const [isFetchingMore, setFetchingMore] = useState(false);
   const [userToFind, setUserToFind] = useState('');
@@ -43,7 +43,7 @@ export const StewardsProvider: React.FC<ProviderProps> = ({ children }) => {
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
   const [hasMore, setHasMore] = useState(false);
 
-  const fetchStewards = async (_offset = offset) => {
+  const fetchDelegates = async (_offset = offset) => {
     setLoading(true);
     try {
       const axiosClient = await axiosInstance.get(
@@ -51,11 +51,11 @@ export const StewardsProvider: React.FC<ProviderProps> = ({ children }) => {
           userToFind && `name=${userToFind}`
         }&offset=${_offset}&order=${order}&field=${stat}&period=${period}`
       );
-      const { delegates } = axiosClient.data.data;
-      setHasMore(delegates.length === 10);
-      setLastUpdate(delegates[0].stats[0].updatedAt);
+      const { delegates: fetchedDelegates } = axiosClient.data.data;
+      setHasMore(fetchedDelegates.length === 10);
+      setLastUpdate(fetchedDelegates[0].stats[0].updatedAt);
 
-      const stewardsList = delegates.map((item: IDelegate) => {
+      const delegatesList = fetchedDelegates.map((item: IDelegateFromAPI) => {
         const fetchedPeriod = item.stats.find(
           fetchedStat => fetchedStat.period === period
         );
@@ -64,7 +64,7 @@ export const StewardsProvider: React.FC<ProviderProps> = ({ children }) => {
           address: item.publicAddress,
           ensName: item.ensName,
           forumActivity: fetchedPeriod?.forumActivityScore || 0,
-          stewardSince: item.joinDateAt,
+          delegateSince: item.joinDateAt,
           delegators: item.delegatorCount,
           voteParticipation: {
             onChain: fetchedPeriod?.onChainVotesPct || 0,
@@ -75,7 +75,7 @@ export const StewardsProvider: React.FC<ProviderProps> = ({ children }) => {
           updatedAt: fetchedPeriod?.updatedAt,
         };
       });
-      setStewards(stewardsList);
+      setDelegates(delegatesList);
     } catch (error) {
       console.log(error);
     } finally {
@@ -83,39 +83,39 @@ export const StewardsProvider: React.FC<ProviderProps> = ({ children }) => {
     }
   };
 
-  const findSteward = async () => {
+  const findDelegate = async () => {
     try {
       setLoading(true);
       setHasMore(false);
       const axiosClient = await axiosInstance.get(
         `/dao/find-delegate?dao=${GENERAL.DAO_KARMA_ID}&user=${userToFind}`
       );
-      const { delegate } = axiosClient.data.data;
-      if (!delegate) {
+      const { delegate: fetchedDelegate } = axiosClient.data.data;
+      if (!fetchedDelegate) {
         throw new Error('No delegates found');
       }
-      const fetchedPeriod = (delegate as IDelegate).stats.find(
+      const fetchedPeriod = (fetchedDelegate as IDelegateFromAPI).stats.find(
         fetchedStat => fetchedStat.period === period
       );
-      setStewards([
+      setDelegates([
         {
-          address: delegate.publicAddress,
-          ensName: delegate.ensName,
+          address: fetchedDelegate.publicAddress,
+          ensName: fetchedDelegate.ensName,
           forumActivity: fetchedPeriod?.forumActivityScore || 0,
-          stewardSince: delegate.joinDateAt,
-          delegators: delegate.delegatorCount,
+          delegateSince: fetchedDelegate.joinDateAt,
+          delegators: fetchedDelegate.delegatorCount,
           voteParticipation: {
             onChain: fetchedPeriod?.onChainVotesPct || 0,
             offChain: fetchedPeriod?.offChainVotesPct || 0,
           },
-          votingWeight: delegate.delegatedVotes,
-          twitterHandle: delegate.twitterHandle,
+          votingWeight: fetchedDelegate.delegatedVotes,
+          twitterHandle: fetchedDelegate.twitterHandle,
           updatedAt: fetchedPeriod?.updatedAt,
         },
       ]);
     } catch (error) {
       console.log(error);
-      setStewards([]);
+      setDelegates([]);
       return;
     } finally {
       setLoading(false);
@@ -124,9 +124,9 @@ export const StewardsProvider: React.FC<ProviderProps> = ({ children }) => {
 
   useMemo(() => {
     if (userToFind) {
-      findSteward();
+      findDelegate();
     } else {
-      fetchStewards();
+      fetchDelegates();
     }
   }, [stat, order, period, userToFind]);
 
@@ -139,7 +139,7 @@ export const StewardsProvider: React.FC<ProviderProps> = ({ children }) => {
     const selectUserToFind = (selectedUserToFind: string) =>
       setUserToFind(selectedUserToFind);
 
-    const fetchNextStewards = async () => {
+    const fetchNextDelegates = async () => {
       if (isFetchingMore) return;
       const newOffset = offset + 1;
       setOffset(newOffset);
@@ -150,20 +150,20 @@ export const StewardsProvider: React.FC<ProviderProps> = ({ children }) => {
             userToFind && `name=${userToFind}`
           }&offset=${newOffset}&order=${order}&field=${stat}&period=${period}`
         );
-        const { delegates } = axiosClient.data.data;
-        setHasMore(delegates.length === 10);
-        setLastUpdate(delegates[0].stats[0].updatedAt);
+        const { delegates: fetchedDelegates } = axiosClient.data.data;
+        setHasMore(fetchedDelegates.length === 10);
+        setLastUpdate(fetchedDelegates[0].stats[0].updatedAt);
 
-        delegates.forEach((item: IDelegate) => {
+        fetchedDelegates.forEach((item: IDelegateFromAPI) => {
           const fetchedPeriod = item.stats.find(
             fetchedStat => fetchedStat.period === period
           );
 
-          stewards.push({
+          delegates.push({
             address: item.publicAddress,
             ensName: item.ensName,
             forumActivity: fetchedPeriod?.forumActivityScore || 0,
-            stewardSince: item.joinDateAt || '-',
+            delegateSince: item.joinDateAt || '-',
             delegators: item.delegatorCount,
             voteParticipation: {
               onChain: fetchedPeriod?.onChainVotesPct || 0,
@@ -182,7 +182,7 @@ export const StewardsProvider: React.FC<ProviderProps> = ({ children }) => {
     };
 
     return {
-      stewards,
+      delegates,
       isLoading,
       stat,
       order,
@@ -194,10 +194,10 @@ export const StewardsProvider: React.FC<ProviderProps> = ({ children }) => {
       lastUpdate,
       selectUserToFind,
       hasMore,
-      fetchNextStewards,
+      fetchNextDelegates,
     };
   }, [
-    stewards,
+    delegates,
     isLoading,
     stat,
     order,
@@ -210,9 +210,10 @@ export const StewardsProvider: React.FC<ProviderProps> = ({ children }) => {
   ]);
 
   return (
-    <StewardsContext.Provider value={providerValue}>
+    <DelegatesContext.Provider value={providerValue}>
       {children}
-    </StewardsContext.Provider>
+    </DelegatesContext.Provider>
   );
 };
-export const useStewards = () => useContext(StewardsContext);
+
+export const useDelegates = () => useContext(DelegatesContext);

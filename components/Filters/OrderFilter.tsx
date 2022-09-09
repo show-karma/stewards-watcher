@@ -1,7 +1,6 @@
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { THEME } from 'configs';
-import { useStewards } from 'contexts';
-import { useState } from 'react';
+import { useDelegates } from 'contexts';
 import { HiChevronDown } from 'react-icons/hi';
 import { IFilterOrder } from 'types';
 
@@ -16,7 +15,7 @@ const orderOptions: IOrderOptions[] = [
 ];
 
 export const OrderFilter = () => {
-  const { order, selectOrder } = useStewards();
+  const { order, selectOrder } = useDelegates();
 
   const selectedOrder = orderOptions.find(
     option => option.order === order

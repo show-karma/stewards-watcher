@@ -10,10 +10,10 @@ import {
 import { THEME } from 'configs';
 import { BiSearch } from 'react-icons/bi';
 import debounce from 'lodash.debounce';
-import { useStewards } from 'contexts';
+import { useDelegates } from 'contexts';
 
 export const SearchFilter = () => {
-  const { selectUserToFind } = useStewards();
+  const { selectUserToFind } = useDelegates();
   const handleSearch = debounce(text => {
     selectUserToFind(text);
   }, 250);

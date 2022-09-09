@@ -1,1 +1,1 @@
-export * from './stewards';
+export * from './delegates';

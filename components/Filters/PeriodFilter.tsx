@@ -1,7 +1,6 @@
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { THEME } from 'configs';
-import { useStewards } from 'contexts';
-import { useState } from 'react';
+import { useDelegates } from 'contexts';
 import { HiChevronDown } from 'react-icons/hi';
 import { IFilterPeriod } from 'types';
 
@@ -16,7 +15,7 @@ const periodOptions: IPeriodOptions[] = [
 ];
 
 export const PeriodFilter = () => {
-  const { period, selectPeriod } = useStewards();
+  const { period, selectPeriod } = useDelegates();
 
   const selectedPeriod = periodOptions.find(
     option => option.period === period

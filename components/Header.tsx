@@ -1,12 +1,12 @@
 import { Flex, Img, Text, Link, Button, Skeleton } from '@chakra-ui/react';
 import { GENERAL, THEME } from 'configs';
-import { useStewards } from 'contexts';
+import { useDelegates } from 'contexts';
 import { FC } from 'react';
 import { getTimeFromNow } from 'utils';
 import { Filters } from './Filters';
 
 export const Header: FC = () => {
-  const { stewards, isLoading, lastUpdate } = useStewards();
+  const { delegates, isLoading, lastUpdate } = useDelegates();
 
   return (
     <Flex
@@ -107,7 +107,7 @@ export const Header: FC = () => {
           <Skeleton w="40" h="6" />
         ) : (
           <Text fontSize="md" color={THEME.text}>
-            {stewards.length} Stewards found
+            {delegates.length} Delegates found
           </Text>
         )}
         <Flex flexDir="column" textAlign="end">
@@ -119,7 +119,7 @@ export const Header: FC = () => {
               </Text>
             </Link>
           </Text>
-          {stewards.length > 0 && (
+          {delegates.length > 0 && (
             <Flex flexDir="row" gap="1" justifyContent="end">
               <Text fontSize="xs" color={THEME.subtitle}>
                 Last updated

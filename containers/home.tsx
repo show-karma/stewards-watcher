@@ -1,14 +1,14 @@
 import { Flex } from '@chakra-ui/react';
-import { Header, StewardsList } from 'components';
-import { StewardsProvider } from 'contexts';
+import { Header, DelegatesList } from 'components';
+import { DelegatesProvider } from 'contexts';
 import { MainLayout } from 'layouts';
 import React from 'react';
 
 export const HomeContainer: React.FC = () => (
-  <StewardsProvider>
+  <DelegatesProvider>
     <MainLayout>
       <Header />
-      <StewardsList />
+      <DelegatesList />
     </MainLayout>
-  </StewardsProvider>
+  </DelegatesProvider>
 );

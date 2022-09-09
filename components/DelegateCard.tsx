@@ -14,23 +14,23 @@ import { BsCalendar4, BsChat } from 'react-icons/bs';
 import { IoPersonOutline } from 'react-icons/io5';
 import { IoIosCheckboxOutline } from 'react-icons/io';
 import { AiOutlineThunderbolt } from 'react-icons/ai';
-import { ISteward } from 'types';
+import { IDelegate } from 'types';
 import { truncateAddress } from 'utils';
 import { ImgWithFallback } from './ImgWithFallback';
 
-interface IStewardCardProps {
-  data?: ISteward;
+interface IDelegateCardProps {
+  data?: IDelegate;
 }
 
-export const StewardCard: FC<IStewardCardProps> = props => {
+export const DelegateCard: FC<IDelegateCardProps> = props => {
   const { data } = props;
   const isLoaded = !!data;
 
   const statIcons = [
     {
-      title: 'Stewards since',
+      title: 'Delegates since',
       icon: BsCalendar4,
-      value: data?.stewardSince ? data.stewardSince : '-',
+      value: data?.delegateSince ? data.delegateSince : '-',
     },
     {
       title: 'Forum activity',
@@ -54,13 +54,13 @@ export const StewardCard: FC<IStewardCardProps> = props => {
         ? `${data.voteParticipation.offChain}%`
         : '-',
     },
-    {
-      title: 'On-chain votes',
-      icon: AiOutlineThunderbolt,
-      value: data?.voteParticipation.onChain
-        ? `${data.voteParticipation.onChain}%`
-        : '-',
-    },
+    // {
+    //   title: 'On-chain votes',
+    //   icon: AiOutlineThunderbolt,
+    //   value: data?.voteParticipation.onChain
+    //     ? `${data.voteParticipation.onChain}%`
+    //     : '-',
+    // },
   ];
 
   const shortAddress = data && truncateAddress(data.address);

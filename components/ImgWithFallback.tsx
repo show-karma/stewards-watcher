@@ -9,7 +9,7 @@ interface Props extends ImgProps {
  * Image component to avoid possible not handled error on image path
  */
 export const ImgWithFallback = ({
-  fallback = 'Steward',
+  fallback = 'Delegate',
   src,
   ...props
 }: Props) => {
