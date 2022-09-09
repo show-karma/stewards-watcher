@@ -6,8 +6,9 @@ import { SearchFilter } from './SearchFilter';
 export const Filters = () => (
   <Flex
     bgColor={THEME.card}
-    w="full"
-    flexDir="row"
+    w={{ base: 'full', xl: 'max-content' }}
+    flexDir={['row']}
+    flexWrap="wrap"
     gap="8"
     align="center"
     p="6"

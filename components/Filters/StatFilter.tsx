@@ -1,7 +1,6 @@
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { THEME } from 'configs';
-import { useStewards } from 'contexts';
-import { useState } from 'react';
+import { useDelegates } from 'contexts';
 import { HiChevronDown } from 'react-icons/hi';
 import { IFilterStat } from 'types';
 
@@ -15,11 +14,11 @@ const statOptions: IStatOptions[] = [
   { title: 'User Address', stat: 'user' },
   { title: 'Voting weight', stat: 'delegatedVotes' },
   { title: 'Off-chain votes', stat: 'offChainVotesPct' },
-  { title: 'On-chain votes', stat: 'onChainVotesPct' },
+  // { title: 'On-chain votes', stat: 'onChainVotesPct' },
 ];
 
 export const StatFilter = () => {
-  const { stat, selectStat } = useStewards();
+  const { stat, selectStat } = useDelegates();
 
   const selectedStat = statOptions.find(option => option.stat === stat)?.title;
   return (
@@ -31,6 +30,8 @@ export const StatFilter = () => {
         gap="4"
         fontFamily="heading"
         fontWeight="normal"
+        textAlign="left"
+        w={{ base: 'full', md: 'max-content' }}
       >
         {selectedStat}
       </MenuButton>

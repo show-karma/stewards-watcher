@@ -4,33 +4,33 @@ import {
   Grid,
   GridItem,
   Icon,
-  Img,
   Skeleton,
   SkeletonCircle,
   Text,
 } from '@chakra-ui/react';
-import { THEME } from 'configs';
+import { GENERAL, THEME } from 'configs';
 import { FC } from 'react';
 import { BsCalendar4, BsChat } from 'react-icons/bs';
 import { IoPersonOutline } from 'react-icons/io5';
 import { IoIosCheckboxOutline } from 'react-icons/io';
 import { AiOutlineThunderbolt } from 'react-icons/ai';
-import { ISteward } from 'types';
-import { getStewardImage, truncateAddress } from 'utils';
+import { IDelegate } from 'types';
+import { truncateAddress } from 'utils';
+import { ImgWithFallback } from './ImgWithFallback';
 
-interface IStewardCardProps {
-  data?: ISteward;
+interface IDelegateCardProps {
+  data?: IDelegate;
 }
 
-export const StewardCard: FC<IStewardCardProps> = props => {
+export const DelegateCard: FC<IDelegateCardProps> = props => {
   const { data } = props;
   const isLoaded = !!data;
 
   const statIcons = [
     {
-      title: 'Stewards since',
+      title: 'Delegates since',
       icon: BsCalendar4,
-      value: data?.stewardSince ? data.stewardSince : '-',
+      value: data?.delegateSince ? data.delegateSince : '-',
     },
     {
       title: 'Forum activity',
@@ -54,13 +54,13 @@ export const StewardCard: FC<IStewardCardProps> = props => {
         ? `${data.voteParticipation.offChain}%`
         : '-',
     },
-    {
-      title: 'On-chain votes',
-      icon: AiOutlineThunderbolt,
-      value: data?.voteParticipation.onChain
-        ? `${data.voteParticipation.onChain}%`
-        : '-',
-    },
+    // {
+    //   title: 'On-chain votes',
+    //   icon: AiOutlineThunderbolt,
+    //   value: data?.voteParticipation.onChain
+    //     ? `${data.voteParticipation.onChain}%`
+    //     : '-',
+    // },
   ];
 
   const shortAddress = data && truncateAddress(data.address);
@@ -79,19 +79,34 @@ export const StewardCard: FC<IStewardCardProps> = props => {
     >
       <Flex flexDir="row" gap={['2', '8']} w="full" align="center">
         {data ? (
-          <Img
-            h={['12', '16']}
-            w={['12', '16']}
-            borderRadius="full"
-            src={getStewardImage(data.address)}
-            boxShadow={`0px 0px 0px 2px ${THEME.branding}`}
-          />
+          <Flex
+            minH={['48px', '64px']}
+            minW={['48px', '64px']}
+            h={['48px', '64px']}
+            w={['48px', '64px']}
+          >
+            <ImgWithFallback
+              h={['48px', '64px']}
+              w={['48px', '64px']}
+              borderRadius="full"
+              src={`${GENERAL.IMAGE_PREFIX_URL}${data.address}`}
+              fallback={data.address}
+              boxShadow={`0px 0px 0px 2px ${THEME.branding}`}
+            />
+          </Flex>
         ) : (
-          <SkeletonCircle
-            h={['12', '16']}
-            w={['14', '20']}
-            borderRadius="full"
-          />
+          <Flex
+            minH={['48px', '64px']}
+            minW={['48px', '64px']}
+            h={['48px', '64px']}
+            w={['48px', '64px']}
+          >
+            <SkeletonCircle
+              h={['48px', '64px']}
+              w={['48px', '64px']}
+              borderRadius="full"
+            />
+          </Flex>
         )}
         <Flex
           flexDir="column"

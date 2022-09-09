@@ -10,10 +10,10 @@ import {
 import { THEME } from 'configs';
 import { BiSearch } from 'react-icons/bi';
 import debounce from 'lodash.debounce';
-import { useStewards } from 'contexts';
+import { useDelegates } from 'contexts';
 
 export const SearchFilter = () => {
-  const { selectUserToFind } = useStewards();
+  const { selectUserToFind } = useDelegates();
   const handleSearch = debounce(text => {
     selectUserToFind(text);
   }, 250);
@@ -28,8 +28,8 @@ export const SearchFilter = () => {
         />
         <Input
           type="text"
-          placeholder="Type what you’re loking for..."
-          w={['full', '36.25rem']}
+          placeholder="Type what you’re looking for..."
+          w={{ base: 'full', xl: '36.25rem' }}
           onChange={event => handleSearch(event.target.value)}
           _focusVisible={{
             borderColor: THEME.branding,

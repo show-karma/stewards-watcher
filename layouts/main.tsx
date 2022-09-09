@@ -11,7 +11,7 @@ export const MainLayout: React.FC<IMainLayout> = ({ children }) => (
     flexDir="column"
     minH="100vh"
     backgroundColor={THEME.background}
-    px={['0', '120']}
+    px={{ base: '0', lg: '120' }}
   >
     {children}
   </Flex>

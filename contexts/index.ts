@@ -1,2 +1,2 @@
 export * from './ColorHandler';
-export * from './stewards';
+export * from './delegates';
