@@ -73,12 +73,12 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       px="8"
       py="6"
       borderRadius="16"
-      w={['full', '26rem']}
+      w={['full', '22rem']}
       gap="8"
       boxShadow="0px 0px 10px 1px rgba(0,0,0,0.3)"
-      h="500"
+      h="520"
     >
-      <Flex flexDir="row" gap={['2', '8']} w="full" align="center">
+      <Flex flexDir="row" gap={['2', '4']} w="full" align="center">
         {data ? (
           <Flex
             minH={['48px', '64px']}

@@ -14,8 +14,6 @@ export const DelegateButton: FC<IDelegateButton> = ({ delegated }) => {
 
   const { isLoading, write } = useDelegate(delegated);
 
-  //   const { openAccountModal } = useAccountModal();
-
   const getButtonText = () => {
     if (!isConnected) {
       return 'Connect wallet';
