@@ -1,3 +1,5 @@
+import { chain } from 'wagmi';
+
 export const GENERAL = {
   DAO: 'Optimism',
   DAO_DESCRIPTION: `The Delegates of Optimism DAO play a vital role in driving the Optimism
@@ -15,4 +17,6 @@ export const GENERAL = {
     FAVICON: '/meta/favicon.ico',
     URL: `https://watcher.optimism.io`,
   },
+  DAO_CHAIN: chain.optimism,
+  DAO_DELEGATE_CONTRACT: '0x4200000000000000000000000000000000000042',
 };

@@ -17,6 +17,7 @@ import { AiOutlineThunderbolt } from 'react-icons/ai';
 import { IDelegate } from 'types';
 import { truncateAddress } from 'utils';
 import { ImgWithFallback } from './ImgWithFallback';
+import { DelegateButton } from './DelegateButton';
 
 interface IDelegateCardProps {
   data?: IDelegate;
@@ -189,18 +190,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       </Grid>
       <Flex justify="center" align="center">
         {isLoaded ? (
-          <Button
-            bgColor={THEME.branding}
-            fontSize="xl"
-            px="6"
-            py="6"
-            fontWeight="medium"
-            _hover={{}}
-            _focus={{}}
-            _active={{}}
-          >
-            Delegate
-          </Button>
+          <DelegateButton delegated={data.address} />
         ) : (
           <Skeleton isLoaded={isLoaded} w="36" h="12">
             SkeletonText

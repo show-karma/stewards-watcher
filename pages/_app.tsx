@@ -2,6 +2,8 @@ import type { AppProps } from 'next/app';
 import { ColorHandler } from 'contexts';
 import Head from 'next/head';
 import { GENERAL } from 'configs';
+import '@rainbow-me/rainbowkit/styles.css';
+import { RainbowWrapper } from 'components';
 
 const MyApp = ({ Component, pageProps }: AppProps) => (
   <>
@@ -42,9 +44,11 @@ const MyApp = ({ Component, pageProps }: AppProps) => (
       />
       <meta property="twitter:image" content={GENERAL.METATAGS.IMAGE} />
     </Head>
-    <ColorHandler cookies={pageProps.cookies}>
-      <Component {...pageProps} />
-    </ColorHandler>
+    <RainbowWrapper>
+      <ColorHandler cookies={pageProps.cookies}>
+        <Component {...pageProps} />
+      </ColorHandler>
+    </RainbowWrapper>
   </>
 );
 
