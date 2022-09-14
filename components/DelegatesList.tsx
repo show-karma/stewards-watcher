@@ -17,7 +17,13 @@ export const DelegatesList: FC = () => {
         loadMore={fetchNextDelegates}
         hasMore={hasMore}
         loader={
-          <Flex width="full" py="16" align="center" justify="center">
+          <Flex
+            width="full"
+            py="16"
+            align="center"
+            justify="center"
+            key="loading-spinner"
+          >
             <Spinner w="20" h="20" />
           </Flex>
         }

@@ -12,7 +12,10 @@
     "next",
     "next/core-web-vitals",
     "plugin:@typescript-eslint/recommended",
-    "eslint-config-next"
+    "eslint-config-next",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -23,12 +26,18 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
+  },
   "plugins": [
     "react",
     "@typescript-eslint",
     "@typescript-eslint/eslint-plugin",
     "prettier"
   ],
+
   "rules": {
     "prettier/prettier": "error",
     "react/prop-types": "off",
