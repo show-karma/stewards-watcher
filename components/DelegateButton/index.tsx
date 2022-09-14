@@ -14,14 +14,6 @@ export const DelegateButton: FC<IDelegateButton> = ({ delegated }) => {
 
   const { isLoading, write } = useDelegate(delegated);
 
-  const getButtonText = () => {
-    if (!isConnected) {
-      return 'Connect wallet';
-    }
-    if (chain && chain.id !== GENERAL.DAO_CHAIN.id) return 'Change network';
-    return 'Delegate';
-  };
-
   const handleCase = () => {
     if (!isConnected) {
       return openConnectModal && openConnectModal();
@@ -46,7 +38,7 @@ export const DelegateButton: FC<IDelegateButton> = ({ delegated }) => {
     >
       <Flex gap="2">
         {isLoading && <Spinner />}
-        {getButtonText()}
+        Delegate
       </Flex>
     </Button>
   );
