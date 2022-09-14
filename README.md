@@ -20,3 +20,4 @@ Step 3: Build the project
 ```bash
 yarn install && yarn build
 ```
+Step 4: Host the site on your hosting provider 
