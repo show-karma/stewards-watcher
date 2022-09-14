@@ -6,7 +6,7 @@ import '@rainbow-me/rainbowkit/styles.css';
 import { RainbowWrapper } from 'components';
 
 const MyApp = ({ Component, pageProps }: AppProps) => (
-  <>
+  <ColorHandler cookies={pageProps.cookies}>
     <Head>
       <title>{GENERAL.METATAGS.TITLE}</title>
       <meta name="description" content={GENERAL.METATAGS.DESCRIPTION} />
@@ -45,11 +45,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => (
       <meta property="twitter:image" content={GENERAL.METATAGS.IMAGE} />
     </Head>
     <RainbowWrapper>
-      <ColorHandler cookies={pageProps.cookies}>
-        <Component {...pageProps} />
-      </ColorHandler>
+      <Component {...pageProps} />
     </RainbowWrapper>
-  </>
+  </ColorHandler>
 );
 
 export default MyApp;
