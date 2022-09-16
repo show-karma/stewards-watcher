@@ -8,7 +8,6 @@ export const Header: FC = () => {
   const { delegates, isLoading, lastUpdate } = useDelegates();
   const { daoInfo } = useDAO();
   const { theme, config } = daoInfo;
-
   return (
     <Flex
       px={{ base: '4' }}
