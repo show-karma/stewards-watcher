@@ -21,7 +21,7 @@ export default function middleware(req: NextRequest) {
   const url = req.nextUrl;
 
   // Get hostname of request (e.g. demo.vercel.pub, demo.localhost:3000)
-  const hostname = req.headers.get('host');
+  const hostname = req.headers.get('host') || 'www.showkarma.xyz';
 
   const dao =
     process.env.NODE_ENV === 'production'
