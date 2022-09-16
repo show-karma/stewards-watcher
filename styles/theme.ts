@@ -1,5 +1,4 @@
 import { extendTheme, ThemeConfig } from '@chakra-ui/react';
-import { THEME } from 'configs';
 
 const config: ThemeConfig = {
   initialColorMode: 'dark',
@@ -35,9 +34,7 @@ export const theme = extendTheme({
     },
     Menu: {
       baseStyle: {
-        list: {
-          bgColor: THEME.background,
-        },
+        list: {},
       },
     },
   },
@@ -49,11 +46,9 @@ export const theme = extendTheme({
           width: '8px',
           marginX: '4px',
           borderRadius: '8px',
-          backgroundColor: THEME.background,
         },
         '&::-webkit-scrollbar-thumb': {
           borderRadius: '8px',
-          backgroundColor: THEME.branding,
         },
       },
     }),

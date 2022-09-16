@@ -1,4 +1,3 @@
-import { GENERAL } from 'configs';
 import React, { useContext, createContext, useState, useMemo } from 'react';
 import {
   IDelegate,
@@ -8,6 +7,7 @@ import {
   IDelegateFromAPI,
 } from 'types';
 import { axiosInstance } from 'utils';
+import { useDAO } from './dao';
 
 interface IDelegateProps {
   delegates: IDelegate[];
@@ -42,6 +42,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const [period, setPeriod] = useState<IFilterPeriod>('lifetime');
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
   const [hasMore, setHasMore] = useState(false);
+
+  const { daoInfo } = useDAO();
+  const { config } = daoInfo;
 
   const fetchDelegates = async (_offset = offset) => {
     setLoading(true);
@@ -88,7 +91,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       setLoading(true);
       setHasMore(false);
       const axiosClient = await axiosInstance.get(
-        `/dao/find-delegate?dao=${GENERAL.DAO_KARMA_ID}&user=${userToFind}`
+        `/dao/find-delegate?dao=${config.DAO_KARMA_ID}&user=${userToFind}`
       );
       const { delegate: fetchedDelegate } = axiosClient.data.data;
       if (!fetchedDelegate) {

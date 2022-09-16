@@ -1,21 +1,7 @@
-import React, { useContext, createContext, useState, useMemo } from 'react';
+import React, { useContext, createContext, useMemo } from 'react';
 
-import {
-  getDefaultWallets,
-  RainbowKitProvider,
-  useChainModal,
-  useConnectModal,
-} from '@rainbow-me/rainbowkit';
-import {
-  Chain,
-  useAccount,
-  useContractWrite,
-  useNetwork,
-  usePrepareContractWrite,
-} from 'wagmi';
-import { alchemyProvider } from 'wagmi/providers/alchemy';
-import { publicProvider } from 'wagmi/providers/public';
-import { GENERAL } from 'configs';
+import { useChainModal, useConnectModal } from '@rainbow-me/rainbowkit';
+import { Chain, useAccount, useNetwork } from 'wagmi';
 
 interface IWalletProps {
   isConnected: boolean;

@@ -1,6 +1,7 @@
 import { chain } from 'wagmi';
+import ABI from './ABI.json';
 
-export const GENERAL = {
+const config = {
   DAO: 'Optimism',
   DAO_DESCRIPTION: `The Delegates of Optimism DAO play a vital role in driving the Optimism
   ecosystem forward through their work in governance and workstreams.`,
@@ -8,15 +9,29 @@ export const GENERAL = {
   DAO_URL: 'https://www.optimism.io',
   GOVERNANCE_FORUM: 'https://www.optimism.io',
   DAO_KARMA_ID: 'optimism',
-  KARMA_DELEGATES_API: 'https://api.showkarma.xyz/api/',
   IMAGE_PREFIX_URL: 'https://cdn.stamp.fyi/avatar/eth:',
+  DAO_LOGO: '/daos/optimism/logo.svg',
   METATAGS: {
     TITLE: `Optimism's Delegates Watcher`,
     DESCRIPTION: `Delegates Watcher made by Optimism`,
-    IMAGE: '/meta/meta.png',
-    FAVICON: '/meta/favicon.ico',
+    IMAGE: '/daos/optimism/meta.png',
+    FAVICON: '/daos/optimism/favicon.ico',
     URL: `https://watcher.optimism.io`,
   },
   DAO_CHAIN: chain.optimism,
   DAO_DELEGATE_CONTRACT: '0x4200000000000000000000000000000000000042',
 };
+
+const theme = {
+  background: '#14171A',
+  card: '#1a1e23',
+  title: '#FFFFFF',
+  subtitle: '#a0aec0',
+  text: '#FFFFFF',
+  branding: '#ff0420',
+  buttonText: '#FFFFFF',
+};
+
+const optimism = { theme, config, ABI };
+
+export default optimism;

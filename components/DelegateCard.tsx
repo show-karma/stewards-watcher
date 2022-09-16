@@ -1,5 +1,4 @@
 import {
-  Button,
   Flex,
   Grid,
   GridItem,
@@ -8,13 +7,13 @@ import {
   SkeletonCircle,
   Text,
 } from '@chakra-ui/react';
-import { GENERAL, THEME } from 'configs';
 import { FC } from 'react';
 import { BsCalendar4, BsChat } from 'react-icons/bs';
 import { IoPersonOutline } from 'react-icons/io5';
 import { IoIosCheckboxOutline } from 'react-icons/io';
 import { AiOutlineThunderbolt } from 'react-icons/ai';
 import { IDelegate } from 'types';
+import { useDAO } from 'contexts';
 import { truncateAddress } from 'utils';
 import { ImgWithFallback } from './ImgWithFallback';
 import { DelegateButton } from './DelegateButton';
@@ -25,6 +24,8 @@ interface IDelegateCardProps {
 
 export const DelegateCard: FC<IDelegateCardProps> = props => {
   const { data } = props;
+  const { daoInfo } = useDAO();
+  const { theme, config } = daoInfo;
   const isLoaded = !!data;
 
   const statIcons = [
@@ -68,7 +69,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
 
   return (
     <Flex
-      bgColor={THEME.card}
+      bgColor={theme.card}
       flexDir="column"
       px="8"
       py="6"
@@ -90,9 +91,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
               h={['48px', '64px']}
               w={['48px', '64px']}
               borderRadius="full"
-              src={`${GENERAL.IMAGE_PREFIX_URL}${data.address}`}
+              src={`${config.IMAGE_PREFIX_URL}${data.address}`}
               fallback={data.address}
-              boxShadow={`0px 0px 0px 2px ${THEME.branding}`}
+              boxShadow={`0px 0px 0px 2px ${theme.branding}`}
             />
           </Flex>
         ) : (
@@ -121,13 +122,13 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           {data ? (
             <>
               <Text
-                color={THEME.title}
+                color={theme.title}
                 fontSize={['lg', 'xl']}
                 fontWeight="medium"
               >
                 {data.ensName || shortAddress}
               </Text>
-              <Text color={THEME.branding} fontSize={['lg', 'xl']}>
+              <Text color={theme.branding} fontSize={['lg', 'xl']}>
                 {shortAddress}
               </Text>
             </>
@@ -151,12 +152,12 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
               w="max-content"
             >
               <Flex gap="1" flexDir="column">
-                <Icon as={stat.icon} h="6" w="6" color={THEME.branding} />
-                <Text color={THEME.title} fontSize="sm" fontWeight="medium">
+                <Icon as={stat.icon} h="6" w="6" color={theme.branding} />
+                <Text color={theme.title} fontSize="sm" fontWeight="medium">
                   {stat.title}
                 </Text>
                 <Text
-                  color={THEME.title}
+                  color={theme.title}
                   fontFamily="heading"
                   fontSize="lg"
                   fontWeight="normal"

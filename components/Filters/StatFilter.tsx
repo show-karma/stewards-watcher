@@ -1,6 +1,5 @@
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
-import { THEME } from 'configs';
-import { useDelegates } from 'contexts';
+import { useDAO, useDelegates } from 'contexts';
 import { HiChevronDown } from 'react-icons/hi';
 import { IFilterStat } from 'types';
 
@@ -18,6 +17,8 @@ const statOptions: IStatOptions[] = [
 ];
 
 export const StatFilter = () => {
+  const { daoInfo } = useDAO();
+  const { theme } = daoInfo;
   const { stat, selectStat } = useDelegates();
 
   const selectedStat = statOptions.find(option => option.stat === stat)?.title;
@@ -26,7 +27,7 @@ export const StatFilter = () => {
       <MenuButton
         as={Button}
         rightIcon={<HiChevronDown />}
-        bgColor={THEME.background}
+        bgColor={theme.background}
         gap="4"
         fontFamily="heading"
         fontWeight="normal"

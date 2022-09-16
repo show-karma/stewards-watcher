@@ -1,6 +1,5 @@
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
-import { THEME } from 'configs';
-import { useDelegates } from 'contexts';
+import { useDAO, useDelegates } from 'contexts';
 import { HiChevronDown } from 'react-icons/hi';
 import { IFilterPeriod } from 'types';
 
@@ -16,6 +15,8 @@ const periodOptions: IPeriodOptions[] = [
 
 export const PeriodFilter = () => {
   const { period, selectPeriod } = useDelegates();
+  const { daoInfo } = useDAO();
+  const { theme } = daoInfo;
 
   const selectedPeriod = periodOptions.find(
     option => option.period === period
@@ -25,7 +26,7 @@ export const PeriodFilter = () => {
       <MenuButton
         as={Button}
         rightIcon={<HiChevronDown />}
-        bgColor={THEME.background}
+        bgColor={theme.background}
         gap="4"
         fontFamily="heading"
         fontWeight="normal"

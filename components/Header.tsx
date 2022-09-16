@@ -1,12 +1,13 @@
 import { Flex, Img, Text, Link, Button, Skeleton } from '@chakra-ui/react';
-import { GENERAL, THEME } from 'configs';
-import { useDelegates } from 'contexts';
+import { useDAO, useDelegates } from 'contexts';
 import { FC } from 'react';
 import { getTimeFromNow } from 'utils';
 import { Filters } from './Filters';
 
 export const Header: FC = () => {
   const { delegates, isLoading, lastUpdate } = useDelegates();
+  const { daoInfo } = useDAO();
+  const { theme, config } = daoInfo;
 
   return (
     <Flex
@@ -24,39 +25,39 @@ export const Header: FC = () => {
         maxW="800"
         gap="2"
       >
-        <Img w="36" h="20" src="/images/logo.svg" />
+        <Img w="36" h="20" src={config.DAO_LOGO} />
         <Text
-          color={THEME.title}
+          color={theme.title}
           textAlign="start"
           fontSize={['1.8rem', '2rem']}
           lineHeight={['2rem', '3rem']}
           fontWeight="600"
           fontFamily="heading"
         >
-          {GENERAL.DAO_DESCRIPTION}
+          {config.DAO_DESCRIPTION}
         </Text>
-        <Text color={THEME.subtitle} fontSize={['lg', 'xl']} fontWeight="light">
-          {GENERAL.DAO_SUBDESCRIPTION}
+        <Text color={theme.subtitle} fontSize={['lg', 'xl']} fontWeight="light">
+          {config.DAO_SUBDESCRIPTION}
         </Text>
         <Flex gap={['4', '8']} my={['2', '8']} flexWrap="wrap">
-          <Link href={GENERAL.GOVERNANCE_FORUM}>
+          <Link href={config.GOVERNANCE_FORUM}>
             <Button
               px="6"
               py="4"
               borderRadius="base"
-              bgColor={THEME.branding}
+              bgColor={theme.branding}
               fontSize="md"
               fontFamily="heading"
               _hover={{
-                bgColor: THEME.branding,
+                bgColor: theme.branding,
                 opacity: 0.8,
               }}
               _focusVisible={{
-                bgColor: THEME.branding,
+                bgColor: theme.branding,
                 opacity: 0.8,
               }}
               _focusWithin={{
-                bgColor: THEME.branding,
+                bgColor: theme.branding,
                 opacity: 0.8,
               }}
               _focus={{
@@ -69,7 +70,7 @@ export const Header: FC = () => {
               View discussion
             </Button>
           </Link>
-          <Link href={GENERAL.DAO_URL}>
+          <Link href={config.DAO_URL}>
             <Button
               px="6"
               py="4"
@@ -78,7 +79,7 @@ export const Header: FC = () => {
               fontFamily="heading"
               background="none"
               borderWidth="1px"
-              borderColor={THEME.buttonText}
+              borderColor={theme.buttonText}
               borderStyle="solid"
               _hover={{
                 opacity: 0.8,
@@ -106,12 +107,12 @@ export const Header: FC = () => {
         {isLoading ? (
           <Skeleton w="40" h="6" />
         ) : (
-          <Text fontSize="md" color={THEME.text}>
+          <Text fontSize="md" color={theme.text}>
             {delegates.length} Delegates found
           </Text>
         )}
         <Flex flexDir="column" textAlign="end">
-          <Text fontSize="md" color={THEME.text}>
+          <Text fontSize="md" color={theme.text}>
             Data powered by{' '}
             <Link href="https://showkarma.xyz" isExternal>
               <Text as="span" textDecor="underline">
@@ -121,7 +122,7 @@ export const Header: FC = () => {
           </Text>
           {delegates.length > 0 && (
             <Flex flexDir="row" gap="1" justifyContent="end">
-              <Text fontSize="xs" color={THEME.subtitle}>
+              <Text fontSize="xs" color={theme.subtitle}>
                 Last updated
               </Text>
               {isLoading ? (
@@ -129,7 +130,7 @@ export const Header: FC = () => {
                   00 hours ago
                 </Skeleton>
               ) : (
-                <Text fontSize="xs" color={THEME.subtitle}>
+                <Text fontSize="xs" color={theme.subtitle}>
                   {getTimeFromNow(lastUpdate)}
                 </Text>
               )}

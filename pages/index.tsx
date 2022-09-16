@@ -1,6 +1,5 @@
-import { HomeContainer } from 'containers';
 import type { NextPage } from 'next';
 
-const Home: NextPage = () => <HomeContainer />;
+const Home: NextPage = () => <p>A</p>;
 
 export default Home;

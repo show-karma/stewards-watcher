@@ -7,12 +7,13 @@ import {
   InputLeftElement,
   Text,
 } from '@chakra-ui/react';
-import { THEME } from 'configs';
 import { BiSearch } from 'react-icons/bi';
 import debounce from 'lodash.debounce';
-import { useDelegates } from 'contexts';
+import { useDAO, useDelegates } from 'contexts';
 
 export const SearchFilter = () => {
+  const { daoInfo } = useDAO();
+  const { theme } = daoInfo;
   const { selectUserToFind } = useDelegates();
   const handleSearch = debounce(text => {
     selectUserToFind(text);
@@ -24,7 +25,7 @@ export const SearchFilter = () => {
       <InputGroup>
         <InputLeftElement
           pointerEvents="none"
-          children={<Icon as={BiSearch} color={THEME.title} />}
+          children={<Icon as={BiSearch} color={theme.title} />}
         />
         <Input
           type="text"
@@ -32,8 +33,8 @@ export const SearchFilter = () => {
           w={{ base: 'full', xl: '36.25rem' }}
           onChange={event => handleSearch(event.target.value)}
           _focusVisible={{
-            borderColor: THEME.branding,
-            boxShadow: `0 0 0 1px ${THEME.branding}`,
+            borderColor: theme.branding,
+            boxShadow: `0 0 0 1px ${theme.branding}`,
           }}
         />
       </InputGroup>
