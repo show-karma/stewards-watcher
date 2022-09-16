@@ -26,9 +26,8 @@ export default function middleware(req: NextRequest) {
   const dao =
     process.env.NODE_ENV === 'production'
       ? getDAOName(hostname)
-      : hostname.split('.')[0]
+      : req.nextUrl.pathname.replace('/','')
 
-  // rewrite everything else to `/_sites/[site] dynamic route
   url.pathname = `/_sites/${dao}`;
   return NextResponse.rewrite(url);
 }
