@@ -20,7 +20,6 @@ function getDAOName(host: string) {
   case "optimism.showkarma.xyz":
     dao = "optimism";
     break;
-  }
   case "pooltogether.showkarma.xyz":
     dao = "pooltogether";
     break;
