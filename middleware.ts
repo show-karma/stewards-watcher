@@ -21,6 +21,10 @@ function getDAOName(host: string) {
     dao = "optimism";
     break;
   }
+  case "pooltogether.showkarma.xyz":
+    dao = "pooltogether";
+    break;
+  }
   return dao;
 }
 
