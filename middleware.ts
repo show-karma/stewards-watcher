@@ -15,6 +15,13 @@ export const config = {
 };
 
 function getDAOName(host: string) {
+  let dao;
+  switch (host) {
+  case "optimism.showkarma.xyz":
+    dao = "optimism";
+    break;
+  }
+  return dao;
 }
 
 export default function middleware(req: NextRequest) {
@@ -25,13 +32,11 @@ export default function middleware(req: NextRequest) {
 
   console.log(hostname);
   console.log("Node env " + process.env.NODE_ENV);
-/*  const dao =
+  const dao =
     process.env.NODE_ENV === 'production'
       ? getDAOName(hostname)
-      : req.nextUrl.pathname.replace('/','')
-     */
+      : hostname.split('.')[0]
 
-  const dao = req.nextUrl.pathname.replace('/','')
   console.log("DAO " + dao);
 
   url.pathname = `/_sites/${dao}`;
