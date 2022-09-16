@@ -24,13 +24,15 @@ export default function middleware(req: NextRequest) {
   const hostname = req.headers.get('host') || 'www.showkarma.xyz';
 
   console.log("Node env " + process.env.NODE_ENV);
-  const dao =
+/*  const dao =
     process.env.NODE_ENV === 'production'
       ? getDAOName(hostname)
       : req.nextUrl.pathname.replace('/','')
+     */
 
+  const dao = req.nextUrl.pathname.replace('/','')
   console.log("DAO " + dao);
-  url.pathname = `/_sites/optimism`;
+  url.pathname = `/_sites/${dao}`;
   console.log("URL " + url);
   return NextResponse.rewrite(url);
 }
