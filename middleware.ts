@@ -23,11 +23,14 @@ export default function middleware(req: NextRequest) {
   // Get hostname of request (e.g. demo.vercel.pub, demo.localhost:3000)
   const hostname = req.headers.get('host') || 'www.showkarma.xyz';
 
+  console.log("Node env " + process.env.NODE_ENV);
   const dao =
     process.env.NODE_ENV === 'production'
       ? getDAOName(hostname)
       : req.nextUrl.pathname.replace('/','')
 
+  console.log("DAO " + dao);
   url.pathname = `/_sites/${dao}`;
+  console.log("URL " + url);
   return NextResponse.rewrite(url);
 }
