@@ -30,7 +30,7 @@ export default function middleware(req: NextRequest) {
       : req.nextUrl.pathname.replace('/','')
 
   console.log("DAO " + dao);
-  url.pathname = `/_sites/${dao}`;
+  url.pathname = `/_sites/optimism`;
   console.log("URL " + url);
   return NextResponse.rewrite(url);
 }
