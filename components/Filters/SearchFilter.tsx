@@ -9,15 +9,12 @@ import {
 } from '@chakra-ui/react';
 import { BiSearch } from 'react-icons/bi';
 import debounce from 'lodash.debounce';
-import { useDAO, useDelegates } from 'contexts';
+import { useDAO, useFilter } from 'contexts';
 
 export const SearchFilter = () => {
   const { daoInfo } = useDAO();
   const { theme } = daoInfo;
-  const { selectUserToFind } = useDelegates();
-  const handleSearch = debounce(text => {
-    selectUserToFind(text);
-  }, 250);
+  const { handleSearch } = useFilter();
 
   return (
     <Flex flexDir="column">
@@ -29,7 +26,7 @@ export const SearchFilter = () => {
         />
         <Input
           type="text"
-          placeholder="Type what you’re looking for..."
+          placeholder="Find delegate by address or ens name..."
           w={{ base: 'full', xl: '36.25rem' }}
           onChange={event => handleSearch(event.target.value)}
           _focusVisible={{

@@ -4,10 +4,10 @@ import ABI from './ABI.json';
 const config = {
   DAO: 'Optimism',
   DAO_DESCRIPTION: `The Delegates of Optimism DAO play a vital role in driving the Optimism
-  ecosystem forward through their work in governance and workstreams.`,
-  DAO_SUBDESCRIPTION: `This site will help boost transparency with health cards for each Delegate that display metrics and links on their involvement and engagement in the DAO.`,
+  ecosystem forward through their work in governance.`,
+  DAO_SUBDESCRIPTION: `This site will help boost transparency by displaying delegate contribution to indicate their involvement and engagement in the DAO.`,
   DAO_URL: 'https://www.optimism.io',
-  GOVERNANCE_FORUM: 'https://www.optimism.io',
+  GOVERNANCE_FORUM: 'https://gov.optimism.io',
   DAO_KARMA_ID: 'optimism',
   IMAGE_PREFIX_URL: 'https://cdn.stamp.fyi/avatar/eth:',
   DAO_LOGO: '/daos/optimism/logo.svg',

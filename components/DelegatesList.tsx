@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import { Flex, Spinner } from '@chakra-ui/react';
-import { useDelegates } from 'contexts';
+import { useDelegates, useFilter } from 'contexts';
 import { FC } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { DelegateCard } from './DelegateCard';

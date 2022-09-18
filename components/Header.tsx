@@ -1,12 +1,29 @@
 import { Flex, Img, Text, Link, Button, Skeleton } from '@chakra-ui/react';
-import { useDAO, useDelegates } from 'contexts';
+import { useDAO, useDelegates, useFilter } from 'contexts';
 import { FC } from 'react';
+import { IDAOTheme, IDelegate } from 'types';
 import { getTimeFromNow } from 'utils';
 import { Filters } from './Filters';
+
+const DelegatesCounter: FC<{
+  isLoading: boolean;
+  isSearchDirty: boolean;
+  theme: IDAOTheme;
+  delegates: IDelegate[];
+}> = ({ isLoading, isSearchDirty, theme, delegates }) => {
+  if (isLoading) return <Skeleton w="40" h="6" />;
+  if (!isSearchDirty) return <Flex />;
+  return (
+    <Text fontSize="md" color={theme.text}>
+      {delegates.length} delegate{delegates.length > 1 && 's'} found
+    </Text>
+  );
+};
 
 export const Header: FC = () => {
   const { delegates, isLoading, lastUpdate } = useDelegates();
   const { daoInfo } = useDAO();
+  const { isSearchDirty } = useFilter();
   const { theme, config } = daoInfo;
   return (
     <Flex
@@ -103,13 +120,12 @@ export const Header: FC = () => {
       </Flex>
       <Filters />
       <Flex flexDir="row" justify="space-between" p="6">
-        {isLoading ? (
-          <Skeleton w="40" h="6" />
-        ) : (
-          <Text fontSize="md" color={theme.text}>
-            {delegates.length} Delegates found
-          </Text>
-        )}
+        <DelegatesCounter
+          delegates={delegates}
+          isLoading={isLoading}
+          isSearchDirty={isSearchDirty}
+          theme={theme}
+        />
         <Flex flexDir="column" textAlign="end">
           <Text fontSize="md" color={theme.text}>
             Data powered by{' '}
