@@ -10,7 +10,6 @@ interface IStatOptions {
 
 const statOptions: IStatOptions[] = [
   { title: 'Forum Activity', stat: 'forumScore' },
-  { title: 'User Address', stat: 'user' },
   { title: 'Voting weight', stat: 'delegatedVotes' },
   { title: 'Off-chain votes', stat: 'offChainVotesPct' },
   // { title: 'On-chain votes', stat: 'onChainVotesPct' },

@@ -14,7 +14,7 @@ import { IoIosCheckboxOutline } from 'react-icons/io';
 import { AiOutlineThunderbolt } from 'react-icons/ai';
 import { IDelegate } from 'types';
 import { useDAO } from 'contexts';
-import { truncateAddress } from 'utils';
+import { formatDate, formatNumber, truncateAddress } from 'utils';
 import { ImgWithFallback } from './ImgWithFallback';
 import { DelegateButton } from './DelegateButton';
 
@@ -32,22 +32,22 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     {
       title: 'Delegates since',
       icon: BsCalendar4,
-      value: data?.delegateSince ? data.delegateSince : '-',
+      value: data?.delegateSince ? formatDate(data?.delegateSince) : '-',
     },
     {
       title: 'Forum activity',
       icon: BsChat,
-      value: data?.forumActivity ? data.forumActivity : '-',
+      value: data?.forumActivity ? formatNumber(data.forumActivity) : '-',
     },
     {
       title: 'Voting weight',
       icon: IoIosCheckboxOutline,
-      value: data?.votingWeight ? data.votingWeight : '-',
+      value: data?.votingWeight ? formatNumber(data.votingWeight) : '-',
     },
     {
       title: 'Delegators',
       icon: IoPersonOutline,
-      value: data?.delegators ? data.delegators : '-',
+      value: data?.delegators ? formatNumber(data.delegators) : '-',
     },
     {
       title: 'Off-chain votes',

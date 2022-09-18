@@ -38,7 +38,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const [isFetchingMore, setFetchingMore] = useState(false);
   const [userToFind, setUserToFind] = useState('');
   const [offset, setOffset] = useState(0);
-  const [stat, setStat] = useState<IFilterStat>('forumScore');
+  const [stat, setStat] = useState<IFilterStat>('delegatedVotes');
   const [order, setOrder] = useState<IFilterOrder>('desc');
   const [period, setPeriod] = useState<IFilterPeriod>('lifetime');
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
