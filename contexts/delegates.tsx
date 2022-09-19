@@ -1,4 +1,3 @@
-import { GENERAL } from 'configs';
 import React, { useContext, createContext, useState, useMemo } from 'react';
 import {
   IDelegate,
@@ -8,6 +7,8 @@ import {
   IDelegateFromAPI,
 } from 'types';
 import { axiosInstance } from 'utils';
+import { useDAO } from './dao';
+import { useFilter } from './filter';
 
 interface IDelegateProps {
   delegates: IDelegate[];
@@ -37,17 +38,21 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const [isFetchingMore, setFetchingMore] = useState(false);
   const [userToFind, setUserToFind] = useState('');
   const [offset, setOffset] = useState(0);
-  const [stat, setStat] = useState<IFilterStat>('forumScore');
+  const [stat, setStat] = useState<IFilterStat>('delegatedVotes');
   const [order, setOrder] = useState<IFilterOrder>('desc');
   const [period, setPeriod] = useState<IFilterPeriod>('lifetime');
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
   const [hasMore, setHasMore] = useState(false);
 
+  const { isSearchDirty } = useFilter();
+  const { daoInfo } = useDAO();
+  const { config } = daoInfo;
+
   const fetchDelegates = async (_offset = offset) => {
     setLoading(true);
     try {
       const axiosClient = await axiosInstance.get(
-        `/dao/delegates?name=optimism&pageSize=10${
+        `/dao/delegates?name=${config.DAO_KARMA_ID}&pageSize=10${
           userToFind && `name=${userToFind}`
         }&offset=${_offset}&order=${order}&field=${stat}&period=${period}`
       );
@@ -84,11 +89,12 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   };
 
   const findDelegate = async () => {
+    setLoading(true);
+    setHasMore(false);
+    setOffset(0);
     try {
-      setLoading(true);
-      setHasMore(false);
       const axiosClient = await axiosInstance.get(
-        `/dao/find-delegate?dao=${GENERAL.DAO_KARMA_ID}&user=${userToFind}`
+        `/dao/find-delegate?dao=${config.DAO_KARMA_ID}&user=${userToFind}`
       );
       const { delegate: fetchedDelegate } = axiosClient.data.data;
       if (!fetchedDelegate) {
@@ -140,15 +146,13 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       setUserToFind(selectedUserToFind);
 
     const fetchNextDelegates = async () => {
-      if (isFetchingMore) return;
+      if (isFetchingMore || !hasMore || isSearchDirty) return;
       const newOffset = offset + 1;
       setOffset(newOffset);
       setFetchingMore(true);
       try {
         const axiosClient = await axiosInstance.get(
-          `/dao/delegates?name=optimism&pageSize=10${
-            userToFind && `name=${userToFind}`
-          }&offset=${newOffset}&order=${order}&field=${stat}&period=${period}`
+          `/dao/delegates?name=${config.DAO_KARMA_ID}&pageSize=10&offset=${newOffset}&order=${order}&field=${stat}&period=${period}`
         );
         const { delegates: fetchedDelegates } = axiosClient.data.data;
         setHasMore(fetchedDelegates.length === 10);
@@ -163,7 +167,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
             address: item.publicAddress,
             ensName: item.ensName,
             forumActivity: fetchedPeriod?.forumActivityScore || 0,
-            delegateSince: item.joinDateAt || '-',
+            delegateSince: item.joinDateAt,
             delegators: item.delegatorCount,
             voteParticipation: {
               onChain: fetchedPeriod?.onChainVotesPct || 0,
