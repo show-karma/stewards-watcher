@@ -7,33 +7,37 @@ import {
   InputLeftElement,
   Text,
 } from '@chakra-ui/react';
-import { THEME } from 'configs';
 import { BiSearch } from 'react-icons/bi';
 import debounce from 'lodash.debounce';
-import { useDelegates } from 'contexts';
+import { useDAO, useFilter } from 'contexts';
 
 export const SearchFilter = () => {
-  const { selectUserToFind } = useDelegates();
-  const handleSearch = debounce(text => {
-    selectUserToFind(text);
-  }, 250);
+  const { daoInfo } = useDAO();
+  const { theme } = daoInfo;
+  const { handleSearch } = useFilter();
 
   return (
     <Flex flexDir="column">
-      <Text fontFamily="heading">Search</Text>
+      <Text fontFamily="heading" color={theme.title}>
+        Search
+      </Text>
       <InputGroup>
         <InputLeftElement
           pointerEvents="none"
-          children={<Icon as={BiSearch} color={THEME.title} />}
+          children={<Icon as={BiSearch} color={theme.title} />}
         />
         <Input
           type="text"
-          placeholder="Type what you’re looking for..."
+          placeholder="Find delegate by address or ens name..."
           w={{ base: 'full', xl: '36.25rem' }}
           onChange={event => handleSearch(event.target.value)}
+          boxShadow={theme.cardShadow}
+          _placeholder={{
+            color: theme.subtitle,
+          }}
           _focusVisible={{
-            borderColor: THEME.branding,
-            boxShadow: `0 0 0 1px ${THEME.branding}`,
+            borderColor: theme.branding,
+            boxShadow: `0 0 0 1px ${theme.branding}`,
           }}
         />
       </InputGroup>

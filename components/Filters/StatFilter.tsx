@@ -1,6 +1,5 @@
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
-import { THEME } from 'configs';
-import { useDelegates } from 'contexts';
+import { useDAO, useDelegates } from 'contexts';
 import { HiChevronDown } from 'react-icons/hi';
 import { IFilterStat } from 'types';
 
@@ -11,13 +10,14 @@ interface IStatOptions {
 
 const statOptions: IStatOptions[] = [
   { title: 'Forum Activity', stat: 'forumScore' },
-  { title: 'User Address', stat: 'user' },
   { title: 'Voting weight', stat: 'delegatedVotes' },
   { title: 'Off-chain votes', stat: 'offChainVotesPct' },
   // { title: 'On-chain votes', stat: 'onChainVotesPct' },
 ];
 
 export const StatFilter = () => {
+  const { daoInfo } = useDAO();
+  const { theme } = daoInfo;
   const { stat, selectStat } = useDelegates();
 
   const selectedStat = statOptions.find(option => option.stat === stat)?.title;
@@ -26,7 +26,9 @@ export const StatFilter = () => {
       <MenuButton
         as={Button}
         rightIcon={<HiChevronDown />}
-        bgColor={THEME.background}
+        bgColor={theme.background}
+        boxShadow={theme.cardShadow}
+        color={theme.title}
         gap="4"
         fontFamily="heading"
         fontWeight="normal"

@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { GENERAL } from 'configs';
+import { KARMA_API } from 'helpers';
 
 export const axiosInstance = axios.create({
   timeout: 30000, // 30 secs
-  baseURL: GENERAL.KARMA_DELEGATES_API,
+  baseURL: KARMA_API.base_url,
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',

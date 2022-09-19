@@ -1,12 +1,12 @@
 import { useContractWrite, usePrepareContractWrite } from 'wagmi';
-import ABI from 'resources/optimism/ABI.json';
-import { GENERAL } from 'configs';
+import { useDAO } from 'contexts';
 import { useToasty } from './useToasty';
 
 export const useDelegate = (delegatee: string) => {
+  const { daoInfo } = useDAO();
   const { config } = usePrepareContractWrite({
-    addressOrName: GENERAL.DAO_DELEGATE_CONTRACT,
-    contractInterface: ABI,
+    addressOrName: daoInfo.config.DAO_DELEGATE_CONTRACT,
+    contractInterface: daoInfo.ABI,
     functionName: 'delegate',
     args: [delegatee],
   });

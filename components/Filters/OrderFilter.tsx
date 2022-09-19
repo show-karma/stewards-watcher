@@ -1,6 +1,5 @@
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
-import { THEME } from 'configs';
-import { useDelegates } from 'contexts';
+import { useDAO, useDelegates } from 'contexts';
 import { HiChevronDown } from 'react-icons/hi';
 import { IFilterOrder } from 'types';
 
@@ -16,6 +15,8 @@ const orderOptions: IOrderOptions[] = [
 
 export const OrderFilter = () => {
   const { order, selectOrder } = useDelegates();
+  const { daoInfo } = useDAO();
+  const { theme } = daoInfo;
 
   const selectedOrder = orderOptions.find(
     option => option.order === order
@@ -25,7 +26,9 @@ export const OrderFilter = () => {
       <MenuButton
         as={Button}
         rightIcon={<HiChevronDown />}
-        bgColor={THEME.background}
+        bgColor={theme.background}
+        boxShadow={theme.cardShadow}
+        color={theme.title}
         gap="4"
         fontFamily="heading"
         fontWeight="normal"
