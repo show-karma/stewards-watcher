@@ -15,7 +15,7 @@ const config = {
     TITLE: `Optimism's Delegates Watcher`,
     DESCRIPTION: `Delegates Watcher made by Optimism`,
     IMAGE: '/daos/optimism/meta.png',
-    FAVICON: '/daos/optimism/favicon.ico',
+    FAVICON: '/daos/optimism/favicon.png',
     URL: `https://watcher.optimism.io`,
   },
   DAO_CHAIN: chain.optimism,
