@@ -1,6 +1,7 @@
 import { IDAOInfo } from 'types';
 import optimism from './optimism';
 import pooltogether from './pooltogether';
+import yamfinance from './yamfinance';
 
 interface ISupportedDAOs {
   [key: string]: IDAOInfo;
@@ -16,5 +17,10 @@ export const supportedDAOs: ISupportedDAOs = {
     config: pooltogether.config,
     theme: pooltogether.theme,
     ABI: pooltogether.ABI,
+  },
+  yamfinance: {
+    config: yamfinance.config,
+    theme: yamfinance.theme,
+    ABI: yamfinance.ABI,
   },
 };

@@ -18,7 +18,9 @@ export const SearchFilter = () => {
 
   return (
     <Flex flexDir="column">
-      <Text fontFamily="heading">Search</Text>
+      <Text fontFamily="heading" color={theme.title}>
+        Search
+      </Text>
       <InputGroup>
         <InputLeftElement
           pointerEvents="none"
@@ -29,6 +31,10 @@ export const SearchFilter = () => {
           placeholder="Find delegate by address or ens name..."
           w={{ base: 'full', xl: '36.25rem' }}
           onChange={event => handleSearch(event.target.value)}
+          boxShadow={theme.cardShadow}
+          _placeholder={{
+            color: theme.subtitle,
+          }}
           _focusVisible={{
             borderColor: theme.branding,
             boxShadow: `0 0 0 1px ${theme.branding}`,

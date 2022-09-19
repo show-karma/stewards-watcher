@@ -167,7 +167,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
             address: item.publicAddress,
             ensName: item.ensName,
             forumActivity: fetchedPeriod?.forumActivityScore || 0,
-            delegateSince: item.joinDateAt || '-',
+            delegateSince: item.joinDateAt,
             delegators: item.delegatorCount,
             voteParticipation: {
               onChain: fetchedPeriod?.onChainVotesPct || 0,

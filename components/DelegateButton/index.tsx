@@ -35,6 +35,7 @@ export const DelegateButton: FC<IDelegateButton> = ({ delegated }) => {
       _focus={{}}
       _active={{}}
       disabled={isLoading}
+      color={theme.buttonText}
     >
       <Flex gap="2">
         {isLoading && <Spinner />}

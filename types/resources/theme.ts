@@ -6,4 +6,5 @@ export interface IDAOTheme {
   text: string;
   branding: string;
   buttonText: string;
+  cardShadow?: string;
 }

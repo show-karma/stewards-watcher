@@ -27,6 +27,8 @@ export const PeriodFilter = () => {
         as={Button}
         rightIcon={<HiChevronDown />}
         bgColor={theme.background}
+        boxShadow={theme.cardShadow}
+        color={theme.title}
         gap="4"
         fontFamily="heading"
         fontWeight="normal"

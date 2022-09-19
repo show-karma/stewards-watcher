@@ -32,7 +32,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     {
       title: 'Delegates since',
       icon: BsCalendar4,
-      value: data?.delegateSince ? formatDate(data?.delegateSince) : '-',
+      value: data?.delegateSince ? formatDate(data.delegateSince) : '-',
     },
     {
       title: 'Forum activity',
@@ -76,7 +76,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       borderRadius="16"
       w={['full', '22rem']}
       gap="8"
-      boxShadow="0px 0px 10px 1px rgba(0,0,0,0.3)"
+      boxShadow={theme.cardShadow || '0px 0px 10px 1px rgba(0,0,0,0.3)'}
       h="520"
     >
       <Flex flexDir="row" gap={['2', '4']} w="full" align="center">

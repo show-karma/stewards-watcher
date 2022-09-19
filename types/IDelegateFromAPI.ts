@@ -7,8 +7,8 @@ export interface IDelegateFromAPI {
   ensName: string;
   isForumVerified: boolean;
   isNominee: boolean;
-  joinDateAt: null;
-  pitch: null;
+  joinDateAt?: string;
+  pitch: any;
   poap: number;
   publicAddress: string;
   score: number;
@@ -26,11 +26,11 @@ export interface IDelegateFromAPI {
     forumPostCount: number;
     forumPostsReadCount: number;
     forumTopicCount: number;
-    gitcoinHealthScore: null;
+    gitcoinHealthScore: number;
     karmaRank: number;
     karmaScore: number;
     offChainVotesPct: number;
-    onChainVotesPct: null;
+    onChainVotesPct: number;
     percentile: number;
     period: string;
     proposalsDiscussed: number;

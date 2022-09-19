@@ -9,6 +9,7 @@ export const Filters = () => {
   return (
     <Flex
       bgColor={theme.card}
+      boxShadow={theme.cardShadow}
       w={{ base: 'full', xl: 'max-content' }}
       flexDir={['row']}
       flexWrap="wrap"

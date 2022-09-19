@@ -10,28 +10,28 @@ const config = {
   GOVERNANCE_FORUM: 'https://gov.pooltogether.com',
   DAO_KARMA_ID: 'pooltogether',
   IMAGE_PREFIX_URL: 'https://cdn.stamp.fyi/avatar/eth:',
-  DAO_LOGO: 'https://pooltogether.com/_next/static/media/pooltogether-logo.81dff880.svg',
+  DAO_LOGO: '/daos/pooltogether/logo.svg',
   METATAGS: {
     TITLE: `Delegates of PoolTogether DAO`,
     DESCRIPTION: `Find all the active delegates in PoolTogether DAO along with governance stats across on-chain, off-chain, forum and discord.`,
-    IMAGE: '/daos/optimism/meta.png',
-    FAVICON: '/daos/optimism/favicon.ico',
-    URL: `https://watcher.optimism.io`,
+    IMAGE: '/daos/pooltogether/meta.png',
+    FAVICON: '/daos/pooltogether/favicon.png',
+    URL: `https://pooltogether.showkarma.xyz`,
   },
   DAO_CHAIN: chain.mainnet,
   DAO_DELEGATE_CONTRACT: '0x0cec1a9154ff802e7934fc916ed7ca50bde6844e',
 };
 
 const theme = {
-  background: '#14171A',
-  card: '#1a1e23',
+  background: '#2D0B5A',
+  card: '#4C249F',
   title: '#FFFFFF',
   subtitle: '#a0aec0',
   text: '#FFFFFF',
-  branding: '#ff0420',
-  buttonText: '#FFFFFF',
+  branding: '#3EF3D4',
+  buttonText: '#4C249F',
 };
 
-const optimism = { theme, config, ABI };
+const dao = { theme, config, ABI };
 
-export default optimism;
+export default dao;

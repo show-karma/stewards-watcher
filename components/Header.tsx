@@ -41,7 +41,7 @@ export const Header: FC = () => {
         maxW="800"
         gap="2"
       >
-        <Img w="36" h="20" src={config.DAO_LOGO} />
+        <Img w="36" h="20" objectFit="contain" src={config.DAO_LOGO} />
         <Text
           color={theme.title}
           textAlign="start"
@@ -64,6 +64,7 @@ export const Header: FC = () => {
               bgColor={theme.branding}
               fontSize="md"
               fontFamily="heading"
+              color={theme.buttonText}
               _hover={{
                 bgColor: theme.branding,
                 opacity: 0.8,
@@ -90,6 +91,7 @@ export const Header: FC = () => {
             <Button
               px="6"
               py="4"
+              color={theme.text}
               borderRadius="base"
               fontSize="md"
               fontFamily="heading"

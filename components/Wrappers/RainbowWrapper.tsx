@@ -9,14 +9,14 @@ interface ProviderProps {
   children: React.ReactNode;
 }
 
-const { chains, provider } = configureChains(
-  [chain.optimism],
-  [publicProvider()]
-);
-
 export const RainbowWrapper: React.FC<ProviderProps> = ({ children }) => {
   const { daoInfo } = useDAO();
   const { config } = daoInfo;
+
+  const { chains, provider } = configureChains(
+    [config.DAO_CHAIN],
+    [publicProvider()]
+  );
 
   const { connectors } = getDefaultWallets({
     appName: `${config.DAO}'s Delegates Watcher`,

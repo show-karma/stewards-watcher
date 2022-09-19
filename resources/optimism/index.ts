@@ -16,7 +16,7 @@ const config = {
     DESCRIPTION: `Delegates Watcher made by Optimism`,
     IMAGE: '/daos/optimism/meta.png',
     FAVICON: '/daos/optimism/favicon.png',
-    URL: `https://watcher.optimism.io`,
+    URL: `https://optimism.showkarma.xyz`,
   },
   DAO_CHAIN: chain.optimism,
   DAO_DELEGATE_CONTRACT: '0x4200000000000000000000000000000000000042',
@@ -32,6 +32,6 @@ const theme = {
   buttonText: '#FFFFFF',
 };
 
-const optimism = { theme, config, ABI };
+const dao = { theme, config, ABI };
 
-export default optimism;
+export default dao;
