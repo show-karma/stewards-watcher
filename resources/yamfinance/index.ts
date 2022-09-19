@@ -28,7 +28,7 @@ const theme = {
   cardShadow:
     'rgb(20 1 8 / 15%) -2px 2px 4px inset, rgb(255 255 255) 2px -2px 4px inset',
   title: '#140108',
-  subtitle: '#AEA4A7',
+  subtitle: '#615358',
   text: '#140108',
   branding: '#D1004D',
   buttonText: '#F5F0F2',
