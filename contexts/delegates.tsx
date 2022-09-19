@@ -52,7 +52,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     setLoading(true);
     try {
       const axiosClient = await axiosInstance.get(
-        `/dao/delegates?name=optimism&pageSize=10${
+        `/dao/delegates?name=${config.DAO_KARMA_ID}&pageSize=10${
           userToFind && `name=${userToFind}`
         }&offset=${_offset}&order=${order}&field=${stat}&period=${period}`
       );
@@ -152,7 +152,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       setFetchingMore(true);
       try {
         const axiosClient = await axiosInstance.get(
-          `/dao/delegates?name=optimism&pageSize=10&offset=${newOffset}&order=${order}&field=${stat}&period=${period}`
+          `/dao/delegates?name=${config.DAO_KARMA_ID}&pageSize=10&offset=${newOffset}&order=${order}&field=${stat}&period=${period}`
         );
         const { delegates: fetchedDelegates } = axiosClient.data.data;
         setHasMore(fetchedDelegates.length === 10);
