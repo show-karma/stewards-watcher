@@ -18,4 +18,5 @@ export interface IDAOConfig {
   };
   DAO_CHAIN: Chain;
   DAO_DELEGATE_CONTRACT: string;
+  EXCLUDED_CARD_FIELDS: string[];
 }

@@ -1,9 +1,4 @@
-import {
-  DelegatesProvider,
-  FilterProvider,
-  useDAO,
-  WalletProvider,
-} from 'contexts';
+import { DelegatesProvider, useDAO, WalletProvider } from 'contexts';
 import { MainLayout } from 'layouts';
 import Head from 'next/head';
 import React from 'react';
@@ -57,12 +52,10 @@ export const DAOContainer: React.FC = () => {
             />
             <meta property="twitter:image" content={config.METATAGS.IMAGE} />
           </Head>
-          <FilterProvider>
-            <MainLayout>
-              <Header />
-              <DelegatesList />
-            </MainLayout>
-          </FilterProvider>
+          <MainLayout>
+            <Header />
+            <DelegatesList />
+          </MainLayout>
         </WalletProvider>
       </DelegatesProvider>
     </RainbowWrapper>
