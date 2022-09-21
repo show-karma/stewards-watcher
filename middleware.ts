@@ -17,12 +17,15 @@ export const config = {
 function getDAOName(host: string) {
   let dao;
   switch (host) {
-  case "optimism.showkarma.xyz":
-    dao = "optimism";
-    break;
-  case "pooltogether.showkarma.xyz":
-    dao = "pooltogether";
-    break;
+    case 'optimism.showkarma.xyz':
+      dao = 'optimism';
+      break;
+    case 'pooltogether.showkarma.xyz':
+      dao = 'pooltogether';
+      break;
+    case 'yamfinance.showkarma.xyz':
+      dao = 'yamfinance';
+      break;
   }
   return dao;
 }
@@ -30,19 +33,12 @@ function getDAOName(host: string) {
 export default function middleware(req: NextRequest) {
   const url = req.nextUrl;
 
-  // Get hostname of request (e.g. demo.vercel.pub, demo.localhost:3000)
   const hostname = req.headers.get('host') || 'www.showkarma.xyz';
 
-  console.log(hostname);
-  console.log("Node env " + process.env.NODE_ENV);
   const dao =
     process.env.NODE_ENV === 'production'
       ? getDAOName(hostname)
-      : hostname.split('.')[0]
-
-  console.log("DAO " + dao);
-
+      : hostname.split('.')[0];
   url.pathname = `/_sites/${dao}`;
-  console.log("URL " + url);
   return NextResponse.rewrite(url);
 }

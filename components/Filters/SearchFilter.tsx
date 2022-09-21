@@ -8,13 +8,12 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { BiSearch } from 'react-icons/bi';
-import debounce from 'lodash.debounce';
-import { useDAO, useFilter } from 'contexts';
+import { useDAO, useDelegates } from 'contexts';
 
 export const SearchFilter = () => {
   const { daoInfo } = useDAO();
   const { theme } = daoInfo;
-  const { handleSearch } = useFilter();
+  const { handleSearch } = useDelegates();
 
   return (
     <Flex flexDir="column">
