@@ -1,7 +1,8 @@
+import { IDAOConfig, IDAOTheme } from 'types';
 import { chain } from 'wagmi';
 import ABI from './ABI.json';
 
-const config = {
+const config: IDAOConfig = {
   DAO: 'Yam Finance',
   DAO_DESCRIPTION: `The Delegates of DAO play a vital role in driving the Yam Finance
   ecosystem forward through their work in governance and workstreams.`,
@@ -20,9 +21,10 @@ const config = {
   },
   DAO_CHAIN: chain.mainnet,
   DAO_DELEGATE_CONTRACT: '0x0AaCfbeC6a24756c20D41914F2caba817C0d8521',
+  EXCLUDED_CARD_FIELDS: [],
 };
 
-const theme = {
+const theme: IDAOTheme = {
   background: '#F5F0F2',
   card: '#FFFFFF',
   cardShadow:

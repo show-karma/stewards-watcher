@@ -1,7 +1,8 @@
+import { IDAOConfig, IDAOTheme } from 'types';
 import { chain } from 'wagmi';
 import ABI from './ABI.json';
 
-const config = {
+const config: IDAOConfig = {
   DAO: 'Optimism',
   DAO_DESCRIPTION: `The Delegates of Optimism DAO play a vital role in driving the Optimism
   ecosystem forward through their work in governance.`,
@@ -20,9 +21,10 @@ const config = {
   },
   DAO_CHAIN: chain.optimism,
   DAO_DELEGATE_CONTRACT: '0x4200000000000000000000000000000000000042',
+  EXCLUDED_CARD_FIELDS: ['onChainVotesPct'],
 };
 
-const theme = {
+const theme: IDAOTheme = {
   background: '#14171A',
   card: '#1a1e23',
   title: '#FFFFFF',

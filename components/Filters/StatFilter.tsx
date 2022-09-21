@@ -1,26 +1,14 @@
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { useDAO, useDelegates } from 'contexts';
 import { HiChevronDown } from 'react-icons/hi';
-import { IFilterStat } from 'types';
-
-interface IStatOptions {
-  title: string;
-  stat: IFilterStat;
-}
-
-const statOptions: IStatOptions[] = [
-  { title: 'Forum Activity', stat: 'forumScore' },
-  { title: 'Voting weight', stat: 'delegatedVotes' },
-  { title: 'Off-chain votes', stat: 'offChainVotesPct' },
-  // { title: 'On-chain votes', stat: 'onChainVotesPct' },
-];
 
 export const StatFilter = () => {
   const { daoInfo } = useDAO();
   const { theme } = daoInfo;
-  const { stat, selectStat } = useDelegates();
+  const { selectStat, statOptions, stat } = useDelegates();
 
   const selectedStat = statOptions.find(option => option.stat === stat)?.title;
+
   return (
     <Menu>
       <MenuButton

@@ -1,7 +1,8 @@
+import { IDAOConfig, IDAOTheme } from 'types';
 import { chain } from 'wagmi';
 import ABI from './ABI.json';
 
-const config = {
+const config: IDAOConfig = {
   DAO: 'Pool Together',
   DAO_DESCRIPTION: `The Delegates of DAO play a vital role in driving the PoolTogether
   ecosystem forward through their work in governance and workstreams.`,
@@ -20,9 +21,10 @@ const config = {
   },
   DAO_CHAIN: chain.mainnet,
   DAO_DELEGATE_CONTRACT: '0x0cec1a9154ff802e7934fc916ed7ca50bde6844e',
+  EXCLUDED_CARD_FIELDS: [],
 };
 
-const theme = {
+const theme: IDAOTheme = {
   background: '#2D0B5A',
   card: '#4C249F',
   title: '#FFFFFF',

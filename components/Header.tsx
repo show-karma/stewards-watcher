@@ -1,5 +1,5 @@
 import { Flex, Img, Text, Link, Button, Skeleton } from '@chakra-ui/react';
-import { useDAO, useDelegates, useFilter } from 'contexts';
+import { useDAO, useDelegates } from 'contexts';
 import { FC } from 'react';
 import { IDAOTheme, IDelegate } from 'types';
 import { getTimeFromNow } from 'utils';
@@ -21,9 +21,8 @@ const DelegatesCounter: FC<{
 };
 
 export const Header: FC = () => {
-  const { delegates, isLoading, lastUpdate } = useDelegates();
+  const { delegates, isLoading, lastUpdate, isSearchDirty } = useDelegates();
   const { daoInfo } = useDAO();
-  const { isSearchDirty } = useFilter();
   const { theme, config } = daoInfo;
   return (
     <Flex

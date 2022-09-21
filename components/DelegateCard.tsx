@@ -7,7 +7,7 @@ import {
   SkeletonCircle,
   Text,
 } from '@chakra-ui/react';
-import { FC } from 'react';
+import { FC, useState, useMemo } from 'react';
 import { BsCalendar4, BsChat } from 'react-icons/bs';
 import { IoPersonOutline } from 'react-icons/io5';
 import { IoIosCheckboxOutline } from 'react-icons/io';
@@ -27,27 +27,30 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   const { daoInfo } = useDAO();
   const { theme, config } = daoInfo;
   const isLoaded = !!data;
-
-  const statIcons = [
+  const [stats, setStats] = useState([
     {
       title: 'Delegates since',
       icon: BsCalendar4,
       value: data?.delegateSince ? formatDate(data.delegateSince) : '-',
+      id: 'delegateSince',
     },
     {
       title: 'Forum activity',
       icon: BsChat,
       value: data?.forumActivity ? formatNumber(data.forumActivity) : '-',
+      id: 'forumScore',
     },
     {
       title: 'Voting weight',
       icon: IoIosCheckboxOutline,
       value: data?.votingWeight ? formatNumber(data.votingWeight) : '-',
+      id: 'delegatedVotes',
     },
     {
       title: 'Delegators',
       icon: IoPersonOutline,
       value: data?.delegators ? formatNumber(data.delegators) : '-',
+      id: 'delegators',
     },
     {
       title: 'Off-chain votes',
@@ -55,15 +58,24 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       value: data?.voteParticipation.offChain
         ? `${data.voteParticipation.offChain}%`
         : '-',
+      id: 'offChainVotesPct',
     },
-    // {
-    //   title: 'On-chain votes',
-    //   icon: AiOutlineThunderbolt,
-    //   value: data?.voteParticipation.onChain
-    //     ? `${data.voteParticipation.onChain}%`
-    //     : '-',
-    // },
-  ];
+    {
+      title: 'On-chain votes',
+      icon: AiOutlineThunderbolt,
+      value: data?.voteParticipation.onChain
+        ? `${data.voteParticipation.onChain}%`
+        : '-',
+      id: 'onChainVotesPct',
+    },
+  ]);
+
+  useMemo(() => {
+    const filteredStats = stats.filter(
+      stat => !config.EXCLUDED_CARD_FIELDS.includes(stat.id)
+    );
+    setStats(filteredStats);
+  }, [config]);
 
   const shortAddress = data && truncateAddress(data.address);
 
@@ -142,7 +154,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       </Flex>
 
       <Grid gridTemplateColumns="1fr 1fr" w="full" gap="4">
-        {statIcons?.map((stat, index) =>
+        {stats.map((stat, index) =>
           isLoaded ? (
             <GridItem
               key={+index}
