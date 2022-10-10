@@ -79,6 +79,8 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
 
   const shortAddress = data && truncateAddress(data.address);
 
+  const canDelegate = !!daoInfo.ABI;
+
   return (
     <Flex
       bgColor={theme.card}
@@ -89,7 +91,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       w={['full', '22rem']}
       gap="8"
       boxShadow={theme.cardShadow || '0px 0px 10px 1px rgba(0,0,0,0.3)'}
-      h="520"
+      minH="440"
     >
       <Flex flexDir="row" gap={['2', '4']} w="full" align="center">
         {data ? (
@@ -201,15 +203,17 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           )
         )}
       </Grid>
-      <Flex justify="center" align="center">
-        {isLoaded ? (
-          <DelegateButton delegated={data.address} />
-        ) : (
-          <Skeleton isLoaded={isLoaded} w="36" h="12">
-            SkeletonText
-          </Skeleton>
-        )}
-      </Flex>
+      {canDelegate && (
+        <Flex justify="center" align="center">
+          {isLoaded ? (
+            <DelegateButton delegated={data.address} />
+          ) : (
+            <Skeleton isLoaded={isLoaded} w="36" h="12">
+              SkeletonText
+            </Skeleton>
+          )}
+        </Flex>
+      )}
     </Flex>
   );
 };
