@@ -12,7 +12,7 @@ const config: IDAOConfig = {
   DAO_LOGO: '/daos/ssvnetwork/logo.svg',
   METATAGS: {
     TITLE: `Delegates of SSV Network DAO`,
-    DESCRIPTION: `Find all the active delegates in SSV Network DAO along with governance stats across on-chain, off-chain, forum and discord.`,
+    DESCRIPTION: `Find all the active delegates in SSV Network DAO along with governance stats across off-chain, forum and discord.`,
     IMAGE: '/daos/ssvnetwork/meta.png',
     FAVICON: '/daos/ssvnetwork/favicon.png',
     URL: `https://ssvnetwork.showkarma.xyz`,
