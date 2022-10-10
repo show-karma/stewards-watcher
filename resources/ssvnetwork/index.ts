@@ -18,7 +18,7 @@ const config: IDAOConfig = {
     URL: `https://ssvnetwork.showkarma.xyz`,
   },
   DAO_CHAIN: chain.mainnet,
-  DAO_DELEGATE_CONTRACT: '0x0cec1a9154ff802e7934fc916ed7ca50bde6844e',
+  DAO_DELEGATE_CONTRACT: '',
   EXCLUDED_CARD_FIELDS: ['onChainVotesPct'],
 };
 
