@@ -26,6 +26,9 @@ function getDAOName(host: string) {
     case 'yamfinance.showkarma.xyz':
       dao = 'yamfinance';
       break;
+    case 'ssvnetwork.showkarma.xyz':
+      dao = 'ssvnetwork';
+      break;
   }
   return dao;
 }
