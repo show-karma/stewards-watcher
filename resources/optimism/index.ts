@@ -13,7 +13,7 @@ const config: IDAOConfig = {
   IMAGE_PREFIX_URL: 'https://cdn.stamp.fyi/avatar/eth:',
   DAO_LOGO: '/daos/optimism/logo.svg',
   METATAGS: {
-    TITLE: `Optimism's Delegates Watcher`,
+    TITLE: `Delegates of Optimism DAO`,
     DESCRIPTION: `Delegates Watcher made by Optimism`,
     IMAGE: '/daos/optimism/meta.png',
     FAVICON: '/daos/optimism/favicon.png',
