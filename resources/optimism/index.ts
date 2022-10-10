@@ -13,8 +13,8 @@ const config: IDAOConfig = {
   IMAGE_PREFIX_URL: 'https://cdn.stamp.fyi/avatar/eth:',
   DAO_LOGO: '/daos/optimism/logo.svg',
   METATAGS: {
-    TITLE: `Optimism's Delegates Watcher`,
-    DESCRIPTION: `Delegates Watcher made by Optimism`,
+    TITLE: `Delegates of Optimism DAO`,
+    DESCRIPTION: `Find all the active delegates in PoolTogether DAO along with governance stats across off-chain, forum and discord.`,
     IMAGE: '/daos/optimism/meta.png',
     FAVICON: '/daos/optimism/favicon.png',
     URL: `https://optimism.showkarma.xyz`,
