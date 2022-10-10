@@ -14,7 +14,7 @@ const config: IDAOConfig = {
   DAO_LOGO: '/daos/optimism/logo.svg',
   METATAGS: {
     TITLE: `Delegates of Optimism DAO`,
-    DESCRIPTION: `Delegates Watcher made by Optimism`,
+    DESCRIPTION: `Find all the active delegates in PoolTogether DAO along with governance stats across off-chain, forum and discord.`,
     IMAGE: '/daos/optimism/meta.png',
     FAVICON: '/daos/optimism/favicon.png',
     URL: `https://optimism.showkarma.xyz`,
