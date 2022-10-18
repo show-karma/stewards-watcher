@@ -2,7 +2,7 @@ import { DelegatesProvider, useDAO, WalletProvider } from 'contexts';
 import { MainLayout } from 'layouts';
 import Head from 'next/head';
 import React from 'react';
-import { RainbowWrapper, Header, DelegatesList } from 'components';
+import { RainbowWrapper, Header, DelegatesList, HeaderHat } from 'components';
 
 export const DAOContainer: React.FC = () => {
   const { daoInfo } = useDAO();
@@ -52,6 +52,7 @@ export const DAOContainer: React.FC = () => {
             />
             <meta property="twitter:image" content={config.METATAGS.IMAGE} />
           </Head>
+          <HeaderHat />
           <MainLayout>
             <Header />
             <DelegatesList />

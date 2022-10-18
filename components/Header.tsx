@@ -25,35 +25,36 @@ export const Header: FC = () => {
   const { daoInfo } = useDAO();
   const { theme, config } = daoInfo;
   return (
-    <Flex
-      px={{ base: '4' }}
-      flexDir="column"
-      w={{ base: 'full', xl: 'max-content' }}
-    >
-      <Flex
-        textAlign="start"
-        w="full"
-        align="flex-start"
-        justify="flex-start"
-        py={['2', '8']}
-        flexDir="column"
-        maxW="800"
-        gap="2"
-      >
-        <Img w="36" h="20" objectFit="contain" src={config.DAO_LOGO} />
-        <Text
-          color={theme.title}
+    <Flex px={{ base: '4' }} flexDir="column" w="full">
+      <Flex align="center" justify="space-between" flexWrap="wrap">
+        <Flex
           textAlign="start"
-          fontSize={['1.8rem', '2rem']}
-          lineHeight={['2rem', '3rem']}
-          fontWeight="600"
-          fontFamily="heading"
+          w="full"
+          align="flex-start"
+          justify="flex-start"
+          py={['2', '8']}
+          flexDir="column"
+          maxW="800"
+          gap="2"
         >
-          {config.DAO_DESCRIPTION}
-        </Text>
-        <Text color={theme.subtitle} fontSize={['lg', 'xl']} fontWeight="light">
-          {config.DAO_SUBDESCRIPTION}
-        </Text>
+          <Text
+            color={theme.title}
+            textAlign="start"
+            fontSize={['1.8rem', '2rem']}
+            lineHeight={['2rem', '3rem']}
+            fontWeight="600"
+            fontFamily="heading"
+          >
+            {config.DAO_DESCRIPTION}
+          </Text>
+          <Text
+            color={theme.subtitle}
+            fontSize={['lg', 'xl']}
+            fontWeight="light"
+          >
+            {config.DAO_SUBDESCRIPTION}
+          </Text>
+        </Flex>
         <Flex gap={['4', '8']} my={['2', '8']} flexWrap="wrap">
           <Link href={config.GOVERNANCE_FORUM}>
             <Button
@@ -127,32 +128,6 @@ export const Header: FC = () => {
           isSearchDirty={isSearchDirty}
           theme={theme}
         />
-        <Flex flexDir="column" textAlign="end">
-          <Text fontSize="md" color={theme.text}>
-            Data powered by{' '}
-            <Link href="https://showkarma.xyz" isExternal>
-              <Text as="span" textDecor="underline">
-                Karma
-              </Text>
-            </Link>
-          </Text>
-          {delegates.length > 0 && (
-            <Flex flexDir="row" gap="1" justifyContent="end">
-              <Text fontSize="xs" color={theme.subtitle}>
-                Last updated
-              </Text>
-              {isLoading ? (
-                <Skeleton w="16" h="5">
-                  00 hours ago
-                </Skeleton>
-              ) : (
-                <Text fontSize="xs" color={theme.subtitle}>
-                  {getTimeFromNow(lastUpdate)}
-                </Text>
-              )}
-            </Flex>
-          )}
-        </Flex>
       </Flex>
     </Flex>
   );

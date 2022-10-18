@@ -30,7 +30,7 @@ export const SearchFilter = () => {
           placeholder="Find delegate by address or ens name..."
           w={{ base: 'full', xl: '36.25rem' }}
           onChange={event => handleSearch(event.target.value)}
-          boxShadow={theme.cardShadow}
+          boxShadow={theme.card.shadow}
           _placeholder={{
             color: theme.subtitle,
           }}
