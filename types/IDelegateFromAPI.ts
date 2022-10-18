@@ -7,7 +7,8 @@ export interface IDelegateFromAPI {
   ensName: string;
   isForumVerified: boolean;
   isNominee: boolean;
-  joinDateAt?: string;
+  joinDateAt: string;
+  firstTokenDelegatedAt: string;
   pitch: any;
   poap: number;
   publicAddress: string;

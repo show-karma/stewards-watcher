@@ -8,8 +8,8 @@ export const Filters = () => {
   const { theme } = daoInfo;
   return (
     <Flex
-      bgColor={theme.card}
-      boxShadow={theme.cardShadow}
+      bgColor={theme.card.background}
+      boxShadow={theme.card.shadow}
       w={{ base: 'full', xl: 'max-content' }}
       flexDir={['row']}
       flexWrap="wrap"
