@@ -216,7 +216,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       </Flex>
       <Flex gap="4" flexDir="column">
         <Divider borderColor={theme.card.divider} w="full" />
-        <Flex flexDir="row" justify="space-between" flexWrap="wrap" gap="2">
+        <Flex flexDir={['column', 'row']} justify="space-between" gap="2">
           {featuredStats.map((stat, index) => (
             <Flex
               key={+index}
