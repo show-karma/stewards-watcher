@@ -32,6 +32,7 @@ const theme: IDAOTheme = {
   text: '#FFFFFF',
   branding: '#C80925',
   buttonText: '#FFFFFF',
+  headerBg: '#212328',
   card: {
     icon: '#ADB8C0',
     background: '#222429',

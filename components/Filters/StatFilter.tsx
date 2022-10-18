@@ -15,7 +15,7 @@ export const StatFilter = () => {
         as={Button}
         rightIcon={<HiChevronDown />}
         bgColor={theme.background}
-        boxShadow={theme.cardShadow}
+        boxShadow={theme.card.shadow}
         color={theme.title}
         gap="4"
         fontFamily="heading"

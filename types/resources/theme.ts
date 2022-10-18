@@ -5,6 +5,7 @@ export interface IDAOTheme {
   text: string;
   branding: string;
   buttonText: string;
+  headerBg: string;
   card: {
     shadow?: string;
     icon: string;
