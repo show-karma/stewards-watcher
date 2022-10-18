@@ -26,9 +26,10 @@ export const DelegateButton: FC<IDelegateButton> = ({ delegated }) => {
   return (
     <Button
       bgColor={theme.branding}
-      fontSize="xl"
-      px="6"
-      py="6"
+      px={['2', '6']}
+      py={['2', '6']}
+      h="10"
+      fontSize={['sm', 'md']}
       fontWeight="medium"
       onClick={handleCase}
       _hover={{}}

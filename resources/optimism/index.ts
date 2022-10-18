@@ -21,17 +21,25 @@ const config: IDAOConfig = {
   },
   DAO_CHAIN: chain.optimism,
   DAO_DELEGATE_CONTRACT: '0x4200000000000000000000000000000000000042',
-  EXCLUDED_CARD_FIELDS: ['onChainVotesPct'],
+  EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'forumScore'],
+  FEATURED_CARD_FIELDS: ['delegatedVotes', 'offChainVotesPct'],
 };
 
 const theme: IDAOTheme = {
   background: '#14171A',
-  card: '#1a1e23',
   title: '#FFFFFF',
   subtitle: '#a0aec0',
   text: '#FFFFFF',
-  branding: '#ff0420',
+  branding: '#C80925',
   buttonText: '#FFFFFF',
+  card: {
+    icon: '#ADB8C0',
+    background: '#222429',
+    featureStatBg: 'rgba(102, 102, 102, 0.15)',
+    divider: 'rgba(173, 184, 192, 0.2)',
+    text: { primary: '#FFFFFF', secondary: '#ADB8C0' },
+    border: '#403E4F',
+  },
 };
 
 const dao = { theme, config, ABI };
