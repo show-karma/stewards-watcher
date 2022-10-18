@@ -1,3 +1,3 @@
 export const KARMA_API = {
-  base_url: 'https://api.showkarma.xyz/api/',
+  base_url: 'https://stageapi.showkarma.xyz/api/',
 };

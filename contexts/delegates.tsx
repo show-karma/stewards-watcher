@@ -93,7 +93,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           address: item.publicAddress,
           ensName: item.ensName,
           forumActivity: fetchedPeriod?.forumActivityScore || 0,
-          delegateSince: item.joinDateAt,
+          delegateSince: item.joinDateAt || item.firstTokenDelegatedAt,
           delegators: item.delegatorCount,
           voteParticipation: {
             onChain: fetchedPeriod?.onChainVotesPct || 0,
@@ -132,7 +132,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           address: fetchedDelegate.publicAddress,
           ensName: fetchedDelegate.ensName,
           forumActivity: fetchedPeriod?.forumActivityScore || 0,
-          delegateSince: fetchedDelegate.joinDateAt,
+          delegateSince:
+            fetchedDelegate.joinDateAt || fetchedDelegate.firstTokenDelegatedAt,
           delegators: fetchedDelegate.delegatorCount,
           voteParticipation: {
             onChain: fetchedPeriod?.onChainVotesPct || 0,
@@ -174,7 +175,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           address: item.publicAddress,
           ensName: item.ensName,
           forumActivity: fetchedPeriod?.forumActivityScore || 0,
-          delegateSince: item.joinDateAt,
+          delegateSince: item.joinDateAt || item.firstTokenDelegatedAt,
           delegators: item.delegatorCount,
           voteParticipation: {
             onChain: fetchedPeriod?.onChainVotesPct || 0,

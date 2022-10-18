@@ -1,2 +1,2 @@
 export const formatDate = (dateToFormat: string) =>
-  new Date(dateToFormat).toLocaleDateString();
+  new Date(dateToFormat).toISOString().split('T')[0];
