@@ -2,13 +2,7 @@ import { DelegatesProvider, useDAO, WalletProvider } from 'contexts';
 import { MainLayout } from 'layouts';
 import Head from 'next/head';
 import React from 'react';
-import {
-  RainbowWrapper,
-  Header,
-  DelegatesList,
-  HeaderHat,
-  GradientBall,
-} from 'components';
+import { RainbowWrapper, Header, DelegatesList, HeaderHat } from 'components';
 import { Flex } from '@chakra-ui/react';
 
 export const DAOContainer: React.FC = () => {
@@ -32,12 +26,12 @@ export const DAOContainer: React.FC = () => {
             />
             <meta
               property="og:site_name"
-              content={config.METATAGS.DESCRIPTION}
+              content={`Karma - ${config.DAO} delegate dashboard`}
               key="ogsitename"
             />
             <meta
               property="og:title"
-              content={config.METATAGS.DESCRIPTION}
+              content={`Active delegates of ${config.DAO}`}
               key="ogtitle"
             />
             <meta
@@ -65,7 +59,6 @@ export const DAOContainer: React.FC = () => {
             align="center"
             bgColor={theme.background}
           >
-            <GradientBall background={theme.gradientBall} />
             <HeaderHat />
             <MainLayout>
               <Header />
