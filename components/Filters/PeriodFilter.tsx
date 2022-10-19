@@ -32,6 +32,7 @@ export const PeriodFilter = () => {
         boxShadow={theme.filters.shadow}
         color={theme.filters.title}
         borderRadius="sm"
+
         gap="4"
         fontFamily="heading"
         fontWeight="normal"
