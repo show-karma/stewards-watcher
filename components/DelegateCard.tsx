@@ -221,7 +221,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
         </Flex>
         {data?.twitterHandle && (
           <Link href={`https://twitter.com/${data.twitterHandle}`} isExternal>
-            <Icon as={BsTwitter} w="5" h="5" color={theme.card.text} />
+            <Icon as={BsTwitter} w="5" h="5" color={theme.card.icon} />
           </Link>
         )}
       </Flex>

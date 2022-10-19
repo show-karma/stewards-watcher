@@ -63,8 +63,7 @@ const dark: IDAOTheme = {
 
 const light: IDAOTheme = {
   background: '#F2F4F9',
-  bodyBg: '#FFFFFF',
-  bodyShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+  bodyBg: '#F2F4F9',
   title: '#222429',
   subtitle: '#666666',
   text: '#222429',
