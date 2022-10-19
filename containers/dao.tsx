@@ -26,12 +26,12 @@ export const DAOContainer: React.FC = () => {
             />
             <meta
               property="og:site_name"
-              content={config.METATAGS.DESCRIPTION}
+              content={`Karma - ${config.DAO} delegate dashboard`}
               key="ogsitename"
             />
             <meta
               property="og:title"
-              content={config.METATAGS.DESCRIPTION}
+              content={`Active delegates of ${config.DAO}`}
               key="ogtitle"
             />
             <meta
