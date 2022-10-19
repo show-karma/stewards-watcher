@@ -9,8 +9,8 @@ interface IDelegateButton {
 
 export const DelegateButton: FC<IDelegateButton> = ({ delegated }) => {
   const { openConnectModal, openChainModal, isConnected, chain } = useWallet();
-  const { daoInfo } = useDAO();
-  const { theme, config } = daoInfo;
+  const { daoInfo, theme } = useDAO();
+  const { config } = daoInfo;
 
   const { isLoading, write } = useDelegate(delegated);
 

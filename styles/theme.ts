@@ -49,6 +49,7 @@ export const theme = extendTheme({
         },
         '&::-webkit-scrollbar-thumb': {
           borderRadius: '8px',
+          bgColor: 'gray.500',
         },
       },
     }),

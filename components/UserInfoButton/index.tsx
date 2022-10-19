@@ -17,8 +17,8 @@ interface IUserInfoProps {
 }
 
 export const UserInfoButton: FC<IUserInfoProps> = ({ user }) => {
-  const { daoInfo } = useDAO();
-  const { theme } = daoInfo;
+  const { theme } = useDAO();
+
   const options = [
     {
       title: 'User Statement',
@@ -43,7 +43,8 @@ export const UserInfoButton: FC<IUserInfoProps> = ({ user }) => {
         fontWeight="medium"
         bg="transparent"
         borderWidth="2px"
-        borderColor="white"
+        borderColor={theme.buttonTextSec}
+        color={theme.buttonTextSec}
         borderStyle="solid"
         _hover={{}}
         _active={{}}
@@ -51,7 +52,7 @@ export const UserInfoButton: FC<IUserInfoProps> = ({ user }) => {
       >
         User Info
       </MenuButton>
-      <MenuList bgColor={theme.branding}>
+      <MenuList bgColor={theme.card.background}>
         {options.map(({ title, link }, index) => (
           <Link
             isExternal

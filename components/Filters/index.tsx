@@ -4,19 +4,19 @@ import { OrderByFilters } from './OrderByFilters';
 import { SearchFilter } from './SearchFilter';
 
 export const Filters = () => {
-  const { daoInfo } = useDAO();
-  const { theme } = daoInfo;
+  const { theme } = useDAO();
   return (
     <Flex
       bgColor={theme.card.background}
       boxShadow={theme.card.shadow}
-      w={{ base: 'full', xl: 'max-content' }}
+      w="full"
       flexDir={['row']}
       flexWrap="wrap"
       gap="8"
       align="center"
       p="6"
       borderRadius="xl"
+      justify="space-between"
     >
       <SearchFilter />
       <OrderByFilters />

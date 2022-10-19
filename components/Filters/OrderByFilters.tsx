@@ -5,12 +5,11 @@ import { PeriodFilter } from './PeriodFilter';
 import { StatFilter } from './StatFilter';
 
 export const OrderByFilters = () => {
-  const { daoInfo } = useDAO();
-  const { theme } = daoInfo;
+  const { theme } = useDAO();
   return (
     <Flex gap="4" align="end" flexDir={['row']} flexWrap="wrap">
       <Flex flexDir="column" w={{ base: 'full', md: 'max-content' }}>
-        <Text fontFamily="heading" color={theme.title}>
+        <Text fontFamily="heading" color={theme.filters.head}>
           Order by
         </Text>
         <StatFilter />
