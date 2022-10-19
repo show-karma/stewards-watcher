@@ -11,22 +11,26 @@ interface ISupportedDAOs {
 export const supportedDAOs: ISupportedDAOs = {
   optimism: {
     config: optimism.config,
-    theme: optimism.theme,
+    light: optimism.light,
+    dark: optimism.dark,
     ABI: optimism.ABI,
   },
   pooltogether: {
     config: pooltogether.config,
-    theme: pooltogether.theme,
+    dark: pooltogether.dark,
+    light: pooltogether.light,
     ABI: pooltogether.ABI,
   },
   yamfinance: {
     config: yamfinance.config,
-    theme: yamfinance.theme,
+    dark: yamfinance.dark,
+    light: yamfinance.light,
     ABI: yamfinance.ABI,
   },
   ssvnetwork: {
     config: ssvnetwork.config,
-    theme: ssvnetwork.theme,
+    dark: ssvnetwork.dark,
+    light: ssvnetwork.light,
     ABI: null,
   },
 };

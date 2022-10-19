@@ -25,14 +25,32 @@ const config: IDAOConfig = {
   FEATURED_CARD_FIELDS: ['delegatedVotes', 'offChainVotesPct'],
 };
 
-const theme: IDAOTheme = {
+const dark: IDAOTheme = {
   background: '#14171A',
+  bodyBg: '#14171A',
   title: '#FFFFFF',
   subtitle: '#a0aec0',
   text: '#FFFFFF',
   branding: '#C80925',
   buttonText: '#FFFFFF',
+  buttonTextSec: '#FFFFFF',
   headerBg: '#212328',
+  gradientBall: '#ADB8C0',
+  themeIcon: '#ADB8C0',
+  hat: {
+    text: {
+      primary: '#FFFFFF',
+      secondary: '#ADB8C0',
+    },
+  },
+  filters: {
+    head: '#ADB8C0',
+    border: '#ADB8C033',
+    title: 'white',
+    bg: 'transparent',
+    listBg: '#222429',
+    listText: 'white',
+  },
   card: {
     icon: '#ADB8C0',
     background: '#222429',
@@ -43,6 +61,43 @@ const theme: IDAOTheme = {
   },
 };
 
-const dao = { theme, config, ABI };
+const light: IDAOTheme = {
+  background: '#F2F4F9',
+  bodyBg: '#FFFFFF',
+  bodyShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+  title: '#222429',
+  subtitle: '#666666',
+  text: '#222429',
+  branding: '#C80925',
+  buttonText: '#FFFFFF',
+  buttonTextSec: '#222429',
+  headerBg: '#212328',
+  gradientBall: '#ADB8C0',
+  themeIcon: '#ADB8C0',
+  hat: {
+    text: {
+      primary: '#FFFFFF',
+      secondary: '#ADB8C0',
+    },
+  },
+  filters: {
+    head: '#666666',
+    border: '#ADB8C033',
+    title: '#666666',
+    bg: 'transparent',
+    listBg: '#FFFFFF',
+    listText: '#666666',
+  },
+  card: {
+    icon: '#ADB8C0',
+    background: '#FFFFFF',
+    featureStatBg: 'transparent',
+    divider: 'rgba(102, 102, 102, 0.5)',
+    text: { primary: '#212328', secondary: '#666666' },
+    border: 'rgba(102, 102, 102, 0.5)',
+  },
+};
+
+const dao = { dark, light, config, ABI };
 
 export default dao;

@@ -1,6 +1,6 @@
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { useDAO, useDelegates } from 'contexts';
-import { HiChevronDown } from 'react-icons/hi';
+import { IoChevronDownOutline } from 'react-icons/io5';
 import { IFilterPeriod } from 'types';
 
 interface IPeriodOptions {
@@ -15,8 +15,7 @@ const periodOptions: IPeriodOptions[] = [
 
 export const PeriodFilter = () => {
   const { period, selectPeriod } = useDelegates();
-  const { daoInfo } = useDAO();
-  const { theme } = daoInfo;
+  const { theme } = useDAO();
 
   const selectedPeriod = periodOptions.find(
     option => option.period === period
@@ -25,10 +24,14 @@ export const PeriodFilter = () => {
     <Menu>
       <MenuButton
         as={Button}
-        rightIcon={<HiChevronDown />}
-        bgColor={theme.background}
-        boxShadow={theme.card.shadow}
-        color={theme.title}
+        rightIcon={<IoChevronDownOutline />}
+        bgColor={theme.filters.bg}
+        borderWidth="1px"
+        borderColor={theme.filters.border}
+        borderStyle="solid"
+        boxShadow={theme.filters.shadow}
+        color={theme.filters.title}
+        borderRadius="sm"
         gap="4"
         fontFamily="heading"
         fontWeight="normal"
@@ -37,7 +40,7 @@ export const PeriodFilter = () => {
       >
         {selectedPeriod}
       </MenuButton>
-      <MenuList>
+      <MenuList bgColor={theme.filters.listBg} color={theme.filters.listText}>
         {periodOptions.map((option, index) => (
           <MenuItem key={+index} onClick={() => selectPeriod(option.period)}>
             {option.title}

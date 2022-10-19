@@ -2,10 +2,17 @@ import { DelegatesProvider, useDAO, WalletProvider } from 'contexts';
 import { MainLayout } from 'layouts';
 import Head from 'next/head';
 import React from 'react';
-import { RainbowWrapper, Header, DelegatesList, HeaderHat } from 'components';
+import {
+  RainbowWrapper,
+  Header,
+  DelegatesList,
+  HeaderHat,
+  GradientBall,
+} from 'components';
+import { Flex } from '@chakra-ui/react';
 
 export const DAOContainer: React.FC = () => {
-  const { daoInfo } = useDAO();
+  const { daoInfo, theme } = useDAO();
   const { config } = daoInfo;
 
   return (
@@ -52,11 +59,19 @@ export const DAOContainer: React.FC = () => {
             />
             <meta property="twitter:image" content={config.METATAGS.IMAGE} />
           </Head>
-          <HeaderHat />
-          <MainLayout>
-            <Header />
-            <DelegatesList />
-          </MainLayout>
+          <Flex
+            w="full"
+            flexDir="column"
+            align="center"
+            bgColor={theme.background}
+          >
+            <GradientBall background={theme.gradientBall} />
+            <HeaderHat />
+            <MainLayout>
+              <Header />
+              <DelegatesList />
+            </MainLayout>
+          </Flex>
         </WalletProvider>
       </DelegatesProvider>
     </RainbowWrapper>

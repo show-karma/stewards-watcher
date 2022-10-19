@@ -2,6 +2,7 @@ export * from './DelegateButton';
 export * from './DelegateCard';
 export * from './DelegatesList';
 export * from './Filters';
+export * from './GradientBall';
 export * from './Header';
 export * from './HeaderHat';
 export * from './ImgWithFallback';

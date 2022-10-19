@@ -32,6 +32,7 @@ interface IDelegateProps {
   stat: IFilterStat;
   order: IFilterOrder;
   period: IFilterPeriod;
+  clearFilters: () => void;
 }
 
 export const DelegatesContext = createContext({} as IDelegateProps);
@@ -212,6 +213,13 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     selectUserToFind(text);
   }, 250);
 
+  const clearFilters = () => {
+    setStat(statOptions[0].stat);
+    setOrder('desc');
+    setPeriod('lifetime');
+    setUserToFind('');
+  };
+
   const providerValue = useMemo(
     () => ({
       delegates,
@@ -232,6 +240,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       selectPeriod,
       selectUserToFind,
       userToFind,
+      clearFilters,
     }),
     [
       delegates,

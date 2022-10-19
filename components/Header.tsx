@@ -1,9 +1,11 @@
 import { Flex, Img, Text, Link, Button, Skeleton } from '@chakra-ui/react';
 import { useDAO, useDelegates } from 'contexts';
+import { usePicasso } from 'hooks';
 import { FC } from 'react';
 import { IDAOTheme, IDelegate } from 'types';
 import { getTimeFromNow } from 'utils';
 import { Filters } from './Filters';
+import { ClearButton } from './Filters/ClearButton';
 
 const DelegatesCounter: FC<{
   isLoading: boolean;
@@ -14,18 +16,26 @@ const DelegatesCounter: FC<{
   if (isLoading) return <Skeleton w="40" h="6" />;
   if (!isSearchDirty) return <Flex />;
   return (
-    <Text fontSize="md" color={theme.text}>
-      {delegates.length} delegate{delegates.length > 1 && 's'} found
-    </Text>
+    <Flex align="center">
+      <Text fontSize="md" color={theme.text}>
+        {delegates.length} delegate{delegates.length > 1 && 's'} found
+      </Text>
+      <ClearButton />
+    </Flex>
   );
 };
 
 export const Header: FC = () => {
-  const { delegates, isLoading, lastUpdate, isSearchDirty } = useDelegates();
-  const { daoInfo } = useDAO();
-  const { theme, config } = daoInfo;
+  const { delegates, isLoading, isSearchDirty } = useDelegates();
+  const { daoInfo, theme } = useDAO();
+  const { config } = daoInfo;
+
   return (
-    <Flex px={{ base: '4' }} flexDir="column" w="full">
+    <Flex
+      flexDir="column"
+      w={{ base: 'full', '2xl': '1360px' }}
+      px={{ base: '6', lg: '0' }}
+    >
       <Flex align="center" justify="space-between" flexWrap="wrap">
         <Flex
           textAlign="start"
@@ -40,8 +50,8 @@ export const Header: FC = () => {
           <Text
             color={theme.title}
             textAlign="start"
-            fontSize={['1.8rem', '2rem']}
-            lineHeight={['2rem', '3rem']}
+            fontSize={['xl', '2xl']}
+            lineHeight={['8', '9']}
             fontWeight="600"
             fontFamily="heading"
           >
@@ -91,13 +101,13 @@ export const Header: FC = () => {
             <Button
               px="6"
               py="4"
-              color={theme.text}
+              color={theme.buttonTextSec}
               borderRadius="base"
               fontSize="md"
               fontFamily="heading"
               background="none"
               borderWidth="1px"
-              borderColor={theme.buttonText}
+              borderColor={theme.buttonTextSec}
               borderStyle="solid"
               _hover={{
                 opacity: 0.8,

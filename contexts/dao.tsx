@@ -1,9 +1,12 @@
+import { useColorModeValue } from '@chakra-ui/react';
+import { usePicasso } from 'hooks';
 import React, { useContext, createContext, useMemo, useState } from 'react';
 import { supportedDAOs } from 'resources';
-import { IDAOInfo } from 'types';
+import { IDAOInfo, IDAOTheme } from 'types';
 
 interface IDAOProps {
   daoInfo: IDAOInfo;
+  theme: IDAOTheme;
 }
 
 export const DAOContext = createContext({} as IDAOProps);
@@ -18,6 +21,7 @@ export const DAOProvider: React.FC<ProviderProps> = ({
   selectedDAO,
 }) => {
   const [daoInfo, setDAOInfo] = useState<IDAOInfo>({} as IDAOInfo);
+  const theme = usePicasso({ light: daoInfo.light, dark: daoInfo.dark });
 
   const searchConfig = (dao: string) => {
     const findDAO = supportedDAOs[dao];
@@ -32,8 +36,9 @@ export const DAOProvider: React.FC<ProviderProps> = ({
   const providerValue = useMemo(
     () => ({
       daoInfo,
+      theme,
     }),
-    [daoInfo]
+    [daoInfo, theme]
   );
 
   return (
