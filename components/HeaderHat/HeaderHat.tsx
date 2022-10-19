@@ -68,7 +68,7 @@ export const HeaderHat = () => {
               fontWeight="normal"
               color={theme.hat.text.primary}
             >
-              Built by
+              Made with ❤️ by
             </Text>
 
             <Link href="https://showkarma.xyz" isExternal>
