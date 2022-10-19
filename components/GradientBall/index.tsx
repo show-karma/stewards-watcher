@@ -29,5 +29,6 @@ export const GradientBall: FC<IGradientBall> = ({
     right={right}
     opacity={opacity}
     filter={`blur(${blur})`}
+    zIndex="2"
   />
 );

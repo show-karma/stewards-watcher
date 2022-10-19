@@ -17,6 +17,7 @@ export const MainLayout: React.FC<IMainLayout> = ({ children }) => {
       boxShadow={theme.bodyShadow}
       align="center"
       px={['0', '2', '16']}
+      zIndex="1"
     >
       {children}
     </Flex>
