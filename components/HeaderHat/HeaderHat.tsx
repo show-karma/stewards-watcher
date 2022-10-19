@@ -3,6 +3,7 @@ import {
   Flex,
   Icon,
   Img,
+  Link,
   Skeleton,
   Text,
   useColorMode,
@@ -25,6 +26,7 @@ export const HeaderHat = () => {
       align="center"
       justify="center"
       px={['4', '16']}
+      zIndex="2"
     >
       <Flex
         w={{ base: 'full', '2xl': '1360px' }}
@@ -41,7 +43,7 @@ export const HeaderHat = () => {
             fontSize={['lg', '2xl']}
             color={theme.hat.text.primary}
           >
-            DAO Reputation Tracker
+            Delegates Dashboard
           </Text>
         </Flex>
         <Flex flexDir="row" gap="8" align="center">
@@ -66,15 +68,17 @@ export const HeaderHat = () => {
               fontWeight="normal"
               color={theme.hat.text.primary}
             >
-              Data powered by
+              Built by
             </Text>
 
-            <Img
-              w={['5.25rem', '8.75rem']}
-              h={['1.35rem', '2.25rem']}
-              objectFit="contain"
-              src="/images/karma_logo.svg"
-            />
+            <Link href="https://showkarma.xyz" isExternal>
+              <Img
+                w={['5.25rem', '8.75rem']}
+                h={['1.35rem', '2.25rem']}
+                objectFit="contain"
+                src="/images/karma_logo.svg"
+              />
+            </Link>
             {delegates.length > 0 && (
               <Flex
                 flexDir="row"
@@ -82,7 +86,7 @@ export const HeaderHat = () => {
                 justifyContent="end"
                 color={theme.hat.text.secondary}
               >
-                <Text fontSize="xs">Last updated</Text>
+                <Text fontSize="xs">Data updated</Text>
                 {isLoading ? (
                   <Skeleton w="16" h="5">
                     00 hours ago

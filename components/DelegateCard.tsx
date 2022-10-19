@@ -146,7 +146,8 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       px="6"
       py="6"
       borderRadius="16"
-      w={['full', '28rem']}
+      maxW={['full', '28rem']}
+      flex="1"
       gap="8"
       boxShadow={theme.card.shadow}
       minH="max-content"
@@ -231,9 +232,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
             <Flex
               key={+index}
               gap={['1', '2']}
-              pl={['1', '4']}
-              pr={['2', '6']}
-              py={['2', '4']}
+              pl="4"
+              pr="6"
+              py="4"
               borderRadius="lg"
               bgColor={theme.card.featureStatBg}
               borderWidth="1px"
