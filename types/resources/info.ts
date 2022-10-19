@@ -3,6 +3,7 @@ import { IDAOTheme } from './theme';
 
 export interface IDAOInfo {
   config: IDAOConfig;
-  theme: IDAOTheme;
+  light: IDAOTheme;
+  dark: IDAOTheme;
   ABI: any;
 }

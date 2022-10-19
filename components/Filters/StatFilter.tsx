@@ -1,10 +1,9 @@
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { useDAO, useDelegates } from 'contexts';
-import { HiChevronDown } from 'react-icons/hi';
+import { IoChevronDownOutline } from 'react-icons/io5';
 
 export const StatFilter = () => {
-  const { daoInfo } = useDAO();
-  const { theme } = daoInfo;
+  const { theme } = useDAO();
   const { selectStat, statOptions, stat } = useDelegates();
 
   const selectedStat = statOptions.find(option => option.stat === stat)?.title;
@@ -13,10 +12,14 @@ export const StatFilter = () => {
     <Menu>
       <MenuButton
         as={Button}
-        rightIcon={<HiChevronDown />}
-        bgColor={theme.background}
-        boxShadow={theme.cardShadow}
-        color={theme.title}
+        rightIcon={<IoChevronDownOutline />}
+        bgColor={theme.filters.bg}
+        borderWidth="1px"
+        borderColor={theme.filters.border}
+        borderStyle="solid"
+        boxShadow={theme.filters.shadow}
+        color={theme.filters.title}
+        borderRadius="sm"
         gap="4"
         fontFamily="heading"
         fontWeight="normal"
@@ -25,7 +28,7 @@ export const StatFilter = () => {
       >
         {selectedStat}
       </MenuButton>
-      <MenuList>
+      <MenuList bgColor={theme.filters.listBg} color={theme.filters.listText}>
         {statOptions.map((option, index) => (
           <MenuItem key={+index} onClick={() => selectStat(option.stat)}>
             {option.title}

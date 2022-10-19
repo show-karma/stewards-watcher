@@ -7,15 +7,16 @@ interface IMainLayout {
 }
 
 export const MainLayout: React.FC<IMainLayout> = ({ children }) => {
-  const { daoInfo } = useDAO();
-  const { theme } = daoInfo;
+  const { theme } = useDAO();
 
   return (
     <Flex
       flexDir="column"
       minH="100vh"
-      backgroundColor={theme.background}
-      px={{ base: '0', lg: '120' }}
+      backgroundColor={theme.bodyBg}
+      boxShadow={theme.bodyShadow}
+      align="center"
+      px={['0', '2', '16']}
     >
       {children}
     </Flex>

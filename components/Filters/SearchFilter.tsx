@@ -11,13 +11,12 @@ import { BiSearch } from 'react-icons/bi';
 import { useDAO, useDelegates } from 'contexts';
 
 export const SearchFilter = () => {
-  const { daoInfo } = useDAO();
-  const { theme } = daoInfo;
+  const { theme } = useDAO();
   const { handleSearch } = useDelegates();
 
   return (
     <Flex flexDir="column">
-      <Text fontFamily="heading" color={theme.title}>
+      <Text fontFamily="heading" color={theme.filters.head}>
         Search
       </Text>
       <InputGroup>
@@ -30,13 +29,13 @@ export const SearchFilter = () => {
           placeholder="Find delegate by address or ens name..."
           w={{ base: 'full', xl: '36.25rem' }}
           onChange={event => handleSearch(event.target.value)}
-          boxShadow={theme.cardShadow}
+          boxShadow={theme.card.shadow}
           _placeholder={{
             color: theme.subtitle,
           }}
           _focusVisible={{
-            borderColor: theme.branding,
-            boxShadow: `0 0 0 1px ${theme.branding}`,
+            borderColor: theme.title,
+            boxShadow: `0 0 0 1px ${theme.title}`,
           }}
         />
       </InputGroup>

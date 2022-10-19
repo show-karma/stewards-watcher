@@ -4,12 +4,13 @@ import {
   Grid,
   GridItem,
   Icon,
+  Link,
   Skeleton,
   SkeletonCircle,
   Text,
 } from '@chakra-ui/react';
 import { FC, useState, useMemo } from 'react';
-import { BsCalendar4, BsChat } from 'react-icons/bs';
+import { BsCalendar4, BsChat, BsTwitter } from 'react-icons/bs';
 import { IoPersonOutline } from 'react-icons/io5';
 import { IoIosCheckboxOutline } from 'react-icons/io';
 import { AiOutlineThunderbolt } from 'react-icons/ai';
@@ -35,8 +36,8 @@ interface IStat {
 
 export const DelegateCard: FC<IDelegateCardProps> = props => {
   const { data } = props;
-  const { daoInfo } = useDAO();
-  const { theme, config } = daoInfo;
+  const { daoInfo, theme } = useDAO();
+  const { config } = daoInfo;
   const isLoaded = !!data;
   const allStats: IStat[] = [
     {
@@ -142,12 +143,12 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     <Flex
       bgColor={theme.card.background}
       flexDir="column"
-      px="8"
+      px="6"
       py="6"
       borderRadius="16"
       w={['full', '28rem']}
       gap="8"
-      boxShadow={theme.card.shadow || '0px 0px 10px 1px rgba(0,0,0,0.3)'}
+      boxShadow={theme.card.shadow}
       minH="max-content"
       borderWidth="1px"
       borderStyle="solid"
@@ -188,7 +189,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           flexDir="column"
           gap="0.5"
           justify="center"
-          w="full"
+          w="max-content"
           textOverflow="ellipsis"
           overflow="hidden"
           whiteSpace="break-spaces"
@@ -202,7 +203,11 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
               >
                 {data.ensName || shortAddress}
               </Text>
-              <Text color={theme.branding} fontSize={['lg', 'xl']}>
+              <Text
+                color={theme.subtitle}
+                fontSize={['md', 'lg']}
+                fontWeight="medium"
+              >
                 {shortAddress}
               </Text>
             </>
@@ -213,6 +218,11 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
             </>
           )}
         </Flex>
+        {data?.twitterHandle && (
+          <Link href={`https://twitter.com/${data.twitterHandle}`} isExternal>
+            <Icon as={BsTwitter} w="5" h="5" color={theme.card.text} />
+          </Link>
+        )}
       </Flex>
       <Flex gap="4" flexDir="column">
         <Divider borderColor={theme.card.divider} w="full" />
@@ -226,6 +236,13 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
               py={['2', '4']}
               borderRadius="lg"
               bgColor={theme.card.featureStatBg}
+              borderWidth="1px"
+              borderStyle="solid"
+              borderColor={
+                theme.card.featureStatBg === 'transparent'
+                  ? theme.card.border
+                  : 'transparent'
+              }
               w="full"
             >
               {data ? (

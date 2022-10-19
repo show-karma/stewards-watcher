@@ -11,7 +11,7 @@ export const DelegatesList: FC = () => {
   const { delegates, isLoading, fetchNextDelegates, hasMore } = useDelegates();
 
   return (
-    <Flex flexDir="column" align="center" px={{ base: '6' }}>
+    <Flex flexDir="column" align="center">
       <InfiniteScroll
         pageStart={0}
         loadMore={fetchNextDelegates}
@@ -31,11 +31,13 @@ export const DelegatesList: FC = () => {
       >
         <Flex
           flexWrap="wrap"
-          gap="8"
-          w="full"
+          rowGap="10"
+          columnGap="2"
+          w={{ base: 'full', '2xl': '1360px' }}
           align="center"
           justify="flex-start"
           my="8"
+          px={{ base: '6', lg: '0' }}
         >
           {isLoading
             ? delegates.length <= 0
