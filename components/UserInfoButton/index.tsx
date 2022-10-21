@@ -39,7 +39,7 @@ export const UserInfoButton: FC<IUserInfoProps> = ({ user }) => {
         as={Button}
         h={['10', '12']}
         rightIcon={<GoPlus />}
-        fontSize={['sm', 'md']}
+        fontSize={['md']}
         fontWeight="medium"
         bg="transparent"
         borderWidth="2px"

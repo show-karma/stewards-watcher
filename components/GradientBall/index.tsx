@@ -30,5 +30,6 @@ export const GradientBall: FC<IGradientBall> = ({
     opacity={opacity}
     filter={`blur(${blur})`}
     zIndex="2"
+    display={{ base: 'none', lg: 'flex' }}
   />
 );

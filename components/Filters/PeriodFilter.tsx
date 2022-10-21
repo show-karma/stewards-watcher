@@ -32,11 +32,14 @@ export const PeriodFilter = () => {
         boxShadow={theme.filters.shadow}
         color={theme.filters.title}
         borderRadius="sm"
-        gap="4"
+        gap="1"
         fontFamily="heading"
         fontWeight="normal"
         textAlign="left"
-        w={{ base: 'full', md: 'max-content' }}
+        fontSize="md"
+        minW="min-content"
+        maxW="full"
+        flex="1"
       >
         {selectedPeriod}
       </MenuButton>

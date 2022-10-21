@@ -14,8 +14,15 @@ export const OrderByFilters = () => {
         </Text>
         <StatFilter />
       </Flex>
-      <OrderFilter />
-      <PeriodFilter />
+      <Flex
+        flex="1"
+        gap={{ base: '1', sm: '2' }}
+        justifyContent="space-between"
+        flexWrap="wrap"
+      >
+        <OrderFilter />
+        <PeriodFilter />
+      </Flex>
     </Flex>
   );
 };
