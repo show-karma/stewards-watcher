@@ -143,8 +143,8 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     <Flex
       bgColor={theme.card.background}
       flexDir="column"
-      px="6"
-      py="6"
+      px={{ base: '4', sm: '6' }}
+      py={{ base: '4', sm: '6' }}
       borderRadius="16"
       maxW={['full', '28rem']}
       flex="1"
@@ -155,7 +155,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       borderStyle="solid"
       borderColor={theme.card.border}
     >
-      <Flex flexDir="row" gap={['2', '4']} w="full" align="center">
+      <Flex flexDir="row" gap={['4']} w="full" align="center">
         {data ? (
           <Flex
             minH={['48px', '64px']}
@@ -227,13 +227,13 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       </Flex>
       <Flex gap="4" flexDir="column">
         <Divider borderColor={theme.card.divider} w="full" />
-        <Flex flexDir={['column', 'row']} justify="space-between" gap="2">
+        <Flex flexDir={['row']} justify="space-between" gap="2">
           {featuredStats.map((stat, index) => (
             <Flex
               key={+index}
               gap={['1', '2']}
               pl="4"
-              pr="6"
+              pr="4"
               py="4"
               borderRadius="lg"
               bgColor={theme.card.featureStatBg}
@@ -245,6 +245,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   : 'transparent'
               }
               w="full"
+              flex="1"
             >
               {data ? (
                 <Icon as={stat.icon} h="6" w="6" color={theme.card.icon} />
@@ -258,6 +259,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                       color={theme.card.text.primary}
                       fontSize={['xs', 'sm']}
                       fontWeight="300"
+                      width="full"
                     >
                       {stat.title}
                     </Text>
@@ -276,7 +278,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
         <Divider borderColor={theme.card.divider} w="full" />
       </Flex>
       <Grid
-        gridTemplateColumns={['1fr', '1fr 1fr']}
+        gridTemplateColumns={['1fr 1fr', '1fr 1fr']}
         w="full"
         gap="6"
         px={['0', '4']}

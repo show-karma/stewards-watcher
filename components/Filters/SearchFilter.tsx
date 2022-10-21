@@ -15,7 +15,7 @@ export const SearchFilter = () => {
   const { handleSearch } = useDelegates();
 
   return (
-    <Flex flexDir="column">
+    <Flex flexDir="column" w="full" maxW="740">
       <Text fontFamily="heading" color={theme.filters.head}>
         Search
       </Text>
@@ -26,7 +26,7 @@ export const SearchFilter = () => {
         />
         <Input
           type="text"
-          placeholder="Find delegate by address or ens name..."
+          placeholder="Find delegate by name or address..."
           w={{ base: 'full', xl: '36.25rem' }}
           onChange={event => handleSearch(event.target.value)}
           boxShadow={theme.card.shadow}

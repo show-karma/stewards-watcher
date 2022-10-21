@@ -1,28 +1,16 @@
-import {
-  Button,
-  Flex,
-  Icon,
-  Img,
-  Link,
-  Skeleton,
-  Text,
-  useColorMode,
-  useColorModeValue,
-} from '@chakra-ui/react';
-import { useDAO, useDelegates } from 'contexts';
-import { getTimeFromNow } from 'utils';
-import { BsFillMoonFill, BsFillSunFill } from 'react-icons/bs';
+import { Flex, Img, Text } from '@chakra-ui/react';
+import { useDAO } from 'contexts';
+import { Madeby } from './Madeby';
+import { ThemeButton } from './ThemeButton';
 
 export const HeaderHat = () => {
   const { daoInfo, theme } = useDAO();
-  const { delegates, isLoading, lastUpdate } = useDelegates();
   const { config } = daoInfo;
-  const { toggleColorMode } = useColorMode();
   return (
     <Flex
       bgColor={theme.headerBg}
       py="4"
-      w="100%"
+      w="full"
       align="center"
       justify="center"
       px={['4', '16']}
@@ -35,7 +23,11 @@ export const HeaderHat = () => {
         gap="4"
         flexWrap="wrap"
       >
-        <Flex flexDir="column">
+        <Flex
+          flexDir="column"
+          flex={['1', 'none']}
+          align={['center', 'flex-start']}
+        >
           <Img w="36" h="10" objectFit="contain" src={config.DAO_LOGO} />
           <Text
             w="max-content"
@@ -46,57 +38,17 @@ export const HeaderHat = () => {
             Delegates Dashboard
           </Text>
         </Flex>
-        <Flex flexDir="row" gap="8" align="center">
-          <Button
-            onClick={toggleColorMode}
-            _hover={{ opacity: 0.9 }}
-            _active={{}}
-            _focus={{}}
-            _focusWithin={{}}
-            bgColor="transparent"
-            color={theme.themeIcon}
-          >
-            <Icon
-              as={useColorModeValue(BsFillMoonFill, BsFillSunFill)}
-              w="5"
-              h="5"
-            />
-          </Button>
-          <Flex flexDir="column" align="start">
-            <Text
-              fontSize={['sm', 'md']}
-              fontWeight="normal"
-              color={theme.hat.text.primary}
-            >
-              Made with ❤️ by
-            </Text>
-
-            <Link href="https://showkarma.xyz" isExternal>
-              <Img
-                w={['5.25rem', '8.75rem']}
-                h={['1.35rem', '2.25rem']}
-                objectFit="contain"
-                src="/images/karma_logo.svg"
-              />
-            </Link>
-            {delegates.length > 0 && (
-              <Flex
-                flexDir="row"
-                gap="1"
-                justifyContent="end"
-                color={theme.hat.text.secondary}
-              >
-                <Text fontSize="xs">Data updated</Text>
-                {isLoading ? (
-                  <Skeleton w="16" h="5">
-                    00 hours ago
-                  </Skeleton>
-                ) : (
-                  <Text fontSize="xs">{getTimeFromNow(lastUpdate)}</Text>
-                )}
-              </Flex>
-            )}
-          </Flex>
+        <Flex
+          flexDir="row"
+          gap="2"
+          h="full"
+          w={['min-content', 'max-content']}
+          position={{ base: 'absolute', md: 'unset' }}
+          right={{ base: '4', md: 'unset' }}
+          top={{ base: '6', md: 'unset' }}
+        >
+          <ThemeButton />
+          <Madeby display={{ base: 'none', md: 'flex' }} />
         </Flex>
       </Flex>
     </Flex>
