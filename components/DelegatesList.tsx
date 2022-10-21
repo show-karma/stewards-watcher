@@ -36,7 +36,7 @@ export const DelegatesList: FC = () => {
           w={{ base: 'full', '2xl': '1360px' }}
           align="center"
           justify="flex-start"
-          my="8"
+          mb="8"
           px={{ base: '6', lg: '0' }}
         >
           {isLoading

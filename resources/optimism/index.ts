@@ -41,6 +41,8 @@ const dark: IDAOTheme = {
     text: {
       primary: '#FFFFFF',
       secondary: '#ADB8C0',
+      madeBy: '#FFFFFF',
+      lastUpdated: '#ADB8C0',
     },
   },
   filters: {
@@ -77,6 +79,8 @@ const light: IDAOTheme = {
     text: {
       primary: '#FFFFFF',
       secondary: '#ADB8C0',
+      madeBy: '#222429',
+      lastUpdated: '#666666',
     },
   },
   filters: {

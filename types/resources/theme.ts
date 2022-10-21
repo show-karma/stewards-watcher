@@ -15,6 +15,8 @@ export interface IDAOTheme {
     text: {
       primary: string;
       secondary: string;
+      madeBy: string;
+      lastUpdated: string;
     };
   };
   filters: {

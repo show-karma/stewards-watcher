@@ -14,6 +14,7 @@ import { IoClose } from 'react-icons/io5';
 import { Filters } from './Filters';
 import { ClearButton } from './Filters/ClearButton';
 import { GradientBall } from './GradientBall';
+import { Madeby } from './HeaderHat/Madeby';
 
 const DelegatesCounter: FC<{
   isLoading: boolean;
@@ -50,15 +51,18 @@ export const Header: FC = () => {
         w={{ base: 'full', '2xl': '1360px' }}
         px={{ base: '6', lg: '0' }}
         zIndex="4"
-        py={showHeaderText ? '0' : ['2', '3.75rem']}
+        py={showHeaderText ? '0' : { base: '0', md: '2rem' }}
+        align={{ base: 'center', md: 'flex-start' }}
       >
-        <Collapse in={showHeaderText}>
+        <Madeby display={{ base: 'flex', md: 'none' }} py="6" />
+        <Collapse in={showHeaderText} style={{ width: '100%' }}>
           <Flex
             align="center"
             justify="space-between"
             flexWrap="wrap"
             py={['2', '3.75rem']}
             position="relative"
+            w="full"
           >
             <Flex
               textAlign="start"
@@ -71,23 +75,34 @@ export const Header: FC = () => {
             >
               <Text
                 color={theme.title}
-                textAlign="start"
-                fontSize={['xl', '2xl']}
+                textAlign={{ base: 'start' }}
+                fontSize={{ base: 'lg', sm: '2xl' }}
                 lineHeight={['8', '9']}
                 fontWeight="600"
-                fontFamily="heading"
+                fontFamily="body"
               >
                 {config.DAO_DESCRIPTION}
               </Text>
               <Text
                 color={theme.subtitle}
-                fontSize={['lg', 'xl']}
+                fontSize={{ base: 'md', sm: 'xl' }}
+                textAlign={{ base: 'start' }}
                 fontWeight="light"
+                fontFamily="heading"
+                pt={{ base: '4', md: '0' }}
+                pb={{ base: '8', md: '0' }}
               >
                 {config.DAO_SUBDESCRIPTION}
               </Text>
             </Flex>
-            <Flex gap={['4', '8']} my={['2', '8']} flexWrap="wrap">
+            <Flex
+              alignItems={{ base: 'center' }}
+              justifyContent={{ base: 'center', md: 'flex-start' }}
+              gap={['4', '8']}
+              mt={{ base: '2', sm: '4', md: '8' }}
+              mb={{ base: '10' }}
+              flexWrap="wrap"
+            >
               <Link href={config.GOVERNANCE_FORUM}>
                 <Button
                   px="6"
@@ -158,9 +173,10 @@ export const Header: FC = () => {
               color={theme.themeIcon}
               onClick={hideHeaderText}
               position="absolute"
-              top="8"
+              top={{ base: '0', md: '8' }}
               right="0"
               cursor="pointer"
+              display={{ base: 'none', md: 'flex' }}
             />
           </Flex>
         </Collapse>
