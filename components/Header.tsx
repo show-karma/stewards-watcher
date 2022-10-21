@@ -75,7 +75,7 @@ export const Header: FC = () => {
             >
               <Text
                 color={theme.title}
-                textAlign={{ base: 'center', md: 'start' }}
+                textAlign={{ base: 'start' }}
                 fontSize={{ base: 'lg', sm: '2xl' }}
                 lineHeight={['8', '9']}
                 fontWeight="600"
@@ -86,7 +86,7 @@ export const Header: FC = () => {
               <Text
                 color={theme.subtitle}
                 fontSize={{ base: 'md', sm: 'xl' }}
-                textAlign={{ base: 'center', md: 'start' }}
+                textAlign={{ base: 'start' }}
                 fontWeight="light"
                 fontFamily="heading"
                 pt={{ base: '4', md: '0' }}
