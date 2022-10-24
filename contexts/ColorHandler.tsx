@@ -17,7 +17,6 @@ const ColorHandler = ({
     typeof cookies === 'string'
       ? cookieStorageManagerSSR(cookies)
       : localStorageManager;
-
   return (
     <ChakraProvider resetCSS theme={theme} colorModeManager={colorModeManager}>
       {children}
