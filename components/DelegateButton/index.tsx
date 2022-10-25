@@ -5,9 +5,13 @@ import { FC } from 'react';
 
 interface IDelegateButton {
   delegated: string;
+  text?: string;
 }
 
-export const DelegateButton: FC<IDelegateButton> = ({ delegated }) => {
+export const DelegateButton: FC<IDelegateButton> = ({
+  delegated,
+  text = 'Delegate',
+}) => {
   const { openConnectModal, openChainModal, isConnected, chain } = useWallet();
   const { daoInfo, theme } = useDAO();
   const { config } = daoInfo;
@@ -40,7 +44,7 @@ export const DelegateButton: FC<IDelegateButton> = ({ delegated }) => {
     >
       <Flex gap="2">
         {isLoading && <Spinner />}
-        Delegate
+        {text}
       </Flex>
     </Button>
   );

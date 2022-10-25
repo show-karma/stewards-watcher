@@ -40,4 +40,36 @@ export interface IDAOTheme {
     };
     border: string;
   };
+  modal: {
+    background: string;
+    header: {
+      border: string;
+      title: string;
+      subtitle: string;
+      twitter: string;
+      divider: string;
+    };
+    buttons: {
+      selectBg: string;
+      selectText: string;
+      navBg: string;
+      navText: string;
+      navUnselectedText: string;
+      navBorder: string;
+    };
+    statement: {
+      headline: string;
+      text: string;
+      sidebar: {
+        section: string;
+        subsection: string;
+        text: string;
+        item: {
+          bg: string;
+          text: string;
+          border: string;
+        };
+      };
+    };
+  };
 }

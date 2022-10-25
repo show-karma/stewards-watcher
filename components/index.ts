@@ -5,6 +5,8 @@ export * from './Filters';
 export * from './GradientBall';
 export * from './Header';
 export * from './HeaderHat';
+export * from './Icons';
 export * from './ImgWithFallback';
+export * from './Modals';
 export * from './UserInfoButton';
 export * from './Wrappers';

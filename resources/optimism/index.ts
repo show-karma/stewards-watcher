@@ -61,6 +61,38 @@ const dark: IDAOTheme = {
     text: { primary: '#FFFFFF', secondary: '#ADB8C0' },
     border: '#403E4F',
   },
+  modal: {
+    background: '#222429',
+    header: {
+      border: '#ADB8C0',
+      title: '#FFFFFF',
+      subtitle: '#ADB8C0',
+      twitter: '#ADB8C0',
+      divider: 'rgba(173, 184, 192, 0.2)',
+    },
+    buttons: {
+      selectBg: '#C80925',
+      selectText: '#FFFFFF',
+      navBg: 'transparent',
+      navText: '#FFFFFF',
+      navUnselectedText: '#ADB8C0',
+      navBorder: '#FFFFFF',
+    },
+    statement: {
+      headline: '#FFFFFF',
+      text: '#ADB8C0',
+      sidebar: {
+        section: '#FFFFFF',
+        subsection: '#FFFFFF',
+        text: '#ADB8C0',
+        item: {
+          bg: 'transparent',
+          text: '#FFFFFF',
+          border: '#ADB8C0',
+        },
+      },
+    },
+  },
 };
 
 const light: IDAOTheme = {
@@ -98,6 +130,38 @@ const light: IDAOTheme = {
     divider: 'rgba(102, 102, 102, 0.5)',
     text: { primary: '#212328', secondary: '#666666' },
     border: 'rgba(102, 102, 102, 0.5)',
+  },
+  modal: {
+    background: '#222429',
+    header: {
+      border: '#ADB8C0',
+      title: '#FFFFFF',
+      subtitle: '#ADB8C0',
+      twitter: '#ADB8C0',
+      divider: 'rgba(173, 184, 192, 0.2)',
+    },
+    buttons: {
+      selectBg: '#C80925',
+      selectText: '#FFFFFF',
+      navBg: 'transparent',
+      navText: '#FFFFFF',
+      navUnselectedText: '#ADB8C0',
+      navBorder: '#FFFFFF',
+    },
+    statement: {
+      headline: '#FFFFFF',
+      text: '#ADB8C0',
+      sidebar: {
+        section: '#FFFFFF',
+        subsection: '#FFFFFF',
+        text: '#ADB8C0',
+        item: {
+          bg: 'transparent',
+          text: '#FFFFFF',
+          border: '#ADB8C0',
+        },
+      },
+    },
   },
 };
 
