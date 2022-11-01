@@ -5,6 +5,8 @@ import {
   IconProps,
   Img,
   Link,
+  Skeleton,
+  SkeletonText,
   Text,
 } from '@chakra-ui/react';
 import { FC, ReactNode } from 'react';
@@ -22,41 +24,47 @@ interface ICustomFields {
   value: string[];
 }
 interface ITextSection {
-  profile: IProfile;
+  statement?: ICustomFields[];
 }
-const TextSection: FC<ITextSection> = ({ profile }) => {
+const TextSection: FC<ITextSection> = ({ statement }) => {
   const { theme } = useDAO();
+  console.log('statement', statement);
   return (
-    <Flex maxW="30rem" gap="4" flexDir="column">
-      <Text
-        color={theme.modal.statement.headline}
-        fontWeight="semibold"
-        fontSize="xl"
-      >
-        Headline
-      </Text>
-      <Text
-        color={theme.modal.statement.text}
-        fontWeight="light"
-        fontSize="md"
-        fontFamily="body"
-        textAlign="left"
-      >
-        I want to further support the important work that Optimism is doing on
-        scaling. I’m also passionate about public goods funding and governance
-        experimentation. My view on the Optimistic Vision: I align strongly with
-        the vision. I’m excited about the new model focused on optimizing for
-        positive impact and providing retroactive incentives for public goods.
-        My view on the first three articles of the Working Constitution: Agree,
-        I think the collective should be open to experimentation and be dynamic
-        in the early days as we grow and learn Agree, I’m supportive of checks
-        and balances Agree, I’m glad to see the Optimism Foundation be a steward
-        of the collective early on My skills and areas of expertise: product
-        (previously product manager at Coinbase), governance (delegate for
-        Gitcoin and Element DAO), writing / creating educational content,
-        operations, strategy, DeFi (advisor of 0x and investor in many DeFi
-        projects), investing (co-founder of crypto fund Scalar Capital)
-      </Text>
+    <Flex maxW="30rem" gap="4" flexDir="column" flex="1">
+      {statement && statement.length > 0 ? (
+        statement.map((text, index) => (
+          <Flex flexDir="column" key={+index}>
+            {/* <Text
+              color={theme.modal.statement.headline}
+              fontWeight="semibold"
+              fontSize="xl"
+            >
+              {text.label}
+            </Text> */}
+            <Text
+              color={theme.modal.statement.text}
+              fontWeight="light"
+              fontSize="md"
+              fontFamily="body"
+              textAlign="left"
+              whiteSpace="pre-line"
+            >
+              {text.value}
+            </Text>
+          </Flex>
+        ))
+      ) : (
+        <Text
+          color={theme.modal.statement.text}
+          fontWeight="light"
+          fontSize="md"
+          fontFamily="body"
+          textAlign="left"
+          whiteSpace="pre-line"
+        >
+          {`This user doesn't have a statement yet`}
+        </Text>
+      )}
     </Flex>
   );
 };
@@ -160,7 +168,9 @@ const Sidebar: FC<ISidebar> = ({ profile, interests, languages }) => {
           ))}
         </Flex>
         <Flex flexDir="column" gap="5">
-          <SectionHeader>Languages</SectionHeader>
+          {languages && languages.value.length > 0 && (
+            <SectionHeader>Languages</SectionHeader>
+          )}
           <Flex columnGap="1" rowGap="2" flexWrap="wrap">
             {languages?.value.map((language, index) => (
               <SectionItem key={+index}>{language}</SectionItem>
@@ -168,7 +178,9 @@ const Sidebar: FC<ISidebar> = ({ profile, interests, languages }) => {
           </Flex>
         </Flex>
         <Flex flexDir="column" gap="5">
-          <SectionHeader>Interests</SectionHeader>
+          {interests && languages.value.length > 0 && (
+            <SectionHeader>Interests</SectionHeader>
+          )}
           <Flex columnGap="1" rowGap="2" flexWrap="wrap">
             {interests?.value.map((interest, index) => (
               <SectionItem icon={JoystickIcon} key={+index}>
@@ -187,29 +199,34 @@ interface IStatement {
 }
 
 export const Statement: FC<IStatement> = ({ profile }) => {
-  const { theme, daoInfo } = useDAO();
-  const { avatar } = profile;
+  const { daoInfo } = useDAO();
   const { DAO_KARMA_ID } = daoInfo.config;
-  const { data } = useQuery(
-    ['statement'],
-    () =>
+  const { data, isLoading } = useQuery({
+    queryKey: ['statement', profile.address],
+    queryFn: () =>
       axiosInstance.get(
-        `/forum-user/ens/delegate-pitch/0xd7d1db401ea825b0325141cd5e6cd7c2d01825f2`
-      )
-    // axiosInstance.get(
-    //   `/forum-user/${DAO_KARMA_ID}/delegate-pitch/${profile.address}`
-    // )
-  );
+        `/forum-user/${DAO_KARMA_ID}/delegate-pitch/${profile.address}`
+      ),
+    retry: 1,
+    retryDelay: 1000,
+  });
+
   const customFields: ICustomFields[] =
     data?.data.data.delegatePitch.customFields;
   const emptyField: ICustomFields = { label: '', value: [] };
   const languages =
-    customFields?.find(item => item.label.includes('Languages')) || emptyField;
+    customFields?.find(item =>
+      item.label.toLowerCase().includes('languages')
+    ) || emptyField;
   const interests =
-    customFields?.find(item => item.label.includes('Interests')) || emptyField;
+    customFields?.find(item =>
+      item.label.toLowerCase().includes('interests')
+    ) || emptyField;
   const statement =
-    customFields?.find(item => item.label.includes('Enter your pitch here')) ||
-    emptyField;
+    customFields?.filter(
+      (item: { value: string | string[]; label: string }) =>
+        typeof item.value === 'string' && item.value.length > 100
+    ) || [];
 
   return (
     <Flex
@@ -219,8 +236,23 @@ export const Statement: FC<IStatement> = ({ profile }) => {
       flexDir={{ base: 'column', lg: 'row' }}
       px="0"
     >
-      <TextSection profile={profile} />
-      <Sidebar profile={profile} languages={languages} interests={interests} />
+      {isLoading ? (
+        <SkeletonText w="full" mt="4" noOfLines={4} spacing="4" />
+      ) : (
+        <TextSection statement={statement} />
+      )}
+      {isLoading ? (
+        <Flex flexDir="column" w="full" maxW="40" gap="10">
+          <Skeleton w="full" h="10" />
+          <Skeleton w="full" h="10" />
+        </Flex>
+      ) : (
+        <Sidebar
+          profile={profile}
+          languages={languages}
+          interests={interests}
+        />
+      )}
     </Flex>
   );
 };
