@@ -1,6 +1,6 @@
 import { Button, Flex, Spinner } from '@chakra-ui/react';
 import { useDAO, useWallet } from 'contexts';
-import { useDelegate } from 'hooks';
+import { useDelegation } from 'hooks';
 import { FC } from 'react';
 
 interface IDelegateButton {
@@ -16,7 +16,10 @@ export const DelegateButton: FC<IDelegateButton> = ({
   const { daoInfo, theme } = useDAO();
   const { config } = daoInfo;
 
-  const { isLoading, write } = useDelegate(delegated);
+  const { isLoading, write } = useDelegation({
+    delegatee: delegated,
+    type: 'onChain',
+  });
 
   const handleCase = () => {
     if (!isConnected) {

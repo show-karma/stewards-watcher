@@ -40,6 +40,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   const { data } = props;
   const { daoInfo, theme } = useDAO();
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   const { config } = daoInfo;
   const isLoaded = !!data;
   const allStats: IStat[] = [
@@ -92,6 +93,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   ];
 
   const [stats, setStats] = useState(allStats);
+  const [selectedTab, setSelectedTab] = useState<'statement' | 'votingHistory'>(
+    'statement'
+  );
 
   const [featuredStats, setFeaturedStats] = useState([] as IStat[]);
 
@@ -142,9 +146,26 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
 
   const canDelegate = !!daoInfo.ABI;
 
+  const handleModal = (tab: 'statement' | 'votingHistory') => {
+    setSelectedTab(tab);
+    onOpen();
+  };
+
   return (
     <>
-      <UserProfile isOpen={isOpen} onClose={onClose} />
+      {data && (
+        <UserProfile
+          isOpen={isOpen}
+          onClose={onClose}
+          profile={{
+            address: data.address,
+            avatar: `${config.IMAGE_PREFIX_URL}${data.address}`,
+            ensName: data.ensName,
+            twitter: data.twitterHandle,
+          }}
+          selectedTab={selectedTab}
+        />
+      )}
       <Flex
         bgColor={theme.card.background}
         flexDir="column"
@@ -348,7 +369,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
               {isLoaded ? (
                 <>
                   <DelegateButton delegated={data.address} />
-                  <UserInfoButton onOpen={onOpen} />
+                  <UserInfoButton onOpen={handleModal} />
                 </>
               ) : (
                 <>

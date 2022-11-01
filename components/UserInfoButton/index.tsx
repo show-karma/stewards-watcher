@@ -1,7 +1,6 @@
 import {
   Button,
   Icon,
-  Link,
   Menu,
   MenuButton,
   MenuItem,
@@ -13,20 +12,20 @@ import { GoPlus } from 'react-icons/go';
 import { TbExternalLink } from 'react-icons/tb';
 
 interface IUserInfoProps {
-  onOpen: () => void;
+  onOpen: (tab: 'statement' | 'votingHistory') => void;
 }
 
 export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen }) => {
   const { theme } = useDAO();
 
-  const options = [
+  const options: { title: string; tab: 'statement' | 'votingHistory' }[] = [
     {
       title: 'User Statement',
-      link: '/',
+      tab: 'statement',
     },
     {
       title: 'Voting History',
-      link: '/',
+      tab: 'votingHistory',
     },
   ];
   return (
@@ -49,14 +48,14 @@ export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen }) => {
         User Info
       </MenuButton>
       <MenuList bgColor={theme.card.background}>
-        {options.map(({ title }, index) => (
+        {options.map(({ title, tab }, index) => (
           <MenuItem
             key={+index}
             justifyContent="space-between"
             textDecor="none"
             fontSize={['sm', 'md']}
             _hover={{ textDecor: 'none', opacity: '0.7' }}
-            onClick={onOpen}
+            onClick={() => onOpen(tab)}
           >
             {title} <Icon as={TbExternalLink} />
           </MenuItem>

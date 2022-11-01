@@ -5,3 +5,8 @@ export interface IStatOptions {
   title: string;
   stat: IFilterStat;
 }
+
+export interface IVoteInfo {
+  snapshotIds: string | string[];
+  onChainId: string;
+}

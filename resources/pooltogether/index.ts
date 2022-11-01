@@ -21,6 +21,9 @@ const config: IDAOConfig = {
   },
   DAO_CHAIN: chain.mainnet,
   DAO_DELEGATE_CONTRACT: '0x0cec1a9154ff802e7934fc916ed7ca50bde6844e',
+  DAO_DELEGATE_MODES: {
+    onChain: true,
+  },
   EXCLUDED_CARD_FIELDS: [],
   FEATURED_CARD_FIELDS: ['delegatedVotes', 'offChainVotesPct'],
 };
@@ -102,6 +105,39 @@ const dark: IDAOTheme = {
         },
       },
     },
+    votingHistory: {
+      headline: '#FFFFFF',
+      divider: '#E6E6E6',
+      proposal: {
+        title: '#FFFFFF',
+        type: '#ADB8C0',
+        date: '#ADB8C0',
+        result: '#FFFFFF',
+        verticalDivider: 'rgba(173, 184, 192, 0.5)',
+        divider: 'rgba(173, 184, 192, 0.2)',
+        icons: {
+          for: 'green.300',
+          against: 'red.500',
+          abstain: 'gray.300',
+          notVoted: 'gray.300',
+          multiple: 'green.300',
+        },
+      },
+      reason: {
+        title: '#FFFFFF',
+        text: '#ADB8C0',
+        divider: 'rgba(173, 184, 192, 0.2)',
+      },
+      navigation: {
+        color: '#ADB8C0',
+        buttons: {
+          selectedBg: '#ADB8C0',
+          selectedText: '#222429',
+          unSelectedBg: 'transparent',
+          unSelectedText: '#ADB8C0',
+        },
+      },
+    },
   },
 };
 
@@ -169,6 +205,39 @@ const light: IDAOTheme = {
           bg: 'transparent',
           text: '#FFFFFF',
           border: '#ADB8C0',
+        },
+      },
+    },
+    votingHistory: {
+      headline: '#FFFFFF',
+      divider: '#E6E6E6',
+      proposal: {
+        title: '#FFFFFF',
+        type: '#ADB8C0',
+        date: '#ADB8C0',
+        result: '#FFFFFF',
+        verticalDivider: 'rgba(173, 184, 192, 0.5)',
+        divider: 'rgba(173, 184, 192, 0.2)',
+        icons: {
+          for: '#FFFFFF',
+          against: '#FFFFFF',
+          abstain: '#FFFFFF',
+          notVoted: '#FFFFFF',
+          multiple: '#FFFFFF',
+        },
+      },
+      reason: {
+        title: '#FFFFFF',
+        text: '#ADB8C0',
+        divider: 'rgba(173, 184, 192, 0.2)',
+      },
+      navigation: {
+        color: '#ADB8C0',
+        buttons: {
+          selectedBg: '#ADB8C0',
+          selectedText: '#222429',
+          unSelectedBg: 'transparent',
+          unSelectedText: '#ADB8C0',
         },
       },
     },

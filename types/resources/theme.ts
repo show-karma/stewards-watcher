@@ -71,5 +71,38 @@ export interface IDAOTheme {
         };
       };
     };
+    votingHistory: {
+      headline: string;
+      divider: string;
+      proposal: {
+        title: string;
+        type: string;
+        date: string;
+        result: string;
+        verticalDivider: string;
+        divider: string;
+        icons: {
+          for: string;
+          against: string;
+          abstain: string;
+          notVoted: string;
+          multiple: string;
+        };
+      };
+      reason: {
+        title: string;
+        text: string;
+        divider: string;
+      };
+      navigation: {
+        color: string;
+        buttons: {
+          selectedBg: string;
+          selectedText: string;
+          unSelectedBg: string;
+          unSelectedText: string;
+        };
+      };
+    };
   };
 }

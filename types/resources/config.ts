@@ -18,6 +18,10 @@ export interface IDAOConfig {
   };
   DAO_CHAIN: Chain;
   DAO_DELEGATE_CONTRACT: string;
+  DAO_DELEGATE_MODES: {
+    onChain: boolean;
+    offChain?: 'snapshot';
+  };
   EXCLUDED_CARD_FIELDS: string[];
   FEATURED_CARD_FIELDS: string[];
 }

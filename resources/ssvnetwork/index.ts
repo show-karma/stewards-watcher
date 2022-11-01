@@ -3,7 +3,7 @@ import { chain } from 'wagmi';
 
 const config: IDAOConfig = {
   DAO: 'SSV Network',
-  DAO_DESCRIPTION: `The Delegates of DAO play a vital role in driving the SSV Network ecosystem forward through their work in governance and workstreams.`,
+  DAO_DESCRIPTION: `The Delegates of SSV Network DAO play a vital role in driving the SSV Network ecosystem forward through their work in governance and workstreams.`,
   DAO_SUBDESCRIPTION: `This site will help boost transparency with health cards for each Delegate that display metrics and links on their involvement and engagement in the DAO.`,
   DAO_URL: 'https://ssv.network',
   GOVERNANCE_FORUM: 'https://forum.ssv.network',
@@ -19,6 +19,10 @@ const config: IDAOConfig = {
   },
   DAO_CHAIN: chain.mainnet,
   DAO_DELEGATE_CONTRACT: '',
+  DAO_DELEGATE_MODES: {
+    onChain: false,
+    offChain: 'snapshot',
+  },
   FEATURED_CARD_FIELDS: ['delegatedVotes', 'offChainVotesPct'],
   EXCLUDED_CARD_FIELDS: ['onChainVotesPct'],
 };
@@ -100,6 +104,39 @@ const dark: IDAOTheme = {
         },
       },
     },
+    votingHistory: {
+      headline: '#FFFFFF',
+      divider: '#E6E6E6',
+      proposal: {
+        title: '#FFFFFF',
+        type: '#ADB8C0',
+        date: '#ADB8C0',
+        result: '#FFFFFF',
+        verticalDivider: 'rgba(173, 184, 192, 0.5)',
+        divider: 'rgba(173, 184, 192, 0.2)',
+        icons: {
+          for: 'green.300',
+          against: 'red.500',
+          abstain: 'gray.300',
+          notVoted: 'gray.300',
+          multiple: 'green.300',
+        },
+      },
+      reason: {
+        title: '#FFFFFF',
+        text: '#ADB8C0',
+        divider: 'rgba(173, 184, 192, 0.2)',
+      },
+      navigation: {
+        color: '#ADB8C0',
+        buttons: {
+          selectedBg: '#ADB8C0',
+          selectedText: '#222429',
+          unSelectedBg: 'transparent',
+          unSelectedText: '#ADB8C0',
+        },
+      },
+    },
   },
 };
 
@@ -167,6 +204,39 @@ const light: IDAOTheme = {
           bg: 'transparent',
           text: '#FFFFFF',
           border: '#ADB8C0',
+        },
+      },
+    },
+    votingHistory: {
+      headline: '#FFFFFF',
+      divider: '#E6E6E6',
+      proposal: {
+        title: '#FFFFFF',
+        type: '#ADB8C0',
+        date: '#ADB8C0',
+        result: '#FFFFFF',
+        verticalDivider: 'rgba(173, 184, 192, 0.5)',
+        divider: 'rgba(173, 184, 192, 0.2)',
+        icons: {
+          for: '#FFFFFF',
+          against: '#FFFFFF',
+          abstain: '#FFFFFF',
+          notVoted: '#FFFFFF',
+          multiple: '#FFFFFF',
+        },
+      },
+      reason: {
+        title: '#FFFFFF',
+        text: '#ADB8C0',
+        divider: 'rgba(173, 184, 192, 0.2)',
+      },
+      navigation: {
+        color: '#ADB8C0',
+        buttons: {
+          selectedBg: '#ADB8C0',
+          selectedText: '#222429',
+          unSelectedBg: 'transparent',
+          unSelectedText: '#ADB8C0',
         },
       },
     },

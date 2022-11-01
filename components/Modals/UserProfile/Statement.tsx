@@ -10,15 +10,24 @@ import {
 import { FC, ReactNode } from 'react';
 import { useDAO } from 'contexts';
 import { RiExternalLinkLine } from 'react-icons/ri';
-import { truncateAddress } from 'utils';
+import { axiosInstance, truncateAddress } from 'utils';
 import { ImgWithFallback } from 'components/ImgWithFallback';
 import { JoystickIcon } from 'components/Icons';
 import { IconType } from 'react-icons';
+import { IProfile } from 'types';
+import { useQuery } from '@tanstack/react-query';
 
-const TextSection = () => {
+interface ICustomFields {
+  label: string;
+  value: string[];
+}
+interface ITextSection {
+  profile: IProfile;
+}
+const TextSection: FC<ITextSection> = ({ profile }) => {
   const { theme } = useDAO();
   return (
-    <Flex flexDir="column" maxW="30rem" gap="4">
+    <Flex maxW="30rem" gap="4" flexDir="column">
       <Text
         color={theme.modal.statement.headline}
         fontWeight="semibold"
@@ -95,40 +104,24 @@ const SectionItem: FC<SectionItem> = ({ children, icon }) => {
   );
 };
 
-const Sidebar = () => {
+interface ISidebar {
+  profile: IProfile;
+  interests: ICustomFields;
+  languages: ICustomFields;
+}
+
+const Sidebar: FC<ISidebar> = ({ profile, interests, languages }) => {
   const { theme } = useDAO();
+  const { avatar } = profile;
   const links = [
     {
-      address: '0x12345a54dsa6d54as454567890',
-      ensName: 'lindajxe.eth',
+      address: profile.address,
+      ensName: profile.ensName,
     },
-    {
-      address: '0x12345613s21ad321sa32190',
-      ensName: 'lindaj1xe.eth',
-    },
-  ];
-
-  const languages = [
-    'English',
-    'Mandarian',
-    'German',
-    'Spanish',
-    'French',
-    'Italian',
-  ];
-  const interests = [
-    'Accessibility',
-    'DAO',
-    'Defi',
-    'Governance',
-    'Economics',
-    'Identity',
-    'Privacy',
-    'Social Impact',
   ];
 
   return (
-    <Flex w="16.875rem">
+    <Flex w={{ base: 'full', lg: '16.875rem' }}>
       <Flex flexDir="column" gap="10" w="full">
         <Flex flexDir="column" gap="4">
           <SectionHeader>Links</SectionHeader>
@@ -137,6 +130,7 @@ const Sidebar = () => {
               <Flex flexDir="row" gap="3" align="center">
                 <ImgWithFallback
                   fallback={ensName || address}
+                  src={avatar}
                   w="4"
                   h="4"
                   borderRadius="full"
@@ -168,15 +162,15 @@ const Sidebar = () => {
         <Flex flexDir="column" gap="5">
           <SectionHeader>Languages</SectionHeader>
           <Flex columnGap="1" rowGap="2" flexWrap="wrap">
-            {languages.map((language, index) => (
+            {languages?.value.map((language, index) => (
               <SectionItem key={+index}>{language}</SectionItem>
             ))}
           </Flex>
         </Flex>
         <Flex flexDir="column" gap="5">
-          <SectionHeader>Crypto Interests</SectionHeader>
+          <SectionHeader>Interests</SectionHeader>
           <Flex columnGap="1" rowGap="2" flexWrap="wrap">
-            {interests.map((interest, index) => (
+            {interests?.value.map((interest, index) => (
               <SectionItem icon={JoystickIcon} key={+index}>
                 {interest}
               </SectionItem>
@@ -188,9 +182,45 @@ const Sidebar = () => {
   );
 };
 
-export const Statement: FC = () => (
-  <Flex mt="10" mb="20" flexDir="row" gap="4rem">
-    <TextSection />
-    <Sidebar />
-  </Flex>
-);
+interface IStatement {
+  profile: IProfile;
+}
+
+export const Statement: FC<IStatement> = ({ profile }) => {
+  const { theme, daoInfo } = useDAO();
+  const { avatar } = profile;
+  const { DAO_KARMA_ID } = daoInfo.config;
+  const { data } = useQuery(
+    ['statement'],
+    () =>
+      axiosInstance.get(
+        `/forum-user/ens/delegate-pitch/0xd7d1db401ea825b0325141cd5e6cd7c2d01825f2`
+      )
+    // axiosInstance.get(
+    //   `/forum-user/${DAO_KARMA_ID}/delegate-pitch/${profile.address}`
+    // )
+  );
+  const customFields: ICustomFields[] =
+    data?.data.data.delegatePitch.customFields;
+  const emptyField: ICustomFields = { label: '', value: [] };
+  const languages =
+    customFields?.find(item => item.label.includes('Languages')) || emptyField;
+  const interests =
+    customFields?.find(item => item.label.includes('Interests')) || emptyField;
+  const statement =
+    customFields?.find(item => item.label.includes('Enter your pitch here')) ||
+    emptyField;
+
+  return (
+    <Flex
+      mt={{ base: '5', lg: '10' }}
+      mb={{ base: '10', lg: '20' }}
+      gap={{ base: '2rem', lg: '4rem' }}
+      flexDir={{ base: 'column', lg: 'row' }}
+      px="0"
+    >
+      <TextSection profile={profile} />
+      <Sidebar profile={profile} languages={languages} interests={interests} />
+    </Flex>
+  );
+};
