@@ -9,6 +9,7 @@ import {
   IFilterPeriod,
   IDelegateFromAPI,
   IStatOptions,
+  IVoteInfo,
 } from 'types';
 import { axiosInstance } from 'utils';
 import { useDAO } from './dao';
@@ -33,6 +34,7 @@ interface IDelegateProps {
   order: IFilterOrder;
   period: IFilterPeriod;
   clearFilters: () => void;
+  voteInfos: IVoteInfo;
 }
 
 export const DelegatesContext = createContext({} as IDelegateProps);
@@ -63,6 +65,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const [order, setOrder] = useState<IFilterOrder>('desc');
   const [period, setPeriod] = useState<IFilterPeriod>('lifetime');
   const [userToFind, setUserToFind] = useState('');
+  const [voteInfos, setVoteInfos] = useState({} as IVoteInfo);
 
   const isSearchDirty = userToFind !== '';
 
@@ -81,7 +84,15 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           userToFind && `name=${userToFind}`
         }&offset=${_offset}&order=${order}&field=${stat}&period=${period}`
       );
-      const { delegates: fetchedDelegates } = axiosClient.data.data;
+      const {
+        delegates: fetchedDelegates,
+        onChainId,
+        snapshotIds,
+      } = axiosClient.data.data;
+      setVoteInfos({
+        onChainId,
+        snapshotIds,
+      });
       setHasMore(fetchedDelegates.length === 10);
       setLastUpdate(fetchedDelegates[0].stats[0].updatedAt);
 
@@ -121,7 +132,15 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       const axiosClient = await axiosInstance.get(
         `/dao/find-delegate?dao=${config.DAO_KARMA_ID}&user=${userToFind}`
       );
-      const { delegate: fetchedDelegate } = axiosClient.data.data;
+      const {
+        delegate: fetchedDelegate,
+        snapshotIds,
+        onChainId,
+      } = axiosClient.data.data;
+      setVoteInfos({
+        onChainId,
+        snapshotIds,
+      });
       if (!fetchedDelegate) {
         throw new Error('No delegates found');
       }
@@ -163,7 +182,15 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       const axiosClient = await axiosInstance.get(
         `/dao/delegates?name=${config.DAO_KARMA_ID}&pageSize=10&offset=${newOffset}&order=${order}&field=${stat}&period=${period}`
       );
-      const { delegates: fetchedDelegates } = axiosClient.data.data;
+      const {
+        delegates: fetchedDelegates,
+        snapshotIds,
+        onChainId,
+      } = axiosClient.data.data;
+      setVoteInfos({
+        onChainId,
+        snapshotIds,
+      });
       setHasMore(fetchedDelegates.length === 10);
       setLastUpdate(fetchedDelegates[0].stats[0].updatedAt);
 
@@ -241,6 +268,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       selectUserToFind,
       userToFind,
       clearFilters,
+      voteInfos,
     }),
     [
       delegates,
@@ -255,6 +283,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       order,
       period,
       userToFind,
+      voteInfos,
     ]
   );
 

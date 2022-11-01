@@ -1,7 +1,6 @@
 import {
   Button,
   Icon,
-  Link,
   Menu,
   MenuButton,
   MenuItem,
@@ -13,24 +12,20 @@ import { GoPlus } from 'react-icons/go';
 import { TbExternalLink } from 'react-icons/tb';
 
 interface IUserInfoProps {
-  user?: string;
+  onOpen: (tab: 'statement' | 'votingHistory') => void;
 }
 
-export const UserInfoButton: FC<IUserInfoProps> = ({ user }) => {
+export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen }) => {
   const { theme } = useDAO();
 
-  const options = [
+  const options: { title: string; tab: 'statement' | 'votingHistory' }[] = [
     {
       title: 'User Statement',
-      link: '/',
+      tab: 'statement',
     },
     {
       title: 'Voting History',
-      link: '/',
-    },
-    {
-      title: 'Voting Thread',
-      link: '/',
+      tab: 'votingHistory',
     },
   ];
   return (
@@ -53,21 +48,17 @@ export const UserInfoButton: FC<IUserInfoProps> = ({ user }) => {
         User Info
       </MenuButton>
       <MenuList bgColor={theme.card.background}>
-        {options.map(({ title, link }, index) => (
-          <Link
-            isExternal
+        {options.map(({ title, tab }, index) => (
+          <MenuItem
             key={+index}
-            href={link}
+            justifyContent="space-between"
+            textDecor="none"
+            fontSize={['sm', 'md']}
             _hover={{ textDecor: 'none', opacity: '0.7' }}
+            onClick={() => onOpen(tab)}
           >
-            <MenuItem
-              justifyContent="space-between"
-              textDecor="none"
-              fontSize={['sm', 'md']}
-            >
-              {title} <Icon as={TbExternalLink} />
-            </MenuItem>
-          </Link>
+            {title} <Icon as={TbExternalLink} />
+          </MenuItem>
         ))}
       </MenuList>
     </Menu>

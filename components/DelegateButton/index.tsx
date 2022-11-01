@@ -1,18 +1,25 @@
 import { Button, Flex, Spinner } from '@chakra-ui/react';
 import { useDAO, useWallet } from 'contexts';
-import { useDelegate } from 'hooks';
+import { useDelegation } from 'hooks';
 import { FC } from 'react';
 
 interface IDelegateButton {
   delegated: string;
+  text?: string;
 }
 
-export const DelegateButton: FC<IDelegateButton> = ({ delegated }) => {
+export const DelegateButton: FC<IDelegateButton> = ({
+  delegated,
+  text = 'Delegate',
+}) => {
   const { openConnectModal, openChainModal, isConnected, chain } = useWallet();
   const { daoInfo, theme } = useDAO();
   const { config } = daoInfo;
 
-  const { isLoading, write } = useDelegate(delegated);
+  const { isLoading, write } = useDelegation({
+    delegatee: delegated,
+    type: 'onChain',
+  });
 
   const handleCase = () => {
     if (!isConnected) {
@@ -40,7 +47,7 @@ export const DelegateButton: FC<IDelegateButton> = ({ delegated }) => {
     >
       <Flex gap="2">
         {isLoading && <Spinner />}
-        Delegate
+        {text}
       </Flex>
     </Button>
   );

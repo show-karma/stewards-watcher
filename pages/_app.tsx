@@ -1,12 +1,16 @@
 import type { AppProps } from 'next/app';
 import { ColorHandler } from 'contexts';
-import Head from 'next/head';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import '@rainbow-me/rainbowkit/styles.css';
 
+const queryClient = new QueryClient();
+
 const MyApp = ({ Component, pageProps }: AppProps) => (
-  <ColorHandler cookies={pageProps.cookies}>
-    <Component {...pageProps} />
-  </ColorHandler>
+  <QueryClientProvider client={queryClient}>
+    <ColorHandler cookies={pageProps.cookies}>
+      <Component {...pageProps} />
+    </ColorHandler>
+  </QueryClientProvider>
 );
 
 export default MyApp;

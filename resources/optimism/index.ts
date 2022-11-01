@@ -21,6 +21,10 @@ const config: IDAOConfig = {
   },
   DAO_CHAIN: chain.optimism,
   DAO_DELEGATE_CONTRACT: '0x4200000000000000000000000000000000000042',
+  DAO_DELEGATE_MODES: {
+    onChain: true,
+    offChain: 'snapshot',
+  },
   EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'forumScore'],
   FEATURED_CARD_FIELDS: ['delegatedVotes', 'offChainVotesPct'],
 };
@@ -61,6 +65,71 @@ const dark: IDAOTheme = {
     text: { primary: '#FFFFFF', secondary: '#ADB8C0' },
     border: '#403E4F',
   },
+  modal: {
+    background: '#222429',
+    header: {
+      border: '#ADB8C0',
+      title: '#FFFFFF',
+      subtitle: '#ADB8C0',
+      twitter: '#ADB8C0',
+      divider: 'rgba(173, 184, 192, 0.2)',
+    },
+    buttons: {
+      selectBg: '#C80925',
+      selectText: '#FFFFFF',
+      navBg: 'transparent',
+      navText: '#FFFFFF',
+      navUnselectedText: '#ADB8C0',
+      navBorder: '#FFFFFF',
+    },
+    statement: {
+      headline: '#FFFFFF',
+      text: '#ADB8C0',
+      sidebar: {
+        section: '#FFFFFF',
+        subsection: '#FFFFFF',
+        text: '#ADB8C0',
+        item: {
+          bg: 'transparent',
+          text: '#FFFFFF',
+          border: '#ADB8C0',
+        },
+      },
+    },
+    votingHistory: {
+      headline: '#FFFFFF',
+      divider: '#E6E6E6',
+      proposal: {
+        title: '#FFFFFF',
+        type: '#ADB8C0',
+        date: '#ADB8C0',
+        result: '#FFFFFF',
+        verticalDivider: 'rgba(173, 184, 192, 0.5)',
+        divider: 'rgba(173, 184, 192, 0.2)',
+        icons: {
+          for: 'green.300',
+          against: 'red.500',
+          abstain: 'gray.300',
+          notVoted: 'gray.300',
+          multiple: 'green.300',
+        },
+      },
+      reason: {
+        title: '#FFFFFF',
+        text: '#ADB8C0',
+        divider: 'rgba(173, 184, 192, 0.2)',
+      },
+      navigation: {
+        color: '#ADB8C0',
+        buttons: {
+          selectedBg: '#ADB8C0',
+          selectedText: '#222429',
+          unSelectedBg: 'transparent',
+          unSelectedText: '#ADB8C0',
+        },
+      },
+    },
+  },
 };
 
 const light: IDAOTheme = {
@@ -98,6 +167,71 @@ const light: IDAOTheme = {
     divider: 'rgba(102, 102, 102, 0.5)',
     text: { primary: '#212328', secondary: '#666666' },
     border: 'rgba(102, 102, 102, 0.5)',
+  },
+  modal: {
+    background: '#222429',
+    header: {
+      border: '#ADB8C0',
+      title: '#FFFFFF',
+      subtitle: '#ADB8C0',
+      twitter: '#ADB8C0',
+      divider: 'rgba(173, 184, 192, 0.2)',
+    },
+    buttons: {
+      selectBg: '#C80925',
+      selectText: '#FFFFFF',
+      navBg: 'transparent',
+      navText: '#FFFFFF',
+      navUnselectedText: '#ADB8C0',
+      navBorder: '#FFFFFF',
+    },
+    statement: {
+      headline: '#FFFFFF',
+      text: '#ADB8C0',
+      sidebar: {
+        section: '#FFFFFF',
+        subsection: '#FFFFFF',
+        text: '#ADB8C0',
+        item: {
+          bg: 'transparent',
+          text: '#FFFFFF',
+          border: '#ADB8C0',
+        },
+      },
+    },
+    votingHistory: {
+      headline: '#FFFFFF',
+      divider: '#E6E6E6',
+      proposal: {
+        title: '#FFFFFF',
+        type: '#ADB8C0',
+        date: '#ADB8C0',
+        result: '#FFFFFF',
+        verticalDivider: 'rgba(173, 184, 192, 0.5)',
+        divider: 'rgba(173, 184, 192, 0.2)',
+        icons: {
+          for: '#FFFFFF',
+          against: '#FFFFFF',
+          abstain: '#FFFFFF',
+          notVoted: '#FFFFFF',
+          multiple: '#FFFFFF',
+        },
+      },
+      reason: {
+        title: '#FFFFFF',
+        text: '#ADB8C0',
+        divider: 'rgba(173, 184, 192, 0.2)',
+      },
+      navigation: {
+        color: '#ADB8C0',
+        buttons: {
+          selectedBg: '#ADB8C0',
+          selectedText: '#222429',
+          unSelectedBg: 'transparent',
+          unSelectedText: '#ADB8C0',
+        },
+      },
+    },
   },
 };
 
