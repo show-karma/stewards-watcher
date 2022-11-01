@@ -56,9 +56,7 @@ export const VotingHistory: FC<IVotingHistory> = ({ profile }) => {
       <Divider bgColor={theme.modal.votingHistory.divider} />
       <Flex gap="5" flexDir="column" pt="8" pb="4">
         {isLoading
-          ? loadArray.map((vote, index) => (
-              <ProposalVote key={+index} isLoading />
-            ))
+          ? loadArray.map((_, index) => <ProposalVote key={+index} isLoading />)
           : showingVotes.map((vote, index) => (
               <ProposalVote key={+index} vote={vote} isLoading={false} />
             ))}
