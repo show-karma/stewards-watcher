@@ -210,11 +210,11 @@ const light: IDAOTheme = {
         verticalDivider: 'rgba(173, 184, 192, 0.5)',
         divider: 'rgba(173, 184, 192, 0.2)',
         icons: {
-          for: '#FFFFFF',
-          against: '#FFFFFF',
-          abstain: '#FFFFFF',
-          notVoted: '#FFFFFF',
-          multiple: '#FFFFFF',
+          for: 'green.300',
+          against: 'red.500',
+          abstain: 'gray.300',
+          notVoted: 'gray.300',
+          multiple: 'green.300',
         },
       },
       reason: {

@@ -128,7 +128,11 @@ export const Navigation: FC<INavigation> = ({
           >
             1
           </NavigationButton>
-          <Text>...</Text>
+          <Text
+            color={theme.modal.votingHistory.navigation.buttons.unSelectedText}
+          >
+            ...
+          </Text>
         </>
       )}
       {pagesToDisplay.map((page, index) => (
@@ -142,7 +146,11 @@ export const Navigation: FC<INavigation> = ({
       ))}
       {!pagesToDisplay.includes(totalPages.length) && totalPages.length > 0 && (
         <>
-          <Text>...</Text>
+          <Text
+            color={theme.modal.votingHistory.navigation.buttons.unSelectedText}
+          >
+            ...
+          </Text>
           <NavigationButton
             isSelected={isSelected(totalPages.length)}
             onClick={() => selectPage(totalPages.length - 1)}
