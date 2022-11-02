@@ -6,10 +6,12 @@ import { getIdBySnapshotId } from 'utils';
 import { useToasty } from './useToasty';
 
 export const useDelegation = (args: IDelegation) => {
-  const { delegatee, type } = args;
+  const { delegatee } = args;
   const { daoInfo } = useDAO();
   const { voteInfos } = useDelegates();
+
   const { snapshotIds } = voteInfos;
+  const type = daoInfo.config.DAO_DELEGATE_MODE;
 
   const getAddressOrName = () => {
     if (type === 'snapshot')
@@ -23,8 +25,10 @@ export const useDelegation = (args: IDelegation) => {
   };
 
   const getArgs = () => {
-    if (type === 'snapshot')
-      return [getIdBySnapshotId(snapshotIds[0]), delegatee];
+    if (type === 'snapshot') {
+      const idBySnapshotId = getIdBySnapshotId(snapshotIds[0]);
+      return [idBySnapshotId, delegatee];
+    }
     return [delegatee];
   };
 

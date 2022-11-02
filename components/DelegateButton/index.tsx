@@ -18,7 +18,6 @@ export const DelegateButton: FC<IDelegateButton> = ({
 
   const { isLoading, write } = useDelegation({
     delegatee: delegated,
-    type: 'onChain',
   });
 
   const handleCase = () => {
