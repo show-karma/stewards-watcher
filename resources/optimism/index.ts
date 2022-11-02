@@ -21,10 +21,7 @@ const config: IDAOConfig = {
   },
   DAO_CHAIN: chain.optimism,
   DAO_DELEGATE_CONTRACT: '0x4200000000000000000000000000000000000042',
-  DAO_DELEGATE_MODES: {
-    onChain: true,
-    offChain: 'snapshot',
-  },
+  DAO_DELEGATE_MODE: 'custom',
   EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'forumScore'],
   FEATURED_CARD_FIELDS: ['delegatedVotes', 'offChainVotesPct'],
 };

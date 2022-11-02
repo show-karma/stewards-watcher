@@ -19,10 +19,7 @@ const config: IDAOConfig = {
   },
   DAO_CHAIN: chain.mainnet,
   DAO_DELEGATE_CONTRACT: '',
-  DAO_DELEGATE_MODES: {
-    onChain: false,
-    offChain: 'snapshot',
-  },
+  DAO_DELEGATE_MODE: 'snapshot',
   FEATURED_CARD_FIELDS: ['delegatedVotes', 'offChainVotesPct'],
   EXCLUDED_CARD_FIELDS: ['onChainVotesPct'],
 };

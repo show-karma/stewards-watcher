@@ -144,7 +144,15 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
 
   const shortAddress = data && truncateAddress(data.address);
 
-  const canDelegate = !!daoInfo.ABI;
+  const checkIfDelegate = () => {
+    if (daoInfo.config.DAO_DELEGATE_MODE === 'custom') {
+      return !!daoInfo.ABI;
+    }
+    if (daoInfo.config.DAO_DELEGATE_MODE === 'snapshot') return true;
+    return false;
+  };
+
+  const canDelegate = checkIfDelegate();
 
   const handleModal = (tab: 'statement' | 'votingHistory') => {
     setSelectedTab(tab);
