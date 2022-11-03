@@ -5,7 +5,6 @@ import {
   Link,
   Skeleton,
   Text,
-  useBreakpoint,
   useBreakpointValue,
   useColorModeValue,
 } from '@chakra-ui/react';

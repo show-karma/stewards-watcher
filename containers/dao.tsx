@@ -5,7 +5,11 @@ import React from 'react';
 import { RainbowWrapper, Header, DelegatesList, HeaderHat } from 'components';
 import { Flex } from '@chakra-ui/react';
 
-export const DAOContainer: React.FC = () => {
+interface IDAOContainer {
+  user?: string;
+}
+
+export const DAOContainer: React.FC<IDAOContainer> = ({ user }) => {
   const { daoInfo, theme } = useDAO();
   const { config } = daoInfo;
 
@@ -62,7 +66,7 @@ export const DAOContainer: React.FC = () => {
             <HeaderHat />
             <MainLayout>
               <Header />
-              <DelegatesList />
+              <DelegatesList pathUser={user} />
             </MainLayout>
           </Flex>
         </WalletProvider>

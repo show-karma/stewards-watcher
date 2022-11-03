@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { DebouncedFunc } from 'lodash';
+import { useDisclosure } from '@chakra-ui/react';
 import debounce from 'lodash.debounce';
 import React, { useContext, createContext, useState, useMemo } from 'react';
 import {
@@ -10,6 +11,7 @@ import {
   IDelegateFromAPI,
   IStatOptions,
   IVoteInfo,
+  IActiveTab,
 } from 'types';
 import { axiosInstance } from 'utils';
 import { useDAO } from './dao';
@@ -35,6 +37,15 @@ interface IDelegateProps {
   period: IFilterPeriod;
   clearFilters: () => void;
   voteInfos: IVoteInfo;
+  isOpenProfile: boolean;
+  onCloseProfile: () => void;
+  profileSelected?: IDelegate;
+  selectProfile: (profile: IDelegate, tab?: IActiveTab) => void;
+  selectedTab: IActiveTab;
+  searchProfileModal: (
+    userToSearch: string,
+    tabToOpen?: IActiveTab
+  ) => Promise<void>;
 }
 
 export const DelegatesContext = createContext({} as IDelegateProps);
@@ -66,6 +77,16 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const [period, setPeriod] = useState<IFilterPeriod>('lifetime');
   const [userToFind, setUserToFind] = useState('');
   const [voteInfos, setVoteInfos] = useState({} as IVoteInfo);
+  const [selectedTab, setSelectedTab] = useState<IActiveTab>('statement');
+  const [profileSelected, setProfileSelected] = useState<IDelegate | undefined>(
+    {} as IDelegate
+  );
+
+  const {
+    isOpen: isOpenProfile,
+    onOpen: onOpenProfile,
+    onClose: onCloseProfile,
+  } = useDisclosure();
 
   const isSearchDirty = userToFind !== '';
 
@@ -173,6 +194,49 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     }
   };
 
+  const selectProfile = (profile: IDelegate, tab: IActiveTab = 'statement') => {
+    setSelectedTab(tab);
+    setProfileSelected(profile);
+    onOpenProfile();
+  };
+
+  const searchProfileModal = async (
+    userToSearch: string,
+    tabToOpen?: IActiveTab
+  ) => {
+    try {
+      const axiosClient = await axiosInstance.get(
+        `/dao/find-delegate?dao=${config.DAO_KARMA_ID}&user=${userToSearch}`
+      );
+      const { delegate: fetchedDelegate } = axiosClient.data.data;
+
+      if (!fetchedDelegate) {
+        throw new Error('No delegates found');
+      }
+      const fetchedPeriod = (fetchedDelegate as IDelegateFromAPI).stats.find(
+        fetchedStat => fetchedStat.period === period
+      );
+      const userFound: IDelegate = {
+        address: fetchedDelegate.publicAddress,
+        ensName: fetchedDelegate.ensName,
+        forumActivity: fetchedPeriod?.forumActivityScore || 0,
+        delegateSince:
+          fetchedDelegate.joinDateAt || fetchedDelegate.firstTokenDelegatedAt,
+        delegators: fetchedDelegate.delegatorCount,
+        voteParticipation: {
+          onChain: fetchedPeriod?.onChainVotesPct || 0,
+          offChain: fetchedPeriod?.offChainVotesPct || 0,
+        },
+        votingWeight: fetchedDelegate.delegatedVotes,
+        twitterHandle: fetchedDelegate.twitterHandle,
+        updatedAt: fetchedPeriod?.updatedAt,
+      };
+      selectProfile(userFound, tabToOpen);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const fetchNextDelegates = async () => {
     if (isFetchingMore || !hasMore || isSearchDirty) return;
     const newOffset = offset + 1;
@@ -269,8 +333,16 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       userToFind,
       clearFilters,
       voteInfos,
+      isOpenProfile,
+      onCloseProfile,
+      profileSelected,
+      selectProfile,
+      selectedTab,
+      searchProfileModal,
     }),
     [
+      profileSelected,
+      isOpenProfile,
       delegates,
       isLoading,
       lastUpdate,
@@ -284,6 +356,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       period,
       userToFind,
       voteInfos,
+      selectedTab,
     ]
   );
 

@@ -1,10 +1,10 @@
-import { Divider, Flex, Spinner, Text } from '@chakra-ui/react';
+import { Divider, Flex, Text } from '@chakra-ui/react';
 import { useDAO, useDelegates } from 'contexts';
 import { useOnChainVotes, useOffChainVotes } from 'hooks';
 import moment from 'moment';
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 
-import { IChainRow, IProfile } from 'types';
+import { IProfile } from 'types';
 import { Navigation } from './Navigation';
 import { ProposalVote } from './ProposalVote';
 

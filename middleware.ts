@@ -1,5 +1,5 @@
-/* eslint-disable */
 import { NextRequest, NextResponse } from 'next/server';
+
 export const config = {
   matcher: [
     /*
@@ -29,19 +29,21 @@ function getDAOName(host: string) {
     case 'ssvnetwork.showkarma.xyz':
       dao = 'ssvnetwork';
       break;
+    default:
+      dao = 'optimism';
   }
   return dao;
 }
 
 export default function middleware(req: NextRequest) {
   const url = req.nextUrl;
-
   const hostname = req.headers.get('host') || 'www.showkarma.xyz';
-
   const dao =
     process.env.NODE_ENV === 'production'
       ? getDAOName(hostname)
       : hostname.split('.')[0];
-  url.pathname = `/_sites/${dao}`;
+  const currentPathname = url.pathname;
+
+  url.pathname = `/_sites/${dao}${currentPathname}`;
   return NextResponse.rewrite(url);
 }
