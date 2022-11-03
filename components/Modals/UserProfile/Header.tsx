@@ -4,14 +4,12 @@ import {
   Divider,
   Flex,
   Icon,
-  Img,
   Link,
   Text,
 } from '@chakra-ui/react';
-import { DelegateButton } from 'components/DelegateButton';
-import { ImgWithFallback } from 'components/ImgWithFallback';
+import { ImgWithFallback, DelegateButton } from 'components';
 import { useDAO } from 'contexts';
-import { FC, ReactNode, useState } from 'react';
+import { FC, ReactNode } from 'react';
 import { BsTwitter } from 'react-icons/bs';
 import { IActiveTab, IProfile } from 'types';
 import { truncateAddress } from 'utils';
@@ -161,7 +159,7 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
       bgColor="transparent"
     >
       <Flex w="full" flexDir="column">
-        <Img
+        <ImgWithFallback
           src="/images/profilenobg.png"
           borderBottom="1px"
           borderStyle="solid"
@@ -186,8 +184,8 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
             Statement
           </NavButton>
           <NavButton
-            isActive={isActiveTab('votingHistory')}
-            onClick={() => changeTab('votingHistory')}
+            isActive={isActiveTab('votinghistory')}
+            onClick={() => changeTab('votinghistory')}
           >
             Voting History
           </NavButton>

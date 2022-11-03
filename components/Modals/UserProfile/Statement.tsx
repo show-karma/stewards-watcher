@@ -3,7 +3,6 @@ import {
   Flex,
   Icon,
   IconProps,
-  Img,
   Link,
   Skeleton,
   SkeletonText,
@@ -28,7 +27,6 @@ interface ITextSection {
 }
 const TextSection: FC<ITextSection> = ({ statement }) => {
   const { theme } = useDAO();
-  console.log('statement', statement);
   return (
     <Flex maxW="30rem" gap="4" flexDir="column" flex="1">
       {statement && statement.length > 0 ? (

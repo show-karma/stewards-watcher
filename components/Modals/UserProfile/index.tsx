@@ -17,7 +17,7 @@ interface ITab {
   profile: IProfile;
 }
 const Tab: FC<ITab> = ({ activeTab, profile }) => {
-  if (activeTab === 'votingHistory') return <VotingHistory profile={profile} />;
+  if (activeTab === 'votinghistory') return <VotingHistory profile={profile} />;
   return <Statement profile={profile} />;
 };
 
@@ -25,7 +25,7 @@ interface IUserProfileProps {
   isOpen: boolean;
   onClose: () => void;
   profile: IProfile;
-  selectedTab: 'statement' | 'votingHistory';
+  selectedTab: IActiveTab;
 }
 
 export const UserProfile: FC<IUserProfileProps> = props => {

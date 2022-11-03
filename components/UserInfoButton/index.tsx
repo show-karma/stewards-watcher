@@ -10,22 +10,24 @@ import { useDAO } from 'contexts';
 import { FC } from 'react';
 import { GoPlus } from 'react-icons/go';
 import { TbExternalLink } from 'react-icons/tb';
+import { IActiveTab, IDelegate } from 'types';
 
 interface IUserInfoProps {
-  onOpen: (tab: 'statement' | 'votingHistory') => void;
+  onOpen: (profile: IDelegate, tab?: IActiveTab) => void;
+  profile: IDelegate;
 }
 
-export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen }) => {
+export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen, profile }) => {
   const { theme } = useDAO();
 
-  const options: { title: string; tab: 'statement' | 'votingHistory' }[] = [
+  const options: { title: string; tab: IActiveTab }[] = [
     {
       title: 'User Statement',
       tab: 'statement',
     },
     {
       title: 'Voting History',
-      tab: 'votingHistory',
+      tab: 'votinghistory',
     },
   ];
   return (
@@ -55,7 +57,7 @@ export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen }) => {
             textDecor="none"
             fontSize={['sm', 'md']}
             _hover={{ textDecor: 'none', opacity: '0.7' }}
-            onClick={() => onOpen(tab)}
+            onClick={() => onOpen(profile, tab)}
           >
             {title} <Icon as={TbExternalLink} />
           </MenuItem>
