@@ -7,6 +7,7 @@ import {
   MenuList,
 } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
+import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { GoPlus } from 'react-icons/go';
 import { TbExternalLink } from 'react-icons/tb';
@@ -19,7 +20,7 @@ interface IUserInfoProps {
 
 export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen, profile }) => {
   const { theme } = useDAO();
-
+  const router = useRouter();
   const options: { title: string; tab: IActiveTab }[] = [
     {
       title: 'User Statement',
@@ -30,6 +31,16 @@ export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen, profile }) => {
       tab: 'votinghistory',
     },
   ];
+
+  const redirectWithoutRefresh = (tab: IActiveTab) => {
+    onOpen(profile, tab);
+    router.push(
+      { pathname: `/profile/${profile.ensName || profile.address}#${tab}` },
+      undefined,
+      { shallow: true }
+    );
+  };
+
   return (
     <Menu placement="top-start">
       <MenuButton
@@ -57,7 +68,7 @@ export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen, profile }) => {
             textDecor="none"
             fontSize={['sm', 'md']}
             _hover={{ textDecor: 'none', opacity: '0.7' }}
-            onClick={() => onOpen(profile, tab)}
+            onClick={() => redirectWithoutRefresh(tab)}
           >
             {title} <Icon as={TbExternalLink} />
           </MenuItem>
