@@ -6,6 +6,7 @@ import {
   ModalOverlay,
 } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
+import { useRouter } from 'next/router';
 import { FC, useMemo, useState } from 'react';
 import { IActiveTab, IProfile } from 'types';
 import { Header } from './Header';
@@ -30,6 +31,7 @@ interface IUserProfileProps {
 
 export const UserProfile: FC<IUserProfileProps> = props => {
   const { isOpen, onClose, profile, selectedTab } = props;
+  const router = useRouter();
   const { theme } = useDAO();
 
   const [activeTab, setActiveTab] = useState<IActiveTab>(selectedTab);
@@ -38,10 +40,43 @@ export const UserProfile: FC<IUserProfileProps> = props => {
     setActiveTab(selectedTab);
   }, [selectedTab]);
 
-  const changeTab = (chosenTab: IActiveTab) => setActiveTab(chosenTab);
+  const changeTab = (hash: IActiveTab) => {
+    router
+      .push(
+        {
+          pathname: `/profile/${profile.ensName || profile.address}`,
+          hash,
+        },
+        undefined,
+        { shallow: true }
+      )
+      .catch(error => {
+        if (!error.cancelled) {
+          throw error;
+        }
+      });
+    setActiveTab(hash);
+  };
+
+  const onCloseModal = () => {
+    router
+      .push(
+        {
+          pathname: '/',
+        },
+        undefined,
+        { shallow: true }
+      )
+      .catch(error => {
+        if (!error.cancelled) {
+          throw error;
+        }
+      });
+    onClose();
+  };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onCloseModal}>
       <ModalOverlay
         background="linear-gradient(359.86deg, rgba(20, 21, 24, 0.85) 41.37%, rgba(33, 35, 40, 0) 101.24%)"
         backdropFilter="blur(4px)"
