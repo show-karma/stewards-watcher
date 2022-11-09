@@ -32,13 +32,22 @@ export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen, profile }) => {
     },
   ];
 
-  const redirectWithoutRefresh = (tab: IActiveTab) => {
-    onOpen(profile, tab);
-    router.push(
-      { pathname: `/profile/${profile.ensName || profile.address}#${tab}` },
-      undefined,
-      { shallow: true }
-    );
+  const redirectWithoutRefresh = (hash: IActiveTab) => {
+    onOpen(profile, hash);
+    router
+      .push(
+        {
+          pathname: `/profile/${profile.ensName || profile.address}`,
+          hash,
+        },
+        undefined,
+        { shallow: true }
+      )
+      .catch(error => {
+        if (!error.cancelled) {
+          throw error;
+        }
+      });
   };
 
   return (
@@ -58,7 +67,7 @@ export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen, profile }) => {
         _active={{}}
         _focus={{}}
       >
-        User Info
+        Activity
       </MenuButton>
       <MenuList bgColor={theme.card.background}>
         {options.map(({ title, tab }, index) => (

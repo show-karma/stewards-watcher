@@ -9,6 +9,7 @@ import {
 } from '@chakra-ui/react';
 import { ImgWithFallback, DelegateButton } from 'components';
 import { useDAO } from 'contexts';
+import { useRouter } from 'next/router';
 import { FC, ReactNode } from 'react';
 import { BsTwitter } from 'react-icons/bs';
 import { IActiveTab, IProfile } from 'types';
