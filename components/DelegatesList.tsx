@@ -16,7 +16,7 @@ interface IDelegatesList {
 
 export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
   const {
-    delegates,
+    delegates: fetchedDelegates,
     isLoading,
     fetchNextDelegates,
     hasMore,
@@ -30,6 +30,8 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
   const { config } = daoInfo;
   const router = useRouter();
   const { asPath } = router;
+  const delegates = [...fetchedDelegates];
+  console.log(delegates);
 
   const searchProfileSelected = async (userToSearch: string) => {
     const getTab = asPath && (asPath as string).split('#');
@@ -91,18 +93,12 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
             {isLoading
               ? delegates.length <= 0
                 ? loadingArray.map((_, index) => <DelegateCard key={+index} />)
-                : delegates.map((item, index) => (
-                    <DelegateCard
-                      key={`${item.address} + ${+index}`}
-                      data={item}
-                    />
+                : delegates.map(item => (
+                    <DelegateCard key={`${JSON.stringify(item)}`} data={item} />
                   ))
               : delegates.length > 0
-              ? delegates.map((item, index) => (
-                  <DelegateCard
-                    key={`${item.address} + ${+index}`}
-                    data={item}
-                  />
+              ? delegates.map(item => (
+                  <DelegateCard key={`${JSON.stringify(item)}`} data={item} />
                 ))
               : undefined}
           </Flex>
