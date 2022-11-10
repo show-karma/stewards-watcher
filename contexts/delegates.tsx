@@ -139,6 +139,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       });
       setDelegates(delegatesList);
     } catch (error) {
+      setDelegates([]);
       console.log(error);
     } finally {
       setLoading(false);
@@ -286,6 +287,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   };
 
   useMemo(() => {
+    console.log('useMemo');
     if (userToFind) {
       findDelegate();
     } else {
