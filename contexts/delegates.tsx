@@ -287,7 +287,6 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   };
 
   useMemo(() => {
-    console.log('useMemo');
     if (userToFind) {
       findDelegate();
     } else {

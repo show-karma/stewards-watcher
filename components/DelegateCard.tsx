@@ -148,8 +148,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
 
   const canDelegate = checkIfDelegate();
 
-  // console.log(data);
-
   return (
     <Flex
       bgColor={theme.card.background}
