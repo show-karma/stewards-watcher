@@ -16,7 +16,7 @@ interface IDelegatesList {
 
 export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
   const {
-    delegates: fetchedDelegates,
+    delegates,
     isLoading,
     fetchNextDelegates,
     hasMore,
@@ -30,8 +30,6 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
   const { config } = daoInfo;
   const router = useRouter();
   const { asPath } = router;
-  const delegates = [...fetchedDelegates];
-  console.log(delegates);
 
   const searchProfileSelected = async (userToSearch: string) => {
     const getTab = asPath && (asPath as string).split('#');
