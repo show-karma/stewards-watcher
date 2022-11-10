@@ -60,7 +60,7 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
           selectedTab={selectedTab}
         />
       )}
-      <Flex flexDir="column" align="center">
+      <Flex flexDir="column" align="center" w="full" maxW="1360px">
         <InfiniteScroll
           pageStart={0}
           loadMore={fetchNextDelegates}
@@ -82,7 +82,7 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
             flexWrap="wrap"
             rowGap="10"
             columnGap="2"
-            w={{ base: 'full', '2xl': '1360px' }}
+            w="full"
             align="center"
             justify="flex-start"
             mb="8"

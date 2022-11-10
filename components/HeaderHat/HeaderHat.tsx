@@ -41,7 +41,7 @@ export const HeaderHat = () => {
         <Flex
           flexDir="row"
           gap="2"
-          h="full"
+          h="min-content"
           w={['min-content', 'max-content']}
           position={{ base: 'absolute', md: 'unset' }}
           right={{ base: '4', md: 'unset' }}
