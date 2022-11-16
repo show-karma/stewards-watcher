@@ -61,7 +61,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       id: 'delegators',
     },
     {
-      title: 'Delegates since',
+      title: 'Delegate since',
       icon: BsCalendar4,
       value: data?.delegateSince ? formatDate(data.delegateSince) : '-',
       id: 'delegateSince',
