@@ -154,15 +154,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       const axiosClient = await axiosInstance.get(
         `/dao/find-delegate?dao=${config.DAO_KARMA_ID}&user=${userToFind}`
       );
-      const {
-        delegate: fetchedDelegate,
-        snapshotIds,
-        onChainId,
-      } = axiosClient.data.data;
-      setVoteInfos({
-        onChainId,
-        snapshotIds,
-      });
+      const { delegate: fetchedDelegate } = axiosClient.data.data;
+
       if (!fetchedDelegate) {
         throw new Error('No delegates found');
       }
@@ -247,15 +240,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       const axiosClient = await axiosInstance.get(
         `/dao/delegates?name=${config.DAO_KARMA_ID}&pageSize=10&offset=${newOffset}&order=${order}&field=${stat}&period=${period}`
       );
-      const {
-        delegates: fetchedDelegates,
-        snapshotIds,
-        onChainId,
-      } = axiosClient.data.data;
-      setVoteInfos({
-        onChainId,
-        snapshotIds,
-      });
+      const { delegates: fetchedDelegates } = axiosClient.data.data;
+
       setHasMore(fetchedDelegates.length === 10);
       setLastUpdate(fetchedDelegates[0].stats[0].updatedAt);
 
@@ -293,6 +279,33 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       fetchDelegates();
     }
   }, [stat, order, period, userToFind]);
+
+  const getVoteInfos = async () => {
+    try {
+      const axiosClient = await axiosInstance.get(
+        `/dao/delegates?name=${config.DAO_KARMA_ID}&pageSize=10${
+          userToFind && `name=${userToFind}`
+        }&offset=0&order=desc&field=score&period=lifetime`
+      );
+      const { onChainId, snapshotIds } = axiosClient.data.data;
+      setVoteInfos({
+        onChainId,
+        snapshotIds,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useMemo(() => {
+    if (
+      delegates.length &&
+      !voteInfos?.onChainId &&
+      !voteInfos?.snapshotIds?.length
+    ) {
+      getVoteInfos();
+    }
+  }, [delegates]);
 
   const selectStat = (_selectedStat: IFilterStat) => setStat(_selectedStat);
   const selectOrder = (selectedOrder: IFilterOrder) => setOrder(selectedOrder);
