@@ -15,7 +15,6 @@ interface IVotingHistory {
 export const VotingHistory: FC<IVotingHistory> = ({ profile }) => {
   const { theme } = useDAO();
   const { voteInfos } = useDelegates();
-  console.log(voteInfos);
 
   const [offset, setOffset] = useState(0);
   const limit = 6;
