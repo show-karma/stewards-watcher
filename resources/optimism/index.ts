@@ -61,6 +61,7 @@ const dark: IDAOTheme = {
     divider: 'rgba(173, 184, 192, 0.2)',
     text: { primary: '#FFFFFF', secondary: '#ADB8C0' },
     border: 'rgba(87, 93, 104, 0.25)',
+    common: '#727B81',
   },
   modal: {
     background: '#222429',
@@ -165,6 +166,7 @@ const light: IDAOTheme = {
     text: { primary: '#212328', secondary: '#666666' },
     border: 'rgba(102, 102, 102, 0.5)',
     shadow: '-1px 1px 5px 0px rgba(87,93,104,0.75);',
+    common: '#727B81',
   },
   modal: {
     background: '#222429',
