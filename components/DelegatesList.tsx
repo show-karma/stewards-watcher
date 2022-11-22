@@ -81,7 +81,7 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
           <Flex
             flexWrap="wrap"
             rowGap="10"
-            columnGap="2"
+            columnGap="8"
             w="full"
             align="center"
             justify="flex-start"

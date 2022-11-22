@@ -351,7 +351,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           <Flex justify="left" align="center" gap="6">
             {isLoaded ? (
               <>
-                <DelegateButton delegated={data.address} />
+                <DelegateButton delegated={data.address} px={['4', '8']} />
                 <UserInfoButton onOpen={selectProfile} profile={data} />
               </>
             ) : (
