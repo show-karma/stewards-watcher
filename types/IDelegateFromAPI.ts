@@ -9,6 +9,7 @@ export interface IDelegateFromAPI {
   isNominee: boolean;
   joinDateAt: string;
   firstTokenDelegatedAt: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   pitch: any;
   poap: number;
   publicAddress: string;

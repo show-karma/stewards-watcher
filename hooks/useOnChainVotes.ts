@@ -26,7 +26,9 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
       proposal: proposal?.description,
       choice: vote?.support,
       solution: vote?.solution,
+      reason: vote?.reason,
       executed: moment.unix(proposal.timestamp).format('MMMM D, YYYY'),
+      voteId: proposal?.id,
     });
   });
 
@@ -37,6 +39,7 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
       choice: -1,
       solution: null,
       executed: moment.unix(proposal.timestamp).format('MMMM D, YYYY'),
+      voteId: proposal?.id,
     });
   });
 
@@ -61,6 +64,7 @@ async function fetchOnChainProposalVotes(
         address,
       },
     });
+    console.log(votes);
     if (votes && Array.isArray(votes.votes)) {
       const skipIds = votes.votes.map((vote: any) => vote.proposal.id);
       const { data: proposals } = await onChainClient.query({
