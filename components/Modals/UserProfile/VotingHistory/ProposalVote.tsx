@@ -8,8 +8,9 @@ import {
 } from '@chakra-ui/react';
 import { CheckIcon, EmptyCircleIcon, XMarkIcon } from 'components/Icons';
 import { useDAO } from 'contexts';
+import { useVoteReason } from 'hooks';
 import { FC } from 'react';
-import { IChainRow } from 'types';
+import { IChainRow, IProfile } from 'types';
 import { formatDate } from 'utils';
 
 const iconStyle = {
@@ -105,15 +106,23 @@ const VoteIcon: FC<{ vote: IChainRow }> = ({ vote }) => {
   }
 };
 
-export const ProposalVote: FC<{ vote?: IChainRow; isLoading?: boolean }> = ({
+interface IProposalVote {
+  vote: IChainRow;
+  isLoading?: boolean;
+  profile: IProfile;
+}
+
+export const ProposalVote: FC<IProposalVote> = ({
   vote,
   isLoading,
+  profile,
 }) => {
   const { theme } = useDAO();
+  const { getVoteReason } = useVoteReason({ address: profile.address });
 
   const showChoice = () => {
     if (vote && typeof vote.choice === 'string') return vote.choice;
-    switch (vote?.choice) {
+    switch (vote.choice) {
       case 0:
         return 'Against';
       case 1:
@@ -124,6 +133,8 @@ export const ProposalVote: FC<{ vote?: IChainRow; isLoading?: boolean }> = ({
   };
 
   const isLoaded = !isLoading && vote;
+
+  const voteReason = vote.voteId && getVoteReason(vote.voteId);
 
   return (
     <Flex flexDir="column" w="full">
@@ -137,7 +148,7 @@ export const ProposalVote: FC<{ vote?: IChainRow; isLoading?: boolean }> = ({
               textAlign="left"
               color={theme.modal.votingHistory.proposal.title}
             >
-              {vote?.proposal}
+              {vote.proposal}
             </Text>
           ) : (
             <Skeleton isLoaded={isLoaded} w="300px" maxW="372" h="6" />
@@ -150,7 +161,7 @@ export const ProposalVote: FC<{ vote?: IChainRow; isLoading?: boolean }> = ({
                   fontWeight="medium"
                   color={theme.modal.votingHistory.proposal.type}
                 >
-                  {vote?.voteMethod}
+                  {vote.voteMethod}
                 </Text>
               ) : (
                 <Skeleton isLoaded={isLoaded} w="full" maxW="240" h="4" />
@@ -207,14 +218,22 @@ export const ProposalVote: FC<{ vote?: IChainRow; isLoading?: boolean }> = ({
         my="3"
         h="1px"
       />
-      {vote?.solution && (
+      {voteReason && (
         <Flex flexDir="column" mt="1" mb="4">
           <Flex flexDir="column" gap="2.5">
-            <Text fontSize="sm" color={theme.modal.votingHistory.reason.title}>
+            <Text
+              fontSize="sm"
+              fontWeight="medium"
+              color={theme.modal.votingHistory.reason.title}
+            >
               Reason
             </Text>
-            <Text fontSize="sm" color={theme.modal.votingHistory.reason.text}>
-              {vote.solution}
+            <Text
+              fontSize="sm"
+              fontWeight="light"
+              color={theme.modal.votingHistory.reason.text}
+            >
+              {voteReason}
             </Text>
           </Flex>
           <Divider
