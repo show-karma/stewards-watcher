@@ -1,6 +1,7 @@
 /* eslint-disable no-useless-catch */
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { useQuery } from '@tanstack/react-query';
+import { useVoteReason } from 'hooks';
 
 import moment from 'moment';
 import { IChainRow } from 'types';
@@ -22,7 +23,9 @@ const concatOffChainProposals = (proposals: any[], votes: any[]) => {
       choice: Array.isArray(vote.choice)
         ? 'Multiple'
         : proposal.choices[vote.choice - 1],
+      reason: vote?.reason,
       executed: moment.unix(proposal.end).format('MMMM D, YYYY'),
+      voteId: proposal?.id,
     });
   });
 
@@ -34,6 +37,7 @@ const concatOffChainProposals = (proposals: any[], votes: any[]) => {
         choice: 'DID NOT VOTE',
         solution: null,
         executed: moment.unix(proposal.end).format('MMMM D, YYYY'),
+        voteId: proposal?.id,
       });
   });
 

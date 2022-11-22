@@ -4,4 +4,6 @@ export interface IChainRow {
   solution?: string | null;
   choice: string | number;
   executed: string;
+  reason?: string | null;
+  voteId?: string | null;
 }

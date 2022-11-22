@@ -4,7 +4,7 @@ import { useOnChainVotes, useOffChainVotes } from 'hooks';
 import moment from 'moment';
 import { FC, useMemo, useState } from 'react';
 
-import { IProfile } from 'types';
+import { IChainRow, IProfile } from 'types';
 import { Navigation } from './Navigation';
 import { ProposalVote } from './ProposalVote';
 
@@ -56,9 +56,21 @@ export const VotingHistory: FC<IVotingHistory> = ({ profile }) => {
       <Divider bgColor={theme.modal.votingHistory.divider} />
       <Flex gap="5" flexDir="column" pt="8" pb="4">
         {isLoading
-          ? loadArray.map((_, index) => <ProposalVote key={+index} isLoading />)
+          ? loadArray.map((_, index) => (
+              <ProposalVote
+                vote={{} as IChainRow}
+                key={+index}
+                profile={profile}
+                isLoading
+              />
+            ))
           : showingVotes.map((vote, index) => (
-              <ProposalVote key={+index} vote={vote} isLoading={false} />
+              <ProposalVote
+                key={+index}
+                vote={vote}
+                isLoading={false}
+                profile={profile}
+              />
             ))}
       </Flex>
       <Flex w="full" justify="end" pb="9">
