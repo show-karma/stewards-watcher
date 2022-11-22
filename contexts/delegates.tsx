@@ -2,7 +2,13 @@
 import { DebouncedFunc } from 'lodash';
 import { useDisclosure } from '@chakra-ui/react';
 import debounce from 'lodash.debounce';
-import React, { useContext, createContext, useState, useMemo } from 'react';
+import React, {
+  useContext,
+  createContext,
+  useState,
+  useMemo,
+  useEffect,
+} from 'react';
 import {
   IDelegate,
   IFilterStat,
@@ -46,6 +52,9 @@ interface IDelegateProps {
     userToSearch: string,
     tabToOpen?: IActiveTab
   ) => Promise<void>;
+  interests: string[];
+  interestFilter: string[];
+  selectInterests: (index: number) => void;
 }
 
 export const DelegatesContext = createContext({} as IDelegateProps);
@@ -75,6 +84,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const [stat, setStat] = useState<IFilterStat>(statOptions[0].stat);
   const [order, setOrder] = useState<IFilterOrder>('desc');
   const [period, setPeriod] = useState<IFilterPeriod>('lifetime');
+  const [interests, setInterests] = useState<string[]>([]);
+  const [interestFilter, setInterestFilter] = useState<string[]>([]);
   const [userToFind, setUserToFind] = useState('');
   const [voteInfos, setVoteInfos] = useState({} as IVoteInfo);
   const [selectedTab, setSelectedTab] = useState<IActiveTab>('statement');
@@ -97,13 +108,33 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     setStatOptions(filteredStats);
   }, [config]);
 
+  const fetchInterests = async () => {
+    try {
+      const { data } = await axiosInstance.get(
+        `/dao/interests/${config.DAO_KARMA_ID}`
+      );
+      if (Array.isArray(data?.data?.interests)) {
+        setInterests(data.data.interests);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const fetchDelegates = async (_offset = offset) => {
     setLoading(true);
     try {
       const axiosClient = await axiosInstance.get(
         `/dao/delegates?name=${config.DAO_KARMA_ID}&pageSize=10${
           userToFind && `name=${userToFind}`
-        }&offset=${_offset}&order=${order}&field=${stat}&period=${period}`
+        }&offset=${_offset}&order=${order}&field=${stat}&period=${period}`,
+        {
+          params: {
+            interests: interestFilter.length
+              ? interestFilter.join(',')
+              : undefined,
+          },
+        }
       );
       const {
         delegates: fetchedDelegates,
@@ -238,7 +269,14 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     setFetchingMore(true);
     try {
       const axiosClient = await axiosInstance.get(
-        `/dao/delegates?name=${config.DAO_KARMA_ID}&pageSize=10&offset=${newOffset}&order=${order}&field=${stat}&period=${period}`
+        `/dao/delegates?name=${config.DAO_KARMA_ID}&pageSize=10&offset=${newOffset}&order=${order}&field=${stat}&period=${period}`,
+        {
+          params: {
+            interests: interestFilter.length
+              ? interestFilter.join(',')
+              : undefined,
+          },
+        }
       );
       const { delegates: fetchedDelegates } = axiosClient.data.data;
 
@@ -280,6 +318,14 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     }
   }, [stat, order, period, userToFind]);
 
+  useEffect(() => {
+    fetchInterests();
+  }, []);
+
+  useEffect(() => {
+    fetchDelegates();
+  }, [interestFilter]);
+
   const getVoteInfos = async () => {
     try {
       const axiosClient = await axiosInstance.get(
@@ -313,6 +359,24 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     setPeriod(selectedPeriod);
   const selectUserToFind = (selectedUser: string) =>
     setUserToFind(selectedUser);
+
+  const selectInterests = (index: number) => {
+    if (!interests[index]) return;
+
+    const filterIdx = interestFilter.findIndex(
+      filter => filter === interests[index]
+    );
+
+    const items = [...interestFilter];
+
+    if (filterIdx >= 0) {
+      items.splice(filterIdx, 1);
+    } else {
+      items.push(interests[index]);
+    }
+
+    setInterestFilter(items);
+  };
 
   const handleSearch = debounce(text => {
     selectUserToFind(text);
@@ -353,6 +417,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       selectProfile,
       selectedTab,
       searchProfileModal,
+      interests,
+      interestFilter,
+      selectInterests,
     }),
     [
       profileSelected,
@@ -371,6 +438,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       userToFind,
       voteInfos,
       selectedTab,
+      interests,
     ]
   );
 
