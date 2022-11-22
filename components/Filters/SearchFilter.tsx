@@ -15,7 +15,7 @@ export const SearchFilter = () => {
   const { handleSearch } = useDelegates();
 
   return (
-    <Flex flexDir="column" w="full" maxW="740">
+    <Flex flexDir="column" maxW="740">
       <Text fontFamily="heading" color={theme.filters.head}>
         Search
       </Text>
