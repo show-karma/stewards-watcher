@@ -1,4 +1,3 @@
-import { useColorModeValue } from '@chakra-ui/react';
 import { usePicasso } from 'hooks';
 import React, { useContext, createContext, useMemo, useState } from 'react';
 import { supportedDAOs } from 'resources';

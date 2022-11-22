@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import makeBlockie from 'ethereum-blockies-base64';
-import { Image, Img, ImgProps } from '@chakra-ui/react';
+import { Image, ImgProps } from '@chakra-ui/react';
 
 interface Props extends ImgProps {
   fallback?: string;
