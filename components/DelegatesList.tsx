@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import { Flex, Spinner } from '@chakra-ui/react';
+import { Flex, Spinner, Text } from '@chakra-ui/react';
 import { useDAO, useDelegates } from 'contexts';
 import { useRouter } from 'next/router';
 import { FC, useMemo } from 'react';
@@ -25,6 +25,7 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
     profileSelected,
     selectedTab,
     searchProfileModal,
+    interestFilter,
   } = useDelegates();
   const { daoInfo } = useDAO();
   const { config } = daoInfo;
@@ -61,6 +62,14 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
         />
       )}
       <Flex flexDir="column" align="center" w="full" maxW="1360px">
+        {!!interestFilter.length && (
+          <Flex textAlign="start" w={{ base: 'full' }} fontSize={12} mb={4}>
+            <Text as="span">
+              <Text as="b">Delegate Interests: </Text>
+              {interestFilter.join(', ')}
+            </Text>
+          </Flex>
+        )}
         <InfiniteScroll
           pageStart={0}
           loadMore={fetchNextDelegates}
