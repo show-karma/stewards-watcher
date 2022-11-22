@@ -39,6 +39,7 @@ export interface IDAOTheme {
       secondary: string;
     };
     border: string;
+    common: string;
   };
   modal: {
     background: string;

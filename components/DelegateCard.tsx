@@ -9,14 +9,20 @@ import {
   SkeletonCircle,
   Text,
 } from '@chakra-ui/react';
+import { useQuery } from '@tanstack/react-query';
 import { FC, useState, useMemo } from 'react';
 import { BsCalendar4, BsChat, BsTwitter } from 'react-icons/bs';
 import { IoPersonOutline } from 'react-icons/io5';
 import { IoIosCheckboxOutline } from 'react-icons/io';
 import { AiOutlineThunderbolt } from 'react-icons/ai';
-import { IDelegate } from 'types';
+import { ICustomFields, IDelegate } from 'types';
 import { useDAO, useDelegates } from 'contexts';
-import { formatDate, formatNumber, truncateAddress } from 'utils';
+import {
+  axiosInstance,
+  formatDate,
+  formatNumber,
+  truncateAddress,
+} from 'utils';
 import { IconType } from 'react-icons/lib';
 import { ImgWithFallback } from './ImgWithFallback';
 import { DelegateButton } from './DelegateButton';
@@ -37,6 +43,7 @@ interface IStat {
 export const DelegateCard: FC<IDelegateCardProps> = props => {
   const { data } = props;
   const { daoInfo, theme } = useDAO();
+  const { DAO_KARMA_ID } = daoInfo.config;
   const { selectProfile } = useDelegates();
 
   const { config } = daoInfo;
@@ -92,6 +99,25 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
 
   const [stats, setStats] = useState(allStats);
   const [featuredStats, setFeaturedStats] = useState([] as IStat[]);
+
+  const { data: pitchData, isLoading: isLoadingPitchData } = useQuery({
+    queryKey: ['statement', data?.address],
+    queryFn: () =>
+      axiosInstance.get(
+        `/forum-user/${DAO_KARMA_ID}/delegate-pitch/${data?.address}`
+      ),
+    retry: 1,
+    retryDelay: 1000,
+  });
+
+  const customFields: ICustomFields[] =
+    pitchData?.data.data.delegatePitch.customFields;
+  const emptyField: ICustomFields = { label: '', value: [] };
+
+  const interests =
+    customFields?.find(item =>
+      item.label.toLowerCase().includes('interests')
+    ) || emptyField;
 
   useMemo(() => {
     if (!config) return;
@@ -220,6 +246,16 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
               >
                 {shortAddress}
               </Text>
+              <Flex flexDir="row" gap="2">
+                {data?.twitterHandle && (
+                  <Link
+                    href={`https://twitter.com/${data.twitterHandle}`}
+                    isExternal
+                  >
+                    <Icon as={BsTwitter} w="5" h="5" color={theme.card.icon} />
+                  </Link>
+                )}
+              </Flex>
             </>
           ) : (
             <>
@@ -228,11 +264,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
             </>
           )}
         </Flex>
-        {data?.twitterHandle && (
-          <Link href={`https://twitter.com/${data.twitterHandle}`} isExternal>
-            <Icon as={BsTwitter} w="5" h="5" color={theme.card.icon} />
-          </Link>
-        )}
       </Flex>
       <Flex gap="4" flexDir="column">
         <Divider borderColor={theme.card.divider} w="full" />
@@ -347,6 +378,55 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       </Grid>
       <Flex flexDir="column" gap="4">
         <Divider borderColor={theme.card.divider} w="full" />
+        {isLoadingPitchData ? (
+          <Skeleton w="full" h="1.5rem" />
+        ) : (
+          <Flex
+            flexDir="row"
+            flexWrap="wrap"
+            rowGap="0"
+            columnGap="2"
+            textAlign="center"
+            width="full"
+          >
+            <Text color={theme.card.common} fontSize="sm" textAlign="center">
+              Interests:
+            </Text>
+            {interests.value.length > 0 ? (
+              interests.value.slice(0, 4).map((interest, index) => {
+                const hasNext =
+                  +index !== interests.value.length - 1 && index !== 3;
+                return (
+                  <Flex
+                    gap="2"
+                    key={+index}
+                    align-self="center"
+                    align="center"
+                    alignContent="center"
+                  >
+                    <Text color={theme.card.text.primary} fontSize="sm">
+                      {interest[0].toUpperCase() + interest.substring(1)}
+                    </Text>
+                    {hasNext && (
+                      <Text
+                        color={theme.card.text.primary}
+                        key={+index}
+                        fontSize="0.4rem"
+                        height="max-content"
+                      >
+                        -
+                      </Text>
+                    )}
+                  </Flex>
+                );
+              })
+            ) : (
+              <Text color={theme.card.text.primary} fontSize="sm">
+                N/A
+              </Text>
+            )}
+          </Flex>
+        )}
         {canDelegate && (
           <Flex justify="left" align="center" gap="6">
             {isLoaded ? (

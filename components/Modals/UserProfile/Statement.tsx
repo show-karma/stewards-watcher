@@ -13,15 +13,10 @@ import { useDAO } from 'contexts';
 import { RiExternalLinkLine } from 'react-icons/ri';
 import { axiosInstance, truncateAddress } from 'utils';
 import { ImgWithFallback } from 'components/ImgWithFallback';
-import { JoystickIcon } from 'components/Icons';
 import { IconType } from 'react-icons';
-import { IProfile } from 'types';
+import { ICustomFields, IProfile } from 'types';
 import { useQuery } from '@tanstack/react-query';
 
-interface ICustomFields {
-  label: string;
-  value: string[];
-}
 interface ITextSection {
   statement?: ICustomFields[];
 }
@@ -180,7 +175,7 @@ const Sidebar: FC<ISidebar> = ({ profile, interests, languages }) => {
             <SectionHeader>Interests</SectionHeader>
           )}
           <Flex columnGap="1" rowGap="2" flexWrap="wrap">
-            {interests?.value.slice(0, 4).map((interest, index) => (
+            {interests?.value.map((interest, index) => (
               <SectionItem key={+index}>
                 {interest[0].toUpperCase() + interest.substring(1)}
               </SectionItem>

@@ -9,7 +9,6 @@ import {
 import { useDAO } from 'contexts';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
-import { GoPlus } from 'react-icons/go';
 import { TbExternalLink } from 'react-icons/tb';
 import { IActiveTab, IDelegate } from 'types';
 
