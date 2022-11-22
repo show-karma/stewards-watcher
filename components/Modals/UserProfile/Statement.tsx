@@ -180,9 +180,9 @@ const Sidebar: FC<ISidebar> = ({ profile, interests, languages }) => {
             <SectionHeader>Interests</SectionHeader>
           )}
           <Flex columnGap="1" rowGap="2" flexWrap="wrap">
-            {interests?.value.map((interest, index) => (
-              <SectionItem icon={JoystickIcon} key={+index}>
-                {interest}
+            {interests?.value.slice(0, 4).map((interest, index) => (
+              <SectionItem key={+index}>
+                {interest[0].toUpperCase() + interest.substring(1)}
               </SectionItem>
             ))}
           </Flex>

@@ -1,9 +1,9 @@
-import { Button, Flex, Spinner } from '@chakra-ui/react';
+import { Button, ButtonProps, Flex, Spinner } from '@chakra-ui/react';
 import { useDAO, useWallet } from 'contexts';
 import { useDelegation } from 'hooks';
 import { FC } from 'react';
 
-interface IDelegateButton {
+interface IDelegateButton extends ButtonProps {
   delegated: string;
   text?: string;
 }
@@ -11,6 +11,7 @@ interface IDelegateButton {
 export const DelegateButton: FC<IDelegateButton> = ({
   delegated,
   text = 'Delegate',
+  ...props
 }) => {
   const { openConnectModal, openChainModal, isConnected, chain } = useWallet();
   const { daoInfo, theme } = useDAO();
@@ -43,6 +44,7 @@ export const DelegateButton: FC<IDelegateButton> = ({
       _active={{}}
       disabled={isLoading}
       color={theme.buttonText}
+      {...props}
     >
       <Flex gap="2">
         {isLoading && <Spinner />}

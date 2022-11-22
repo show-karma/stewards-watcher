@@ -55,7 +55,6 @@ export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen, profile }) => {
       <MenuButton
         as={Button}
         h={['10', '12']}
-        rightIcon={<GoPlus />}
         fontSize={['md']}
         fontWeight="medium"
         bg="transparent"
@@ -67,7 +66,7 @@ export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen, profile }) => {
         _active={{}}
         _focus={{}}
       >
-        Activity
+        Show Activity
       </MenuButton>
       <MenuList bgColor={theme.card.background}>
         {options.map(({ title, tab }, index) => (
