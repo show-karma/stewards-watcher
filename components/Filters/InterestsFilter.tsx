@@ -7,18 +7,11 @@ import {
   MenuOptionGroup,
 } from '@chakra-ui/react';
 import { useDAO, useDelegates } from 'contexts';
-import { useMemo } from 'react';
 import { IoChevronDownOutline } from 'react-icons/io5';
 
 export const InterestsFilter = () => {
   const { interests, interestFilter, selectInterests } = useDelegates();
   const { theme } = useDAO();
-
-  const buttonText = useMemo(() => {
-    if (!interestFilter.length) return 'Delegate interest';
-    const text = interestFilter.slice(0, 4).join(', ');
-    return text.length > 18 ? `${text.slice(0, 20)}...` : text;
-  }, [interestFilter]);
 
   return (
     <Menu closeOnSelect={false}>
@@ -38,7 +31,7 @@ export const InterestsFilter = () => {
         textAlign="left"
         w={{ base: '52' }}
       >
-        {buttonText}
+        Delegate Interest
       </MenuButton>
       <MenuList
         bgColor={theme.filters.listBg}
@@ -46,7 +39,7 @@ export const InterestsFilter = () => {
         h={{ base: '64' }}
         overflowY="auto"
       >
-        <MenuOptionGroup type="checkbox">
+        <MenuOptionGroup type="checkbox" value={interestFilter}>
           {interests.map((option, index) => (
             <MenuItemOption
               key={+index}
