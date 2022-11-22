@@ -1,18 +1,14 @@
 import {
   Button,
-  Checkbox,
-  CheckboxIcon,
   Menu,
   MenuButton,
-  MenuItem,
   MenuItemOption,
   MenuList,
   MenuOptionGroup,
 } from '@chakra-ui/react';
-import { CheckIcon } from 'components/Icons';
 import { useDAO, useDelegates } from 'contexts';
 import { useMemo } from 'react';
-import { IoCheckmark, IoChevronDownOutline } from 'react-icons/io5';
+import { IoChevronDownOutline } from 'react-icons/io5';
 
 export const InterestsFilter = () => {
   const { interests, interestFilter, selectInterests } = useDelegates();
