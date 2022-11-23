@@ -101,7 +101,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   ];
 
   const router = useRouter();
-  console.log(router);
 
   const [isOverflowingInterest, setIsOverflowingInterest] = useState(false);
   const [stats, setStats] = useState<IStat[]>(allStats);
