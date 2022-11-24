@@ -11,5 +11,6 @@ export interface IDelegate {
     offChain: number;
   };
   twitterHandle?: string;
+  discourseHandle?: string;
   updatedAt?: string;
 }

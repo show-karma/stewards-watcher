@@ -2,6 +2,7 @@ export * from './contexts';
 export * from './hooks';
 export * from './IChainRow';
 export * from './ICustomFields';
+export * from './IDAOData';
 export * from './IDelegate';
 export * from './IDelegateFromAPI';
 export * from './Modal';
