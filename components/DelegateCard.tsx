@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-useless-fragment */
 import {
   Divider,
   Flex,
@@ -10,11 +11,12 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
-import { FC, useState, useMemo } from 'react';
+import { FC, useState, useMemo, useCallback } from 'react';
 import { BsCalendar4, BsChat, BsTwitter } from 'react-icons/bs';
 import { IoPersonOutline } from 'react-icons/io5';
 import { IoIosCheckboxOutline } from 'react-icons/io';
 import { AiOutlineThunderbolt } from 'react-icons/ai';
+import { BiPlanet } from 'react-icons/bi';
 import { ICustomFields, IDelegate } from 'types';
 import { useDAO, useDelegates } from 'contexts';
 import {
@@ -24,6 +26,7 @@ import {
   formatNumberPercentage,
   truncateAddress,
 } from 'utils';
+import { useRouter } from 'next/router';
 import { IconType } from 'react-icons/lib';
 import { ImgWithFallback } from './ImgWithFallback';
 import { DelegateButton } from './DelegateButton';
@@ -95,7 +98,11 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     },
   ];
 
-  const [stats, setStats] = useState(allStats);
+  const router = useRouter();
+  console.log(router);
+
+  const [isOverflowingInterest, setIsOverflowingInterest] = useState(false);
+  const [stats, setStats] = useState<IStat[]>(allStats);
   const [featuredStats, setFeaturedStats] = useState([] as IStat[]);
 
   const { data: pitchData, isLoading: isLoadingPitchData } = useQuery({
@@ -119,6 +126,8 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
         item.label.toLowerCase().includes('interests')
     ) || emptyField;
 
+  const shouldHardcode = router.query.site === 'op';
+
   useMemo(() => {
     if (!config) return;
     const featureds: IStat[] = [];
@@ -132,6 +141,16 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       if (config.EXCLUDED_CARD_FIELDS.includes(stat.id)) return;
       filtereds.push(stat);
     });
+    if (shouldHardcode) {
+      filtereds.push({
+        title: 'Workstream',
+        icon: BiPlanet,
+        value: ['Tooling', 'DeFi', 'Governance', '-'][
+          Math.floor(Math.random() * 4)
+        ],
+        id: 'workstream',
+      });
+    }
 
     setFeaturedStats(featureds);
     setStats(filtereds);
@@ -187,6 +206,14 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
 
   const canDelegate = checkIfDelegate();
 
+  const [interestsNumberToShow, setInterestsNumberToShow] = useState(4);
+  const handleInterestOverflow = useCallback((ref: HTMLDivElement) => {
+    if (ref?.clientHeight > 25 || ref?.scrollHeight > 25) {
+      setIsOverflowingInterest(true);
+      setInterestsNumberToShow(previous => previous - 1);
+    }
+  }, []);
+
   return (
     <Flex
       bgColor={theme.card.background}
@@ -194,7 +221,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       px={{ base: '4', sm: '6' }}
       py={{ base: '4', sm: '6' }}
       borderRadius="16"
-      maxW={['full', '28rem']}
+      maxW={['full', '26rem']}
+      w="full"
+      minW={['23rem']}
       flex="1"
       gap="8"
       boxShadow={theme.card.shadow}
@@ -202,81 +231,119 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       borderWidth="1px"
       borderStyle="solid"
       borderColor={theme.card.border}
+      maxH="600px"
     >
-      <Flex flexDir="row" gap={['4']} w="full" align="center">
-        {data ? (
-          <Flex
-            minH={['48px', '64px']}
-            minW={['48px', '64px']}
-            h={['48px', '64px']}
-            w={['48px', '64px']}
-          >
-            <ImgWithFallback
-              h={['48px', '64px']}
-              w={['48px', '64px']}
-              borderRadius="full"
-              src={`${config.IMAGE_PREFIX_URL}${data.address}`}
-              fallback={data.address}
-              boxShadow="0px 0px 0px 2px white"
-            />
-          </Flex>
-        ) : (
-          <Flex
-            minH={['48px', '64px']}
-            minW={['48px', '64px']}
-            h={['48px', '64px']}
-            w={['48px', '64px']}
-          >
-            <SkeletonCircle
-              h={['48px', '64px']}
-              w={['48px', '64px']}
-              borderRadius="full"
-            />
-          </Flex>
-        )}
-        <Flex
-          flexDir="column"
-          gap="0.5"
-          justify="center"
-          w="max-content"
-          textOverflow="ellipsis"
-          overflow="hidden"
-          whiteSpace="break-spaces"
-        >
+      <Flex flexDir="row" justify="space-between" w="full" align="center">
+        <Flex flexDir="row" gap={['4']} w="full" align="flex-start">
           {data ? (
-            <>
-              <Text
-                color={theme.title}
-                fontSize={['lg', 'xl']}
-                fontWeight="medium"
-              >
-                {data.ensName || shortAddress}
-              </Text>
-              <Text
-                color={theme.subtitle}
-                fontSize={['md', 'lg']}
-                fontWeight="medium"
-              >
-                {shortAddress}
-              </Text>
-              <Flex flexDir="row" gap="2">
-                {data?.twitterHandle && (
-                  <Link
-                    href={`https://twitter.com/${data.twitterHandle}`}
-                    isExternal
-                  >
-                    <Icon as={BsTwitter} w="5" h="5" color={theme.card.icon} />
-                  </Link>
-                )}
-              </Flex>
-            </>
+            <Flex
+              minH={['48px', '64px']}
+              minW={['48px', '64px']}
+              h={['48px', '64px']}
+              w={['48px', '64px']}
+            >
+              <ImgWithFallback
+                h={['48px', '64px']}
+                w={['48px', '64px']}
+                borderRadius="full"
+                src={`${config.IMAGE_PREFIX_URL}${data.address}`}
+                fallback={data.address}
+                boxShadow="0px 0px 0px 2px white"
+              />
+            </Flex>
           ) : (
-            <>
-              <Skeleton isLoaded={isLoaded}>SkeletonText</Skeleton>
-              <Skeleton isLoaded={isLoaded}>SkeletonSubText</Skeleton>
-            </>
+            <Flex
+              minH={['48px', '64px']}
+              minW={['48px', '64px']}
+              h={['48px', '64px']}
+              w={['48px', '64px']}
+            >
+              <SkeletonCircle
+                h={['48px', '64px']}
+                w={['48px', '64px']}
+                borderRadius="full"
+              />
+            </Flex>
           )}
+          <Flex
+            flexDir="column"
+            gap="0.5"
+            justify="center"
+            w="max-content"
+            maxW={{ base: '160px', md: '190px' }}
+            textOverflow="ellipsis"
+            overflow="hidden"
+            whiteSpace="break-spaces"
+          >
+            {data ? (
+              <>
+                <Text
+                  color={theme.title}
+                  fontSize={['lg', 'xl']}
+                  fontWeight="medium"
+                  maxH="30px"
+                  maxW="full"
+                  textOverflow="ellipsis"
+                  overflow="hidden"
+                  whiteSpace="nowrap"
+                >
+                  {data.ensName || shortAddress}
+                </Text>
+                <Text
+                  color={theme.subtitle}
+                  fontSize={['md', 'lg']}
+                  fontWeight="medium"
+                >
+                  {shortAddress}
+                </Text>
+                {data?.twitterHandle ? (
+                  <Flex flexDir="row" gap="2">
+                    {data?.twitterHandle && (
+                      <Link
+                        href={`https://twitter.com/${data.twitterHandle}`}
+                        isExternal
+                      >
+                        <Icon
+                          as={BsTwitter}
+                          w="5"
+                          h="5"
+                          color={theme.card.icon}
+                        />
+                      </Link>
+                    )}
+                  </Flex>
+                ) : (
+                  <Flex w="5" h="5" />
+                )}
+              </>
+            ) : (
+              <>
+                <Skeleton isLoaded={isLoaded}>SkeletonText</Skeleton>
+                <Skeleton isLoaded={isLoaded}>SkeletonSubText</Skeleton>
+              </>
+            )}
+          </Flex>
         </Flex>
+        {shouldHardcode && (
+          <>
+            {data ? (
+              <Flex flexDir="column" align="end" w="max-content">
+                <Text w="max-content" fontSize="2xl" lineHeight="shorter">
+                  {data?.karmaScore}
+                </Text>
+                <Text
+                  w="max-content"
+                  fontSize="sm"
+                  color={theme.card.text.secondary}
+                >
+                  DAO Score
+                </Text>
+              </Flex>
+            ) : (
+              <Skeleton>Skeleton Text</Skeleton>
+            )}
+          </>
+        )}
       </Flex>
       <Flex gap="4" flexDir="column">
         <Divider borderColor={theme.card.divider} w="full" />
@@ -316,7 +383,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                     >
                       {stat.title}
                     </Text>
-                    {renderPctCase(stat)}
+                    <Text color={theme.card.text.secondary}>
+                      {renderPctCase(stat)}
+                    </Text>
                   </>
                 ) : (
                   <>
@@ -360,6 +429,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                     fontFamily="heading"
                     fontSize={['md', 'lg']}
                     fontWeight="bold"
+                    textAlign={stat.value === '-' ? 'center' : 'start'}
                   >
                     {stat.value}
                   </Text>
@@ -401,38 +471,45 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
             columnGap="2"
             textAlign="center"
             width="full"
+            ref={handleInterestOverflow}
+            maxH="21px"
+            overflow="hidden"
           >
             <Text color={theme.card.common} fontSize="sm" textAlign="center">
               Interests:
             </Text>
             {interests.value.length > 0 ? (
-              interests.value.slice(0, 4).map((interest, index) => {
-                const hasNext =
-                  +index !== interests.value.length - 1 && index !== 3;
-                return (
-                  <Flex
-                    gap="2"
-                    key={+index}
-                    align-self="center"
-                    align="center"
-                    alignContent="center"
-                  >
-                    <Text color={theme.card.text.primary} fontSize="sm">
-                      {interest[0].toUpperCase() + interest.substring(1)}
-                    </Text>
-                    {hasNext && (
-                      <Text
-                        color={theme.card.text.primary}
-                        key={+index}
-                        fontSize="0.4rem"
-                        height="max-content"
-                      >
-                        -
+              interests.value
+                .slice(0, interestsNumberToShow)
+                .map((interest, index) => {
+                  const hasNext =
+                    +index !== interests.value.length - 1 &&
+                    index !== interestsNumberToShow - 1;
+                  return (
+                    <Flex
+                      gap="2"
+                      key={+index}
+                      align-self="center"
+                      align="center"
+                      alignContent="center"
+                    >
+                      <Text color={theme.card.text.primary} fontSize="sm">
+                        {interest[0].toUpperCase() + interest.substring(1)}
                       </Text>
-                    )}
-                  </Flex>
-                );
-              })
+                      {hasNext && (
+                        <Text
+                          color={theme.card.text.primary}
+                          key={+index}
+                          fontSize="0.4rem"
+                          height="max-content"
+                        >
+                          -
+                        </Text>
+                      )}
+                      {isOverflowingInterest}
+                    </Flex>
+                  );
+                })
             ) : (
               <Text color={theme.card.text.primary} fontSize="sm">
                 N/A

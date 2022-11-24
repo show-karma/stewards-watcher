@@ -167,6 +167,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           delegatedVotes: item.delegatedVotes,
           twitterHandle: item.twitterHandle,
           updatedAt: fetchedPeriod?.updatedAt,
+          karmaScore: fetchedPeriod?.karmaScore || 0,
         };
       });
 
@@ -211,6 +212,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           delegatedVotes: fetchedDelegate.delegatedVotes,
           twitterHandle: fetchedDelegate.twitterHandle,
           updatedAt: fetchedPeriod?.updatedAt,
+          karmaScore: fetchedPeriod?.karmaScore || 0,
         },
       ]);
     } catch (error) {
@@ -259,6 +261,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         delegatedVotes: fetchedDelegate.delegatedVotes,
         twitterHandle: fetchedDelegate.twitterHandle,
         updatedAt: fetchedPeriod?.updatedAt,
+        karmaScore: fetchedPeriod?.karmaScore || 0,
       };
       selectProfile(userFound, tabToOpen);
     } catch (error) {
@@ -306,6 +309,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           delegatedVotes: item.delegatedVotes,
           twitterHandle: item.twitterHandle,
           updatedAt: fetchedPeriod?.updatedAt || '-',
+          karmaScore: fetchedPeriod?.karmaScore || 0,
         });
       });
     } catch (error) {

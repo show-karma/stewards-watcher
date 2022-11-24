@@ -6,6 +6,7 @@ export interface IDelegate {
   votingWeight: number;
   delegatedVotes: number;
   delegators: number;
+  karmaScore: number;
   voteParticipation: {
     onChain: number;
     offChain: number;
