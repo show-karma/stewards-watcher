@@ -38,6 +38,7 @@ export interface IDelegateFromAPI {
     proposalsDiscussed: number;
     proposalsInitiated: number;
     updatedAt: string;
+    voteWeight?: number;
   }[];
   workstreams: {
     id: number;

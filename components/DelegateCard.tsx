@@ -21,6 +21,7 @@ import {
   axiosInstance,
   formatDate,
   formatNumber,
+  formatNumberPercentage,
   truncateAddress,
 } from 'utils';
 import { IconType } from 'react-icons/lib';
@@ -52,7 +53,8 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     {
       title: 'Voting weight',
       icon: IoIosCheckboxOutline,
-      value: data?.votingWeight ? formatNumber(data.votingWeight) : '-',
+      pct: data?.votingWeight ? formatNumberPercentage(data.votingWeight) : '-',
+      value: formatNumber(data?.delegatedVotes || 0),
       id: 'delegatedVotes',
     },
     {
@@ -79,9 +81,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       pct: data?.voteParticipation.offChain
         ? `${data.voteParticipation.offChain}%`
         : '-',
-      value: data?.voteParticipation.offChain
-        ? data.voteParticipation.offChain.toString()
-        : '-',
+      value: '',
       id: 'offChainVotesPct',
     },
     {
@@ -90,9 +90,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       pct: data?.voteParticipation.onChain
         ? `${data.voteParticipation.onChain}%`
         : '-',
-      value: data?.voteParticipation.onChain
-        ? data.voteParticipation.onChain.toString()
-        : '-',
+      value: '',
       id: 'onChainVotesPct',
     },
   ];
@@ -115,8 +113,10 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   const emptyField: ICustomFields = { label: '', value: [] };
 
   const interests =
-    customFields?.find(item =>
-      item.label.toLowerCase().includes('interests')
+    customFields?.find(
+      item =>
+        item.displayAs === 'interests' ||
+        item.label.toLowerCase().includes('interests')
     ) || emptyField;
 
   useMemo(() => {
@@ -140,22 +140,35 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   const renderPctCase = (stat: IStat) => {
     if (stat.pct)
       return (
-        <Text
-          color={theme.card.text.primary}
-          fontFamily="heading"
-          fontSize={['xl', '3xl']}
-          fontWeight="bold"
-          lineHeight="shorter"
-        >
-          {stat.pct}
-        </Text>
+        <>
+          <Text
+            color={theme.card.text.primary}
+            fontFamily="heading"
+            fontSize={['xl', '3xl']}
+            fontWeight="bold"
+            lineHeight="shorter"
+          >
+            {stat.pct}
+          </Text>
+          {!!stat.value && (
+            <Text
+              color={theme.card.text.primary}
+              fontFamily="heading"
+              fontSize={['md', 'lg']}
+              fontWeight="semibold"
+            >
+              {stat.value}
+            </Text>
+          )}
+        </>
       );
     return (
       <Text
         color={theme.card.text.primary}
         fontFamily="heading"
-        fontSize={['md', 'lg']}
-        fontWeight="semibold"
+        fontSize={['xl', '3xl']}
+        fontWeight="bold"
+        lineHeight="shorter"
       >
         {stat.value}
       </Text>
