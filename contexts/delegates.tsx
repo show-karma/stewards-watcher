@@ -18,6 +18,7 @@ import {
   IStatOptions,
   IVoteInfo,
   IActiveTab,
+  IDAOData,
 } from 'types';
 import { axiosInstance } from 'utils';
 import { useDAO } from './dao';
@@ -55,6 +56,7 @@ interface IDelegateProps {
   interests: string[];
   interestFilter: string[];
   selectInterests: (index: number) => void;
+  daoData: IDAOData | undefined;
 }
 
 export const DelegatesContext = createContext({} as IDelegateProps);
@@ -92,6 +94,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const [profileSelected, setProfileSelected] = useState<IDelegate | undefined>(
     {} as IDelegate
   );
+  const [daoData, setDAOData] = useState<IDAOData>();
 
   const {
     isOpen: isOpenProfile,
@@ -136,17 +139,15 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           },
         }
       );
-      const {
-        delegates: fetchedDelegates,
-        onChainId,
-        snapshotIds,
-      } = axiosClient.data.data;
+      const { data } = axiosClient.data;
+      const { delegates: fetchedDelegates, onChainId, snapshotIds } = data;
       setVoteInfos({
         onChainId,
         snapshotIds,
       });
       setHasMore(fetchedDelegates.length === 10);
       setLastUpdate(fetchedDelegates[0].stats[0].updatedAt);
+      setDAOData(data);
 
       const delegatesList = fetchedDelegates.map((item: IDelegateFromAPI) => {
         const fetchedPeriod = item.stats.find(
@@ -165,6 +166,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           },
           votingWeight: item.delegatedVotes,
           twitterHandle: item.twitterHandle,
+          discourseHandle: item.discourseHandle,
           updatedAt: fetchedPeriod?.updatedAt,
           karmaScore: fetchedPeriod?.karmaScore || 0,
         };
@@ -186,7 +188,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       const axiosClient = await axiosInstance.get(
         `/dao/find-delegate?dao=${config.DAO_KARMA_ID}&user=${userToFind}`
       );
-      const { delegate: fetchedDelegate } = axiosClient.data.data;
+      const { data } = axiosClient.data;
+      const { delegate: fetchedDelegate } = data;
+      setDAOData(data);
 
       if (!fetchedDelegate) {
         throw new Error('No delegates found');
@@ -208,6 +212,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           },
           votingWeight: fetchedDelegate.delegatedVotes,
           twitterHandle: fetchedDelegate.twitterHandle,
+          discourseHandle: fetchedDelegate.discourseHandle,
           updatedAt: fetchedPeriod?.updatedAt,
           karmaScore: fetchedPeriod?.karmaScore || 0,
         },
@@ -235,7 +240,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       const axiosClient = await axiosInstance.get(
         `/dao/find-delegate?dao=${config.DAO_KARMA_ID}&user=${userToSearch}`
       );
-      const { delegate: fetchedDelegate } = axiosClient.data.data;
+      const { data } = axiosClient.data;
+      const { delegate: fetchedDelegate } = data;
+      setDAOData(data);
 
       if (!fetchedDelegate) {
         throw new Error('No delegates found');
@@ -256,6 +263,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         },
         votingWeight: fetchedDelegate.delegatedVotes,
         twitterHandle: fetchedDelegate.twitterHandle,
+        discourseHandle: fetchedDelegate.discourseHandle,
         updatedAt: fetchedPeriod?.updatedAt,
         karmaScore: fetchedPeriod?.karmaScore || 0,
       };
@@ -281,7 +289,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           },
         }
       );
-      const { delegates: fetchedDelegates } = axiosClient.data.data;
+      const { data } = axiosClient.data;
+      const { delegates: fetchedDelegates } = data;
+      setDAOData(data);
 
       setHasMore(fetchedDelegates.length === 10);
       setLastUpdate(fetchedDelegates[0].stats[0].updatedAt);
@@ -303,6 +313,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           },
           votingWeight: item.delegatedVotes,
           twitterHandle: item.twitterHandle,
+          discourseHandle: item.discourseHandle,
           updatedAt: fetchedPeriod?.updatedAt || '-',
           karmaScore: fetchedPeriod?.karmaScore || 0,
         });
@@ -424,6 +435,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       interests,
       interestFilter,
       selectInterests,
+      daoData,
     }),
     [
       profileSelected,
@@ -443,6 +455,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       voteInfos,
       selectedTab,
       interests,
+      daoData,
     ]
   );
 

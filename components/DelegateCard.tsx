@@ -16,6 +16,7 @@ import { BsCalendar4, BsChat, BsTwitter } from 'react-icons/bs';
 import { IoPersonOutline } from 'react-icons/io5';
 import { IoIosCheckboxOutline } from 'react-icons/io';
 import { AiOutlineThunderbolt } from 'react-icons/ai';
+import { FaDiscourse } from 'react-icons/fa';
 import { BiPlanet } from 'react-icons/bi';
 import { ICustomFields, IDelegate } from 'types';
 import { useDAO, useDelegates } from 'contexts';
@@ -47,7 +48,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   const { data } = props;
   const { daoInfo, theme } = useDAO();
   const { DAO_KARMA_ID } = daoInfo.config;
-  const { selectProfile } = useDelegates();
+  const { selectProfile, daoData } = useDelegates();
 
   const { config } = daoInfo;
   const isLoaded = !!data;
@@ -101,7 +102,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   ];
 
   const router = useRouter();
-  console.log(router);
 
   const [isOverflowingInterest, setIsOverflowingInterest] = useState(false);
   const [stats, setStats] = useState<IStat[]>(allStats);
@@ -201,6 +201,13 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     }
   }, []);
 
+  const forumUrl =
+    daoData &&
+    `${
+      daoData.socialLinks.forum +
+      (daoData?.socialLinks.forum.slice(-1) === '/' ? '' : '/')
+    }u/`;
+
   return (
     <Flex
       bgColor={theme.card.background}
@@ -283,7 +290,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                 >
                   {shortAddress}
                 </Text>
-                {data?.twitterHandle ? (
+                {data?.twitterHandle || data?.discourseHandle ? (
                   <Flex flexDir="row" gap="2">
                     {data?.twitterHandle && (
                       <Link
@@ -292,6 +299,19 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                       >
                         <Icon
                           as={BsTwitter}
+                          w="5"
+                          h="5"
+                          color={theme.card.icon}
+                        />
+                      </Link>
+                    )}
+                    {data?.discourseHandle && (
+                      <Link
+                        href={`${forumUrl}${data.discourseHandle}`}
+                        isExternal
+                      >
+                        <Icon
+                          as={FaDiscourse}
                           w="5"
                           h="5"
                           color={theme.card.icon}
