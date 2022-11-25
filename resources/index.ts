@@ -1,4 +1,5 @@
 import { IDAOInfo } from 'types';
+import op from './op';
 import optimism from './optimism';
 import pooltogether from './pooltogether';
 import yamfinance from './yamfinance';
@@ -9,6 +10,12 @@ interface ISupportedDAOs {
 }
 
 export const supportedDAOs: ISupportedDAOs = {
+  op: {
+    config: op.config,
+    light: op.light,
+    dark: op.dark,
+    ABI: op.ABI,
+  },
   optimism: {
     config: optimism.config,
     light: optimism.light,

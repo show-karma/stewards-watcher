@@ -12,6 +12,7 @@ import { useVoteReason } from 'hooks';
 import { FC } from 'react';
 import { IChainRow, IProfile } from 'types';
 import { formatDate } from 'utils';
+import { ExpandableReason } from './ExpandableReason';
 
 const iconStyle = {
   width: '1.75rem',
@@ -220,22 +221,8 @@ export const ProposalVote: FC<IProposalVote> = ({
       />
       {voteReason && (
         <Flex flexDir="column" mt="1" mb="4">
-          <Flex flexDir="column" gap="2.5">
-            <Text
-              fontSize="sm"
-              fontWeight="medium"
-              color={theme.modal.votingHistory.reason.title}
-            >
-              Reason
-            </Text>
-            <Text
-              fontSize="sm"
-              fontWeight="light"
-              color={theme.modal.votingHistory.reason.text}
-            >
-              {voteReason}
-            </Text>
-          </Flex>
+          <ExpandableReason text={voteReason} />
+
           <Divider
             bgColor={theme.modal.votingHistory.reason.divider}
             mt="4"
