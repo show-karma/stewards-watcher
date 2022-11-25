@@ -46,9 +46,9 @@ interface IStat {
 
 export const DelegateCard: FC<IDelegateCardProps> = props => {
   const { data } = props;
-  const { daoInfo, theme } = useDAO();
+  const { daoInfo, theme, daoData } = useDAO();
   const { DAO_KARMA_ID } = daoInfo.config;
-  const { selectProfile, daoData } = useDelegates();
+  const { selectProfile } = useDelegates();
 
   const { config } = daoInfo;
   const isLoaded = !!data;
