@@ -5,5 +5,5 @@ export const formatNumber = (numberToFormat: number) =>
 
 export const formatNumberPercentage = (numberToFormat: number) =>
   numberToFormat > 0.01
-    ? `${formatNumber(+numberToFormat.toFixed(3))}%`
+    ? `${formatNumber(+numberToFormat.toFixed(2))}%`
     : '< 0.01%';
