@@ -160,13 +160,15 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
             onChain: fetchedPeriod?.onChainVotesPct || 0,
             offChain: fetchedPeriod?.offChainVotesPct || 0,
           },
-          votingWeight: item.delegatedVotes,
+          votingWeight: item.stats?.[0]?.voteWeight || 0,
+          delegatedVotes: item.delegatedVotes,
           twitterHandle: item.twitterHandle,
           discourseHandle: item.discourseHandle,
           updatedAt: fetchedPeriod?.updatedAt,
           karmaScore: fetchedPeriod?.karmaScore || 0,
         };
       });
+
       setDelegates(delegatesList);
     } catch (error) {
       setDelegates([]);
@@ -205,7 +207,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
             onChain: fetchedPeriod?.onChainVotesPct || 0,
             offChain: fetchedPeriod?.offChainVotesPct || 0,
           },
-          votingWeight: fetchedDelegate.delegatedVotes,
+          votingWeight: fetchedPeriod?.voteWeight || 0,
+          delegatedVotes: fetchedDelegate.delegatedVotes,
           twitterHandle: fetchedDelegate.twitterHandle,
           discourseHandle: fetchedDelegate.discourseHandle,
           updatedAt: fetchedPeriod?.updatedAt,
@@ -255,7 +258,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           onChain: fetchedPeriod?.onChainVotesPct || 0,
           offChain: fetchedPeriod?.offChainVotesPct || 0,
         },
-        votingWeight: fetchedDelegate.delegatedVotes,
+        votingWeight: fetchedPeriod?.voteWeight || 0,
+        delegatedVotes: fetchedDelegate.delegatedVotes,
         twitterHandle: fetchedDelegate.twitterHandle,
         discourseHandle: fetchedDelegate.discourseHandle,
         updatedAt: fetchedPeriod?.updatedAt,
@@ -304,7 +308,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
             onChain: fetchedPeriod?.onChainVotesPct || 0,
             offChain: fetchedPeriod?.offChainVotesPct || 0,
           },
-          votingWeight: item.delegatedVotes,
+          votingWeight: item.stats?.[0]?.voteWeight || 0,
+          delegatedVotes: item.delegatedVotes,
           twitterHandle: item.twitterHandle,
           discourseHandle: item.discourseHandle,
           updatedAt: fetchedPeriod?.updatedAt || '-',

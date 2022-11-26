@@ -4,6 +4,7 @@ export interface IDelegate {
   delegateSince?: string;
   forumActivity: number;
   votingWeight: number;
+  delegatedVotes: number;
   delegators: number;
   karmaScore: number;
   voteParticipation: {
