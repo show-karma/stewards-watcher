@@ -62,6 +62,28 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       id: 'delegatedVotes',
     },
     {
+      title: 'Off-chain votes',
+      icon: AiOutlineThunderbolt,
+      pct: data?.voteParticipation.offChain
+        ? `${data.voteParticipation.offChain}%`
+        : '-',
+      value: data?.voteParticipation.offChain
+        ? `${data.voteParticipation.offChain}%`
+        : '-',
+      id: 'offChainVotesPct',
+    },
+    {
+      title: 'On-chain votes',
+      icon: AiOutlineThunderbolt,
+      pct: data?.voteParticipation.onChain
+        ? `${data.voteParticipation.onChain}%`
+        : '-',
+      value: data?.voteParticipation.onChain
+        ? `${data.voteParticipation.onChain}%`
+        : '-',
+      id: 'onChainVotesPct',
+    },
+    {
       title: 'Forum activity',
       icon: BsChat,
       value: data?.forumActivity ? formatNumber(data.forumActivity) : '-',
@@ -78,24 +100,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       icon: BsCalendar4,
       value: data?.delegateSince ? formatDate(data.delegateSince) : '-',
       id: 'delegateSince',
-    },
-    {
-      title: 'Off-chain votes',
-      icon: AiOutlineThunderbolt,
-      pct: data?.voteParticipation.offChain
-        ? `${data.voteParticipation.offChain}%`
-        : '-',
-      value: '',
-      id: 'offChainVotesPct',
-    },
-    {
-      title: 'On-chain votes',
-      icon: AiOutlineThunderbolt,
-      pct: data?.voteParticipation.onChain
-        ? `${data.voteParticipation.onChain}%`
-        : '-',
-      value: '',
-      id: 'onChainVotesPct',
     },
   ];
 
@@ -169,16 +173,18 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           >
             {stat.pct}
           </Text>
-          {!!stat.value && (
-            <Text
-              color={theme.card.text.primary}
-              fontFamily="heading"
-              fontSize={['md', 'lg']}
-              fontWeight="semibold"
-            >
-              {stat.value}
-            </Text>
-          )}
+          {!!stat.value &&
+            stat.id !== 'onChainVotesPct' &&
+            stat.id !== 'offChainVotesPct' && (
+              <Text
+                color={theme.card.text.primary}
+                fontFamily="heading"
+                fontSize={['md', 'lg']}
+                fontWeight="semibold"
+              >
+                {stat.value}
+              </Text>
+            )}
         </>
       );
     return (
@@ -449,7 +455,8 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                     fontFamily="heading"
                     fontSize={['md', 'lg']}
                     fontWeight="bold"
-                    textAlign={stat.value === '-' ? 'center' : 'start'}
+                    ml={stat.value === '-' ? '8' : '0'}
+                    textAlign="start"
                   >
                     {stat.value}
                   </Text>
