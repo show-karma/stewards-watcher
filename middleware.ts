@@ -32,6 +32,9 @@ function getDAOName(host: string) {
     case 'aave.showkarma.xyz':
       dao = 'aave';
       break;
+    case 'op.showkarma.xyz':
+      dao = 'op';
+      break;
     default:
       dao = 'optimism';
   }
