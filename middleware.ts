@@ -29,6 +29,9 @@ function getDAOName(host: string) {
     case 'ssvnetwork.showkarma.xyz':
       dao = 'ssvnetwork';
       break;
+    case 'aave.showkarma.xyz':
+      dao = 'aave';
+      break;
     default:
       dao = 'optimism';
   }

@@ -1,4 +1,5 @@
 import { IDAOInfo } from 'types';
+import aave from './aave';
 import op from './op';
 import optimism from './optimism';
 import pooltogether from './pooltogether';
@@ -10,6 +11,12 @@ interface ISupportedDAOs {
 }
 
 export const supportedDAOs: ISupportedDAOs = {
+  aave: {
+    config: aave.config,
+    light: aave.light,
+    dark: aave.dark,
+    ABI: aave.ABI,
+  },
   op: {
     config: op.config,
     light: op.light,
