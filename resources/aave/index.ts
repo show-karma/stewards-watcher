@@ -4,17 +4,16 @@ import ABI from './ABI.json';
 
 const config: IDAOConfig = {
   DAO: 'Aave',
-  DAO_DESCRIPTION: `The Delegates of Aave DAO play a vital role in driving the Aave
-  ecosystem forward through their work in governance.`,
+  DAO_DESCRIPTION: `The Delegates of Aave DAO play a vital role in driving the Aave ecosystem forward through their work in governance.`,
   DAO_SUBDESCRIPTION: `This site will help boost transparency by displaying delegate contribution to indicate their involvement and engagement in the DAO.`,
-  DAO_URL: 'https://www.aave.io',
-  GOVERNANCE_FORUM: 'https://gov.aave.io',
+  DAO_URL: 'https://www.aave.com',
+  GOVERNANCE_FORUM: 'https://governance.aave.com',
   DAO_KARMA_ID: 'aave',
   IMAGE_PREFIX_URL: 'https://cdn.stamp.fyi/avatar/eth:',
   DAO_LOGO: '/daos/aave/logo.svg',
   METATAGS: {
     TITLE: `Delegates of Aave DAO`,
-    DESCRIPTION: `Find all the active delegates in Aave DAO along with governance stats across off-chain, forum and discord.`,
+    DESCRIPTION: `Find all the active delegates in Aave DAO along with governance stats across on-chain, off-chain, forum and discord.`,
     IMAGE: '/daos/aave/preview.png',
     FAVICON: '/daos/aave/favicon.png',
     URL: `https://aave.showkarma.xyz`,
@@ -22,7 +21,7 @@ const config: IDAOConfig = {
   DAO_CHAIN: chain.mainnet,
   DAO_DELEGATE_CONTRACT: '0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9',
   DAO_DELEGATE_MODE: 'custom',
-  EXCLUDED_CARD_FIELDS: ['onChainVotesPct'],
+  EXCLUDED_CARD_FIELDS: [],
   FEATURED_CARD_FIELDS: ['delegatedVotes', 'offChainVotesPct'],
 };
 
