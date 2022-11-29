@@ -20,6 +20,7 @@ const config: IDAOConfig = {
   DAO_CHAIN: chain.mainnet,
   DAO_DELEGATE_CONTRACT: '',
   DAO_DELEGATE_MODE: 'snapshot',
+  DAO_FORUM_TYPE: 'discourse',
   FEATURED_CARD_FIELDS: ['delegatedVotes', 'offChainVotesPct'],
   EXCLUDED_CARD_FIELDS: ['onChainVotesPct'],
 };

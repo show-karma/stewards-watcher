@@ -22,6 +22,7 @@ const config: IDAOConfig = {
   DAO_CHAIN: chain.mainnet,
   DAO_DELEGATE_CONTRACT: '0x0cec1a9154ff802e7934fc916ed7ca50bde6844e',
   DAO_DELEGATE_MODE: 'custom',
+  DAO_FORUM_TYPE: 'discourse',
   EXCLUDED_CARD_FIELDS: [],
   FEATURED_CARD_FIELDS: ['delegatedVotes', 'offChainVotesPct'],
 };

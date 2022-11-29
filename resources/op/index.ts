@@ -22,6 +22,7 @@ const config: IDAOConfig = {
   DAO_CHAIN: chain.optimism,
   DAO_DELEGATE_CONTRACT: '0x4200000000000000000000000000000000000042',
   DAO_DELEGATE_MODE: 'custom',
+  DAO_FORUM_TYPE: 'discourse',
   EXCLUDED_CARD_FIELDS: ['onChainVotesPct'],
   FEATURED_CARD_FIELDS: ['delegatedVotes', 'offChainVotesPct'],
 };

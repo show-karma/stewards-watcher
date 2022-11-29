@@ -4,6 +4,7 @@ export * from './formatDate';
 export * from './formatNumber';
 export * from './getIdBySnapshotId';
 export * from './getTimeFromNow';
+export * from './getUserForumUrl';
 export * from './GraphQL';
 export * from './removeLinkPrefix';
 export * from './truncateAddress';

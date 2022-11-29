@@ -5,12 +5,19 @@ import optimism from './optimism';
 import pooltogether from './pooltogether';
 import yamfinance from './yamfinance';
 import ssvnetwork from './ssvnetwork';
+import dydx from './dydx';
 
 interface ISupportedDAOs {
   [key: string]: IDAOInfo;
 }
 
 export const supportedDAOs: ISupportedDAOs = {
+  dydx: {
+    config: dydx.config,
+    light: dydx.light,
+    dark: dydx.dark,
+    ABI: dydx.ABI,
+  },
   aave: {
     config: aave.config,
     light: aave.light,
