@@ -11,7 +11,7 @@ interface IExpandableText {
 export const ExpandableReason: FC<IExpandableText> = props => {
   const { theme } = useDAO();
 
-  const { text, maxChars = 650 } = props;
+  const { text, maxChars = 250 } = props;
   const [isExpanded, setIsExpanded] = useState(false);
   const toggleIsExpanded = () => setIsExpanded(!isExpanded);
 
