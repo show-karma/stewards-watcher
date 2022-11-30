@@ -4,6 +4,7 @@ import Head from 'next/head';
 import React from 'react';
 import { RainbowWrapper, Header, DelegatesList, HeaderHat } from 'components';
 import { Flex } from '@chakra-ui/react';
+import Script from 'next/script';
 
 interface IDAOContainer {
   user?: string;
@@ -57,6 +58,22 @@ export const DAOContainer: React.FC<IDAOContainer> = ({ user }) => {
             />
             <meta property="twitter:image" content={config.METATAGS.IMAGE} />
           </Head>
+          <Script
+            strategy="afterInteractive"
+            src={`https://www.googletagmanager.com/gtag/js?id=${config.DAO_GTAG}`}
+            onLoad={() => console.log('GTAG code setup')}
+          />
+          <Script
+            id="google-analytics"
+            strategy="afterInteractive"
+            onLoad={() => console.log('Google-Analytics code setup')}
+          >
+            {`window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+
+              gtag('config', ${config.DAO_GTAG});`}
+          </Script>
           <Flex
             w="full"
             flexDir="column"

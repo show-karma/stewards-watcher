@@ -23,6 +23,7 @@ const config: IDAOConfig = {
   DAO_DELEGATE_CONTRACT: '0x4200000000000000000000000000000000000042',
   DAO_DELEGATE_MODE: 'custom',
   DAO_FORUM_TYPE: 'discourse',
+  DAO_GTAG: 'G-67LDHT697P',
   EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'forumScore'],
   FEATURED_CARD_FIELDS: ['delegatedVotes', 'offChainVotesPct'],
 };
