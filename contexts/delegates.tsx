@@ -55,6 +55,7 @@ interface IDelegateProps {
   interests: string[];
   interestFilter: string[];
   selectInterests: (index: number) => void;
+  delegateCount: number;
 }
 
 export const DelegatesContext = createContext({} as IDelegateProps);
@@ -92,6 +93,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const [profileSelected, setProfileSelected] = useState<IDelegate | undefined>(
     {} as IDelegate
   );
+  const [delegateCount, setDelegateCount] = useState(0);
 
   const {
     isOpen: isOpenProfile,
@@ -137,12 +139,18 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         }
       );
       const { data } = axiosClient.data;
-      const { delegates: fetchedDelegates, onChainId, snapshotIds } = data;
+      const {
+        delegates: fetchedDelegates,
+        onChainId,
+        snapshotIds,
+        count,
+      } = data;
+
       setVoteInfos({
         onChainId,
         snapshotIds,
       });
-      setHasMore(fetchedDelegates.length === 10);
+      // setHasMore(fetchedDelegates.length === 10);
       setLastUpdate(fetchedDelegates[0].stats[0].updatedAt);
 
       const delegatesList = fetchedDelegates.map((item: IDelegateFromAPI) => {
@@ -170,6 +178,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       });
 
       setDelegates(delegatesList);
+      setDelegateCount(count || 0);
     } catch (error) {
       setDelegates([]);
       console.log(error);
@@ -178,49 +187,62 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     }
   };
 
+  useEffect(() => {
+    setHasMore(delegates.length < delegateCount);
+  }, [delegates.length, delegateCount]);
+
   const findDelegate = async () => {
+    if (isFetchingMore) return;
+    setFetchingMore(true);
     setLoading(true);
-    setHasMore(false);
-    setOffset(0);
     try {
       const axiosClient = await axiosInstance.get(
-        `/dao/find-delegate?dao=${config.DAO_KARMA_ID}&user=${userToFind}`
+        `/dao/search-delegate?dao=${config.DAO_KARMA_ID}&user=${userToFind}&pageSize=10&offset=${offset}&period=${period}`
       );
       const { data } = axiosClient.data;
-      const { delegate: fetchedDelegate } = data;
 
-      if (!fetchedDelegate) {
+      const { delegates: fetchedDelegates, count } = data;
+
+      if (!fetchedDelegates) {
         throw new Error('No delegates found');
       }
-      const fetchedPeriod = (fetchedDelegate as IDelegateFromAPI).stats.find(
-        fetchedStat => fetchedStat.period === period
-      );
-      setDelegates([
-        {
-          address: fetchedDelegate.publicAddress,
-          ensName: fetchedDelegate.ensName,
+      setOffset(offset + 1);
+      const delegatesList = fetchedDelegates.map((item: IDelegateFromAPI) => {
+        const fetchedPeriod = item.stats.find(
+          fetchedStat => fetchedStat.period === period
+        );
+
+        return {
+          address: item.publicAddress,
+          ensName: item.ensName,
           forumActivity: fetchedPeriod?.forumActivityScore || 0,
-          delegateSince:
-            fetchedDelegate.joinDateAt || fetchedDelegate.firstTokenDelegatedAt,
-          delegators: fetchedDelegate.delegatorCount,
+          delegateSince: item.joinDateAt || item.firstTokenDelegatedAt,
+          delegators: item.delegatorCount,
           voteParticipation: {
             onChain: fetchedPeriod?.onChainVotesPct || 0,
             offChain: fetchedPeriod?.offChainVotesPct || 0,
           },
-          votingWeight: fetchedPeriod?.voteWeight || 0,
-          delegatedVotes: fetchedDelegate.delegatedVotes,
-          twitterHandle: fetchedDelegate.twitterHandle,
-          discourseHandle: fetchedDelegate.discourseHandle,
+          discourseHandle: item.discourseHandle,
+          votingWeight: item.stats?.[0]?.voteWeight || 0,
+          delegatedVotes: item.delegatedVotes,
+          twitterHandle: item.twitterHandle,
           updatedAt: fetchedPeriod?.updatedAt,
           karmaScore: fetchedPeriod?.karmaScore || 0,
-        },
-      ]);
+        };
+      });
+      if (count < delegateCount) {
+        setDelegates(delegatesList);
+      } else {
+        setDelegates(delegates.concat(delegatesList));
+      }
+      setDelegateCount(count || 0);
     } catch (error) {
       console.log(error);
       setDelegates([]);
       return;
     } finally {
       setLoading(false);
+      setFetchingMore(false);
     }
   };
 
@@ -272,7 +294,13 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   };
 
   const fetchNextDelegates = async () => {
-    if (isFetchingMore || !hasMore || isSearchDirty) return;
+    if (isSearchDirty) {
+      findDelegate();
+      return;
+    }
+
+    if (isFetchingMore || !hasMore) return;
+
     const newOffset = offset + 1;
     setOffset(newOffset);
     setFetchingMore(true);
@@ -290,7 +318,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       const { data } = axiosClient.data;
       const { delegates: fetchedDelegates } = data;
 
-      setHasMore(fetchedDelegates.length === 10);
+      // setHasMore(fetchedDelegates.length === 10);
       setLastUpdate(fetchedDelegates[0].stats[0].updatedAt);
 
       fetchedDelegates.forEach((item: IDelegateFromAPI) => {
@@ -370,8 +398,13 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const selectOrder = (selectedOrder: IFilterOrder) => setOrder(selectedOrder);
   const selectPeriod = (selectedPeriod: IFilterPeriod) =>
     setPeriod(selectedPeriod);
-  const selectUserToFind = (selectedUser: string) =>
+
+  const selectUserToFind = (selectedUser: string) => {
+    setOffset(0);
+    setDelegates([]);
+    setDelegateCount(0);
     setUserToFind(selectedUser);
+  };
 
   const selectInterests = (index: number) => {
     if (!interests[index]) return;
@@ -433,6 +466,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       interests,
       interestFilter,
       selectInterests,
+      delegateCount,
     }),
     [
       profileSelected,
