@@ -8,7 +8,7 @@ const config: IDAOConfig = {
   DAO_SUBDESCRIPTION: `This site will help boost transparency by displaying delegate contribution to indicate their involvement and engagement in the DAO.`,
   DAO_URL: 'https://dydx.exchange',
   GOVERNANCE_FORUM: 'https://governance.dydx.com',
-  DAO_KARMA_ID: 'optimism',
+  DAO_KARMA_ID: 'dydx',
   IMAGE_PREFIX_URL: 'https://cdn.stamp.fyi/avatar/eth:',
   DAO_LOGO: '/daos/dydx/logo.svg',
   METATAGS: {
