@@ -64,7 +64,6 @@ async function fetchOnChainProposalVotes(
         address,
       },
     });
-    console.log(votes);
     if (votes && Array.isArray(votes.votes)) {
       const skipIds = votes.votes.map((vote: any) => vote.proposal.id);
       const { data: proposals } = await onChainClient.query({
