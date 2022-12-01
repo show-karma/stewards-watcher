@@ -59,7 +59,7 @@ export const DAOContainer: React.FC<IDAOContainer> = ({ user }) => {
             <meta property="twitter:image" content={config.METATAGS.IMAGE} />
           </Head>
           <Script
-            strategy="afterInteractive"
+            async
             src={`https://www.googletagmanager.com/gtag/js?id=${config.DAO_GTAG}`}
             onLoad={() => console.log('GTAG code setup')}
           />
@@ -72,7 +72,7 @@ export const DAOContainer: React.FC<IDAOContainer> = ({ user }) => {
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
 
-              gtag('config', ${config.DAO_GTAG});`}
+              gtag('config', '${config.DAO_GTAG}');`}
           </Script>
           <Flex
             w="full"
