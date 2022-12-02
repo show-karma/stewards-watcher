@@ -21,13 +21,14 @@ const DelegatesCounter: FC<{
   isSearchDirty: boolean;
   theme: IDAOTheme;
   delegates: IDelegate[];
-}> = ({ isLoading, isSearchDirty, theme, delegates }) => {
+  delegateCount?: number;
+}> = ({ isLoading, isSearchDirty, theme, delegates, delegateCount = 0 }) => {
   if (isLoading) return <Skeleton w="40" h="6" />;
   if (!isSearchDirty) return <Flex />;
   return (
     <Flex align="center">
       <Text fontSize="md" color={theme.text}>
-        {delegates.length} delegate{delegates.length > 1 && 's'} found
+        {delegateCount} delegate{delegateCount > 1 && 's'} found
       </Text>
       <ClearButton />
     </Flex>
@@ -35,7 +36,7 @@ const DelegatesCounter: FC<{
 };
 
 export const Header: FC = () => {
-  const { delegates, isLoading, isSearchDirty } = useDelegates();
+  const { delegates, isLoading, isSearchDirty, delegateCount } = useDelegates();
   const { daoInfo, theme } = useDAO();
   const { config } = daoInfo;
   const [showHeaderText, setShowHeaderText] = useState(true);
@@ -187,6 +188,7 @@ export const Header: FC = () => {
             isLoading={isLoading}
             isSearchDirty={isSearchDirty}
             theme={theme}
+            delegateCount={delegateCount}
           />
         </Flex>
       </Flex>

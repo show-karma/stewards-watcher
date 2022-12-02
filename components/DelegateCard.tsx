@@ -25,6 +25,7 @@ import {
   formatDate,
   formatNumber,
   formatNumberPercentage,
+  getUserForumUrl,
   truncateAddress,
 } from 'utils';
 import { useRouter } from 'next/router';
@@ -220,13 +221,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     }
   }, []);
 
-  const forumUrl =
-    daoData &&
-    `${
-      daoData.socialLinks.forum +
-      (daoData?.socialLinks.forum.slice(-1) === '/' ? '' : '/')
-    }u/`;
-
   return (
     <Flex
       bgColor={theme.card.background}
@@ -324,9 +318,13 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                         />
                       </Link>
                     )}
-                    {data?.discourseHandle && (
+                    {data?.discourseHandle && daoData?.socialLinks.forum && (
                       <Link
-                        href={`${forumUrl}${data.discourseHandle}`}
+                        href={getUserForumUrl(
+                          data.discourseHandle,
+                          config.DAO_FORUM_TYPE,
+                          daoData.socialLinks.forum
+                        )}
                         isExternal
                       >
                         <Icon

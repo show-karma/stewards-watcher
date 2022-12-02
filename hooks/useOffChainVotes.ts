@@ -1,7 +1,6 @@
 /* eslint-disable no-useless-catch */
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { useQuery } from '@tanstack/react-query';
-import { useVoteReason } from 'hooks';
 
 import moment from 'moment';
 import { IChainRow } from 'types';
