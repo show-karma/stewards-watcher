@@ -1,5 +1,5 @@
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
-import { useDAO } from 'contexts';
+import { useDAO, useVotes } from 'contexts';
 import { Button, Flex, Icon, Text } from '@chakra-ui/react';
 import { FC, ReactNode } from 'react';
 import { IChainRow } from 'types';
@@ -54,20 +54,9 @@ const NavigationButton: FC<INavigationButton> = ({
   );
 };
 
-interface INavigation {
-  allVotes: IChainRow[];
-  limit: number;
-  offset: number;
-  changeOffset: (newOffset: number) => void;
-}
-
-export const Navigation: FC<INavigation> = ({
-  allVotes,
-  offset,
-  limit,
-  changeOffset,
-}) => {
+export const Navigation: FC = () => {
   const { theme } = useDAO();
+  const { allVotes, offset, limit, changeOffset } = useVotes();
   const proposalsSize = allVotes.length;
   const maxPagesPerView = 3;
   const activePage = offset + 1;

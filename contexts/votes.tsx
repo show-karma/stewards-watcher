@@ -4,6 +4,7 @@ import { supportedDAOs } from 'resources';
 import { IChainRow, IDAOData, IDAOInfo, IDAOTheme, IProfile } from 'types';
 import { axiosInstance } from 'utils';
 import debounce from 'lodash.debounce';
+import moment from 'moment';
 import { useDelegates } from './delegates';
 
 interface IVotesProps {
@@ -12,6 +13,11 @@ interface IVotesProps {
   onChainVotes: IChainRow[] | undefined;
   searchProposal: (partialText: string) => void;
   resetProposal: () => void;
+  showingVotes: IChainRow[];
+  allVotes: IChainRow[];
+  limit: number;
+  offset: number;
+  changeOffset: (newOffset: number) => void;
 }
 
 export const VotesContext = createContext({} as IVotesProps);
@@ -25,7 +31,6 @@ export const VotesProvider: React.FC<ProviderProps> = ({
   children,
   profile,
 }) => {
-  //   console.log('profile', profile);
   const { voteInfos } = useDelegates();
   const { data: dataOffChainVotes } = useOffChainVotes(
     voteInfos.snapshotIds,
@@ -37,18 +42,33 @@ export const VotesProvider: React.FC<ProviderProps> = ({
   );
 
   const [offChainVotes, setOffChainVotes] = useState<IChainRow[] | undefined>(
-    []
+    undefined
   );
-  const [onChainVotes, setOnChainVotes] = useState<IChainRow[] | undefined>([]);
+  const [onChainVotes, setOnChainVotes] = useState<IChainRow[] | undefined>(
+    undefined
+  );
   const [isLoading, setIsLoading] = useState(true);
+  const [offset, setOffset] = useState(0);
+  const limit = 6;
+
+  const changeOffset = (newOffset: number) => setOffset(newOffset);
+
+  const allVotes = useMemo(
+    () =>
+      (offChainVotes || [])
+        .concat(onChainVotes || [])
+        .sort((voteA, voteB) =>
+          moment(voteA.executed).isBefore(voteB.executed) ? 1 : -1
+        ) || [],
+    [onChainVotes, offChainVotes]
+  );
+
+  const showingVotes = allVotes.slice(offset * limit, offset * limit + limit);
 
   const setupVotes = () => {
     setIsLoading(true);
-    if (dataOnChainVotes && dataOnChainVotes.length > 0)
-      setOnChainVotes(dataOnChainVotes);
-
-    if (dataOffChainVotes && dataOffChainVotes.length > 0)
-      setOffChainVotes(dataOffChainVotes);
+    setOnChainVotes(dataOnChainVotes || []);
+    setOffChainVotes(dataOffChainVotes || []);
     setIsLoading(false);
   };
 
@@ -58,14 +78,16 @@ export const VotesProvider: React.FC<ProviderProps> = ({
 
   const searchProposal = debounce((partialText: string) => {
     setIsLoading(true);
+    changeOffset(0);
     const filteredOffChain = dataOffChainVotes?.filter(vote =>
       vote.proposal.toLowerCase().includes(partialText.toLowerCase())
     );
-    if (filteredOffChain?.length) setOffChainVotes(filteredOffChain);
+    setOffChainVotes(filteredOffChain?.length ? filteredOffChain : []);
     const filteredOnChain = dataOnChainVotes?.filter(vote =>
       vote.proposal.toLowerCase().includes(partialText.toLowerCase())
     );
-    if (filteredOnChain?.length) setOnChainVotes(filteredOnChain);
+    setOnChainVotes(filteredOnChain?.length ? filteredOnChain : []);
+
     setIsLoading(false);
   }, 500);
 
@@ -81,8 +103,22 @@ export const VotesProvider: React.FC<ProviderProps> = ({
       isLoading,
       searchProposal,
       resetProposal,
+      showingVotes,
+      changeOffset,
+      allVotes,
+      limit,
+      offset,
     }),
-    [offChainVotes, onChainVotes, isLoading]
+    [
+      offChainVotes,
+      onChainVotes,
+      isLoading,
+      showingVotes,
+      changeOffset,
+      allVotes,
+      limit,
+      offset,
+    ]
   );
 
   return (
