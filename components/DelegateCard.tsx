@@ -174,18 +174,16 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           >
             {stat.pct}
           </Text>
-          {!!stat.value &&
-            stat.id !== 'onChainVotesPct' &&
-            stat.id !== 'offChainVotesPct' && (
-              <Text
-                color={theme.card.text.primary}
-                fontFamily="heading"
-                fontSize={['md', 'lg']}
-                fontWeight="semibold"
-              >
-                {stat.value}
-              </Text>
-            )}
+          {!!stat.value && !stat.id.includes('Pct') && stat.pct !== '-' && (
+            <Text
+              color={theme.card.text.primary}
+              fontFamily="heading"
+              fontSize={['md', 'lg']}
+              fontWeight="semibold"
+            >
+              {stat.value}
+            </Text>
+          )}
         </>
       );
     return (
