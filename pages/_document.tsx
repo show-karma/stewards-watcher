@@ -7,6 +7,7 @@ import Document, {
   DocumentContext,
   DocumentInitialProps,
 } from 'next/document';
+import Script from 'next/script';
 import { theme } from 'styles';
 
 class MyDocument extends Document {
