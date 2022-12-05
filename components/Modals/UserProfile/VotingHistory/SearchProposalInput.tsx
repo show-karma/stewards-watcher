@@ -16,7 +16,7 @@ export const SearchProposalInput: FC = () => {
     <Flex flexDir="column" maxW="300" flex="1" minW="max-content">
       <InputGroup>
         <InputLeftElement pointerEvents="none">
-          <Icon as={BiSearch} color={theme.title} />
+          <Icon as={BiSearch} color={theme.modal.votingHistory.headline} />
         </InputLeftElement>
         <Input
           type="text"
@@ -24,12 +24,13 @@ export const SearchProposalInput: FC = () => {
           w="full"
           onChange={event => searchProposal(event.target.value)}
           boxShadow={theme.card.shadow}
+          color={theme.modal.votingHistory.headline}
           _placeholder={{
-            color: theme.subtitle,
+            color: theme.modal.votingHistory.reason.text,
           }}
           _focusVisible={{
-            borderColor: theme.title,
-            boxShadow: `0 0 0 1px ${theme.title}`,
+            borderColor: theme.modal.votingHistory.reason.text,
+            boxShadow: `0 0 0 1px ${theme.modal.votingHistory.reason.text}`,
           }}
         />
       </InputGroup>
