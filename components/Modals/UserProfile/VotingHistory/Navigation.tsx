@@ -2,7 +2,6 @@ import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 import { useDAO, useVotes } from 'contexts';
 import { Button, Flex, Icon, Text } from '@chakra-ui/react';
 import { FC, ReactNode } from 'react';
-import { IChainRow } from 'types';
 
 const navigationIconStyle = {
   width: '1.5rem',
