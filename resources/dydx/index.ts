@@ -22,6 +22,7 @@ const config: IDAOConfig = {
   DAO_DELEGATE_CONTRACT: '0x92D6C1e31e14520e676a687F0a93788B716BEff5',
   DAO_DELEGATE_MODE: 'custom',
   DAO_FORUM_TYPE: 'commonwealth',
+  DAO_GTAG: 'G-67LDHT697P',
   EXCLUDED_CARD_FIELDS: [],
   FEATURED_CARD_FIELDS: ['delegatedVotes', 'offChainVotesPct'],
 };
