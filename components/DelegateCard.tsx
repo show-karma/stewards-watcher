@@ -405,9 +405,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                     >
                       {stat.title}
                     </Text>
-                    <Text color={theme.card.text.secondary}>
+                    <Flex flexDir="column" color={theme.card.text.secondary}>
                       {renderPctCase(stat)}
-                    </Text>
+                    </Flex>
                   </>
                 ) : (
                   <>
