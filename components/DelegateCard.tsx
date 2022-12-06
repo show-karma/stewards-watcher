@@ -59,7 +59,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       title: 'Voting weight',
       icon: IoIosCheckboxOutline,
       pct: data?.votingWeight ? formatNumberPercentage(data.votingWeight) : '-',
-      value: formatNumber(data?.delegatedVotes || 0),
+      value: data?.delegatedVotes ? formatNumber(data?.delegatedVotes) : '-',
       id: 'delegatedVotes',
     },
     {
@@ -162,7 +162,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   }, [config]);
 
   const renderPctCase = (stat: IStat) => {
-    if (stat.pct)
+    if (stat.pct !== '-' && stat.pct)
       return (
         <>
           <Text
@@ -174,7 +174,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           >
             {stat.pct}
           </Text>
-          {!!stat.value && !stat.id.includes('Pct') && stat.pct !== '-' && (
+          {stat.value && !stat.id.includes('Pct') && (
             <Text
               color={theme.card.text.primary}
               fontFamily="heading"
@@ -186,6 +186,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           )}
         </>
       );
+
     return (
       <Text
         color={theme.card.text.primary}
@@ -226,9 +227,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       px={{ base: '4', sm: '6' }}
       py={{ base: '4', sm: '6' }}
       borderRadius="16"
-      maxW={['full', '26rem']}
+      maxW="27rem"
       w="full"
-      minW={['23rem']}
+      minW="min-content"
       flex="1"
       gap="8"
       boxShadow={theme.card.shadow}
@@ -369,7 +370,12 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       </Flex>
       <Flex gap="4" flexDir="column">
         <Divider borderColor={theme.card.divider} w="full" />
-        <Flex flexDir={['row']} justify="space-between" gap="2">
+        <Flex
+          flexDir={['row']}
+          justify={{ base: 'start', lg: 'space-between' }}
+          gap="2"
+          flexWrap="wrap"
+        >
           {featuredStats.map((stat, index) => (
             <Flex
               key={+index}
@@ -388,6 +394,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
               }
               w="full"
               flex="1"
+              maxW="200"
             >
               {data ? (
                 <Icon as={stat.icon} h="6" w="6" color={theme.card.icon} />
