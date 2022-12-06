@@ -3,8 +3,8 @@ export interface IDelegate {
   ensName?: string;
   delegateSince?: string;
   forumActivity: number;
-  votingWeight: number;
-  delegatedVotes: number;
+  votingWeight?: number;
+  delegatedVotes?: number;
   delegators: number;
   karmaScore: number;
   voteParticipation: {

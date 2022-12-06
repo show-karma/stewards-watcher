@@ -167,8 +167,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
             onChain: fetchedPeriod?.onChainVotesPct || 0,
             offChain: fetchedPeriod?.offChainVotesPct || 0,
           },
-          votingWeight: item.stats?.[0]?.voteWeight || 0,
-          delegatedVotes: item.delegatedVotes,
+          votingWeight: item.stats?.[0]?.voteWeight,
+          delegatedVotes:
+            item.delegatedVotes || item.stats?.[0]?.snapshotDelegatedVotes,
           twitterHandle: item.twitterHandle,
           discourseHandle: item.discourseHandle,
           updatedAt: fetchedPeriod?.updatedAt,
@@ -222,8 +223,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
             offChain: fetchedPeriod?.offChainVotesPct || 0,
           },
           discourseHandle: item.discourseHandle,
-          votingWeight: item.stats?.[0]?.voteWeight || 0,
-          delegatedVotes: item.delegatedVotes,
+          votingWeight: item.stats?.[0]?.voteWeight,
+          delegatedVotes:
+            item.delegatedVotes || item.stats?.[0]?.snapshotDelegatedVotes,
           twitterHandle: item.twitterHandle,
           updatedAt: fetchedPeriod?.updatedAt,
           karmaScore: fetchedPeriod?.karmaScore || 0,
@@ -279,8 +281,10 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           onChain: fetchedPeriod?.onChainVotesPct || 0,
           offChain: fetchedPeriod?.offChainVotesPct || 0,
         },
-        votingWeight: fetchedPeriod?.voteWeight || 0,
-        delegatedVotes: fetchedDelegate.delegatedVotes,
+        votingWeight: fetchedPeriod?.voteWeight,
+        delegatedVotes:
+          fetchedDelegate.delegatedVotes ||
+          fetchedDelegate.snapshotDelegatedVotes,
         twitterHandle: fetchedDelegate.twitterHandle,
         discourseHandle: fetchedDelegate.discourseHandle,
         updatedAt: fetchedPeriod?.updatedAt,
@@ -335,8 +339,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
             onChain: fetchedPeriod?.onChainVotesPct || 0,
             offChain: fetchedPeriod?.offChainVotesPct || 0,
           },
-          votingWeight: item.stats?.[0]?.voteWeight || 0,
-          delegatedVotes: item.delegatedVotes,
+          votingWeight: item.stats?.[0]?.voteWeight,
+          delegatedVotes:
+            item.delegatedVotes || item.stats?.[0]?.snapshotDelegatedVotes,
           twitterHandle: item.twitterHandle,
           discourseHandle: item.discourseHandle,
           updatedAt: fetchedPeriod?.updatedAt || '-',
@@ -408,18 +413,22 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const selectInterests = (index: number) => {
     if (!interests[index]) return;
 
+    // search for the interest in the interestFilter array
     const filterIdx = interestFilter.findIndex(
       filter => filter === interests[index]
     );
 
+    // clone the interestFilter array
     const items = [...interestFilter];
 
+    // if the interest is already in the interestFilter array, remove it
     if (filterIdx >= 0) {
       items.splice(filterIdx, 1);
     } else {
       items.push(interests[index]);
     }
 
+    // set the new interestFilter array
     setInterestFilter(items);
   };
 
@@ -427,6 +436,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     selectUserToFind(text);
   }, 250);
 
+  /**
+   * @description This function is used to clear all filters
+   */
   const clearFilters = () => {
     setStat(statOptions[0].stat);
     setOrder('desc');
