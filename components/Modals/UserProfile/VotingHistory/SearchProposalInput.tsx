@@ -20,7 +20,7 @@ export const SearchProposalInput: FC = () => {
         </InputLeftElement>
         <Input
           type="text"
-          placeholder="Find a vote by proposal..."
+          placeholder="Find a proposal..."
           w="full"
           onChange={event => searchProposal(event.target.value)}
           boxShadow={theme.card.shadow}
