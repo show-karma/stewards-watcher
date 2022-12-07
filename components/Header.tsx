@@ -104,37 +104,39 @@ export const Header: FC = () => {
               mb={{ base: '10' }}
               flexWrap="wrap"
             >
-              <Link href={config.GOVERNANCE_FORUM}>
-                <Button
-                  px="6"
-                  py="4"
-                  borderRadius="base"
-                  bgColor={theme.branding}
-                  fontSize="md"
-                  fontFamily="heading"
-                  color={theme.buttonText}
-                  _hover={{
-                    bgColor: theme.branding,
-                    opacity: 0.8,
-                  }}
-                  _focusVisible={{
-                    bgColor: theme.branding,
-                    opacity: 0.8,
-                  }}
-                  _focusWithin={{
-                    bgColor: theme.branding,
-                    opacity: 0.8,
-                  }}
-                  _focus={{
-                    opacity: 0.8,
-                  }}
-                  _active={{
-                    opacity: 0.8,
-                  }}
-                >
-                  View discussion
-                </Button>
-              </Link>
+              {config.GOVERNANCE_FORUM && (
+                <Link href={config.GOVERNANCE_FORUM}>
+                  <Button
+                    px="6"
+                    py="4"
+                    borderRadius="base"
+                    bgColor={theme.branding}
+                    fontSize="md"
+                    fontFamily="heading"
+                    color={theme.buttonText}
+                    _hover={{
+                      bgColor: theme.branding,
+                      opacity: 0.8,
+                    }}
+                    _focusVisible={{
+                      bgColor: theme.branding,
+                      opacity: 0.8,
+                    }}
+                    _focusWithin={{
+                      bgColor: theme.branding,
+                      opacity: 0.8,
+                    }}
+                    _focus={{
+                      opacity: 0.8,
+                    }}
+                    _active={{
+                      opacity: 0.8,
+                    }}
+                  >
+                    View discussion
+                  </Button>
+                </Link>
+              )}
               <Link href={config.DAO_URL}>
                 <Button
                   px="6"

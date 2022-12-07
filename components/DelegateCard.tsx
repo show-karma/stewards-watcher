@@ -317,23 +317,25 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                         />
                       </Link>
                     )}
-                    {data?.discourseHandle && daoData?.socialLinks.forum && (
-                      <Link
-                        href={getUserForumUrl(
-                          data.discourseHandle,
-                          config.DAO_FORUM_TYPE,
-                          daoData.socialLinks.forum
-                        )}
-                        isExternal
-                      >
-                        <Icon
-                          as={FaDiscourse}
-                          w="5"
-                          h="5"
-                          color={theme.card.icon}
-                        />
-                      </Link>
-                    )}
+                    {data?.discourseHandle &&
+                      daoData?.socialLinks.forum &&
+                      config.DAO_FORUM_TYPE && (
+                        <Link
+                          href={getUserForumUrl(
+                            data.discourseHandle,
+                            config.DAO_FORUM_TYPE,
+                            daoData.socialLinks.forum
+                          )}
+                          isExternal
+                        >
+                          <Icon
+                            as={FaDiscourse}
+                            w="5"
+                            h="5"
+                            color={theme.card.icon}
+                          />
+                        </Link>
+                      )}
                   </Flex>
                 ) : (
                   <Flex w="5" h="5" />

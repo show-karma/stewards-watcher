@@ -25,8 +25,9 @@ export const DelegateButton: FC<IDelegateButton> = ({
     if (!isConnected) {
       return openConnectModal && openConnectModal();
     }
-    if (chain && chain.id !== config.DAO_CHAIN.id)
+    if (chain && chain.id !== config.DAO_CHAIN.id) {
       return openChainModal && openChainModal();
+    }
     return write && write();
   };
 

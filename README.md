@@ -14,10 +14,16 @@ Contact us at dao@showkarma.xyz and we can host the site for you. You have to si
 
 Step 1: Clone the github repo
 
-Step 2: Update configs/general.ts and configs/theme.ts for your DAO
+Step 2: Create a folder inside resources folder
 
-Step 3: Build the project 
+Step 3: Configure a index.ts there just like the other folders do
+
+Step 4: Create an ABI.json and put your contract ABI of your governance token there.
+
+Step 5: Include your config on resources/index.ts
+
 ```bash
 yarn install && yarn build
 ```
-Step 4: Host the site on your hosting provider 
+
+Step 6: Host the site on your hosting provider

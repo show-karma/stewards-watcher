@@ -6,12 +6,19 @@ import pooltogether from './pooltogether';
 import yamfinance from './yamfinance';
 import ssvnetwork from './ssvnetwork';
 import dydx from './dydx';
+import dimo from './dimo';
 
 interface ISupportedDAOs {
   [key: string]: IDAOInfo;
 }
 
 export const supportedDAOs: ISupportedDAOs = {
+  dimo: {
+    config: dimo.config,
+    light: dimo.light,
+    dark: dimo.dark,
+    ABI: dimo.ABI,
+  },
   dydx: {
     config: dydx.config,
     light: dydx.light,
