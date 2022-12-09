@@ -34,7 +34,7 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
 
   const searchProfileSelected = async (userToSearch: string) => {
     const getTab = asPath && (asPath as string).split('#');
-    const tabs = ['votinghistory', 'statement'];
+    const tabs = ['votinghistory', 'statement', 'aboutMe'];
     const checkTab = tabs.includes(getTab[1]);
     await searchProfileModal(
       userToSearch,
@@ -54,9 +54,13 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
           onClose={onCloseProfile}
           profile={{
             address: profileSelected.address,
-            avatar: `${config.IMAGE_PREFIX_URL}${profileSelected.address}`,
+            avatar:
+              profileSelected.profilePicture ||
+              `${config.IMAGE_PREFIX_URL}${profileSelected.address}`,
             ensName: profileSelected.ensName,
             twitter: profileSelected.twitterHandle,
+            aboutMe: profileSelected.aboutMe,
+            realName: profileSelected.realName,
           }}
           selectedTab={selectedTab}
         />
