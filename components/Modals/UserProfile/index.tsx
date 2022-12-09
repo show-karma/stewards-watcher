@@ -11,6 +11,7 @@ import { FC, useMemo, useState } from 'react';
 import { IActiveTab, IProfile } from 'types';
 import { Header } from './Header';
 import { Statement } from './Statement';
+import { AboutMe } from './AboutMe';
 import { VotingHistory } from './VotingHistory';
 
 interface ITab {
@@ -18,13 +19,18 @@ interface ITab {
   profile: IProfile;
 }
 const Tab: FC<ITab> = ({ activeTab, profile }) => {
-  if (activeTab === 'votinghistory')
-    return (
-      <VotesProvider profile={profile}>
-        <VotingHistory profile={profile} />
-      </VotesProvider>
-    );
-  return <Statement profile={profile} />;
+  switch (activeTab) {
+    case 'aboutMe':
+      return <AboutMe profile={profile} />;
+    case 'votinghistory':
+      return (
+        <VotesProvider profile={profile}>
+          <VotingHistory profile={profile} />
+        </VotesProvider>
+      );
+    default:
+      return <Statement profile={profile} />;
+  }
 };
 
 interface IUserProfileProps {

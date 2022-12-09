@@ -14,4 +14,7 @@ export interface IDelegate {
   twitterHandle?: string;
   discourseHandle?: string;
   updatedAt?: string;
+  aboutMe?: string;
+  realName?: string;
+  profilePicture?: string;
 }

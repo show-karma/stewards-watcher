@@ -56,7 +56,7 @@ interface IUserSection {
 }
 
 const UserSection: FC<IUserSection> = ({ profile }) => {
-  const { address: fullAddress, ensName, twitter } = profile;
+  const { address: fullAddress, ensName, twitter, realName } = profile;
   const address = truncateAddress(fullAddress);
   const { theme } = useDAO();
 
@@ -97,7 +97,7 @@ const UserSection: FC<IUserSection> = ({ profile }) => {
                 overflow="hidden"
                 textOverflow="ellipsis"
               >
-                {ensName || address}
+                {realName || ensName || address}
               </Text>
               {twitter && (
                 <Link href={`https://twitter.com/${twitter}`} isExternal>
@@ -178,6 +178,12 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
       >
         <Flex w="full">
           <NavButton
+            isActive={isActiveTab('aboutMe')}
+            onClick={() => changeTab('aboutMe')}
+          >
+            About me
+          </NavButton>
+          <NavButton
             isActive={isActiveTab('statement')}
             onClick={() => changeTab('statement')}
           >
@@ -190,7 +196,6 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
             Voting History
           </NavButton>
         </Flex>
-
         <Divider bgColor={theme.modal.header.divider} w="full" />
       </Flex>
     </Flex>

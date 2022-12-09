@@ -174,6 +174,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           discourseHandle: item.discourseHandle,
           updatedAt: fetchedPeriod?.updatedAt,
           karmaScore: fetchedPeriod?.karmaScore || 0,
+          aboutMe: item.aboutMe,
+          realName: item.realName,
+          profilePicture: item.profilePicture,
         };
       });
 
@@ -229,6 +232,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           twitterHandle: item.twitterHandle,
           updatedAt: fetchedPeriod?.updatedAt,
           karmaScore: fetchedPeriod?.karmaScore || 0,
+          aboutMe: item.aboutMe,
+          realName: item.realName,
+          profilePicture: item.profilePicture,
         };
       });
       if (count < delegateCount) {
@@ -289,6 +295,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         discourseHandle: fetchedDelegate.discourseHandle,
         updatedAt: fetchedPeriod?.updatedAt,
         karmaScore: fetchedPeriod?.karmaScore || 0,
+        aboutMe: fetchedDelegate.aboutMe,
+        realName: fetchedDelegate.realName,
+        profilePicture: fetchedDelegate.profilePicture,
       };
       selectProfile(userFound, tabToOpen);
     } catch (error) {
@@ -346,6 +355,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           discourseHandle: item.discourseHandle,
           updatedAt: fetchedPeriod?.updatedAt || '-',
           karmaScore: fetchedPeriod?.karmaScore || 0,
+          aboutMe: item.aboutMe,
+          realName: item.realName,
+          profilePicture: item.profilePicture,
         });
       });
     } catch (error) {

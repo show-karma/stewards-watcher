@@ -252,7 +252,10 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                 h={['48px', '64px']}
                 w={['48px', '64px']}
                 borderRadius="full"
-                src={`${config.IMAGE_PREFIX_URL}${data.address}`}
+                src={
+                  data.profilePicture ||
+                  `${config.IMAGE_PREFIX_URL}${data.address}`
+                }
                 fallback={data.address}
                 boxShadow="0px 0px 0px 2px white"
               />
@@ -293,7 +296,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   overflow="hidden"
                   whiteSpace="nowrap"
                 >
-                  {data.ensName || shortAddress}
+                  {data.realName || data.ensName || shortAddress}
                 </Text>
                 <Text
                   color={theme.subtitle}
