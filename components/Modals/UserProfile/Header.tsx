@@ -56,7 +56,7 @@ interface IUserSection {
 }
 
 const UserSection: FC<IUserSection> = ({ profile }) => {
-  const { address: fullAddress, ensName, twitter } = profile;
+  const { address: fullAddress, ensName, twitter, realName } = profile;
   const address = truncateAddress(fullAddress);
   const { theme } = useDAO();
 
@@ -97,7 +97,7 @@ const UserSection: FC<IUserSection> = ({ profile }) => {
                 overflow="hidden"
                 textOverflow="ellipsis"
               >
-                {ensName || address}
+                {realName || ensName || address}
               </Text>
               {twitter && (
                 <Link href={`https://twitter.com/${twitter}`} isExternal>

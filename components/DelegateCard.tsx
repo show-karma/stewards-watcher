@@ -293,7 +293,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   overflow="hidden"
                   whiteSpace="nowrap"
                 >
-                  {data.ensName || shortAddress}
+                  {data.realName || data.ensName || shortAddress}
                 </Text>
                 <Text
                   color={theme.subtitle}

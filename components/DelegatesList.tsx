@@ -58,6 +58,7 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
             ensName: profileSelected.ensName,
             twitter: profileSelected.twitterHandle,
             aboutMe: profileSelected.aboutMe,
+            realName: profileSelected.realName,
           }}
           selectedTab={selectedTab}
         />
