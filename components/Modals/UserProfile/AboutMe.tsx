@@ -8,6 +8,7 @@ interface ITextSection {
 }
 const TextSection: FC<ITextSection> = ({ text }) => {
   const { theme } = useDAO();
+
   return (
     <Flex maxW="30rem" gap="4" flexDir="column" flex="1">
       {text ? (

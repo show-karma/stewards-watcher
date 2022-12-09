@@ -22,6 +22,10 @@ export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen, profile }) => {
   const router = useRouter();
   const options: { title: string; tab: IActiveTab }[] = [
     {
+      title: 'About me',
+      tab: 'aboutMe',
+    },
+    {
       title: 'User Statement',
       tab: 'statement',
     },
