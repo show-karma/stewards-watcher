@@ -54,7 +54,9 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
           onClose={onCloseProfile}
           profile={{
             address: profileSelected.address,
-            avatar: `${config.IMAGE_PREFIX_URL}${profileSelected.address}`,
+            avatar:
+              profileSelected.profilePicture ||
+              `${config.IMAGE_PREFIX_URL}${profileSelected.address}`,
             ensName: profileSelected.ensName,
             twitter: profileSelected.twitterHandle,
             aboutMe: profileSelected.aboutMe,

@@ -19,6 +19,7 @@ export interface IDelegateFromAPI {
   userType: string;
   aboutMe?: string;
   realName?: string;
+  profilePicture?: string;
   scoreBreakdown: {
     name: string;
     pct: number;

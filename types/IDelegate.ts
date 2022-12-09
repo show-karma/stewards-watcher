@@ -16,4 +16,5 @@ export interface IDelegate {
   updatedAt?: string;
   aboutMe?: string;
   realName?: string;
+  profilePicture?: string;
 }

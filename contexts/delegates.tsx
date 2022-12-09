@@ -176,6 +176,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           karmaScore: fetchedPeriod?.karmaScore || 0,
           aboutMe: item.aboutMe,
           realName: item.realName,
+          profilePicture: item.profilePicture,
         };
       });
 
@@ -233,6 +234,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           karmaScore: fetchedPeriod?.karmaScore || 0,
           aboutMe: item.aboutMe,
           realName: item.realName,
+          profilePicture: item.profilePicture,
         };
       });
       if (count < delegateCount) {
@@ -295,6 +297,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         karmaScore: fetchedPeriod?.karmaScore || 0,
         aboutMe: fetchedDelegate.aboutMe,
         realName: fetchedDelegate.realName,
+        profilePicture: fetchedDelegate.profilePicture,
       };
       selectProfile(userFound, tabToOpen);
     } catch (error) {
@@ -354,6 +357,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           karmaScore: fetchedPeriod?.karmaScore || 0,
           aboutMe: item.aboutMe,
           realName: item.realName,
+          profilePicture: item.profilePicture,
         });
       });
     } catch (error) {
