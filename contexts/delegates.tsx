@@ -174,6 +174,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           discourseHandle: item.discourseHandle,
           updatedAt: fetchedPeriod?.updatedAt,
           karmaScore: fetchedPeriod?.karmaScore || 0,
+          aboutMe: item.aboutMe,
+          realName: item.realName,
         };
       });
 
@@ -229,6 +231,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           twitterHandle: item.twitterHandle,
           updatedAt: fetchedPeriod?.updatedAt,
           karmaScore: fetchedPeriod?.karmaScore || 0,
+          aboutMe: item.aboutMe,
+          realName: item.realName,
         };
       });
       if (count < delegateCount) {
@@ -289,6 +293,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         discourseHandle: fetchedDelegate.discourseHandle,
         updatedAt: fetchedPeriod?.updatedAt,
         karmaScore: fetchedPeriod?.karmaScore || 0,
+        aboutMe: fetchedDelegate.aboutMe,
+        realName: fetchedDelegate.realName,
       };
       selectProfile(userFound, tabToOpen);
     } catch (error) {
@@ -346,6 +352,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           discourseHandle: item.discourseHandle,
           updatedAt: fetchedPeriod?.updatedAt || '-',
           karmaScore: fetchedPeriod?.karmaScore || 0,
+          aboutMe: item.aboutMe,
+          realName: item.realName,
         });
       });
     } catch (error) {

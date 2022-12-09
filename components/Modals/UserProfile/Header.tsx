@@ -178,6 +178,12 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
       >
         <Flex w="full">
           <NavButton
+            isActive={isActiveTab('aboutMe')}
+            onClick={() => changeTab('aboutMe')}
+          >
+            About me
+          </NavButton>
+          <NavButton
             isActive={isActiveTab('statement')}
             onClick={() => changeTab('statement')}
           >
@@ -190,7 +196,6 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
             Voting History
           </NavButton>
         </Flex>
-
         <Divider bgColor={theme.modal.header.divider} w="full" />
       </Flex>
     </Flex>

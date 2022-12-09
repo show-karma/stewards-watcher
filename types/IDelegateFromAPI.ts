@@ -17,6 +17,8 @@ export interface IDelegateFromAPI {
   twitterHandle: string;
   discourseHandle: string;
   userType: string;
+  aboutMe?: string;
+  realName?: string;
   scoreBreakdown: {
     name: string;
     pct: number;
