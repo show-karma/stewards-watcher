@@ -1,4 +1,6 @@
-import { Flex, Img, Text } from '@chakra-ui/react';
+import { Button, Flex, Img, Text, useDisclosure } from '@chakra-ui/react';
+import { DelegateButton } from 'components/DelegateButton';
+import { DelegateVotesModal } from 'components/Modals/DelegateVotes';
 import { useDAO } from 'contexts';
 import { Madeby } from './Madeby';
 import { ThemeButton } from './ThemeButton';
@@ -6,6 +8,7 @@ import { ThemeButton } from './ThemeButton';
 export const HeaderHat = () => {
   const { daoInfo, theme } = useDAO();
   const { config } = daoInfo;
+  const { isOpen, onToggle } = useDisclosure();
   return (
     <Flex
       bgColor={theme.headerBg}
@@ -24,19 +27,29 @@ export const HeaderHat = () => {
         flexWrap="wrap"
       >
         <Flex
-          flexDir="column"
-          flex={['1', 'none']}
+          flexDir="row"
+          flex={['2', 'none']}
           align={['center', 'flex-start']}
+          gap="16"
         >
-          <Img w="36" h="10" objectFit="contain" src={config.DAO_LOGO} />
-          <Text
-            w="max-content"
-            fontWeight="semibold"
-            fontSize={['lg', '2xl']}
-            color={theme.hat.text.primary}
+          <Flex
+            flexDir="column"
+            flex={['1', 'none']}
+            align={['center', 'flex-start']}
           >
-            Delegates Dashboard
-          </Text>
+            <Img w="36" h="10" objectFit="contain" src={config.DAO_LOGO} />
+            <Text
+              w="max-content"
+              fontWeight="semibold"
+              fontSize={['lg', '2xl']}
+              color={theme.hat.text.primary}
+            >
+              Delegates Dashboard
+            </Text>
+          </Flex>
+          <Flex justify="center" alignItems="center" height="100%">
+            <Button onClick={onToggle}>Delegate</Button>
+          </Flex>
         </Flex>
         <Flex
           flexDir="row"
@@ -51,6 +64,7 @@ export const HeaderHat = () => {
           <Madeby display={{ base: 'none', md: 'flex' }} />
         </Flex>
       </Flex>
+      <DelegateVotesModal isOpen={isOpen} onClose={onToggle} />
     </Flex>
   );
 };
