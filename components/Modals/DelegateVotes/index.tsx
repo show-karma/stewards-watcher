@@ -53,7 +53,7 @@ export const DelegateVotesModal: React.FC<IDelegateVotesModal> = ({
       >
         <ModalCloseButton />
         <ModalBody px={{ base: '1.25rem', lg: '2.5rem' }} py={6}>
-          <Text mb={2}>Type an address to delegate your tokens:</Text>
+          <Text mb={2}>Enter ETH address to delegate your tokens</Text>
           <Input
             placeholder="0x4fa...65c2b"
             type="text"
