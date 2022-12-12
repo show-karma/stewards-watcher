@@ -1,5 +1,4 @@
 import { Button, Flex, Img, Text, useDisclosure } from '@chakra-ui/react';
-import { DelegateButton } from 'components/DelegateButton';
 import { DelegateVotesModal } from 'components/Modals/DelegateVotes';
 import { useDAO } from 'contexts';
 import { Madeby } from './Madeby';
@@ -28,7 +27,7 @@ export const HeaderHat = () => {
       >
         <Flex
           flexDir="row"
-          flex={['2', 'none']}
+          flex={['1', 'none']}
           align={['center', 'flex-start']}
           gap="16"
         >
@@ -47,7 +46,12 @@ export const HeaderHat = () => {
               Delegates Dashboard
             </Text>
           </Flex>
-          <Flex justify="center" alignItems="center" height="100%">
+          <Flex
+            justify="center"
+            alignItems="center"
+            height="100%"
+            display={{ base: 'none', md: 'flex' }}
+          >
             <Button onClick={onToggle}>Delegate</Button>
           </Flex>
         </Flex>
