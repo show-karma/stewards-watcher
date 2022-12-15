@@ -20,7 +20,7 @@ const config: IDAOConfig = {
     URL: `https://gitcoin.showkarma.xyz`,
   },
   DAO_CHAIN: chain.mainnet,
-  DAO_DELEGATE_CONTRACT: '0x4200000000000000000000000000000000000042',
+  DAO_DELEGATE_CONTRACT: '0xde30da39c46104798bb5aa3fe8b9e0e1f348163f',
   DAO_DELEGATE_MODE: 'custom',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
