@@ -5,7 +5,7 @@ export const getUserForumUrl = (
   forumType: IForumType,
   forumUrl: string
 ) => {
-  const urlToForum = forumUrl + forumUrl.slice(-1) !== '/' && '/';
+  const urlToForum = forumUrl + (forumUrl.slice(-1) !== '/' && '/');
   if (forumType === 'commonwealth') return `${urlToForum}account/${user}`;
-  return `${forumUrl}u/${user}`;
+  return `${urlToForum}u/${user}`;
 };
