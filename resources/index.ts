@@ -7,12 +7,19 @@ import yamfinance from './yamfinance';
 import ssvnetwork from './ssvnetwork';
 import dydx from './dydx';
 import dimo from './dimo';
+import gitcoin from './gitcoin';
 
 interface ISupportedDAOs {
   [key: string]: IDAOInfo;
 }
 
 export const supportedDAOs: ISupportedDAOs = {
+  gitcoin: {
+    config: gitcoin.config,
+    light: gitcoin.light,
+    dark: gitcoin.dark,
+    ABI: gitcoin.ABI,
+  },
   dimo: {
     config: dimo.config,
     light: dimo.light,
