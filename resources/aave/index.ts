@@ -4,7 +4,7 @@ import ABI from './ABI.json';
 
 const config: IDAOConfig = {
   DAO: 'Aave',
-  DAO_DESCRIPTION: `The Delegates of Aave DAO play a vital role in driving the Aave ecosystem forward through their work in governance.`,
+  DAO_DESCRIPTION: `The Delegates of AAVE DAO play a vital role in driving the Aave ecosystem forward through their work in governance.`,
   DAO_SUBDESCRIPTION: `This site will help boost transparency by displaying delegate contribution to indicate their involvement and engagement in the DAO.`,
   DAO_URL: 'https://www.aave.com',
   GOVERNANCE_FORUM: 'https://governance.aave.com',
@@ -13,7 +13,7 @@ const config: IDAOConfig = {
   DAO_LOGO: '/daos/aave/logo.svg',
   METATAGS: {
     TITLE: `Delegates of Aave DAO`,
-    DESCRIPTION: `Find all the active delegates in Aave DAO along with governance stats across on-chain, off-chain, forum and discord.`,
+    DESCRIPTION: `Find all the active delegates in AAVE DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
     IMAGE: '/daos/aave/preview.png',
     FAVICON: '/daos/aave/favicon.png',
     URL: `https://aave.showkarma.xyz`,

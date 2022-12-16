@@ -14,7 +14,7 @@ const config: IDAOConfig = {
   DAO_LOGO: '/daos/gitcoin/logo.svg',
   METATAGS: {
     TITLE: `Delegates of Gitcoin DAO`,
-    DESCRIPTION: `Find all the active delegates in Gitcoin DAO along with governance stats across on-chain, off-chain, forum and discord.`,
+    DESCRIPTION: `Find all the active delegates in Gitcoin DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
     IMAGE: '/daos/gitcoin/preview.png',
     FAVICON: '/daos/gitcoin/favicon.png',
     URL: `https://gitcoin.showkarma.xyz`,

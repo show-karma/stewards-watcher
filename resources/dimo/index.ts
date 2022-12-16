@@ -14,7 +14,7 @@ const config: IDAOConfig = {
   DAO_LOGO: '/daos/dimo/logo.svg',
   METATAGS: {
     TITLE: `Delegates of Dimo DAO`,
-    DESCRIPTION: `Find all the active delegates in Dimo DAO along with governance stats across on-chain, off-chain, forum and discord.`,
+    DESCRIPTION: `Find all the active delegates in Dimo DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
     IMAGE: '/daos/dimo/preview.jpg',
     FAVICON: '/daos/dimo/favicon.png',
     URL: `https://dimo.showkarma.xyz`,

@@ -13,7 +13,7 @@ const config: IDAOConfig = {
   DAO_LOGO: '/daos/dydx/logo.svg',
   METATAGS: {
     TITLE: `Delegates of dYdX DAO`,
-    DESCRIPTION: `Find all the active delegates in dYdX DAO along with governance stats across on-chain, off-chain, forum and discord.`,
+    DESCRIPTION: `Find all the active delegates in dYdX DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
     IMAGE: '/daos/dydx/preview.png',
     FAVICON: '/daos/dydx/favicon.png',
     URL: `https://dydx.showkarma.xyz`,

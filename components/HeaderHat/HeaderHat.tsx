@@ -43,7 +43,7 @@ export const HeaderHat = () => {
               fontSize={['lg', '2xl']}
               color={theme.hat.text.primary}
             >
-              Delegates Dashboard
+              Delegate Dashboard
             </Text>
           </Flex>
           <Flex
