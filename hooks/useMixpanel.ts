@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { IMixpanelEvent } from 'types';
 
 interface IUseMixpanel {
-  //   mixpanel?: Mixpanel;
   mixpanel: {
     reportEvent: (data: IMixpanelEvent) => void;
   };
