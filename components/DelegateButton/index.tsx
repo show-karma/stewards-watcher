@@ -1,6 +1,6 @@
 import { Button, ButtonProps, Flex, Spinner } from '@chakra-ui/react';
 import { useDAO, useWallet } from 'contexts';
-import { useDelegation } from 'hooks';
+import { useDelegation, useMixpanel } from 'hooks';
 import { FC } from 'react';
 
 interface IDelegateButton extends ButtonProps {
@@ -16,12 +16,17 @@ export const DelegateButton: FC<IDelegateButton> = ({
   const { openConnectModal, openChainModal, isConnected, chain } = useWallet();
   const { daoInfo, theme } = useDAO();
   const { config } = daoInfo;
+  const { mixpanel } = useMixpanel();
 
   const { isLoading, write } = useDelegation({
     delegatee: delegated,
   });
 
   const handleCase = () => {
+    mixpanel.reportEvent({
+      event: 'deleateButtonClick',
+    });
+
     if (!isConnected) {
       return openConnectModal && openConnectModal();
     }

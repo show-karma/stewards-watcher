@@ -13,6 +13,7 @@ import { Header } from './Header';
 import { Statement } from './Statement';
 import { AboutMe } from './AboutMe';
 import { VotingHistory } from './VotingHistory';
+import { useMixpanel } from 'hooks';
 
 interface ITab {
   activeTab: IActiveTab;
@@ -45,6 +46,8 @@ export const UserProfile: FC<IUserProfileProps> = props => {
   const router = useRouter();
   const { theme } = useDAO();
 
+  const { mixpanel } = useMixpanel();
+
   const [activeTab, setActiveTab] = useState<IActiveTab>(selectedTab);
 
   useMemo(() => {
@@ -52,6 +55,12 @@ export const UserProfile: FC<IUserProfileProps> = props => {
   }, [selectedTab]);
 
   const changeTab = (hash: IActiveTab) => {
+    mixpanel.reportEvent({
+      event: 'viewActivity',
+      properties: {
+        tab: hash,
+      },
+    });
     router
       .push(
         {

@@ -7,6 +7,7 @@ import {
   MenuList,
 } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
+import { useMixpanel } from 'hooks';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { TbExternalLink } from 'react-icons/tb';
@@ -19,6 +20,7 @@ interface IUserInfoProps {
 
 export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen, profile }) => {
   const { theme } = useDAO();
+  const { mixpanel } = useMixpanel();
   const router = useRouter();
   const options: { title: string; tab: IActiveTab }[] = [
     {
@@ -37,6 +39,13 @@ export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen, profile }) => {
 
   const redirectWithoutRefresh = (hash: IActiveTab) => {
     onOpen(profile, hash);
+    mixpanel.reportEvent({
+      event: 'viewActivity',
+      properties: {
+        tab: hash,
+      },
+    });
+
     router
       .push(
         {
