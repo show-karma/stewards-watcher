@@ -9,11 +9,11 @@ import { useDAO, VotesProvider } from 'contexts';
 import { useRouter } from 'next/router';
 import { FC, useMemo, useState } from 'react';
 import { IActiveTab, IProfile } from 'types';
+import { useMixpanel } from 'hooks';
 import { Header } from './Header';
 import { Statement } from './Statement';
 import { AboutMe } from './AboutMe';
 import { VotingHistory } from './VotingHistory';
-import { useMixpanel } from 'hooks';
 
 interface ITab {
   activeTab: IActiveTab;
