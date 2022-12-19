@@ -14,7 +14,7 @@ const config: IDAOConfig = {
   DAO_LOGO: '/daos/pooltogether/logo.svg',
   METATAGS: {
     TITLE: `Delegates of PoolTogether DAO`,
-    DESCRIPTION: `Find all the active delegates in PoolTogether DAO along with governance stats across on-chain, off-chain, forum and discord.`,
+    DESCRIPTION: `Find all the active delegates in PoolTogether DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
     IMAGE: '/daos/pooltogether/meta.png',
     FAVICON: '/daos/pooltogether/favicon.png',
     URL: `https://pooltogether.showkarma.xyz`,

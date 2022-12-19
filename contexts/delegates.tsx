@@ -84,7 +84,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const [statOptions, setStatOptions] = useState(statDefaultOptions);
   const [stat, setStat] = useState<IFilterStat>(statOptions[0].stat);
   const [order, setOrder] = useState<IFilterOrder>('desc');
-  const [period, setPeriod] = useState<IFilterPeriod>('lifetime');
+  const [period, setPeriod] = useState<IFilterPeriod>(
+    config.DAO_DEFAULT_ORDER_TIMEFRAME || 'lifetime'
+  );
   const [interests, setInterests] = useState<string[]>([]);
   const [interestFilter, setInterestFilter] = useState<string[]>([]);
   const [userToFind, setUserToFind] = useState('');
