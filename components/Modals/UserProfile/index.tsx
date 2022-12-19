@@ -21,7 +21,7 @@ interface ITab {
 }
 const Tab: FC<ITab> = ({ activeTab, profile }) => {
   switch (activeTab) {
-    case 'aboutMe':
+    case 'aboutme':
       return <AboutMe profile={profile} />;
     case 'votinghistory':
       return (

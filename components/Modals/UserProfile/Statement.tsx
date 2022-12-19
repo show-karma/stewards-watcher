@@ -55,7 +55,7 @@ const TextSection: FC<ITextSection> = ({ statement }) => {
           textAlign="left"
           whiteSpace="pre-line"
         >
-          {`This user doesn't have a statement yet`}
+          {`We couldn't find the contributor statement`}
         </Text>
       )}
     </Flex>
@@ -124,7 +124,7 @@ const Sidebar: FC<ISidebar> = ({ profile, interests, languages }) => {
   return (
     <Flex w={{ base: 'full', lg: '16.875rem' }}>
       <Flex flexDir="column" gap="10" w="full">
-        <Flex flexDir="column" gap="4">
+        {/* <Flex flexDir="column" gap="4">
           <SectionHeader>Links</SectionHeader>
           {links.map(({ address, ensName }, index) => (
             <Link isExternal key={+index} href="/" _hover={{}}>
@@ -159,7 +159,7 @@ const Sidebar: FC<ISidebar> = ({ profile, interests, languages }) => {
               </Flex>
             </Link>
           ))}
-        </Flex>
+        </Flex> */}
         <Flex flexDir="column" gap="5">
           {languages && languages.value.length > 0 && (
             <SectionHeader>Languages</SectionHeader>

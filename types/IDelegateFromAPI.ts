@@ -20,6 +20,7 @@ export interface IDelegateFromAPI {
   aboutMe?: string;
   realName?: string;
   profilePicture?: string;
+  voteWeight?: number;
   scoreBreakdown: {
     name: string;
     pct: number;
@@ -45,7 +46,7 @@ export interface IDelegateFromAPI {
     snapshotDelegatedVotes?: number;
     voteWeight?: number;
   }[];
-  workstreams: {
+  workstreams?: {
     id: number;
     name: string;
   }[];

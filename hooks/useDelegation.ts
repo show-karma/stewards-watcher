@@ -53,12 +53,23 @@ export const useDelegation = (args: IDelegation) => {
         status: 'success',
       });
     },
-    onError() {
-      toast({
-        title: 'Error',
-        description: 'The transaction goes wrong...',
-        status: 'error',
-      });
+    onError(error) {
+      if (
+        error.stack?.includes('code=ACTION_REJECTED') ||
+        error.stack?.includes('code=4001')
+      ) {
+        toast({
+          title: 'Error',
+          description: 'The transaction was cancelled. Please try again',
+          status: 'error',
+        });
+      } else {
+        toast({
+          title: 'Error',
+          description: 'The transaction goes wrong...',
+          status: 'error',
+        });
+      }
     },
   });
 

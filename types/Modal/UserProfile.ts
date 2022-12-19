@@ -1,4 +1,4 @@
-export type IActiveTab = 'statement' | 'votinghistory' | 'aboutMe';
+export type IActiveTab = 'statement' | 'votinghistory' | 'aboutme';
 
 export type IProfile = {
   address: string;

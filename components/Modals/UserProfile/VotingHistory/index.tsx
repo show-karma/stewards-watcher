@@ -36,7 +36,7 @@ export const VotingHistory: FC<IVotingHistory> = ({ profile }) => {
     if (!showingVotes.length)
       return (
         <Text color={theme.modal.votingHistory.proposal.title}>
-          No proposals found.
+          {`Contributor hasn't voted on any proposals yet`}
         </Text>
       );
     return showingVotes.map((vote, index) => (

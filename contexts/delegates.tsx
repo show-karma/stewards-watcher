@@ -9,6 +9,7 @@ import React, {
   useMemo,
   useEffect,
 } from 'react';
+import { useRouter } from 'next/router';
 import {
   IDelegate,
   IFilterStat,
@@ -20,6 +21,7 @@ import {
   IActiveTab,
 } from 'types';
 import { axiosInstance } from 'utils';
+import { useToasty } from 'hooks';
 import { useDAO } from './dao';
 
 interface IDelegateProps {
@@ -48,10 +50,7 @@ interface IDelegateProps {
   profileSelected?: IDelegate;
   selectProfile: (profile: IDelegate, tab?: IActiveTab) => void;
   selectedTab: IActiveTab;
-  searchProfileModal: (
-    userToSearch: string,
-    tabToOpen?: IActiveTab
-  ) => Promise<void>;
+  searchProfileModal: (userToSearch: string) => Promise<void>;
   interests: string[];
   interestFilter: string[];
   selectInterests: (index: number) => void;
@@ -96,6 +95,10 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     {} as IDelegate
   );
   const [delegateCount, setDelegateCount] = useState(0);
+  const { toast } = useToasty();
+
+  const router = useRouter();
+  const { asPath } = router;
 
   const {
     isOpen: isOpenProfile,
@@ -169,7 +172,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
             onChain: fetchedPeriod?.onChainVotesPct || 0,
             offChain: fetchedPeriod?.offChainVotesPct || 0,
           },
-          votingWeight: item.stats?.[0]?.voteWeight,
+          votingWeight: item.stats?.[0]?.voteWeight || item?.voteWeight,
           delegatedVotes:
             item.delegatedVotes || item.stats?.[0]?.snapshotDelegatedVotes,
           twitterHandle: item.twitterHandle,
@@ -179,6 +182,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           aboutMe: item.aboutMe,
           realName: item.realName,
           profilePicture: item.profilePicture,
+          workstreams: item.workstreams,
         };
       });
 
@@ -228,7 +232,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
             offChain: fetchedPeriod?.offChainVotesPct || 0,
           },
           discourseHandle: item.discourseHandle,
-          votingWeight: item.stats?.[0]?.voteWeight,
+          votingWeight: item.stats?.[0]?.voteWeight || item.voteWeight,
           delegatedVotes:
             item.delegatedVotes || item.stats?.[0]?.snapshotDelegatedVotes,
           twitterHandle: item.twitterHandle,
@@ -237,6 +241,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           aboutMe: item.aboutMe,
           realName: item.realName,
           profilePicture: item.profilePicture,
+          workstreams: item.workstreams,
         };
       });
       if (count < delegateCount) {
@@ -261,10 +266,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     onOpenProfile();
   };
 
-  const searchProfileModal = async (
-    userToSearch: string,
-    tabToOpen?: IActiveTab
-  ) => {
+  const searchProfileModal = async (userToSearch: string) => {
     try {
       const axiosClient = await axiosInstance.get(
         `/dao/find-delegate?dao=${config.DAO_KARMA_ID}&user=${userToSearch}`
@@ -272,9 +274,6 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       const { data } = axiosClient.data;
       const { delegate: fetchedDelegate } = data;
 
-      if (!fetchedDelegate) {
-        throw new Error('No delegates found');
-      }
       const fetchedPeriod = (fetchedDelegate as IDelegateFromAPI).stats.find(
         fetchedStat => fetchedStat.period === period
       );
@@ -289,7 +288,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           onChain: fetchedPeriod?.onChainVotesPct || 0,
           offChain: fetchedPeriod?.offChainVotesPct || 0,
         },
-        votingWeight: fetchedPeriod?.voteWeight,
+        votingWeight: fetchedPeriod?.voteWeight || fetchedDelegate.voteWeight,
         delegatedVotes:
           fetchedDelegate.delegatedVotes ||
           fetchedDelegate.snapshotDelegatedVotes,
@@ -300,10 +299,20 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         aboutMe: fetchedDelegate.aboutMe,
         realName: fetchedDelegate.realName,
         profilePicture: fetchedDelegate.profilePicture,
+        workstreams: fetchedDelegate.workstreams,
       };
-      selectProfile(userFound, tabToOpen);
+      const getTab = asPath.split('#');
+      const tabs = ['votinghistory', 'statement'];
+      if (userFound.aboutMe) tabs.push('aboutme');
+      const checkTab = tabs.includes(getTab[1]);
+      selectProfile(
+        userFound,
+        checkTab ? (getTab[1] as IActiveTab) : undefined
+      );
     } catch (error) {
-      console.log(error);
+      toast({
+        title: `We couldn't find the contributor page`,
+      });
     }
   };
 
@@ -350,7 +359,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
             onChain: fetchedPeriod?.onChainVotesPct || 0,
             offChain: fetchedPeriod?.offChainVotesPct || 0,
           },
-          votingWeight: item.stats?.[0]?.voteWeight,
+          votingWeight: item.stats?.[0]?.voteWeight || item?.voteWeight,
           delegatedVotes:
             item.delegatedVotes || item.stats?.[0]?.snapshotDelegatedVotes,
           twitterHandle: item.twitterHandle,
@@ -360,6 +369,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           aboutMe: item.aboutMe,
           realName: item.realName,
           profilePicture: item.profilePicture,
+          workstreams: item.workstreams,
         });
       });
     } catch (error) {

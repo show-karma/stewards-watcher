@@ -156,6 +156,17 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
         id: 'workstream',
       });
     }
+    if (DAO_KARMA_ID === 'gitcoin') {
+      filtereds.push({
+        title: 'Workstream',
+        icon: BiPlanet,
+        value:
+          data?.workstreams?.length && data?.workstreams?.length > 0
+            ? data?.workstreams[0]?.name
+            : '-',
+        id: 'workstream',
+      });
+    }
 
     setFeaturedStats(featureds);
     setStats(filtereds);
@@ -227,16 +238,17 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       px={{ base: '4', sm: '6' }}
       py={{ base: '4', sm: '6' }}
       borderRadius="16"
-      maxW="27rem"
-      w="full"
-      minW="min-content"
       flex="1"
       gap="8"
       boxShadow={theme.card.shadow}
-      minH="max-content"
       borderWidth="1px"
       borderStyle="solid"
       borderColor={theme.card.border}
+      w="full"
+      minW="min-content"
+      maxW="27rem"
+      h="full"
+      minH="max-content"
       maxH="600px"
     >
       <Flex flexDir="row" justify="space-between" w="full" align="center">
@@ -465,6 +477,8 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                     fontWeight="bold"
                     ml={stat.value === '-' ? '8' : '0'}
                     textAlign="start"
+                    h="full"
+                    w="full"
                   >
                     {stat.value}
                   </Text>
@@ -499,58 +513,62 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
         {isLoadingPitchData ? (
           <Skeleton w="full" h="1.5rem" />
         ) : (
-          <Flex
-            flexDir="row"
-            flexWrap="wrap"
-            rowGap="0"
-            columnGap="2"
-            textAlign="center"
-            width="full"
-            ref={handleInterestOverflow}
-            maxH="21px"
-            overflow="hidden"
-          >
-            <Text color={theme.card.common} fontSize="sm" textAlign="center">
-              Interests:
-            </Text>
+          <>
             {interests.value.length > 0 ? (
-              interests.value
-                .slice(0, interestsNumberToShow)
-                .map((interest, index) => {
-                  const hasNext =
-                    +index !== interests.value.length - 1 &&
-                    index !== interestsNumberToShow - 1;
-                  return (
-                    <Flex
-                      gap="2"
-                      key={+index}
-                      align-self="center"
-                      align="center"
-                      alignContent="center"
-                    >
-                      <Text color={theme.card.text.primary} fontSize="sm">
-                        {interest[0].toUpperCase() + interest.substring(1)}
-                      </Text>
-                      {hasNext && (
-                        <Text
-                          color={theme.card.text.primary}
-                          key={+index}
-                          fontSize="0.4rem"
-                          height="max-content"
-                        >
-                          -
+              <Flex
+                flexDir="row"
+                flexWrap="wrap"
+                rowGap="0"
+                columnGap="2"
+                textAlign="center"
+                width="full"
+                ref={handleInterestOverflow}
+                maxH="21px"
+                overflow="hidden"
+              >
+                <Text
+                  color={theme.card.common}
+                  fontSize="sm"
+                  textAlign="center"
+                >
+                  Interests:
+                </Text>
+                {interests.value
+                  .slice(0, interestsNumberToShow)
+                  .map((interest, index) => {
+                    const hasNext =
+                      +index !== interests.value.length - 1 &&
+                      index !== interestsNumberToShow - 1;
+                    return (
+                      <Flex
+                        gap="2"
+                        key={+index}
+                        align-self="center"
+                        align="center"
+                        alignContent="center"
+                      >
+                        <Text color={theme.card.text.primary} fontSize="sm">
+                          {interest[0].toUpperCase() + interest.substring(1)}
                         </Text>
-                      )}
-                      {isOverflowingInterest}
-                    </Flex>
-                  );
-                })
+                        {hasNext && (
+                          <Text
+                            color={theme.card.text.primary}
+                            key={+index}
+                            fontSize="0.4rem"
+                            height="max-content"
+                          >
+                            -
+                          </Text>
+                        )}
+                        {isOverflowingInterest}
+                      </Flex>
+                    );
+                  })}
+              </Flex>
             ) : (
-              <Text color={theme.card.text.primary} fontSize="sm">
-                N/A
-              </Text>
+              <Flex h="21px" />
             )}
-          </Flex>
+          </>
         )}
         {canDelegate && (
           <Flex justify="left" align="center" gap="6">
