@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { IMixpanelEvent } from 'types';
 
 interface IUseMixpanel {
+  //   mixpanel?: Mixpanel;
   mixpanel: {
     reportEvent: (data: IMixpanelEvent) => void;
   };
@@ -18,10 +19,9 @@ export const useMixpanel = (prefix = 'delegateApp'): IUseMixpanel => {
     }
   }, []);
 
-  const reportEvent = (data: IMixpanelEvent): Promise<void> => {
-    if (!mixpanel) throw new Error('Mixpanel is not available');
-    return new Promise((resolve, reject) => {
-      mixpanel.track(`${prefix}:${data.event}`, data.properties || {}, err => {
+  const reportEvent = (data: IMixpanelEvent): Promise<void> =>
+    new Promise((resolve, reject) => {
+      mixpanel?.track(`${prefix}:${data.event}`, data.properties || {}, err => {
         if (err) {
           reject(err);
         } else {
@@ -29,7 +29,6 @@ export const useMixpanel = (prefix = 'delegateApp'): IUseMixpanel => {
         }
       });
     });
-  };
 
   return { mixpanel: { reportEvent } };
 };
