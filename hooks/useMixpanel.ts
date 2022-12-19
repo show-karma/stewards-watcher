@@ -9,7 +9,7 @@ interface IUseMixpanel {
   };
 }
 
-export const useMixpanel = (prefix = 'delegateApp') => {
+export const useMixpanel = (prefix = 'delegateApp'): IUseMixpanel => {
   const [mixpanel, setMixpanel] = useState<Mixpanel | undefined>();
 
   useEffect(() => {
