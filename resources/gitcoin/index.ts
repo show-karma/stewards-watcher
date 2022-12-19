@@ -24,20 +24,21 @@ const config: IDAOConfig = {
   DAO_DELEGATE_MODE: 'custom',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
-  EXCLUDED_CARD_FIELDS: [],
+  DAO_DEFAULT_ORDER_TIMEFRAME: '30d',
+  EXCLUDED_CARD_FIELDS: ['onChainVotesPct'],
   FEATURED_CARD_FIELDS: ['delegatedVotes', 'offChainVotesPct'],
 };
 
 const dark: IDAOTheme = {
-  background: '#0E0333',
-  bodyBg: '#0E0333',
+  background: '#291555',
+  bodyBg: '#291555',
   title: '#FFFFFF',
   subtitle: '#a0aec0',
   text: '#FFFFFF',
   branding: '#02E2AC',
   buttonText: '#0E0333',
   buttonTextSec: '#FFFFFF',
-  headerBg: '#212328',
+  headerBg: '#321E5E',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
   hat: {
@@ -58,7 +59,7 @@ const dark: IDAOTheme = {
   },
   card: {
     icon: '#ADB8C0',
-    background: '#131f3a',
+    background: '#321E5E',
     featureStatBg: 'rgba(102, 102, 102, 0.15)',
     divider: 'rgba(173, 184, 192, 0.2)',
     text: { primary: '#FFFFFF', secondary: '#ADB8C0' },
@@ -141,7 +142,7 @@ const light: IDAOTheme = {
   branding: '#02E2AC',
   buttonText: '#0E0333',
   buttonTextSec: '#222429',
-  headerBg: '#212328',
+  headerBg: '#321E5E',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
   hat: {

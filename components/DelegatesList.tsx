@@ -78,6 +78,7 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
           pageStart={0}
           loadMore={fetchNextDelegates}
           hasMore={hasMore}
+          disabled={isLoading}
           loader={
             <Flex
               width="full"
