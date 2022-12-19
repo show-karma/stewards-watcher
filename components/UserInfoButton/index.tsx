@@ -22,20 +22,25 @@ export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen, profile }) => {
   const { theme } = useDAO();
   const { mixpanel } = useMixpanel();
   const router = useRouter();
-  const options: { title: string; tab: IActiveTab }[] = [
-    {
-      title: 'About me',
-      tab: 'aboutMe',
-    },
-    {
-      title: 'User Statement',
-      tab: 'statement',
-    },
-    {
-      title: 'Voting History',
-      tab: 'votinghistory',
-    },
-  ];
+
+  const options = () => {
+    const defaultOptions: { title: string; tab: IActiveTab }[] = [
+      {
+        title: 'User Statement',
+        tab: 'statement',
+      },
+      {
+        title: 'Voting History',
+        tab: 'votinghistory',
+      },
+    ];
+    if (profile.aboutMe)
+      defaultOptions.push({
+        title: 'About me',
+        tab: 'aboutme',
+      });
+    return defaultOptions;
+  };
 
   const redirectWithoutRefresh = (hash: IActiveTab) => {
     onOpen(profile, hash);
@@ -81,7 +86,7 @@ export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen, profile }) => {
         Show Activity
       </MenuButton>
       <MenuList bgColor={theme.card.background}>
-        {options.map(({ title, tab }, index) => (
+        {options().map(({ title, tab }, index) => (
           <MenuItem
             key={+index}
             justifyContent="space-between"

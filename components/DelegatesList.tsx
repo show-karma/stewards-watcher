@@ -1,10 +1,8 @@
 /* eslint-disable no-nested-ternary */
-import { Flex, Spinner, Text } from '@chakra-ui/react';
+import { Flex, SimpleGrid, Spinner, Text } from '@chakra-ui/react';
 import { useDAO, useDelegates } from 'contexts';
-import { useRouter } from 'next/router';
 import { FC, useMemo } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
-import { IActiveTab } from 'types';
 import { DelegateCard } from './DelegateCard';
 import { UserProfile } from './Modals';
 
@@ -14,9 +12,57 @@ interface IDelegatesList {
   pathUser?: string;
 }
 
+const EmptyStates = () => {
+  const { theme } = useDAO();
+  const { isSearchDirty, interests } = useDelegates();
+
+  if (isSearchDirty || interests.length > 0)
+    return (
+      <Text
+        as="p"
+        color={theme.title}
+        w="full"
+      >{`We couldn't find any contributors matching that criteria`}</Text>
+    );
+  return (
+    <Text
+      as="p"
+      color={theme.title}
+    >{`We couldn't find any contributor info`}</Text>
+  );
+};
+
+const DelegatesCases: FC = () => {
+  const { delegates, isLoading } = useDelegates();
+  if (isLoading) {
+    if (delegates.length <= 0) {
+      return (
+        <>
+          {loadingArray.map((_, index) => (
+            <DelegateCard key={+index} />
+          ))}
+        </>
+      );
+    }
+    return (
+      <>
+        {delegates.map(item => (
+          <DelegateCard key={`${JSON.stringify(item)}`} data={item} />
+        ))}
+      </>
+    );
+  }
+  return (
+    <>
+      {delegates.map(item => (
+        <DelegateCard key={`${JSON.stringify(item)}`} data={item} />
+      ))}
+    </>
+  );
+};
+
 export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
   const {
-    delegates,
     isLoading,
     fetchNextDelegates,
     hasMore,
@@ -26,20 +72,13 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
     selectedTab,
     searchProfileModal,
     interestFilter,
+    delegates,
   } = useDelegates();
   const { daoInfo } = useDAO();
   const { config } = daoInfo;
-  const router = useRouter();
-  const { asPath } = router;
 
   const searchProfileSelected = async (userToSearch: string) => {
-    const getTab = asPath && (asPath as string).split('#');
-    const tabs = ['votinghistory', 'statement', 'aboutMe'];
-    const checkTab = tabs.includes(getTab[1]);
-    await searchProfileModal(
-      userToSearch,
-      checkTab ? (getTab[1] as IActiveTab) : undefined
-    );
+    await searchProfileModal(userToSearch);
   };
 
   useMemo(() => {
@@ -92,28 +131,18 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
           }
           style={{ width: '100%' }}
         >
-          <Flex
+          <SimpleGrid
             flexWrap="wrap"
             rowGap="10"
             columnGap="8"
             w="full"
-            align="center"
-            justify="flex-start"
+            columns={3}
             mb="8"
             px={{ base: '6', lg: '0' }}
           >
-            {isLoading
-              ? delegates.length <= 0
-                ? loadingArray.map((_, index) => <DelegateCard key={+index} />)
-                : delegates.map(item => (
-                    <DelegateCard key={`${JSON.stringify(item)}`} data={item} />
-                  ))
-              : delegates.length > 0
-              ? delegates.map(item => (
-                  <DelegateCard key={`${JSON.stringify(item)}`} data={item} />
-                ))
-              : undefined}
-          </Flex>
+            <DelegatesCases />
+          </SimpleGrid>
+          {!isLoading && delegates.length <= 0 && <EmptyStates />}
         </InfiniteScroll>
       </Flex>
     </>

@@ -4,6 +4,7 @@ import {
   Divider,
   Flex,
   Icon,
+  Img,
   Link,
   Text,
 } from '@chakra-ui/react';
@@ -159,7 +160,7 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
       bgColor="transparent"
     >
       <Flex w="full" flexDir="column">
-        <ImgWithFallback
+        <Img
           src="/images/profilenobg.png"
           borderBottom="1px"
           borderStyle="solid"
@@ -177,12 +178,14 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
         gap="1.5rem"
       >
         <Flex w="full">
-          <NavButton
-            isActive={isActiveTab('aboutMe')}
-            onClick={() => changeTab('aboutMe')}
-          >
-            About me
-          </NavButton>
+          {profile.aboutMe && (
+            <NavButton
+              isActive={isActiveTab('aboutme')}
+              onClick={() => changeTab('aboutme')}
+            >
+              About me
+            </NavButton>
+          )}
           <NavButton
             isActive={isActiveTab('statement')}
             onClick={() => changeTab('statement')}
