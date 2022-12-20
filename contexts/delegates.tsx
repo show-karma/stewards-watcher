@@ -68,24 +68,28 @@ const statDefaultOptions: IStatOptions[] = [
   { title: 'Forum Activity', stat: 'forumScore' },
   { title: 'Off-chain votes', stat: 'offChainVotesPct' },
   { title: 'On-chain votes', stat: 'onChainVotesPct' },
+  { title: 'Health', stat: 'healthScore' },
 ];
 
 export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const { daoInfo } = useDAO();
   const { config } = daoInfo;
 
+  const defaultTimePeriod =
+    config.DAO_DEFAULT_SETTINGS?.TIMEPERIOD || 'lifetime';
+  const sortedDefaultOptions = statDefaultOptions.sort(element =>
+    element.stat === config.DAO_DEFAULT_SETTINGS?.ORDERSTAT ? -1 : 1
+  );
   const [delegates, setDelegates] = useState<IDelegate[]>([]);
   const [isLoading, setLoading] = useState(true);
   const [isFetchingMore, setFetchingMore] = useState(false);
   const [offset, setOffset] = useState(0);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
   const [hasMore, setHasMore] = useState(false);
-  const [statOptions, setStatOptions] = useState(statDefaultOptions);
+  const [statOptions, setStatOptions] = useState(sortedDefaultOptions);
   const [stat, setStat] = useState<IFilterStat>(statOptions[0].stat);
   const [order, setOrder] = useState<IFilterOrder>('desc');
-  const [period, setPeriod] = useState<IFilterPeriod>(
-    config.DAO_DEFAULT_ORDER_TIMEFRAME || 'lifetime'
-  );
+  const [period, setPeriod] = useState<IFilterPeriod>(defaultTimePeriod);
   const [interests, setInterests] = useState<string[]>([]);
   const [interestFilter, setInterestFilter] = useState<string[]>([]);
   const [userToFind, setUserToFind] = useState('');
@@ -323,9 +327,14 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     }
 
     if (isFetchingMore || !hasMore) return;
-
     const newOffset = offset + 1;
-    setOffset(newOffset);
+
+    if (delegates.length) {
+      setOffset(newOffset);
+    } else {
+      setLoading(true);
+    }
+
     setFetchingMore(true);
     try {
       const axiosClient = await axiosInstance.get(
@@ -376,6 +385,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       console.log(error);
     } finally {
       setFetchingMore(false);
+      setLoading(false);
     }
   };
 
@@ -395,6 +405,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     fetchDelegates();
   }, [interestFilter]);
 
+  // Fetch vote infos
   const getVoteInfos = async () => {
     try {
       const axiosClient = await axiosInstance.get(
@@ -412,6 +423,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     }
   };
 
+  // Fetch vote infos if there are delegates
   useMemo(() => {
     if (
       delegates.length &&
@@ -466,7 +478,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const clearFilters = () => {
     setStat(statOptions[0].stat);
     setOrder('desc');
-    setPeriod('lifetime');
+    setPeriod(defaultTimePeriod);
     setUserToFind('');
   };
 

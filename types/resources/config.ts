@@ -1,4 +1,4 @@
-import { IFilterPeriod } from 'types/contexts';
+import { IFilterPeriod, IFilterStat } from 'types/contexts';
 import { Chain } from 'wagmi';
 import { IForumType } from './forum';
 
@@ -23,7 +23,11 @@ export interface IDAOConfig {
   DAO_DELEGATE_MODE: 'custom' | 'snapshot';
   DAO_FORUM_TYPE?: IForumType;
   DAO_GTAG?: string;
-  DAO_DEFAULT_ORDER_TIMEFRAME?: IFilterPeriod;
+  DAO_DEFAULT_SETTINGS?: {
+    TIMEPERIOD?: IFilterPeriod;
+    KARMA_SCORE?: boolean;
+    ORDERSTAT?: IFilterStat;
+  };
   EXCLUDED_CARD_FIELDS: string[];
   FEATURED_CARD_FIELDS: string[];
 }
