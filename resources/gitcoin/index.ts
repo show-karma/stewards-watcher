@@ -24,7 +24,11 @@ const config: IDAOConfig = {
   DAO_DELEGATE_MODE: 'custom',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
-  DAO_DEFAULT_ORDER_TIMEFRAME: '30d',
+  DAO_DEFAULT_SETTINGS: {
+    TIMEPERIOD: '30d',
+    KARMA_SCORE: true,
+    ORDERSTAT: 'healthScore',
+  },
   EXCLUDED_CARD_FIELDS: ['onChainVotesPct'],
   FEATURED_CARD_FIELDS: ['delegatedVotes', 'offChainVotesPct'],
 };
@@ -54,7 +58,7 @@ const dark: IDAOTheme = {
     border: '#ADB8C033',
     title: 'white',
     bg: 'transparent',
-    listBg: '#222429',
+    listBg: '#321E5E',
     listText: 'white',
   },
   card: {

@@ -49,7 +49,7 @@ interface IStat {
 export const DelegateCard: FC<IDelegateCardProps> = props => {
   const { data } = props;
   const { daoInfo, theme, daoData } = useDAO();
-  const { DAO_KARMA_ID } = daoInfo.config;
+  const { DAO_KARMA_ID, DAO_DEFAULT_SETTINGS } = daoInfo.config;
   const { selectProfile } = useDelegates();
 
   const { config } = daoInfo;
@@ -110,14 +110,17 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   const [stats, setStats] = useState<IStat[]>(allStats);
   const [featuredStats, setFeaturedStats] = useState([] as IStat[]);
 
-  const { data: pitchData, isLoading: isLoadingPitchData } = useQuery({
+  const {
+    data: pitchData,
+    isLoading: isLoadingPitchData,
+    failureCount: pitchFailureCount,
+  } = useQuery({
     queryKey: ['statement', data?.address],
     queryFn: () =>
       axiosInstance.get(
         `/forum-user/${DAO_KARMA_ID}/delegate-pitch/${data?.address}`
       ),
-    retry: 1,
-    retryDelay: 1000,
+    retry: false,
   });
 
   const customFields: ICustomFields[] =
@@ -130,8 +133,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
         item.displayAs === 'interests' ||
         item.label.toLowerCase().includes('interests')
     ) || emptyField;
-
-  const shouldHardcode = router.query.site === 'op';
 
   useMemo(() => {
     if (!config) return;
@@ -146,7 +147,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       if (config.EXCLUDED_CARD_FIELDS.includes(stat.id)) return;
       filtereds.push(stat);
     });
-    if (shouldHardcode) {
+    if (router.query.site === 'op') {
       filtereds.push({
         title: 'Workstream',
         icon: BiPlanet,
@@ -364,7 +365,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
             )}
           </Flex>
         </Flex>
-        {shouldHardcode && (
+        {DAO_DEFAULT_SETTINGS?.KARMA_SCORE && (
           <>
             {data ? (
               <Flex flexDir="column" align="end" w="max-content">
@@ -510,7 +511,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       </Grid>
       <Flex flexDir="column" gap="4">
         <Divider borderColor={theme.card.divider} w="full" />
-        {isLoadingPitchData ? (
+        {isLoadingPitchData && !pitchFailureCount ? (
           <Skeleton w="full" h="1.5rem" />
         ) : (
           <>
