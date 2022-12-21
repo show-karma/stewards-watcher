@@ -120,19 +120,25 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
         )}
         <InfiniteScroll
           pageStart={0}
-          loadMore={fetchNextDelegates}
+          loadMore={() => {
+            if (delegates.length) fetchNextDelegates();
+          }}
           hasMore={hasMore}
-          disabled
           loader={
-            <Flex
-              width="full"
-              py="16"
-              align="center"
-              justify="center"
-              key="loading-spinner"
-            >
-              <Spinner w="20" h="20" />
-            </Flex>
+            // eslint-disable-next-line react/jsx-no-useless-fragment
+            <>
+              {isLoading && delegates.length > 0 && (
+                <Flex
+                  width="full"
+                  py="16"
+                  align="center"
+                  justify="center"
+                  key="loading-spinner"
+                >
+                  <Spinner w="20" h="20" />
+                </Flex>
+              )}
+            </>
           }
           style={{ width: '100%' }}
         >

@@ -77,16 +77,23 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const defaultTimePeriod =
     config.DAO_DEFAULT_SETTINGS?.TIMEPERIOD || 'lifetime';
-  const sortedDefaultOptions = statDefaultOptions.sort(element =>
-    element.stat === config.DAO_DEFAULT_SETTINGS?.ORDERSTAT ? -1 : 1
-  );
   const [delegates, setDelegates] = useState<IDelegate[]>([]);
   const [isLoading, setLoading] = useState(true);
   const [isFetchingMore, setFetchingMore] = useState(false);
   const [offset, setOffset] = useState(0);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
   const [hasMore, setHasMore] = useState(false);
-  const [statOptions, setStatOptions] = useState(sortedDefaultOptions);
+
+  const statOptions = useMemo(() => {
+    const sortedDefaultOptions = statDefaultOptions.sort(element =>
+      element.stat === config.DAO_DEFAULT_SETTINGS?.ORDERSTAT ? -1 : 1
+    );
+    const filteredStats = sortedDefaultOptions.filter(
+      option => !config.EXCLUDED_CARD_FIELDS.includes(option.stat)
+    );
+    return filteredStats;
+  }, [config]);
+
   const [stat, setStat] = useState<IFilterStat>(statOptions[0].stat);
   const [order, setOrder] = useState<IFilterOrder>('desc');
   const [period, setPeriod] = useState<IFilterPeriod>(defaultTimePeriod);
@@ -111,13 +118,6 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   } = useDisclosure();
 
   const isSearchDirty = userToFind !== '';
-
-  useMemo(() => {
-    const filteredStats = statOptions.filter(
-      option => !config.EXCLUDED_CARD_FIELDS.includes(option.stat)
-    );
-    setStatOptions(filteredStats);
-  }, [config]);
 
   const fetchInterests = async () => {
     try {
@@ -331,10 +331,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
 
     if (delegates.length) {
       setOffset(newOffset);
-    } else {
-      setLoading(true);
     }
 
+    setLoading(true);
     setFetchingMore(true);
     try {
       const axiosClient = await axiosInstance.get(
@@ -350,8 +349,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       const { data } = axiosClient.data;
       const { delegates: fetchedDelegates } = data;
 
-      // setHasMore(fetchedDelegates.length === 10);
-      setLastUpdate(fetchedDelegates[0].stats[0].updatedAt);
+      if (fetchedDelegates.length) {
+        setLastUpdate(fetchedDelegates[0].stats[0].updatedAt);
+      }
 
       fetchedDelegates.forEach((item: IDelegateFromAPI) => {
         const fetchedPeriod = item.stats.find(
@@ -382,6 +382,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         });
       });
     } catch (error) {
+      setDelegates([]);
       console.log(error);
     } finally {
       setFetchingMore(false);
@@ -390,12 +391,15 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   };
 
   useMemo(() => {
+    setOffset(0);
     if (userToFind) {
       findDelegate();
     } else {
       fetchDelegates();
     }
   }, [stat, order, period, userToFind]);
+
+  console.log(stat, order, period, userToFind);
 
   useEffect(() => {
     fetchInterests();
