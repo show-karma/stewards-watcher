@@ -3,6 +3,7 @@ import { Flex, SimpleGrid, Spinner, Text } from '@chakra-ui/react';
 import { useDAO, useDelegates } from 'contexts';
 import { FC, useMemo } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
+import { IDelegate } from 'types';
 import { DelegateCard } from './DelegateCard';
 import { UserProfile } from './Modals';
 
@@ -32,8 +33,12 @@ const EmptyStates = () => {
   );
 };
 
-const DelegatesCases: FC = () => {
-  const { delegates, isLoading } = useDelegates();
+interface IDelegatesCasesProps {
+  delegates: IDelegate[];
+  isLoading: boolean;
+}
+
+const DelegatesCases: FC<IDelegatesCasesProps> = ({ delegates, isLoading }) => {
   if (isLoading) {
     if (delegates.length <= 0) {
       return (
@@ -115,19 +120,25 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
         )}
         <InfiniteScroll
           pageStart={0}
-          loadMore={fetchNextDelegates}
+          loadMore={() => {
+            if (delegates.length) fetchNextDelegates();
+          }}
           hasMore={hasMore}
-          disabled={isLoading}
           loader={
-            <Flex
-              width="full"
-              py="16"
-              align="center"
-              justify="center"
-              key="loading-spinner"
-            >
-              <Spinner w="20" h="20" />
-            </Flex>
+            // eslint-disable-next-line react/jsx-no-useless-fragment
+            <>
+              {isLoading && delegates.length > 0 && (
+                <Flex
+                  width="full"
+                  py="16"
+                  align="center"
+                  justify="center"
+                  key="loading-spinner"
+                >
+                  <Spinner w="20" h="20" />
+                </Flex>
+              )}
+            </>
           }
           style={{ width: '100%' }}
         >
@@ -136,14 +147,16 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
             rowGap="10"
             columnGap="8"
             w="full"
-            columns={3}
+            columns={{ base: 1, lg: 2, xl: 3 }}
+            alignItems="center"
+            justifyItems="center"
             mb="8"
             px={{ base: '6', lg: '0' }}
           >
-            <DelegatesCases />
+            <DelegatesCases delegates={delegates} isLoading={isLoading} />
           </SimpleGrid>
-          {!isLoading && delegates.length <= 0 && <EmptyStates />}
         </InfiniteScroll>
+        {!isLoading && !delegates.length && <EmptyStates />}
       </Flex>
     </>
   );

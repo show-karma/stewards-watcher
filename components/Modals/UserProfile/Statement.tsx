@@ -200,8 +200,7 @@ export const Statement: FC<IStatement> = ({ profile }) => {
       axiosInstance.get(
         `/forum-user/${DAO_KARMA_ID}/delegate-pitch/${profile.address}`
       ),
-    retry: 1,
-    retryDelay: 1000,
+    retry: false,
   });
 
   const customFields: ICustomFields[] =

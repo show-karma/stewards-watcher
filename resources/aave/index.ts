@@ -23,7 +23,8 @@ const config: IDAOConfig = {
   DAO_DELEGATE_MODE: 'custom',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
-  EXCLUDED_CARD_FIELDS: [],
+
+  EXCLUDED_CARD_FIELDS: ['healthScore'],
   FEATURED_CARD_FIELDS: ['delegatedVotes', 'offChainVotesPct'],
 };
 

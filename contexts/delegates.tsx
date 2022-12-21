@@ -68,24 +68,35 @@ const statDefaultOptions: IStatOptions[] = [
   { title: 'Forum Activity', stat: 'forumScore' },
   { title: 'Off-chain votes', stat: 'offChainVotesPct' },
   { title: 'On-chain votes', stat: 'onChainVotesPct' },
+  { title: 'Health', stat: 'healthScore' },
 ];
 
 export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const { daoInfo } = useDAO();
   const { config } = daoInfo;
 
+  const defaultTimePeriod =
+    config.DAO_DEFAULT_SETTINGS?.TIMEPERIOD || 'lifetime';
   const [delegates, setDelegates] = useState<IDelegate[]>([]);
   const [isLoading, setLoading] = useState(true);
   const [isFetchingMore, setFetchingMore] = useState(false);
   const [offset, setOffset] = useState(0);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
   const [hasMore, setHasMore] = useState(false);
-  const [statOptions, setStatOptions] = useState(statDefaultOptions);
+
+  const statOptions = useMemo(() => {
+    const sortedDefaultOptions = statDefaultOptions.sort(element =>
+      element.stat === config.DAO_DEFAULT_SETTINGS?.ORDERSTAT ? -1 : 1
+    );
+    const filteredStats = sortedDefaultOptions.filter(
+      option => !config.EXCLUDED_CARD_FIELDS.includes(option.stat)
+    );
+    return filteredStats;
+  }, [config]);
+
   const [stat, setStat] = useState<IFilterStat>(statOptions[0].stat);
   const [order, setOrder] = useState<IFilterOrder>('desc');
-  const [period, setPeriod] = useState<IFilterPeriod>(
-    config.DAO_DEFAULT_ORDER_TIMEFRAME || 'lifetime'
-  );
+  const [period, setPeriod] = useState<IFilterPeriod>(defaultTimePeriod);
   const [interests, setInterests] = useState<string[]>([]);
   const [interestFilter, setInterestFilter] = useState<string[]>([]);
   const [userToFind, setUserToFind] = useState('');
@@ -107,13 +118,6 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   } = useDisclosure();
 
   const isSearchDirty = userToFind !== '';
-
-  useMemo(() => {
-    const filteredStats = statOptions.filter(
-      option => !config.EXCLUDED_CARD_FIELDS.includes(option.stat)
-    );
-    setStatOptions(filteredStats);
-  }, [config]);
 
   const fetchInterests = async () => {
     try {
@@ -323,9 +327,13 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     }
 
     if (isFetchingMore || !hasMore) return;
-
     const newOffset = offset + 1;
-    setOffset(newOffset);
+
+    if (delegates.length) {
+      setOffset(newOffset);
+    }
+
+    setLoading(true);
     setFetchingMore(true);
     try {
       const axiosClient = await axiosInstance.get(
@@ -341,8 +349,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       const { data } = axiosClient.data;
       const { delegates: fetchedDelegates } = data;
 
-      // setHasMore(fetchedDelegates.length === 10);
-      setLastUpdate(fetchedDelegates[0].stats[0].updatedAt);
+      if (fetchedDelegates.length) {
+        setLastUpdate(fetchedDelegates[0].stats[0].updatedAt);
+      }
 
       fetchedDelegates.forEach((item: IDelegateFromAPI) => {
         const fetchedPeriod = item.stats.find(
@@ -373,19 +382,24 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         });
       });
     } catch (error) {
+      setDelegates([]);
       console.log(error);
     } finally {
       setFetchingMore(false);
+      setLoading(false);
     }
   };
 
   useMemo(() => {
+    setOffset(0);
     if (userToFind) {
       findDelegate();
     } else {
       fetchDelegates();
     }
   }, [stat, order, period, userToFind]);
+
+  console.log(stat, order, period, userToFind);
 
   useEffect(() => {
     fetchInterests();
@@ -395,6 +409,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     fetchDelegates();
   }, [interestFilter]);
 
+  // Fetch vote infos
   const getVoteInfos = async () => {
     try {
       const axiosClient = await axiosInstance.get(
@@ -412,6 +427,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     }
   };
 
+  // Fetch vote infos if there are delegates
   useMemo(() => {
     if (
       delegates.length &&
@@ -466,7 +482,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const clearFilters = () => {
     setStat(statOptions[0].stat);
     setOrder('desc');
-    setPeriod('lifetime');
+    setPeriod(defaultTimePeriod);
     setUserToFind('');
   };
 
