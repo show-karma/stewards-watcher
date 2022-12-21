@@ -43,9 +43,8 @@ export interface IDelegateFromAPI {
     proposalsDiscussed: number;
     proposalsInitiated: number;
     updatedAt: string;
-    snapshotDelegatedVotes?: number;
-    voteWeight?: number;
   }[];
+  snapshotDelegatedVotes?: number;
   workstreams?: {
     id: number;
     name: string;

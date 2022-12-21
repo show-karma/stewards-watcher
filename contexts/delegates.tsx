@@ -176,9 +176,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
             onChain: fetchedPeriod?.onChainVotesPct || 0,
             offChain: fetchedPeriod?.offChainVotesPct || 0,
           },
-          votingWeight: item.stats?.[0]?.voteWeight || item?.voteWeight,
-          delegatedVotes:
-            item.delegatedVotes || item.stats?.[0]?.snapshotDelegatedVotes,
+          votingWeight: item.voteWeight,
+          delegatedVotes: item.delegatedVotes || item.snapshotDelegatedVotes,
           twitterHandle: item.twitterHandle,
           discourseHandle: item.discourseHandle,
           updatedAt: fetchedPeriod?.updatedAt,
@@ -236,9 +235,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
             offChain: fetchedPeriod?.offChainVotesPct || 0,
           },
           discourseHandle: item.discourseHandle,
-          votingWeight: item.stats?.[0]?.voteWeight || item.voteWeight,
-          delegatedVotes:
-            item.delegatedVotes || item.stats?.[0]?.snapshotDelegatedVotes,
+          votingWeight: item.voteWeight,
+          delegatedVotes: item.delegatedVotes || item.snapshotDelegatedVotes,
           twitterHandle: item.twitterHandle,
           updatedAt: fetchedPeriod?.updatedAt,
           karmaScore: fetchedPeriod?.karmaScore || 0,
@@ -292,7 +290,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           onChain: fetchedPeriod?.onChainVotesPct || 0,
           offChain: fetchedPeriod?.offChainVotesPct || 0,
         },
-        votingWeight: fetchedPeriod?.voteWeight || fetchedDelegate.voteWeight,
+        votingWeight: fetchedDelegate.voteWeight,
         delegatedVotes:
           fetchedDelegate.delegatedVotes ||
           fetchedDelegate.snapshotDelegatedVotes,
@@ -368,9 +366,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
             onChain: fetchedPeriod?.onChainVotesPct || 0,
             offChain: fetchedPeriod?.offChainVotesPct || 0,
           },
-          votingWeight: item.stats?.[0]?.voteWeight || item?.voteWeight,
-          delegatedVotes:
-            item.delegatedVotes || item.stats?.[0]?.snapshotDelegatedVotes,
+          votingWeight: item?.voteWeight,
+          delegatedVotes: item.delegatedVotes || item.snapshotDelegatedVotes,
           twitterHandle: item.twitterHandle,
           discourseHandle: item.discourseHandle,
           updatedAt: fetchedPeriod?.updatedAt || '-',
