@@ -408,7 +408,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     if (userToFind) {
       findDelegate();
     } else {
-      fetchDelegates();
+      fetchDelegates(0);
     }
   }, [stat, order, period, userToFind]);
 
@@ -416,8 +416,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     fetchInterests();
   }, []);
 
+  // Fetch delegates when interest filter change
   useEffect(() => {
-    fetchDelegates();
+    fetchDelegates(0);
   }, [interestFilter]);
 
   // Fetch vote infos
