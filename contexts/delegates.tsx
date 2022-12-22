@@ -219,6 +219,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           pageSize: 10,
           offset,
           period,
+          order,
           dao: config.DAO_KARMA_ID,
         },
       });
