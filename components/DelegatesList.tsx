@@ -126,7 +126,7 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
           hasMore={hasMore}
           loader={
             // eslint-disable-next-line react/jsx-no-useless-fragment
-            <>
+            <div key="spinner">
               {isLoading && delegates.length > 0 && (
                 <Flex
                   width="full"
@@ -138,7 +138,7 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
                   <Spinner w="20" h="20" />
                 </Flex>
               )}
-            </>
+            </div>
           }
           style={{ width: '100%' }}
         >

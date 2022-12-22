@@ -65,7 +65,7 @@ interface ProviderProps {
 
 const statDefaultOptions: IStatOptions[] = [
   { title: 'Voting weight', stat: 'delegatedVotes' },
-  { title: 'Forum Activity', stat: 'forumScore' },
+  { title: 'Forum score', stat: 'forumScore' },
   { title: 'Off-chain votes', stat: 'offChainVotesPct' },
   { title: 'On-chain votes', stat: 'onChainVotesPct' },
   { title: 'Health', stat: 'healthScore' },
@@ -135,18 +135,22 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const fetchDelegates = async (_offset = offset) => {
     setLoading(true);
     try {
-      const axiosClient = await axiosInstance.get(
-        `/dao/delegates?name=${config.DAO_KARMA_ID}&pageSize=10${
-          userToFind && `name=${userToFind}`
-        }&offset=${_offset}&order=${order}&field=${stat}&period=${period}`,
-        {
-          params: {
-            interests: interestFilter.length
-              ? interestFilter.join(',')
-              : undefined,
-          },
-        }
-      );
+      const axiosClient = await axiosInstance.get(`/dao/delegates`, {
+        params: {
+          interests: interestFilter.length
+            ? interestFilter.join(',')
+            : undefined,
+          name: config.DAO_KARMA_ID,
+          offset: _offset,
+          order,
+          field: stat,
+          period,
+          pageSize: 10,
+          workstreamId:
+            config.DAO_KARMA_ID === 'gitcoin' ? '6,4,3,7,1,2,5' : undefined,
+        },
+      });
+
       const { data } = axiosClient.data;
       const {
         delegates: fetchedDelegates,
@@ -208,9 +212,15 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     setFetchingMore(true);
     setLoading(true);
     try {
-      const axiosClient = await axiosInstance.get(
-        `/dao/search-delegate?dao=${config.DAO_KARMA_ID}&user=${userToFind}&pageSize=10&offset=${offset}&period=${period}`
-      );
+      const axiosClient = await axiosInstance.get(`/dao/search-delegate`, {
+        params: {
+          user: userToFind,
+          pageSize: 10,
+          offset,
+          period,
+          dao: config.DAO_KARMA_ID,
+        },
+      });
       const { data } = axiosClient.data;
 
       const { delegates: fetchedDelegates, count } = data;
@@ -270,9 +280,12 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const searchProfileModal = async (userToSearch: string) => {
     try {
-      const axiosClient = await axiosInstance.get(
-        `/dao/find-delegate?dao=${config.DAO_KARMA_ID}&user=${userToSearch}`
-      );
+      const axiosClient = await axiosInstance.get(`/dao/find-delegate`, {
+        params: {
+          dao: config.DAO_KARMA_ID,
+          user: userToSearch,
+        },
+      });
       const { data } = axiosClient.data;
       const { delegate: fetchedDelegate } = data;
 
@@ -334,16 +347,19 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     setLoading(true);
     setFetchingMore(true);
     try {
-      const axiosClient = await axiosInstance.get(
-        `/dao/delegates?name=${config.DAO_KARMA_ID}&pageSize=10&offset=${newOffset}&order=${order}&field=${stat}&period=${period}`,
-        {
-          params: {
-            interests: interestFilter.length
-              ? interestFilter.join(',')
-              : undefined,
-          },
-        }
-      );
+      const axiosClient = await axiosInstance.get(`/dao/delegates`, {
+        params: {
+          interests: interestFilter.length
+            ? interestFilter.join(',')
+            : undefined,
+          name: config.DAO_KARMA_ID,
+          pageSize: 10,
+          offset: newOffset,
+          order,
+          field: stat,
+          period,
+        },
+      });
       const { data } = axiosClient.data;
       const { delegates: fetchedDelegates } = data;
 
@@ -396,8 +412,6 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     }
   }, [stat, order, period, userToFind]);
 
-  console.log(stat, order, period, userToFind);
-
   useEffect(() => {
     fetchInterests();
   }, []);
@@ -409,11 +423,16 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   // Fetch vote infos
   const getVoteInfos = async () => {
     try {
-      const axiosClient = await axiosInstance.get(
-        `/dao/delegates?name=${config.DAO_KARMA_ID}&pageSize=10${
-          userToFind && `name=${userToFind}`
-        }&offset=0&order=desc&field=score&period=lifetime`
-      );
+      const axiosClient = await axiosInstance.get(`/dao/delegates`, {
+        params: {
+          name: config.DAO_KARMA_ID,
+          pageSize: 10,
+          offset: 0,
+          order: 'desc',
+          field: 'score',
+          period: 'lifetime',
+        },
+      });
       const { onChainId, snapshotIds } = axiosClient.data.data;
       setVoteInfos({
         onChainId,

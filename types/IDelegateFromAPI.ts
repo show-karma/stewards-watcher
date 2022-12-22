@@ -48,5 +48,6 @@ export interface IDelegateFromAPI {
   workstreams?: {
     id: number;
     name: string;
+    description: string;
   }[];
 }
