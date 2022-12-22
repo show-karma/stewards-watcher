@@ -17,5 +17,5 @@ export interface IDelegate {
   aboutMe?: string;
   realName?: string;
   profilePicture?: string;
-  workstreams?: { id: number; name: string }[];
+  workstreams?: { id: number; name: string; description: string }[];
 }

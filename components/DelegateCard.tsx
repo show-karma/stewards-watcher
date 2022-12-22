@@ -85,7 +85,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       id: 'onChainVotesPct',
     },
     {
-      title: 'Forum activity',
+      title: 'Forum score',
       icon: BsChat,
       value: data?.forumActivity ? formatNumber(data.forumActivity) : '-',
       id: 'forumScore',
@@ -121,6 +121,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
         `/forum-user/${DAO_KARMA_ID}/delegate-pitch/${data?.address}`
       ),
     retry: false,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
   });
 
   const customFields: ICustomFields[] =
@@ -158,13 +161,18 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       });
     }
     if (DAO_KARMA_ID === 'gitcoin') {
+      const gitcoinWorkstream = () => {
+        if (!data?.workstreams?.length) return '-';
+        if (data.workstreams[0]?.description.toLowerCase() === 'general') {
+          if (data.workstreams.length === 1) return '';
+          return data.workstreams[1]?.description || data.workstreams[1]?.name;
+        }
+        return data.workstreams[0]?.description || data.workstreams[0]?.name;
+      };
       filtereds.push({
         title: 'Workstream',
         icon: BiPlanet,
-        value:
-          data?.workstreams?.length && data?.workstreams?.length > 0
-            ? data?.workstreams[0]?.name
-            : '-',
+        value: gitcoinWorkstream(),
         id: 'workstream',
       });
     }
@@ -180,7 +188,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           <Text
             color={theme.card.text.primary}
             fontFamily="heading"
-            fontSize={['xl', '3xl']}
+            fontSize={{ base: 'xl', lg: '2xl', xl: '3xl' }}
             fontWeight="bold"
             lineHeight="shorter"
           >
@@ -240,7 +248,8 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       py={{ base: '4', sm: '6' }}
       borderRadius="16"
       flex="1"
-      gap="8"
+      gap="2"
+      justifyContent="space-between"
       boxShadow={theme.card.shadow}
       borderWidth="1px"
       borderStyle="solid"
@@ -377,7 +386,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   fontSize="sm"
                   color={theme.card.text.secondary}
                 >
-                  DAO Score
+                  {config.DAO_KARMA_ID === 'gitcoin'
+                    ? 'Health Score'
+                    : 'DAO Score'}
                 </Text>
               </Flex>
             ) : (
@@ -398,8 +409,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
             <Flex
               key={+index}
               gap={['1', '2']}
-              pl="4"
-              pr="4"
+              px="2"
               py="4"
               borderRadius="lg"
               bgColor={theme.card.featureStatBg}
@@ -460,6 +470,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
               gap={['2', '4']}
               flexDir="column"
               w="max-content"
+              maxW="180px"
             >
               <Flex gap="2" flexDir="row">
                 <Icon as={stat.icon} h="6" w="6" color={theme.card.icon} />
