@@ -228,7 +228,6 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       if (!fetchedDelegates) {
         throw new Error('No delegates found');
       }
-      setOffset(offset + 1);
       const delegatesList = fetchedDelegates.map((item: IDelegateFromAPI) => {
         const fetchedPeriod = item.stats.find(
           fetchedStat => fetchedStat.period === period
@@ -256,11 +255,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           workstreams: item.workstreams,
         };
       });
-      if (count < delegateCount) {
-        setDelegates(delegatesList);
-      } else {
-        setDelegates(delegates.concat(delegatesList));
-      }
+      setDelegates(delegatesList);
+
       setDelegateCount(count || 0);
     } catch (error) {
       console.log(error);
