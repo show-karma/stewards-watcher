@@ -180,6 +180,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
             onChain: fetchedPeriod?.onChainVotesPct || 0,
             offChain: fetchedPeriod?.offChainVotesPct || 0,
           },
+          gitcoinHealthScore: fetchedPeriod?.gitcoinHealthScore || 0,
           votingWeight: item.voteWeight,
           delegatedVotes: item.delegatedVotes || item.snapshotDelegatedVotes,
           twitterHandle: item.twitterHandle,
@@ -246,6 +247,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           discourseHandle: item.discourseHandle,
           votingWeight: item.voteWeight,
           delegatedVotes: item.delegatedVotes || item.snapshotDelegatedVotes,
+          gitcoinHealthScore: fetchedPeriod?.gitcoinHealthScore || 0,
           twitterHandle: item.twitterHandle,
           updatedAt: fetchedPeriod?.updatedAt,
           karmaScore: fetchedPeriod?.karmaScore || 0,
@@ -303,6 +305,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         delegatedVotes:
           fetchedDelegate.delegatedVotes ||
           fetchedDelegate.snapshotDelegatedVotes,
+        gitcoinHealthScore: fetchedPeriod?.gitcoinHealthScore || 0,
         twitterHandle: fetchedDelegate.twitterHandle,
         discourseHandle: fetchedDelegate.discourseHandle,
         updatedAt: fetchedPeriod?.updatedAt,

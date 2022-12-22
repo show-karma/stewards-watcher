@@ -379,7 +379,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
             {data ? (
               <Flex flexDir="column" align="end" w="max-content">
                 <Text w="max-content" fontSize="2xl" lineHeight="shorter">
-                  {data?.karmaScore}
+                  {config.DAO_KARMA_ID === 'gitcoin'
+                    ? data?.gitcoinHealthScore
+                    : data?.karmaScore}
                 </Text>
                 <Text
                   w="max-content"

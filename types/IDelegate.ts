@@ -7,6 +7,7 @@ export interface IDelegate {
   delegatedVotes?: number;
   delegators: number;
   karmaScore: number;
+  gitcoinHealthScore?: number;
   voteParticipation: {
     onChain: number;
     offChain: number;
