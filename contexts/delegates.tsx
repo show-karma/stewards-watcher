@@ -99,7 +99,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const [period, setPeriod] = useState<IFilterPeriod>(defaultTimePeriod);
   const [interests, setInterests] = useState<string[]>([]);
   const [interestFilter, setInterestFilter] = useState<string[]>([]);
-  const [userToFind, setUserToFind] = useState('');
+  const [userToFind, setUserToFind] = useState<string>('');
   const [voteInfos, setVoteInfos] = useState({} as IVoteInfo);
   const [selectedTab, setSelectedTab] = useState<IActiveTab>('statement');
   const [profileSelected, setProfileSelected] = useState<IDelegate | undefined>(
@@ -462,8 +462,6 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const selectUserToFind = (selectedUser: string) => {
     setOffset(0);
-    setDelegates([]);
-    setDelegateCount(0);
     setUserToFind(selectedUser);
   };
 
