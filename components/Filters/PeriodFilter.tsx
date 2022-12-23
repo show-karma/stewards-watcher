@@ -22,7 +22,7 @@ export const PeriodFilter = () => {
     option => option.period === period
   )?.title;
   return (
-    <Menu>
+    <Menu isLazy id="period-filter">
       <MenuButton
         as={Button}
         rightIcon={<IoChevronDownOutline />}
