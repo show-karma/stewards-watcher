@@ -13,6 +13,7 @@ import { FC } from 'react';
 import { IChainRow, IProfile } from 'types';
 import { formatDate } from 'utils';
 import { ExpandableReason } from './ExpandableReason';
+import { ExpandableTitle } from './ExpandableTitle';
 
 const iconStyle = {
   width: '1.75rem',
@@ -142,15 +143,7 @@ export const ProposalVote: FC<IProposalVote> = ({
       <Flex flexDir="row" w="full">
         <Flex flexDir="column" w="full">
           {isLoaded ? (
-            <Text
-              maxW="372"
-              fontSize="sm"
-              fontWeight="medium"
-              textAlign="left"
-              color={theme.modal.votingHistory.proposal.title}
-            >
-              {vote.proposal}
-            </Text>
+            <ExpandableTitle text={vote.proposal} />
           ) : (
             <Skeleton isLoaded={isLoaded} w="300px" maxW="372" h="6" />
           )}
