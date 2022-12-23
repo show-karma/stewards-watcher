@@ -84,7 +84,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
   const [hasMore, setHasMore] = useState(false);
 
-  const statOptions = useMemo(() => {
+  const prepareStatOptions = () => {
     const sortedDefaultOptions = statDefaultOptions.sort(element =>
       element.stat === config.DAO_DEFAULT_SETTINGS?.ORDERSTAT ? -1 : 1
     );
@@ -92,7 +92,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       option => !config.EXCLUDED_CARD_FIELDS.includes(option.stat)
     );
     return filteredStats;
-  }, [config]);
+  };
+  const statOptions = prepareStatOptions();
 
   const [stat, setStat] = useState<IFilterStat>(statOptions[0].stat);
   const [order, setOrder] = useState<IFilterOrder>('desc');

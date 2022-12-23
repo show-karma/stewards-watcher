@@ -9,7 +9,7 @@ export const StatFilter = () => {
   const selectedStat = statOptions.find(option => option.stat === stat)?.title;
 
   return (
-    <Menu>
+    <Menu isLazy id="stat-filter">
       <MenuButton
         as={Button}
         rightIcon={<IoChevronDownOutline />}

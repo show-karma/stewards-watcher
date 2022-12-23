@@ -21,7 +21,7 @@ export const OrderFilter = () => {
     option => option.order === order
   )?.title;
   return (
-    <Menu>
+    <Menu isLazy id="order-filter">
       <MenuButton
         as={Button}
         rightIcon={<IoChevronDownOutline />}
