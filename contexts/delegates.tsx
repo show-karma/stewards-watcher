@@ -354,11 +354,13 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
             ? interestFilter.join(',')
             : undefined,
           name: config.DAO_KARMA_ID,
-          pageSize: 10,
           offset: newOffset,
           order,
           field: stat,
           period,
+          pageSize: 10,
+          workstreamId:
+            config.DAO_KARMA_ID === 'gitcoin' ? '6,4,3,7,1,2,5' : undefined,
         },
       });
       const { data } = axiosClient.data;
