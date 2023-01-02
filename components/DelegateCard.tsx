@@ -46,6 +46,36 @@ interface IStat {
   id: string;
 }
 
+const DelegateStat: FC<{ stat: IStat }> = ({ stat }) => {
+  const { theme } = useDAO();
+  return (
+    <Flex gap="2" flexDir="row">
+      <Icon as={stat.icon} h="6" w="6" color={theme.card.icon} />
+      <Flex flexDir="column">
+        <Text
+          color={theme.card.text.secondary}
+          fontSize="sm"
+          fontWeight="light"
+        >
+          {stat.title}
+        </Text>
+        <Text
+          color={theme.title}
+          fontFamily="heading"
+          fontSize={['md', 'lg']}
+          fontWeight="bold"
+          ml={stat.value === '-' ? '8' : '0'}
+          textAlign="start"
+          h="full"
+          w="full"
+        >
+          {stat.value}
+        </Text>
+      </Flex>
+    </Flex>
+  );
+};
+
 export const DelegateCard: FC<IDelegateCardProps> = props => {
   const { data } = props;
   const { daoInfo, theme, daoData } = useDAO();
@@ -63,7 +93,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       id: 'delegatedVotes',
     },
     {
-      title: 'Off-chain votes',
+      title: 'Snapshot votes',
       icon: AiOutlineThunderbolt,
       pct: data?.voteParticipation.offChain
         ? `${data.voteParticipation.offChain}%`
@@ -474,30 +504,24 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
               w="max-content"
               maxW="180px"
             >
-              <Flex gap="2" flexDir="row">
-                <Icon as={stat.icon} h="6" w="6" color={theme.card.icon} />
-                <Flex flexDir="column">
-                  <Text
-                    color={theme.card.text.secondary}
-                    fontSize="sm"
-                    fontWeight="light"
-                  >
-                    {stat.title}
-                  </Text>
-                  <Text
-                    color={theme.title}
-                    fontFamily="heading"
-                    fontSize={['md', 'lg']}
-                    fontWeight="bold"
-                    ml={stat.value === '-' ? '8' : '0'}
-                    textAlign="start"
-                    h="full"
-                    w="full"
-                  >
-                    {stat.value}
-                  </Text>
-                </Flex>
-              </Flex>
+              {stat.id === 'forumScore' &&
+              data?.discourseHandle &&
+              daoData?.socialLinks.forum &&
+              config.DAO_FORUM_TYPE ? (
+                <Link
+                  href={getUserForumUrl(
+                    data.discourseHandle,
+                    config.DAO_FORUM_TYPE,
+                    daoData.socialLinks.forum
+                  )}
+                  isExternal
+                  _hover={{}}
+                >
+                  <DelegateStat stat={stat} />
+                </Link>
+              ) : (
+                <DelegateStat stat={stat} />
+              )}
             </GridItem>
           ) : (
             <GridItem

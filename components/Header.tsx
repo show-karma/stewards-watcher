@@ -105,7 +105,7 @@ export const Header: FC = () => {
               flexWrap="wrap"
             >
               {config.GOVERNANCE_FORUM && (
-                <Link href={config.GOVERNANCE_FORUM}>
+                <Link href={config.GOVERNANCE_FORUM} isExternal _hover={{}}>
                   <Button
                     px="6"
                     py="4"
@@ -137,7 +137,7 @@ export const Header: FC = () => {
                   </Button>
                 </Link>
               )}
-              <Link href={config.DAO_URL}>
+              <Link href={config.DAO_URL} isExternal _hover={{}}>
                 <Button
                   px="6"
                   py="4"
