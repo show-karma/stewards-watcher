@@ -26,7 +26,7 @@ export const SearchFilter = () => {
         />
         <Input
           type="text"
-          placeholder="Find delegate by ENS name or address..."
+          placeholder="Find delegate by Name, ENS name or address"
           w="full"
           onChange={event => handleSearch(event.target.value)}
           boxShadow={theme.card.shadow}
