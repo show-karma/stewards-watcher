@@ -66,7 +66,7 @@ interface ProviderProps {
 const statDefaultOptions: IStatOptions[] = [
   { title: 'Voting weight', stat: 'delegatedVotes' },
   { title: 'Forum score', stat: 'forumScore' },
-  { title: 'Off-chain votes', stat: 'offChainVotesPct' },
+  { title: 'Snapshot votes', stat: 'offChainVotesPct' },
   { title: 'On-chain votes', stat: 'onChainVotesPct' },
   { title: 'Health', stat: 'healthScore' },
 ];
@@ -395,6 +395,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           realName: item.realName,
           profilePicture: item.profilePicture,
           workstreams: item.workstreams,
+          gitcoinHealthScore: fetchedPeriod?.gitcoinHealthScore || 0,
         });
       });
     } catch (error) {
