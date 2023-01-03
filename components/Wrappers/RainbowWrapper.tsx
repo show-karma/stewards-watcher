@@ -2,6 +2,7 @@ import React from 'react';
 
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
+import { publicProvider } from 'wagmi/providers/public';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { useDAO } from 'contexts';
 
@@ -16,10 +17,11 @@ export const RainbowWrapper: React.FC<ProviderProps> = ({ children }) => {
   const { chains, provider } = configureChains(
     [config.DAO_CHAIN],
     [
-      alchemyProvider({
-        apiKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY,
-      }),
-      // publicProvider(),
+      process.env.NEXT_PUBLIC_ALCHEMY_KEY
+        ? alchemyProvider({
+            apiKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY,
+          })
+        : publicProvider(),
     ]
   );
 
