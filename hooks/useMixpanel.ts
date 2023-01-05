@@ -22,7 +22,7 @@ export const useMixpanel = (prefix = 'delegateApp'): IUseMixpanel => {
   const reportEvent = (data: IMixpanelEvent): Promise<void> =>
     new Promise((resolve, reject) => {
       mixpanel?.track(`${prefix}:${data.event}`, data.properties || {}, err => {
-        if (err) {
+        if (err && err !== 1) {
           reject(err);
         } else {
           resolve();
