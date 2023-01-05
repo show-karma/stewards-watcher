@@ -24,7 +24,7 @@ export const DelegateButton: FC<IDelegateButton> = ({
 
   const handleCase = () => {
     mixpanel.reportEvent({
-      event: 'deleateButtonClick',
+      event: 'delegateButtonClick',
     });
 
     if (!isConnected) {
