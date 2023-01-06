@@ -36,7 +36,13 @@ export const HeaderHat = () => {
             flex={['1', 'none']}
             align={['center', 'flex-start']}
           >
-            <Img w="36" h="10" objectFit="contain" src={config.DAO_LOGO} />
+            <Img
+              w="auto"
+              maxW="36"
+              h="10"
+              objectFit="contain"
+              src={config.DAO_LOGO}
+            />
             <Text
               w="max-content"
               fontWeight="semibold"
