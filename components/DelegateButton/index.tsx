@@ -27,6 +27,10 @@ export const DelegateButton: FC<IDelegateButton> = ({
       event: 'delegateButtonClick',
     });
 
+    if (config.DAO_DELEGATE_MODE === 'custom' && config.DAO_DELEGATE_ACTION) {
+      return config.DAO_DELEGATE_ACTION();
+    }
+
     if (!isConnected) {
       return openConnectModal && openConnectModal();
     }
