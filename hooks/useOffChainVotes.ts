@@ -19,9 +19,10 @@ const concatOffChainProposals = (proposals: any[], votes: any[]) => {
     array.push({
       voteMethod: 'Off-chain',
       proposal: proposal?.title,
-      choice: Array.isArray(vote.choice)
-        ? 'Multiple'
-        : proposal.choices[vote.choice - 1],
+      choice:
+        Array.isArray(vote.choice) || Object.keys(vote.choice || {}).length
+          ? 'Multiple'
+          : proposal.choices[vote.choice - 1],
       reason: vote?.reason,
       executed: moment.unix(proposal.end).format('MMMM D, YYYY'),
       voteId: proposal?.id,
