@@ -25,7 +25,7 @@ const config: IDAOConfig = {
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
   DAO_DEFAULT_SETTINGS: {
-    TIMEPERIOD: '30d',
+    TIMEPERIOD: 'lifetime',
     KARMA_SCORE: true,
     ORDERSTAT: 'healthScore',
   },
