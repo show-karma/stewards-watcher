@@ -10,3 +10,5 @@ export interface IVoteInfo {
   snapshotIds: string | string[];
   onChainId: string;
 }
+
+export type IStatusOptions = 'active' | 'inactive' | 'withdrawn' | 'recognized';

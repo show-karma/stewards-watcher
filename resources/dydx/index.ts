@@ -28,6 +28,9 @@ const config: IDAOConfig = {
   DAO_GTAG: 'G-67LDHT697P',
   EXCLUDED_CARD_FIELDS: ['healthScore'],
   FEATURED_CARD_FIELDS: ['delegatedVotes', 'offChainVotesPct'],
+  DAO_DEFAULT_SETTINGS: {
+    STATUS_FILTER: true,
+  },
 };
 
 const dark: IDAOTheme = {

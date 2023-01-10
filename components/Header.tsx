@@ -11,10 +11,10 @@ import { useDAO, useDelegates } from 'contexts';
 import { FC, useState } from 'react';
 import { IDAOTheme, IDelegate } from 'types';
 import { IoClose } from 'react-icons/io5';
-import { Filters } from './Filters';
 import { ClearButton } from './Filters/ClearButton';
 import { GradientBall } from './GradientBall';
 import { Madeby } from './HeaderHat/Madeby';
+import { Filters } from './Filters';
 
 const DelegatesCounter: FC<{
   isLoading: boolean;
