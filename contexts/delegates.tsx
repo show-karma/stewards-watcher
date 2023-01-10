@@ -102,7 +102,11 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const [order, setOrder] = useState<IFilterOrder>('desc');
   const [period, setPeriod] = useState<IFilterPeriod>(defaultTimePeriod);
   const [interests, setInterests] = useState<string[]>([]);
-  const [statuses, setStatuses] = useState<IStatusOptions[]>([]);
+  const [statuses, setStatuses] = useState<IStatusOptions[]>(
+    config.DAO_KARMA_ID === 'dydx'
+      ? ['active', 'inactive', 'recognized', 'withdrawn']
+      : []
+  );
   const [interestFilter, setInterestFilter] = useState<string[]>([]);
   const [userToFind, setUserToFind] = useState<string>('');
   const [voteInfos, setVoteInfos] = useState({} as IVoteInfo);
@@ -366,7 +370,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           pageSize: 10,
           workstreamId:
             config.DAO_KARMA_ID === 'gitcoin' ? '6,4,3,7,1,2,5,12' : undefined,
-          statuses,
+          statuses: statuses.length ? statuses.join(',') : undefined,
         },
       });
       const { data } = axiosClient.data;
