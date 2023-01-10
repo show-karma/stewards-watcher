@@ -26,16 +26,6 @@ const config: IDAOConfig = {
   FEATURED_CARD_FIELDS: ['delegatedVotes', 'offChainVotesPct'],
 };
 
-// const theme: IDAOTheme = {
-//   background: '#011627',
-//   card: '#0b2a3c',
-//   title: '#FFFFFF',
-//   subtitle: '#FFFFFF',
-//   text: '#FFFFFF',
-//   buttonText: '#FFFFFF',
-//   branding: '#1ba5f8',
-// };
-
 const dark: IDAOTheme = {
   background: '#182026',
   bodyBg: '#182026',
