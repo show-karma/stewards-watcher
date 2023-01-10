@@ -28,6 +28,7 @@ export interface IDAOConfig {
     TIMEPERIOD?: IFilterPeriod;
     KARMA_SCORE?: boolean;
     ORDERSTAT?: IFilterStat;
+    STATUS_FILTER?: boolean;
   };
   EXCLUDED_CARD_FIELDS: string[];
   FEATURED_CARD_FIELDS: string[];
