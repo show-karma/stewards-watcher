@@ -37,7 +37,7 @@ export const DelegateStatusFilter = () => {
   const { theme } = useDAO();
 
   return (
-    <Menu closeOnSelect={false}>
+    <Menu isLazy closeOnSelect={false} id="delegate-status-filter">
       <MenuButton
         as={Button}
         rightIcon={<IoChevronDownOutline />}
@@ -53,10 +53,10 @@ export const DelegateStatusFilter = () => {
         fontWeight="normal"
         textAlign="left"
       >
-        Delegate Status
+        {defaultStatuses.find(item => item.value === statuses)?.label}
       </MenuButton>
       <MenuList bgColor={theme.filters.listBg} color={theme.filters.listText}>
-        <MenuOptionGroup type="checkbox" value={statuses}>
+        <MenuOptionGroup value={statuses}>
           {defaultStatuses.map((option, index) => (
             <MenuItemOption
               key={+index}
