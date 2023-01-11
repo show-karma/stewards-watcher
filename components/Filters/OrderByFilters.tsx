@@ -20,7 +20,9 @@ export const OrderByFilters = () => {
           </Text>
           <Flex flexDir="row" gap="4">
             {interests.length > 0 && <InterestsFilter />}
-            <DelegateStatusFilter />
+            {daoInfo.config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER && (
+              <DelegateStatusFilter />
+            )}
           </Flex>
         </Flex>
       )}
