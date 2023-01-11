@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 
-export function useIsMounted<T>(): boolean {
+/**
+ * Checks if the app is mounted
+ * @returns boolean
+ */
+export function useIsMounted(): boolean {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {

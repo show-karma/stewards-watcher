@@ -22,7 +22,7 @@ interface ProviderProps {
 }
 
 export const WalletProvider: React.FC<ProviderProps> = ({ children }) => {
-  const mounted = useIsMounted();
+  const isMounted = useIsMounted();
   const { openConnectModal } = useConnectModal();
   const { openChainModal } = useChainModal();
   const { isConnected } = useAccount();
@@ -38,7 +38,7 @@ export const WalletProvider: React.FC<ProviderProps> = ({ children }) => {
     [isConnected, openConnectModal, openChainModal, chain]
   );
 
-  return mounted ? (
+  return isMounted ? (
     <WalletContext.Provider value={providerValue}>
       {children}
     </WalletContext.Provider>
