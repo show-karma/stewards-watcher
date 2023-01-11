@@ -15,21 +15,16 @@ interface IDelegatesList {
 
 const EmptyStates = () => {
   const { theme } = useDAO();
-  const { isSearchDirty, interests } = useDelegates();
+  const { isSearchDirty, isFiltering } = useDelegates();
 
-  if (isSearchDirty || interests.length > 0)
-    return (
-      <Text
-        as="p"
-        color={theme.title}
-        w="full"
-      >{`We couldn't find any contributors matching that criteria`}</Text>
-    );
+  const isSearchingOrFiltering = isSearchDirty || isFiltering;
+
   return (
-    <Text
-      as="p"
-      color={theme.title}
-    >{`We couldn't find any contributor info`}</Text>
+    <Text as="p" color={theme.title} w="full" align="center">
+      {isSearchingOrFiltering
+        ? `We couldn't find any contributors matching that criteria`
+        : `We couldn't find any contributor info`}
+    </Text>
   );
 };
 

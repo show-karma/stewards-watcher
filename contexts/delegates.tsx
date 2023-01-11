@@ -58,6 +58,7 @@ interface IDelegateProps {
   delegateCount: number;
   selectStatus: (selectedStatus: IStatusOptions) => void;
   statuses: IStatusOptions;
+  isFiltering: boolean;
 }
 
 export const DelegatesContext = createContext({} as IDelegateProps);
@@ -123,6 +124,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   } = useDisclosure();
 
   const isSearchDirty = userToFind !== '';
+  const isFiltering =
+    interests.length > 0 ||
+    (config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER ? Boolean(statuses) : false);
 
   const fetchInterests = async () => {
     try {
@@ -548,6 +552,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       delegateCount,
       selectStatus,
       statuses,
+      isFiltering,
     }),
     [
       profileSelected,
@@ -568,6 +573,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       selectedTab,
       interests,
       statuses,
+      isFiltering,
     ]
   );
 

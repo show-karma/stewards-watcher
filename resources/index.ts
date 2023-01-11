@@ -8,6 +8,7 @@ import ssvnetwork from './ssvnetwork';
 import dydx from './dydx';
 import dimo from './dimo';
 import gitcoin from './gitcoin';
+import elementFinance from './element-finance';
 
 interface ISupportedDAOs {
   [key: string]: IDAOInfo;
@@ -66,6 +67,12 @@ export const supportedDAOs: ISupportedDAOs = {
     config: ssvnetwork.config,
     dark: ssvnetwork.dark,
     light: ssvnetwork.light,
+    ABI: null,
+  },
+  element: {
+    config: elementFinance.config,
+    dark: elementFinance.dark,
+    light: elementFinance.light,
     ABI: null,
   },
 };
