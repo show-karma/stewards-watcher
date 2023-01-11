@@ -57,7 +57,7 @@ interface IDelegateProps {
   selectInterests: (index: number) => void;
   delegateCount: number;
   selectStatus: (selectedStatus: IStatusOptions) => void;
-  statuses: IStatusOptions[];
+  statuses: IStatusOptions;
 }
 
 export const DelegatesContext = createContext({} as IDelegateProps);
@@ -102,11 +102,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const [order, setOrder] = useState<IFilterOrder>('desc');
   const [period, setPeriod] = useState<IFilterPeriod>(defaultTimePeriod);
   const [interests, setInterests] = useState<string[]>([]);
-  const [statuses, setStatuses] = useState<IStatusOptions[]>(
-    config.DAO_KARMA_ID === 'dydx'
-      ? ['active', 'inactive', 'recognized', 'withdrawn']
-      : []
-  );
+  const [statuses, setStatuses] = useState<IStatusOptions>('active');
   const [interestFilter, setInterestFilter] = useState<string[]>([]);
   const [userToFind, setUserToFind] = useState<string>('');
   const [voteInfos, setVoteInfos] = useState({} as IVoteInfo);
@@ -157,7 +153,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           pageSize: 10,
           workstreamId:
             config.DAO_KARMA_ID === 'gitcoin' ? '6,4,3,7,1,2,5,12' : undefined,
-          statuses: statuses.length ? statuses.join(',') : undefined,
+          statuses,
         },
       });
 
@@ -370,7 +366,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           pageSize: 10,
           workstreamId:
             config.DAO_KARMA_ID === 'gitcoin' ? '6,4,3,7,1,2,5,12' : undefined,
-          statuses: statuses.length ? statuses.join(',') : undefined,
+          statuses,
         },
       });
       const { data } = axiosClient.data;
@@ -501,13 +497,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     setInterestFilter(items);
   };
   const selectStatus = (selectedStatus: IStatusOptions) => {
-    if (statuses.find(item => item === selectedStatus)) {
-      const removedStatus = statuses.filter(item => item !== selectedStatus);
-      setStatuses(removedStatus);
-      return;
-    }
-    const items = [...statuses, selectedStatus];
-    setStatuses(items);
+    setStatuses(selectedStatus);
   };
 
   const handleSearch = debounce(text => {
