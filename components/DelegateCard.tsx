@@ -218,7 +218,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           <Text
             color={theme.card.text.primary}
             fontFamily="heading"
-            fontSize={{ base: 'xl', lg: '2xl', xl: '3xl' }}
+            fontSize={{ base: 'xl', lg: '2xl' }}
             fontWeight="bold"
             lineHeight="shorter"
           >
@@ -241,7 +241,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       <Text
         color={theme.card.text.primary}
         fontFamily="heading"
-        fontSize={['xl', '3xl']}
+        fontSize={['xl', '2xl']}
         fontWeight="bold"
         lineHeight="shorter"
       >
