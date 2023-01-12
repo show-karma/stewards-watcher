@@ -39,7 +39,6 @@ interface IDelegateCardProps {
 export const DelegateCard: FC<IDelegateCardProps> = props => {
   const { data } = props;
   const { daoInfo, theme, daoData } = useDAO();
-  const { DAO_KARMA_ID, DAO_DEFAULT_SETTINGS } = daoInfo.config;
   const { selectProfile } = useDelegates();
 
   const { config } = daoInfo;
@@ -85,13 +84,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       tooltipText: 'Score based on their contribution in the forum',
     },
     {
-      title: 'Delegators',
-      icon: IoPersonOutline,
-      value: data?.delegators ? formatNumber(data.delegators) : '-',
-      id: 'delegators',
-      tooltipText: 'Total number of delegators',
-    },
-    {
       title: 'Score',
       icon: IoPersonOutline,
       value: data?.karmaScore ? formatNumber(data?.karmaScore) : '-',
@@ -124,6 +116,20 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       if (config.EXCLUDED_CARD_FIELDS.includes(item.id)) return;
       filtereds.push(item);
     });
+    if (
+      filtereds.find(
+        item => item.id === 'offChainVotesPct' || item.id === 'onChainVotesPct'
+      )
+    )
+      filtereds.push({
+        title: 'Voting Weight',
+        icon: IoPersonOutline,
+        value: data?.votingWeight
+          ? `${formatNumberPercentage(data?.votingWeight)}`
+          : '-',
+        id: 'votingWeight',
+        tooltipText: `Based on ${data?.delegators} delegators`,
+      });
     if (router.query.site === 'op') {
       const randomId = Math.floor(Math.random() * 3);
       data?.workstreams?.push({
@@ -172,6 +178,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     return 4;
   };
 
+  const firstRowStats = stats.slice(0, columnsCalculator());
+  const restRowStats = stats.slice(columnsCalculator(), stats.length);
+
   return (
     <Flex
       bgColor={theme.card.background}
@@ -191,8 +200,8 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       maxWidth="420px"
       h={{
         base: 'max-content',
+        // eslint-disable-next-line no-nested-ternary
         md: showSecondRow ? '400px' : '350px',
-        lg: showSecondRow ? '380px' : '350px',
       }}
     >
       <Flex flexDir="row" gap="4" w="full" align="flex-start">
@@ -368,40 +377,87 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           {!isExpanded && (
             <>
               {isLoaded ? (
-                <SimpleGrid
-                  columns={columnsCalculator()}
-                  gap="2"
-                  w="full"
-                  bgColor={theme.card.statBg}
-                  px="2"
-                  py="4"
-                  borderRadius="xl"
-                  maxH="max-content"
-                >
-                  {stats.map((statItem, index) => (
-                    <Flex align="center" justify="center" key={+index} w="full">
-                      {statItem.id === 'forumScore' &&
-                      data?.discourseHandle &&
-                      daoData?.socialLinks.forum &&
-                      config.DAO_FORUM_TYPE ? (
-                        <Link
-                          href={getUserForumUrl(
-                            data.discourseHandle,
-                            config.DAO_FORUM_TYPE,
-                            daoData.socialLinks.forum
-                          )}
-                          isExternal
-                          _hover={{}}
-                          h="max-content"
-                        >
+                <Flex flexDir="column" w="full">
+                  <SimpleGrid
+                    columns={columnsCalculator()}
+                    gap="2"
+                    w="full"
+                    bgColor={theme.card.statBg}
+                    px="2"
+                    py="4"
+                    borderRadius="xl"
+                    maxH="max-content"
+                  >
+                    {firstRowStats.map((statItem, index) => (
+                      <Flex
+                        align="center"
+                        justify="center"
+                        key={+index}
+                        w="full"
+                      >
+                        {statItem.id === 'forumScore' &&
+                        data?.discourseHandle &&
+                        daoData?.socialLinks.forum &&
+                        config.DAO_FORUM_TYPE ? (
+                          <Link
+                            href={getUserForumUrl(
+                              data.discourseHandle,
+                              config.DAO_FORUM_TYPE,
+                              daoData.socialLinks.forum
+                            )}
+                            isExternal
+                            _hover={{}}
+                            h="max-content"
+                          >
+                            <DelegateStat stat={statItem} />
+                          </Link>
+                        ) : (
                           <DelegateStat stat={statItem} />
-                        </Link>
-                      ) : (
-                        <DelegateStat stat={statItem} />
-                      )}
-                    </Flex>
-                  ))}
-                </SimpleGrid>
+                        )}
+                      </Flex>
+                    ))}
+                  </SimpleGrid>
+                  {stats.length > 4 && (
+                    <SimpleGrid
+                      columns={columnsCalculator()}
+                      gap="2"
+                      w="full"
+                      bgColor="transparent"
+                      px="2"
+                      py="4"
+                      maxH="max-content"
+                    >
+                      {restRowStats.map((statItem, index) => (
+                        <Flex
+                          align="center"
+                          justify="center"
+                          key={+index}
+                          w="full"
+                        >
+                          {statItem.id === 'forumScore' &&
+                          data?.discourseHandle &&
+                          daoData?.socialLinks.forum &&
+                          config.DAO_FORUM_TYPE ? (
+                            <Link
+                              href={getUserForumUrl(
+                                data.discourseHandle,
+                                config.DAO_FORUM_TYPE,
+                                daoData.socialLinks.forum
+                              )}
+                              isExternal
+                              _hover={{}}
+                              h="max-content"
+                            >
+                              <DelegateStat stat={statItem} />
+                            </Link>
+                          ) : (
+                            <DelegateStat stat={statItem} />
+                          )}
+                        </Flex>
+                      ))}
+                    </SimpleGrid>
+                  )}
+                </Flex>
               ) : (
                 <Skeleton w="full" h="full" />
               )}
