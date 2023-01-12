@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { fetchOnChainProposalVotes } from 'hooks';
 import { IChainRow } from 'types';
 
 interface DyDxProposal {
@@ -18,9 +19,13 @@ interface DyDxProposal {
 
 const dydxProviderUrl =
   'https://raw.githubusercontent.com/dydxfoundation/dip/ff29e5eb4b9b5f2db7f71183ff7c1dbc647fa3c3/content/ipfs-dips/all-dips.json';
+
 export async function onChainDyDxVotesProvider(
-  votes: IChainRow[]
+  daoName: string | string[],
+  address: string
 ): Promise<IChainRow[]> {
+  const votes = await fetchOnChainProposalVotes(daoName, address);
+
   const { data: proposals } = await axios.get<DyDxProposal[]>(dydxProviderUrl);
   if (!Array.isArray(proposals))
     throw new TypeError(
@@ -30,7 +35,6 @@ export async function onChainDyDxVotesProvider(
   const proposalById = proposals.reduce(
     (acc: Record<string, DyDxProposal>, cur) => {
       const proposalId = `dydx.eth-0x${Number(cur.DIP).toString(16)}`;
-      console.info(proposalId);
       acc[proposalId] = cur;
       return acc;
     },

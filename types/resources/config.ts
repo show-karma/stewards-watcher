@@ -40,7 +40,13 @@ export interface IDAOConfig {
    * @param votes
    */
   DAO_EXT_VOTES_PROVIDER?: {
-    onChain?: (votes: IChainRow[]) => Promise<IChainRow[]>;
-    offChain?: (votes: IChainRow[]) => Promise<IChainRow[]>;
+    onChain?: (
+      daoName: string | string[],
+      address: string
+    ) => Promise<IChainRow[]>;
+    offChain?: (
+      daoName: string | string[],
+      address: string
+    ) => Promise<IChainRow[]>;
   };
 }

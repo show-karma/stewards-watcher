@@ -50,7 +50,7 @@ const concatOffChainProposals = (proposals: any[], votes: any[]) => {
  * @param daoName
  * @returns array of voted and not voted proposals (not sorted)
  */
-async function fetchOffChainProposalVotes(
+export async function fetchOffChainProposalVotes(
   daoName: string | string[],
   address: string
 ) {
@@ -87,11 +87,10 @@ const useOffChainVotes = (daoName: string | string[], address: string) => {
   } = useDAO();
 
   return useQuery(['offChainVotes', daoName, address], async () => {
-    const votes = await fetchOffChainProposalVotes(daoName, address);
     if (DAO_EXT_VOTES_PROVIDER?.offChain) {
-      return DAO_EXT_VOTES_PROVIDER.offChain(votes);
+      return DAO_EXT_VOTES_PROVIDER.offChain(daoName, address);
     }
-    return votes;
+    return fetchOffChainProposalVotes(daoName, address);
   });
 };
 export { useOffChainVotes };
