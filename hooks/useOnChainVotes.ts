@@ -52,7 +52,7 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
  * @param daoName
  * @returns array of voted and not voted proposals (not sorted)
  */
-export async function fetchOnChainProposalVotes(
+async function fetchOnChainProposalVotes(
   daoName: string | string[],
   address: string
 ) {
@@ -98,4 +98,4 @@ const useOnChainVotes = (daoName: string | string[], address: string) => {
   });
 };
 
-export { useOnChainVotes };
+export { useOnChainVotes, fetchOnChainProposalVotes };

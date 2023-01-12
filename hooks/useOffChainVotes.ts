@@ -50,7 +50,7 @@ const concatOffChainProposals = (proposals: any[], votes: any[]) => {
  * @param daoName
  * @returns array of voted and not voted proposals (not sorted)
  */
-export async function fetchOffChainProposalVotes(
+async function fetchOffChainProposalVotes(
   daoName: string | string[],
   address: string
 ) {
@@ -93,4 +93,4 @@ const useOffChainVotes = (daoName: string | string[], address: string) => {
     return fetchOffChainProposalVotes(daoName, address);
   });
 };
-export { useOffChainVotes };
+export { useOffChainVotes, fetchOffChainProposalVotes };
