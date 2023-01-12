@@ -359,7 +359,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   />
                 </Flex>
               ) : (
-                <Flex h="24px" />
+                <Text>-</Text>
               )}
             </>
           ) : (
