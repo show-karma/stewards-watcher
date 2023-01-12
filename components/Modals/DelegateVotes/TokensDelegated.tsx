@@ -1,8 +1,6 @@
-import { Button, Flex, Input, Text } from '@chakra-ui/react';
-import { DelegateButton } from 'components';
+import { Button, Flex, Text } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
-import { ethers } from 'ethers';
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 import { truncateAddress } from 'utils';
 
 interface ITokensDelegatedProps {

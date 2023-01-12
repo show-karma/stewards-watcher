@@ -85,22 +85,20 @@ export const BodyTitle: FC = () => {
                 color={theme.collapse.text}
                 textAlign={{ base: 'start' }}
                 fontSize={{ base: 'lg', sm: '2xl', md: '3xl' }}
-                lineHeight={['8', '9']}
+                lineHeight="9"
                 fontWeight="600"
                 fontFamily="body"
-                maxW={{ base: '95%', lg: '100%' }}
               >
                 {config.DAO_DESCRIPTION}
               </Text>
               <Text
                 color={theme.collapse.subtext}
-                fontSize={{ base: 'md', sm: 'xl' }}
+                fontSize={{ base: 'md', md: 'xl' }}
                 textAlign={{ base: 'start' }}
                 fontWeight="light"
                 fontFamily="heading"
                 pt={{ base: '4', md: '0' }}
                 pb={{ base: '8', md: '0' }}
-                maxW={{ base: '95%', lg: '100%' }}
               >
                 {config.DAO_SUBDESCRIPTION}
               </Text>

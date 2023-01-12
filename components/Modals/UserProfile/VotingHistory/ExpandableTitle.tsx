@@ -1,7 +1,6 @@
-import { Button, Flex, Icon, Text } from '@chakra-ui/react';
+import { Flex, Text } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
 import { FC, useState } from 'react';
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
 interface IExpandableText {
   text: string;

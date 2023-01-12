@@ -3,19 +3,16 @@ import {
   Flex,
   Icon,
   IconProps,
-  Link,
   Skeleton,
   SkeletonText,
   Text,
 } from '@chakra-ui/react';
 import { FC, ReactNode } from 'react';
 import { useDAO } from 'contexts';
-import { RiExternalLinkLine } from 'react-icons/ri';
-import { axiosInstance, truncateAddress } from 'utils';
-import { ImgWithFallback } from 'components/ImgWithFallback';
-import { IconType } from 'react-icons';
+import { axiosInstance } from 'utils';
 import { ICustomFields, IProfile } from 'types';
 import { useQuery } from '@tanstack/react-query';
+import { IconType } from 'react-icons';
 
 interface ITextSection {
   statement?: ICustomFields[];
