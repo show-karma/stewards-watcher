@@ -22,7 +22,7 @@ export const SearchFilter = () => {
       <InputGroup>
         <InputLeftElement
           pointerEvents="none"
-          children={<Icon as={BiSearch} color={theme.title} />}
+          children={<Icon as={BiSearch} color={theme.title} boxSize="5" />}
         />
         <Input
           type="text"
