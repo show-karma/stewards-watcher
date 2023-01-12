@@ -25,7 +25,6 @@ export interface IDAOConfig {
   DAO_GTAG?: string;
   DAO_DEFAULT_SETTINGS?: {
     TIMEPERIOD?: IFilterPeriod;
-    KARMA_SCORE?: boolean;
     ORDERSTAT?: IFilterStat;
   };
   EXCLUDED_CARD_FIELDS: string[];

@@ -26,7 +26,6 @@ const config: IDAOConfig = {
   DAO_GTAG: 'G-67LDHT697P',
   DAO_DEFAULT_SETTINGS: {
     TIMEPERIOD: '30d',
-    KARMA_SCORE: true,
     ORDERSTAT: 'healthScore',
   },
   EXCLUDED_CARD_FIELDS: ['onChainVotesPct'],

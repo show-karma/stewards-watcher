@@ -13,6 +13,7 @@ interface IDelegateButton extends ButtonProps {
 export const DelegateButton: FC<IDelegateButton> = ({
   delegated,
   text = 'Delegate',
+  successEmitter,
   ...props
 }) => {
   const { openConnectModal, openChainModal, isConnected, chain } = useWallet();
@@ -22,6 +23,7 @@ export const DelegateButton: FC<IDelegateButton> = ({
 
   const { isLoading, write } = useDelegation({
     delegatee: delegated,
+    onSuccessFunction: successEmitter,
   });
 
   const handleCase = () => {

@@ -4,8 +4,10 @@ import {
   Flex,
   Icon,
   Link,
+  SimpleGrid,
   Skeleton,
   SkeletonCircle,
+  SkeletonText,
   Text,
 } from '@chakra-ui/react';
 import { FC, useState, useMemo, useCallback } from 'react';
@@ -51,7 +53,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   const isLoaded = !!data;
   const allStats: ICardStat[] = [
     {
-      title: 'Voting weight',
+      title: 'Delegated Tokens',
       icon: IoIosCheckboxOutline,
       pct: data?.votingWeight ? formatNumberPercentage(data.votingWeight) : '-',
       value: data?.delegatedVotes ? formatNumber(data?.delegatedVotes) : '-',
@@ -96,6 +98,13 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       id: 'delegators',
       tooltipText: 'Total number of delegators',
     },
+    {
+      title: 'Score',
+      icon: IoPersonOutline,
+      value: data?.karmaScore ? formatNumber(data?.karmaScore) : '-',
+      id: 'karmaScore',
+      tooltipText: 'Total Score based on all the delegate activity',
+    },
   ];
 
   const router = useRouter();
@@ -130,22 +139,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
         description: ['Tooling', 'DeFi', 'Governance'][randomId],
       });
     }
-    if (DAO_KARMA_ID === 'gitcoin') {
-      const gitcoinWorkstream = () => {
-        if (!data?.workstreams?.length) return '-';
-        if (data.workstreams[0]?.description.toLowerCase() === 'general') {
-          if (data.workstreams.length === 1) return '';
-          return data.workstreams[1]?.description || data.workstreams[1]?.name;
-        }
-        return data.workstreams[0]?.description || data.workstreams[0]?.name;
-      };
-      filtereds.push({
-        title: 'Workstream',
-        icon: BiPlanet,
-        value: gitcoinWorkstream(),
-        id: 'workstream',
-      });
-    }
 
     setStats(filtereds);
   }, [config, data]);
@@ -171,8 +164,20 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     }
   }, []);
 
-  const userStatement = customFields.find(item => item.displayAs === 'headline')
-    ?.value as string;
+  const findStatement = customFields.find(
+    item => item.displayAs === 'headline'
+  )?.value;
+  const userStatement = Array.isArray(findStatement)
+    ? findStatement[0]
+    : findStatement;
+
+  const showSecondRow = stats.length > 4;
+
+  const columnsCalculator = () => {
+    if (showSecondRow) return 3;
+    if (stats.length < 4) return stats.length;
+    return 4;
+  };
 
   return (
     <Flex
@@ -191,10 +196,14 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       w="full"
       minWidth="288px"
       maxWidth="420px"
-      h={{ base: '400px', lg: '329px' }}
+      h={{
+        base: 'max-content',
+        md: showSecondRow ? '400px' : '350px',
+        lg: showSecondRow ? '380px' : '350px',
+      }}
     >
       <Flex flexDir="row" gap="4" w="full" align="flex-start">
-        {data ? (
+        {isLoaded && data ? (
           <Flex
             minH={['48px', '54px']}
             minW={['48px', '54px']}
@@ -237,7 +246,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           overflow="hidden"
           whiteSpace="break-spaces"
         >
-          {data ? (
+          {isLoaded && data ? (
             <>
               <Text
                 color={theme.title}
@@ -339,126 +348,146 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           )}
         </Flex>
       </Flex>
-      {userStatement ? (
-        <Flex h="full" align="flex-start">
-          <ExpandableCardText
-            text={userStatement}
-            isExpanded={isExpanded}
-            toggleIsExpanded={toggleIsExpanded}
-          />
-        </Flex>
-      ) : (
-        'Placeholder Text for User Statement'
-      )}
-      {!isExpanded && (
+      <Flex flexDir="column" justifyContent="space-between" h="full">
         <Flex
-          flexDir="row"
-          gap="2"
-          w="full"
-          bgColor={theme.card.statBg}
-          px="2"
-          py="4"
-          borderRadius="xl"
+          flexDir="column"
+          align="flex-start"
           justify="space-between"
-          maxH="max-content"
-          flexWrap="wrap"
+          h="full"
         >
-          {stats.map((statItem, index) =>
-            statItem.id === 'forumScore' &&
-            data?.discourseHandle &&
-            daoData?.socialLinks.forum &&
-            config.DAO_FORUM_TYPE ? (
-              <Flex
-                flexBasis={{ base: '46%', lg: 'unset' }}
-                align="center"
-                justify="center"
-                key={+index}
-              >
-                <Link
-                  href={getUserForumUrl(
-                    data.discourseHandle,
-                    config.DAO_FORUM_TYPE,
-                    daoData.socialLinks.forum
-                  )}
-                  isExternal
-                  _hover={{}}
-                  h="max-content"
+          {isLoaded ? (
+            <>
+              {userStatement ? (
+                <Flex h="full" align="flex-start">
+                  <ExpandableCardText
+                    text={userStatement}
+                    isExpanded={isExpanded}
+                    toggleIsExpanded={toggleIsExpanded}
+                  />
+                </Flex>
+              ) : (
+                <Flex h="24px" />
+              )}
+            </>
+          ) : (
+            <SkeletonText h="full" w="full" />
+          )}
+          {!isExpanded && (
+            <>
+              {isLoaded ? (
+                <SimpleGrid
+                  columns={columnsCalculator()}
+                  gap="2"
+                  w="full"
+                  bgColor={theme.card.statBg}
+                  px="2"
+                  py="4"
+                  borderRadius="xl"
+                  maxH="max-content"
                 >
-                  <DelegateStat stat={statItem} />
-                </Link>
-              </Flex>
-            ) : (
-              <Flex flexBasis={{ base: '46%', lg: 'unset' }} key={+index}>
-                <DelegateStat stat={statItem} />
-              </Flex>
-            )
+                  {stats.map((statItem, index) => (
+                    <Flex align="center" justify="center" key={+index} w="full">
+                      {statItem.id === 'forumScore' &&
+                      data?.discourseHandle &&
+                      daoData?.socialLinks.forum &&
+                      config.DAO_FORUM_TYPE ? (
+                        <Link
+                          href={getUserForumUrl(
+                            data.discourseHandle,
+                            config.DAO_FORUM_TYPE,
+                            daoData.socialLinks.forum
+                          )}
+                          isExternal
+                          _hover={{}}
+                          h="max-content"
+                        >
+                          <DelegateStat stat={statItem} />
+                        </Link>
+                      ) : (
+                        <DelegateStat stat={statItem} />
+                      )}
+                    </Flex>
+                  ))}
+                </SimpleGrid>
+              ) : (
+                <Skeleton w="full" h="full" />
+              )}
+            </>
           )}
         </Flex>
-      )}
 
-      <Flex flexDir="column" gap="3">
-        <Divider borderColor={theme.card.divider} w="full" />
+        <Flex flexDir="column" gap="3" mt="1" h="max-content">
+          <Divider borderColor={theme.card.divider} w="full" />
 
-        {canDelegate && (
-          <Flex justify="left" align="center" gap="4">
-            {isLoaded ? (
-              <Flex flexDir="row" justifyContent="space-between" w="full">
-                <Flex gap="4" align="center" justify="center">
-                  {data?.twitterHandle && (
-                    <Link
-                      href={`https://twitter.com/${data.twitterHandle}`}
-                      isExternal
-                      color={theme.card.text}
-                      _hover={{
-                        transform: 'scale(1.5)',
-                      }}
-                    >
-                      <TwitterIcon w="5" h="5" />
-                    </Link>
-                  )}
-                  {data?.discourseHandle &&
-                    daoData?.socialLinks.forum &&
-                    config.DAO_FORUM_TYPE && (
+          {canDelegate && (
+            <Flex justify="left" align="center" gap="4">
+              {isLoaded ? (
+                <Flex flexDir="row" justifyContent="space-between" w="full">
+                  <Flex gap="4" align="center" justify="center">
+                    {data?.twitterHandle && (
                       <Link
-                        href={getUserForumUrl(
-                          data.discourseHandle,
-                          config.DAO_FORUM_TYPE,
-                          daoData.socialLinks.forum
-                        )}
+                        href={`https://twitter.com/${data.twitterHandle}`}
                         isExternal
                         color={theme.card.text}
                         _hover={{
                           transform: 'scale(1.5)',
                         }}
                       >
-                        <ForumIcon w="5" h="5" />
+                        <TwitterIcon w="5" h="5" />
                       </Link>
                     )}
-                  {/* <Link
+                    {data?.discourseHandle &&
+                      daoData?.socialLinks.forum &&
+                      config.DAO_FORUM_TYPE && (
+                        <Link
+                          href={getUserForumUrl(
+                            data.discourseHandle,
+                            config.DAO_FORUM_TYPE,
+                            daoData.socialLinks.forum
+                          )}
+                          isExternal
+                          color={theme.card.text}
+                          _hover={{
+                            transform: 'scale(1.5)',
+                          }}
+                        >
+                          <ForumIcon w="5" h="5" />
+                        </Link>
+                      )}
+                    {/* <Link
                     href={`https://discordapp.com/users/${1234}`}
                     isExternal
                     color={theme.card.text}
                   >
                     <Icon as={FaDiscord} w="5" h="5" />
                   </Link> */}
+                  </Flex>
+                  {data && (
+                    <Flex flexDir="row">
+                      <UserInfoButton onOpen={selectProfile} profile={data} />
+                      <DelegateButton
+                        delegated={data.address}
+                        px={['4', '8']}
+                      />
+                    </Flex>
+                  )}
                 </Flex>
-                <Flex flexDir="row">
-                  <UserInfoButton onOpen={selectProfile} profile={data} />
-                  <DelegateButton delegated={data.address} px={['4', '8']} />
-                </Flex>
-              </Flex>
-            ) : (
-              <>
-                <Skeleton isLoaded={isLoaded} w="36" h="12">
-                  SkeletonText
-                </Skeleton>
-                <Skeleton isLoaded={isLoaded} w="36" h="12">
-                  SkeletonText
-                </Skeleton>
-              </>
-            )}
-          </Flex>
-        )}
+              ) : (
+                <>
+                  <Skeleton isLoaded={isLoaded} w="36" h="12">
+                    SkeletonText
+                  </Skeleton>
+                  <Skeleton isLoaded={isLoaded} w="36" h="12">
+                    SkeletonText
+                  </Skeleton>
+                  <Skeleton isLoaded={isLoaded} w="36" h="12">
+                    SkeletonText
+                  </Skeleton>
+                </>
+              )}
+            </Flex>
+          )}
+        </Flex>
       </Flex>
     </Flex>
   );

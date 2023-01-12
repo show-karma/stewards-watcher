@@ -51,6 +51,7 @@ export const ExpandableCardText: FC<IExpandableText> = props => {
               cursor: isExpanded ? 'pointer' : 'unset',
               opacity: isExpanded ? 0.9 : 'unset',
             }}
+            flex="1"
           >
             {isExpanded
               ? `${text.substring(0, maxCharsExpanded)}...`

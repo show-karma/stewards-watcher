@@ -24,9 +24,6 @@ const config: IDAOConfig = {
   DAO_DELEGATE_MODE: 'custom',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
-  DAO_DEFAULT_SETTINGS: {
-    KARMA_SCORE: true,
-  },
   EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'healthScore'],
 };
 
