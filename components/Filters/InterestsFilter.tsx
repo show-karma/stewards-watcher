@@ -15,7 +15,7 @@ export const InterestsFilter = () => {
   const { theme } = useDAO();
 
   return (
-    <Menu closeOnSelect={false}>
+    <Menu isLazy closeOnSelect={false}>
       <MenuButton
         as={Button}
         rightIcon={

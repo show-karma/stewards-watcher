@@ -1,46 +1,40 @@
 import { IDAOConfig, IDAOTheme } from 'types';
 import { chain } from 'wagmi';
-import ABI from './ABI.json';
 
 const config: IDAOConfig = {
-  DAO: 'Gitcoin',
-  DAO_DESCRIPTION: `The Delegates of Gitcoin DAO play a vital role in driving the Gitcoin
-  ecosystem forward through their work in governance.`,
-  DAO_SUBDESCRIPTION: `This site will help boost transparency by displaying delegate contribution to indicate their involvement and engagement in the DAO.`,
-  DAO_URL: 'https://gitcoin.co',
-  GOVERNANCE_FORUM: 'https://gov.gitcoin.co',
-  DAO_KARMA_ID: 'gitcoin',
+  DAO: 'Element Finance',
+  DAO_DESCRIPTION: `The Delegates of Element Finance DAO play a vital role in driving the Element Finance ecosystem forward through their work in governance and workstreams.`,
+  DAO_SUBDESCRIPTION: `This site will help boost transparency with health cards for each Delegate that display metrics and links on their involvement and engagement in the DAO.`,
+  DAO_URL: 'https://www.element.fi/',
+  GOVERNANCE_FORUM: 'https://forum.element.fi/',
+  DAO_KARMA_ID: 'elementfinance',
   IMAGE_PREFIX_URL: 'https://cdn.stamp.fyi/avatar/eth:',
-  DAO_LOGO: '/daos/gitcoin/logo.svg',
+  DAO_LOGO: '/daos/element-finance/logo.svg',
   METATAGS: {
-    TITLE: `Delegates of Gitcoin DAO`,
-    DESCRIPTION: `Find all the active delegates in Gitcoin DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
-    IMAGE: '/daos/gitcoin/preview.png',
-    FAVICON: '/daos/gitcoin/favicon.png',
-    URL: `https://gitcoin.showkarma.xyz`,
+    TITLE: `Delegates of Element Finance DAO`,
+    DESCRIPTION: `Find all the active delegates in Element Finance DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
+    IMAGE: '/daos/element-finance/meta.png',
+    FAVICON: '/daos/element-finance/favicon.png',
+    URL: `https://elementfinance.showkarma.xyz`,
   },
   DAO_CHAIN: chain.mainnet,
-  DAO_DELEGATE_CONTRACT: '0xde30da39c46104798bb5aa3fe8b9e0e1f348163f',
-  DAO_DELEGATE_MODE: 'custom',
-  DAO_FORUM_TYPE: 'discourse',
+  DAO_DELEGATE_CONTRACT: '',
+  DAO_DELEGATE_MODE: 'snapshot',
+  DAO_FORUM_TYPE: 'commonwealth',
   DAO_GTAG: 'G-67LDHT697P',
-  DAO_DEFAULT_SETTINGS: {
-    TIMEPERIOD: 'lifetime',
-    ORDERSTAT: 'healthScore',
-  },
-  EXCLUDED_CARD_FIELDS: ['onChainVotesPct'],
+  EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'healthScore'],
 };
 
 const dark: IDAOTheme = {
-  background: '#291555',
-  bodyBg: '#291555',
+  background: '#182026',
+  bodyBg: '#182026',
   title: '#FFFFFF',
   subtitle: '#a0aec0',
   text: '#FFFFFF',
-  branding: '#02E2AC',
-  buttonText: '#0E0333',
+  branding: '#137cbd',
+  buttonText: '#FFFFFF',
   buttonTextSec: '#FFFFFF',
-  headerBg: '#321E5E',
+  headerBg: '#212328',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
   collapse: { bg: '#2C2E32', text: '#FFFFFF', subtext: '#ADB8C0' },
@@ -57,48 +51,26 @@ const dark: IDAOTheme = {
     border: '#ADB8C033',
     title: 'white',
     bg: 'transparent',
-    listBg: '#321E5E',
+    listBg: '#222429',
     listText: 'white',
   },
   card: {
     icon: '#ADB8C0',
-    background: '#321E5E',
-    statBg: 'rgba(102, 102, 102, 0.15)',
+    background: '#222429',
     divider: 'rgba(173, 184, 192, 0.2)',
     text: { primary: '#FFFFFF', secondary: '#ADB8C0' },
-    border: 'rgba(87, 93, 104, 0.25)',
+    border: '#403E4F',
     common: '#727B81',
+    statBg: 'transparent',
   },
   modal: {
-    background: '#131f3a',
+    background: '#222429',
     header: {
       border: '#ADB8C0',
       title: '#FFFFFF',
       subtitle: '#ADB8C0',
       twitter: '#ADB8C0',
       divider: 'rgba(173, 184, 192, 0.2)',
-    },
-    buttons: {
-      selectBg: '#02E2AC',
-      selectText: '#FFFFFF',
-      navBg: 'transparent',
-      navText: '#FFFFFF',
-      navUnselectedText: '#ADB8C0',
-      navBorder: '#FFFFFF',
-    },
-    statement: {
-      headline: '#FFFFFF',
-      text: '#ADB8C0',
-      sidebar: {
-        section: '#FFFFFF',
-        subsection: '#FFFFFF',
-        text: '#ADB8C0',
-        item: {
-          bg: 'transparent',
-          text: '#FFFFFF',
-          border: '#ADB8C0',
-        },
-      },
     },
     delegateTo: {
       bg: '#FFFFFF',
@@ -128,6 +100,28 @@ const dark: IDAOTheme = {
           bg: 'transparent',
           text: '#212328',
           border: '#595A5E',
+        },
+      },
+    },
+    buttons: {
+      selectBg: '#C80925',
+      selectText: '#FFFFFF',
+      navBg: 'transparent',
+      navText: '#FFFFFF',
+      navUnselectedText: '#ADB8C0',
+      navBorder: '#FFFFFF',
+    },
+    statement: {
+      headline: '#FFFFFF',
+      text: '#ADB8C0',
+      sidebar: {
+        section: '#FFFFFF',
+        subsection: '#FFFFFF',
+        text: '#ADB8C0',
+        item: {
+          bg: 'transparent',
+          text: '#FFFFFF',
+          border: '#ADB8C0',
         },
       },
     },
@@ -173,10 +167,10 @@ const light: IDAOTheme = {
   title: '#222429',
   subtitle: '#666666',
   text: '#222429',
-  branding: '#02E2AC',
-  buttonText: '#0E0333',
+  branding: '#137cbd',
+  buttonText: '#FFFFFF',
   buttonTextSec: '#222429',
-  headerBg: '#321E5E',
+  headerBg: '#212328',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
   collapse: { bg: '#2C2E32', text: '#FFFFFF', subtext: '#ADB8C0' },
@@ -203,7 +197,6 @@ const light: IDAOTheme = {
     divider: 'rgba(102, 102, 102, 0.5)',
     text: { primary: '#212328', secondary: '#666666' },
     border: 'rgba(102, 102, 102, 0.5)',
-    shadow: '-1px 1px 5px 0px rgba(87,93,104,0.75);',
     common: '#727B81',
   },
   modal: {
@@ -214,14 +207,6 @@ const light: IDAOTheme = {
       subtitle: '#ADB8C0',
       twitter: '#ADB8C0',
       divider: 'rgba(173, 184, 192, 0.2)',
-    },
-    buttons: {
-      selectBg: '#02E2AC',
-      selectText: '#FFFFFF',
-      navBg: 'transparent',
-      navText: '#FFFFFF',
-      navUnselectedText: '#ADB8C0',
-      navBorder: '#FFFFFF',
     },
     delegateTo: {
       bg: '#FFFFFF',
@@ -254,6 +239,14 @@ const light: IDAOTheme = {
         },
       },
     },
+    buttons: {
+      selectBg: '#C80925',
+      selectText: '#FFFFFF',
+      navBg: 'transparent',
+      navText: '#FFFFFF',
+      navUnselectedText: '#ADB8C0',
+      navBorder: '#FFFFFF',
+    },
     statement: {
       headline: '#FFFFFF',
       text: '#ADB8C0',
@@ -279,11 +272,11 @@ const light: IDAOTheme = {
         verticalDivider: 'rgba(173, 184, 192, 0.5)',
         divider: 'rgba(173, 184, 192, 0.2)',
         icons: {
-          for: 'green.300',
-          against: 'red.500',
-          abstain: 'gray.300',
-          notVoted: 'gray.300',
-          multiple: 'green.300',
+          for: '#FFFFFF',
+          against: '#FFFFFF',
+          abstain: '#FFFFFF',
+          notVoted: '#FFFFFF',
+          multiple: '#FFFFFF',
         },
       },
       reason: {
@@ -304,6 +297,6 @@ const light: IDAOTheme = {
   },
 };
 
-const dao = { dark, light, config, ABI };
+const dao = { dark, light, config };
 
 export default dao;

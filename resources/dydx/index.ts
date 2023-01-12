@@ -21,9 +21,15 @@ const config: IDAOConfig = {
   DAO_CHAIN: chain.mainnet,
   DAO_DELEGATE_CONTRACT: '0x92D6C1e31e14520e676a687F0a93788B716BEff5',
   DAO_DELEGATE_MODE: 'custom',
+  DAO_DELEGATE_ACTION: () =>
+    typeof window !== 'undefined' &&
+    window.open('https://dydx.vote/delegate', '_blank'),
   DAO_FORUM_TYPE: 'commonwealth',
   DAO_GTAG: 'G-67LDHT697P',
   EXCLUDED_CARD_FIELDS: ['healthScore', 'karmaScore'],
+  DAO_DEFAULT_SETTINGS: {
+    STATUS_FILTER: true,
+  },
 };
 
 const dark: IDAOTheme = {

@@ -21,11 +21,13 @@ export interface IDAOConfig {
   DAO_CHAIN: Chain;
   DAO_DELEGATE_CONTRACT: string;
   DAO_DELEGATE_MODE: 'custom' | 'snapshot';
+  DAO_DELEGATE_ACTION?: () => void;
   DAO_FORUM_TYPE?: IForumType;
   DAO_GTAG?: string;
   DAO_DEFAULT_SETTINGS?: {
     TIMEPERIOD?: IFilterPeriod;
     ORDERSTAT?: IFilterStat;
+    STATUS_FILTER?: boolean;
   };
   EXCLUDED_CARD_FIELDS: string[];
 }

@@ -2,7 +2,6 @@
 import {
   Divider,
   Flex,
-  Icon,
   Link,
   SimpleGrid,
   Skeleton,
@@ -12,17 +11,12 @@ import {
 } from '@chakra-ui/react';
 import { FC, useState, useMemo, useCallback } from 'react';
 import { BsChat } from 'react-icons/bs';
-import { SiTwitter } from 'react-icons/si';
 import { IoPersonOutline } from 'react-icons/io5';
 import { IoIosCheckboxOutline } from 'react-icons/io';
 import { AiOutlineThunderbolt } from 'react-icons/ai';
-import { MdForum } from 'react-icons/md';
-import { BiPlanet } from 'react-icons/bi';
-import { FaDiscord } from 'react-icons/fa';
 import { ICardStat, ICustomFields, IDelegate } from 'types';
 import { useDAO, useDelegates } from 'contexts';
 import {
-  axiosInstance,
   convertHexToRGBA,
   formatDate,
   formatNumber,
@@ -31,7 +25,6 @@ import {
   truncateAddress,
 } from 'utils';
 import { useRouter } from 'next/router';
-import { IconType } from 'react-icons/lib';
 import { ImgWithFallback } from '../ImgWithFallback';
 import { DelegateButton } from '../DelegateButton';
 import { UserInfoButton } from '../UserInfoButton';
