@@ -84,7 +84,7 @@ export const BodyTitle: FC = () => {
               <Text
                 color={theme.collapse.text}
                 textAlign={{ base: 'start' }}
-                fontSize={{ base: 'lg', sm: '2xl' }}
+                fontSize={{ base: 'lg', sm: '2xl', md: '3xl' }}
                 lineHeight={['8', '9']}
                 fontWeight="600"
                 fontFamily="body"
