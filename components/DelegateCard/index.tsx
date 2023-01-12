@@ -77,18 +77,18 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       tooltipText: `Contributor's voting % for on-chain proposals`,
     },
     {
-      title: 'Forum score',
-      icon: BsChat,
-      value: data?.forumActivity ? formatNumber(data.forumActivity) : '-',
-      id: 'forumScore',
-      tooltipText: 'Score based on their contribution in the forum',
-    },
-    {
       title: 'Score',
       icon: IoPersonOutline,
       value: data?.karmaScore ? formatNumber(data?.karmaScore) : '-',
       id: 'karmaScore',
       tooltipText: 'Total Score based on all the delegate activity',
+    },
+    {
+      title: 'Forum score',
+      icon: BsChat,
+      value: data?.forumActivity ? formatNumber(data.forumActivity) : '-',
+      id: 'forumScore',
+      tooltipText: 'Score based on their contribution in the forum',
     },
   ];
 
@@ -130,6 +130,18 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
         id: 'votingWeight',
         tooltipText: `Based on ${data?.delegators} delegators`,
       });
+
+    const order = [
+      'delegatedVotes',
+      'votingWeight',
+      'offChainVotesPct',
+      'onChainVotesPct',
+      'karmaScore',
+      'forumScore',
+    ];
+
+    filtereds.sort((one, two) => order.indexOf(one.id) - order.indexOf(two.id));
+
     if (router.query.site === 'op') {
       const randomId = Math.floor(Math.random() * 3);
       data?.workstreams?.push({
@@ -173,7 +185,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   const showSecondRow = stats.length > 4;
 
   const columnsCalculator = () => {
-    if (showSecondRow) return 3;
     if (stats.length < 4) return stats.length;
     return 4;
   };
@@ -201,7 +212,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       h={{
         base: 'max-content',
         // eslint-disable-next-line no-nested-ternary
-        md: showSecondRow ? '400px' : '350px',
+        md: showSecondRow ? '420px' : '350px',
       }}
     >
       <Flex flexDir="row" gap="4" w="full" align="flex-start">
