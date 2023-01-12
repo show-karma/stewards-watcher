@@ -63,6 +63,7 @@ export const Madeby: FC<FlexProps> = props => {
             md: theme.hat.text.secondary,
           }}
           fontSize={{ base: 'sm', lg: 'xs' }}
+          w="max-content"
         >
           <Text>Last updated</Text>
           {isLoading ? (
