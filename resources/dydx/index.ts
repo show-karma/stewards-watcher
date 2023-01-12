@@ -1,4 +1,5 @@
 import { IDAOConfig, IDAOTheme } from 'types';
+import { onChainDyDxVotesProvider } from 'utils/onChainDyDxVotesProvider';
 import { chain } from 'wagmi';
 import ABI from './ABI.json';
 
@@ -30,6 +31,9 @@ const config: IDAOConfig = {
   FEATURED_CARD_FIELDS: ['delegatedVotes', 'offChainVotesPct'],
   DAO_DEFAULT_SETTINGS: {
     STATUS_FILTER: true,
+  },
+  DAO_EXT_VOTES_PROVIDER: {
+    onChain: onChainDyDxVotesProvider,
   },
 };
 

@@ -1,6 +1,7 @@
 /* eslint-disable no-useless-catch */
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { useQuery } from '@tanstack/react-query';
+import { useDAO } from 'contexts';
 
 import moment from 'moment';
 import { IChainRow } from 'types';
@@ -82,9 +83,20 @@ async function fetchOnChainProposalVotes(
   return [];
 }
 
-const useOnChainVotes = (daoName: string | string[], address: string) =>
-  useQuery(['onChainVotes', daoName, address], async () =>
-    fetchOnChainProposalVotes(daoName, address)
-  );
+const useOnChainVotes = (daoName: string | string[], address: string) => {
+  const {
+    daoInfo: {
+      config: { DAO_EXT_VOTES_PROVIDER },
+    },
+  } = useDAO();
+
+  return useQuery(['onChainVotes', daoName, address], async () => {
+    const votes = await fetchOnChainProposalVotes(daoName, address);
+    if (DAO_EXT_VOTES_PROVIDER?.onChain) {
+      return DAO_EXT_VOTES_PROVIDER.onChain(votes);
+    }
+    return votes;
+  });
+};
 
 export { useOnChainVotes };
