@@ -16,7 +16,7 @@ export const MainLayout: React.FC<IMainLayout> = ({ children }) => {
       backgroundColor={theme.bodyBg}
       boxShadow={theme.bodyShadow}
       align="center"
-      px={['0', '2', '16']}
+      px={{ base: 0, lg: '16' }}
       zIndex="1"
     >
       {children}

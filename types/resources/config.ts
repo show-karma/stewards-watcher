@@ -29,5 +29,4 @@ export interface IDAOConfig {
     ORDERSTAT?: IFilterStat;
   };
   EXCLUDED_CARD_FIELDS: string[];
-  FEATURED_CARD_FIELDS: string[];
 }

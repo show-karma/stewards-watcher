@@ -75,15 +75,16 @@ export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen, profile }) => {
         fontSize={['md']}
         fontWeight="medium"
         bg="transparent"
-        borderWidth="2px"
-        borderColor={theme.buttonTextSec}
         color={theme.buttonTextSec}
         borderStyle="solid"
-        _hover={{}}
+        _hover={{
+          textDecoration: 'underline',
+          cursor: 'pointer',
+        }}
         _active={{}}
         _focus={{}}
       >
-        Show Activity
+        Activity
       </MenuButton>
       <MenuList bgColor={theme.card.background}>
         {options().map(({ title, tab }, index) => (

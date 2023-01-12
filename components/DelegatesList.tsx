@@ -147,11 +147,11 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
             rowGap="10"
             columnGap="8"
             w="full"
-            columns={{ base: 1, lg: 2, xl: 3 }}
+            columns={{ base: 1, md: 2, xl: 3 }}
             alignItems="center"
             justifyItems="center"
             mb="8"
-            px={{ base: '6', lg: '0' }}
+            px={{ base: '4', lg: '0' }}
           >
             <DelegatesCases delegates={delegates} isLoading={isLoading} />
           </SimpleGrid>

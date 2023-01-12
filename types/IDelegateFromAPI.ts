@@ -1,3 +1,5 @@
+import { ICustomFields } from './ICustomFields';
+
 export interface IDelegateFromAPI {
   daoCount: number;
   daoName: string;
@@ -44,6 +46,11 @@ export interface IDelegateFromAPI {
     proposalsInitiated: number;
     updatedAt: string;
   }[];
+  delegatePitch?: {
+    threadId: number;
+    customFields: ICustomFields[];
+    postId: number;
+  };
   snapshotDelegatedVotes?: number;
   workstreams?: {
     id: number;

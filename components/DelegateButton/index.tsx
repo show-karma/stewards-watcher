@@ -2,10 +2,12 @@ import { Button, ButtonProps, Flex, Spinner } from '@chakra-ui/react';
 import { useDAO, useWallet } from 'contexts';
 import { useDelegation, useMixpanel } from 'hooks';
 import { FC } from 'react';
+import { convertHexToRGBA } from 'utils';
 
 interface IDelegateButton extends ButtonProps {
   delegated: string;
   text?: string;
+  successEmitter?: () => void;
 }
 
 export const DelegateButton: FC<IDelegateButton> = ({
@@ -45,7 +47,9 @@ export const DelegateButton: FC<IDelegateButton> = ({
       fontSize={['md']}
       fontWeight="medium"
       onClick={handleCase}
-      _hover={{}}
+      _hover={{
+        backgroundColor: convertHexToRGBA(theme.branding, 0.8),
+      }}
       _focus={{}}
       _active={{}}
       disabled={isLoading}

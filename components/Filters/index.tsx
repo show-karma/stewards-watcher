@@ -10,10 +10,10 @@ export const Filters = () => {
       bgColor={theme.card.background}
       boxShadow={theme.card.shadow}
       w="full"
-      flexDir={['row']}
+      flexDir={{ base: 'column', xl: 'row' }}
       flexWrap="wrap"
       gap="8"
-      align="center"
+      align={{ base: 'flex-start', xl: 'center' }}
       p="6"
       borderRadius="xl"
       justify="space-between"

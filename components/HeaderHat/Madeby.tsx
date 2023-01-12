@@ -24,28 +24,30 @@ export const Madeby: FC<FlexProps> = props => {
   });
   return (
     <Flex
-      flexDir="column"
-      align={{ base: 'center', md: 'flex-start' }}
-      justify={{ base: 'center', md: 'flex-start' }}
+      flexDir={{ base: 'column', sm: 'row', lg: 'column' }}
+      align={{ base: 'center', lg: 'flex-start' }}
+      justify={{ base: 'center', lg: 'flex-start' }}
+      gap="2"
+      py={{ base: '2', lg: '0' }}
       {...props}
     >
       <Flex
-        gap={{ base: '2', md: '0' }}
-        flexDir={{ base: 'row', md: 'column' }}
-        align={{ base: 'center', md: 'flex-start' }}
+        gap={{ base: '2', lg: '0' }}
+        flexDir={{ base: 'row', lg: 'column' }}
+        align={{ base: 'center', lg: 'flex-start' }}
       >
         <Text
           fontSize={['sm', 'md']}
           fontWeight="normal"
           color={{ base: theme.hat.text.madeBy, md: theme.hat.text.primary }}
         >
-          Made with ❤️ by
+          Data powered by
         </Text>
 
         <Link href="https://showkarma.xyz" isExternal>
           <Img
-            w={['5.25rem', '8.75rem']}
-            h={['1.35rem', '2.25rem']}
+            w={{ base: '96px', lg: '140px' }}
+            h={{ base: '24px', lg: '35px' }}
             objectFit="contain"
             src={variantImg}
           />
@@ -60,9 +62,9 @@ export const Madeby: FC<FlexProps> = props => {
             base: theme.hat.text.lastUpdated,
             md: theme.hat.text.secondary,
           }}
-          fontSize="xs"
+          fontSize={{ base: 'sm', lg: 'xs' }}
         >
-          <Text>Data updated</Text>
+          <Text>Last updated</Text>
           {isLoading ? (
             <Skeleton w="16" h="5">
               00 hours ago

@@ -18,20 +18,26 @@ export const OrderByFilters = () => {
           <InterestsFilter />
         </Flex>
       )}
-      <Flex flexDir="column" w={{ base: 'full', md: 'max-content' }}>
-        <Text fontFamily="heading" color={theme.filters.head}>
-          Order by
-        </Text>
-        <StatFilter />
-      </Flex>
-      <Flex
-        flex="1"
-        gap={{ base: '1', sm: '2' }}
-        justifyContent="space-between"
-        flexWrap="wrap"
-      >
-        <OrderFilter />
-        <PeriodFilter />
+      <Flex align="flex-end" justify="center" gap={{ base: '1', sm: '2' }}>
+        <Flex
+          flexDir={{ base: 'column' }}
+          w={{ base: 'full', md: 'max-content' }}
+        >
+          <Text fontFamily="heading" color={theme.filters.head}>
+            Order by
+          </Text>
+          <Flex
+            flexDir="row"
+            gap={{ base: '1', sm: '2' }}
+            flexWrap={{ base: 'wrap', md: 'nowrap' }}
+          >
+            <StatFilter />
+            <Flex gap={{ base: '1', sm: '2' }} w="full">
+              <OrderFilter />
+              <PeriodFilter />
+            </Flex>
+          </Flex>
+        </Flex>
       </Flex>
     </Flex>
   );

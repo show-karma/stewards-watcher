@@ -6,6 +6,7 @@ import {
   MenuList,
   MenuOptionGroup,
 } from '@chakra-ui/react';
+import { DownChevron } from 'components/Icons';
 import { useDAO, useDelegates } from 'contexts';
 import { IoChevronDownOutline } from 'react-icons/io5';
 
@@ -17,19 +18,36 @@ export const InterestsFilter = () => {
     <Menu closeOnSelect={false}>
       <MenuButton
         as={Button}
-        rightIcon={<IoChevronDownOutline />}
+        rightIcon={
+          <DownChevron
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            boxSize="5"
+          />
+        }
         bgColor={theme.filters.bg}
         borderWidth="1px"
         borderColor={theme.filters.border}
         borderStyle="solid"
         boxShadow={theme.filters.shadow}
         color={theme.filters.title}
-        borderRadius="sm"
-        gap="4"
+        gap="1"
         fontFamily="heading"
         fontWeight="normal"
         textAlign="left"
-        w={{ base: '52' }}
+        w={{ base: 'full', md: 'max-content' }}
+        _hover={{
+          bg: theme.filters.activeBg,
+        }}
+        _active={{
+          bg: theme.filters.activeBg,
+        }}
+        px="4"
+        py="5"
+        borderRadius="4px"
+        _focus={{}}
+        _focusWithin={{}}
       >
         Delegate Interest
       </MenuButton>

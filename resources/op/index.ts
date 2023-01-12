@@ -28,12 +28,11 @@ const config: IDAOConfig = {
     KARMA_SCORE: true,
   },
   EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'healthScore'],
-  FEATURED_CARD_FIELDS: ['delegatedVotes', 'offChainVotesPct'],
 };
 
 const dark: IDAOTheme = {
-  background: '#14171A',
-  bodyBg: '#14171A',
+  background: '#1C1D20',
+  bodyBg: '#1C1D20',
   title: '#FFFFFF',
   subtitle: '#a0aec0',
   text: '#FFFFFF',
@@ -43,6 +42,7 @@ const dark: IDAOTheme = {
   headerBg: '#212328',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
+  collapse: { bg: '#2C2E32', text: '#FFFFFF', subtext: '#ADB8C0' },
   hat: {
     text: {
       primary: '#FFFFFF',
@@ -53,16 +53,17 @@ const dark: IDAOTheme = {
   },
   filters: {
     head: '#ADB8C0',
-    border: '#ADB8C033',
+    border: 'rgba(173, 184, 192, 0.2)',
     title: 'white',
     bg: 'transparent',
+    activeBg: '#3E4247',
     listBg: '#222429',
     listText: 'white',
   },
   card: {
     icon: '#ADB8C0',
     background: '#222429',
-    featureStatBg: 'rgba(102, 102, 102, 0.15)',
+    statBg: '#2C2E32',
     divider: 'rgba(173, 184, 192, 0.2)',
     text: { primary: '#FFFFFF', secondary: '#ADB8C0' },
     border: 'rgba(87, 93, 104, 0.25)',
@@ -132,6 +133,37 @@ const dark: IDAOTheme = {
         },
       },
     },
+    delegateTo: {
+      bg: '#FFFFFF',
+      userBg: '#FFFFFF',
+      userShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+      topBg: '#EBEDEF',
+      text: '#212328',
+      subtext: '#595A5E',
+      input: {
+        placeholder: '#595A5E',
+        text: '#212328',
+        dirtyBorder: '#212328',
+        border: '#E6E6E6',
+        error: '#C80925',
+        bg: '#FFFFFF',
+      },
+      button: {
+        disabled: {
+          bg: '#F2F4F9',
+          text: 'rgba(89, 90, 94, 0.5)',
+        },
+        normal: {
+          bg: '#C80925',
+          text: '#FFFFFF',
+        },
+        alternative: {
+          bg: 'transparent',
+          text: '#212328',
+          border: '#595A5E',
+        },
+      },
+    },
   },
 };
 
@@ -147,6 +179,7 @@ const light: IDAOTheme = {
   headerBg: '#212328',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
+  collapse: { bg: '#2C2E32', text: '#FFFFFF', subtext: '#ADB8C0' },
   hat: {
     text: {
       primary: '#FFFFFF',
@@ -162,11 +195,12 @@ const light: IDAOTheme = {
     bg: 'transparent',
     listBg: '#FFFFFF',
     listText: '#666666',
+    activeBg: '#3E4247',
   },
   card: {
     icon: '#ADB8C0',
     background: '#FFFFFF',
-    featureStatBg: 'transparent',
+    statBg: '#EBEDEF',
     divider: 'rgba(102, 102, 102, 0.5)',
     text: { primary: '#212328', secondary: '#666666' },
     border: 'rgba(102, 102, 102, 0.5)',
@@ -234,6 +268,37 @@ const light: IDAOTheme = {
           selectedText: '#222429',
           unSelectedBg: 'transparent',
           unSelectedText: '#ADB8C0',
+        },
+      },
+    },
+    delegateTo: {
+      bg: '#FFFFFF',
+      userBg: '#FFFFFF',
+      userShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+      topBg: '#EBEDEF',
+      text: '#212328',
+      subtext: '#595A5E',
+      input: {
+        placeholder: '#595A5E',
+        text: '#212328',
+        dirtyBorder: '#212328',
+        border: '#E6E6E6',
+        error: '#C80925',
+        bg: '#FFFFFF',
+      },
+      button: {
+        disabled: {
+          bg: '#F2F4F9',
+          text: 'rgba(89, 90, 94, 0.5)',
+        },
+        normal: {
+          bg: '#C80925',
+          text: '#FFFFFF',
+        },
+        alternative: {
+          bg: 'transparent',
+          text: '#212328',
+          border: '#595A5E',
         },
       },
     },
