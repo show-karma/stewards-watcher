@@ -21,19 +21,18 @@ const DelegatesCounter: FC<{
   isLoading: boolean;
   isSearchDirty: boolean;
   theme: IDAOTheme;
-  delegates: IDelegate[];
   delegateCount?: number;
-}> = ({ isLoading, isSearchDirty, theme, delegates, delegateCount = 0 }) => {
+}> = ({ isLoading, isSearchDirty, theme, delegateCount = 0 }) => {
   if (isLoading) return <Skeleton w="40" h="6" />;
   if (!isSearchDirty) return <Flex />;
   return (
-    <Flex align="center">
+    <Flex align="center" w="full" justifyContent="flex-start">
       <Text
         fontSize="md"
         color={theme.text}
-        w="full"
+        w="max-content"
         align="center"
-        justifyContent="flex-start"
+        textAlign="start"
       >
         {delegateCount} delegate{delegateCount > 1 && 's'} found
       </Text>
@@ -220,9 +219,8 @@ export const BodyTitle: FC = () => {
         </Flex>
       </Collapse>
       <Filters />
-      <Flex flexDir="row" justify="space-between" p="6">
+      <Flex flexDir="row" w="full" justify="flex-start" p="6">
         <DelegatesCounter
-          delegates={delegates}
           isLoading={isLoading}
           isSearchDirty={isSearchDirty}
           theme={theme}
