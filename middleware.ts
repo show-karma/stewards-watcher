@@ -17,11 +17,34 @@ export const config = {
 
 const getDAOName = (host: string) => host.split('.')[0];
 
+const supportedDAOs = [
+  'aave',
+  'op',
+  'optimism',
+  'pooltogether',
+  'yamfinance',
+  'ssvnetwork',
+  'dydx',
+  'dimo',
+  'gitcoin',
+  'element-finance',
+];
+
 export default function middleware(req: NextRequest) {
   const url = req.nextUrl;
-  const hostname = req.headers.get('host') || 'www.showkarma.xyz';
-  const dao = getDAOName(hostname);
+  const hostname = req.headers.get('host') || 'www.karmahq.xyz';
   const currentPathname = url.pathname;
+  const dao = getDAOName(hostname);
+  if (
+    hostname.includes('vercel.app') ||
+    (hostname.includes('localhost') && !dao)
+  ) {
+    const daoToFind = currentPathname.split('/')[1];
+    const searchDAO = supportedDAOs.find(item => item === daoToFind);
+    const lastPathname = currentPathname.split(`/${searchDAO}`)[1];
+    url.pathname = `/_sites/${searchDAO}${lastPathname || ''}`;
+    return NextResponse.rewrite(url);
+  }
 
   url.pathname = `/_sites/${dao}${currentPathname}`;
   return NextResponse.rewrite(url);
