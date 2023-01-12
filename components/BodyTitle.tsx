@@ -28,7 +28,13 @@ const DelegatesCounter: FC<{
   if (!isSearchDirty) return <Flex />;
   return (
     <Flex align="center">
-      <Text fontSize="md" color={theme.text}>
+      <Text
+        fontSize="md"
+        color={theme.text}
+        w="full"
+        align="center"
+        justifyContent="flex-start"
+      >
         {delegateCount} delegate{delegateCount > 1 && 's'} found
       </Text>
       <ClearButton />
