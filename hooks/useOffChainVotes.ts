@@ -54,7 +54,8 @@ async function fetchOffChainProposalVotes(
   daoName: string | string[],
   address: string
 ) {
-  if (!daoName || !address) return [];
+  // Assure that the string isn't null or array is also not empty
+  if (![daoName].flat().length || !address) return [];
   try {
     const { data: votes } = await offChainClient.query({
       query: VOTING_HISTORY.offChainVotesReq,

@@ -52,7 +52,7 @@ export const DelegateButton: FC<IDelegateButton> = ({
     return write && write();
   };
 
-  return (
+  return config.DAO_DELEGATE_MODE !== 'hidden' ? (
     <Button
       bgColor={theme.branding}
       px={['4', '6']}
@@ -73,5 +73,5 @@ export const DelegateButton: FC<IDelegateButton> = ({
         {text}
       </Flex>
     </Button>
-  );
+  ) : null;
 };
