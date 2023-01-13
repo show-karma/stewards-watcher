@@ -16,7 +16,7 @@ export const Filters = () => {
       align={{ base: 'flex-start', xl: 'center' }}
       p="6"
       borderRadius="xl"
-      justify="flex-start"
+      justify="space-between"
     >
       <SearchFilter />
       <OrderByFilters />

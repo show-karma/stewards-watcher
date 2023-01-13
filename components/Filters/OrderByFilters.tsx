@@ -4,6 +4,7 @@ import { DelegateStatusFilter } from './DelegateStatusFilter';
 import { InterestsFilter } from './InterestsFilter';
 import { OrderFilter } from './OrderFilter';
 import { PeriodFilter } from './PeriodFilter';
+import { SortBy } from './SortBy';
 import { StatFilter } from './StatFilter';
 
 export const OrderByFilters = () => {
@@ -18,35 +19,16 @@ export const OrderByFilters = () => {
           <Text fontFamily="heading" color={theme.filters.head}>
             Filter by
           </Text>
-          <Flex flexDir="row" gap="4">
+          <Flex flexDir="row" gap="4" flexWrap="wrap">
             {interests.length > 0 && <InterestsFilter />}
             {daoInfo.config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER && (
               <DelegateStatusFilter />
             )}
+            <PeriodFilter />
           </Flex>
         </Flex>
       )}
-      <Flex align="flex-end" justify="center" gap={{ base: '1', sm: '2' }}>
-        <Flex
-          flexDir={{ base: 'column' }}
-          w={{ base: 'full', md: 'max-content' }}
-        >
-          <Text fontFamily="heading" color={theme.filters.head}>
-            Order by
-          </Text>
-          <Flex
-            flexDir="row"
-            gap={{ base: '1', sm: '2' }}
-            flexWrap={{ base: 'wrap', md: 'nowrap' }}
-          >
-            <StatFilter />
-            <Flex gap={{ base: '1', sm: '2' }} w="full">
-              <OrderFilter />
-              <PeriodFilter />
-            </Flex>
-          </Flex>
-        </Flex>
-      </Flex>
+      <SortBy />
     </Flex>
   );
 };
