@@ -608,25 +608,25 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
             )}
           </>
         )}
-        {canDelegate && (
-          <Flex justify="left" align="center" gap="6">
-            {isLoaded ? (
-              <>
+        <Flex justify="left" align="center" gap="6">
+          {isLoaded ? (
+            <>
+              {canDelegate && (
                 <DelegateButton delegated={data.address} px={['4', '8']} />
-                <UserInfoButton onOpen={selectProfile} profile={data} />
-              </>
-            ) : (
-              <>
-                <Skeleton isLoaded={isLoaded} w="36" h="12">
-                  SkeletonText
-                </Skeleton>
-                <Skeleton isLoaded={isLoaded} w="36" h="12">
-                  SkeletonText
-                </Skeleton>
-              </>
-            )}
-          </Flex>
-        )}
+              )}
+              <UserInfoButton onOpen={selectProfile} profile={data} />
+            </>
+          ) : (
+            <>
+              <Skeleton isLoaded={isLoaded} w="36" h="12">
+                SkeletonText
+              </Skeleton>
+              <Skeleton isLoaded={isLoaded} w="36" h="12">
+                SkeletonText
+              </Skeleton>
+            </>
+          )}
+        </Flex>
       </Flex>
     </Flex>
   );
