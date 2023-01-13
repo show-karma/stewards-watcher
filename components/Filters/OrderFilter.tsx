@@ -33,10 +33,7 @@ export const OrderFilter = () => {
             boxSize="5"
           />
         }
-        bgColor={theme.filters.bg}
-        borderWidth="1px"
-        borderColor={theme.filters.border}
-        borderStyle="solid"
+        bgColor={theme.card.background}
         boxShadow={theme.filters.shadow}
         color={theme.filters.title}
         gap="1"
@@ -45,8 +42,8 @@ export const OrderFilter = () => {
         textAlign="left"
         fontSize="md"
         minW="min-content"
-        w={{ base: 'full', md: 'max-content' }}
-        maxW="full"
+        w="full"
+        maxW={{ base: 'full', md: 'max-content' }}
         _hover={{
           bg: theme.filters.activeBg,
         }}
@@ -54,7 +51,7 @@ export const OrderFilter = () => {
           bg: theme.filters.activeBg,
         }}
         px="4"
-        py="5"
+        py="3"
         borderRadius="4px"
         _focus={{}}
         _focusWithin={{}}

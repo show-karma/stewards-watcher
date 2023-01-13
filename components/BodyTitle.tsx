@@ -16,6 +16,7 @@ import { Filters } from './Filters';
 import { ClearButton } from './Filters/ClearButton';
 import { GradientBall } from './GradientBall';
 import { Madeby } from './HeaderHat/Madeby';
+import { SortBy } from './Filters/SortBy';
 
 const DelegatesCounter: FC<{
   isLoading: boolean;
@@ -219,13 +220,21 @@ export const BodyTitle: FC = () => {
         </Flex>
       </Collapse>
       <Filters />
-      <Flex flexDir="row" w="full" justify="flex-start" p="6">
+      <Flex
+        flexDir={{ base: 'column', md: 'row' }}
+        w="full"
+        gap="6"
+        justify="space-between"
+        px={{ base: '0', md: '6' }}
+        py="6"
+      >
         <DelegatesCounter
           isLoading={isLoading}
           isSearchDirty={isSearchDirty}
           theme={theme}
           delegateCount={delegateCount}
         />
+        <SortBy />
       </Flex>
     </Flex>
   );

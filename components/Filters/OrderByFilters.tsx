@@ -28,7 +28,6 @@ export const OrderByFilters = () => {
           </Flex>
         </Flex>
       )}
-      <SortBy />
     </Flex>
   );
 };

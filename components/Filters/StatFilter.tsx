@@ -21,17 +21,14 @@ export const StatFilter = () => {
             boxSize="5"
           />
         }
-        bgColor={theme.filters.bg}
-        borderWidth="1px"
-        borderColor={theme.filters.border}
-        borderStyle="solid"
+        bgColor={theme.card.background}
         boxShadow={theme.filters.shadow}
         color={theme.filters.title}
-        gap="4"
         fontFamily="heading"
         fontWeight="normal"
         textAlign="left"
         w="full"
+        maxW={{ base: 'full', md: 'max-content' }}
         _hover={{
           bg: theme.filters.activeBg,
         }}
@@ -39,7 +36,7 @@ export const StatFilter = () => {
           bg: theme.filters.activeBg,
         }}
         px="4"
-        py="5"
+        py="3"
         borderRadius="4px"
         _focus={{}}
         _focusWithin={{}}

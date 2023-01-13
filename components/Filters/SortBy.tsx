@@ -8,29 +8,21 @@ export const SortBy: FC = () => {
   const { theme } = useDAO();
   return (
     <Flex
-      align="flex-end"
-      justify="center"
-      gap={{ base: '1', sm: '2' }}
+      align={{ base: 'flex-start', md: 'center' }}
+      gap="4"
+      flexDir={{ base: 'column', md: 'row' }}
       w={{ base: 'full', md: 'max-content' }}
     >
-      <Flex
-        flexDir={{ base: 'column' }}
-        w={{ base: 'full', md: 'max-content' }}
+      <Text
+        fontFamily="heading"
+        color={theme.filters.head}
+        w="max-content"
+        h="min-content"
       >
-        <Text fontFamily="heading" color={theme.filters.head}>
-          Order by
-        </Text>
-        <Flex
-          flexDir="row"
-          gap={{ base: '1', sm: '2' }}
-          flexWrap={{ base: 'wrap', md: 'nowrap' }}
-        >
-          <StatFilter />
-          <Flex gap={{ base: '1', sm: '2' }} w="full">
-            <OrderFilter />
-          </Flex>
-        </Flex>
-      </Flex>
+        Sort by:
+      </Text>
+      <StatFilter />
+      <OrderFilter />
     </Flex>
   );
 };
