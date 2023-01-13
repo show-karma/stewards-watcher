@@ -5,12 +5,16 @@ import { InterestsFilter } from './InterestsFilter';
 import { OrderFilter } from './OrderFilter';
 import { PeriodFilter } from './PeriodFilter';
 import { StatFilter } from './StatFilter';
+import { WorkstreamFilter } from './WorkstreamFilter';
 
 export const OrderByFilters = () => {
-  const { interests } = useDelegates();
+  const { interests, workstreams } = useDelegates();
   const { theme, daoInfo } = useDAO();
   const haveFilter =
-    interests.length > 0 || daoInfo.config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER;
+    interests.length > 0 ||
+    daoInfo.config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER ||
+    workstreams.length > 0;
+
   return (
     <Flex gap="4" align="end" flexDir={['row']} flexWrap="wrap">
       {haveFilter && (
@@ -20,6 +24,7 @@ export const OrderByFilters = () => {
           </Text>
           <Flex flexDir="row" gap="4">
             {interests.length > 0 && <InterestsFilter />}
+            {workstreams.length > 0 && <WorkstreamFilter />}
             {daoInfo.config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER && (
               <DelegateStatusFilter />
             )}

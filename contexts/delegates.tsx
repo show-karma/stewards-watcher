@@ -20,6 +20,7 @@ import {
   IVoteInfo,
   IActiveTab,
   IStatusOptions,
+  IWorkstream,
 } from 'types';
 import { axiosInstance } from 'utils';
 import { useToasty } from 'hooks';
@@ -59,6 +60,9 @@ interface IDelegateProps {
   selectStatus: (selectedStatus: IStatusOptions) => void;
   statuses: IStatusOptions;
   isFiltering: boolean;
+  workstreams: IWorkstream[];
+  workstreamsFilter: string[];
+  selectWorkstream: (index: number) => void;
 }
 
 export const DelegatesContext = createContext({} as IDelegateProps);
@@ -112,6 +116,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     {} as IDelegate
   );
   const [delegateCount, setDelegateCount] = useState(0);
+  const [workstreams, setWorkstreams] = useState<IWorkstream[]>([]);
+  const [workstreamsFilter, setWorkstreamsFilter] = useState<string[]>([]);
+
   const { toast } = useToasty();
 
   const router = useRouter();
@@ -141,6 +148,19 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     }
   };
 
+  const fetchWorkstreams = async () => {
+    try {
+      const { data } = await axiosInstance.get(
+        `/workstream/list?dao=${config.DAO_KARMA_ID}`
+      );
+      if (Array.isArray(data.data.workstreams)) {
+        setWorkstreams(data.data.workstreams);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const fetchDelegates = async (_offset = offset) => {
     setLoading(true);
     try {
@@ -156,7 +176,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           period,
           pageSize: 10,
           workstreamId:
-            config.DAO_KARMA_ID === 'gitcoin' ? '6,4,3,7,1,2,5,12' : undefined,
+            workstreamsFilter.length === 0 && config.DAO_KARMA_ID === 'gitcoin'
+              ? '6,4,3,7,1,2,5,12'
+              : workstreamsFilter.join(','),
           statuses,
         },
       });
@@ -369,7 +391,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           period,
           pageSize: 10,
           workstreamId:
-            config.DAO_KARMA_ID === 'gitcoin' ? '6,4,3,7,1,2,5,12' : undefined,
+            workstreamsFilter.length === 0 && config.DAO_KARMA_ID === 'gitcoin'
+              ? '6,4,3,7,1,2,5,12'
+              : workstreamsFilter.join(','),
           statuses,
         },
       });
@@ -424,16 +448,20 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     } else {
       fetchDelegates(0);
     }
-  }, [stat, order, period, userToFind, statuses]);
+  }, [
+    stat,
+    order,
+    period,
+    userToFind,
+    statuses,
+    interestFilter,
+    workstreamsFilter,
+  ]);
 
   useEffect(() => {
     fetchInterests();
+    fetchWorkstreams();
   }, []);
-
-  // Fetch delegates when interest filter change
-  useEffect(() => {
-    fetchDelegates(0);
-  }, [interestFilter]);
 
   // Fetch vote infos
   const getVoteInfos = async () => {
@@ -500,6 +528,29 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     // set the new interestFilter array
     setInterestFilter(items);
   };
+
+  const selectWorkstream = (index: number) => {
+    if (!workstreams[index]) return;
+
+    // search for the interest in the workstreamsFilter array
+    const filterIdx = workstreamsFilter.findIndex(
+      filter => filter === workstreams[index].id.toString()
+    );
+
+    // clone the workstreamsFilter array
+    const items = [...workstreamsFilter];
+
+    // if the workstreams is already in the workstreamsFilter array, remove it
+    if (filterIdx >= 0) {
+      items.splice(filterIdx, 1);
+    } else {
+      items.push(workstreams[index].id.toString());
+    }
+
+    // set the new workstreamsFilter array
+    setWorkstreamsFilter(items);
+  };
+
   const selectStatus = (selectedStatus: IStatusOptions) => {
     setStatuses(selectedStatus);
   };
@@ -553,6 +604,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       selectStatus,
       statuses,
       isFiltering,
+      workstreams,
+      selectWorkstream,
+      workstreamsFilter,
     }),
     [
       profileSelected,
@@ -574,6 +628,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       interests,
       statuses,
       isFiltering,
+      workstreams,
+      workstreamsFilter,
     ]
   );
 

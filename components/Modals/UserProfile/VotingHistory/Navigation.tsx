@@ -20,18 +20,22 @@ const NavigationButton: FC<INavigationButton> = ({
   children,
   isSelected,
 }) => {
-  const { theme } = useDAO();
+  const {
+    theme: {
+      modal: { votingHistory },
+    },
+  } = useDAO();
   return (
     <Button
       bgColor={
         isSelected
-          ? theme.modal.votingHistory.navigation.buttons.selectedBg
-          : theme.modal.votingHistory.navigation.buttons.unSelectedBg
+          ? votingHistory.navigation.buttons.selectedBg
+          : votingHistory.navigation.buttons.unSelectedBg
       }
       color={
         isSelected
-          ? theme.modal.votingHistory.navigation.buttons.selectedText
-          : theme.modal.votingHistory.navigation.buttons.unSelectedText
+          ? votingHistory.navigation.buttons.selectedText
+          : votingHistory.navigation.buttons.unSelectedText
       }
       px="0"
       py="0"
@@ -39,13 +43,11 @@ const NavigationButton: FC<INavigationButton> = ({
       h="36px"
       minW="max-content"
       borderRadius="full"
-      _hover={{
-        bgColor: theme.modal.votingHistory.navigation.buttons.selectedBg,
-        color: theme.modal.votingHistory.navigation.buttons.selectedText,
-      }}
+      _hover={{}}
       _active={{}}
       _focus={{}}
       _focusWithin={{}}
+      _focusVisible={{}}
       onClick={onClick}
     >
       {children}
