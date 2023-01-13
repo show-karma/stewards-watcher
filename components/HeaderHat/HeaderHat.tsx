@@ -52,20 +52,22 @@ export const HeaderHat = () => {
               Delegate Dashboard
             </Text>
           </Flex>
-          <Flex
-            justify="center"
-            alignItems="center"
-            height="100%"
-            display={{ base: 'none', md: 'flex' }}
-          >
-            <Button onClick={onToggle}>Delegate</Button>
-          </Flex>
+          {config.DAO_DELEGATE_MODE !== 'hidden' && (
+            <Flex
+              justify="center"
+              alignItems="center"
+              height="100%"
+              display={{ base: 'none', md: 'flex' }}
+            >
+              <Button onClick={onToggle}>Delegate</Button>
+            </Flex>
+          )}
         </Flex>
         <Flex
           flexDir="row"
           gap="2"
           h="min-content"
-          w={['min-content', 'max-content']}
+          w={['max-content']}
           position={{ base: 'absolute', md: 'unset' }}
           right={{ base: '4', md: 'unset' }}
           top={{ base: '6', md: 'unset' }}
