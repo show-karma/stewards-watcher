@@ -172,7 +172,8 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   }, []);
 
   const findStatement = customFields.find(
-    item => item.displayAs === 'headline'
+    item =>
+      item.displayAs === 'headline' || item.label.toLowerCase() === 'statement'
   )?.value;
   const userStatement = Array.isArray(findStatement)
     ? findStatement[0]
@@ -204,9 +205,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       minWidth="288px"
       h={{
         base: 'max-content',
-        sm: showSecondRow ? '480px' : '380px',
-        lg: showSecondRow ? '410px' : '320px',
-        '2xl': showSecondRow ? '410px' : '320px',
+        sm: showSecondRow ? '400px' : '380px',
+        lg: showSecondRow ? '380px' : '320px',
+        '2xl': showSecondRow ? '380px' : '320px',
       }}
     >
       <Flex
@@ -489,74 +490,69 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           px={{ base: '14px', lg: '5' }}
           pb={{ base: '5', lg: '5' }}
         >
-          {canDelegate && (
-            <Flex justify="left" align="center" gap="4">
-              {isLoaded ? (
-                <Flex flexDir="row" justifyContent="space-between" w="full">
-                  <Flex gap="4" align="center" justify="center">
-                    {data?.twitterHandle && (
+          <Flex justify="left" align="center" gap="4">
+            {isLoaded ? (
+              <Flex flexDir="row" justifyContent="space-between" w="full">
+                <Flex gap="4" align="center" justify="center">
+                  {data?.twitterHandle && (
+                    <Link
+                      href={`https://twitter.com/${data.twitterHandle}`}
+                      isExternal
+                      color={theme.card.text}
+                      _hover={{
+                        transform: 'scale(1.5)',
+                      }}
+                    >
+                      <TwitterIcon w="5" h="5" />
+                    </Link>
+                  )}
+                  {data?.discourseHandle &&
+                    daoData?.socialLinks.forum &&
+                    config.DAO_FORUM_TYPE && (
                       <Link
-                        href={`https://twitter.com/${data.twitterHandle}`}
+                        href={getUserForumUrl(
+                          data.discourseHandle,
+                          config.DAO_FORUM_TYPE,
+                          daoData.socialLinks.forum
+                        )}
                         isExternal
                         color={theme.card.text}
                         _hover={{
                           transform: 'scale(1.5)',
                         }}
                       >
-                        <TwitterIcon w="5" h="5" />
+                        <ForumIcon w="5" h="5" />
                       </Link>
                     )}
-                    {data?.discourseHandle &&
-                      daoData?.socialLinks.forum &&
-                      config.DAO_FORUM_TYPE && (
-                        <Link
-                          href={getUserForumUrl(
-                            data.discourseHandle,
-                            config.DAO_FORUM_TYPE,
-                            daoData.socialLinks.forum
-                          )}
-                          isExternal
-                          color={theme.card.text}
-                          _hover={{
-                            transform: 'scale(1.5)',
-                          }}
-                        >
-                          <ForumIcon w="5" h="5" />
-                        </Link>
-                      )}
-                    {/* <Link
+                  {/* <Link
                     href={`https://discordapp.com/users/${1234}`}
                     isExternal
                     color={theme.card.text}
                   >
                     <Icon as={FaDiscord} w="5" h="5" />
                   </Link> */}
-                  </Flex>
-                  {data && (
-                    <Flex flexDir="row">
-                      <UserInfoButton onOpen={selectProfile} profile={data} />
-                      <DelegateButton
-                        delegated={data.address}
-                        px={['4', '8']}
-                      />
-                    </Flex>
+                </Flex>
+                <Flex flexDir="row">
+                  <UserInfoButton onOpen={selectProfile} profile={data} />
+                  {canDelegate && (
+                    <DelegateButton delegated={data.address} px={['4', '8']} />
                   )}
                 </Flex>
-              ) : (
-                <>
-                  <Skeleton isLoaded={isLoaded} w="36" h="12">
-                    SkeletonText
-                  </Skeleton>
-                  <Skeleton isLoaded={isLoaded} w="36" h="12">
-                    SkeletonText
-                  </Skeleton>
-                  <Skeleton isLoaded={isLoaded} w="36" h="12">
-                    SkeletonText
-                  </Skeleton>
-                </>
-              )}
-            </Flex>
-          )}
+              </Flex>
+            ) : (
+              <>
+                <Skeleton isLoaded={isLoaded} w="36" h="12">
+                  SkeletonText
+                </Skeleton>
+                <Skeleton isLoaded={isLoaded} w="36" h="12">
+                  SkeletonText
+                </Skeleton>
+                <Skeleton isLoaded={isLoaded} w="36" h="12">
+                  SkeletonText
+                </Skeleton>
+              </>
+            )}
+          </Flex>
         </Flex>
       </Flex>
     </Flex>
