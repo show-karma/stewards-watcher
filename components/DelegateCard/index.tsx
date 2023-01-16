@@ -115,7 +115,8 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     if (
       filtereds.find(
         item => item.id === 'offChainVotesPct' || item.id === 'onChainVotesPct'
-      )
+      ) &&
+      data?.votingWeight
     )
       filtereds.push({
         title: 'Voting Weight',
@@ -135,8 +136,11 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       'karmaScore',
       'forumScore',
     ];
+    const removedArray = filtereds.filter(item => item.value !== '-');
 
-    filtereds.sort((one, two) => order.indexOf(one.id) - order.indexOf(two.id));
+    removedArray.sort(
+      (one, two) => order.indexOf(one.id) - order.indexOf(two.id)
+    );
 
     if (router.query.site === 'op') {
       const randomId = Math.floor(Math.random() * 3);
@@ -147,7 +151,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       });
     }
 
-    setStats(filtereds);
+    setStats(removedArray);
   }, [config, data]);
 
   const shortAddress = data && truncateAddress(data.address);
@@ -394,14 +398,14 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
               {isLoaded ? (
                 <Flex flexDir="column" w="full">
                   <Flex
-                    gap="1"
+                    gap="8"
                     w="full"
                     bgColor={theme.card.statBg}
                     px="2"
                     py="4"
                     borderRadius="xl"
                     maxH="max-content"
-                    justify="space-between"
+                    justify={stats.length === 2 ? 'center' : 'space-between'}
                   >
                     {firstRowStats.map((statItem, index) => (
                       <Flex
