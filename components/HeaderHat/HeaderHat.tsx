@@ -3,19 +3,47 @@ import {
   Center,
   Divider,
   Flex,
+  Icon,
   Img,
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
 import { DelegateVotesModal } from 'components/Modals/DelegateVotes';
 import { useDAO } from 'contexts';
+import { FC } from 'react';
+import { IoMenu } from 'react-icons/io5';
+import { HeaderBurgerMenu } from './HeaderBurgerMenu';
 import { Madeby } from './Madeby';
 import { ThemeButton } from './ThemeButton';
+
+const DelegateToAnyoneButton: FC<{ onToggle: () => void }> = ({ onToggle }) => (
+  <Button
+    bgColor="white"
+    color="black"
+    onClick={onToggle}
+    px="6"
+    py="4"
+    fontWeight="semibold"
+    border="1px solid white"
+    _active={{}}
+    _focus={{}}
+    _hover={{}}
+  >
+    Delegate to Anyone
+  </Button>
+);
 
 export const HeaderHat = () => {
   const { daoInfo, theme } = useDAO();
   const { config } = daoInfo;
   const { isOpen, onToggle } = useDisclosure();
+
+  const {
+    isOpen: isBurgerMenuOpen,
+    onClose: closeBurgerMenu,
+    onOpen: openBurgerMenu,
+  } = useDisclosure();
+
   return (
     <Flex flexDir="column" w="full">
       <Madeby display={{ base: 'flex', lg: 'none' }} />
@@ -42,6 +70,7 @@ export const HeaderHat = () => {
             align={{ base: 'center', lg: 'flex-start' }}
             gap="16"
             w="full"
+            justify={{ base: 'space-between', lg: 'flex-start' }}
           >
             <Flex
               flexDir="column"
@@ -68,7 +97,7 @@ export const HeaderHat = () => {
               flexDir="row"
               alignItems="center"
               justify="space-between"
-              w="full"
+              w={{ base: 'max-content', lg: 'full' }}
             >
               <Flex
                 flexDir="row"
@@ -93,6 +122,24 @@ export const HeaderHat = () => {
                 </Flex>
               </Flex>
               <Flex
+                display={{ base: 'flex', md: 'none' }}
+                w="max-content"
+                align="center"
+                justify="center"
+              >
+                <Button
+                  bg="none"
+                  _hover={{}}
+                  _active={{}}
+                  _focus={{}}
+                  _focusWithin={{}}
+                  _focusVisible={{}}
+                  onClick={openBurgerMenu}
+                >
+                  <Icon as={IoMenu} boxSize="8" />
+                </Button>
+              </Flex>
+              <Flex
                 justify="center"
                 alignItems="center"
                 height="100%"
@@ -100,24 +147,17 @@ export const HeaderHat = () => {
                 gap="4"
               >
                 <ThemeButton />
-                <Button
-                  bgColor="white"
-                  color="black"
-                  onClick={onToggle}
-                  px="6"
-                  py="4"
-                  fontWeight="semibold"
-                  border="1px solid white"
-                  _active={{}}
-                  _focus={{}}
-                  _hover={{}}
-                >
-                  Delegate to Anyone
-                </Button>
+                <DelegateToAnyoneButton onToggle={onToggle} />
               </Flex>
             </Flex>
           </Flex>
         </Flex>
+        <HeaderBurgerMenu isOpen={isBurgerMenuOpen} onClose={closeBurgerMenu}>
+          <Flex flexDir="column" gap="4">
+            <ThemeButton />
+            <DelegateToAnyoneButton onToggle={onToggle} />
+          </Flex>
+        </HeaderBurgerMenu>
         <DelegateVotesModal isOpen={isOpen} onClose={onToggle} />
       </Flex>
     </Flex>

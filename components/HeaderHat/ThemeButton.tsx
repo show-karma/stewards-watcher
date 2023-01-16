@@ -2,6 +2,7 @@ import {
   Button,
   ButtonProps,
   Icon,
+  Text,
   useColorMode,
   useColorModeValue,
 } from '@chakra-ui/react';
@@ -25,9 +26,11 @@ export const ThemeButton: FC<ButtonProps> = props => {
       px="2"
       py="2"
       borderRadius="4px"
+      gap="2"
       {...props}
     >
-      <Icon as={useColorModeValue(BsFillMoonFill, BsFillSunFill)} w="5" h="5" />
+      <Text display={{ base: 'unset', md: 'none' }}>Theme</Text>
+      <Icon as={useColorModeValue(BsFillSunFill, BsFillMoonFill)} w="5" h="5" />
     </Button>
   );
 };
