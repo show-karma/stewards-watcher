@@ -407,7 +407,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                         align="center"
                         justify="center"
                         key={+index}
-                        w="full"
+                        w="max-content"
                       >
                         {statItem.id === 'forumScore' &&
                         data?.discourseHandle &&
@@ -447,7 +447,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                           justify="flex-start"
                           align="flex-start"
                           key={+index}
-                          w="full"
+                          w="max-content"
                         >
                           {statItem.id === 'forumScore' &&
                           data?.discourseHandle &&
