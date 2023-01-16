@@ -6,7 +6,7 @@ import { getIdBySnapshotId } from 'utils';
 import { useToasty } from './useToasty';
 
 export const useDelegation = (args: IDelegation) => {
-  const { delegatee } = args;
+  const { delegatee, onSuccessFunction } = args;
   const { daoInfo } = useDAO();
   const { voteInfos } = useDelegates();
 
@@ -47,6 +47,7 @@ export const useDelegation = (args: IDelegation) => {
   const { data, isLoading, isSuccess, write } = useContractWrite({
     ...config,
     onSuccess() {
+      onSuccessFunction?.();
       toast({
         title: 'Success',
         description: 'The delegate was successful!',

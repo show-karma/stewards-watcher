@@ -3,19 +3,16 @@ import {
   Flex,
   Icon,
   IconProps,
-  Link,
   Skeleton,
   SkeletonText,
   Text,
 } from '@chakra-ui/react';
 import { FC, ReactNode } from 'react';
 import { useDAO } from 'contexts';
-import { RiExternalLinkLine } from 'react-icons/ri';
-import { axiosInstance, truncateAddress } from 'utils';
-import { ImgWithFallback } from 'components/ImgWithFallback';
-import { IconType } from 'react-icons';
+import { axiosInstance } from 'utils';
 import { ICustomFields, IProfile } from 'types';
 import { useQuery } from '@tanstack/react-query';
+import { IconType } from 'react-icons';
 
 interface ITextSection {
   statement?: ICustomFields[];
@@ -121,6 +118,9 @@ const Sidebar: FC<ISidebar> = ({ profile, interests, languages }) => {
     },
   ];
 
+  const languagesValueArray = languages.value as string[];
+  const interestsValueArray = interests.value as string[];
+
   return (
     <Flex w={{ base: 'full', lg: '16.875rem' }}>
       <Flex flexDir="column" gap="10" w="full">
@@ -161,11 +161,11 @@ const Sidebar: FC<ISidebar> = ({ profile, interests, languages }) => {
           ))}
         </Flex> */}
         <Flex flexDir="column" gap="5">
-          {languages && languages.value.length > 0 && (
+          {languages && languagesValueArray.length > 0 && (
             <SectionHeader>Languages</SectionHeader>
           )}
           <Flex columnGap="1" rowGap="2" flexWrap="wrap">
-            {languages?.value.map((language, index) => (
+            {languagesValueArray.map((language, index) => (
               <SectionItem key={+index}>{language}</SectionItem>
             ))}
           </Flex>
@@ -175,7 +175,7 @@ const Sidebar: FC<ISidebar> = ({ profile, interests, languages }) => {
             <SectionHeader>Interests</SectionHeader>
           )}
           <Flex columnGap="1" rowGap="2" flexWrap="wrap">
-            {interests?.value.map((interest, index) => (
+            {interestsValueArray.map((interest, index) => (
               <SectionItem key={+index}>
                 {interest[0].toUpperCase() + interest.substring(1)}
               </SectionItem>

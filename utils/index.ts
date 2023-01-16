@@ -1,5 +1,6 @@
 export * from './axiosInstance';
 export * from './commonAddresses';
+export * from './convertHexToRGBA';
 export * from './formatDate';
 export * from './formatNumber';
 export * from './getIdBySnapshotId';

@@ -1,17 +1,16 @@
 import {
   Flex,
-  Input,
+  Img,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalOverlay,
-  Text,
 } from '@chakra-ui/react';
-import { DelegateButton } from 'components/DelegateButton';
 import { useDAO } from 'contexts';
-import { ethers } from 'ethers';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
+import { ToDelegate } from './ToDelegate';
+import { TokensDelegated } from './TokensDelegated';
 
 interface IDelegateVotesModal {
   isOpen: boolean;
@@ -23,17 +22,10 @@ export const DelegateVotesModal: React.FC<IDelegateVotesModal> = ({
   onClose = () => ({}),
 }) => {
   const { theme } = useDAO();
+  const { delegateTo: modalTheme } = theme.modal;
 
-  const [address, setAddress] = useState<string>('');
-
-  const handleChange = (addr: string) => {
-    if (address !== addr) setAddress(addr);
-  };
-
-  const isEthAddress = useMemo(
-    () => ethers.utils.isAddress(address),
-    [address]
-  );
+  const [address, setAddress] = useState('');
+  const [success, setSuccess] = useState(false);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -44,26 +36,55 @@ export const DelegateVotesModal: React.FC<IDelegateVotesModal> = ({
       <ModalContent
         w={{ base: 'max-content', lg: '920' }}
         maxW={{ base: 'max-content', lg: '920' }}
-        borderRadius="12px"
-        borderWidth="1px"
-        borderStyle="solid"
-        borderColor={theme.modal.header.border}
-        bgColor={theme.modal.background}
+        bgColor={modalTheme.bg}
         mx="1rem"
+        maxH="max-content"
+        borderTopRadius="12px"
       >
-        <ModalCloseButton />
-        <ModalBody px={{ base: '1.25rem', lg: '2.5rem' }} py={6}>
-          <Text mb={2}>Enter ETH address to delegate your tokens</Text>
-          <Input
-            placeholder="0x4fa...65c2b"
-            type="text"
-            onChange={event => handleChange(event.target.value)}
-            mb={4}
-            width="43ch"
+        <ModalCloseButton color={modalTheme.text} />
+        <ModalBody
+          px="0"
+          py="0"
+          w="416px"
+          display="flex"
+          flexDir="column"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Flex
+            w="full"
+            bgColor={modalTheme.topBg}
+            h="140px"
+            maxH="140px"
+            borderTopRadius="12px"
           />
-          <Flex justifyContent="flex-end">
-            <DelegateButton delegated={address} disabled={!isEthAddress} />
+          <Flex
+            marginTop="-48px"
+            w="94px"
+            h="94px"
+            bgColor={modalTheme.userBg}
+            align="center"
+            justify="center"
+            borderRadius="full"
+            boxShadow={modalTheme.userShadow}
+            mb="4"
+          >
+            <Img
+              w="54px"
+              h="54px"
+              src={success ? '/icons/check.svg' : '/icons/delegate.svg'}
+            />
           </Flex>
+          {success ? (
+            <TokensDelegated address={address} />
+          ) : (
+            <ToDelegate
+              address={address}
+              setAddress={setAddress}
+              setSuccess={setSuccess}
+              success={success}
+            />
+          )}
         </ModalBody>
       </ModalContent>
     </Modal>

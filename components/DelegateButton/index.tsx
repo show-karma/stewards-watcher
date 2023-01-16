@@ -1,16 +1,19 @@
 import { Button, ButtonProps, Flex, Spinner } from '@chakra-ui/react';
 import { useDAO, useWallet } from 'contexts';
 import { useDelegation, useMixpanel } from 'hooks';
+import { convertHexToRGBA } from 'utils';
 import { FC, useEffect, useState } from 'react';
 
 interface IDelegateButton extends ButtonProps {
   delegated: string;
   text?: string;
+  successEmitter?: () => void;
 }
 
 export const DelegateButton: FC<IDelegateButton> = ({
   delegated,
   text = 'Delegate',
+  successEmitter,
   ...props
 }) => {
   const { openConnectModal, openChainModal, isConnected, chain } = useWallet();
@@ -22,6 +25,7 @@ export const DelegateButton: FC<IDelegateButton> = ({
 
   const { isLoading, write } = useDelegation({
     delegatee: delegated,
+    onSuccessFunction: successEmitter,
   });
 
   useEffect(() => {
@@ -61,7 +65,9 @@ export const DelegateButton: FC<IDelegateButton> = ({
       fontSize={['md']}
       fontWeight="medium"
       onClick={handleCase}
-      _hover={{}}
+      _hover={{
+        backgroundColor: convertHexToRGBA(theme.branding, 0.8),
+      }}
       _focus={{}}
       _active={{}}
       disabled={isLoading}

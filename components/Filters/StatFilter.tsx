@@ -1,4 +1,5 @@
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
+import { DownChevron } from 'components/Icons';
 import { useDAO, useDelegates } from 'contexts';
 import { IoChevronDownOutline } from 'react-icons/io5';
 
@@ -12,19 +13,33 @@ export const StatFilter = () => {
     <Menu isLazy id="stat-filter">
       <MenuButton
         as={Button}
-        rightIcon={<IoChevronDownOutline />}
-        bgColor={theme.filters.bg}
-        borderWidth="1px"
-        borderColor={theme.filters.border}
-        borderStyle="solid"
+        rightIcon={
+          <DownChevron
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            boxSize="5"
+          />
+        }
+        bgColor={theme.card.background}
         boxShadow={theme.filters.shadow}
         color={theme.filters.title}
-        borderRadius="sm"
-        gap="4"
         fontFamily="heading"
         fontWeight="normal"
         textAlign="left"
-        w={{ base: 'full', md: 'max-content' }}
+        w="full"
+        maxW={{ base: 'full', md: 'max-content' }}
+        _hover={{
+          bg: theme.filters.activeBg,
+        }}
+        _active={{
+          bg: theme.filters.activeBg,
+        }}
+        px="4"
+        py="3"
+        borderRadius="4px"
+        _focus={{}}
+        _focusWithin={{}}
       >
         {selectedStat}
       </MenuButton>

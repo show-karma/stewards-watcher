@@ -2,7 +2,12 @@ import { DelegatesProvider, useDAO, WalletProvider } from 'contexts';
 import { MainLayout } from 'layouts';
 import Head from 'next/head';
 import React from 'react';
-import { RainbowWrapper, Header, DelegatesList, HeaderHat } from 'components';
+import {
+  RainbowWrapper,
+  DelegatesList,
+  HeaderHat,
+  BodyTitle,
+} from 'components';
 import { Flex } from '@chakra-ui/react';
 import Script from 'next/script';
 
@@ -82,7 +87,7 @@ export const DAOContainer: React.FC<IDAOContainer> = ({ user }) => {
           >
             <HeaderHat />
             <MainLayout>
-              <Header />
+              <BodyTitle />
               <DelegatesList pathUser={user} />
             </MainLayout>
           </Flex>
