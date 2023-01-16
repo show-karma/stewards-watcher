@@ -1,3 +1,5 @@
+import { ICustomFields } from './ICustomFields';
+
 export interface IDelegate {
   address: string;
   ensName?: string;
@@ -18,5 +20,10 @@ export interface IDelegate {
   aboutMe?: string;
   realName?: string;
   profilePicture?: string;
+  delegatePitch?: {
+    threadId: number;
+    customFields: ICustomFields[];
+    postId: number;
+  };
   workstreams?: { id: number; name: string; description: string }[];
 }

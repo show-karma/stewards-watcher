@@ -11,6 +11,11 @@ export interface IDAOTheme {
   headerBg: string;
   gradientBall: string;
   themeIcon: string;
+  collapse: {
+    bg?: string;
+    text: string;
+    subtext: string;
+  };
   hat: {
     text: {
       primary: string;
@@ -25,6 +30,7 @@ export interface IDAOTheme {
     title: string;
     bg: string;
     listBg: string;
+    activeBg?: string;
     listText: string;
     shadow?: string;
   };
@@ -32,7 +38,7 @@ export interface IDAOTheme {
     shadow?: string;
     icon: string;
     background: string;
-    featureStatBg: string;
+    statBg: string;
     divider: string;
     text: {
       primary: string;
@@ -102,6 +108,37 @@ export interface IDAOTheme {
           selectedText: string;
           unSelectedBg: string;
           unSelectedText: string;
+        };
+      };
+    };
+    delegateTo: {
+      bg: string;
+      userBg: string;
+      userShadow: string;
+      topBg: string;
+      text: string;
+      subtext: string;
+      input: {
+        placeholder: string;
+        text: string;
+        dirtyBorder: string;
+        border: string;
+        error: string;
+        bg: string;
+      };
+      button: {
+        disabled: {
+          bg: string;
+          text: string;
+        };
+        normal: {
+          bg: string;
+          text: string;
+        };
+        alternative: {
+          bg: string;
+          text: string;
+          border: string;
         };
       };
     };

@@ -1,8 +1,8 @@
 import moment from 'moment';
 
-type IFormat = 'YYYY-MM-DD' | 'MMMM D, YYYY';
+type IFormat = 'MMM YYYY' | 'MMMM D, YYYY';
 
 export const formatDate = (
   dateToFormat: string,
-  format: IFormat = 'YYYY-MM-DD'
+  format: IFormat = 'MMM YYYY'
 ) => moment(dateToFormat).format(format);

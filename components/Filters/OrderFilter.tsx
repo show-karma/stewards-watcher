@@ -1,4 +1,5 @@
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
+import { DownChevron } from 'components/Icons';
 import { useDAO, useDelegates } from 'contexts';
 import { IoChevronDownOutline } from 'react-icons/io5';
 import { IFilterOrder } from 'types';
@@ -24,22 +25,36 @@ export const OrderFilter = () => {
     <Menu isLazy id="order-filter">
       <MenuButton
         as={Button}
-        rightIcon={<IoChevronDownOutline />}
-        bgColor={theme.filters.bg}
-        borderWidth="1px"
-        borderColor={theme.filters.border}
-        borderStyle="solid"
+        rightIcon={
+          <DownChevron
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            boxSize="5"
+          />
+        }
+        bgColor={theme.card.background}
         boxShadow={theme.filters.shadow}
         color={theme.filters.title}
-        borderRadius="sm"
         gap="1"
         fontFamily="heading"
         fontWeight="normal"
         textAlign="left"
         fontSize="md"
         minW="min-content"
-        maxW="full"
-        flex="1"
+        w="full"
+        maxW={{ base: 'full', md: 'max-content' }}
+        _hover={{
+          bg: theme.filters.activeBg,
+        }}
+        _active={{
+          bg: theme.filters.activeBg,
+        }}
+        px="4"
+        py="3"
+        borderRadius="4px"
+        _focus={{}}
+        _focusWithin={{}}
       >
         {selectedOrder}
       </MenuButton>

@@ -1,9 +1,10 @@
+import { IStats } from 'types/resources';
+
 export type IFilterOrder = 'asc' | 'desc';
 export type IFilterPeriod = 'lifetime' | '30d' | '180d';
-export type IFilterStat = string;
 export interface IStatOptions {
   title: string;
-  stat: IFilterStat;
+  stat: IStats;
 }
 
 export interface IVoteInfo {
