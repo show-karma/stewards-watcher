@@ -133,10 +133,10 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       'votingWeight',
       'offChainVotesPct',
       'onChainVotesPct',
-      'karmaScore',
       'forumScore',
+      'karmaScore',
     ];
-    const removedArray = filtereds.filter(item => item.value !== '-');
+    let removedArray = filtereds.filter(item => item.value !== '-');
 
     removedArray.sort(
       (one, two) => order.indexOf(one.id) - order.indexOf(two.id)
@@ -150,6 +150,8 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
         description: ['Tooling', 'DeFi', 'Governance'][randomId],
       });
     }
+
+    if (router.query.site === 'starknet') removedArray = [];
 
     setStats(removedArray);
   }, [config, data]);
@@ -193,6 +195,17 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   const firstRowStats = stats.slice(0, columnsCalculator());
   const restRowStats = stats.slice(columnsCalculator(), stats.length);
 
+  const calculateSizeByStats = (size: 'sm' | 'lg') => {
+    if (size === 'sm') {
+      if (showSecondRow) return '400px';
+      if (!stats.length) return '240px';
+      return '300px';
+    }
+    if (showSecondRow) return '380px';
+    if (!stats.length) return '240px';
+    return '320px';
+  };
+
   return (
     <Flex
       bgColor={theme.card.background}
@@ -209,9 +222,8 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       minWidth="288px"
       h={{
         base: 'max-content',
-        sm: showSecondRow ? '400px' : '380px',
-        lg: showSecondRow ? '380px' : '320px',
-        '2xl': showSecondRow ? '380px' : '320px',
+        sm: calculateSizeByStats('sm'),
+        lg: calculateSizeByStats('lg'),
       }}
     >
       <Flex
@@ -396,88 +408,94 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           {!isExpanded && (
             <>
               {isLoaded ? (
-                <Flex flexDir="column" w="full">
-                  <Flex
-                    gap="8"
-                    w="full"
-                    bgColor={theme.card.statBg}
-                    px="2"
-                    py="4"
-                    borderRadius="xl"
-                    maxH="max-content"
-                    justify={stats.length === 2 ? 'center' : 'space-between'}
-                  >
-                    {firstRowStats.map((statItem, index) => (
+                <>
+                  {stats.length > 0 && (
+                    <Flex flexDir="column" w="full">
                       <Flex
-                        align="center"
-                        justify="center"
-                        key={+index}
-                        w="max-content"
+                        gap="2"
+                        w="full"
+                        bgColor={theme.card.statBg}
+                        px="2"
+                        py="4"
+                        borderRadius="xl"
+                        maxH="max-content"
+                        justify={
+                          stats.length === 2 ? 'center' : 'space-between'
+                        }
                       >
-                        {statItem.id === 'forumScore' &&
-                        data?.discourseHandle &&
-                        daoData?.socialLinks.forum &&
-                        config.DAO_FORUM_TYPE ? (
-                          <Link
-                            href={getUserForumUrl(
-                              data.discourseHandle,
-                              config.DAO_FORUM_TYPE,
-                              daoData.socialLinks.forum
-                            )}
-                            isExternal
-                            _hover={{}}
-                            h="max-content"
+                        {firstRowStats.map((statItem, index) => (
+                          <Flex
+                            align="center"
+                            justify="center"
+                            key={+index}
+                            w="max-content"
                           >
-                            <DelegateStat stat={statItem} />
-                          </Link>
-                        ) : (
-                          <DelegateStat stat={statItem} />
-                        )}
+                            {statItem.id === 'forumScore' &&
+                            data?.discourseHandle &&
+                            daoData?.socialLinks.forum &&
+                            config.DAO_FORUM_TYPE ? (
+                              <Link
+                                href={getUserForumUrl(
+                                  data.discourseHandle,
+                                  config.DAO_FORUM_TYPE,
+                                  daoData.socialLinks.forum
+                                )}
+                                isExternal
+                                _hover={{}}
+                                h="max-content"
+                              >
+                                <DelegateStat stat={statItem} />
+                              </Link>
+                            ) : (
+                              <DelegateStat stat={statItem} />
+                            )}
+                          </Flex>
+                        ))}
                       </Flex>
-                    ))}
-                  </Flex>
-                  {stats.length > 4 && (
-                    <Flex
-                      gap="2"
-                      w="full"
-                      bgColor="transparent"
-                      px="2"
-                      py="4"
-                      maxH="max-content"
-                      justify="flex-start"
-                      align="flex-start"
-                    >
-                      {restRowStats.map((statItem, index) => (
+                      {stats.length > 4 && (
                         <Flex
+                          gap="2"
+                          w="full"
+                          bgColor="transparent"
+                          px="2"
+                          py="4"
+                          maxH="max-content"
                           justify="flex-start"
                           align="flex-start"
-                          key={+index}
-                          w="max-content"
                         >
-                          {statItem.id === 'forumScore' &&
-                          data?.discourseHandle &&
-                          daoData?.socialLinks.forum &&
-                          config.DAO_FORUM_TYPE ? (
-                            <Link
-                              href={getUserForumUrl(
-                                data.discourseHandle,
-                                config.DAO_FORUM_TYPE,
-                                daoData.socialLinks.forum
-                              )}
-                              isExternal
-                              _hover={{}}
-                              h="max-content"
+                          {restRowStats.map((statItem, index) => (
+                            <Flex
+                              justify="flex-start"
+                              align="flex-start"
+                              key={+index}
+                              w="max-content"
                             >
-                              <DelegateStat stat={statItem} />
-                            </Link>
-                          ) : (
-                            <DelegateStat stat={statItem} />
-                          )}
+                              {statItem.id === 'forumScore' &&
+                              data?.discourseHandle &&
+                              daoData?.socialLinks.forum &&
+                              config.DAO_FORUM_TYPE ? (
+                                <Link
+                                  href={getUserForumUrl(
+                                    data.discourseHandle,
+                                    config.DAO_FORUM_TYPE,
+                                    daoData.socialLinks.forum
+                                  )}
+                                  isExternal
+                                  _hover={{}}
+                                  h="max-content"
+                                >
+                                  <DelegateStat stat={statItem} />
+                                </Link>
+                              ) : (
+                                <DelegateStat stat={statItem} />
+                              )}
+                            </Flex>
+                          ))}
                         </Flex>
-                      ))}
+                      )}
                     </Flex>
                   )}
-                </Flex>
+                </>
               ) : (
                 <Skeleton w="full" h="full" />
               )}

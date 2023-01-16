@@ -12,7 +12,6 @@ import React, {
 import { useRouter } from 'next/router';
 import {
   IDelegate,
-  IFilterStat,
   IFilterOrder,
   IFilterPeriod,
   IDelegateFromAPI,
@@ -21,6 +20,7 @@ import {
   IActiveTab,
   IStatusOptions,
   IWorkstream,
+  IStats,
 } from 'types';
 import { axiosInstance } from 'utils';
 import { useMixpanel, useToasty } from 'hooks';
@@ -37,12 +37,12 @@ interface IDelegateProps {
   fetchDelegates: (_offset?: number) => Promise<void>;
   handleSearch: DebouncedFunc<(text: any) => void>;
   isSearchDirty: boolean;
-  selectStat: (_selectedStat: IFilterStat) => void;
+  selectStat: (_selectedStat: IStats) => void;
   selectOrder: (selectedOrder: IFilterOrder) => void;
   selectPeriod: (selectedPeriod: IFilterPeriod) => void;
   selectUserToFind: (selectedUserToFind: string) => void;
   statOptions: IStatOptions[];
-  stat: IFilterStat;
+  stat: IStats;
   order: IFilterOrder;
   period: IFilterPeriod;
   clearFilters: () => void;
@@ -103,7 +103,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   };
   const statOptions = prepareStatOptions();
 
-  const [stat, setStat] = useState<IFilterStat>(statOptions[0].stat);
+  const [stat, setStat] = useState<IStats>(statOptions[0].stat);
   const [order, setOrder] = useState<IFilterOrder>('desc');
   const [period, setPeriod] = useState<IFilterPeriod>(defaultTimePeriod);
   const [interests, setInterests] = useState<string[]>([]);
@@ -507,7 +507,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     }
   }, [delegates]);
 
-  const selectStat = (_selectedStat: IFilterStat) => setStat(_selectedStat);
+  const selectStat = (_selectedStat: IStats) => setStat(_selectedStat);
   const selectOrder = (selectedOrder: IFilterOrder) => setOrder(selectedOrder);
   const selectPeriod = (selectedPeriod: IFilterPeriod) =>
     setPeriod(selectedPeriod);

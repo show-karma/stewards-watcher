@@ -1,7 +1,8 @@
-import { IFilterPeriod, IFilterStat } from 'types/contexts';
+import { IFilterPeriod } from 'types/contexts';
 import { Chain } from 'wagmi';
 import { IChainRow } from 'types/IChainRow';
 import { IForumType } from './forum';
+import { IStats } from './stats';
 
 export interface IDAOConfig {
   DAO: string;
@@ -27,10 +28,10 @@ export interface IDAOConfig {
   DAO_GTAG?: string;
   DAO_DEFAULT_SETTINGS?: {
     TIMEPERIOD?: IFilterPeriod;
-    ORDERSTAT?: IFilterStat;
+    ORDERSTAT?: IStats;
     STATUS_FILTER?: boolean;
   };
-  EXCLUDED_CARD_FIELDS: string[];
+  EXCLUDED_CARD_FIELDS: IStats[];
   /**
    * Defines a custom function to parse the votes with an external proposal provider.
    *

@@ -2,6 +2,7 @@ import { Flex, Text } from '@chakra-ui/react';
 import { useDAO, useDelegates } from 'contexts';
 import { DelegateStatusFilter } from './DelegateStatusFilter';
 import { InterestsFilter } from './InterestsFilter';
+import { PeriodFilter } from './PeriodFilter';
 import { WorkstreamFilter } from './WorkstreamFilter';
 
 export const OrderByFilters = () => {
@@ -20,6 +21,7 @@ export const OrderByFilters = () => {
           {daoInfo.config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER && (
             <DelegateStatusFilter />
           )}
+          <PeriodFilter />
         </Flex>
       </Flex>
     </Flex>
