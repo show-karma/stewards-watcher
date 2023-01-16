@@ -1,5 +1,6 @@
 import { IFilterPeriod, IFilterStat } from 'types/contexts';
 import { Chain } from 'wagmi';
+import { IChainRow } from 'types/IChainRow';
 import { IForumType } from './forum';
 
 export interface IDAOConfig {
@@ -20,7 +21,7 @@ export interface IDAOConfig {
   };
   DAO_CHAIN: Chain;
   DAO_DELEGATE_CONTRACT: string;
-  DAO_DELEGATE_MODE: 'custom' | 'snapshot';
+  DAO_DELEGATE_MODE: 'custom' | 'snapshot' | 'hidden';
   DAO_DELEGATE_ACTION?: () => void;
   DAO_FORUM_TYPE?: IForumType;
   DAO_GTAG?: string;
@@ -30,4 +31,20 @@ export interface IDAOConfig {
     STATUS_FILTER?: boolean;
   };
   EXCLUDED_CARD_FIELDS: string[];
+  /**
+   * Defines a custom function to parse the votes with an external proposal provider.
+   *
+   *_initially used by DyDx_
+   * @param votes
+   */
+  DAO_EXT_VOTES_PROVIDER?: {
+    onChain?: (
+      daoName: string | string[],
+      address: string
+    ) => Promise<IChainRow[]>;
+    offChain?: (
+      daoName: string | string[],
+      address: string
+    ) => Promise<IChainRow[]>;
+  };
 }

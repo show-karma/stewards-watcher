@@ -9,6 +9,7 @@ import dydx from './dydx';
 import dimo from './dimo';
 import gitcoin from './gitcoin';
 import elementFinance from './element-finance';
+import starknet from './starknet';
 
 interface ISupportedDAOs {
   [key: string]: IDAOInfo;
@@ -73,6 +74,12 @@ export const supportedDAOs: ISupportedDAOs = {
     config: elementFinance.config,
     dark: elementFinance.dark,
     light: elementFinance.light,
+    ABI: null,
+  },
+  starknet: {
+    config: starknet.config,
+    dark: starknet.dark,
+    light: starknet.light,
     ABI: null,
   },
 };
