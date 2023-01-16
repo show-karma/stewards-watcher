@@ -42,6 +42,13 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
 
   const { config } = daoInfo;
   const isLoaded = !!data;
+
+  const getScore = () => {
+    if (data?.gitcoinHealthScore) return formatNumber(data.gitcoinHealthScore);
+    if (data?.karmaScore) return formatNumber(data?.karmaScore);
+    return '-';
+  };
+
   const allStats: ICardStat[] = [
     {
       title: 'Delegated Tokens',
@@ -75,9 +82,11 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     {
       title: 'Score',
       icon: IoPersonOutline,
-      value: data?.karmaScore ? formatNumber(data?.karmaScore) : '-',
+      value: getScore(),
       id: 'karmaScore',
-      tooltipText: 'Total Score based on all the delegate activity',
+      tooltipText: data?.gitcoinHealthScore
+        ? 'Total gitcoin health score'
+        : 'Total Score based on all the delegate activity',
     },
     {
       title: 'Forum score',
@@ -201,7 +210,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       if (!stats.length) return '240px';
       return '300px';
     }
-    if (showSecondRow) return '380px';
+    if (showSecondRow) return '400px';
     if (!stats.length) return '240px';
     return '320px';
   };

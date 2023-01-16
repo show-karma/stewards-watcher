@@ -1,14 +1,10 @@
-import numbro from 'numbro';
+import humanFormat from 'human-format';
 
 export const formatNumber = (numberToFormat: number) =>
-  numbro(numberToFormat).format({
-    thousandSeparated: true,
-    average: true,
-    mantissa: 2,
-    trimMantissa: true,
+  humanFormat(numberToFormat, {
+    maxDecimals: 2,
+    separator: '',
   });
 
 export const formatNumberPercentage = (numberToFormat: number) =>
-  numberToFormat > 0.01
-    ? `${formatNumber(+numberToFormat.toFixed(2))}%`
-    : '< 0.01%';
+  numberToFormat > 0.01 ? `${+numberToFormat.toFixed(2)}%` : '< 0.01%';
