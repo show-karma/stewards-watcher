@@ -9,6 +9,7 @@ interface IExpandableText {
   maxCharsExpanded?: number;
   isExpanded: boolean;
   toggleIsExpanded: () => void;
+  isShowingSecondRow?: boolean;
 }
 
 export const ExpandableCardText: FC<IExpandableText> = props => {
@@ -20,8 +21,9 @@ export const ExpandableCardText: FC<IExpandableText> = props => {
 
   const {
     text,
+    isShowingSecondRow,
     maxChars = 80,
-    maxCharsExpanded = 288,
+    maxCharsExpanded = isShowingSecondRow ? 535 : 288,
     isExpanded,
     toggleIsExpanded,
   } = props;

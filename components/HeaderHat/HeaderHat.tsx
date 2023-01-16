@@ -26,7 +26,7 @@ export const HeaderHat = () => {
         w="full"
         align="center"
         justify="center"
-        px={{ base: '4', lg: '16' }}
+        px={{ base: '4', lg: '20' }}
         zIndex="2"
       >
         <Flex

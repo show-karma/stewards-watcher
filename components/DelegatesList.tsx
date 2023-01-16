@@ -140,7 +140,7 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
           <SimpleGrid
             flexWrap="wrap"
             rowGap="10"
-            columnGap="8"
+            columnGap="6"
             w="full"
             columns={{ base: 1, md: 2, xl: 3 }}
             alignItems="center"

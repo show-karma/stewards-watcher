@@ -66,7 +66,7 @@ export const BodyTitle: FC = () => {
           align="center"
           justify="space-between"
           flexWrap="wrap"
-          py={['2', '3.75rem']}
+          py="6"
           w="full"
         >
           <Flex
@@ -90,7 +90,7 @@ export const BodyTitle: FC = () => {
               <Text
                 color={theme.collapse.text}
                 textAlign={{ base: 'start' }}
-                fontSize={{ base: 'lg', sm: '2xl', md: '3xl' }}
+                fontSize={{ base: 'lg', sm: '2xl' }}
                 lineHeight="9"
                 fontWeight="600"
                 fontFamily="body"
@@ -124,7 +124,7 @@ export const BodyTitle: FC = () => {
                   >
                     <Button
                       px="6"
-                      py={{ base: '6', lg: '4' }}
+                      py={{ base: '6' }}
                       justifyContent={{ base: 'space-between', lg: 'center' }}
                       borderRadius="base"
                       bgColor={theme.branding}
@@ -168,7 +168,7 @@ export const BodyTitle: FC = () => {
                 >
                   <Button
                     px="6"
-                    py={{ base: '6', lg: '4' }}
+                    py={{ base: '6' }}
                     color={theme.collapse.text}
                     justifyContent={{ base: 'space-between', lg: 'center' }}
                     borderRadius="base"

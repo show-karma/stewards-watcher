@@ -14,7 +14,8 @@ export const Filters = () => {
       flexWrap="wrap"
       gap="8"
       align={{ base: 'flex-start', xl: 'center' }}
-      p="6"
+      py="5"
+      px="4"
       borderRadius="xl"
       justify="space-between"
     >

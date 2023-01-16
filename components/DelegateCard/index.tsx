@@ -196,8 +196,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     <Flex
       bgColor={theme.card.background}
       flexDir="column"
-      px={{ base: '14px', lg: '5' }}
-      py={{ base: '5', lg: '5' }}
       borderRadius="16"
       flex="1"
       gap="2"
@@ -208,14 +206,22 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       borderColor={theme.card.border}
       w="full"
       minWidth="288px"
-      maxWidth="420px"
       h={{
         base: 'max-content',
         // eslint-disable-next-line no-nested-ternary
-        md: showSecondRow ? '420px' : '350px',
+        sm: showSecondRow ? '480px' : '380px',
+        lg: showSecondRow ? '480px' : '350px',
+        '2xl': showSecondRow ? '440px' : '350px',
       }}
     >
-      <Flex flexDir="row" gap="4" w="full" align="flex-start">
+      <Flex
+        flexDir="row"
+        gap="4"
+        w="full"
+        align="flex-start"
+        px={{ base: '14px', lg: '5' }}
+        pt={{ base: '5', lg: '5' }}
+      >
         {isLoaded && data ? (
           <Flex
             minH={['48px', '54px']}
@@ -367,6 +373,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           align="flex-start"
           justify="space-between"
           h="full"
+          px={{ base: '14px', lg: '5' }}
         >
           {isLoaded ? (
             <>
@@ -376,6 +383,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                     text={userStatement}
                     isExpanded={isExpanded}
                     toggleIsExpanded={toggleIsExpanded}
+                    isShowingSecondRow={showSecondRow}
                   />
                 </Flex>
               ) : (
@@ -476,9 +484,15 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           )}
         </Flex>
 
-        <Flex flexDir="column" gap="3" mt="1" h="max-content">
-          <Divider borderColor={theme.card.divider} w="full" />
-
+        <Divider borderColor={theme.card.divider} w="full" mt={{ base: '3' }} />
+        <Flex
+          flexDir="column"
+          gap="3"
+          mt={{ base: '3' }}
+          h="max-content"
+          px={{ base: '14px', lg: '5' }}
+          pb={{ base: '5', lg: '5' }}
+        >
           {canDelegate && (
             <Flex justify="left" align="center" gap="4">
               {isLoaded ? (
