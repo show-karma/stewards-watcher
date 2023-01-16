@@ -28,6 +28,7 @@ const supportedDAOs = [
   'dimo',
   'gitcoin',
   'element-finance',
+  'starknet',
 ];
 
 export default function middleware(req: NextRequest) {
