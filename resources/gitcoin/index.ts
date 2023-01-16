@@ -25,7 +25,7 @@ const config: IDAOConfig = {
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
   DAO_DEFAULT_SETTINGS: {
-    TIMEPERIOD: 'lifetime',
+    TIMEPERIOD: '180d',
     ORDERSTAT: 'healthScore',
   },
   EXCLUDED_CARD_FIELDS: ['onChainVotesPct'],

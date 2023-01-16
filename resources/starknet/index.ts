@@ -25,16 +25,6 @@ const config: IDAOConfig = {
   EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'healthScore'],
 };
 
-// const theme: IDAOTheme = {
-//   background: '#011627',
-//   card: '#0b2a3c',
-//   title: '#FFFFFF',
-//   subtitle: '#FFFFFF',
-//   text: '#FFFFFF',
-//   buttonText: '#FFFFFF',
-//   branding: '#1ba5f8',
-// };
-
 const dark: IDAOTheme = {
   background: '#17212B',
   bodyBg: '#17212B',
