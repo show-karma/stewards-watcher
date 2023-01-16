@@ -45,9 +45,12 @@ export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen, profile }) => {
       _hover={{
         textDecoration: 'underline',
         cursor: 'pointer',
+        bg: 'transparent',
       }}
       _active={{}}
       _focus={{}}
+      _focusVisible={{}}
+      _focusWithin={{}}
       onClick={() => redirectWithoutRefresh('votinghistory')}
     >
       Activity
