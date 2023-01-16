@@ -1,31 +1,28 @@
-import { Button, Flex, Icon, Text, useMediaQuery } from '@chakra-ui/react';
+import { Flex, Text, useMediaQuery } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
-import { FC, useState } from 'react';
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { FC } from 'react';
 
 interface IExpandableText {
   text: string;
   maxChars?: number;
-  maxCharsExpanded?: number;
   isExpanded: boolean;
   toggleIsExpanded: () => void;
-  isShowingSecondRow?: boolean;
+  selectProfile: () => void;
 }
 
 export const ExpandableCardText: FC<IExpandableText> = props => {
   const { theme } = useDAO();
-  const [isMobile] = useMediaQuery('(min-width: 425px)', {
+  const [isMobile] = useMediaQuery('(max-width: 425px)', {
     ssr: true,
     fallback: false,
   });
 
   const {
     text,
-    isShowingSecondRow,
-    maxChars = 80,
-    maxCharsExpanded = isShowingSecondRow ? 535 : 288,
+    maxChars = 82,
     isExpanded,
     toggleIsExpanded,
+    selectProfile,
   } = props;
 
   return (
@@ -55,11 +52,9 @@ export const ExpandableCardText: FC<IExpandableText> = props => {
             }}
             flex="1"
           >
-            {isExpanded
-              ? `${text.substring(0, maxCharsExpanded)}...`
-              : `${text.substring(0, isMobile ? 128 : maxChars)}... `}
+            {`${text.substring(0, isMobile ? 90 : maxChars)}... `}
             <Text
-              onClick={toggleIsExpanded}
+              onClick={selectProfile}
               cursor="pointer"
               color={theme.card.text.primary}
               w="max-content"
@@ -70,7 +65,7 @@ export const ExpandableCardText: FC<IExpandableText> = props => {
                 cursor: 'pointer',
               }}
             >
-              {!isExpanded && 'view statement'}
+              view statement
             </Text>
           </Text>
         </Flex>

@@ -12,7 +12,7 @@ export interface IDAOTheme {
   gradientBall: string;
   themeIcon: string;
   collapse: {
-    bg: string;
+    bg?: string;
     text: string;
     subtext: string;
   };

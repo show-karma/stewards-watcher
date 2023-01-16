@@ -33,7 +33,6 @@ const config: IDAOConfig = {
 };
 
 const dark: IDAOTheme = {
-  collapse: { bg: '#2C2E32', text: '#FFFFFF', subtext: '#ADB8C0' },
   background: '#1C1D20',
   bodyBg: '#1C1D20',
   title: '#FFFFFF',
@@ -45,6 +44,7 @@ const dark: IDAOTheme = {
   headerBg: '#212328',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
+  collapse: { bg: '#222429', text: '#FFFFFF', subtext: '#ADB8C0' },
   hat: {
     text: {
       primary: '#FFFFFF',
@@ -55,16 +55,17 @@ const dark: IDAOTheme = {
   },
   filters: {
     head: '#ADB8C0',
-    border: '#ADB8C033',
+    border: 'rgba(173, 184, 192, 0.2)',
     title: 'white',
     bg: 'transparent',
+    activeBg: '#3E4247',
     listBg: '#222429',
     listText: 'white',
   },
   card: {
     icon: '#ADB8C0',
     background: '#222429',
-    statBg: 'rgba(102, 102, 102, 0.15)',
+    statBg: '#2C2E32',
     divider: 'rgba(173, 184, 192, 0.2)',
     text: { primary: '#FFFFFF', secondary: '#ADB8C0' },
     border: 'rgba(87, 93, 104, 0.25)',
@@ -101,37 +102,6 @@ const dark: IDAOTheme = {
         },
       },
     },
-    delegateTo: {
-      bg: '#FFFFFF',
-      userBg: '#FFFFFF',
-      userShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
-      topBg: '#EBEDEF',
-      text: '#212328',
-      subtext: '#595A5E',
-      input: {
-        placeholder: '#595A5E',
-        text: '#212328',
-        dirtyBorder: '#212328',
-        border: '#E6E6E6',
-        error: '#C80925',
-        bg: '#FFFFFF',
-      },
-      button: {
-        disabled: {
-          bg: '#F2F4F9',
-          text: 'rgba(89, 90, 94, 0.5)',
-        },
-        normal: {
-          bg: '#C80925',
-          text: '#FFFFFF',
-        },
-        alternative: {
-          bg: 'transparent',
-          text: '#212328',
-          border: '#595A5E',
-        },
-      },
-    },
     votingHistory: {
       headline: '#FFFFFF',
       divider: '#E6E6E6',
@@ -165,57 +135,6 @@ const dark: IDAOTheme = {
         },
       },
     },
-  },
-};
-
-const light: IDAOTheme = {
-  background: '#F2F4F9',
-  bodyBg: '#F2F4F9',
-  title: '#222429',
-  subtitle: '#666666',
-  text: '#222429',
-  branding: '#C80925',
-  buttonText: '#FFFFFF',
-  buttonTextSec: '#222429',
-  headerBg: '#212328',
-  gradientBall: '#ADB8C0',
-  themeIcon: '#ADB8C0',
-  collapse: { bg: '#2C2E32', text: '#FFFFFF', subtext: '#ADB8C0' },
-  hat: {
-    text: {
-      primary: '#FFFFFF',
-      secondary: '#ADB8C0',
-      madeBy: '#222429',
-      lastUpdated: '#666666',
-    },
-  },
-  filters: {
-    head: '#666666',
-    border: '#ADB8C033',
-    title: '#666666',
-    bg: 'transparent',
-    listBg: '#FFFFFF',
-    listText: '#666666',
-  },
-  card: {
-    icon: '#ADB8C0',
-    background: '#FFFFFF',
-    statBg: 'transparent',
-    divider: 'rgba(102, 102, 102, 0.5)',
-    text: { primary: '#212328', secondary: '#666666' },
-    border: 'rgba(102, 102, 102, 0.5)',
-    shadow: '-1px 1px 5px 0px rgba(87,93,104,0.75);',
-    common: '#727B81',
-  },
-  modal: {
-    background: '#222429',
-    header: {
-      border: '#ADB8C0',
-      title: '#FFFFFF',
-      subtitle: '#ADB8C0',
-      twitter: '#ADB8C0',
-      divider: 'rgba(173, 184, 192, 0.2)',
-    },
     delegateTo: {
       bg: '#FFFFFF',
       userBg: '#FFFFFF',
@@ -246,6 +165,58 @@ const light: IDAOTheme = {
           border: '#595A5E',
         },
       },
+    },
+  },
+};
+
+const light: IDAOTheme = {
+  background: '#F2F4F9',
+  bodyBg: '#F2F4F9',
+  title: '#222429',
+  subtitle: '#666666',
+  text: '#222429',
+  branding: '#C80925',
+  buttonText: '#FFFFFF',
+  buttonTextSec: '#222429',
+  headerBg: '#212328',
+  gradientBall: '#ADB8C0',
+  themeIcon: '#ADB8C0',
+  collapse: { bg: '#222429', text: '#FFFFFF', subtext: '#ADB8C0' },
+  hat: {
+    text: {
+      primary: '#FFFFFF',
+      secondary: '#ADB8C0',
+      madeBy: '#222429',
+      lastUpdated: '#666666',
+    },
+  },
+  filters: {
+    head: '#666666',
+    border: '#ADB8C033',
+    title: '#666666',
+    bg: 'transparent',
+    listBg: '#FFFFFF',
+    listText: '#666666',
+    activeBg: '#3E4247',
+  },
+  card: {
+    icon: '#ADB8C0',
+    background: '#FFFFFF',
+    statBg: '#EBEDEF',
+    divider: 'rgba(102, 102, 102, 0.5)',
+    text: { primary: '#212328', secondary: '#666666' },
+    border: 'rgba(102, 102, 102, 0.5)',
+    shadow: '-1px 1px 5px 0px rgba(87,93,104,0.75);',
+    common: '#727B81',
+  },
+  modal: {
+    background: '#222429',
+    header: {
+      border: '#ADB8C0',
+      title: '#FFFFFF',
+      subtitle: '#ADB8C0',
+      twitter: '#ADB8C0',
+      divider: 'rgba(173, 184, 192, 0.2)',
     },
     buttons: {
       selectBg: '#C80925',
@@ -299,6 +270,37 @@ const light: IDAOTheme = {
           selectedText: '#222429',
           unSelectedBg: 'transparent',
           unSelectedText: '#ADB8C0',
+        },
+      },
+    },
+    delegateTo: {
+      bg: '#FFFFFF',
+      userBg: '#FFFFFF',
+      userShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+      topBg: '#EBEDEF',
+      text: '#212328',
+      subtext: '#595A5E',
+      input: {
+        placeholder: '#595A5E',
+        text: '#212328',
+        dirtyBorder: '#212328',
+        border: '#E6E6E6',
+        error: '#C80925',
+        bg: '#FFFFFF',
+      },
+      button: {
+        disabled: {
+          bg: '#F2F4F9',
+          text: 'rgba(89, 90, 94, 0.5)',
+        },
+        normal: {
+          bg: '#C80925',
+          text: '#FFFFFF',
+        },
+        alternative: {
+          bg: 'transparent',
+          text: '#212328',
+          border: '#595A5E',
         },
       },
     },

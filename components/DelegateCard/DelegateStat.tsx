@@ -22,7 +22,7 @@ export const DelegateStat: FC<{ stat: ICardStat }> = ({ stat }) => {
         justifyContent="center"
         maxH="max-content"
         h="max-content"
-        w="full"
+        w="max-content"
       >
         <Text
           color={theme.card.text.primary}
@@ -31,15 +31,16 @@ export const DelegateStat: FC<{ stat: ICardStat }> = ({ stat }) => {
           fontWeight="bold"
           textAlign="center"
           h="max-content"
-          w="full"
+          w="max-content"
         >
           {stat.value}
         </Text>
         <Text
           color={theme.card.text.primary}
-          fontSize="xs"
+          fontSize="11px"
           fontWeight="light"
           h="max-content"
+          w="max-content"
         >
           {stat.title}
         </Text>

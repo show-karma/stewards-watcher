@@ -23,7 +23,7 @@ import {
   IWorkstream,
 } from 'types';
 import { axiosInstance } from 'utils';
-import { useToasty } from 'hooks';
+import { useMixpanel, useToasty } from 'hooks';
 import { useDAO } from './dao';
 
 interface IDelegateProps {
@@ -119,8 +119,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const [workstreams, setWorkstreams] = useState<IWorkstream[]>([]);
   const [workstreamsFilter, setWorkstreamsFilter] = useState<string[]>([]);
 
+  const { mixpanel } = useMixpanel();
   const { toast } = useToasty();
-
   const router = useRouter();
   const { asPath } = router;
 
@@ -306,6 +306,12 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   };
 
   const selectProfile = (profile: IDelegate, tab: IActiveTab = 'statement') => {
+    mixpanel.reportEvent({
+      event: 'viewActivity',
+      properties: {
+        tab,
+      },
+    });
     setSelectedTab(tab);
     setProfileSelected(profile);
     onOpenProfile();

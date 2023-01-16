@@ -47,7 +47,7 @@ const dark: IDAOTheme = {
   headerBg: '#212328',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
-  collapse: { bg: '#2C2E32', text: '#FFFFFF', subtext: '#ADB8C0' },
+  collapse: { text: '#FFFFFF', subtext: '#ADB8C0' },
   hat: {
     text: {
       primary: '#FFFFFF',
@@ -183,7 +183,7 @@ const light: IDAOTheme = {
   headerBg: '#212328',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
-  collapse: { bg: '#2C2E32', text: '#FFFFFF', subtext: '#ADB8C0' },
+  collapse: { text: '#FFFFFF', subtext: '#ADB8C0' },
   hat: {
     text: {
       primary: '#FFFFFF',

@@ -9,13 +9,11 @@ import {
 } from '@chakra-ui/react';
 import { useDAO, useDelegates } from 'contexts';
 import { FC, useState } from 'react';
-import { IDAOTheme, IDelegate } from 'types';
+import { IDAOTheme } from 'types';
 import { IoClose } from 'react-icons/io5';
 import { TbExternalLink } from 'react-icons/tb';
 import { Filters } from './Filters';
 import { ClearButton } from './Filters/ClearButton';
-import { GradientBall } from './GradientBall';
-import { Madeby } from './HeaderHat/Madeby';
 import { SortBy } from './Filters/SortBy';
 
 const DelegatesCounter: FC<{
@@ -43,7 +41,7 @@ const DelegatesCounter: FC<{
 };
 
 export const BodyTitle: FC = () => {
-  const { delegates, isLoading, isSearchDirty, delegateCount } = useDelegates();
+  const { isLoading, isSearchDirty, delegateCount } = useDelegates();
   const { daoInfo, theme } = useDAO();
   const { config } = daoInfo;
   const [showHeaderText, setShowHeaderText] = useState(true);
@@ -76,7 +74,7 @@ export const BodyTitle: FC = () => {
             justify="flex-start"
             flexDir="row"
             w="100%"
-            bgColor={theme.collapse.bg}
+            bgColor={theme.collapse.bg || theme.card.background}
             px="4"
             borderRadius="md"
           >

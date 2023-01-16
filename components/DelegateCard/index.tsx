@@ -3,7 +3,6 @@ import {
   Divider,
   Flex,
   Link,
-  SimpleGrid,
   Skeleton,
   SkeletonCircle,
   SkeletonText,
@@ -53,7 +52,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       tooltipText: `Total votes delegated`,
     },
     {
-      title: 'Snapshot votes',
+      title: 'Snapshot pct.',
       icon: AiOutlineThunderbolt,
       pct: data?.voteParticipation.offChain
         ? `${data.voteParticipation.offChain}%`
@@ -67,9 +66,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     {
       title: 'On-chain votes',
       icon: AiOutlineThunderbolt,
-      pct: data?.voteParticipation.onChain
-        ? `${data.voteParticipation.onChain}%`
-        : '-',
       value: data?.voteParticipation.onChain
         ? `${data.voteParticipation.onChain}%`
         : '-',
@@ -208,10 +204,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       minWidth="288px"
       h={{
         base: 'max-content',
-        // eslint-disable-next-line no-nested-ternary
         sm: showSecondRow ? '480px' : '380px',
-        lg: showSecondRow ? '480px' : '350px',
-        '2xl': showSecondRow ? '440px' : '350px',
+        lg: showSecondRow ? '410px' : '320px',
+        '2xl': showSecondRow ? '410px' : '320px',
       }}
     >
       <Flex
@@ -257,7 +252,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
         )}
         <Flex
           flexDir="column"
-          gap="0.5"
+          gap="1"
           justify="center"
           w="max-content"
           maxW="full"
@@ -383,7 +378,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                     text={userStatement}
                     isExpanded={isExpanded}
                     toggleIsExpanded={toggleIsExpanded}
-                    isShowingSecondRow={showSecondRow}
+                    selectProfile={() => selectProfile(data, 'statement')}
                   />
                 </Flex>
               ) : (
@@ -397,15 +392,15 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
             <>
               {isLoaded ? (
                 <Flex flexDir="column" w="full">
-                  <SimpleGrid
-                    columns={columnsCalculator()}
-                    gap="2"
+                  <Flex
+                    gap="1"
                     w="full"
                     bgColor={theme.card.statBg}
                     px="2"
                     py="4"
                     borderRadius="xl"
                     maxH="max-content"
+                    justify="space-between"
                   >
                     {firstRowStats.map((statItem, index) => (
                       <Flex
@@ -435,21 +430,22 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                         )}
                       </Flex>
                     ))}
-                  </SimpleGrid>
+                  </Flex>
                   {stats.length > 4 && (
-                    <SimpleGrid
-                      columns={columnsCalculator()}
+                    <Flex
                       gap="2"
                       w="full"
                       bgColor="transparent"
                       px="2"
                       py="4"
                       maxH="max-content"
+                      justify="flex-start"
+                      align="flex-start"
                     >
                       {restRowStats.map((statItem, index) => (
                         <Flex
-                          align="center"
-                          justify="center"
+                          justify="flex-start"
+                          align="flex-start"
                           key={+index}
                           w="full"
                         >
@@ -474,7 +470,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                           )}
                         </Flex>
                       ))}
-                    </SimpleGrid>
+                    </Flex>
                   )}
                 </Flex>
               ) : (
