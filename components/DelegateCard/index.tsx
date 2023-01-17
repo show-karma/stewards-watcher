@@ -81,15 +81,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       tooltipText: `Contributor's voting % for on-chain proposals`,
     },
     {
-      title: 'Score',
-      icon: IoPersonOutline,
-      value: getScore(),
-      id: 'karmaScore',
-      tooltipText: data?.gitcoinHealthScore
-        ? 'Total gitcoin health score'
-        : 'Total Score based on all the delegate activity',
-    },
-    {
       title: 'Forum score',
       icon: BsChat,
       value: data?.forumActivity ? formatNumber(data.forumActivity) : '-',
@@ -103,12 +94,19 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   const toggleIsExpanded = () => setIsExpanded(!isExpanded);
 
   const [stats, setStats] = useState<ICardStat[]>(allStats);
-  const showSecondRow =
-    config.EXCLUDED_CARD_FIELDS.length <= 2 &&
-    !config.SHOULD_NOT_SHOW?.includes('stats');
 
   const customFields: ICustomFields[] = data?.delegatePitch?.customFields || [];
   const emptyField: ICustomFields = { label: '', value: [] };
+
+  const score: ICardStat = {
+    title: 'Score',
+    icon: IoPersonOutline,
+    value: getScore(),
+    id: 'karmaScore',
+    tooltipText: data?.gitcoinHealthScore
+      ? 'Total gitcoin health score'
+      : 'Total Score based on all the delegate activity',
+  };
 
   const interests =
     customFields?.find(
@@ -165,6 +163,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
 
     setStats(filtereds);
   }, [config, data]);
+
+  const showSecondRow =
+    stats.length > 4 && !config.SHOULD_NOT_SHOW?.includes('stats');
 
   const shortAddress = data && truncateAddress(data.address);
 
@@ -276,115 +277,131 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           </Flex>
         )}
         <Flex
-          flexDir="column"
-          gap="1"
-          justify="center"
-          w="max-content"
-          maxW="full"
-          textOverflow="ellipsis"
-          overflow="hidden"
-          whiteSpace="break-spaces"
+          w="full"
+          justifyContent="space-between"
+          align="center"
+          position="relative"
         >
-          {isLoaded && data ? (
-            <>
-              <Text
-                color={theme.title}
-                fontSize="lg"
-                fontWeight="bold"
-                maxH="30px"
-                maxW="full"
-                textOverflow="ellipsis"
-                overflow="hidden"
-                whiteSpace="nowrap"
-              >
-                {data.realName || data.ensName || shortAddress}
-              </Text>
-              <Flex flexDir="row" color={theme.subtitle} gap="1.5">
+          <Flex
+            flexDir="column"
+            gap="1"
+            justify="center"
+            w="max-content"
+            maxW="full"
+            textOverflow="ellipsis"
+            overflow="hidden"
+            whiteSpace="break-spaces"
+          >
+            {isLoaded && data ? (
+              <>
                 <Text
-                  fontSize="xs"
-                  fontWeight="medium"
-                  _hover={{ textDecoration: 'underline', cursor: 'pointer' }}
+                  color={theme.title}
+                  fontSize="lg"
+                  fontWeight="bold"
+                  maxH="30px"
+                  maxW="full"
+                  textOverflow="ellipsis"
+                  overflow="hidden"
+                  whiteSpace="nowrap"
                 >
-                  {shortAddress}
+                  {data.realName || data.ensName || shortAddress}
                 </Text>
-                {data.delegateSince && (
-                  <Flex flexDir="row" gap="1.5" alignItems="center">
-                    <Flex
-                      w="3px"
-                      h="3px"
-                      bgColor={theme.subtitle}
-                      borderRadius="full"
-                    />
-                    <Text fontSize="xs" fontWeight="medium">
-                      Joined {formatDate(data.delegateSince)}
-                    </Text>
-                  </Flex>
-                )}
-              </Flex>
-              <Flex
-                flexDir="row"
-                gap="1.5"
-                overflowX="hidden"
-                width="max-content"
-              >
-                {data.workstreams && data.workstreams.length > 0 && (
+                <Flex flexDir="row" color={theme.subtitle} gap="1.5">
                   <Text
-                    color={theme.card.background}
-                    bgColor={theme.title}
-                    px="2"
-                    py="1"
-                    borderRadius="md"
-                    fontSize="10px"
+                    fontSize="xs"
                     fontWeight="medium"
-                    _hover={{
-                      backgroundColor: convertHexToRGBA(theme.title, 0.8),
-                    }}
+                    _hover={{ textDecoration: 'underline', cursor: 'pointer' }}
                   >
-                    {data?.workstreams[0]?.name}
+                    {shortAddress}
                   </Text>
-                )}
-                {!isLoaded ? (
-                  <Flex h="21px" />
-                ) : (
-                  <>
-                    {interests.value.length > 0 &&
-                      (interests.value.slice(0, 3) as string[]).map(
-                        (interest, index) => (
-                          <Text
-                            color={theme.subtitle}
-                            bgColor={theme.card.statBg}
-                            px="2"
-                            py="1"
-                            borderRadius="md"
-                            fontSize="10px"
-                            fontWeight="medium"
-                            key={+index}
-                            h="max-content"
-                            _hover={{
-                              backgroundColor: () => {
-                                if (theme.card.statBg.includes('rgba'))
-                                  return theme.card.statBg.replace(
-                                    '0.15',
-                                    '0.30'
+                  {data.delegateSince && (
+                    <Flex flexDir="row" gap="1.5" alignItems="center">
+                      <Flex
+                        w="3px"
+                        h="3px"
+                        bgColor={theme.subtitle}
+                        borderRadius="full"
+                      />
+                      <Text fontSize="xs" fontWeight="medium">
+                        Joined {formatDate(data.delegateSince)}
+                      </Text>
+                    </Flex>
+                  )}
+                </Flex>
+                <Flex
+                  flexDir="row"
+                  gap="1.5"
+                  overflowX="hidden"
+                  width="max-content"
+                >
+                  {data.workstreams && data.workstreams.length > 0 && (
+                    <Text
+                      color={theme.card.background}
+                      bgColor={theme.title}
+                      px="2"
+                      py="1"
+                      borderRadius="md"
+                      fontSize="10px"
+                      fontWeight="medium"
+                      _hover={{
+                        backgroundColor: convertHexToRGBA(theme.title, 0.8),
+                      }}
+                    >
+                      {data?.workstreams[0]?.name}
+                    </Text>
+                  )}
+                  {!isLoaded ? (
+                    <Flex h="21px" />
+                  ) : (
+                    <>
+                      {interests.value.length > 0 &&
+                        (interests.value.slice(0, 3) as string[]).map(
+                          (interest, index) => (
+                            <Text
+                              color={theme.subtitle}
+                              bgColor={theme.card.statBg}
+                              px="2"
+                              py="1"
+                              borderRadius="md"
+                              fontSize="10px"
+                              fontWeight="medium"
+                              key={+index}
+                              h="max-content"
+                              _hover={{
+                                backgroundColor: () => {
+                                  if (theme.card.statBg.includes('rgba'))
+                                    return theme.card.statBg.replace(
+                                      '0.15',
+                                      '0.30'
+                                    );
+                                  return convertHexToRGBA(
+                                    theme.card.statBg,
+                                    0.1
                                   );
-                                return convertHexToRGBA(theme.card.statBg, 0.1);
-                              },
-                            }}
-                          >
-                            {interest}
-                          </Text>
-                        )
-                      )}
-                  </>
-                )}
+                                },
+                              }}
+                            >
+                              {interest}
+                            </Text>
+                          )
+                        )}
+                    </>
+                  )}
+                </Flex>
+              </>
+            ) : (
+              <>
+                <Skeleton isLoaded={isLoaded}>SkeletonText</Skeleton>
+                <Skeleton isLoaded={isLoaded}>SkeletonSubText</Skeleton>
+              </>
+            )}
+          </Flex>
+          {!config.EXCLUDED_CARD_FIELDS.includes('karmaScore') &&
+            !config.SHOULD_NOT_SHOW?.includes('stats') && (
+              <Flex position="absolute" right="0" top="0">
+                <DelegateStat stat={score} />
               </Flex>
-            </>
-          ) : (
-            <>
-              <Skeleton isLoaded={isLoaded}>SkeletonText</Skeleton>
-              <Skeleton isLoaded={isLoaded}>SkeletonSubText</Skeleton>
-            </>
-          )}
+            )}
         </Flex>
       </Flex>
       <Flex flexDir="column" justifyContent="space-between" h="full">
