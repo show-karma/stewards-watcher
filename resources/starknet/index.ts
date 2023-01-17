@@ -22,6 +22,7 @@ const config: IDAOConfig = {
   DAO_DELEGATE_MODE: 'hidden',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
+  SHOULD_NOT_SHOW: 'stats',
   EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'healthScore'],
 };
 

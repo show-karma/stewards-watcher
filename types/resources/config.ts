@@ -31,6 +31,7 @@ export interface IDAOConfig {
     ORDERSTAT?: IStats;
     STATUS_FILTER?: boolean;
   };
+  SHOULD_NOT_SHOW?: 'statement' | 'stats';
   EXCLUDED_CARD_FIELDS: IStats[];
   /**
    * Defines a custom function to parse the votes with an external proposal provider.
