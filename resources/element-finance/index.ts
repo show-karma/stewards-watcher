@@ -61,7 +61,7 @@ const dark: IDAOTheme = {
     text: { primary: '#FFFFFF', secondary: '#ADB8C0' },
     border: '#403E4F',
     common: '#727B81',
-    statBg: 'transparent',
+    statBg: '#403E4F',
   },
   modal: {
     background: '#222429',
