@@ -1,6 +1,6 @@
 import { Flex, Text, useMediaQuery } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
-import { FC } from 'react';
+import { FC, useRef } from 'react';
 
 interface IExpandableText {
   text: string;
@@ -27,6 +27,13 @@ export const ExpandableCardText: FC<IExpandableText> = props => {
 
   const formattedText = text.replaceAll(/\s/g, '');
 
+  const flexRef = useRef<HTMLDivElement>(null);
+
+  const newMaxChars =
+    flexRef.current && flexRef.current?.clientHeight > 50
+      ? maxChars - 12
+      : maxChars;
+
   return (
     <Flex flexDir="column" gap="2.5" h="full">
       {formattedText.length <= maxChars ? (
@@ -40,7 +47,7 @@ export const ExpandableCardText: FC<IExpandableText> = props => {
           {text}
         </Text>
       ) : (
-        <Flex flexDir="column" w="full">
+        <Flex flexDir="column" w="full" ref={flexRef}>
           <Text
             maxW="full"
             fontSize="sm"
@@ -54,7 +61,7 @@ export const ExpandableCardText: FC<IExpandableText> = props => {
             }}
             flex="1"
           >
-            {`${text.substring(0, isMobile ? 90 : maxChars)}... `}
+            {`${text.substring(0, isMobile ? 90 : newMaxChars)}... `}
             <Text
               onClick={selectProfile}
               cursor="pointer"
