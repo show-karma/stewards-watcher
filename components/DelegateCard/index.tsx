@@ -7,6 +7,7 @@ import {
   SkeletonCircle,
   SkeletonText,
   Text,
+  useClipboard,
 } from '@chakra-ui/react';
 import { FC, useState, useMemo, useCallback } from 'react';
 import { BsChat } from 'react-icons/bs';
@@ -24,6 +25,7 @@ import {
   truncateAddress,
 } from 'utils';
 import { useRouter } from 'next/router';
+import { useToasty } from 'hooks';
 import { ImgWithFallback } from '../ImgWithFallback';
 import { DelegateButton } from '../DelegateButton';
 import { UserInfoButton } from '../UserInfoButton';
@@ -40,6 +42,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   const { data } = props;
   const { daoInfo, theme, daoData } = useDAO();
   const { selectProfile } = useDelegates();
+  const { onCopy } = useClipboard(data?.address || '');
 
   const { config } = daoInfo;
   const isLoaded = !!data;
@@ -215,6 +218,16 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     return '320px';
   };
 
+  const { toast } = useToasty();
+  const copyText = () => {
+    onCopy();
+    toast({
+      title: 'Copied to clipboard',
+      description: 'Address copied',
+      duration: 3000,
+    });
+  };
+
   return (
     <Flex
       bgColor={theme.card.background}
@@ -311,6 +324,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                     fontSize="xs"
                     fontWeight="medium"
                     _hover={{ textDecoration: 'underline', cursor: 'pointer' }}
+                    onClick={copyText}
                   >
                     {shortAddress}
                   </Text>

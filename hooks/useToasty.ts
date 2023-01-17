@@ -8,10 +8,10 @@ const useToasty = () => {
   useEffect(() => {
     if (state && Object.keys(state).length !== 0) {
       toast({
-        ...state,
         duration: 5000,
         position: 'top',
         isClosable: true,
+        ...state,
       });
     }
   }, [state, toast]);
