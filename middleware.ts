@@ -36,6 +36,7 @@ export default function middleware(req: NextRequest) {
   const hostname = req.headers.get('host') || 'www.karmahq.xyz';
   const currentPathname = url.pathname;
   const dao = getDAOName(hostname);
+
   if (
     hostname.includes('vercel.app') ||
     (hostname.includes('localhost') && !dao)
