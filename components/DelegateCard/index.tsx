@@ -30,6 +30,7 @@ import { UserInfoButton } from '../UserInfoButton';
 import { ForumIcon, TwitterIcon } from '../Icons';
 import { ExpandableCardText } from './ExpandableCardText';
 import { DelegateStat } from './DelegateStat';
+import { RestStatsRows } from './RestStatsRows';
 
 interface IDelegateCardProps {
   data?: IDelegate;
@@ -102,6 +103,8 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   const toggleIsExpanded = () => setIsExpanded(!isExpanded);
 
   const [stats, setStats] = useState<ICardStat[]>(allStats);
+  const showSecondRow =
+    config.EXCLUDED_CARD_FIELDS.length <= 2 && router.query.site !== 'starknet';
 
   const customFields: ICustomFields[] = data?.delegatePitch?.customFields || [];
   const emptyField: ICustomFields = { label: '', value: [] };
@@ -193,8 +196,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   const userStatement = Array.isArray(findStatement)
     ? findStatement[0]
     : findStatement;
-
-  const showSecondRow = stats.length > 4;
 
   const columnsCalculator = () => {
     if (stats.length < 4) return stats.length;
@@ -461,47 +462,16 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                           </Flex>
                         ))}
                       </Flex>
-                      {stats.length > 4 && (
-                        <Flex
-                          gap="2"
-                          w="full"
-                          bgColor="transparent"
-                          px="2"
-                          py="4"
-                          maxH="max-content"
-                          justify="flex-start"
-                          align="flex-start"
-                        >
-                          {restRowStats.map((statItem, index) => (
-                            <Flex
-                              justify="flex-start"
-                              align="flex-start"
-                              key={+index}
-                              w="max-content"
-                            >
-                              {statItem.id === 'forumScore' &&
-                              data?.discourseHandle &&
-                              daoData?.socialLinks.forum &&
-                              config.DAO_FORUM_TYPE ? (
-                                <Link
-                                  href={getUserForumUrl(
-                                    data.discourseHandle,
-                                    config.DAO_FORUM_TYPE,
-                                    daoData.socialLinks.forum
-                                  )}
-                                  isExternal
-                                  _hover={{}}
-                                  h="max-content"
-                                >
-                                  <DelegateStat stat={statItem} />
-                                </Link>
-                              ) : (
-                                <DelegateStat stat={statItem} />
-                              )}
-                            </Flex>
-                          ))}
-                        </Flex>
-                      )}
+                      <Flex minH={showSecondRow ? '76px' : '0px'}>
+                        {(stats.length > 4 || showSecondRow) && (
+                          <RestStatsRows
+                            restRowStats={restRowStats}
+                            config={config}
+                            daoData={daoData}
+                            data={data}
+                          />
+                        )}
+                      </Flex>
                     </Flex>
                   )}
                 </>

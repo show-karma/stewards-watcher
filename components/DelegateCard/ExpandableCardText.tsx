@@ -19,15 +19,17 @@ export const ExpandableCardText: FC<IExpandableText> = props => {
 
   const {
     text,
-    maxChars = 82,
+    maxChars = 78,
     isExpanded,
     toggleIsExpanded,
     selectProfile,
   } = props;
 
+  const formattedText = text.replaceAll(/\s/g, '');
+
   return (
     <Flex flexDir="column" gap="2.5" h="full">
-      {text.length <= maxChars ? (
+      {formattedText.length <= maxChars ? (
         <Text
           maxW="full"
           fontSize="sm"
