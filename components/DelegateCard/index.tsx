@@ -104,7 +104,8 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
 
   const [stats, setStats] = useState<ICardStat[]>(allStats);
   const showSecondRow =
-    config.EXCLUDED_CARD_FIELDS.length <= 2 && router.query.site !== 'starknet';
+    config.EXCLUDED_CARD_FIELDS.length <= 2 &&
+    !config.SHOULD_NOT_SHOW?.includes('stats');
 
   const customFields: ICustomFields[] = data?.delegatePitch?.customFields || [];
   const emptyField: ICustomFields = { label: '', value: [] };
@@ -163,7 +164,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       });
     }
 
-    if (router.query.site === 'starknet') removedArray = [];
+    if (config.SHOULD_NOT_SHOW?.includes('stats')) removedArray = [];
 
     setStats(removedArray);
   }, [config, data]);
@@ -430,7 +431,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                         borderRadius="xl"
                         maxH="max-content"
                         justify={
-                          stats.length === 2 ? 'center' : 'space-between'
+                          stats.length < 4 ? 'flex-start' : 'space-between'
                         }
                       >
                         {firstRowStats.map((statItem, index) => (
