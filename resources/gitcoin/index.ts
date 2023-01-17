@@ -179,7 +179,7 @@ const light: IDAOTheme = {
   headerBg: '#321E5E',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
-  collapse: { text: '#FFFFFF', subtext: '#ADB8C0' },
+  collapse: { text: '#FFFFFF', subtext: '#ADB8C0', bg: '#321E5E' },
   hat: {
     text: {
       primary: '#FFFFFF',
