@@ -119,7 +119,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
 
   useMemo(() => {
     if (!config) return;
-    const filtereds: ICardStat[] = [];
+    let filtereds: ICardStat[] = [];
 
     allStats.forEach(item => {
       if (config.EXCLUDED_CARD_FIELDS.includes(item.id)) return;
@@ -149,11 +149,8 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       'forumScore',
       'karmaScore',
     ];
-    let removedArray = filtereds.filter(item => item.value !== '-');
 
-    removedArray.sort(
-      (one, two) => order.indexOf(one.id) - order.indexOf(two.id)
-    );
+    filtereds.sort((one, two) => order.indexOf(one.id) - order.indexOf(two.id));
 
     if (router.query.site === 'op') {
       const randomId = Math.floor(Math.random() * 3);
@@ -164,9 +161,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       });
     }
 
-    if (config.SHOULD_NOT_SHOW?.includes('stats')) removedArray = [];
+    if (config.SHOULD_NOT_SHOW?.includes('stats')) filtereds = [];
 
-    setStats(removedArray);
+    setStats(filtereds);
   }, [config, data]);
 
   const shortAddress = data && truncateAddress(data.address);
