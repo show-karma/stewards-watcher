@@ -1,4 +1,4 @@
-import { Flex, Link } from '@chakra-ui/react';
+import { Flex, Grid, Link } from '@chakra-ui/react';
 import { FC } from 'react';
 import { ICardStat, IDAOConfig, IDAOData, IDelegate } from 'types';
 import { getUserForumUrl } from 'utils';
@@ -17,45 +17,46 @@ export const RestStatsRows: FC<IRestStatsRowsProps> = ({
   config,
   restRowStats,
 }) => (
-  <Flex
+  <Grid
     gap="2"
     w="full"
-    bgColor="transparent"
     px="2"
     py="4"
-    maxH="max-content"
-    justify="flex-start"
-    align="flex-start"
+    borderRadius="xl"
+    h="full"
+    templateColumns={{
+      base: 'repeat(3, 1fr)',
+      lg: 'repeat(4, 1fr)',
+    }}
+    alignItems="center"
   >
-    <Flex>
-      {restRowStats.map((statItem, index) => (
-        <Flex
-          justify="flex-start"
-          align="flex-start"
-          key={+index}
-          w="max-content"
-        >
-          {statItem.id === 'forumScore' &&
-          data?.discourseHandle &&
-          daoData?.socialLinks.forum &&
-          config.DAO_FORUM_TYPE ? (
-            <Link
-              href={getUserForumUrl(
-                data.discourseHandle,
-                config.DAO_FORUM_TYPE,
-                config.DAO_FORUM_URL || daoData.socialLinks.forum
-              )}
-              isExternal
-              _hover={{}}
-              h="max-content"
-            >
-              <DelegateStat stat={statItem} />
-            </Link>
-          ) : (
+    {restRowStats.map((statItem, index) => (
+      <Flex
+        justify="flex-start"
+        align="flex-start"
+        key={+index}
+        w="max-content"
+      >
+        {statItem.id === 'forumScore' &&
+        data?.discourseHandle &&
+        daoData?.socialLinks.forum &&
+        config.DAO_FORUM_TYPE ? (
+          <Link
+            href={getUserForumUrl(
+              data.discourseHandle,
+              config.DAO_FORUM_TYPE,
+              config.DAO_FORUM_URL || daoData.socialLinks.forum
+            )}
+            isExternal
+            _hover={{}}
+            h="max-content"
+          >
             <DelegateStat stat={statItem} />
-          )}
-        </Flex>
-      ))}
-    </Flex>
-  </Flex>
+          </Link>
+        ) : (
+          <DelegateStat stat={statItem} />
+        )}
+      </Flex>
+    ))}
+  </Grid>
 );

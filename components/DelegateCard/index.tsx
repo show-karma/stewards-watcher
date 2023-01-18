@@ -2,6 +2,7 @@
 import {
   Divider,
   Flex,
+  Grid,
   Link,
   Skeleton,
   SkeletonCircle,
@@ -243,11 +244,10 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       borderColor={theme.card.border}
       w="full"
       minWidth="288px"
+      maxW={{ base: 'full', sm: '380px', lg: '460px' }}
       h={{
         base: 'max-content',
         sm: 'full',
-        // sm: calculateSizeByStats('sm'),
-        // lg: calculateSizeByStats('lg'),
       }}
     >
       <Flex
@@ -452,17 +452,19 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                 <>
                   {stats.length > 0 && (
                     <Flex flexDir="column" w="full">
-                      <Flex
+                      <Grid
                         gap="2"
                         w="full"
                         bgColor={theme.card.statBg}
                         px="2"
                         py="4"
                         borderRadius="xl"
-                        maxH="max-content"
-                        justify={
-                          stats.length < 4 ? 'flex-start' : 'space-between'
-                        }
+                        h="full"
+                        templateColumns={{
+                          base: 'repeat(3, 1fr)',
+                          lg: 'repeat(4, 1fr)',
+                        }}
+                        alignItems="center"
                       >
                         {firstRowStats.map((statItem, index) => (
                           <Flex
@@ -493,7 +495,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                             )}
                           </Flex>
                         ))}
-                      </Flex>
+                      </Grid>
                       <Flex minH={showSecondRow ? '76px' : '0px'}>
                         {(stats.length > 4 || showSecondRow) && (
                           <RestStatsRows

@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import { Flex, SimpleGrid, Spinner, Text } from '@chakra-ui/react';
+import { Flex, Grid, SimpleGrid, Spinner, Text } from '@chakra-ui/react';
 import { useDAO, useDelegates } from 'contexts';
 import { FC, useMemo } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -137,19 +137,24 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
           }
           style={{ width: '100%' }}
         >
-          <SimpleGrid
+          <Grid
             flexWrap="wrap"
             rowGap="10"
             columnGap="6"
             w="full"
-            columns={{ base: 1, md: 2, xl: 3 }}
+            templateColumns={{
+              base: 'repeat(1, 1fr)',
+              sm: 'repeat(2, 1fr)',
+              md: 'repeat(2, 1fr)',
+              xl: 'repeat(3, 1fr)',
+            }}
             alignItems="center"
             justifyItems="center"
             mb="8"
             px={{ base: '4', lg: '0' }}
           >
             <DelegatesCases delegates={delegates} isLoading={isLoading} />
-          </SimpleGrid>
+          </Grid>
         </InfiniteScroll>
         {!isLoading && !delegates.length && <EmptyStates />}
       </Flex>

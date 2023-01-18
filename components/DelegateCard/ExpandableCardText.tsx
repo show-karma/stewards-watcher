@@ -1,6 +1,6 @@
 import { Flex, Text, useMediaQuery } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
-import { FC, useRef } from 'react';
+import { FC, useMemo, useRef } from 'react';
 
 interface IExpandableText {
   text: string;
@@ -31,7 +31,7 @@ export const ExpandableCardText: FC<IExpandableText> = props => {
 
   const newMaxChars =
     flexRef.current && flexRef.current?.clientHeight > 50
-      ? maxChars - 12
+      ? maxChars - 30
       : maxChars;
 
   return (
