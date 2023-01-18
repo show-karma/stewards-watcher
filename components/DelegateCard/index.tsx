@@ -57,7 +57,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     {
       title: 'Delegated Tokens',
       icon: IoIosCheckboxOutline,
-      pct: data?.votingWeight ? formatNumberPercentage(data.votingWeight) : '-',
       value: data?.delegatedVotes ? formatNumber(data?.delegatedVotes) : '-',
       id: 'delegatedVotes',
       tooltipText: `Total votes delegated`,
@@ -130,7 +129,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       filtereds.find(
         item => item.id === 'offChainVotesPct' || item.id === 'onChainVotesPct'
       ) &&
-      data?.votingWeight
+      !config.EXCLUDED_CARD_FIELDS.includes('delegatedVotes')
     )
       filtereds.push({
         title: 'Voting Weight',
@@ -168,7 +167,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   }, [config, data]);
 
   const showSecondRow =
-    stats.length > 4 && !config.SHOULD_NOT_SHOW?.includes('stats');
+    config.DAO_KARMA_ID !== 'gitcoin' &&
+    config.EXCLUDED_CARD_FIELDS.length < 2 &&
+    !config.SHOULD_NOT_SHOW?.includes('stats');
 
   const shortAddress = data && truncateAddress(data.address);
 
@@ -244,8 +245,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       minWidth="288px"
       h={{
         base: 'max-content',
-        sm: calculateSizeByStats('sm'),
-        lg: calculateSizeByStats('lg'),
+        sm: 'full',
+        // sm: calculateSizeByStats('sm'),
+        // lg: calculateSizeByStats('lg'),
       }}
     >
       <Flex
@@ -312,7 +314,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   fontSize="lg"
                   fontWeight="bold"
                   maxH="30px"
-                  maxW="full"
+                  maxW="286px"
                   textOverflow="ellipsis"
                   overflow="hidden"
                   whiteSpace="nowrap"
@@ -427,7 +429,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           px={{ base: '14px', lg: '5' }}
         >
           {isLoaded ? (
-            <>
+            <Flex mb="4">
               {userStatement ? (
                 <Flex h="full" align="flex-start">
                   <ExpandableCardText
@@ -440,7 +442,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
               ) : (
                 <Text>-</Text>
               )}
-            </>
+            </Flex>
           ) : (
             <SkeletonText h="full" w="full" />
           )}
@@ -477,7 +479,8 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                                 href={getUserForumUrl(
                                   data.discourseHandle,
                                   config.DAO_FORUM_TYPE,
-                                  daoData.socialLinks.forum
+                                  config.DAO_FORUM_URL ||
+                                    daoData.socialLinks.forum
                                 )}
                                 isExternal
                                 _hover={{}}
@@ -543,7 +546,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                         href={getUserForumUrl(
                           data.discourseHandle,
                           config.DAO_FORUM_TYPE,
-                          daoData.socialLinks.forum
+                          config.DAO_FORUM_URL || daoData.socialLinks.forum
                         )}
                         isExternal
                         color={theme.card.socialMedia}

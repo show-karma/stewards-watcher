@@ -43,7 +43,7 @@ export const RestStatsRows: FC<IRestStatsRowsProps> = ({
               href={getUserForumUrl(
                 data.discourseHandle,
                 config.DAO_FORUM_TYPE,
-                daoData.socialLinks.forum
+                config.DAO_FORUM_URL || daoData.socialLinks.forum
               )}
               isExternal
               _hover={{}}

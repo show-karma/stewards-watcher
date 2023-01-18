@@ -6,3 +6,15 @@ export type IStats =
   | 'forumScore'
   | 'healthScore'
   | 'votingWeight';
+
+export type IStatsID =
+  | 'score'
+  | 'user'
+  | 'offChainVotesPct'
+  | 'delegatedVotes'
+  | 'onChainVotesPct'
+  | 'forumScore'
+  | 'deworkPoints'
+  | 'discordScore'
+  | 'healthScore'
+  | 'voteWeight';

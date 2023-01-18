@@ -26,6 +26,7 @@ const config: IDAOConfig = {
     typeof window !== 'undefined' &&
     window.open('https://dydx.vote/delegate', '_blank'),
   DAO_FORUM_TYPE: 'commonwealth',
+  DAO_FORUM_URL: 'https://forums.dydx.community/',
   DAO_GTAG: 'G-67LDHT697P',
   EXCLUDED_CARD_FIELDS: ['healthScore'],
   DAO_DEFAULT_SETTINGS: {

@@ -25,6 +25,7 @@ export interface IDAOConfig {
   DAO_DELEGATE_MODE: 'custom' | 'snapshot' | 'hidden';
   DAO_DELEGATE_ACTION?: () => void;
   DAO_FORUM_TYPE?: IForumType;
+  DAO_FORUM_URL?: string;
   DAO_GTAG?: string;
   DAO_DEFAULT_SETTINGS?: {
     TIMEPERIOD?: IFilterPeriod;

@@ -36,7 +36,7 @@ const dark: IDAOTheme = {
   branding: '#6C1E6D',
   buttonText: '#FFFFFF',
   buttonTextSec: '#FFFFFF',
-  headerBg: '#212328',
+  headerBg: '#292E41',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
   collapse: { text: '#FFFFFF', subtext: '#ADB8C0' },

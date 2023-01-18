@@ -21,6 +21,7 @@ import {
   IStatusOptions,
   IWorkstream,
   IStats,
+  IStatsID,
 } from 'types';
 import { axiosInstance } from 'utils';
 import { useMixpanel, useToasty } from 'hooks';
@@ -37,12 +38,12 @@ interface IDelegateProps {
   fetchDelegates: (_offset?: number) => Promise<void>;
   handleSearch: DebouncedFunc<(text: any) => void>;
   isSearchDirty: boolean;
-  selectStat: (_selectedStat: IStats) => void;
+  selectStat: (_selectedStat: IStatsID) => void;
   selectOrder: (selectedOrder: IFilterOrder) => void;
   selectPeriod: (selectedPeriod: IFilterPeriod) => void;
   selectUserToFind: (selectedUserToFind: string) => void;
   statOptions: IStatOptions[];
-  stat: IStats;
+  stat: IStatsID;
   order: IFilterOrder;
   period: IFilterPeriod;
   clearFilters: () => void;
@@ -72,11 +73,12 @@ interface ProviderProps {
 }
 
 const statDefaultOptions: IStatOptions[] = [
-  { title: 'Voting weight', stat: 'delegatedVotes' },
-  { title: 'Forum score', stat: 'forumScore' },
-  { title: 'Snapshot votes', stat: 'offChainVotesPct' },
-  { title: 'On-chain votes', stat: 'onChainVotesPct' },
-  { title: 'Health', stat: 'healthScore' },
+  { title: 'Voting weight', id: 'delegatedVotes', stat: 'delegatedVotes' },
+  { title: 'Forum score', id: 'forumScore', stat: 'forumScore' },
+  { title: 'Snapshot votes', id: 'offChainVotesPct', stat: 'offChainVotesPct' },
+  { title: 'On-chain votes', id: 'onChainVotesPct', stat: 'onChainVotesPct' },
+  { title: 'Score', id: 'score', stat: 'karmaScore' },
+  { title: 'Health', id: 'healthScore', stat: 'healthScore' },
 ];
 
 export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
@@ -103,7 +105,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   };
   const statOptions = prepareStatOptions();
 
-  const [stat, setStat] = useState<IStats>(statOptions[0].stat);
+  const [stat, setStat] = useState<IStatsID>(statOptions[0].id);
   const [order, setOrder] = useState<IFilterOrder>('desc');
   const [period, setPeriod] = useState<IFilterPeriod>(defaultTimePeriod);
   const [interests, setInterests] = useState<string[]>([]);
@@ -507,7 +509,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     }
   }, [delegates]);
 
-  const selectStat = (_selectedStat: IStats) => setStat(_selectedStat);
+  const selectStat = (_selectedStat: IStatsID) => setStat(_selectedStat);
   const selectOrder = (selectedOrder: IFilterOrder) => setOrder(selectedOrder);
   const selectPeriod = (selectedPeriod: IFilterPeriod) =>
     setPeriod(selectedPeriod);
@@ -573,7 +575,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
    * @description This function is used to clear all filters
    */
   const clearFilters = () => {
-    setStat(statOptions[0].stat);
+    setStat(statOptions[0].id);
     setOrder('desc');
     setPeriod(defaultTimePeriod);
     setUserToFind('');

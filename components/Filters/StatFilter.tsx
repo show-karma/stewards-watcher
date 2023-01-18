@@ -7,7 +7,7 @@ export const StatFilter = () => {
   const { theme } = useDAO();
   const { selectStat, statOptions, stat } = useDelegates();
 
-  const selectedStat = statOptions.find(option => option.stat === stat)?.title;
+  const selectedStat = statOptions.find(option => option.id === stat)?.title;
 
   return (
     <Menu isLazy id="stat-filter">
@@ -45,7 +45,7 @@ export const StatFilter = () => {
       </MenuButton>
       <MenuList bgColor={theme.filters.listBg} color={theme.filters.listText}>
         {statOptions.map((option, index) => (
-          <MenuItem key={+index} onClick={() => selectStat(option.stat)}>
+          <MenuItem key={+index} onClick={() => selectStat(option.id)}>
             {option.title}
           </MenuItem>
         ))}

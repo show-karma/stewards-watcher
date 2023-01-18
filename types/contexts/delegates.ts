@@ -1,9 +1,11 @@
-import { IStats } from 'types/resources';
+import { IStats, IStatsID } from 'types/resources';
 
 export type IFilterOrder = 'asc' | 'desc';
 export type IFilterPeriod = 'lifetime' | '30d' | '180d';
+
 export interface IStatOptions {
   title: string;
+  id: IStatsID;
   stat: IStats;
 }
 
