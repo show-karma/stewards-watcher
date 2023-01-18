@@ -17,7 +17,7 @@ const config: IDAOConfig = {
     DESCRIPTION: `Find all the active delegates in Yam Finance DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
     IMAGE: '/daos/yamfinance/meta.png',
     FAVICON: '/daos/yamfinance/favicon.ico',
-    URL: `https://yamfinance.showkarma.xyz`,
+    URL: `https://yamfinance.karmahq.xyz`,
   },
   DAO_CHAIN: chain.mainnet,
   DAO_DELEGATE_CONTRACT: '0x0AaCfbeC6a24756c20D41914F2caba817C0d8521',
@@ -26,18 +26,6 @@ const config: IDAOConfig = {
   DAO_GTAG: 'G-67LDHT697P',
   EXCLUDED_CARD_FIELDS: ['healthScore', 'karmaScore'],
 };
-
-// const theme: IDAOTheme = {
-//   background: '#F5F0F2',
-//   card: '#FFFFFF',
-//   cardShadow:
-//     'rgb(20 1 8 / 15%) -2px 2px 4px inset, rgb(255 255 255) 2px -2px 4px inset',
-//   title: '#140108',
-//   subtitle: '#615358',
-//   text: '#140108',
-//   branding: '#D1004D',
-//   buttonText: '#F5F0F2',
-// };
 
 const dark: IDAOTheme = {
   background: '#1C1D20',
@@ -76,6 +64,9 @@ const dark: IDAOTheme = {
     text: { primary: '#FFFFFF', secondary: '#ADB8C0' },
     border: '#403E4F',
     common: '#727B81',
+    interests: { bg: 'rgba(255, 255, 255, 0.05)', text: '#ADB8C0' },
+    workstream: { bg: '#FFFFFF', text: '#222429' },
+    socialMedia: '#FFFFFF',
   },
   modal: {
     background: '#222429',
@@ -184,15 +175,15 @@ const light: IDAOTheme = {
   branding: '#C80925',
   buttonText: '#FFFFFF',
   buttonTextSec: '#222429',
-  headerBg: '#212328',
+  headerBg: '#FFFFFF',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
   collapse: { text: '#FFFFFF', subtext: '#ADB8C0', bg: '#212328' },
   hat: {
     text: {
-      primary: '#FFFFFF',
-      secondary: '#ADB8C0',
-      madeBy: '#222429',
+      primary: '#212328',
+      secondary: '#595A5E',
+      madeBy: '#595A5E',
       lastUpdated: '#666666',
     },
   },
@@ -207,11 +198,15 @@ const light: IDAOTheme = {
   card: {
     icon: '#ADB8C0',
     background: '#FFFFFF',
-    statBg: 'transparent',
     divider: 'rgba(102, 102, 102, 0.5)',
     text: { primary: '#212328', secondary: '#666666' },
-    border: 'rgba(102, 102, 102, 0.5)',
+    statBg: '#EBEDEF',
+    border: 'none',
+    shadow: '0px 0px 4px rgba(0, 0, 0, 0.1);',
     common: '#727B81',
+    interests: { bg: '#EBEDEF', text: '#2C2E32' },
+    workstream: { bg: '#595A5E', text: '#FFFFFF' },
+    socialMedia: '#595A5E',
   },
   modal: {
     background: '#222429',

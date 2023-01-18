@@ -17,14 +17,19 @@ const config: IDAOConfig = {
     DESCRIPTION: `Find all the active delegates in Dimo DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
     IMAGE: '/daos/dimo/preview.jpg',
     FAVICON: '/daos/dimo/favicon.png',
-    URL: `https://dimo.showkarma.xyz`,
+    URL: `https://dimo.karmahq.xyz`,
   },
   DAO_CHAIN: chain.polygon,
   DAO_DELEGATE_CONTRACT: '0xE261D618a959aFfFd53168Cd07D12E37B26761db',
   DAO_DELEGATE_MODE: 'custom',
   DAO_FORUM_TYPE: undefined,
   DAO_GTAG: 'G-67LDHT697P',
-  EXCLUDED_CARD_FIELDS: ['healthScore', 'karmaScore'],
+  EXCLUDED_CARD_FIELDS: [
+    'healthScore',
+    'karmaScore',
+    'onChainVotesPct',
+    'forumScore',
+  ],
 };
 
 const dark: IDAOTheme = {
@@ -33,7 +38,7 @@ const dark: IDAOTheme = {
   title: '#FFFFFF',
   subtitle: '#a0aec0',
   text: '#FFFFFF',
-  branding: '#CCEEFB',
+  branding: '#59D6E0',
   buttonText: '#000',
   buttonTextSec: '#FFFFFF',
   headerBg: '#333333',
@@ -64,6 +69,9 @@ const dark: IDAOTheme = {
     text: { primary: '#FFFFFF', secondary: '#ADB8C0' },
     border: 'rgba(87, 93, 104, 0.25)',
     common: '#727B81',
+    interests: { bg: 'rgba(255, 255, 255, 0.05)', text: '#ADB8C0' },
+    workstream: { bg: '#FFFFFF', text: '#222429' },
+    socialMedia: '#FFFFFF',
   },
   modal: {
     background: '#333333',
@@ -180,7 +188,7 @@ const light: IDAOTheme = {
     text: {
       primary: '#FFFFFF',
       secondary: '#ADB8C0',
-      madeBy: '#333333',
+      madeBy: '#ADB8C0',
       lastUpdated: '#666666',
     },
   },
@@ -195,12 +203,15 @@ const light: IDAOTheme = {
   card: {
     icon: '#ADB8C0',
     background: '#FFFFFF',
-    statBg: 'transparent',
+    statBg: '#EBEDEF',
     divider: 'rgba(102, 102, 102, 0.5)',
     text: { primary: '#212328', secondary: '#666666' },
-    border: 'rgba(102, 102, 102, 0.5)',
-    shadow: '-1px 1px 5px 0px rgba(87,93,104,0.75);',
+    border: 'none',
+    shadow: '0px 0px 4px rgba(0, 0, 0, 0.1);',
     common: '#727B81',
+    interests: { bg: '#EBEDEF', text: '#2C2E32' },
+    workstream: { bg: '#595A5E', text: '#FFFFFF' },
+    socialMedia: '#595A5E',
   },
   modal: {
     background: '#333333',

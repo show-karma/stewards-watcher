@@ -17,7 +17,7 @@ const config: IDAOConfig = {
     DESCRIPTION: `Find all the active delegates in PoolTogether DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
     IMAGE: '/daos/pooltogether/meta.png',
     FAVICON: '/daos/pooltogether/favicon.png',
-    URL: `https://pooltogether.showkarma.xyz`,
+    URL: `https://pooltogether.karmahq.xyz`,
   },
   DAO_CHAIN: chain.mainnet,
   DAO_DELEGATE_CONTRACT: '0x0cec1a9154ff802e7934fc916ed7ca50bde6844e',
@@ -26,16 +26,6 @@ const config: IDAOConfig = {
   DAO_GTAG: 'G-67LDHT697P',
   EXCLUDED_CARD_FIELDS: ['healthScore', 'karmaScore'],
 };
-
-// const theme: IDAOTheme = {
-//   background: '#2D0B5A',
-//   card: '#4C249F',
-//   title: '#FFFFFF',
-//   subtitle: '#a0aec0',
-//   text: '#FFFFFF',
-//   branding: '#3EF3D4',
-//   buttonText: '#4C249F',
-// };
 
 const dark: IDAOTheme = {
   background: '#1C1D20',
@@ -74,6 +64,9 @@ const dark: IDAOTheme = {
     text: { primary: '#FFFFFF', secondary: '#ADB8C0' },
     border: '#403E4F',
     common: '#727B81',
+    interests: { bg: 'rgba(255, 255, 255, 0.05)', text: '#ADB8C0' },
+    workstream: { bg: '#FFFFFF', text: '#222429' },
+    socialMedia: '#FFFFFF',
   },
   modal: {
     background: '#222429',
@@ -190,7 +183,7 @@ const light: IDAOTheme = {
     text: {
       primary: '#FFFFFF',
       secondary: '#ADB8C0',
-      madeBy: '#222429',
+      madeBy: '#ADB8C0',
       lastUpdated: '#666666',
     },
   },
@@ -205,11 +198,15 @@ const light: IDAOTheme = {
   card: {
     icon: '#ADB8C0',
     background: '#FFFFFF',
-    statBg: 'transparent',
+    statBg: '#EBEDEF',
     divider: 'rgba(102, 102, 102, 0.5)',
     text: { primary: '#212328', secondary: '#666666' },
-    border: 'rgba(102, 102, 102, 0.5)',
+    border: 'none',
+    shadow: '0px 0px 4px rgba(0, 0, 0, 0.1);',
     common: '#727B81',
+    interests: { bg: '#EBEDEF', text: '#2C2E32' },
+    workstream: { bg: '#595A5E', text: '#FFFFFF' },
+    socialMedia: '#595A5E',
   },
   modal: {
     background: '#222429',

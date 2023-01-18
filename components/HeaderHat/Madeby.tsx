@@ -20,7 +20,12 @@ export const Madeby: FC<FlexProps> = props => {
       '/images/karma_logo_black.svg',
       '/images/karma_logo_white.svg'
     ),
-    md: '/images/karma_logo_white.svg',
+    md: useColorModeValue(
+      theme.headerBg === '#FFFFFF'
+        ? '/images/karma_logo_black.svg'
+        : '/images/karma_logo_white.svg',
+      '/images/karma_logo_white.svg'
+    ),
   });
   return (
     <Flex
@@ -39,12 +44,12 @@ export const Madeby: FC<FlexProps> = props => {
         <Text
           fontSize={['sm', 'md']}
           fontWeight="normal"
-          color={{ base: theme.hat.text.madeBy, md: theme.hat.text.primary }}
+          color={theme.hat.text.madeBy}
         >
-          Data powered by
+          Built by
         </Text>
 
-        <Link href="https://showkarma.xyz" isExternal>
+        <Link href="https://karmahq.xyz" isExternal>
           <Img
             w={{ base: '96px', lg: '140px' }}
             h={{ base: '24px', lg: '35px' }}

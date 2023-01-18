@@ -22,11 +22,14 @@ export const ThemeButton: FC<ButtonProps> = props => {
       _focusWithin={{}}
       bgColor="transparent"
       color={theme.themeIcon}
-      border="1px solid #3E4247"
-      px="2"
-      py="2"
+      border="1px solid"
+      borderColor={useColorModeValue('#E6E6E6', '#3E4247')}
+      px="15.5px"
+      py="15.5px"
       borderRadius="4px"
       gap="2"
+      minW="52px"
+      minH="52px"
       {...props}
     >
       <Text display={{ base: 'unset', md: 'none' }}>Theme</Text>

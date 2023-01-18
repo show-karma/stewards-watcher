@@ -17,7 +17,7 @@ const config: IDAOConfig = {
     DESCRIPTION: `Find all the active delegates in dYdX DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
     IMAGE: '/daos/dydx/preview.png',
     FAVICON: '/daos/dydx/favicon.png',
-    URL: `https://dydx.showkarma.xyz`,
+    URL: `https://dydx.karmahq.xyz`,
   },
   DAO_CHAIN: chain.mainnet,
   DAO_DELEGATE_CONTRACT: '0x92D6C1e31e14520e676a687F0a93788B716BEff5',
@@ -27,9 +27,10 @@ const config: IDAOConfig = {
     window.open('https://dydx.vote/delegate', '_blank'),
   DAO_FORUM_TYPE: 'commonwealth',
   DAO_GTAG: 'G-67LDHT697P',
-  EXCLUDED_CARD_FIELDS: ['healthScore', 'karmaScore'],
+  EXCLUDED_CARD_FIELDS: ['healthScore'],
   DAO_DEFAULT_SETTINGS: {
     STATUS_FILTER: true,
+    ORDERSTAT: 'karmaScore',
   },
   DAO_EXT_VOTES_PROVIDER: {
     onChain: onChainDyDxVotesProvider,
@@ -73,6 +74,9 @@ const dark: IDAOTheme = {
     text: { primary: '#FFFFFF', secondary: '#ADB8C0' },
     border: 'rgba(87, 93, 104, 0.25)',
     common: '#727B81',
+    interests: { bg: 'rgba(255, 255, 255, 0.05)', text: '#ADB8C0' },
+    workstream: { bg: '#FFFFFF', text: '#222429' },
+    socialMedia: '#FFFFFF',
   },
   modal: {
     background: '#232334',
@@ -189,7 +193,7 @@ const light: IDAOTheme = {
     text: {
       primary: '#FFFFFF',
       secondary: '#ADB8C0',
-      madeBy: '#232334',
+      madeBy: '#ADB8C0',
       lastUpdated: '#666666',
     },
   },
@@ -204,12 +208,15 @@ const light: IDAOTheme = {
   card: {
     icon: '#ADB8C0',
     background: '#FFFFFF',
-    statBg: 'transparent',
+    statBg: '#EBEDEF',
     divider: 'rgba(102, 102, 102, 0.5)',
     text: { primary: '#212328', secondary: '#666666' },
-    border: 'rgba(102, 102, 102, 0.5)',
-    shadow: '-1px 1px 5px 0px rgba(87,93,104,0.75);',
+    border: 'none',
+    shadow: '0px 0px 4px rgba(0, 0, 0, 0.1);',
     common: '#727B81',
+    interests: { bg: '#EBEDEF', text: '#2C2E32' },
+    workstream: { bg: '#595A5E', text: '#FFFFFF' },
+    socialMedia: '#595A5E',
   },
   modal: {
     background: '#232334',

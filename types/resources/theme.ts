@@ -44,8 +44,11 @@ export interface IDAOTheme {
       primary: string;
       secondary: string;
     };
+    workstream: { bg: string; text: string };
+    interests: { bg: string; text: string };
     border: string;
     common: string;
+    socialMedia: string;
   };
   modal: {
     background: string;

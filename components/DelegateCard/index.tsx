@@ -350,8 +350,8 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                 >
                   {data.workstreams && data.workstreams.length > 0 && (
                     <Text
-                      color={theme.card.background}
-                      bgColor={theme.title}
+                      color={theme.card.workstream.text}
+                      bgColor={theme.card.workstream.bg}
                       px="2"
                       py="1"
                       borderRadius="md"
@@ -372,8 +372,8 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                         (interests.value.slice(0, 3) as string[]).map(
                           (interest, index) => (
                             <Text
-                              color={theme.subtitle}
-                              bgColor={theme.card.statBg}
+                              color={theme.card.interests.text}
+                              bgColor={theme.card.interests.bg}
                               px="2"
                               py="1"
                               borderRadius="md"
@@ -528,7 +528,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                     <Link
                       href={`https://twitter.com/${data.twitterHandle}`}
                       isExternal
-                      color={theme.card.text}
+                      color={theme.card.socialMedia}
                       _hover={{
                         transform: 'scale(1.5)',
                       }}
@@ -546,7 +546,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                           daoData.socialLinks.forum
                         )}
                         isExternal
-                        color={theme.card.text}
+                        color={theme.card.socialMedia}
                         _hover={{
                           transform: 'scale(1.5)',
                         }}
@@ -557,7 +557,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   {/* <Link
                     href={`https://discordapp.com/users/${1234}`}
                     isExternal
-                    color={theme.card.text}
+                    color={theme.card.socialMedia}
                   >
                     <Icon as={FaDiscord} w="5" h="5" />
                   </Link> */}

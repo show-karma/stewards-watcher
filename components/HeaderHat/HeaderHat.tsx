@@ -6,6 +6,7 @@ import {
   Icon,
   Img,
   Text,
+  useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
 import { DelegateVotesModal } from 'components/Modals/DelegateVotes';
@@ -16,22 +17,25 @@ import { HeaderBurgerMenu } from './HeaderBurgerMenu';
 import { Madeby } from './Madeby';
 import { ThemeButton } from './ThemeButton';
 
-const DelegateToAnyoneButton: FC<{ onToggle: () => void }> = ({ onToggle }) => (
-  <Button
-    bgColor="white"
-    color="black"
-    onClick={onToggle}
-    px="6"
-    py="4"
-    fontWeight="semibold"
-    border="1px solid white"
-    _active={{}}
-    _focus={{}}
-    _hover={{}}
-  >
-    Delegate to Anyone
-  </Button>
-);
+const DelegateToAnyoneButton: FC<{ onToggle: () => void }> = ({ onToggle }) => {
+  const { theme } = useDAO();
+  return (
+    <Button
+      bgColor={useColorModeValue(theme.branding, 'white')}
+      color={useColorModeValue(theme.buttonText, 'black')}
+      onClick={onToggle}
+      px="6"
+      py="6"
+      fontWeight="semibold"
+      _active={{}}
+      _focus={{}}
+      _hover={{}}
+      minH="52px"
+    >
+      Delegate to Anyone
+    </Button>
+  );
+};
 
 export const HeaderHat = () => {
   const { daoInfo, theme } = useDAO();
@@ -56,6 +60,10 @@ export const HeaderHat = () => {
         justify="center"
         px={{ base: '4', lg: '20' }}
         zIndex="2"
+        boxShadow={useColorModeValue(
+          '0px 4px 10px rgba(0, 0, 0, 0.1);',
+          'none'
+        )}
       >
         <Flex
           w={{ base: 'full', '2xl': '1360px' }}
@@ -87,7 +95,7 @@ export const HeaderHat = () => {
               <Text
                 w="max-content"
                 fontWeight="semibold"
-                fontSize={['lg', '2xl']}
+                fontSize={['lg', 'xl']}
                 color={theme.hat.text.primary}
               >
                 Delegate Dashboard
@@ -116,7 +124,7 @@ export const HeaderHat = () => {
                   alignItems="center"
                 >
                   <Center height="60px" alignItems="center">
-                    <Divider orientation="vertical" />
+                    <Divider orientation="vertical" borderColor="#2C2E32" />
                   </Center>
                   <Madeby />
                 </Flex>
@@ -135,6 +143,7 @@ export const HeaderHat = () => {
                   _focusWithin={{}}
                   _focusVisible={{}}
                   onClick={openBurgerMenu}
+                  color={theme.hat.text.primary}
                 >
                   <Icon as={IoMenu} boxSize="8" />
                 </Button>
