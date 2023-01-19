@@ -33,6 +33,7 @@ const supportedDAOs = [
 
 const DAO_CUSTOM_DOMAIN: Record<string, string> = {
   'daostewards.xyz': 'gitcoin',
+  'stewards.gitcoin.co': 'gitcoin',
 };
 
 export default function middleware(req: NextRequest) {
