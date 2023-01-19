@@ -32,7 +32,7 @@ const config: IDAOConfig = {
   ],
   DAO_DEFAULT_SETTINGS: {
     STATUS_FILTER: true,
-  }
+  },
 };
 
 const dark: IDAOTheme = {
