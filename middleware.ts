@@ -45,17 +45,6 @@ export default function middleware(req: NextRequest) {
 
   const dao = DAO_CUSTOM_DOMAIN[rootUrl] || getDAOName(hostname);
 
-  if (
-    hostname.includes('vercel.app') ||
-    (hostname.includes('localhost') && !dao)
-  ) {
-    const daoToFind = currentPathname.split('/')[1];
-    const searchDAO = supportedDAOs.find(item => item === daoToFind);
-    const lastPathname = currentPathname.split(`/${searchDAO}`)[1];
-    url.pathname = `/_sites/${searchDAO}${lastPathname || ''}`;
-    return NextResponse.rewrite(url);
-  }
-
   url.pathname = `/_sites/${dao}${currentPathname}`;
   return NextResponse.rewrite(url);
 }
