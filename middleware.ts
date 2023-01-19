@@ -31,11 +31,18 @@ const supportedDAOs = [
   'starknet',
 ];
 
+const DAO_CUSTOM_DOMAIN: Record<string, string> = {
+  'daostewards.xyz': 'gitcoin',
+};
+
 export default function middleware(req: NextRequest) {
   const url = req.nextUrl;
   const hostname = req.headers.get('host') || 'www.karmahq.xyz';
   const currentPathname = url.pathname;
-  const dao = getDAOName(hostname);
+
+  const rootUrl = hostname.replaceAll(/(www\.)|(:.+)/gi, '');
+
+  const dao = DAO_CUSTOM_DOMAIN[rootUrl] || getDAOName(hostname);
 
   if (
     hostname.includes('vercel.app') ||
