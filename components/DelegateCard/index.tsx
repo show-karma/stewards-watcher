@@ -243,7 +243,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       borderStyle="solid"
       borderColor={theme.card.border}
       w="full"
-      minWidth="288px"
+      minWidth="min-content"
       maxW={{ base: 'full', sm: '380px', lg: '460px' }}
       h={{
         base: 'max-content',
