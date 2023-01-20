@@ -245,9 +245,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       w="full"
       minWidth="min-content"
       maxW={{ base: 'full', sm: '380px', lg: '460px' }}
-      minH={{ base: '400px', md: 'max-content' }}
+      minH="max-content"
       h={{
-        base: '400px',
+        base: 'full',
         sm: 'full',
       }}
     >

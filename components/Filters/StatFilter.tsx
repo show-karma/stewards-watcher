@@ -45,7 +45,14 @@ export const StatFilter = () => {
       </MenuButton>
       <MenuList bgColor={theme.filters.listBg} color={theme.filters.listText}>
         {statOptions.map((option, index) => (
-          <MenuItem key={+index} onClick={() => selectStat(option.id)}>
+          <MenuItem
+            key={+index}
+            onClick={() => selectStat(option.id)}
+            bgColor={theme.filters.bg}
+            _hover={{
+              bg: theme.filters.activeBg,
+            }}
+          >
             {option.title}
           </MenuItem>
         ))}

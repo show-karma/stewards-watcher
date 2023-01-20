@@ -46,6 +46,10 @@ export const WorkstreamFilter = () => {
               key={+index}
               value={option.id.toString()}
               onClick={() => selectWorkstream(index)}
+              bgColor={theme.filters.bg}
+              _hover={{
+                bg: theme.filters.activeBg,
+              }}
             >
               {option.description}
             </MenuItemOption>
