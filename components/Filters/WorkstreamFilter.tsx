@@ -29,7 +29,8 @@ export const WorkstreamFilter = () => {
         fontFamily="heading"
         fontWeight="normal"
         textAlign="left"
-        w={{ base: 'max-content' }}
+        w={{ base: 'full', md: 'max-content' }}
+        minW="min-content"
       >
         Workstream
       </MenuButton>

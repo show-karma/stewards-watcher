@@ -139,12 +139,12 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
         >
           <Grid
             flexWrap="wrap"
-            rowGap="10"
-            columnGap="6"
+            rowGap={{ base: '2', md: '10' }}
+            columnGap={{ base: '6', md: '6' }}
             w="full"
             templateColumns={{
               base: 'repeat(1, 1fr)',
-              sm: 'repeat(2, 1fr)',
+              sm: 'repeat(1, 1fr)',
               md: 'repeat(2, 1fr)',
               xl: 'repeat(3, 1fr)',
             }}

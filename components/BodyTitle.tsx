@@ -121,12 +121,12 @@ export const BodyTitle: FC = () => {
                     w={{ base: 'full', md: 'max-content' }}
                   >
                     <Button
-                      px="6"
-                      py={{ base: '6' }}
+                      px={{ base: '3', md: '6' }}
+                      py={{ base: '4', md: '6' }}
                       justifyContent={{ base: 'space-between', lg: 'center' }}
                       borderRadius="base"
                       bgColor={theme.branding}
-                      fontSize="md"
+                      fontSize={{ base: 'sm', md: 'md' }}
                       fontFamily="heading"
                       color={theme.buttonText}
                       _hover={{
@@ -153,7 +153,7 @@ export const BodyTitle: FC = () => {
                       <Icon
                         as={TbExternalLink}
                         ml="2.5"
-                        boxSize={{ base: '5', lg: '4' }}
+                        boxSize={{ base: '4', lg: '4' }}
                       />
                     </Button>
                   </Link>
@@ -165,12 +165,12 @@ export const BodyTitle: FC = () => {
                   w={{ base: 'full', md: 'max-content' }}
                 >
                   <Button
-                    px="6"
-                    py={{ base: '6' }}
+                    px={{ base: '3', md: '6' }}
+                    py={{ base: '4', md: '6' }}
                     color={theme.collapse.text}
                     justifyContent={{ base: 'space-between', lg: 'center' }}
                     borderRadius="base"
-                    fontSize="md"
+                    fontSize={{ base: 'sm', md: 'md' }}
                     fontFamily="heading"
                     background="none"
                     borderWidth="1px"
@@ -197,7 +197,7 @@ export const BodyTitle: FC = () => {
                     <Icon
                       as={TbExternalLink}
                       ml="2.5"
-                      boxSize={{ base: '5', lg: '4' }}
+                      boxSize={{ base: '4', lg: '4' }}
                     />
                   </Button>
                 </Link>

@@ -252,7 +252,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     >
       <Flex
         flexDir="row"
-        gap="4"
+        gap={{ base: '2', md: '4' }}
         w="full"
         align="flex-start"
         px={{ base: '14px', lg: '5' }}
@@ -260,14 +260,14 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       >
         {isLoaded && data ? (
           <Flex
-            minH={['48px', '54px']}
-            minW={['48px', '54px']}
-            h={['48px', '54px']}
-            w={['48px', '54px']}
+            minH={['42px', '48px', '54px']}
+            minW={['42px', '48px', '54px']}
+            h={['42px', '48px', '54px']}
+            w={['42px', '48px', '54px']}
           >
             <ImgWithFallback
-              h={['48px', '54px']}
-              w={['48px', '54px']}
+              h={['42px', '48px', '54px']}
+              w={['42px', '48px', '54px']}
               borderRadius="full"
               src={
                 data.profilePicture ||
@@ -338,7 +338,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                         bgColor={theme.subtitle}
                         borderRadius="full"
                       />
-                      <Text fontSize="xs" fontWeight="medium">
+                      <Text fontSize={{ base: 'xs' }} fontWeight="medium">
                         Joined {formatDate(data.delegateSince)}
                       </Text>
                     </Flex>
@@ -459,7 +459,8 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   {stats.length > 0 && (
                     <Flex flexDir="column" w="full">
                       <Grid
-                        gap="2"
+                        gridColumnGap="2"
+                        gridRowGap="2"
                         w="full"
                         bgColor={theme.card.statBg}
                         px="2"
@@ -467,9 +468,12 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                         borderRadius="xl"
                         h="full"
                         templateColumns={{
-                          base: 'repeat(3, 1fr)',
+                          base: 'repeat(2, 1fr)',
+                          sm: 'repeat(3, 1fr)',
+                          md: 'repeat(3, 1fr)',
                           lg: 'repeat(4, 1fr)',
                         }}
+                        justifyItems="center"
                         alignItems="center"
                       >
                         {firstRowStats.map((statItem, index) => (
