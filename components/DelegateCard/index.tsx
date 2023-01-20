@@ -414,9 +414,15 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           </Flex>
           {!config.EXCLUDED_CARD_FIELDS.includes('karmaScore') &&
             !config.SHOULD_NOT_SHOW?.includes('stats') && (
-              <Flex position="absolute" right="0" top="0">
-                <DelegateStat stat={score} />
-              </Flex>
+              <>
+                {isLoaded ? (
+                  <Flex position="absolute" right="0" top="0">
+                    <DelegateStat stat={score} />
+                  </Flex>
+                ) : (
+                  <Skeleton w="16" h="8" />
+                )}
+              </>
             )}
         </Flex>
       </Flex>
@@ -576,13 +582,13 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
               </Flex>
             ) : (
               <>
-                <Skeleton isLoaded={isLoaded} w="36" h="12">
+                <Skeleton isLoaded={isLoaded} w="full" h="12">
                   SkeletonText
                 </Skeleton>
-                <Skeleton isLoaded={isLoaded} w="36" h="12">
+                <Skeleton isLoaded={isLoaded} w="full" h="12">
                   SkeletonText
                 </Skeleton>
-                <Skeleton isLoaded={isLoaded} w="36" h="12">
+                <Skeleton isLoaded={isLoaded} w="full" h="12">
                   SkeletonText
                 </Skeleton>
               </>
