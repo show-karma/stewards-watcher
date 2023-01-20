@@ -18,14 +18,17 @@ export const RestStatsRows: FC<IRestStatsRowsProps> = ({
   restRowStats,
 }) => (
   <Grid
-    gap="2"
+    gridColumnGap="2"
+    gridRowGap="2"
     w="full"
     px="2"
     py="4"
     borderRadius="xl"
     h="full"
     templateColumns={{
-      base: 'repeat(3, 1fr)',
+      base: 'repeat(2, 1fr)',
+      sm: 'repeat(3, 1fr)',
+      md: 'repeat(3, 1fr)',
       lg: 'repeat(4, 1fr)',
     }}
     alignItems="center"

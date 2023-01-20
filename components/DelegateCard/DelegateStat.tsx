@@ -27,7 +27,7 @@ export const DelegateStat: FC<{ stat: ICardStat }> = ({ stat }) => {
         <Text
           color={theme.card.text.primary}
           fontFamily="heading"
-          fontSize="lg"
+          fontSize={{ base: 'md', md: 'lg' }}
           fontWeight="bold"
           textAlign="center"
           h="max-content"
@@ -37,7 +37,7 @@ export const DelegateStat: FC<{ stat: ICardStat }> = ({ stat }) => {
         </Text>
         <Text
           color={theme.card.text.primary}
-          fontSize="11px"
+          fontSize={{ base: '10px', md: '11px' }}
           fontWeight="light"
           h="max-content"
           w="max-content"

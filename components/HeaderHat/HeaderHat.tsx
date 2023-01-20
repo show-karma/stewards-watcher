@@ -76,7 +76,7 @@ export const HeaderHat = () => {
             flexDir="row"
             flex={['1', 'none']}
             align={{ base: 'center', lg: 'flex-start' }}
-            gap="16"
+            gap={{ base: '2', md: '16' }}
             w="full"
             justify={{ base: 'space-between', lg: 'flex-start' }}
           >
