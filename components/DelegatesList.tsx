@@ -116,7 +116,8 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
         <InfiniteScroll
           pageStart={0}
           loadMore={() => {
-            if (delegates.length) fetchNextDelegates();
+            if (delegates.length && !isLoading && delegates.length >= 10)
+              fetchNextDelegates();
           }}
           hasMore={hasMore}
           loader={

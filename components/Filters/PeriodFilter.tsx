@@ -64,7 +64,14 @@ export const PeriodFilter = () => {
       </MenuButton>
       <MenuList bgColor={theme.filters.listBg} color={theme.filters.listText}>
         {periodOptions.map((option, index) => (
-          <MenuItem key={+index} onClick={() => selectPeriod(option.period)}>
+          <MenuItem
+            key={+index}
+            onClick={() => selectPeriod(option.period)}
+            bgColor={theme.filters.bg}
+            _hover={{
+              bg: theme.filters.activeBg,
+            }}
+          >
             {option.title}
           </MenuItem>
         ))}
