@@ -31,7 +31,9 @@ const supportedDAOs = [
   'starknet',
 ];
 
+const devUrl = 'dev.karmahq.xyz';
 const DAO_CUSTOM_DOMAIN: Record<string, string> = {
+  [devUrl]: 'gitcoin',
   'daostewards.xyz': 'gitcoin',
   'stewards.gitcoin.co': 'gitcoin',
 };
@@ -40,10 +42,14 @@ export default function middleware(req: NextRequest) {
   const url = req.nextUrl;
   const hostname = req.headers.get('host') || 'www.karmahq.xyz';
   const currentPathname = url.pathname;
-
   const rootUrl = hostname.replaceAll(/(www\.)|(:.+)/gi, '');
 
-  const dao = DAO_CUSTOM_DOMAIN[rootUrl] || getDAOName(hostname);
+  let dao = DAO_CUSTOM_DOMAIN[rootUrl] || getDAOName(hostname);
+
+  if (rootUrl === devUrl) {
+    const daoName = url.searchParams.get('dao');
+    dao = daoName ? getDAOName(daoName) : DAO_CUSTOM_DOMAIN[devUrl];
+  }
 
   url.pathname = `/_sites/${dao}${currentPathname}`;
   return NextResponse.rewrite(url);
