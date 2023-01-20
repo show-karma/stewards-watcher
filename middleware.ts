@@ -31,7 +31,7 @@ const supportedDAOs = [
   'starknet',
 ];
 
-const devUrl = 'dev.karmahq.xyz';
+const devUrl = 'dapp.karmahq.xyz';
 const DAO_CUSTOM_DOMAIN: Record<string, string> = {
   [devUrl]: 'gitcoin',
   'daostewards.xyz': 'gitcoin',
