@@ -245,8 +245,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       w="full"
       minWidth="min-content"
       maxW={{ base: 'full', sm: '380px', lg: '460px' }}
+      minH={{ base: '400px', md: 'max-content' }}
       h={{
-        base: 'max-content',
+        base: '400px',
         sm: 'full',
       }}
     >
@@ -432,7 +433,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           align="flex-start"
           justify="space-between"
           h="full"
-          px={{ base: '14px', lg: '5' }}
+          px={{ base: '3', lg: '5' }}
         >
           {isLoaded ? (
             <Flex mb="4">
@@ -459,12 +460,12 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   {stats.length > 0 && (
                     <Flex flexDir="column" w="full">
                       <Grid
-                        gridColumnGap="2"
-                        gridRowGap="2"
+                        gridColumnGap="1"
+                        gridRowGap="1"
                         w="full"
                         bgColor={theme.card.statBg}
                         px="2"
-                        py="4"
+                        py="2"
                         borderRadius="xl"
                         h="full"
                         templateColumns={{
