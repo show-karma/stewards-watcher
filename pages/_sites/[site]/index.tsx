@@ -28,14 +28,6 @@ export const getStaticProps: GetStaticProps<IndexProps, PathProps> = async ({
 
   const { site } = params;
 
-  const dao = supportedDAOs[site];
-
-  if (!dao) {
-    return {
-      notFound: true,
-    };
-  }
-
   return {
     props: { dao: site },
   };

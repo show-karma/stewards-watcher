@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { supportedDAOs } from 'resources';
 
 export const config = {
   matcher: [
@@ -16,20 +17,6 @@ export const config = {
 };
 
 const getDAOName = (host: string) => host.split('.')[0];
-
-const supportedDAOs = [
-  'aave',
-  'op',
-  'optimism',
-  'pooltogether',
-  'yamfinance',
-  'ssvnetwork',
-  'dydx',
-  'dimo',
-  'gitcoin',
-  'element-finance',
-  'starknet',
-];
 
 const devUrl = 'dapp.karmahq.xyz';
 const DAO_CUSTOM_DOMAIN: Record<string, string> = {
@@ -51,6 +38,11 @@ export default function middleware(req: NextRequest) {
     dao = daoName ? getDAOName(daoName) : DAO_CUSTOM_DOMAIN[devUrl];
   }
 
-  url.pathname = `/_sites/${dao}${currentPathname}`;
+  if (!supportedDAOs[dao]) {
+    url.pathname = `_error`;
+  } else {
+    url.pathname = `/_sites/${dao}${currentPathname}`;
+  }
+
   return NextResponse.rewrite(url);
 }

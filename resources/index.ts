@@ -16,12 +16,12 @@ interface ISupportedDAOs {
 }
 
 export const supportedDAOs: ISupportedDAOs = {
-  gitcoin: {
-    config: gitcoin.config,
-    light: gitcoin.light,
-    dark: gitcoin.dark,
-    ABI: gitcoin.ABI,
-  },
+  // gitcoin: {
+  //   config: gitcoin.config,
+  //   light: gitcoin.light,
+  //   dark: gitcoin.dark,
+  //   ABI: gitcoin.ABI,
+  // },
   dimo: {
     config: dimo.config,
     light: dimo.light,
