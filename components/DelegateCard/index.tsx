@@ -4,11 +4,13 @@ import {
   Flex,
   Grid,
   Link,
+  Modal,
   Skeleton,
   SkeletonCircle,
   SkeletonText,
   Text,
   useClipboard,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { FC, useState, useMemo, useCallback } from 'react';
 import { BsChat } from 'react-icons/bs';
@@ -27,6 +29,8 @@ import {
 } from 'utils';
 import { useRouter } from 'next/router';
 import { useToasty } from 'hooks';
+import { ScoreBreakdown } from 'components/ScoreBreakdown';
+import { StyledModal } from 'components/Modals/DelegateVotes/StyledModal';
 import { ImgWithFallback } from '../ImgWithFallback';
 import { DelegateButton } from '../DelegateButton';
 import { UserInfoButton } from '../UserInfoButton';
@@ -45,6 +49,8 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   const { selectProfile } = useDelegates();
   const { onCopy } = useClipboard(data?.address || '');
 
+  const { onOpen, onClose, isOpen } = useDisclosure();
+
   const { config } = daoInfo;
   const isLoaded = !!data;
 
@@ -52,6 +58,10 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     if (data?.gitcoinHealthScore) return formatNumber(data.gitcoinHealthScore);
     if (data?.karmaScore) return formatNumber(data?.karmaScore);
     return '-';
+  };
+
+  const openScoreBreakdown = () => {
+    onOpen();
   };
 
   const allStats: ICardStat[] = [
@@ -417,7 +427,14 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
             !config.SHOULD_NOT_SHOW?.includes('stats') && (
               <>
                 {isLoaded ? (
-                  <Flex position="absolute" right="0" top="0">
+                  <Flex
+                    position="absolute"
+                    right="0"
+                    top="0"
+                    onClick={() => {
+                      openScoreBreakdown();
+                    }}
+                  >
                     <DelegateStat stat={score} />
                   </Flex>
                 ) : (
@@ -601,6 +618,15 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           </Flex>
         </Flex>
       </Flex>
+      <StyledModal isOpen={isOpen} onClose={onClose}>
+        {data?.address ? (
+          <ScoreBreakdown
+            address={data.address}
+            period="lifetime"
+            type="gitcoinHealthScore"
+          />
+        ) : null}
+      </StyledModal>
     </Flex>
   );
 };
