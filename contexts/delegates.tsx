@@ -112,10 +112,11 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     return filteredStats;
   };
 
-  const [statuses, setStatuses] = useState<IStatusOptions[]>([
-    'active',
-    'recognized',
-  ]);
+  const [statuses, setStatuses] = useState<IStatusOptions[]>(
+    config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER?.DEFAULT_STATUSES ||
+      defaultStatuses
+  );
+
   const [statusesOptions] = useState<IStatusOptions[]>(defaultStatuses);
 
   const statOptions = prepareStatOptions();
@@ -150,7 +151,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const isSearchDirty = userToFind !== '';
   const isFiltering =
     interests.length > 0 ||
-    (config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER ? Boolean(statuses) : false);
+    (config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER?.SHOW
+      ? Boolean(statuses)
+      : false);
 
   const fetchInterests = async () => {
     try {
@@ -200,10 +203,11 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           period,
           pageSize: 10,
           workstreamId: getWorkstreams(),
-          statuses:
-            config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER && statuses.length
-              ? statuses.join(',')
-              : undefined,
+          statuses: statuses.length
+            ? statuses.join(',')
+            : config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER?.DEFAULT_STATUSES?.join(
+                ','
+              ) || defaultStatuses.join(','),
         },
       });
 
@@ -425,10 +429,11 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           period,
           pageSize: 10,
           workstreamId: getWorkstreams(),
-          statuses:
-            config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER && statuses.length
-              ? statuses.join(',')
-              : undefined,
+          statuses: statuses.length
+            ? statuses.join(',')
+            : config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER?.DEFAULT_STATUSES?.join(
+                ','
+              ) || defaultStatuses.join(','),
         },
       });
       const { data } = axiosClient.data;

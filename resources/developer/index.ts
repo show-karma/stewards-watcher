@@ -19,11 +19,17 @@ const config: IDAOConfig = {
   },
   DAO_CHAIN: chain.mainnet,
   DAO_DELEGATE_CONTRACT: '',
-  DAO_DELEGATE_MODE: 'snapshot',
+  DAO_DELEGATE_MODE: 'hidden',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
   SHOULD_NOT_SHOW: 'statement',
   EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'healthScore'],
+  DAO_DEFAULT_SETTINGS: {
+    STATUS_FILTER: {
+      SHOW: true,
+      DEFAULT_STATUSES: ['recognized'],
+    },
+  },
 };
 
 const dark: IDAOTheme = {
