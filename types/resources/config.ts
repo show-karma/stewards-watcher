@@ -1,4 +1,4 @@
-import { IFilterPeriod } from 'types/contexts';
+import { IFilterPeriod, IStatusOptions } from 'types/contexts';
 import { Chain } from 'wagmi';
 import { IChainRow } from 'types/IChainRow';
 import { IForumType } from './forum';
@@ -30,7 +30,10 @@ export interface IDAOConfig {
   DAO_DEFAULT_SETTINGS?: {
     TIMEPERIOD?: IFilterPeriod;
     ORDERSTAT?: IStats;
-    STATUS_FILTER?: boolean;
+    STATUS_FILTER?: {
+      SHOW: boolean;
+      DEFAULT_STATUSES?: IStatusOptions[];
+    };
   };
   SHOULD_NOT_SHOW?: 'statement' | 'stats';
   EXCLUDED_CARD_FIELDS: IStats[];
