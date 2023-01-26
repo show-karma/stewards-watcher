@@ -17,20 +17,6 @@ export const config = {
 
 const getDAOName = (host: string) => host.split('.')[0];
 
-const supportedDAOs = [
-  'aave',
-  'op',
-  'optimism',
-  'pooltogether',
-  'yamfinance',
-  'ssvnetwork',
-  'dydx',
-  'dimo',
-  'gitcoin',
-  'element-finance',
-  'starknet',
-];
-
 const devUrl = 'dapp.karmahq.xyz';
 const DAO_CUSTOM_DOMAIN: Record<string, string> = {
   [devUrl]: 'gitcoin',
