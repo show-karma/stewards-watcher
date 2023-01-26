@@ -10,6 +10,7 @@ import dimo from './dimo';
 import gitcoin from './gitcoin';
 import elementFinance from './element-finance';
 import starknet from './starknet';
+import developer from './developer';
 
 interface ISupportedDAOs {
   [key: string]: IDAOInfo;
@@ -80,6 +81,12 @@ export const supportedDAOs: ISupportedDAOs = {
     config: starknet.config,
     dark: starknet.dark,
     light: starknet.light,
+    ABI: null,
+  },
+  developerdao: {
+    config: developer.config,
+    dark: developer.dark,
+    light: developer.light,
     ABI: null,
   },
 };
