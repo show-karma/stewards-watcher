@@ -30,7 +30,10 @@ const config: IDAOConfig = {
   DAO_GTAG: 'G-67LDHT697P',
   EXCLUDED_CARD_FIELDS: ['healthScore'],
   DAO_DEFAULT_SETTINGS: {
-    STATUS_FILTER: true,
+    STATUS_FILTER: {
+      SHOW: true,
+      DEFAULT_STATUSES: ['active', 'recognized'],
+    },
     ORDERSTAT: 'karmaScore',
   },
   DAO_EXT_VOTES_PROVIDER: {

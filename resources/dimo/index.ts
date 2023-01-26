@@ -31,7 +31,9 @@ const config: IDAOConfig = {
     'forumScore',
   ],
   DAO_DEFAULT_SETTINGS: {
-    STATUS_FILTER: true,
+    STATUS_FILTER: {
+      SHOW: true,
+    },
   },
 };
 
