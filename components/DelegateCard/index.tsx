@@ -447,7 +447,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   />
                 </Flex>
               ) : (
-                <Text>-</Text>
+                <>
+                  {!(config.SHOULD_NOT_SHOW === 'statement') && <Text>-</Text>}
+                </>
               )}
             </Flex>
           ) : (

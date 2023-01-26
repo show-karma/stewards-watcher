@@ -15,6 +15,7 @@ const supportedDAOs: Record<string, string> = {
   gitcoin: 'gitcoin',
   element: 'element',
   starknet: 'starknet',
+  developerdao: 'developerdao',
 };
 
 interface PathProps extends ParsedUrlQuery {
