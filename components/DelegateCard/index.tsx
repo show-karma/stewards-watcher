@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 import {
+  Button,
   Divider,
   Flex,
   Grid,
@@ -9,10 +10,11 @@ import {
   SkeletonText,
   Text,
   useClipboard,
+  Icon,
 } from '@chakra-ui/react';
 import { FC, useState, useMemo, useCallback } from 'react';
 import { BsChat } from 'react-icons/bs';
-import { IoPersonOutline } from 'react-icons/io5';
+import { IoCopy, IoPersonOutline } from 'react-icons/io5';
 import { IoIosCheckboxOutline } from 'react-icons/io';
 import { AiOutlineThunderbolt } from 'react-icons/ai';
 import { ICardStat, ICustomFields, IDelegate } from 'types';
@@ -209,17 +211,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   const firstRowStats = stats.slice(0, columnsCalculator());
   const restRowStats = stats.slice(columnsCalculator(), stats.length);
 
-  const calculateSizeByStats = (size: 'sm' | 'lg') => {
-    if (size === 'sm') {
-      if (showSecondRow) return '400px';
-      if (!stats.length) return '240px';
-      return '300px';
-    }
-    if (showSecondRow) return '400px';
-    if (!stats.length) return '240px';
-    return '320px';
-  };
-
   const { toast } = useToasty();
   const copyText = () => {
     onCopy();
@@ -323,14 +314,28 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   {data.realName || data.ensName || shortAddress}
                 </Text>
                 <Flex flexDir="row" color={theme.subtitle} gap="1.5">
-                  <Text
-                    fontSize="xs"
-                    fontWeight="medium"
-                    _hover={{ textDecoration: 'underline', cursor: 'pointer' }}
-                    onClick={copyText}
-                  >
+                  <Text fontSize="xs" fontWeight="medium">
                     {shortAddress}
                   </Text>
+                  <Button
+                    bg="transparent"
+                    py="0"
+                    px="0"
+                    _hover={{
+                      opacity: 0.7,
+                    }}
+                    _active={{}}
+                    _focus={{}}
+                    onClick={copyText}
+                    h="max-content"
+                    w="min-content"
+                    minW="min-content"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                  >
+                    <Icon as={IoCopy} color={theme.subtitle} boxSize="4" />
+                  </Button>
                   {data.delegateSince && (
                     <Flex flexDir="row" gap="1.5" alignItems="center">
                       <Flex

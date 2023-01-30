@@ -3,8 +3,8 @@ import { chain } from 'wagmi';
 
 const config: IDAOConfig = {
   DAO: 'Developer DAO',
-  DAO_DESCRIPTION: `The Delegates of Developer DAO play a vital role in driving the Developer ecosystem forward through their work in governance and workstreams.`,
-  DAO_SUBDESCRIPTION: `This site will help boost transparency with health cards for each Delegate that display metrics and links on their involvement and engagement in the DAO.`,
+  DAO_DESCRIPTION: `The Stewards of Developer DAO play a vital role in driving the Developer ecosystem forward through their work in governance and workstreams.`,
+  DAO_SUBDESCRIPTION: `This site will help boost transparency with health cards for each Steward that display metrics and links on their involvement and engagement in the DAO.`,
   DAO_URL: 'https://www.developerdao.com',
   GOVERNANCE_FORUM: 'https://forum.developerdao.com/',
   DAO_KARMA_ID: 'developerdao',
@@ -23,7 +23,12 @@ const config: IDAOConfig = {
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
   SHOULD_NOT_SHOW: 'statement',
-  EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'healthScore'],
+  EXCLUDED_CARD_FIELDS: [
+    'onChainVotesPct',
+    'healthScore',
+    'delegatedVotes',
+    'votingWeight',
+  ],
   DAO_DEFAULT_SETTINGS: {
     STATUS_FILTER: {
       SHOW: true,
