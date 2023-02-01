@@ -11,6 +11,7 @@ import gitcoin from './gitcoin';
 import elementFinance from './element-finance';
 import starknet from './starknet';
 import developer from './developer';
+import apecoin from './apecoin';
 
 interface ISupportedDAOs {
   [key: string]: IDAOInfo;
@@ -69,6 +70,12 @@ export const supportedDAOs: ISupportedDAOs = {
     config: ssvnetwork.config,
     dark: ssvnetwork.dark,
     light: ssvnetwork.light,
+    ABI: null,
+  },
+  apecoin: {
+    config: apecoin.config,
+    dark: apecoin.dark,
+    light: apecoin.light,
     ABI: null,
   },
   element: {

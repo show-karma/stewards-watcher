@@ -16,6 +16,7 @@ const supportedDAOs: Record<string, string> = {
   element: 'element',
   starknet: 'starknet',
   developerdao: 'developerdao',
+  apecoin: 'apecoin',
 };
 
 interface PathProps extends ParsedUrlQuery {
