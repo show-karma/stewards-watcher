@@ -33,7 +33,7 @@ export const DelegateButton: FC<IDelegateButton> = ({
       setWriteAfterAction(false);
       write();
     }
-  }, [write && isConnected]);
+  }, [write && isConnected && chain?.id === config.DAO_CHAIN.id]);
 
   const handleCase = () => {
     mixpanel.reportEvent({
