@@ -34,7 +34,7 @@ export const ScoreBreakdownProvider: React.FC<
   const setBreakdown = (value: ScoreBreakdownCalc) => {
     setScoreBreakdown(value);
     const newScore = ScoreCalculator.calculate(value);
-    setScore(newScore);
+    setScore(+newScore.toFixed(2));
   };
 
   const {

@@ -46,7 +46,7 @@ interface IDelegateCardProps {
 export const DelegateCard: FC<IDelegateCardProps> = props => {
   const { data } = props;
   const { daoInfo, theme, daoData } = useDAO();
-  const { selectProfile } = useDelegates();
+  const { selectProfile, period } = useDelegates();
   const { onCopy } = useClipboard(data?.address || '');
 
   const { onOpen, onClose, isOpen } = useDisclosure();
@@ -429,6 +429,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                 {isLoaded ? (
                   <Flex
                     position="absolute"
+                    cursor="pointer"
                     right="0"
                     top="0"
                     onClick={() => {
@@ -618,11 +619,11 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           </Flex>
         </Flex>
       </Flex>
-      <StyledModal isOpen={isOpen} onClose={onClose}>
+      <StyledModal isOpen={isOpen} title="Score Breakdown" onClose={onClose}>
         {data?.address ? (
           <ScoreBreakdownProvider
             address={data.address}
-            period="lifetime"
+            period={period}
             type="gitcoinHealthScore"
           >
             <ScoreBreakdown />

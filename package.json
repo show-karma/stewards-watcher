@@ -12,7 +12,6 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "karma-score": "git+https://github.com/show-karma/reputation-scores.git#7f3e094",
     "@apollo/client": "^3.7.1",
     "@chakra-ui/react": "^2.4.9",
     "@emotion/react": "^11.10.5",
@@ -27,6 +26,7 @@
     "framer-motion": "^8.5.0",
     "graphql": "^16.6.0",
     "human-format": "^1.0.0",
+    "karma-score": "git+https://github.com/show-karma/reputation-scores.git#6a99dc7",
     "lodash.debounce": "^4.0.8",
     "mixpanel-browser": "^2.45.0",
     "moment": "^2.29.4",
@@ -41,6 +41,7 @@
     "@types/human-format": "^1.0.0",
     "@types/lodash": "^4.14.191",
     "@types/lodash.debounce": "^4.0.7",
+    "@types/mathjax": "^0.0.37",
     "@types/mixpanel-browser": "^2.38.0",
     "@types/node": "18.7.16",
     "@types/react": "18.0.19",
