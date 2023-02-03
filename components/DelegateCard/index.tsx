@@ -4,7 +4,6 @@ import {
   Flex,
   Grid,
   Link,
-  Modal,
   Skeleton,
   SkeletonCircle,
   SkeletonText,
@@ -31,6 +30,7 @@ import { useRouter } from 'next/router';
 import { useToasty } from 'hooks';
 import { ScoreBreakdown } from 'components/ScoreBreakdown';
 import { StyledModal } from 'components/Modals/DelegateVotes/StyledModal';
+import { ScoreBreakdownProvider } from 'contexts/scoreBreakdown';
 import { ImgWithFallback } from '../ImgWithFallback';
 import { DelegateButton } from '../DelegateButton';
 import { UserInfoButton } from '../UserInfoButton';
@@ -620,11 +620,13 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       </Flex>
       <StyledModal isOpen={isOpen} onClose={onClose}>
         {data?.address ? (
-          <ScoreBreakdown
+          <ScoreBreakdownProvider
             address={data.address}
             period="lifetime"
             type="gitcoinHealthScore"
-          />
+          >
+            <ScoreBreakdown />
+          </ScoreBreakdownProvider>
         ) : null}
       </StyledModal>
     </Flex>

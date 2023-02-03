@@ -4,6 +4,7 @@ import { axiosInstance } from './axiosInstance';
 type ScoreBreakdownRes = {
   breakdown: ScoreBreakdownCalc;
   score: number;
+  asString: string;
 };
 
 export async function fetchScoreBreakdown(

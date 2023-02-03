@@ -1,77 +1,86 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { Flex, Input } from '@chakra-ui/react';
-import { ScoreBreakdownCalc, ScoreBreakdownChildren } from 'karma-score';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { IBreakdownProps, useScoreBreakdown } from 'contexts/scoreBreakdown';
+import { ScoreBreakdownCalc } from 'karma-score';
 
-interface Props {
-  breakdown: ScoreBreakdownCalc;
-  child?: ScoreBreakdownChildren;
-  setItem?: Dispatch<SetStateAction<ScoreBreakdownCalc>>;
+interface Props extends IBreakdownProps {
+  child?: ScoreBreakdownCalc;
   index?: number;
 }
 
-export const InputTree: React.FC<Props> = ({
-  breakdown,
-  setItem,
-  child,
-  index,
-}) => {
-  const [cur, setCur] = useState<ScoreBreakdownCalc | ScoreBreakdownChildren>(
-    child || breakdown
-  );
-  const [hasChanged, setHasChanged] = useState<boolean>(false);
+export const InputTree: React.FC<Props> = ({ child, address }) => {
+  const { breakdown, setBreakdown } = useScoreBreakdown();
 
-  const onChange = (idx: number, weight: number) => {
-    const bd = [...cur];
-    bd[idx].weight = weight;
-    console.log('changing', idx, weight);
-    setCur(bd);
-    setHasChanged(true);
+  const onChange = (index: number, value: number) => {
+    const bd = [...breakdown];
+    bd[index].weight = value;
+    setBreakdown(bd);
   };
 
-  useEffect(() => {
-    console.log('haschanged', hasChanged, index);
-    if (hasChanged && typeof index === 'number') {
-      console.log('changed');
-      const bd = [...breakdown];
-      if (bd[index]) bd[index].children = cur as ScoreBreakdownChildren;
-      setItem?.(bd);
-    }
-  }, [cur]);
-
-  useEffect(() => {
-    setCur(child || breakdown);
-  }, [child, breakdown]);
+  const onChangeChild = (index: number, value: number) => {
+    //
+  };
 
   return (
     <Flex flexDir="column" flex="1">
-      {cur.map((item, idx) => (
+      {child ? (
         <>
-          <Flex key={+idx + item.label} flexDir="column" flex="1">
-            <label>
-              Weight for {item.label} <br />
-              <Input
-                type="number"
-                width="10ch"
-                defaultValue={item.weight}
-                step="0.1"
-                appearance="initial !important"
-                onChange={ev => onChange(idx, +ev.target.value)}
-              />{' '}
-              * {item.value}
-            </label>
-          </Flex>
-          {item.children ? (
-            <InputTree
-              breakdown={breakdown}
-              child={item.children}
-              setItem={setCur}
-              index={idx}
-            />
-          ) : null}
+          {child.map((item, idx) => (
+            <>
+              <Flex key={+idx + item.label} flexDir="column" flex="1">
+                <label>
+                  Weight for {item.label} <br />
+                  <Input
+                    type="number"
+                    width="10ch"
+                    defaultValue={item.weight}
+                    step="0.1"
+                    appearance="initial !important"
+                    onChange={ev => onChange(idx, +ev.target.value)}
+                  />{' '}
+                  * {item.value}
+                </label>
+              </Flex>
+              {item.children ? (
+                <InputTree
+                  child={item.children}
+                  index={idx}
+                  address={address}
+                />
+              ) : null}
+            </>
+          ))}
         </>
-      ))}
+      ) : (
+        <>
+          {breakdown.map((item, idx) => (
+            <>
+              <Flex key={+idx + item.label} flexDir="column" flex="1">
+                <label>
+                  Weight for {item.label} <br />
+                  <Input
+                    type="number"
+                    width="10ch"
+                    defaultValue={item.weight}
+                    step="0.1"
+                    appearance="initial !important"
+                    onChange={ev => onChange(idx, +ev.target.value)}
+                  />{' '}
+                  * {item.value}
+                </label>
+              </Flex>
+              {item.children ? (
+                <InputTree
+                  child={item.children}
+                  index={idx}
+                  address={address}
+                />
+              ) : null}
+            </>
+          ))}
+        </>
+      )}
     </Flex>
   );
 };
