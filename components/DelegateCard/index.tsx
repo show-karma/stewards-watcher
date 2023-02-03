@@ -113,12 +113,23 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       : 'Total Score based on all the delegate activity',
   };
 
-  const interests =
-    customFields?.find(
+  const getInterests = () => {
+    const foundInterests = customFields?.find(
       item =>
-        item.displayAs === 'interests' ||
+        item.label === 'interests' ||
         item.label.toLowerCase().includes('interests')
-    ) || emptyField;
+    );
+    if (!foundInterests) return emptyField;
+    if (Array.isArray(foundInterests.value)) return foundInterests;
+    const { value } = foundInterests;
+    return {
+      label: 'Interests',
+      value: value.split(','),
+      displayAs: 'interests',
+    };
+  };
+
+  const interests = getInterests();
 
   useMemo(() => {
     if (!config) return;
@@ -389,6 +400,10 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                               fontWeight="medium"
                               key={+index}
                               h="max-content"
+                              maxW="20"
+                              textOverflow="ellipsis"
+                              whiteSpace="nowrap"
+                              overflow="hidden"
                               _hover={{
                                 backgroundColor: () => {
                                   if (theme.card.statBg.includes('rgba'))
