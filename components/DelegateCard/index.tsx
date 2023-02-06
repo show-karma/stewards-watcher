@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 import {
+  Button,
   Divider,
   Flex,
   Grid,
@@ -10,10 +11,11 @@ import {
   Text,
   useClipboard,
   useDisclosure,
+  Icon,
 } from '@chakra-ui/react';
 import { FC, useState, useMemo, useCallback } from 'react';
 import { BsChat } from 'react-icons/bs';
-import { IoPersonOutline } from 'react-icons/io5';
+import { IoCopy, IoPersonOutline } from 'react-icons/io5';
 import { IoIosCheckboxOutline } from 'react-icons/io';
 import { AiOutlineThunderbolt } from 'react-icons/ai';
 import { ICardStat, ICustomFields, IDelegate } from 'types';
@@ -121,12 +123,23 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       : 'Total Score based on all the delegate activity',
   };
 
-  const interests =
-    customFields?.find(
+  const getInterests = () => {
+    const foundInterests = customFields?.find(
       item =>
-        item.displayAs === 'interests' ||
+        item.label === 'interests' ||
         item.label.toLowerCase().includes('interests')
-    ) || emptyField;
+    );
+    if (!foundInterests) return emptyField;
+    if (Array.isArray(foundInterests.value)) return foundInterests;
+    const { value } = foundInterests;
+    return {
+      label: 'Interests',
+      value: value.split(','),
+      displayAs: 'interests',
+    };
+  };
+
+  const interests = getInterests();
 
   useMemo(() => {
     if (!config) return;
@@ -219,17 +232,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   const firstRowStats = stats.slice(0, columnsCalculator());
   const restRowStats = stats.slice(columnsCalculator(), stats.length);
 
-  const calculateSizeByStats = (size: 'sm' | 'lg') => {
-    if (size === 'sm') {
-      if (showSecondRow) return '400px';
-      if (!stats.length) return '240px';
-      return '300px';
-    }
-    if (showSecondRow) return '400px';
-    if (!stats.length) return '240px';
-    return '320px';
-  };
-
   const { toast } = useToasty();
   const copyText = () => {
     onCopy();
@@ -255,9 +257,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       w="full"
       minWidth="min-content"
       maxW={{ base: 'full', sm: '380px', lg: '460px' }}
-      minH={{ base: '400px', md: 'max-content' }}
+      minH="max-content"
       h={{
-        base: '400px',
+        base: 'full',
         sm: 'full',
       }}
     >
@@ -333,14 +335,28 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   {data.realName || data.ensName || shortAddress}
                 </Text>
                 <Flex flexDir="row" color={theme.subtitle} gap="1.5">
-                  <Text
-                    fontSize="xs"
-                    fontWeight="medium"
-                    _hover={{ textDecoration: 'underline', cursor: 'pointer' }}
-                    onClick={copyText}
-                  >
+                  <Text fontSize="xs" fontWeight="medium">
                     {shortAddress}
                   </Text>
+                  <Button
+                    bg="transparent"
+                    py="0"
+                    px="0"
+                    _hover={{
+                      opacity: 0.7,
+                    }}
+                    _active={{}}
+                    _focus={{}}
+                    onClick={copyText}
+                    h="max-content"
+                    w="min-content"
+                    minW="min-content"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                  >
+                    <Icon as={IoCopy} color={theme.subtitle} boxSize="4" />
+                  </Button>
                   {data.delegateSince && (
                     <Flex flexDir="row" gap="1.5" alignItems="center">
                       <Flex
@@ -394,6 +410,10 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                               fontWeight="medium"
                               key={+index}
                               h="max-content"
+                              maxW="20"
+                              textOverflow="ellipsis"
+                              whiteSpace="nowrap"
+                              overflow="hidden"
                               _hover={{
                                 backgroundColor: () => {
                                   if (theme.card.statBg.includes('rgba'))
@@ -465,7 +485,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   />
                 </Flex>
               ) : (
-                <Text>-</Text>
+                <>
+                  {!(config.SHOULD_NOT_SHOW === 'statement') && <Text>-</Text>}
+                </>
               )}
             </Flex>
           ) : (

@@ -10,6 +10,8 @@ import dimo from './dimo';
 import gitcoin from './gitcoin';
 import elementFinance from './element-finance';
 import starknet from './starknet';
+import developer from './developer';
+import apecoin from './apecoin';
 
 interface ISupportedDAOs {
   [key: string]: IDAOInfo;
@@ -70,6 +72,12 @@ export const supportedDAOs: ISupportedDAOs = {
     light: ssvnetwork.light,
     ABI: null,
   },
+  apecoin: {
+    config: apecoin.config,
+    dark: apecoin.dark,
+    light: apecoin.light,
+    ABI: null,
+  },
   element: {
     config: elementFinance.config,
     dark: elementFinance.dark,
@@ -80,6 +88,12 @@ export const supportedDAOs: ISupportedDAOs = {
     config: starknet.config,
     dark: starknet.dark,
     light: starknet.light,
+    ABI: null,
+  },
+  developerdao: {
+    config: developer.config,
+    dark: developer.dark,
+    light: developer.light,
     ABI: null,
   },
 };

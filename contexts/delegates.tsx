@@ -58,11 +58,12 @@ interface IDelegateProps {
   interestFilter: string[];
   selectInterests: (index: number) => void;
   delegateCount: number;
-  selectStatus: (selectedStatus: IStatusOptions) => void;
-  statuses: IStatusOptions;
+  selectStatus: (selectedStatus: number) => void;
+  statuses: IStatusOptions[];
   isFiltering: boolean;
   workstreams: IWorkstream[];
   workstreamsFilter: string[];
+  statusesOptions: IStatusOptions[];
   selectWorkstream: (index: number) => void;
 }
 
@@ -79,6 +80,13 @@ const statDefaultOptions: IStatOptions[] = [
   { title: 'On-chain votes', id: 'onChainVotesPct', stat: 'onChainVotesPct' },
   { title: 'Score', id: 'score', stat: 'karmaScore' },
   { title: 'Health', id: 'healthScore', stat: 'healthScore' },
+];
+
+const defaultStatuses: IStatusOptions[] = [
+  'active',
+  'inactive',
+  'withdrawn',
+  'recognized',
 ];
 
 export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
@@ -103,13 +111,21 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     );
     return filteredStats;
   };
+
+  const [statuses, setStatuses] = useState<IStatusOptions[]>(
+    config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER?.DEFAULT_STATUSES ||
+      defaultStatuses
+  );
+
+  const [statusesOptions] = useState<IStatusOptions[]>(defaultStatuses);
+
   const statOptions = prepareStatOptions();
 
   const [stat, setStat] = useState<IStatsID>(statOptions[0].id);
   const [order, setOrder] = useState<IFilterOrder>('desc');
   const [period, setPeriod] = useState<IFilterPeriod>(defaultTimePeriod);
   const [interests, setInterests] = useState<string[]>([]);
-  const [statuses, setStatuses] = useState<IStatusOptions>('active');
+
   const [interestFilter, setInterestFilter] = useState<string[]>([]);
   const [userToFind, setUserToFind] = useState<string>('');
   const [voteInfos, setVoteInfos] = useState({} as IVoteInfo);
@@ -135,7 +151,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const isSearchDirty = userToFind !== '';
   const isFiltering =
     interests.length > 0 ||
-    (config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER ? Boolean(statuses) : false);
+    (config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER?.SHOW
+      ? Boolean(statuses)
+      : false);
 
   const fetchInterests = async () => {
     try {
@@ -163,6 +181,13 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     }
   };
 
+  const getWorkstreams = () => {
+    if (workstreamsFilter.length === 0 && config.DAO_KARMA_ID === 'gitcoin')
+      return '6,4,3,7,1,2,5,12';
+    if (workstreamsFilter.length) return workstreamsFilter.join(',');
+    return undefined;
+  };
+
   const fetchDelegates = async (_offset = offset) => {
     setLoading(true);
     try {
@@ -177,11 +202,12 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           field: stat,
           period,
           pageSize: 10,
-          workstreamId:
-            workstreamsFilter.length === 0 && config.DAO_KARMA_ID === 'gitcoin'
-              ? '6,4,3,7,1,2,5,12'
-              : workstreamsFilter.join(','),
-          statuses,
+          workstreamId: getWorkstreams(),
+          statuses: statuses.length
+            ? statuses.join(',')
+            : config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER?.DEFAULT_STATUSES?.join(
+                ','
+              ) || defaultStatuses.join(','),
         },
       });
 
@@ -240,6 +266,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   };
 
   useEffect(() => {
+    console.log(delegates.length, delegateCount);
     setHasMore(delegates.length < delegateCount);
   }, [delegates.length, delegateCount]);
 
@@ -401,11 +428,12 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           field: stat,
           period,
           pageSize: 10,
-          workstreamId:
-            workstreamsFilter.length === 0 && config.DAO_KARMA_ID === 'gitcoin'
-              ? '6,4,3,7,1,2,5,12'
-              : workstreamsFilter.join(','),
-          statuses,
+          workstreamId: getWorkstreams(),
+          statuses: statuses.length
+            ? statuses.join(',')
+            : config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER?.DEFAULT_STATUSES?.join(
+                ','
+              ) || defaultStatuses.join(','),
         },
       });
       const { data } = axiosClient.data;
@@ -544,7 +572,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const selectWorkstream = (index: number) => {
     if (!workstreams[index]) return;
 
-    // search for the interest in the workstreamsFilter array
+    // search for the index in the workstreamsFilter array
     const filterIdx = workstreamsFilter.findIndex(
       filter => filter === workstreams[index].id.toString()
     );
@@ -563,8 +591,26 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     setWorkstreamsFilter(items);
   };
 
-  const selectStatus = (selectedStatus: IStatusOptions) => {
-    setStatuses(selectedStatus);
+  const selectStatus = (index: number) => {
+    if (!statusesOptions[index]) return;
+
+    // search for the index in the statuses array
+    const filterIdx = statuses.findIndex(
+      filter => filter === statusesOptions[index]
+    );
+
+    // clone the statuses array
+    const items = [...statuses];
+
+    // if the status is already in the statusesOptions array, remove it
+    if (filterIdx >= 0) {
+      items.splice(filterIdx, 1);
+    } else {
+      items.push(statusesOptions[index]);
+    }
+
+    // set the new statuses array
+    setStatuses(items);
   };
 
   const handleSearch = debounce(text => {
@@ -619,6 +665,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       workstreams,
       selectWorkstream,
       workstreamsFilter,
+      statusesOptions,
     }),
     [
       profileSelected,
@@ -642,6 +689,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       isFiltering,
       workstreams,
       workstreamsFilter,
+      statusesOptions,
     ]
   );
 

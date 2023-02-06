@@ -60,7 +60,14 @@ export const OrderFilter = () => {
       </MenuButton>
       <MenuList bgColor={theme.filters.listBg} color={theme.filters.listText}>
         {orderOptions.map((option, index) => (
-          <MenuItem key={+index} onClick={() => selectOrder(option.order)}>
+          <MenuItem
+            key={+index}
+            onClick={() => selectOrder(option.order)}
+            bgColor={theme.filters.bg}
+            _hover={{
+              bg: theme.filters.activeBg,
+            }}
+          >
             {option.title}
           </MenuItem>
         ))}

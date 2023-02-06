@@ -1,56 +1,40 @@
 import { IDAOConfig, IDAOTheme } from 'types';
-import { onChainDyDxVotesProvider } from 'utils/onChainDyDxVotesProvider';
 import { chain } from 'wagmi';
-import ABI from './ABI.json';
 
 const config: IDAOConfig = {
-  DAO: 'dYdX',
-  DAO_DESCRIPTION: `The Delegates of dYdX DAO play a vital role in driving the dYdX ecosystem forward through their work in governance.`,
-  DAO_SUBDESCRIPTION: `This site will help boost transparency by displaying delegate contribution to indicate their involvement and engagement in the DAO.`,
-  DAO_URL: 'https://dydx.foundation/',
-  GOVERNANCE_FORUM: 'https://forums.dydx.community',
-  DAO_KARMA_ID: 'dydx',
+  DAO: 'Apecoin',
+  DAO_DESCRIPTION: `The Delegates of Apecoin DAO play a vital role in driving the Apecoin ecosystem forward through their work in governance and workstreams.`,
+  DAO_SUBDESCRIPTION: `This site will help boost transparency with health cards for each Delegate that display metrics and links on their involvement and engagement in the DAO.`,
+  DAO_URL: 'https://apecoin.com',
+  GOVERNANCE_FORUM: 'https://forum.apecoin.com',
+  DAO_KARMA_ID: 'apecoin',
   IMAGE_PREFIX_URL: 'https://cdn.stamp.fyi/avatar/eth:',
-  DAO_LOGO: '/daos/dydx/logo.svg',
+  DAO_LOGO: '/daos/apecoin/logo.svg',
   METATAGS: {
-    TITLE: `Delegates of dYdX DAO`,
-    DESCRIPTION: `Find all the active delegates in dYdX DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
-    IMAGE: '/daos/dydx/preview.png',
-    FAVICON: '/daos/dydx/favicon.png',
-    URL: `https://dydx.karmahq.xyz`,
+    TITLE: `Delegates of Apecoin DAO`,
+    DESCRIPTION: `Find all the active delegates in Apecoin DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
+    IMAGE: '/daos/apecoin/meta.png',
+    FAVICON: '/daos/apecoin/favicon.png',
+    URL: `https://apecoin.karmahq.xyz`,
   },
   DAO_CHAIN: chain.mainnet,
-  DAO_DELEGATE_CONTRACT: '0x92D6C1e31e14520e676a687F0a93788B716BEff5',
-  DAO_DELEGATE_MODE: 'custom',
-  DAO_DELEGATE_ACTION: () =>
-    typeof window !== 'undefined' &&
-    window.open('https://dydx.vote/delegate', '_blank'),
-  DAO_FORUM_TYPE: 'commonwealth',
-  DAO_FORUM_URL: 'https://forums.dydx.community/',
+  DAO_DELEGATE_CONTRACT: '',
+  DAO_DELEGATE_MODE: 'snapshot',
+  DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
-  EXCLUDED_CARD_FIELDS: ['healthScore'],
-  DAO_DEFAULT_SETTINGS: {
-    STATUS_FILTER: {
-      SHOW: true,
-      DEFAULT_STATUSES: ['active', 'recognized'],
-    },
-    ORDERSTAT: 'karmaScore',
-  },
-  DAO_EXT_VOTES_PROVIDER: {
-    onChain: onChainDyDxVotesProvider,
-  },
+  EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'healthScore'],
 };
 
 const dark: IDAOTheme = {
-  background: '#141424',
-  bodyBg: '#141424',
+  background: '#000001',
+  bodyBg: '#000001',
   title: '#FFFFFF',
   subtitle: '#a0aec0',
   text: '#FFFFFF',
-  branding: '#6966FF',
+  branding: '#183AC5',
   buttonText: '#FFFFFF',
   buttonTextSec: '#FFFFFF',
-  headerBg: '#232334',
+  headerBg: '#090B10',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
   collapse: { text: '#FFFFFF', subtext: '#ADB8C0' },
@@ -67,23 +51,30 @@ const dark: IDAOTheme = {
     border: '#ADB8C033',
     title: 'white',
     bg: 'transparent',
-    listBg: '#232334',
+    listBg: '#090B10',
     listText: 'white',
   },
   card: {
     icon: '#ADB8C0',
-    background: '#232334',
+    background: '#090B10',
     statBg: 'rgba(102, 102, 102, 0.15)',
     divider: 'rgba(173, 184, 192, 0.2)',
     text: { primary: '#FFFFFF', secondary: '#ADB8C0' },
-    border: 'rgba(87, 93, 104, 0.25)',
+    border: '#403E4F',
     common: '#727B81',
     interests: { bg: 'rgba(255, 255, 255, 0.05)', text: '#ADB8C0' },
-    workstream: { bg: '#FFFFFF', text: '#222429' },
+    workstream: { bg: '#FFFFFF', text: '#090B10' },
     socialMedia: '#FFFFFF',
   },
   modal: {
-    background: '#232334',
+    background: '#090B10',
+    header: {
+      border: '#ADB8C0',
+      title: '#FFFFFF',
+      subtitle: '#ADB8C0',
+      twitter: '#ADB8C0',
+      divider: 'rgba(173, 184, 192, 0.2)',
+    },
     delegateTo: {
       bg: '#FFFFFF',
       userBg: '#FFFFFF',
@@ -96,7 +87,7 @@ const dark: IDAOTheme = {
         text: '#212328',
         dirtyBorder: '#212328',
         border: '#E6E6E6',
-        error: '#C80925',
+        error: '#183AC5',
         bg: '#FFFFFF',
       },
       button: {
@@ -105,7 +96,7 @@ const dark: IDAOTheme = {
           text: 'rgba(89, 90, 94, 0.5)',
         },
         normal: {
-          bg: '#C80925',
+          bg: '#183AC5',
           text: '#FFFFFF',
         },
         alternative: {
@@ -115,15 +106,8 @@ const dark: IDAOTheme = {
         },
       },
     },
-    header: {
-      border: '#ADB8C0',
-      title: '#FFFFFF',
-      subtitle: '#ADB8C0',
-      twitter: '#ADB8C0',
-      divider: 'rgba(173, 184, 192, 0.2)',
-    },
     buttons: {
-      selectBg: '#6966FF',
+      selectBg: '#183AC5',
       selectText: '#FFFFFF',
       navBg: 'transparent',
       navText: '#FFFFFF',
@@ -171,7 +155,7 @@ const dark: IDAOTheme = {
         color: '#ADB8C0',
         buttons: {
           selectedBg: '#ADB8C0',
-          selectedText: '#232334',
+          selectedText: '#090B10',
           unSelectedBg: 'transparent',
           unSelectedText: '#ADB8C0',
         },
@@ -183,12 +167,12 @@ const dark: IDAOTheme = {
 const light: IDAOTheme = {
   background: '#F2F4F9',
   bodyBg: '#F2F4F9',
-  title: '#232334',
+  title: '#090B10',
   subtitle: '#666666',
-  text: '#232334',
-  branding: '#6966FF',
+  text: '#090B10',
+  branding: '#183AC5',
   buttonText: '#FFFFFF',
-  buttonTextSec: '#232334',
+  buttonTextSec: '#090B10',
   headerBg: '#212328',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
@@ -223,13 +207,21 @@ const light: IDAOTheme = {
     socialMedia: '#595A5E',
   },
   modal: {
-    background: '#232334',
+    background: '#090B10',
     header: {
       border: '#ADB8C0',
       title: '#FFFFFF',
       subtitle: '#ADB8C0',
       twitter: '#ADB8C0',
       divider: 'rgba(173, 184, 192, 0.2)',
+    },
+    buttons: {
+      selectBg: '#183AC5',
+      selectText: '#FFFFFF',
+      navBg: 'transparent',
+      navText: '#FFFFFF',
+      navUnselectedText: '#ADB8C0',
+      navBorder: '#FFFFFF',
     },
     delegateTo: {
       bg: '#FFFFFF',
@@ -243,7 +235,7 @@ const light: IDAOTheme = {
         text: '#212328',
         dirtyBorder: '#212328',
         border: '#E6E6E6',
-        error: '#C80925',
+        error: '#183AC5',
         bg: '#FFFFFF',
       },
       button: {
@@ -252,7 +244,7 @@ const light: IDAOTheme = {
           text: 'rgba(89, 90, 94, 0.5)',
         },
         normal: {
-          bg: '#C80925',
+          bg: '#183AC5',
           text: '#FFFFFF',
         },
         alternative: {
@@ -261,14 +253,6 @@ const light: IDAOTheme = {
           border: '#595A5E',
         },
       },
-    },
-    buttons: {
-      selectBg: '#6966FF',
-      selectText: '#FFFFFF',
-      navBg: 'transparent',
-      navText: '#FFFFFF',
-      navUnselectedText: '#ADB8C0',
-      navBorder: '#FFFFFF',
     },
     statement: {
       headline: '#FFFFFF',
@@ -295,11 +279,11 @@ const light: IDAOTheme = {
         verticalDivider: 'rgba(173, 184, 192, 0.5)',
         divider: 'rgba(173, 184, 192, 0.2)',
         icons: {
-          for: 'green.300',
-          against: 'red.500',
-          abstain: 'gray.300',
-          notVoted: 'gray.300',
-          multiple: 'green.300',
+          for: '#FFFFFF',
+          against: '#FFFFFF',
+          abstain: '#FFFFFF',
+          notVoted: '#FFFFFF',
+          multiple: '#FFFFFF',
         },
       },
       reason: {
@@ -311,7 +295,7 @@ const light: IDAOTheme = {
         color: '#ADB8C0',
         buttons: {
           selectedBg: '#ADB8C0',
-          selectedText: '#232334',
+          selectedText: '#090B10',
           unSelectedBg: 'transparent',
           unSelectedText: '#ADB8C0',
         },
@@ -320,6 +304,6 @@ const light: IDAOTheme = {
   },
 };
 
-const dao = { dark, light, config, ABI };
+const dao = { dark, light, config };
 
 export default dao;

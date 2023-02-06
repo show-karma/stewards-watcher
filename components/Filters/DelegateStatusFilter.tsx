@@ -10,30 +10,8 @@ import { DownChevron } from 'components/Icons';
 import { useDAO, useDelegates } from 'contexts';
 import { IStatusOptions } from 'types';
 
-const defaultStatuses: {
-  label: string;
-  value: IStatusOptions;
-}[] = [
-  {
-    label: 'Active',
-    value: 'active',
-  },
-  {
-    label: 'Inactive',
-    value: 'inactive',
-  },
-  {
-    label: 'Withdrawn',
-    value: 'withdrawn',
-  },
-  {
-    label: 'Recognized',
-    value: 'recognized',
-  },
-];
-
 export const DelegateStatusFilter = () => {
-  const { selectStatus, statuses } = useDelegates();
+  const { selectStatus, statuses, statusesOptions } = useDelegates();
   const { theme } = useDAO();
 
   return (
@@ -72,17 +50,21 @@ export const DelegateStatusFilter = () => {
         _focus={{}}
         _focusWithin={{}}
       >
-        {defaultStatuses.find(item => item.value === statuses)?.label}
+        Status
       </MenuButton>
       <MenuList bgColor={theme.filters.listBg} color={theme.filters.listText}>
-        <MenuOptionGroup value={statuses}>
-          {defaultStatuses.map((option, index) => (
+        <MenuOptionGroup type="checkbox" value={statuses}>
+          {statusesOptions.map((option, index) => (
             <MenuItemOption
               key={+index}
-              value={option.value}
-              onClick={() => selectStatus(option.value)}
+              value={option}
+              onClick={() => selectStatus(index)}
+              bgColor={theme.filters.bg}
+              _hover={{
+                bg: theme.filters.activeBg,
+              }}
             >
-              {option.label}
+              {option.charAt(0).toUpperCase() + option.slice(1)}
             </MenuItemOption>
           ))}
         </MenuOptionGroup>
