@@ -56,7 +56,10 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
 
   const scoreType = useMemo(
     (): IBreakdownProps['type'] =>
-      data?.gitcoinHealthScore ? 'gitcoinHealthScore' : 'karmaScore',
+      data?.gitcoinHealthScore !== null &&
+      typeof data?.gitcoinHealthScore !== undefined
+        ? 'gitcoinHealthScore'
+        : 'karmaScore',
     [data]
   );
 
