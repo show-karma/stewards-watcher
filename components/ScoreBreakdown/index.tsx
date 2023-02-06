@@ -1,7 +1,7 @@
 import { Box, Flex, Table, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
 import { useScoreBreakdown } from 'contexts/scoreBreakdown';
 import { ScoreCalculator } from 'karma-score';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { InputTree } from './InputTree';
 
 export const ScoreBreakdown: React.FC = () => {
@@ -13,9 +13,7 @@ export const ScoreBreakdown: React.FC = () => {
     ],
     [score]
   );
-  useEffect(() => {
-    console.log(ScoreCalculator.breakdownToString(breakdown, true));
-  }, [breakdown]);
+
   return (
     <Box>
       <Flex flex="1">
@@ -29,7 +27,7 @@ export const ScoreBreakdown: React.FC = () => {
           <Tr>
             <Td colSpan={2}>Total</Td>
             <Td>
-              <Text fontSize="2em">{score}</Text>
+              <Text fontSize="2em">{Math.floor(score)}</Text>
             </Td>
           </Tr>
         </Table>
@@ -49,7 +47,7 @@ export const ScoreBreakdown: React.FC = () => {
           <Td>Score:</Td>
           <Td>
             <pre>{formula}</pre>
-            <br />= {score}
+            <br />= Floor({score}) = {Math.floor(score)}
           </Td>
         </Tr>
       </Table>

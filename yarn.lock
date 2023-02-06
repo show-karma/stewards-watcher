@@ -4665,9 +4665,9 @@ jsonparse@^1.2.0:
     array-includes "^3.1.5"
     object.assign "^4.1.3"
 
-"karma-score@git+https://github.com/show-karma/reputation-scores.git#6a99dc7":
+"karma-score@git+https://github.com/show-karma/reputation-scores.git#7bfbaae":
   version "1.0.0"
-  resolved "git+https://github.com/show-karma/reputation-scores.git#6a99dc7758307e84cd9b2f3854b3e53dddd15e77"
+  resolved "git+https://github.com/show-karma/reputation-scores.git#7bfbaae28c1ccb783fdeaabef74c997263dbe0b5"
   dependencies:
     "@types/node" "16"
     axios "^0.27.2"
