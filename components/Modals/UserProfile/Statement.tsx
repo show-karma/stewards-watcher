@@ -118,8 +118,13 @@ const Sidebar: FC<ISidebar> = ({ profile, interests, languages }) => {
     },
   ];
 
-  const languagesValueArray = languages.value as string[];
-  const interestsValueArray = interests.value as string[];
+  const languagesValueArray = Array.isArray(languages.value)
+    ? (languages.value as string[])
+    : languages.value.split(',');
+
+  const interestsValueArray = Array.isArray(interests.value)
+    ? (interests.value as string[])
+    : interests.value.split(',');
 
   return (
     <Flex w={{ base: 'full', lg: '16.875rem' }}>
