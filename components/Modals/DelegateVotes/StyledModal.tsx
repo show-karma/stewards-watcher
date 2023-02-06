@@ -25,7 +25,7 @@ export const StyledModal: React.FC<ModalProps & { title: string }> = props => {
       <ModalContent
         mx="1rem"
         p={4}
-        width="920"
+        minWidth="920"
         maxWidth="920"
         borderTopRadius="12px"
         bgColor={theme.modal.background}

@@ -56,8 +56,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
 
   const scoreType = useMemo(
     (): IBreakdownProps['type'] =>
-      data?.gitcoinHealthScore !== null &&
-      typeof data?.gitcoinHealthScore !== undefined
+      daoInfo.config.DAO_KARMA_ID === 'gitcoin'
         ? 'gitcoinHealthScore'
         : 'karmaScore',
     [data]

@@ -19,6 +19,7 @@ interface IScoreBreakdownContext extends IBreakdownProps {
   breakdown: ScoreBreakdownCalc;
   setBreakdown: (value: ScoreBreakdownCalc) => void;
   score: number;
+  loading: boolean;
 }
 
 export const ScoreBreakdownContext = createContext(
@@ -30,6 +31,7 @@ export const ScoreBreakdownProvider: React.FC<
 > = ({ address, period, type, children }) => {
   const [breakdown, setScoreBreakdown] = useState<ScoreBreakdownCalc>([]);
   const [score, setScore] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   const setBreakdown = (value: ScoreBreakdownCalc) => {
     setScoreBreakdown(value);
@@ -42,13 +44,20 @@ export const ScoreBreakdownProvider: React.FC<
   } = useDAO();
 
   const fetchBreakdown = async () => {
-    const result = await fetchScoreBreakdown(
-      address,
-      config.DAO_KARMA_ID,
-      type,
-      period
-    );
-    setBreakdown(result.breakdown);
+    try {
+      setLoading(true);
+      const result = await fetchScoreBreakdown(
+        address,
+        config.DAO_KARMA_ID,
+        type,
+        period
+      );
+      setBreakdown(result.breakdown);
+    } catch {
+      //
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -56,8 +65,16 @@ export const ScoreBreakdownProvider: React.FC<
   }, [address]);
 
   const values = useMemo(
-    () => ({ breakdown, setBreakdown, score, address, period, type }),
-    [address, score, breakdown]
+    () => ({
+      breakdown,
+      setBreakdown,
+      score,
+      address,
+      period,
+      type,
+      loading,
+    }),
+    [address, score, breakdown, loading]
   );
 
   return (

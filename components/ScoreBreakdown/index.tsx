@@ -1,11 +1,21 @@
-import { Box, Flex, Table, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  SkeletonText,
+  Table,
+  Td,
+  Text,
+  Th,
+  Thead,
+  Tr,
+} from '@chakra-ui/react';
 import { useScoreBreakdown } from 'contexts/scoreBreakdown';
 import { ScoreCalculator } from 'karma-score';
 import { useMemo } from 'react';
 import { InputTree } from './InputTree';
 
 export const ScoreBreakdown: React.FC = () => {
-  const { score, address, period, breakdown } = useScoreBreakdown();
+  const { score, address, period, breakdown, loading } = useScoreBreakdown();
   const [formulaWithLabels, formula] = useMemo(
     () => [
       ScoreCalculator.breakdownToString(breakdown, true),
@@ -27,7 +37,9 @@ export const ScoreBreakdown: React.FC = () => {
           <Tr>
             <Td colSpan={2}>Total</Td>
             <Td>
-              <Text fontSize="2em">{Math.floor(score)}</Text>
+              <SkeletonText isLoaded={!loading}>
+                <Text fontSize="2em">{Math.floor(score)}</Text>
+              </SkeletonText>
             </Td>
           </Tr>
         </Table>
@@ -35,19 +47,25 @@ export const ScoreBreakdown: React.FC = () => {
       <Table mt="14">
         <Tr>
           <Td>Period</Td>
-          <Td>{period}</Td>
+          <Td>
+            <SkeletonText isLoaded={!loading}>{period}</SkeletonText>
+          </Td>
         </Tr>
         <Tr>
           <Td>Scoring Formula</Td>
           <Td>
-            <code>{formulaWithLabels}</code>
+            <SkeletonText isLoaded={!loading}>
+              <code>{formulaWithLabels}</code>
+            </SkeletonText>
           </Td>
         </Tr>
         <Tr>
           <Td>Score:</Td>
           <Td>
-            <pre>{formula}</pre>
-            <br />= Floor({score}) = {Math.floor(score)}
+            <SkeletonText isLoaded={!loading}>
+              <pre>{formula}</pre>
+              <br />= Floor({score}) = {Math.floor(score)}
+            </SkeletonText>
           </Td>
         </Tr>
       </Table>
