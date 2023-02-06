@@ -32,7 +32,10 @@ import { useRouter } from 'next/router';
 import { useToasty } from 'hooks';
 import { ScoreBreakdown } from 'components/ScoreBreakdown';
 import { StyledModal } from 'components/Modals/DelegateVotes/StyledModal';
-import { ScoreBreakdownProvider } from 'contexts/scoreBreakdown';
+import {
+  IBreakdownProps,
+  ScoreBreakdownProvider,
+} from 'contexts/scoreBreakdown';
 import { ImgWithFallback } from '../ImgWithFallback';
 import { DelegateButton } from '../DelegateButton';
 import { UserInfoButton } from '../UserInfoButton';
@@ -50,6 +53,12 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   const { daoInfo, theme, daoData } = useDAO();
   const { selectProfile, period } = useDelegates();
   const { onCopy } = useClipboard(data?.address || '');
+
+  const scoreType = useMemo(
+    (): IBreakdownProps['type'] =>
+      data?.gitcoinHealthScore ? 'gitcoinHealthScore' : 'karmaScore',
+    [data]
+  );
 
   const { onOpen, onClose, isOpen } = useDisclosure();
 
@@ -646,7 +655,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           <ScoreBreakdownProvider
             address={data.address}
             period={period}
-            type="gitcoinHealthScore"
+            type={scoreType}
           >
             <ScoreBreakdown />
           </ScoreBreakdownProvider>
