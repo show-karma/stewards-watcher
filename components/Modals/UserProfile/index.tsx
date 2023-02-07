@@ -5,7 +5,7 @@ import {
   ModalContent,
   ModalOverlay,
 } from '@chakra-ui/react';
-import { useDAO, VotesProvider } from 'contexts';
+import { EditStatementProvider, useDAO, VotesProvider } from 'contexts';
 import { useRouter } from 'next/router';
 import { FC, useMemo, useState } from 'react';
 import { IActiveTab, IProfile } from 'types';
@@ -30,7 +30,7 @@ const Tab: FC<ITab> = ({ activeTab, profile }) => {
         </VotesProvider>
       );
     default:
-      return <Statement profile={profile} />;
+      return <Statement />;
   }
 };
 
@@ -96,27 +96,33 @@ export const UserProfile: FC<IUserProfileProps> = props => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onCloseModal}>
-      <ModalOverlay
-        background="linear-gradient(359.86deg, rgba(20, 21, 24, 0.85) 41.37%, rgba(33, 35, 40, 0) 101.24%)"
-        backdropFilter="blur(4px)"
-      />
-      <ModalContent
-        w={{ base: 'max-content', lg: '920' }}
-        maxW={{ base: 'max-content', lg: '920' }}
-        borderRadius="12px"
-        borderWidth="1px"
-        borderStyle="solid"
-        borderColor={theme.modal.header.border}
-        bgColor={theme.modal.background}
-        mx="1rem"
-      >
-        <Header changeTab={changeTab} activeTab={activeTab} profile={profile} />
-        <ModalCloseButton />
-        <ModalBody px={{ base: '1.25rem', lg: '2.5rem' }}>
-          <Tab activeTab={activeTab} profile={profile} />
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+    <EditStatementProvider>
+      <Modal isOpen={isOpen} onClose={onCloseModal}>
+        <ModalOverlay
+          background="linear-gradient(359.86deg, rgba(20, 21, 24, 0.85) 41.37%, rgba(33, 35, 40, 0) 101.24%)"
+          backdropFilter="blur(4px)"
+        />
+        <ModalContent
+          w={{ base: 'max-content', lg: '920' }}
+          maxW={{ base: 'max-content', lg: '920' }}
+          borderRadius="12px"
+          borderWidth="1px"
+          borderStyle="solid"
+          borderColor={theme.modal.header.border}
+          bgColor={theme.modal.background}
+          mx="1rem"
+        >
+          <Header
+            changeTab={changeTab}
+            activeTab={activeTab}
+            profile={profile}
+          />
+          <ModalCloseButton />
+          <ModalBody px={{ base: '1.25rem', lg: '2.5rem' }}>
+            <Tab activeTab={activeTab} profile={profile} />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    </EditStatementProvider>
   );
 };

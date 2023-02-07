@@ -20,11 +20,10 @@ import {
   IActiveTab,
   IStatusOptions,
   IWorkstream,
-  IStats,
   IStatsID,
 } from 'types';
-import { axiosInstance } from 'utils';
 import { useMixpanel, useToasty } from 'hooks';
+import { api } from 'helpers';
 import { useDAO } from './dao';
 
 interface IDelegateProps {
@@ -157,9 +156,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const fetchInterests = async () => {
     try {
-      const { data } = await axiosInstance.get(
-        `/dao/interests/${config.DAO_KARMA_ID}`
-      );
+      const { data } = await api.get(`/dao/interests/${config.DAO_KARMA_ID}`);
       if (Array.isArray(data?.data?.interests)) {
         setInterests(data.data.interests);
       }
@@ -170,7 +167,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const fetchWorkstreams = async () => {
     try {
-      const { data } = await axiosInstance.get(
+      const { data } = await api.get(
         `/workstream/list?dao=${config.DAO_KARMA_ID}`
       );
       if (Array.isArray(data.data.workstreams)) {
@@ -191,7 +188,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const fetchDelegates = async (_offset = offset) => {
     setLoading(true);
     try {
-      const axiosClient = await axiosInstance.get(`/dao/delegates`, {
+      const axiosClient = await api.get(`/dao/delegates`, {
         params: {
           interests: interestFilter.length
             ? interestFilter.join(',')
@@ -235,7 +232,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           ensName: item.ensName,
           forumActivity: fetchedPeriod?.forumActivityScore || 0,
           delegateSince: item.joinDateAt || item.firstTokenDelegatedAt,
-          delegators: item.delegatorCount,
+          delegators: item.delegatorCount || 0,
           voteParticipation: {
             onChain: fetchedPeriod?.onChainVotesPct || 0,
             offChain: fetchedPeriod?.offChainVotesPct || 0,
@@ -266,7 +263,6 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   };
 
   useEffect(() => {
-    console.log(delegates.length, delegateCount);
     setHasMore(delegates.length < delegateCount);
   }, [delegates.length, delegateCount]);
 
@@ -275,7 +271,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     setFetchingMore(true);
     setLoading(true);
     try {
-      const axiosClient = await axiosInstance.get(`/dao/search-delegate`, {
+      const axiosClient = await api.get(`/dao/search-delegate`, {
         params: {
           user: userToFind,
           pageSize: 10,
@@ -302,7 +298,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           ensName: item.ensName,
           forumActivity: fetchedPeriod?.forumActivityScore || 0,
           delegateSince: item.joinDateAt || item.firstTokenDelegatedAt,
-          delegators: item.delegatorCount,
+          delegators: item.delegatorCount || 0,
           voteParticipation: {
             onChain: fetchedPeriod?.onChainVotesPct || 0,
             offChain: fetchedPeriod?.offChainVotesPct || 0,
@@ -348,7 +344,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const searchProfileModal = async (userToSearch: string) => {
     try {
-      const axiosClient = await axiosInstance.get(`/dao/find-delegate`, {
+      const axiosClient = await api.get(`/dao/find-delegate`, {
         params: {
           dao: config.DAO_KARMA_ID,
           user: userToSearch,
@@ -366,7 +362,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         forumActivity: fetchedPeriod?.forumActivityScore || 0,
         delegateSince:
           fetchedDelegate.joinDateAt || fetchedDelegate.firstTokenDelegatedAt,
-        delegators: fetchedDelegate.delegatorCount,
+        delegators: fetchedDelegate.delegatorCount || 0,
         voteParticipation: {
           onChain: fetchedPeriod?.onChainVotesPct || 0,
           offChain: fetchedPeriod?.offChainVotesPct || 0,
@@ -417,7 +413,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     setLoading(true);
     setFetchingMore(true);
     try {
-      const axiosClient = await axiosInstance.get(`/dao/delegates`, {
+      const axiosClient = await api.get(`/dao/delegates`, {
         params: {
           interests: interestFilter.length
             ? interestFilter.join(',')
@@ -453,7 +449,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           ensName: item.ensName,
           forumActivity: fetchedPeriod?.forumActivityScore || 0,
           delegateSince: item.joinDateAt || item.firstTokenDelegatedAt,
-          delegators: item.delegatorCount,
+          delegators: item.delegatorCount || 0,
           voteParticipation: {
             onChain: fetchedPeriod?.onChainVotesPct || 0,
             offChain: fetchedPeriod?.offChainVotesPct || 0,
@@ -506,7 +502,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   // Fetch vote infos
   const getVoteInfos = async () => {
     try {
-      const axiosClient = await axiosInstance.get(`/dao/delegates`, {
+      const axiosClient = await api.get(`/dao/delegates`, {
         params: {
           name: config.DAO_KARMA_ID,
           pageSize: 10,

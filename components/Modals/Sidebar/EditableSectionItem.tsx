@@ -1,0 +1,64 @@
+import { ComponentWithAs, Flex, Text, Icon } from '@chakra-ui/react';
+import { useDAO } from 'contexts';
+import { FC } from 'react';
+import { IconBaseProps, IconType } from 'react-icons';
+
+interface ISectionItem {
+  icon?: IconType | ComponentWithAs<'svg', IconBaseProps>;
+  isEditMode: boolean;
+  value: string;
+  isSelected: boolean;
+  selectItem: (item: string) => void;
+}
+
+export const EditableSectionItem: FC<ISectionItem> = ({
+  icon,
+  isEditMode,
+  value,
+  isSelected,
+  selectItem,
+}) => {
+  const { theme } = useDAO();
+
+  return (
+    <Flex
+      flexDir="row"
+      gap="2"
+      borderColor={
+        isSelected && isEditMode
+          ? theme.modal.statement.sidebar.item.text
+          : theme.modal.statement.sidebar.item.border
+      }
+      bgColor={
+        isSelected && isEditMode
+          ? theme.modal.statement.sidebar.item.text
+          : 'none'
+      }
+      borderWidth="1px"
+      borderRadius="30px"
+      borderStyle="solid"
+      w="max-content"
+      align="center"
+      px="3"
+      py="3"
+      cursor={isEditMode ? 'pointer' : 'unset'}
+      onClick={isEditMode ? () => selectItem(value) : undefined}
+      userSelect="none"
+    >
+      {icon && (
+        <Icon as={icon} color={theme.modal.statement.sidebar.item.border} />
+      )}
+      <Text
+        fontSize="xs"
+        color={
+          isSelected && isEditMode
+            ? theme.modal.background
+            : theme.modal.statement.sidebar.item.text
+        }
+        fontWeight="medium"
+      >
+        {value}
+      </Text>
+    </Flex>
+  );
+};

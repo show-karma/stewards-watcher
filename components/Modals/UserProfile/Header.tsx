@@ -6,14 +6,17 @@ import {
   Icon,
   Img,
   Link,
+  Spinner,
   Text,
 } from '@chakra-ui/react';
 import { ImgWithFallback, DelegateButton } from 'components';
-import { useDAO } from 'contexts';
+import { useDAO, useEditStatement, useWallet } from 'contexts';
+import { useAuth } from 'contexts/auth';
 import { FC, ReactNode } from 'react';
 import { BsTwitter } from 'react-icons/bs';
 import { IActiveTab, IProfile } from 'types';
-import { truncateAddress } from 'utils';
+import { convertHexToRGBA, truncateAddress } from 'utils';
+import { useAccount } from 'wagmi';
 
 interface INavButton extends ButtonProps {
   children: ReactNode;
@@ -58,8 +61,19 @@ interface IUserSection {
 
 const UserSection: FC<IUserSection> = ({ profile }) => {
   const { address: fullAddress, ensName, twitter, realName } = profile;
-  const address = truncateAddress(fullAddress);
+  const truncatedAddress = truncateAddress(fullAddress);
+  const { isConnected } = useWallet();
   const { theme } = useDAO();
+  const { isEditing, setIsEditing, saveEdit, isEditSaving } =
+    useEditStatement();
+  const { address } = useAccount();
+
+  const { authenticate } = useAuth();
+
+  const handleAuth = async () => {
+    const tryToAuth = await authenticate();
+    if (tryToAuth) setIsEditing(true);
+  };
 
   return (
     <Flex
@@ -87,7 +101,7 @@ const UserSection: FC<IUserSection> = ({ profile }) => {
               flexDir="row"
               gap="2"
               align="center"
-              width={{ base: '200px', sm: '300px', md: '600px', lg: '440px' }}
+              width={{ base: '200px', sm: '300px', md: '600px', lg: '340px' }}
             >
               <Text
                 fontFamily="body"
@@ -98,7 +112,7 @@ const UserSection: FC<IUserSection> = ({ profile }) => {
                 overflow="hidden"
                 textOverflow="ellipsis"
               >
-                {realName || ensName || address}
+                {realName || ensName || truncatedAddress}
               </Text>
               {twitter && (
                 <Link href={`https://twitter.com/${twitter}`} isExternal>
@@ -120,11 +134,57 @@ const UserSection: FC<IUserSection> = ({ profile }) => {
               fontSize={{ base: 'sm', lg: 'md' }}
               color={theme.modal.header.subtitle}
             >
-              {address}
+              {truncatedAddress}
             </Text>
           </Flex>
-          <Flex display={{ base: 'none', lg: 'flex' }} w="max-content">
-            <DelegateButton delegated={fullAddress} text="Select as Delegate" />
+          <Flex
+            display={{ base: 'none', lg: 'flex' }}
+            w="max-content"
+            align="center"
+          >
+            {isConnected &&
+              !isEditing &&
+              address?.toLowerCase() === fullAddress.toLowerCase() && (
+                <Button
+                  fontWeight="normal"
+                  bgColor="transparent"
+                  _hover={{}}
+                  _active={{}}
+                  _focus={{}}
+                  _focusVisible={{}}
+                  _focusWithin={{}}
+                  onClick={() => handleAuth()}
+                >
+                  Claim to edit
+                </Button>
+              )}
+            {isEditing ? (
+              <Button
+                bgColor={theme.branding}
+                px={['4', '6']}
+                py={['3', '6']}
+                h="10"
+                fontSize={['md']}
+                fontWeight="medium"
+                onClick={saveEdit}
+                _hover={{
+                  backgroundColor: convertHexToRGBA(theme.branding, 0.8),
+                }}
+                _focus={{}}
+                _active={{}}
+                color={theme.buttonText}
+              >
+                <Flex gap="2" align="center">
+                  {isEditSaving && <Spinner />}
+                  Save profile
+                </Flex>
+              </Button>
+            ) : (
+              <DelegateButton
+                delegated={fullAddress}
+                text="Select as Delegate"
+              />
+            )}
           </Flex>
         </Flex>
       </Flex>
