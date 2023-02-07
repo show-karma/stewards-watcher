@@ -1,6 +1,7 @@
 import { Flex, Text, useMediaQuery } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
-import { FC, useMemo, useRef } from 'react';
+import { FC, useRef } from 'react';
+import { removeHtmlTagWithRegex } from 'utils';
 
 interface IExpandableText {
   text: string;
@@ -24,11 +25,6 @@ export const ExpandableCardText: FC<IExpandableText> = props => {
     toggleIsExpanded,
     selectProfile,
   } = props;
-
-  function removeHtmlTagWithRegex(textToTransform: string) {
-    const regex = /(<([^>]+)>|\r|\n)/gi;
-    return textToTransform.replace(regex, ' ');
-  }
 
   const formattedText = removeHtmlTagWithRegex(text.replaceAll(/\s/g, ''));
 

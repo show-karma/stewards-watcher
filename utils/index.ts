@@ -8,5 +8,6 @@ export * from './getTimeFromNow';
 export * from './getUserForumUrl';
 export * from './GraphQL';
 export * from './onChainDyDxVotesProvider';
+export * from './removeHtmlTagWithRegex';
 export * from './removeLinkPrefix';
 export * from './truncateAddress';
