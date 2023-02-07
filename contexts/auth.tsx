@@ -86,7 +86,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
       const signedMessage = await signMessageAsync({ message: messageToSign });
       return signedMessage;
     } catch (err) {
-      console.debug(err);
+      console.log(err);
       return null;
     }
   };

@@ -12,7 +12,8 @@ import {
 import { ImgWithFallback, DelegateButton } from 'components';
 import { useDAO, useEditStatement, useWallet } from 'contexts';
 import { useAuth } from 'contexts/auth';
-import { FC, ReactNode, useState } from 'react';
+import { useToasty } from 'hooks';
+import { FC, ReactNode, useMemo, useState } from 'react';
 import { BsTwitter } from 'react-icons/bs';
 import { IActiveTab, IProfile } from 'types';
 import { convertHexToRGBA, truncateAddress } from 'utils';
@@ -68,11 +69,8 @@ const UserSection: FC<IUserSection> = ({ profile }) => {
     useEditStatement();
   const { address } = useAccount();
   const { authenticate } = useAuth();
+  const { toast } = useToasty();
   const [isConnecting, setConnecting] = useState(false);
-
-  // useMemo(()=>{
-  //   if()
-  // },[isConnecting, isConnected])
 
   const handleAuth = async () => {
     if (!isConnected) {
@@ -80,9 +78,25 @@ const UserSection: FC<IUserSection> = ({ profile }) => {
       setConnecting(true);
       return;
     }
+    setConnecting(false);
+    if (address !== fullAddress) {
+      toast({
+        description: 'You can only edit your own profile.',
+        status: 'error',
+      });
+      return;
+    }
     const tryToAuth = await authenticate();
-    if (tryToAuth) setIsEditing(true);
+    if (tryToAuth) {
+      setIsEditing(true);
+    }
   };
+
+  useMemo(() => {
+    if (isConnecting && isConnected) {
+      handleAuth();
+    }
+  }, [isConnected]);
 
   return (
     <Flex
