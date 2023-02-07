@@ -12,7 +12,7 @@ import {
 import { ImgWithFallback, DelegateButton } from 'components';
 import { useDAO, useEditStatement, useWallet } from 'contexts';
 import { useAuth } from 'contexts/auth';
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useState } from 'react';
 import { BsTwitter } from 'react-icons/bs';
 import { IActiveTab, IProfile } from 'types';
 import { convertHexToRGBA, truncateAddress } from 'utils';
@@ -62,15 +62,24 @@ interface IUserSection {
 const UserSection: FC<IUserSection> = ({ profile }) => {
   const { address: fullAddress, ensName, twitter, realName } = profile;
   const truncatedAddress = truncateAddress(fullAddress);
-  const { isConnected } = useWallet();
+  const { isConnected, openConnectModal } = useWallet();
   const { theme } = useDAO();
   const { isEditing, setIsEditing, saveEdit, isEditSaving } =
     useEditStatement();
   const { address } = useAccount();
-
   const { authenticate } = useAuth();
+  const [isConnecting, setConnecting] = useState(false);
+
+  // useMemo(()=>{
+  //   if()
+  // },[isConnecting, isConnected])
 
   const handleAuth = async () => {
+    if (!isConnected) {
+      openConnectModal?.();
+      setConnecting(true);
+      return;
+    }
     const tryToAuth = await authenticate();
     if (tryToAuth) setIsEditing(true);
   };
@@ -142,22 +151,20 @@ const UserSection: FC<IUserSection> = ({ profile }) => {
             w="max-content"
             align="center"
           >
-            {isConnected &&
-              !isEditing &&
-              address?.toLowerCase() === fullAddress.toLowerCase() && (
-                <Button
-                  fontWeight="normal"
-                  bgColor="transparent"
-                  _hover={{}}
-                  _active={{}}
-                  _focus={{}}
-                  _focusVisible={{}}
-                  _focusWithin={{}}
-                  onClick={() => handleAuth()}
-                >
-                  Claim to edit
-                </Button>
-              )}
+            {!isEditing && (
+              <Button
+                fontWeight="normal"
+                bgColor="transparent"
+                _hover={{}}
+                _active={{}}
+                _focus={{}}
+                _focusVisible={{}}
+                _focusWithin={{}}
+                onClick={() => handleAuth()}
+              >
+                Claim to edit
+              </Button>
+            )}
             {isEditing ? (
               <Button
                 bgColor={theme.branding}

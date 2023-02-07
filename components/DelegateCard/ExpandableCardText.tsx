@@ -26,7 +26,7 @@ export const ExpandableCardText: FC<IExpandableText> = props => {
     selectProfile,
   } = props;
 
-  const formattedText = removeHtmlTagWithRegex(text.replaceAll(/\s/g, ''));
+  const formattedText = removeHtmlTagWithRegex(text.replaceAll(/\s/g, ' '));
 
   const flexRef = useRef<HTMLDivElement>(null);
 
