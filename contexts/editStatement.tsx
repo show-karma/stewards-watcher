@@ -68,7 +68,7 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
   const { profileSelected } = useDelegates();
   const { daoInfo } = useDAO();
   const { address } = useAccount();
-  const { authToken } = useAuth();
+  const { authToken, isAuthenticated } = useAuth();
   const { config } = daoInfo;
 
   const [statement, setStatement] = useState<ICustomFields>({
@@ -240,7 +240,10 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
 
   useMemo(() => {
     setIsEditing(false);
-    if (address?.toLowerCase() === profileSelected?.address?.toLowerCase()) {
+    if (
+      address?.toLowerCase() === profileSelected?.address?.toLowerCase() &&
+      isAuthenticated
+    ) {
       setIsEditing(true);
     }
   }, [address, profileSelected]);

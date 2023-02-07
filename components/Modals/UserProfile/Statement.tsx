@@ -49,7 +49,7 @@ const StatementCases: FC<IStatementCases> = ({
   if (isLoading)
     return <SkeletonText w="full" mt="4" noOfLines={4} spacing="4" />;
   if (isEditing) return <EditStatement />;
-  if (!statement?.value) return <NoStatement />;
+  if (!statement || !statement?.value.length) return <NoStatement />;
   return <TextSection statement={statement} />;
 };
 

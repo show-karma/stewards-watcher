@@ -144,7 +144,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const {
     isOpen: isOpenProfile,
     onOpen: onOpenProfile,
-    onClose: onCloseProfile,
+    onClose: closeModalProfile,
   } = useDisclosure();
 
   const isSearchDirty = userToFind !== '';
@@ -621,6 +621,11 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     setOrder('desc');
     setPeriod(defaultTimePeriod);
     setUserToFind('');
+  };
+
+  const onCloseProfile = () => {
+    closeModalProfile();
+    setProfileSelected(undefined);
   };
 
   const providerValue = useMemo(
