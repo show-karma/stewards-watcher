@@ -79,7 +79,7 @@ const UserSection: FC<IUserSection> = ({ profile }) => {
       return;
     }
     setConnecting(false);
-    if (address !== fullAddress) {
+    if (address?.toLowerCase() !== fullAddress?.toLowerCase()) {
       toast({
         description: 'You can only edit your own profile.',
         status: 'error',
