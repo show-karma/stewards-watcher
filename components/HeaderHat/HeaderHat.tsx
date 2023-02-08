@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { DelegateVotesModal } from 'components/Modals/DelegateVotes';
 import { useDAO } from 'contexts';
+import { useAuth } from 'contexts/auth';
 import { FC } from 'react';
 import { IoMenu } from 'react-icons/io5';
 import { HeaderBurgerMenu } from './HeaderBurgerMenu';
@@ -21,8 +22,8 @@ const DelegateToAnyoneButton: FC<{ onToggle: () => void }> = ({ onToggle }) => {
   const { theme } = useDAO();
   return (
     <Button
-      bgColor={useColorModeValue(theme.branding, 'white')}
-      color={useColorModeValue(theme.buttonText, 'black')}
+      color={useColorModeValue(theme.branding, 'white')}
+      bgColor="transparent"
       onClick={onToggle}
       px="6"
       py="6"
@@ -33,6 +34,33 @@ const DelegateToAnyoneButton: FC<{ onToggle: () => void }> = ({ onToggle }) => {
       minH="52px"
     >
       Delegate to Anyone
+    </Button>
+  );
+};
+
+const DelegateLoginButton: FC = () => {
+  const { theme } = useDAO();
+  const { isAuthenticated, authenticate, disconnect } = useAuth();
+  return (
+    <Button
+      bgColor={useColorModeValue(theme.branding, 'white')}
+      color={useColorModeValue(theme.buttonText, 'black')}
+      onClick={() => {
+        if (isAuthenticated) {
+          disconnect();
+          return;
+        }
+        authenticate();
+      }}
+      px="5"
+      py="3"
+      fontWeight="semibold"
+      _active={{}}
+      _focus={{}}
+      _hover={{}}
+      minH={{ base: '52px', lg: 'max-content' }}
+    >
+      {isAuthenticated ? 'Disconnect' : 'Delegate Login'}
     </Button>
   );
 };
@@ -157,6 +185,7 @@ export const HeaderHat = () => {
               >
                 <ThemeButton />
                 <DelegateToAnyoneButton onToggle={onToggle} />
+                <DelegateLoginButton />
               </Flex>
             </Flex>
           </Flex>
@@ -165,6 +194,7 @@ export const HeaderHat = () => {
           <Flex flexDir="column" gap="4">
             <ThemeButton />
             <DelegateToAnyoneButton onToggle={onToggle} />
+            <DelegateLoginButton />
           </Flex>
         </HeaderBurgerMenu>
         <DelegateVotesModal isOpen={isOpen} onClose={onToggle} />

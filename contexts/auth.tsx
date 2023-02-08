@@ -18,6 +18,7 @@ interface IAuthProps {
   isAuthenticated: boolean;
   authenticate: () => Promise<boolean>;
   authToken: string | null;
+  disconnect: () => void;
 }
 
 export const AuthContext = createContext({} as IAuthProps);
@@ -47,9 +48,10 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const disconnect = async () => {
     setToken(null);
+    setIsAuthenticated(false);
     disconnectWallet();
-    cookies.remove(cookieNames.isConnected);
     cookies.remove(cookieNames.cookieAuth);
+    window.location.reload();
   };
 
   const { address, isConnected } = useAccount({
@@ -110,13 +112,16 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
       setToken(token);
       return token;
     } catch (error) {
-      console.log(' Error in getAccountAssets', error);
+      console.log('Error in getAccountAssets', error);
       return null;
     }
   };
 
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
+
   const authenticate = async () => {
     if (!isConnected || !address) {
+      setIsAuthenticating(true);
       openConnectModal?.();
       return false;
     }
@@ -130,8 +135,16 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
     } catch (error) {
       console.log(error);
       return false;
+    } finally {
+      setIsAuthenticating(false);
     }
   };
+
+  useEffect(() => {
+    if (isConnected && isAuthenticating && !isAuthenticated) {
+      authenticate();
+    }
+  }, [isConnected]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -146,8 +159,9 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
       isAuthenticated,
       authenticate,
       authToken,
+      disconnect,
     }),
-    [isAuthenticated, authenticate, authToken]
+    [isAuthenticated, authenticate, authToken, disconnect]
   );
 
   return (
