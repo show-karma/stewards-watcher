@@ -87,7 +87,7 @@ export const HeaderHat = () => {
     <Flex flexDir="column" w="full">
       <Flex
         bgColor={theme.headerBg}
-        py="4"
+        py="3"
         w="full"
         align="center"
         justify="center"

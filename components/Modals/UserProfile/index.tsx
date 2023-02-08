@@ -5,11 +5,17 @@ import {
   ModalContent,
   ModalOverlay,
 } from '@chakra-ui/react';
-import { EditStatementProvider, useDAO, VotesProvider } from 'contexts';
+import {
+  EditStatementProvider,
+  useDAO,
+  useWallet,
+  VotesProvider,
+} from 'contexts';
 import { useRouter } from 'next/router';
 import { FC, useMemo, useState } from 'react';
 import { IActiveTab, IProfile } from 'types';
 import { useMixpanel } from 'hooks';
+import { useAccount } from 'wagmi';
 import { Statement } from './Statement';
 import { AboutMe } from './AboutMe';
 import { VotingHistory } from './VotingHistory';
@@ -19,22 +25,23 @@ import { Handles } from './Handles';
 interface ITab {
   activeTab: IActiveTab;
   profile: IProfile;
+  isSamePerson: boolean;
 }
-const Tab: FC<ITab> = ({ activeTab, profile }) => {
-  switch (activeTab) {
-    case 'aboutme':
-      return <AboutMe profile={profile} />;
-    case 'votinghistory':
-      return (
-        <VotesProvider profile={profile}>
-          <VotingHistory profile={profile} />
-        </VotesProvider>
-      );
-    case 'handles':
-      return <Handles />;
-    default:
-      return <Statement />;
+const Tab: FC<ITab> = ({ activeTab, profile, isSamePerson }) => {
+  if (activeTab === 'aboutme') {
+    return <AboutMe profile={profile} />;
   }
+  if (activeTab === 'votinghistory') {
+    return (
+      <VotesProvider profile={profile}>
+        <VotingHistory profile={profile} />
+      </VotesProvider>
+    );
+  }
+  if (activeTab === 'handles' && !isSamePerson) {
+    return <Handles />;
+  }
+  return <Statement />;
 };
 
 interface IUserProfileProps {
@@ -48,10 +55,12 @@ export const UserProfile: FC<IUserProfileProps> = props => {
   const { isOpen, onClose, profile, selectedTab } = props;
   const router = useRouter();
   const { theme } = useDAO();
-
+  const { address } = useAccount();
   const { mixpanel } = useMixpanel();
-
   const [activeTab, setActiveTab] = useState<IActiveTab>(selectedTab);
+
+  const isSamePerson =
+    profile?.address?.toLowerCase() === address?.toLowerCase();
 
   useMemo(() => {
     setActiveTab(selectedTab);
@@ -122,7 +131,11 @@ export const UserProfile: FC<IUserProfileProps> = props => {
           />
           <ModalCloseButton />
           <ModalBody px={{ base: '1.25rem', lg: '2.5rem' }}>
-            <Tab activeTab={activeTab} profile={profile} />
+            <Tab
+              activeTab={activeTab}
+              profile={profile}
+              isSamePerson={isSamePerson}
+            />
           </ModalBody>
         </ModalContent>
       </Modal>

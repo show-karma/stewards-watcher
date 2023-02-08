@@ -52,7 +52,10 @@ interface IDelegateProps {
   profileSelected?: IDelegate;
   selectProfile: (profile: IDelegate, tab?: IActiveTab) => void;
   selectedTab: IActiveTab;
-  searchProfileModal: (userToSearch: string) => Promise<void>;
+  searchProfileModal: (
+    userToSearch: string,
+    defaultTab?: IActiveTab | undefined
+  ) => Promise<void>;
   interests: string[];
   interestFilter: string[];
   selectInterests: (index: number) => void;
@@ -342,7 +345,10 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     onOpenProfile();
   };
 
-  const searchProfileModal = async (userToSearch: string) => {
+  const searchProfileModal = async (
+    userToSearch: string,
+    defaultTab?: IActiveTab
+  ) => {
     try {
       const axiosClient = await api.get(`/dao/find-delegate`, {
         params: {
@@ -383,13 +389,11 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         workstreams: fetchedDelegate.workstreams,
       };
       const getTab = asPath.split('#');
-      const tabs = ['votinghistory', 'statement', 'handles'];
+      const tabs: IActiveTab[] = ['votinghistory', 'statement', 'handles'];
       if (userFound.aboutMe) tabs.push('aboutme');
-      const checkTab = tabs.includes(getTab[1]);
-      selectProfile(
-        userFound,
-        checkTab ? (getTab[1] as IActiveTab) : undefined
-      );
+      const checkTab = tabs.includes(getTab[1] as IActiveTab);
+      const shouldOpenTab = defaultTab || (getTab[1] as IActiveTab);
+      selectProfile(userFound, checkTab ? shouldOpenTab : undefined);
     } catch (error) {
       toast({
         title: `We couldn't find the contributor page`,

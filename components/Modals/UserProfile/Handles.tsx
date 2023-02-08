@@ -2,19 +2,16 @@ import { Flex, Text, Icon, Button, useDisclosure } from '@chakra-ui/react';
 import { DiscordIcon, ForumIcon, TwitterIcon } from 'components';
 import { useDAO, useDelegates } from 'contexts';
 import { FC } from 'react';
-import { useAccount } from 'wagmi';
 import { TwitterModal } from '../Linking';
 
 export const Handles: FC = () => {
-  const { theme, daoInfo } = useDAO();
+  const { theme } = useDAO();
   const {
     isOpen: twitterIsOpen,
     onOpen: twitterOnOpen,
     onClose: twitterOnClose,
   } = useDisclosure();
   const { profileSelected } = useDelegates();
-
-  const { address: publicAddress } = useAccount();
 
   const socialMedias = [
     {
@@ -33,11 +30,11 @@ export const Handles: FC = () => {
       action: undefined,
       handle: profileSelected?.discourseHandle,
     },
-    {
-      icon: DiscordIcon,
-      name: 'Discord',
-      action: undefined,
-    },
+    // {
+    //   icon: DiscordIcon,
+    //   name: 'Discord',
+    //   action: undefined,
+    // },
   ];
 
   const openTwitterModal = () =>

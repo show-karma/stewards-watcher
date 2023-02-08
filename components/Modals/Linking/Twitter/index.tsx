@@ -43,7 +43,8 @@ export const TwitterModal: React.FC<IModal> = ({ open, handleModal }) => {
           setStep(ESteps.VERIFIED);
           updateState({
             title: 'Verified.',
-            description: 'Your twitter has been verified.',
+            description:
+              'Your twitter handle has been verified and linked to your profile!',
             status: 'success',
             duration: 10000,
           });
@@ -52,9 +53,8 @@ export const TwitterModal: React.FC<IModal> = ({ open, handleModal }) => {
         .catch(error => {
           setStep(ESteps.PUBLISH);
           updateState({
-            title: 'Verification had an error.',
-            description:
-              'Please try again. Make sure you tweeted the correct message.',
+            title: 'Twitter verification failed',
+            description: `We're sorry, the verification failed. Make sure you tweeted the correct message and click the verify button again.`,
             status: 'error',
             duration: 10000,
           });
@@ -66,7 +66,7 @@ export const TwitterModal: React.FC<IModal> = ({ open, handleModal }) => {
     setStep(ESteps.VERIFYING);
     try {
       toast({
-        title: 'Verifying tweet...',
+        title: 'Verifying your tweet',
         description: 'Please wait while we verify your tweet.',
         duration: 100000,
         status: 'info',

@@ -12,6 +12,7 @@ import { IExpirationStatus, ISession } from 'types';
 import Cookies from 'universal-cookie';
 import { checkExpirationStatus } from 'utils';
 import { useAccount, useDisconnect, useSignMessage } from 'wagmi';
+import { useDelegates } from './delegates';
 import { useWallet } from './wallet';
 
 interface IAuthProps {
@@ -40,7 +41,9 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authToken, setToken] = useState<string | null>(null);
   const { openConnectModal } = useWallet();
+
   const { disconnect: disconnectWallet } = useDisconnect();
+  const { searchProfileModal } = useDelegates();
 
   const cookies = new Cookies();
 
@@ -131,6 +134,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
       if (!signedMessage) return false;
       const token = await getAccountToken(address, signedMessage);
       if (token) saveToken(token);
+      searchProfileModal(address, 'statement');
       return true;
     } catch (error) {
       console.log(error);

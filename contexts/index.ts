@@ -1,3 +1,4 @@
+export * from './auth';
 export * from './ColorHandler';
 export * from './dao';
 export * from './delegates';

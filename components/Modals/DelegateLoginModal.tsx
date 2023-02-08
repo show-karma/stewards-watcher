@@ -53,7 +53,7 @@ export const DelegateLoginModal: FC<IDelegateLogin> = ({ isOpen, onClose }) => {
   const variantImg = useBreakpointValue({
     base: useColorModeValue(
       '/images/karma_logo_green_and_black.svg',
-      '/images/karma_logo_white.svg'
+      '/images/karma_logo_white.png'
     ),
   });
 

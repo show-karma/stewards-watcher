@@ -16,13 +16,13 @@ export const Madeby: FC<FlexProps> = props => {
   const variantImg = useBreakpointValue({
     base: useColorModeValue(
       '/images/karma_logo_black.svg',
-      '/images/karma_logo_white.svg'
+      '/images/karma_logo_white.png'
     ),
     md: useColorModeValue(
       theme.headerBg === '#FFFFFF'
         ? '/images/karma_logo_black.svg'
-        : '/images/karma_logo_white.svg',
-      '/images/karma_logo_white.svg'
+        : '/images/karma_logo_white.png',
+      '/images/karma_logo_white.png'
     ),
   });
   return (
@@ -34,7 +34,7 @@ export const Madeby: FC<FlexProps> = props => {
       {...props}
     >
       <Flex
-        gap={{ base: '2', lg: '3' }}
+        gap={{ base: '2' }}
         flexDir={{ base: 'row' }}
         align={{ base: 'center' }}
       >
@@ -43,7 +43,7 @@ export const Madeby: FC<FlexProps> = props => {
           fontWeight="normal"
           color={theme.hat.text.madeBy}
         >
-          Built by
+          Powered by
         </Text>
 
         <Link href="https://karmahq.xyz" isExternal>

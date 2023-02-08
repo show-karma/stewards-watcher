@@ -1,8 +1,16 @@
-import React, { useRef } from 'react';
-import { IconButton, Icon, Flex, Text, Button } from '@chakra-ui/react';
+import React, { useMemo, useRef } from 'react';
+import {
+  IconButton,
+  Icon,
+  Flex,
+  Text,
+  Button,
+  useClipboard,
+} from '@chakra-ui/react';
 import { MdContentCopy } from 'react-icons/md';
 import { BsArrowLeft } from 'react-icons/bs';
 import { IoClose } from 'react-icons/io5';
+import { useToasty } from 'hooks';
 import { ESteps } from './ESteps';
 
 interface IModal {
@@ -23,7 +31,13 @@ export const Step3: React.FC<IModal> = ({
   verifyPublication,
 }) => {
   const textRef = useRef<HTMLParagraphElement>(null);
+  const textToCopy = `Verifying my Twitter account for Karma
+  addr: ${publicAddress}
+  sig: ${signature}
+  @karmahq_ #karmahq`;
   const backStep = () => setStep(ESteps.SIGN);
+  const { onCopy } = useClipboard(textToCopy);
+  const { toast } = useToasty();
 
   const openTwitter = () => {
     if (typeof window !== 'undefined') {
@@ -36,8 +50,15 @@ export const Step3: React.FC<IModal> = ({
   };
 
   const copyText = () => {
-    if (textRef.current)
-      navigator.clipboard.writeText(textRef.current?.innerText);
+    if (textRef.current) {
+      onCopy();
+
+      toast({
+        title: 'Copied to clipboard',
+        description: 'Address copied',
+        duration: 3000,
+      });
+    }
   };
 
   return (
@@ -107,10 +128,7 @@ export const Step3: React.FC<IModal> = ({
           color="#000000"
           wordBreak="break-word"
         >
-          {`Verifying my Twitter account for Karma
-					addr: ${publicAddress}
-					sig: ${signature}
-					@karmahq_ #karmahq`}
+          {textToCopy}
         </Text>
         <IconButton
           aria-label="close"
