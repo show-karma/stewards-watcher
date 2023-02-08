@@ -1,4 +1,4 @@
-export type IActiveTab = 'statement' | 'votinghistory' | 'aboutme';
+export type IActiveTab = 'statement' | 'votinghistory' | 'aboutme' | 'handles';
 
 export type IProfile = {
   address: string;
@@ -7,4 +7,6 @@ export type IProfile = {
   avatar?: string;
   aboutMe?: string;
   realName?: string;
+  forumHandle?: string;
+  discordHandle?: string;
 };

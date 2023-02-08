@@ -14,6 +14,7 @@ import { Statement } from './Statement';
 import { AboutMe } from './AboutMe';
 import { VotingHistory } from './VotingHistory';
 import { Header } from './Header';
+import { Handles } from './Handles';
 
 interface ITab {
   activeTab: IActiveTab;
@@ -29,6 +30,8 @@ const Tab: FC<ITab> = ({ activeTab, profile }) => {
           <VotingHistory profile={profile} />
         </VotesProvider>
       );
+    case 'handles':
+      return <Handles />;
     default:
       return <Statement />;
   }

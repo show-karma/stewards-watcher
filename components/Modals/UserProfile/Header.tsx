@@ -8,15 +8,22 @@ import {
   Link,
   Spinner,
   Text,
+  Tooltip,
 } from '@chakra-ui/react';
-import { ImgWithFallback, DelegateButton } from 'components';
+import {
+  ImgWithFallback,
+  DelegateButton,
+  ForumIcon,
+  TwitterIcon,
+  DiscordIcon,
+} from 'components';
 import { useDAO, useEditStatement, useWallet } from 'contexts';
 import { useAuth } from 'contexts/auth';
 import { useToasty } from 'hooks';
 import { FC, ReactNode, useMemo, useState } from 'react';
 import { BsTwitter } from 'react-icons/bs';
 import { IActiveTab, IProfile } from 'types';
-import { convertHexToRGBA, truncateAddress } from 'utils';
+import { convertHexToRGBA, getUserForumUrl, truncateAddress } from 'utils';
 import { useAccount } from 'wagmi';
 
 interface INavButton extends ButtonProps {
@@ -55,16 +62,101 @@ const NavButton: FC<INavButton> = ({ children, isActive, ...props }) => {
     </Button>
   );
 };
+interface IMediaIcon {
+  profile: IProfile;
+  media: 'twitter' | 'forum' | 'discord';
+  changeTab: (selectedTab: IActiveTab) => void;
+  children: ReactNode;
+}
+
+const MediaIcon: FC<IMediaIcon> = ({ media, profile, changeTab, children }) => {
+  const { theme, daoData, daoInfo } = useDAO();
+  const { config } = daoInfo;
+
+  const medias = {
+    twitter: {
+      url: `https://twitter.com/${profile.twitter}`,
+      value: profile.twitter,
+    },
+    forum: {
+      url:
+        profile?.forumHandle &&
+        daoData?.socialLinks.forum &&
+        config.DAO_FORUM_TYPE
+          ? getUserForumUrl(
+              profile?.forumHandle,
+              config.DAO_FORUM_TYPE,
+              config.DAO_FORUM_URL || daoData?.socialLinks.forum
+            )
+          : '',
+      value: profile.forumHandle,
+    },
+    discord: {
+      url: `https://discord.com/users/${profile.discordHandle}`,
+      value: profile.discordHandle,
+    },
+  };
+  const chosenMedia = medias[media];
+
+  if (chosenMedia.value)
+    return (
+      <Link
+        href={chosenMedia.url}
+        isExternal
+        color={theme.card.socialMedia}
+        opacity="1"
+        _hover={{
+          transform: 'scale(1.5)',
+        }}
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        boxSize="6"
+        px="0"
+        py="0"
+        minW="max-content"
+      >
+        {children}
+      </Link>
+    );
+  return (
+    <Tooltip label={`Update your ${media} handle now`} placement="top" hasArrow>
+      <Button
+        onClick={() => changeTab('handles')}
+        px="0"
+        py="0"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        bgColor="transparent"
+        _active={{}}
+        _focus={{}}
+        _focusWithin={{}}
+        _focusVisible={{}}
+        color={theme.modal.header.title}
+        opacity="0.25"
+        _hover={{}}
+        h="6"
+        w="max-content"
+        minW="max-content"
+      >
+        {children}
+      </Button>
+    </Tooltip>
+  );
+};
 
 interface IUserSection {
   profile: IProfile;
+  changeTab: (selectedTab: IActiveTab) => void;
 }
 
-const UserSection: FC<IUserSection> = ({ profile }) => {
-  const { address: fullAddress, ensName, twitter, realName } = profile;
+const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
+  const { address: fullAddress, ensName, realName } = profile;
   const truncatedAddress = truncateAddress(fullAddress);
   const { isConnected, openConnectModal } = useWallet();
-  const { theme } = useDAO();
+  const { theme, daoInfo } = useDAO();
+  const { config } = daoInfo;
   const { isEditing, setIsEditing, saveEdit, isEditSaving } =
     useEditStatement();
   const { address } = useAccount();
@@ -137,20 +229,29 @@ const UserSection: FC<IUserSection> = ({ profile }) => {
               >
                 {realName || ensName || truncatedAddress}
               </Text>
-              {twitter && (
-                <Link href={`https://twitter.com/${twitter}`} isExternal>
-                  <Icon
-                    as={BsTwitter}
-                    color={theme.modal.header.twitter}
-                    w="1.375rem"
-                    h="1.03rem"
-                    _hover={{
-                      color: 'blue.400',
-                      transition: 'all 0.2s ease-in-out',
-                    }}
-                  />
-                </Link>
-              )}
+              <Flex flexDir="row" gap="4" ml="4">
+                <MediaIcon
+                  profile={profile}
+                  media="twitter"
+                  changeTab={changeTab}
+                >
+                  <TwitterIcon boxSize="6" />
+                </MediaIcon>
+                <MediaIcon
+                  profile={profile}
+                  media="forum"
+                  changeTab={changeTab}
+                >
+                  <ForumIcon boxSize="6" />
+                </MediaIcon>
+                <MediaIcon
+                  profile={profile}
+                  media="discord"
+                  changeTab={changeTab}
+                >
+                  <DiscordIcon boxSize="6" />
+                </MediaIcon>
+              </Flex>
             </Flex>
             <Text
               fontWeight="medium"
@@ -251,7 +352,7 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
           h="180"
         />
 
-        <UserSection profile={profile} />
+        <UserSection profile={profile} changeTab={changeTab} />
       </Flex>
       <Flex
         px={{ base: '1.25rem', lg: '2.5rem' }}
@@ -278,6 +379,12 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
             onClick={() => changeTab('votinghistory')}
           >
             Voting History
+          </NavButton>
+          <NavButton
+            isActive={isActiveTab('handles')}
+            onClick={() => changeTab('handles')}
+          >
+            Handles
           </NavButton>
         </Flex>
         <Divider bgColor={theme.modal.header.divider} w="full" />

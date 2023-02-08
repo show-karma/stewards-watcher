@@ -383,7 +383,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         workstreams: fetchedDelegate.workstreams,
       };
       const getTab = asPath.split('#');
-      const tabs = ['votinghistory', 'statement'];
+      const tabs = ['votinghistory', 'statement', 'handles'];
       if (userFound.aboutMe) tabs.push('aboutme');
       const checkTab = tabs.includes(getTab[1]);
       selectProfile(
