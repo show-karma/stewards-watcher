@@ -9,6 +9,7 @@ import {
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
+import { DelegateLoginModal } from 'components';
 import { DelegateVotesModal } from 'components/Modals/DelegateVotes';
 import { useDAO } from 'contexts';
 import { useAuth } from 'contexts/auth';
@@ -38,9 +39,10 @@ const DelegateToAnyoneButton: FC<{ onToggle: () => void }> = ({ onToggle }) => {
   );
 };
 
-const DelegateLoginButton: FC = () => {
+const DelegateLoginButton: FC<{ onOpen: () => void }> = ({ onOpen }) => {
   const { theme } = useDAO();
-  const { isAuthenticated, authenticate, disconnect } = useAuth();
+  const { isAuthenticated, disconnect } = useAuth();
+
   return (
     <Button
       bgColor={useColorModeValue(theme.branding, 'white')}
@@ -50,7 +52,7 @@ const DelegateLoginButton: FC = () => {
           disconnect();
           return;
         }
-        authenticate();
+        onOpen();
       }}
       px="5"
       py="3"
@@ -69,6 +71,11 @@ export const HeaderHat = () => {
   const { daoInfo, theme } = useDAO();
   const { config } = daoInfo;
   const { isOpen, onToggle } = useDisclosure();
+  const {
+    onClose: onCloseDelegateLogin,
+    isOpen: isOpenDelegateLogin,
+    onOpen: onOpenDelegateLogin,
+  } = useDisclosure();
 
   const {
     isOpen: isBurgerMenuOpen,
@@ -78,8 +85,6 @@ export const HeaderHat = () => {
 
   return (
     <Flex flexDir="column" w="full">
-      <Madeby display={{ base: 'flex', lg: 'none' }} />
-
       <Flex
         bgColor={theme.headerBg}
         py="4"
@@ -103,10 +108,10 @@ export const HeaderHat = () => {
           <Flex
             flexDir="row"
             flex={['1', 'none']}
-            align={{ base: 'center', lg: 'flex-start' }}
+            align={{ base: 'center' }}
             gap={{ base: '2', md: '16' }}
             w="full"
-            justify={{ base: 'space-between', lg: 'flex-start' }}
+            justify={{ base: 'space-between' }}
           >
             <Flex
               flexDir="column"
@@ -120,43 +125,14 @@ export const HeaderHat = () => {
                 objectFit="contain"
                 src={config.DAO_LOGO}
               />
-              <Text
-                w="max-content"
-                fontWeight="semibold"
-                fontSize={['lg', 'xl']}
-                color={theme.hat.text.primary}
-              >
-                Delegate Dashboard
-              </Text>
+              <Madeby />
             </Flex>
             <Flex
               flexDir="row"
               alignItems="center"
-              justify="space-between"
+              justify="flex-end"
               w={{ base: 'max-content', lg: 'full' }}
             >
-              <Flex
-                flexDir="row"
-                gap="4"
-                h="min-content"
-                w={['min-content', 'max-content']}
-                position={{ base: 'absolute', md: 'unset' }}
-                right={{ base: '4', md: 'unset' }}
-                top={{ base: '6', md: 'unset' }}
-                alignItems="center"
-              >
-                <Flex
-                  flexDir="row"
-                  gap="4"
-                  display={{ base: 'none', lg: 'flex' }}
-                  alignItems="center"
-                >
-                  <Center height="60px" alignItems="center">
-                    <Divider orientation="vertical" borderColor="#2C2E32" />
-                  </Center>
-                  <Madeby />
-                </Flex>
-              </Flex>
               <Flex
                 display={{ base: 'flex', md: 'none' }}
                 w="max-content"
@@ -185,7 +161,7 @@ export const HeaderHat = () => {
               >
                 <ThemeButton />
                 <DelegateToAnyoneButton onToggle={onToggle} />
-                <DelegateLoginButton />
+                <DelegateLoginButton onOpen={onOpenDelegateLogin} />
               </Flex>
             </Flex>
           </Flex>
@@ -194,11 +170,15 @@ export const HeaderHat = () => {
           <Flex flexDir="column" gap="4">
             <ThemeButton />
             <DelegateToAnyoneButton onToggle={onToggle} />
-            <DelegateLoginButton />
+            <DelegateLoginButton onOpen={onOpenDelegateLogin} />
           </Flex>
         </HeaderBurgerMenu>
         <DelegateVotesModal isOpen={isOpen} onClose={onToggle} />
       </Flex>
+      <DelegateLoginModal
+        isOpen={isOpenDelegateLogin}
+        onClose={onCloseDelegateLogin}
+      />
     </Flex>
   );
 };
