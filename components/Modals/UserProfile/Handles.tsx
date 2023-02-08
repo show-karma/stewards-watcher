@@ -13,6 +13,7 @@ export const Handles: FC = () => {
     onClose: twitterOnClose,
   } = useDisclosure();
   const { profileSelected } = useDelegates();
+
   const { address: publicAddress } = useAccount();
 
   const socialMedias = [
