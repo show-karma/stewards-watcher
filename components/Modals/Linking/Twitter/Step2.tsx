@@ -86,8 +86,8 @@ export const Step2: React.FC<IModal> = ({
         color="#687785"
         marginBottom="32px"
       >
-        Sign a message that will be used to link your wallet address to your
-        Twitter username.
+        Sign a message that includes your twitter handle to prove you truly own
+        this wallet.
       </Flex>
       <Flex
         display="flex"

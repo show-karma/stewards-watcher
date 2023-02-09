@@ -101,8 +101,9 @@ export const Statement: FC = () => {
             fontWeight="normal"
             color={theme.modal.statement.sidebar.item.border}
           >
-            Lorem ipsum dolor sit amet consectetur. Ut quis sed aliquam tortor
-            sodales fermentum. Dapibus orolor porta etiam et eget erat
+            Add a statement explaining your intention for becoming a delegate
+            and your skillset. This will help token holders determine if you are
+            the right candidate to delegate their tokens to.
           </Text>
         </Flex>
       )}

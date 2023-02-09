@@ -65,8 +65,8 @@ export const Step1: React.FC<IModal> = ({
         color="#687785"
         marginBottom="32px"
       >
-        When you link your twitter username to your wallet address, we will be
-        able to show your twitter page in your delegate profile.
+        To display your twitter handle in your delegate profile, link your
+        handle to your wallet address.
       </Flex>
       <Flex
         display="flex"
