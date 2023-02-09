@@ -61,6 +61,7 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
   children,
 }) => {
   const isMounted = useIsMounted();
+  const { isConnected } = useAccount();
   const [isEditing, setIsEditing] = useState(false);
   const [isEditSaving, setEditSaving] = useState(false);
   const [value, setValue] = useState('');
@@ -223,13 +224,13 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
       }
       await queryStatement();
       toast({
-        description: 'Edit saved',
+        description: 'Your profile has been saved',
         status: 'success',
       });
     } catch (error: any) {
-      console.log(error);
+      console.error(error);
       toast({
-        description: 'Edit not saved',
+        description: 'We could not save your profile. Please try again.',
         status: 'error',
       });
     } finally {
@@ -240,10 +241,7 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
 
   useMemo(() => {
     setIsEditing(false);
-    if (
-      address?.toLowerCase() === profileSelected?.address?.toLowerCase() &&
-      isAuthenticated
-    ) {
+    if (address?.toLowerCase() === profileSelected?.address?.toLowerCase()) {
       setIsEditing(true);
     }
   }, [address, profileSelected]);

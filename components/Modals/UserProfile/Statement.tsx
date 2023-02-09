@@ -1,8 +1,8 @@
 import { Flex, Skeleton, SkeletonText, Text } from '@chakra-ui/react';
-import { FC } from 'react';
-import { useDAO, useEditStatement } from 'contexts';
-
-import { ICustomFields, IProfile } from 'types';
+import { FC, useMemo } from 'react';
+import { useDAO, useDelegates, useEditStatement } from 'contexts';
+import { useAccount } from 'wagmi';
+import { ICustomFields } from 'types';
 import dynamic from 'next/dynamic';
 import { Sidebar } from '../Sidebar';
 import { NoStatement } from './NoStatement';
@@ -15,19 +15,17 @@ const TextSection: FC<ITextSection> = ({ statement }) => {
   return (
     <Flex maxW="30rem" gap="4" flexDir="column" flex="1">
       {statement && statement.value && (
-        <Flex flexDir="column">
-          <Flex
-            color={theme.modal.statement.text}
-            fontWeight="light"
-            fontSize="md"
-            fontFamily="body"
-            textAlign="left"
-            whiteSpace="pre-line"
-            dangerouslySetInnerHTML={{ __html: statement.value as string }}
-            wordBreak="break-all"
-            style={{ lineBreak: 'anywhere' }}
-          />
-        </Flex>
+        <Flex
+          color={theme.modal.statement.text}
+          fontWeight="light"
+          fontSize="md"
+          fontFamily="body"
+          textAlign="left"
+          whiteSpace="pre-line"
+          flexDir="column"
+          dangerouslySetInnerHTML={{ __html: statement.value as string }}
+          wordBreak="break-word"
+        />
       )}
     </Flex>
   );
@@ -46,6 +44,9 @@ const StatementCases: FC<IStatementCases> = ({
   isLoading,
   statement,
 }) => {
+  const { profileSelected } = useDelegates();
+  const { address, isConnected } = useAccount();
+
   if (isLoading)
     return <SkeletonText w="full" mt="4" noOfLines={4} spacing="4" />;
   if (isEditing) return <EditStatement />;

@@ -17,7 +17,7 @@ import {
   TwitterIcon,
   DiscordIcon,
 } from 'components';
-import { useDAO, useEditStatement, useWallet } from 'contexts';
+import { useDAO, useEditStatement, useHandles, useWallet } from 'contexts';
 import { useAuth } from 'contexts/auth';
 import { useToasty } from 'hooks';
 import { FC, ReactNode, useMemo, useState } from 'react';
@@ -62,16 +62,27 @@ const NavButton: FC<INavButton> = ({ children, isActive, ...props }) => {
     </Button>
   );
 };
+
+type IMedias = 'twitter' | 'forum' | 'discord';
 interface IMediaIcon {
   profile: IProfile;
-  media: 'twitter' | 'forum' | 'discord';
+  media: IMedias;
   changeTab: (selectedTab: IActiveTab) => void;
+  isSamePerson: boolean;
   children: ReactNode;
 }
 
-const MediaIcon: FC<IMediaIcon> = ({ media, profile, changeTab, children }) => {
+const MediaIcon: FC<IMediaIcon> = ({
+  media,
+  profile,
+  changeTab,
+  children,
+  isSamePerson,
+}) => {
   const { theme, daoData, daoInfo } = useDAO();
+  const { isConnected } = useWallet();
   const { config } = daoInfo;
+  const { twitterOnOpen, forumOnOpen } = useHandles();
 
   const medias = {
     twitter: {
@@ -119,10 +130,29 @@ const MediaIcon: FC<IMediaIcon> = ({ media, profile, changeTab, children }) => {
         {children}
       </Link>
     );
+
+  const handleClick = () => {
+    if (!isSamePerson) return;
+    changeTab('handles');
+    const onOpens: { [key: string]: () => void } = {
+      twitter: twitterOnOpen,
+      forum: forumOnOpen,
+    };
+    if (onOpens[media]) onOpens[media]();
+  };
+
   return (
-    <Tooltip label={`Update your ${media} handle now`} placement="top" hasArrow>
+    <Tooltip
+      label={
+        isConnected
+          ? `Update your ${media} handle now`
+          : `Login to update your ${media} handle`
+      }
+      placement="top"
+      hasArrow
+    >
       <Button
-        onClick={() => changeTab('handles')}
+        onClick={() => handleClick()}
         px="0"
         py="0"
         display="flex"
@@ -139,6 +169,7 @@ const MediaIcon: FC<IMediaIcon> = ({ media, profile, changeTab, children }) => {
         h="6"
         w="max-content"
         minW="max-content"
+        cursor={isSamePerson ? 'pointer' : 'default'}
       >
         {children}
       </Button>
@@ -160,9 +191,12 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
   const { isEditing, setIsEditing, saveEdit, isEditSaving } =
     useEditStatement();
   const { address } = useAccount();
-  const { authenticate } = useAuth();
+  const { authenticate, isAuthenticated } = useAuth();
   const { toast } = useToasty();
   const [isConnecting, setConnecting] = useState(false);
+
+  const isSamePerson =
+    isConnected && address?.toLowerCase() === fullAddress?.toLowerCase();
 
   const handleAuth = async () => {
     if (!isConnected) {
@@ -170,12 +204,21 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
       setConnecting(true);
       return;
     }
+    changeTab('statement');
     setConnecting(false);
     if (address?.toLowerCase() !== fullAddress?.toLowerCase()) {
       toast({
         description: 'You can only edit your own profile.',
         status: 'error',
       });
+      return;
+    }
+    if (
+      address?.toLowerCase() === fullAddress?.toLowerCase() &&
+      isConnected &&
+      isAuthenticated
+    ) {
+      setIsEditing(true);
       return;
     }
     const tryToAuth = await authenticate();
@@ -234,23 +277,25 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
                   profile={profile}
                   media="twitter"
                   changeTab={changeTab}
+                  isSamePerson={isSamePerson}
                 >
-                  <TwitterIcon boxSize="6" />
+                  <TwitterIcon boxSize="6" color={theme.modal.header.title} />
                 </MediaIcon>
                 <MediaIcon
                   profile={profile}
                   media="forum"
                   changeTab={changeTab}
+                  isSamePerson={isSamePerson}
                 >
-                  <ForumIcon boxSize="6" />
+                  <ForumIcon boxSize="6" color={theme.modal.header.title} />
                 </MediaIcon>
-                <MediaIcon
+                {/* <MediaIcon
                   profile={profile}
                   media="discord"
                   changeTab={changeTab}
                 >
                   <DiscordIcon boxSize="6" />
-                </MediaIcon>
+                </MediaIcon> */}
               </Flex>
             </Flex>
             <Text
@@ -266,20 +311,22 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
             w="max-content"
             align="center"
           >
-            {!isEditing && (
-              <Button
-                fontWeight="normal"
-                bgColor="transparent"
-                _hover={{}}
-                _active={{}}
-                _focus={{}}
-                _focusVisible={{}}
-                _focusWithin={{}}
-                onClick={() => handleAuth()}
-              >
-                Claim to edit
-              </Button>
-            )}
+            {!isEditing &&
+              profile.address.toLowerCase() === address?.toLowerCase() && (
+                <Button
+                  fontWeight="normal"
+                  bgColor="transparent"
+                  color={theme.buttonText}
+                  _hover={{}}
+                  _active={{}}
+                  _focus={{}}
+                  _focusVisible={{}}
+                  _focusWithin={{}}
+                  onClick={() => handleAuth()}
+                >
+                  Edit profile
+                </Button>
+              )}
             {isEditing ? (
               <Button
                 bgColor={theme.branding}
@@ -330,8 +377,20 @@ interface IHeader {
 
 export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
   const { theme } = useDAO();
+  const { address: fullAddress } = profile;
+  const { isConnected } = useWallet();
+  const { address } = useAccount();
+
+  const isSamePerson =
+    isConnected && address?.toLowerCase() === fullAddress?.toLowerCase();
 
   const isActiveTab = (section: IActiveTab) => activeTab === section;
+
+  useMemo(() => {
+    if (activeTab === 'handles' && !isSamePerson) {
+      changeTab('statement');
+    }
+  }, [isSamePerson, activeTab]);
 
   return (
     <Flex
@@ -380,12 +439,14 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
           >
             Voting History
           </NavButton>
-          <NavButton
-            isActive={isActiveTab('handles')}
-            onClick={() => changeTab('handles')}
-          >
-            Handles
-          </NavButton>
+          {isSamePerson && (
+            <NavButton
+              isActive={isActiveTab('handles')}
+              onClick={() => changeTab('handles')}
+            >
+              Handles
+            </NavButton>
+          )}
         </Flex>
         <Divider bgColor={theme.modal.header.divider} w="full" />
       </Flex>

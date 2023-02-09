@@ -52,7 +52,7 @@ export const EditStatement: FC = () => {
 
   return (
     <Flex maxW="30rem" gap="4" flexDir="column" flex="1" sx={editorStyle}>
-      <Text>Write your statement</Text>
+      <Text color={theme.modal.statement.text}>Write your statement</Text>
       <ReactQuill
         theme="snow"
         value={newStatementValue}
