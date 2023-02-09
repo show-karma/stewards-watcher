@@ -52,7 +52,7 @@ export const Step1: React.FC<IModal> = ({
           color="#000000"
           width="100%"
         >
-          1/3 Enter your Twitter username
+          1/3 Enter your forum username
         </Text>
         <IconButton
           bgColor="transparent"
@@ -70,8 +70,8 @@ export const Step1: React.FC<IModal> = ({
         color="#687785"
         marginBottom="32px"
       >
-        When you link your twitter username to your wallet address, we will be
-        able to show your twitter page in your delegate profile.
+        When you link your forum username to your wallet address, we will be
+        able to include your forum activity in the reputation calculation
       </Flex>
       <Flex
         display="flex"
@@ -107,7 +107,7 @@ export const Step1: React.FC<IModal> = ({
           _focusVisible={{
             outline: 'none',
           }}
-          placeholder="Type your Twitter username"
+          placeholder="Type your forum username"
           type="text"
           value={username}
           onChange={handleInput}
