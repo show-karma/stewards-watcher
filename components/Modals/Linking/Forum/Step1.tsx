@@ -70,8 +70,8 @@ export const Step1: React.FC<IModal> = ({
         color="#687785"
         marginBottom="32px"
       >
-        When you link your forum username to your wallet address, we will be
-        able to include your forum activity in the reputation calculation
+        To display your forum handle in your delegate profile, link your handle
+        to your wallet address.
       </Flex>
       <Flex
         display="flex"

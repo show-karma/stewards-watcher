@@ -9,7 +9,7 @@ import {
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
-import { DelegateLoginModal } from 'components';
+import { DelegateLoginButton, DelegateLoginModal } from 'components';
 import { DelegateVotesModal } from 'components/Modals/DelegateVotes';
 import { useDAO } from 'contexts';
 import { useAuth } from 'contexts/auth';
@@ -35,34 +35,6 @@ const DelegateToAnyoneButton: FC<{ onToggle: () => void }> = ({ onToggle }) => {
       minH="52px"
     >
       Delegate to Anyone
-    </Button>
-  );
-};
-
-const DelegateLoginButton: FC<{ onOpen: () => void }> = ({ onOpen }) => {
-  const { theme } = useDAO();
-  const { isAuthenticated, disconnect } = useAuth();
-
-  return (
-    <Button
-      bgColor={useColorModeValue(theme.branding, 'white')}
-      color={useColorModeValue(theme.buttonText, 'black')}
-      onClick={() => {
-        if (isAuthenticated) {
-          disconnect();
-          return;
-        }
-        onOpen();
-      }}
-      px="5"
-      py="3"
-      fontWeight="semibold"
-      _active={{}}
-      _focus={{}}
-      _hover={{}}
-      minH={{ base: '52px', lg: 'max-content' }}
-    >
-      {isAuthenticated ? 'Disconnect' : 'Delegate Login'}
     </Button>
   );
 };

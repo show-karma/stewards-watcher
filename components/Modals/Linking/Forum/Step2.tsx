@@ -96,8 +96,8 @@ export const Step2: React.FC<IModal> = ({
         color="#687785"
         marginBottom="32px"
       >
-        Sign a message that will be used to link your wallet address and forum
-        handle
+        Sign a message that includes your forum handle to prove you truly own
+        this wallet
       </Flex>
       <Flex
         display="flex"

@@ -62,8 +62,9 @@ export const Handles: FC = () => {
           fontWeight="normal"
           color={theme.modal.statement.sidebar.item.border}
         >
-          Lorem ipsum dolor sit amet consectetur. Ut quis sed aliquam tortor
-          sodales fermentum. Dapibus orolor porta etiam et eget erat
+          Link your social handles to your wallet by clicking the button below.
+          Adding social handles adds more authenticity to your profile and helps
+          us aggregate your activity on those platforms.
         </Text>
         <Flex flexDir="column" gap="4" py="6">
           {socialMedias.map(

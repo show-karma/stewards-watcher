@@ -69,7 +69,7 @@ export const DelegateLoginModal: FC<IDelegateLogin> = ({ isOpen, onClose }) => {
         mx="1rem"
         maxH="max-content"
         borderRadius="20px"
-        bgColor={theme.bodyBg}
+        bgColor={theme.loginModal.background}
       >
         <ModalHeader
           display="flex"
@@ -84,14 +84,16 @@ export const DelegateLoginModal: FC<IDelegateLogin> = ({ isOpen, onClose }) => {
             maxW="36"
             h="10"
             objectFit="contain"
-            src={config.DAO_LOGO}
+            color="white"
+            fill="white"
+            src={theme.logo || config.DAO_LOGO}
           />
           <Flex gap="3" w="full" align="center">
             <Text
               fontWeight="normal"
               fontSize="16px"
               w="max-content"
-              color={theme.card.text.primary}
+              color={theme.loginModal.text}
             >
               Powered By
             </Text>
@@ -105,14 +107,14 @@ export const DelegateLoginModal: FC<IDelegateLogin> = ({ isOpen, onClose }) => {
               fontWeight="medium"
               fontSize="28px"
               pr="25"
-              color={theme.card.text.primary}
+              color={theme.loginModal.text}
             >
               Welcome to the Delegate dashboard.
             </Text>
             <Text
               fontWeight="normal"
               fontSize="18px"
-              color={theme.card.text.primary}
+              color={theme.loginModal.text}
               mt="6px"
               mb="8"
             >
@@ -125,7 +127,7 @@ export const DelegateLoginModal: FC<IDelegateLogin> = ({ isOpen, onClose }) => {
                   <Text
                     fontWeight="500"
                     fontSize="17px"
-                    color={theme.card.text.primary}
+                    color={theme.loginModal.text}
                     maxW="284px"
                   >
                     {point.text}
@@ -135,7 +137,7 @@ export const DelegateLoginModal: FC<IDelegateLogin> = ({ isOpen, onClose }) => {
             </Grid>
           </Flex>
           <Flex
-            bgColor={theme.card.background}
+            bgColor={theme.loginModal.footer.bg}
             mb="-8px"
             mx="-24px"
             borderRadius="0 0 20px 20px"
@@ -147,7 +149,7 @@ export const DelegateLoginModal: FC<IDelegateLogin> = ({ isOpen, onClose }) => {
             <Text
               fontWeight="600"
               fontSize="18px"
-              color={theme.card.text.primary}
+              color={theme.loginModal.footer.text}
             >
               To get started, login by connecting your wallet.
             </Text>
@@ -155,8 +157,8 @@ export const DelegateLoginModal: FC<IDelegateLogin> = ({ isOpen, onClose }) => {
               onClick={() => {
                 authenticate();
               }}
-              color={theme.buttonText}
-              background={theme.branding}
+              color={theme.loginModal.button.text}
+              background={theme.loginModal.button.bg}
               maxW="174px"
               borderRadius="4px"
               _hover={{}}
