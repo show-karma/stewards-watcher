@@ -4,6 +4,8 @@ import { useDAO, useDelegates, useEditStatement } from 'contexts';
 import { useAccount } from 'wagmi';
 import { ICustomFields } from 'types';
 import dynamic from 'next/dynamic';
+import parse from 'html-react-parser';
+import DOMPurify from 'dompurify';
 import { Sidebar } from '../Sidebar';
 import { NoStatement } from './NoStatement';
 
@@ -12,6 +14,14 @@ interface ITextSection {
 }
 const TextSection: FC<ITextSection> = ({ statement }) => {
   const { theme } = useDAO();
+
+  const htmlFrom = (htmlString: string) => {
+    const cleanHtmlString = DOMPurify.sanitize(htmlString, {
+      USE_PROFILES: { html: true },
+    });
+    const html = parse(cleanHtmlString);
+    return html;
+  };
   return (
     <Flex maxW="30rem" gap="4" flexDir="column" flex="1">
       {statement && statement.value && (
@@ -23,9 +33,20 @@ const TextSection: FC<ITextSection> = ({ statement }) => {
           textAlign="left"
           whiteSpace="pre-line"
           flexDir="column"
-          dangerouslySetInnerHTML={{ __html: statement.value as string }}
           wordBreak="break-word"
-        />
+          listStyleType="none"
+          sx={{
+            ol: {
+              marginLeft: '32px',
+            },
+            // eslint-disable-next-line id-length
+            a: {
+              color: 'blue.400',
+            },
+          }}
+        >
+          {htmlFrom(statement.value as string)}
+        </Flex>
       )}
     </Flex>
   );

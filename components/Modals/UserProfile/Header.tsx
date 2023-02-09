@@ -316,7 +316,7 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
                 <Button
                   fontWeight="normal"
                   bgColor="transparent"
-                  color={theme.buttonText}
+                  color={theme.modal.header.title}
                   _hover={{}}
                   _active={{}}
                   _focus={{}}
@@ -327,6 +327,7 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
                   Edit profile
                 </Button>
               )}
+
             {isEditing ? (
               <Button
                 bgColor={theme.branding}

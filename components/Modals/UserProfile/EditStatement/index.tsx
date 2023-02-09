@@ -5,12 +5,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 const modules = {
-  toolbar: [
-    ['bold', 'italic', 'underline', 'strike'],
-    ['link'],
-    ['clean'],
-    [{ align: [] }],
-  ],
+  toolbar: [['bold', 'italic', 'underline', 'strike'], ['link'], ['clean']],
 };
 
 export const EditStatement: FC = () => {

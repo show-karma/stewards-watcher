@@ -25,7 +25,7 @@ export const useDelegation = (args: IDelegation) => {
   };
 
   const getArgs = () => {
-    if (type === 'snapshot') {
+    if (type === 'snapshot' && snapshotIds && snapshotIds.length) {
       const idBySnapshotId = getIdBySnapshotId(snapshotIds[0]);
       return [idBySnapshotId, delegatee];
     }
