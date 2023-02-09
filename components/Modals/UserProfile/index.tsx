@@ -38,7 +38,7 @@ const Tab: FC<ITab> = ({ activeTab, profile, isSamePerson }) => {
       </VotesProvider>
     );
   }
-  if (activeTab === 'handles' && !isSamePerson) {
+  if (activeTab === 'handles') {
     return <Handles />;
   }
   return <Statement />;

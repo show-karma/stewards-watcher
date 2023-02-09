@@ -17,7 +17,7 @@ import {
   TwitterIcon,
   DiscordIcon,
 } from 'components';
-import { useDAO, useEditStatement, useWallet } from 'contexts';
+import { useDAO, useEditStatement, useHandles, useWallet } from 'contexts';
 import { useAuth } from 'contexts/auth';
 import { useToasty } from 'hooks';
 import { FC, ReactNode, useMemo, useState } from 'react';
@@ -62,9 +62,11 @@ const NavButton: FC<INavButton> = ({ children, isActive, ...props }) => {
     </Button>
   );
 };
+
+type IMedias = 'twitter' | 'forum' | 'discord';
 interface IMediaIcon {
   profile: IProfile;
-  media: 'twitter' | 'forum' | 'discord';
+  media: IMedias;
   changeTab: (selectedTab: IActiveTab) => void;
   isSamePerson: boolean;
   children: ReactNode;
@@ -80,6 +82,7 @@ const MediaIcon: FC<IMediaIcon> = ({
   const { theme, daoData, daoInfo } = useDAO();
   const { isConnected } = useWallet();
   const { config } = daoInfo;
+  const { twitterOnOpen, forumOnOpen } = useHandles();
 
   const medias = {
     twitter: {
@@ -127,6 +130,17 @@ const MediaIcon: FC<IMediaIcon> = ({
         {children}
       </Link>
     );
+
+  const handleClick = () => {
+    if (!isSamePerson) return;
+    changeTab('handles');
+    const onOpens: { [key: string]: () => void } = {
+      twitter: twitterOnOpen,
+      forum: forumOnOpen,
+    };
+    if (onOpens[media]) onOpens[media]();
+  };
+
   return (
     <Tooltip
       label={
@@ -138,7 +152,7 @@ const MediaIcon: FC<IMediaIcon> = ({
       hasArrow
     >
       <Button
-        onClick={() => isSamePerson && changeTab('handles')}
+        onClick={() => handleClick()}
         px="0"
         py="0"
         display="flex"

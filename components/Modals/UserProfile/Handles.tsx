@@ -1,16 +1,12 @@
-import { Flex, Text, Icon, Button, useDisclosure } from '@chakra-ui/react';
+import { Flex, Text, Icon, Button } from '@chakra-ui/react';
 import { DiscordIcon, ForumIcon, TwitterIcon } from 'components';
-import { useDAO, useDelegates } from 'contexts';
+import { useDAO, useDelegates, useHandles } from 'contexts';
 import { FC } from 'react';
 import { TwitterModal } from '../Linking';
 
 export const Handles: FC = () => {
   const { theme } = useDAO();
-  const {
-    isOpen: twitterIsOpen,
-    onOpen: twitterOnOpen,
-    onClose: twitterOnClose,
-  } = useDisclosure();
+  const { twitterIsOpen, twitterOnOpen, twitterOnClose } = useHandles();
   const { profileSelected } = useDelegates();
 
   const socialMedias = [
@@ -81,7 +77,8 @@ export const Handles: FC = () => {
                   py="2"
                   borderWidth="1px"
                   borderColor={theme.modal.statement.sidebar.item}
-                  w="60"
+                  minW="60"
+                  w="max-content"
                 >
                   {media.handle}
                 </Text>
@@ -94,8 +91,20 @@ export const Handles: FC = () => {
                     opacity: 0.4,
                     cursor: 'not-allowed',
                   }}
+                  bgColor={theme.modal.buttons.navBg}
+                  color={theme.modal.buttons.navText}
+                  borderColor={theme.modal.buttons.navText}
+                  borderWidth="1px"
+                  borderStyle="solid"
+                  _hover={{
+                    opacity: 0.7,
+                  }}
+                  _active={{}}
+                  _focus={{}}
+                  _focusVisible={{}}
+                  _focusWithin={{}}
                 >
-                  Link your {media.name} handle{' '}
+                  Link your {media.name} handle
                 </Button>
               )}
             </Flex>
