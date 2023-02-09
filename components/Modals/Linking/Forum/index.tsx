@@ -2,7 +2,7 @@ import { ModalContent, ModalOverlay, Modal, Box } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
 import { AxiosClient } from 'helpers';
 import { useToasty } from 'hooks';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { ESteps } from './ESteps';
 import { Step1 } from './Step1';
@@ -15,22 +15,24 @@ interface IModal {
   handleModal: () => void;
 }
 
-export const TwitterModal: React.FC<IModal> = ({ open, handleModal }) => {
+export const DiscourseModal: React.FC<IModal> = ({ open, handleModal }) => {
   const [step, setStep] = useState(ESteps.INPUT);
   const [signature, setSignature] = useState('');
   const [username, setUsername] = useState('');
   const { toast, updateState } = useToasty();
-  const { address: publicAddress } = useAccount();
+  const { address } = useAccount();
   const { daoData } = useDAO();
   const daoName = daoData?.name || '';
   const logoUrl = daoData?.socialLinks.logoUrl || '';
+  const forumTopicURL = daoData?.forumTopicURL || '';
+  const publicAddress = address || '';
   const request = AxiosClient();
 
   const validationPromise = () =>
     new Promise((resolve, reject) =>
       // eslint-disable-next-line no-promise-executor-return
       request
-        .post('/dao/link/twitter', {
+        .post('/dao/link/delegate', {
           daoName,
           message: username,
         })
@@ -39,7 +41,7 @@ export const TwitterModal: React.FC<IModal> = ({ open, handleModal }) => {
           updateState({
             title: 'Verified.',
             description:
-              'Your twitter handle has been verified and linked to your profile!',
+              'Your forum handle has been verified and linked to your profile!',
             status: 'success',
             duration: 10000,
           });
@@ -48,8 +50,8 @@ export const TwitterModal: React.FC<IModal> = ({ open, handleModal }) => {
         .catch(error => {
           setStep(ESteps.PUBLISH);
           updateState({
-            title: 'Twitter verification failed',
-            description: `We're sorry, the verification failed. Make sure you tweeted the correct message and click the verify button again.`,
+            title: 'Forum verification failed',
+            description: `We're sorry, the verification failed. Make sure you published the correct message and click the verify button again.`,
             status: 'error',
             duration: 10000,
           });
@@ -61,8 +63,8 @@ export const TwitterModal: React.FC<IModal> = ({ open, handleModal }) => {
     setStep(ESteps.VERIFYING);
     try {
       toast({
-        title: 'Verifying your tweet',
-        description: 'Please wait while we verify your tweet.',
+        title: 'Verifying your publication',
+        description: 'Please wait while we verify your publication.',
         duration: 100000,
         status: 'info',
       });
@@ -91,17 +93,18 @@ export const TwitterModal: React.FC<IModal> = ({ open, handleModal }) => {
         />
       );
     if (
-      (step === ESteps.PUBLISH ||
-        step === ESteps.VERIFICATION ||
-        step === ESteps.VERIFYING) &&
-      publicAddress
+      step === ESteps.PUBLISH ||
+      step === ESteps.VERIFICATION ||
+      step === ESteps.VERIFYING
     )
       return (
         <Step3
           handleModal={closeModal}
           setStep={setStep}
           signature={signature}
+          daoForumTopic={forumTopicURL}
           publicAddress={publicAddress}
+          daoName={daoName}
           step={step}
           verifyPublication={verifyPublication}
         />
@@ -125,12 +128,16 @@ export const TwitterModal: React.FC<IModal> = ({ open, handleModal }) => {
     );
   };
 
+  useMemo(() => {
+    if (!daoData?.forumTopicURL) closeModal();
+  }, [daoData]);
+
   return (
     <Modal
       isOpen={open}
       onClose={closeModal}
-      aria-labelledby="twitter-modal-title"
-      aria-describedby="twitter-modal-description"
+      aria-labelledby="forum-modal-title"
+      aria-describedby="forum-modal-description"
     >
       <ModalOverlay />
       <ModalContent>{renderStep()}</ModalContent>

@@ -2,11 +2,18 @@ import { Flex, Text, Icon, Button } from '@chakra-ui/react';
 import { DiscordIcon, ForumIcon, TwitterIcon } from 'components';
 import { useDAO, useDelegates, useHandles } from 'contexts';
 import { FC } from 'react';
-import { TwitterModal } from '../Linking';
+import { DiscourseModal, TwitterModal } from '../Linking';
 
 export const Handles: FC = () => {
-  const { theme } = useDAO();
-  const { twitterIsOpen, twitterOnOpen, twitterOnClose } = useHandles();
+  const { theme, daoData } = useDAO();
+  const {
+    twitterIsOpen,
+    twitterOnOpen,
+    twitterOnToggle,
+    forumIsOpen,
+    forumOnToggle,
+    forumOnOpen,
+  } = useHandles();
   const { profileSelected } = useDelegates();
 
   const socialMedias = [
@@ -23,7 +30,10 @@ export const Handles: FC = () => {
     {
       icon: ForumIcon,
       name: 'Forum',
-      action: undefined,
+      disabledCondition: !daoData?.forumTopicURL,
+      action: () => {
+        forumOnOpen();
+      },
       handle: profileSelected?.discourseHandle,
     },
     // {
@@ -32,9 +42,6 @@ export const Handles: FC = () => {
     //   action: undefined,
     // },
   ];
-
-  const openTwitterModal = () =>
-    twitterIsOpen ? twitterOnClose() : twitterOnOpen();
 
   return (
     <>
@@ -59,59 +66,65 @@ export const Handles: FC = () => {
           sodales fermentum. Dapibus orolor porta etiam et eget erat
         </Text>
         <Flex flexDir="column" gap="4" py="6">
-          {socialMedias.map((media, index) => (
-            <Flex
-              flexDir="row"
-              key={+index}
-              gap="3"
-              align="center"
-              color={theme.modal.statement.sidebar.section}
-            >
-              <Icon boxSize="6" as={media.icon} />
-              <Text fontSize="lg" fontWeight="medium" w="20" mr="6">
-                {media.name}
-              </Text>
-              {media.handle ? (
-                <Text
-                  px="4"
-                  py="2"
-                  borderWidth="1px"
-                  borderColor={theme.modal.statement.sidebar.item}
-                  minW="60"
-                  w="max-content"
+          {socialMedias.map(
+            (media, index) =>
+              !media.disabledCondition && (
+                <Flex
+                  flexDir="row"
+                  key={+index}
+                  gap="3"
+                  align="center"
+                  color={theme.modal.statement.sidebar.section}
                 >
-                  {media.handle}
-                </Text>
-              ) : (
-                <Button
-                  onClick={media.action}
-                  isDisabled={!media.name.includes('Twitter')}
-                  disabled={!media.name.includes('Twitter')}
-                  _disabled={{
-                    opacity: 0.4,
-                    cursor: 'not-allowed',
-                  }}
-                  bgColor={theme.modal.buttons.navBg}
-                  color={theme.modal.buttons.navText}
-                  borderColor={theme.modal.buttons.navText}
-                  borderWidth="1px"
-                  borderStyle="solid"
-                  _hover={{
-                    opacity: 0.7,
-                  }}
-                  _active={{}}
-                  _focus={{}}
-                  _focusVisible={{}}
-                  _focusWithin={{}}
-                >
-                  Link your {media.name} handle
-                </Button>
-              )}
-            </Flex>
-          ))}
+                  <Icon boxSize="6" as={media.icon} />
+                  <Text fontSize="lg" fontWeight="medium" w="20" mr="6">
+                    {media.name}
+                  </Text>
+                  {media.handle ? (
+                    <Text
+                      px="4"
+                      py="2"
+                      borderWidth="1px"
+                      borderColor={theme.modal.statement.sidebar.item}
+                      minW="60"
+                      w="max-content"
+                    >
+                      {media.handle}
+                    </Text>
+                  ) : (
+                    <Button
+                      onClick={media.action}
+                      _disabled={{
+                        opacity: 0.4,
+                        cursor: 'not-allowed',
+                      }}
+                      bgColor={theme.modal.buttons.navBg}
+                      color={theme.modal.buttons.navText}
+                      borderColor={theme.modal.buttons.navText}
+                      borderWidth="1px"
+                      borderStyle="solid"
+                      _hover={{
+                        opacity: 0.7,
+                      }}
+                      _active={{}}
+                      _focus={{}}
+                      _focusVisible={{}}
+                      _focusWithin={{}}
+                      isDisabled={media.disabledCondition}
+                      disabled={media.disabledCondition}
+                    >
+                      Link your {media.name} handle
+                    </Button>
+                  )}
+                </Flex>
+              )
+          )}
         </Flex>
       </Flex>
-      <TwitterModal open={twitterIsOpen} handleModal={openTwitterModal} />
+      <TwitterModal open={twitterIsOpen} handleModal={twitterOnToggle} />
+      {daoData?.forumTopicURL && (
+        <DiscourseModal open={forumIsOpen} handleModal={forumOnToggle} />
+      )}
     </>
   );
 };

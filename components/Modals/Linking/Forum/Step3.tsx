@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useRef } from 'react';
 import {
   IconButton,
   Icon,
@@ -17,7 +17,9 @@ interface IModal {
   handleModal: () => void;
   setStep: React.Dispatch<React.SetStateAction<ESteps>>;
   signature: string;
+  daoForumTopic: string;
   publicAddress: string;
+  daoName: string;
   step: ESteps;
   verifyPublication: () => void;
 }
@@ -26,25 +28,27 @@ export const Step3: React.FC<IModal> = ({
   handleModal,
   setStep,
   signature,
+  daoForumTopic,
   publicAddress,
+  daoName,
   step,
   verifyPublication,
 }) => {
   const textRef = useRef<HTMLParagraphElement>(null);
-  const textToCopy = `Verifying my Twitter account for Karma
+  const textToCopy = `Verifying my forum identity for ${daoName} governance
   addr: ${publicAddress}
   sig: ${signature}
-  @karmahq_ #karmahq`;
-  const backStep = () => setStep(ESteps.SIGN);
+  #${daoName}governance`;
   const { onCopy } = useClipboard(textToCopy);
+  const backStep = () => setStep(ESteps.SIGN);
   const { toast } = useToasty();
 
-  const openTwitter = () => {
+  const openForum = () => {
     if (typeof window !== 'undefined') {
       const { outerHeight, outerWidth } = window;
       const [width, height] = [outerWidth * 0.75, outerHeight * 0.75];
       const windowFeatures = `left=0,top=0,width=${width},height=${height}`;
-      window.open('https://twitter.com', '_blank', windowFeatures);
+      window.open(daoForumTopic, '_blank', windowFeatures);
       setStep(ESteps.VERIFICATION);
     }
   };
@@ -80,12 +84,7 @@ export const Step3: React.FC<IModal> = ({
         minWidth="490px"
       >
         <Flex display="flex" flexDirection="row" alignItems="center" gap="15px">
-          <IconButton
-            bgColor="transparent"
-            aria-label="close"
-            onClick={backStep}
-            color="gray.500"
-          >
+          <IconButton aria-label="close" onClick={backStep} color="gray.500">
             <Icon as={BsArrowLeft} boxSize="6" />
           </IconButton>
           <Text
@@ -95,7 +94,7 @@ export const Step3: React.FC<IModal> = ({
             color="#000000"
             width="100%"
           >
-            3/3 Publish on Twitter
+            3/3 Publish on forum
           </Text>
         </Flex>
         <IconButton
@@ -114,8 +113,8 @@ export const Step3: React.FC<IModal> = ({
         color="#687785"
         marginBottom="32px"
       >
-        Copy the text below and post publicly on Twitter. Once you post, come
-        back and click “Verify Tweet” to complete the linking.
+        Copy the text below and post on the governance forum. Once you post,
+        come back and click “Verify” to complete the linking.
       </Flex>
       <Flex
         display="flex"
@@ -147,11 +146,11 @@ export const Step3: React.FC<IModal> = ({
           top={2}
           right={4}
           color="gray.400"
+          bgColor="transparent"
         >
           <Icon as={MdContentCopy} boxSize="6" />
         </IconButton>
       </Flex>
-
       <Flex flexDir="row">
         <Button
           fontStyle="normal"
@@ -179,11 +178,10 @@ export const Step3: React.FC<IModal> = ({
           _focus={{}}
           _focusVisible={{}}
           _focusWithin={{}}
-          onClick={openTwitter}
+          onClick={openForum}
         >
-          Open Twitter
+          Open Forum
         </Button>
-
         <Button
           fontStyle="normal"
           fontWeight="700"
@@ -212,7 +210,7 @@ export const Step3: React.FC<IModal> = ({
           disabled={step === ESteps.VERIFYING}
           onClick={verifyPublication}
         >
-          Verify Tweet
+          Verify Publication
         </Button>
       </Flex>
     </Flex>

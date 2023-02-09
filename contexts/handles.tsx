@@ -8,6 +8,8 @@ interface IHandlesProps {
   forumIsOpen: boolean;
   forumOnClose: () => void;
   forumOnOpen: () => void;
+  twitterOnToggle: () => void;
+  forumOnToggle: () => void;
 }
 
 export const HandlesContext = createContext({} as IHandlesProps);
@@ -21,11 +23,13 @@ export const HandlesProvider: React.FC<IProviderProps> = ({ children }) => {
     isOpen: twitterIsOpen,
     onClose: twitterOnClose,
     onOpen: twitterOnOpen,
+    onToggle: twitterOnToggle,
   } = useDisclosure();
   const {
     isOpen: forumIsOpen,
     onClose: forumOnClose,
     onOpen: forumOnOpen,
+    onToggle: forumOnToggle,
   } = useDisclosure();
 
   const providerValue = useMemo(
@@ -33,17 +37,21 @@ export const HandlesProvider: React.FC<IProviderProps> = ({ children }) => {
       twitterIsOpen,
       twitterOnClose,
       twitterOnOpen,
+      twitterOnToggle,
       forumIsOpen,
       forumOnClose,
       forumOnOpen,
+      forumOnToggle,
     }),
     [
       twitterIsOpen,
       twitterOnClose,
       twitterOnOpen,
+      twitterOnToggle,
       forumIsOpen,
       forumOnClose,
       forumOnOpen,
+      forumOnToggle,
     ]
   );
 

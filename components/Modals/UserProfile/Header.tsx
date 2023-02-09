@@ -21,7 +21,6 @@ import { useDAO, useEditStatement, useHandles, useWallet } from 'contexts';
 import { useAuth } from 'contexts/auth';
 import { useToasty } from 'hooks';
 import { FC, ReactNode, useMemo, useState } from 'react';
-import { BsTwitter } from 'react-icons/bs';
 import { IActiveTab, IProfile } from 'types';
 import { convertHexToRGBA, getUserForumUrl, truncateAddress } from 'utils';
 import { useAccount } from 'wagmi';
@@ -72,6 +71,14 @@ interface IMediaIcon {
   children: ReactNode;
 }
 
+interface IMediasObj {
+  [key: string]: {
+    url: string;
+    value?: string;
+    disabledCondition?: boolean;
+  };
+}
+
 const MediaIcon: FC<IMediaIcon> = ({
   media,
   profile,
@@ -84,7 +91,7 @@ const MediaIcon: FC<IMediaIcon> = ({
   const { config } = daoInfo;
   const { twitterOnOpen, forumOnOpen } = useHandles();
 
-  const medias = {
+  const medias: IMediasObj = {
     twitter: {
       url: `https://twitter.com/${profile.twitter}`,
       value: profile.twitter,
@@ -101,6 +108,7 @@ const MediaIcon: FC<IMediaIcon> = ({
             )
           : '',
       value: profile.forumHandle,
+      disabledCondition: !daoData?.forumTopicURL,
     },
     discord: {
       url: `https://discord.com/users/${profile.discordHandle}`,
@@ -170,6 +178,7 @@ const MediaIcon: FC<IMediaIcon> = ({
         w="max-content"
         minW="max-content"
         cursor={isSamePerson ? 'pointer' : 'default'}
+        isDisabled={chosenMedia?.disabledCondition}
       >
         {children}
       </Button>
@@ -186,7 +195,7 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
   const { address: fullAddress, ensName, realName } = profile;
   const truncatedAddress = truncateAddress(fullAddress);
   const { isConnected, openConnectModal } = useWallet();
-  const { theme, daoInfo } = useDAO();
+  const { theme, daoInfo, daoData } = useDAO();
   const { config } = daoInfo;
   const { isEditing, setIsEditing, saveEdit, isEditSaving } =
     useEditStatement();
@@ -281,14 +290,16 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
                 >
                   <TwitterIcon boxSize="6" color={theme.modal.header.title} />
                 </MediaIcon>
-                <MediaIcon
-                  profile={profile}
-                  media="forum"
-                  changeTab={changeTab}
-                  isSamePerson={isSamePerson}
-                >
-                  <ForumIcon boxSize="6" color={theme.modal.header.title} />
-                </MediaIcon>
+                {daoData?.forumTopicURL && (
+                  <MediaIcon
+                    profile={profile}
+                    media="forum"
+                    changeTab={changeTab}
+                    isSamePerson={isSamePerson}
+                  >
+                    <ForumIcon boxSize="6" color={theme.modal.header.title} />
+                  </MediaIcon>
+                )}
                 {/* <MediaIcon
                   profile={profile}
                   media="discord"

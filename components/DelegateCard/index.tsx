@@ -52,7 +52,8 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
 
   const getScore = () => {
     if (data?.gitcoinHealthScore) return formatNumber(data.gitcoinHealthScore);
-    if (data?.karmaScore) return formatNumber(data?.karmaScore);
+    if (data?.karmaScore && daoInfo.config.DAO_KARMA_ID !== 'gitcoin')
+      return formatNumber(data?.karmaScore);
     return '-';
   };
 

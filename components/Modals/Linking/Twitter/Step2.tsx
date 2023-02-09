@@ -62,7 +62,12 @@ export const Step2: React.FC<IModal> = ({
         minWidth="490px"
       >
         <Flex display="flex" flexDirection="row" alignItems="center" gap="15px">
-          <IconButton aria-label="close" onClick={backStep} color="gray.500">
+          <IconButton
+            bgColor="transparent"
+            aria-label="close"
+            onClick={backStep}
+            color="gray.500"
+          >
             <Icon as={BsArrowLeft} boxSize="6" />
           </IconButton>
           <Text
@@ -75,7 +80,12 @@ export const Step2: React.FC<IModal> = ({
             2/3 Sign a message
           </Text>
         </Flex>
-        <IconButton aria-label="close" onClick={handleModal} color="gray.400">
+        <IconButton
+          bgColor="transparent"
+          aria-label="close"
+          onClick={handleModal}
+          color="gray.400"
+        >
           <Icon as={IoClose} boxSize="6" />
         </IconButton>
       </Flex>
@@ -159,7 +169,7 @@ export const Step2: React.FC<IModal> = ({
         fontWeight="700"
         fontSize="16px"
         lineHeight="20px"
-        color="ffffff"
+        color="white"
         background="black"
         width="100%"
         padding="12px 0"
