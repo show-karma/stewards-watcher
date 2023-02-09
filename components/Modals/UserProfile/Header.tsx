@@ -372,6 +372,12 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
 
   const isActiveTab = (section: IActiveTab) => activeTab === section;
 
+  useMemo(() => {
+    if (activeTab === 'handles' && !isSamePerson) {
+      changeTab('statement');
+    }
+  }, [isSamePerson, activeTab]);
+
   return (
     <Flex
       borderRadius="12px"

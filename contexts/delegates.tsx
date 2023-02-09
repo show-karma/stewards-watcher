@@ -343,6 +343,20 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     setSelectedTab(tab);
     setProfileSelected(profile);
     onOpenProfile();
+    router
+      .push(
+        {
+          pathname: `/profile/${profile.ensName || profile.address}`,
+          hash: tab,
+        },
+        undefined,
+        { shallow: true }
+      )
+      .catch(error => {
+        if (!error.cancelled) {
+          throw error;
+        }
+      });
   };
 
   const searchProfileModal = async (
