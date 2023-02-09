@@ -16,11 +16,34 @@ export const EditStatement: FC = () => {
   const editorStyle = {
     '.quill': { minHeight: '200px' },
     '.ql-toolbar': {
-      bg: '#1C1E21',
+      bg: theme.modal.background,
       color: theme.modal.statement.text,
       border: `1px solid ${theme.modal.statement.sidebar.item.border}`,
       borderTopRadius: '8px',
       fontFamily: 'Poppins, sans-serif',
+    },
+    '.ql-snow.ql-toolbar button:hover .ql-stroke ': {
+      stroke: theme.modal.statement.sidebar.item.border,
+    },
+    '.ql-snow.ql-toolbar button.ql-active .ql-stroke': {
+      stroke: theme.modal.statement.sidebar.item.border,
+    },
+    '.ql-snow.ql-toolbar button.ql-active': {
+      color: theme.modal.statement.sidebar.item.border,
+      stroke: theme.modal.statement.sidebar.item.border,
+    },
+    '.ql-formats': {
+      button: {
+        '.ql-stroke': {
+          color: theme.modal.statement.sidebar.section,
+          stroke: theme.modal.statement.sidebar.section,
+        },
+        '.ql-fill': {
+          color: theme.modal.statement.sidebar.section,
+          stroke: theme.modal.statement.sidebar.section,
+          fill: theme.modal.statement.sidebar.section,
+        },
+      },
     },
     '.ql-picker-label': {
       color: theme.modal.statement.text,
@@ -29,14 +52,8 @@ export const EditStatement: FC = () => {
       color: theme.modal.statement.sidebar.section,
       fontSize: 'sm',
     },
-    '.ql-container': {
-      bg: '#1C1E21',
-      color: theme.modal.statement.text,
-      height: '100%',
-      border: `1px solid ${theme.modal.statement.sidebar.item.border}`,
-      borderBottomRadius: '8px',
-      fontFamily: 'Poppins, sans-serif',
-    },
+    '.ql-container': {},
+
     '.ql-active': {
       color: `${theme.modal.statement.text}`,
       '.ql-stroke': {
@@ -47,7 +64,6 @@ export const EditStatement: FC = () => {
 
   return (
     <Flex maxW="30rem" gap="4" flexDir="column" flex="1" sx={editorStyle}>
-      <Text color={theme.modal.statement.text}>Write your statement</Text>
       <ReactQuill
         theme="snow"
         value={newStatementValue}
