@@ -34,13 +34,14 @@ export const StyledModal: React.FC<
       <ModalContent
         mx="1rem"
         p={4}
+        paddingBottom={24}
         width={{ lg: '920', sm: '250' }}
         maxWidth="920"
         borderTopRadius="12px"
         bgColor={theme.background}
         overflow="hidden"
       >
-        <ModalCloseButton color={modalTheme.subtext} />
+        <ModalCloseButton zIndex={10} id="cu" color={modalTheme.subtext} />
         <Flex
           alignItems="center"
           justifyContent="center"
@@ -50,7 +51,6 @@ export const StyledModal: React.FC<
         >
           {props.headerLogo && (
             <Box
-              id="cu"
               style={{
                 position: 'absolute',
                 top: '-10%',

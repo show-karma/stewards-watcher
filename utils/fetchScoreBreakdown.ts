@@ -1,5 +1,5 @@
 import { ScoreBreakdownCalc } from 'karma-score';
-import { axiosInstance } from './axiosInstance';
+import { api } from 'helpers';
 
 type ScoreBreakdownRes = {
   breakdown: ScoreBreakdownCalc;
@@ -16,7 +16,7 @@ export async function fetchScoreBreakdown(
     | 'karmaScore' = 'gitcoinHealthScore',
   period: 'lifetime' | '180d' | '30d' = 'lifetime'
 ): Promise<ScoreBreakdownRes> {
-  const { data: breakdown } = await axiosInstance.get<{
+  const { data: breakdown } = await api.get<{
     data: ScoreBreakdownRes;
   }>(`user/${publicAddress}/${daoName}/score-descriptor`, {
     params: {
