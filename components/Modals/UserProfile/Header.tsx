@@ -87,6 +87,7 @@ const MediaIcon: FC<IMediaIcon> = ({
   isSamePerson,
 }) => {
   const { theme, daoData, daoInfo } = useDAO();
+
   const { isConnected } = useWallet();
   const { config } = daoInfo;
   const { twitterOnOpen, forumOnOpen } = useHandles();
@@ -230,7 +231,10 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
       setIsEditing(true);
       return;
     }
-    const tryToAuth = await authenticate();
+
+    console.log(daoData?.name);
+    const tryToAuth = await authenticate(daoData?.name);
+
     if (tryToAuth) {
       setIsEditing(true);
     }

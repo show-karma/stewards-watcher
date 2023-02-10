@@ -12,12 +12,13 @@ import { IExpirationStatus, ISession } from 'types';
 import Cookies from 'universal-cookie';
 import { checkExpirationStatus } from 'utils';
 import { useAccount, useDisconnect, useSignMessage } from 'wagmi';
+import { useDAO } from './dao';
 import { useDelegates } from './delegates';
 import { useWallet } from './wallet';
 
 interface IAuthProps {
   isAuthenticated: boolean;
-  authenticate: () => Promise<boolean>;
+  authenticate: (daoName?: string) => Promise<boolean>;
   authToken: string | null;
   disconnect: () => void;
 }
@@ -44,6 +45,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const { disconnect: disconnectWallet } = useDisconnect();
   const { searchProfileModal } = useDelegates();
+  const { daoData } = useDAO();
 
   const cookies = new Cookies();
 
@@ -73,10 +75,12 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
     return true;
   };
 
-  const getNonce = async (publicAddress: string) => {
+  const getNonce = async (publicAddress: string, daoName?: string) => {
+    console.log({ publicAddress, daoName });
     try {
       const response = await api.post(`/auth/login`, {
         publicAddress,
+        daoName,
       });
       const { nonceMessage } = response.data.data;
       return nonceMessage;
@@ -122,14 +126,15 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
-  const authenticate = async () => {
+  const authenticate = async (daoName?: string) => {
+    console.log('inside: ', daoName);
     if (!isConnected || !address) {
       setIsAuthenticating(true);
       openConnectModal?.();
       return false;
     }
     try {
-      const nonceMessage = await getNonce(address);
+      const nonceMessage = await getNonce(address, daoName);
       const signedMessage = await signMessage(nonceMessage);
       if (!signedMessage) return false;
       const token = await getAccountToken(address, signedMessage);
@@ -146,7 +151,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
 
   useEffect(() => {
     if (isConnected && isAuthenticating && !isAuthenticated) {
-      authenticate();
+      authenticate(daoData?.name);
     }
   }, [isConnected]);
 
