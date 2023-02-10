@@ -179,13 +179,22 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
     queryStatement();
   }, [profileSelected]);
 
+  const hasDelegatePitch = async (): Promise<ICustomFields[] | undefined> => {
+    try {
+      const { data } = await api.get(
+        `/forum-user/${config.DAO_KARMA_ID}/delegate-pitch/${profile.address}`
+      );
+      return data?.data.delegatePitch;
+    } catch (error) {
+      return undefined;
+    }
+  };
+
   const saveEdit = async () => {
     setIsEditing(true);
     setEditSaving(true);
+    const fetchedDelegatePitch = await hasDelegatePitch();
     try {
-      const hasStatement =
-        profileSelected?.delegatePitch ||
-        profileSelected?.delegatePitch?.customFields?.length;
       const authorizedAPI = axios.create({
         timeout: 30000,
         headers: {
@@ -194,7 +203,7 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
           Authorization: authToken ? `Bearer ${authToken}` : '',
         },
       });
-      if (hasStatement) {
+      if (fetchedDelegatePitch) {
         await authorizedAPI.put(
           `${KARMA_API.base_url}/forum-user/${daoInfo.config.DAO_KARMA_ID}/delegate-pitch/${profileSelected?.address}`,
           {
@@ -230,7 +239,8 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
         status: 'success',
       });
     } catch (error: any) {
-      console.error(error);
+      console.error(error.response.data);
+
       toast({
         description: 'We could not save your profile. Please try again.',
         status: 'error',
@@ -243,7 +253,11 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
 
   useMemo(() => {
     setIsEditing(false);
-    if (address?.toLowerCase() === profileSelected?.address?.toLowerCase()) {
+    if (
+      address?.toLowerCase() === profileSelected?.address?.toLowerCase() &&
+      isConnected &&
+      isAuthenticated
+    ) {
       setIsEditing(true);
     }
   }, [address, profileSelected]);
