@@ -659,7 +659,18 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       <StyledModal
         isOpen={isOpen}
         title="Score Breakdown"
-        description="desc"
+        description={
+          <>
+            <Text>
+              Below is a breakdown of the user’s activities and actions in the
+              DAO.
+            </Text>
+            <Text>
+              The total score is calculated through a formula and represents
+              their total contributions to the DAO.
+            </Text>
+          </>
+        }
         headerLogo
         onClose={onClose}
       >

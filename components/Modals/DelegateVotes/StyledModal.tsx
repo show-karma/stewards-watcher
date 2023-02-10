@@ -9,13 +9,16 @@ import {
   ModalContent,
   ModalOverlay,
   ModalProps,
-  Text,
 } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
 import React from 'react';
 
 export const StyledModal: React.FC<
-  ModalProps & { title: string; headerLogo?: boolean; description?: string }
+  ModalProps & {
+    title: string;
+    headerLogo?: boolean;
+    description?: string | React.ReactNode;
+  }
 > = props => {
   const {
     theme,
@@ -67,16 +70,7 @@ export const StyledModal: React.FC<
           <Heading textAlign="center" mb={8}>
             {props.title}
           </Heading>
-          <Box textAlign="left">
-            <Text>
-              Below is a breakdown of the user’s activities and actions in the
-              DAO.
-            </Text>
-            <Text>
-              The total score is calculated through a formula and represents
-              their total contributions to the DAO.
-            </Text>
-          </Box>
+          <Box textAlign="left">{props.description}</Box>
         </Flex>
         <ModalBody bgColor="transparent">{props.children}</ModalBody>
       </ModalContent>

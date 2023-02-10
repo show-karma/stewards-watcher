@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable jsx-a11y/label-has-associated-control */
+import { useMemo } from 'react';
 import { IBreakdownProps, useScoreBreakdown } from 'contexts/scoreBreakdown';
 import { ScoreBreakdownCalc } from 'karma-score';
 import { InputDisplay } from './InputDisplay';
@@ -17,6 +18,8 @@ export const InputTree: React.FC<Props> = ({
   onUpdate,
 }) => {
   const { breakdown, setBreakdown } = useScoreBreakdown();
+
+  const list = useMemo(() => child ?? breakdown, [breakdown, child]);
 
   const onChange = (curIndex: number, weight: number) => {
     if (!onUpdate) {
@@ -42,33 +45,21 @@ export const InputTree: React.FC<Props> = ({
     }
   };
 
-  return child ? (
+  return (
     <>
-      {child.map((item, idx) => (
+      {list.map((item, idx) => (
         <>
           {typeof item.weight !== 'undefined' && (
-            <InputDisplay item={item} index={idx} onChange={onChange} />
-          )}
-          {item.children ? (
-            <InputTree
-              child={item.children}
+            <InputDisplay
+              key={`${+idx}_${item.label}`}
+              item={item}
               index={idx}
-              address={address}
-              onUpdate={onUpdateChild}
+              onChange={onChange}
             />
-          ) : null}
-        </>
-      ))}
-    </>
-  ) : (
-    <>
-      {breakdown.map((item, idx) => (
-        <>
-          {typeof item.weight !== 'undefined' && (
-            <InputDisplay item={item} index={idx} onChange={onChange} />
           )}
           {item.children ? (
             <InputTree
+              key={`${+idx}_${item.label}_child`}
               child={item.children}
               index={idx}
               address={address}
