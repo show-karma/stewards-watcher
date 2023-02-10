@@ -1,6 +1,7 @@
 import { Flex, Text, useMediaQuery } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
-import { FC, useMemo, useRef } from 'react';
+import { FC, useRef } from 'react';
+import { removeHtmlTagWithRegex } from 'utils';
 
 interface IExpandableText {
   text: string;
@@ -25,7 +26,7 @@ export const ExpandableCardText: FC<IExpandableText> = props => {
     selectProfile,
   } = props;
 
-  const formattedText = text.replaceAll(/\s/g, '');
+  const formattedText = removeHtmlTagWithRegex(text.replaceAll(/\s/g, ' '));
 
   const flexRef = useRef<HTMLDivElement>(null);
 
@@ -37,15 +38,16 @@ export const ExpandableCardText: FC<IExpandableText> = props => {
   return (
     <Flex flexDir="column" gap="2.5" h="full">
       {formattedText.length <= maxChars ? (
-        <Text
+        <Flex
           maxW="full"
           fontSize="sm"
           fontWeight="medium"
           textAlign="left"
           color={theme.text}
-        >
-          {text}
-        </Text>
+          dangerouslySetInnerHTML={{ __html: text as string }}
+          wordBreak="break-all"
+          style={{ lineBreak: 'anywhere' }}
+        />
       ) : (
         <Flex flexDir="column" w="full" ref={flexRef}>
           <Text
@@ -60,8 +62,10 @@ export const ExpandableCardText: FC<IExpandableText> = props => {
               opacity: isExpanded ? 0.9 : 'unset',
             }}
             flex="1"
+            wordBreak="break-all"
+            style={{ lineBreak: 'anywhere' }}
           >
-            {`${text.substring(0, isMobile ? 90 : newMaxChars)}... `}
+            {`${formattedText.substring(0, isMobile ? 90 : newMaxChars)}... `}
             <Text
               onClick={selectProfile}
               cursor="pointer"

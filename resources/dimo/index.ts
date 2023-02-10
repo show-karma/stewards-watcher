@@ -78,6 +78,15 @@ const dark: IDAOTheme = {
     workstream: { bg: '#FFFFFF', text: '#222429' },
     socialMedia: '#FFFFFF',
   },
+  loginModal: {
+    background: '#333333',
+    text: '#FFFFFF',
+    footer: { bg: 'rgba(102, 102, 102, 0.15)', text: '#FFFFFF' },
+    button: {
+      bg: 'white',
+      text: 'black',
+    },
+  },
   modal: {
     background: '#333333',
     header: {
@@ -177,6 +186,7 @@ const dark: IDAOTheme = {
 };
 
 const light: IDAOTheme = {
+  logo: '/daos/dimo/logo_black.svg',
   background: '#F2F4F9',
   bodyBg: '#F2F4F9',
   title: '#333333',
@@ -217,6 +227,15 @@ const light: IDAOTheme = {
     interests: { bg: '#EBEDEF', text: '#2C2E32' },
     workstream: { bg: '#595A5E', text: '#FFFFFF' },
     socialMedia: '#595A5E',
+  },
+  loginModal: {
+    background: '#FFFFFF',
+    text: '#212328',
+    footer: { bg: '#EBEDEF', text: '#212328' },
+    button: {
+      bg: '#CCEEFB',
+      text: '#000',
+    },
   },
   modal: {
     background: '#333333',

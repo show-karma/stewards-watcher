@@ -26,10 +26,10 @@ export const InterestsFilter = () => {
             boxSize="5"
           />
         }
-        bgColor={theme.filters.bg}
         borderWidth="1px"
-        borderColor={theme.filters.border}
         borderStyle="solid"
+        bgColor={theme.filters.bg}
+        borderColor={theme.filters.border}
         boxShadow={theme.filters.shadow}
         color={theme.filters.title}
         gap="1"
@@ -63,6 +63,10 @@ export const InterestsFilter = () => {
               key={+index}
               value={option}
               onClick={() => selectInterests(index)}
+              bgColor={theme.filters.bg}
+              _hover={{
+                bg: theme.filters.activeBg,
+              }}
             >
               {option}
             </MenuItemOption>

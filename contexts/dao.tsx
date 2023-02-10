@@ -1,8 +1,8 @@
+import { api } from 'helpers';
 import { usePicasso } from 'hooks';
 import React, { useContext, createContext, useMemo, useState } from 'react';
 import { supportedDAOs } from 'resources';
 import { IDAOData, IDAOInfo, IDAOTheme } from 'types';
-import { axiosInstance } from 'utils';
 
 interface IDAOProps {
   daoInfo: IDAOInfo;
@@ -33,7 +33,7 @@ export const DAOProvider: React.FC<ProviderProps> = ({
 
   const setupDaoInfo = async () => {
     const { config } = daoInfo;
-    await axiosInstance
+    await api
       .get(`/dao/delegates?name=${config.DAO_KARMA_ID}&pageSize=10&offset=0`)
       .then(res => setDAOData(res.data.data));
   };

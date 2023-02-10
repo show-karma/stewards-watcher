@@ -20,11 +20,10 @@ import {
   IActiveTab,
   IStatusOptions,
   IWorkstream,
-  IStats,
   IStatsID,
 } from 'types';
-import { axiosInstance } from 'utils';
 import { useMixpanel, useToasty } from 'hooks';
+import { api } from 'helpers';
 import { useDAO } from './dao';
 
 interface IDelegateProps {
@@ -53,7 +52,10 @@ interface IDelegateProps {
   profileSelected?: IDelegate;
   selectProfile: (profile: IDelegate, tab?: IActiveTab) => void;
   selectedTab: IActiveTab;
-  searchProfileModal: (userToSearch: string) => Promise<void>;
+  searchProfileModal: (
+    userToSearch: string,
+    defaultTab?: IActiveTab | undefined
+  ) => Promise<void>;
   interests: string[];
   interestFilter: string[];
   selectInterests: (index: number) => void;
@@ -145,7 +147,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const {
     isOpen: isOpenProfile,
     onOpen: onOpenProfile,
-    onClose: onCloseProfile,
+    onClose: closeModalProfile,
   } = useDisclosure();
 
   const isSearchDirty = userToFind !== '';
@@ -157,9 +159,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const fetchInterests = async () => {
     try {
-      const { data } = await axiosInstance.get(
-        `/dao/interests/${config.DAO_KARMA_ID}`
-      );
+      const { data } = await api.get(`/dao/interests/${config.DAO_KARMA_ID}`);
       if (Array.isArray(data?.data?.interests)) {
         setInterests(data.data.interests);
       }
@@ -170,7 +170,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const fetchWorkstreams = async () => {
     try {
-      const { data } = await axiosInstance.get(
+      const { data } = await api.get(
         `/workstream/list?dao=${config.DAO_KARMA_ID}`
       );
       if (Array.isArray(data.data.workstreams)) {
@@ -191,7 +191,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const fetchDelegates = async (_offset = offset) => {
     setLoading(true);
     try {
-      const axiosClient = await axiosInstance.get(`/dao/delegates`, {
+      const axiosClient = await api.get(`/dao/delegates`, {
         params: {
           interests: interestFilter.length
             ? interestFilter.join(',')
@@ -235,7 +235,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           ensName: item.ensName,
           forumActivity: fetchedPeriod?.forumActivityScore || 0,
           delegateSince: item.joinDateAt || item.firstTokenDelegatedAt,
-          delegators: item.delegatorCount,
+          delegators: item.delegatorCount || 0,
           voteParticipation: {
             onChain: fetchedPeriod?.onChainVotesPct || 0,
             offChain: fetchedPeriod?.offChainVotesPct || 0,
@@ -266,7 +266,6 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   };
 
   useEffect(() => {
-    console.log(delegates.length, delegateCount);
     setHasMore(delegates.length < delegateCount);
   }, [delegates.length, delegateCount]);
 
@@ -275,7 +274,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     setFetchingMore(true);
     setLoading(true);
     try {
-      const axiosClient = await axiosInstance.get(`/dao/search-delegate`, {
+      const axiosClient = await api.get(`/dao/search-delegate`, {
         params: {
           user: userToFind,
           pageSize: 10,
@@ -302,7 +301,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           ensName: item.ensName,
           forumActivity: fetchedPeriod?.forumActivityScore || 0,
           delegateSince: item.joinDateAt || item.firstTokenDelegatedAt,
-          delegators: item.delegatorCount,
+          delegators: item.delegatorCount || 0,
           voteParticipation: {
             onChain: fetchedPeriod?.onChainVotesPct || 0,
             offChain: fetchedPeriod?.offChainVotesPct || 0,
@@ -344,11 +343,28 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     setSelectedTab(tab);
     setProfileSelected(profile);
     onOpenProfile();
+    router
+      .push(
+        {
+          pathname: `/profile/${profile.ensName || profile.address}`,
+          hash: tab,
+        },
+        undefined,
+        { shallow: true }
+      )
+      .catch(error => {
+        if (!error.cancelled) {
+          throw error;
+        }
+      });
   };
 
-  const searchProfileModal = async (userToSearch: string) => {
+  const searchProfileModal = async (
+    userToSearch: string,
+    defaultTab?: IActiveTab
+  ) => {
     try {
-      const axiosClient = await axiosInstance.get(`/dao/find-delegate`, {
+      const axiosClient = await api.get(`/dao/find-delegate`, {
         params: {
           dao: config.DAO_KARMA_ID,
           user: userToSearch,
@@ -366,7 +382,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         forumActivity: fetchedPeriod?.forumActivityScore || 0,
         delegateSince:
           fetchedDelegate.joinDateAt || fetchedDelegate.firstTokenDelegatedAt,
-        delegators: fetchedDelegate.delegatorCount,
+        delegators: fetchedDelegate.delegatorCount || 0,
         voteParticipation: {
           onChain: fetchedPeriod?.onChainVotesPct || 0,
           offChain: fetchedPeriod?.offChainVotesPct || 0,
@@ -387,13 +403,11 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         workstreams: fetchedDelegate.workstreams,
       };
       const getTab = asPath.split('#');
-      const tabs = ['votinghistory', 'statement'];
+      const tabs: IActiveTab[] = ['votinghistory', 'statement', 'handles'];
       if (userFound.aboutMe) tabs.push('aboutme');
-      const checkTab = tabs.includes(getTab[1]);
-      selectProfile(
-        userFound,
-        checkTab ? (getTab[1] as IActiveTab) : undefined
-      );
+      const checkTab = tabs.includes(getTab[1] as IActiveTab);
+      const shouldOpenTab = defaultTab || (getTab[1] as IActiveTab);
+      selectProfile(userFound, checkTab ? shouldOpenTab : undefined);
     } catch (error) {
       toast({
         title: `We couldn't find the contributor page`,
@@ -417,7 +431,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     setLoading(true);
     setFetchingMore(true);
     try {
-      const axiosClient = await axiosInstance.get(`/dao/delegates`, {
+      const axiosClient = await api.get(`/dao/delegates`, {
         params: {
           interests: interestFilter.length
             ? interestFilter.join(',')
@@ -453,7 +467,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           ensName: item.ensName,
           forumActivity: fetchedPeriod?.forumActivityScore || 0,
           delegateSince: item.joinDateAt || item.firstTokenDelegatedAt,
-          delegators: item.delegatorCount,
+          delegators: item.delegatorCount || 0,
           voteParticipation: {
             onChain: fetchedPeriod?.onChainVotesPct || 0,
             offChain: fetchedPeriod?.offChainVotesPct || 0,
@@ -506,7 +520,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   // Fetch vote infos
   const getVoteInfos = async () => {
     try {
-      const axiosClient = await axiosInstance.get(`/dao/delegates`, {
+      const axiosClient = await api.get(`/dao/delegates`, {
         params: {
           name: config.DAO_KARMA_ID,
           pageSize: 10,
@@ -625,6 +639,11 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     setOrder('desc');
     setPeriod(defaultTimePeriod);
     setUserToFind('');
+  };
+
+  const onCloseProfile = () => {
+    closeModalProfile();
+    setProfileSelected(undefined);
   };
 
   const providerValue = useMemo(

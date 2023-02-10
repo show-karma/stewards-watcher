@@ -100,6 +100,7 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
             twitter: profileSelected.twitterHandle,
             aboutMe: profileSelected.aboutMe,
             realName: profileSelected.realName,
+            forumHandle: profileSelected.discourseHandle,
           }}
           selectedTab={selectedTab}
         />

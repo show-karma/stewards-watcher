@@ -18,10 +18,10 @@ export const WorkstreamFilter = () => {
       <MenuButton
         as={Button}
         rightIcon={<IoChevronDownOutline />}
-        bgColor={theme.filters.bg}
         borderWidth="1px"
-        borderColor={theme.filters.border}
         borderStyle="solid"
+        bgColor={theme.filters.bg}
+        borderColor={theme.filters.border}
         boxShadow={theme.filters.shadow}
         color={theme.filters.title}
         borderRadius="sm"

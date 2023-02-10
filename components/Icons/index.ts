@@ -1,4 +1,5 @@
 export * from './Check';
+export * from './DiscordIcon';
 export * from './DownChevron';
 export * from './EmptyCircle';
 export * from './ForumIcon';
