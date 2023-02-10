@@ -82,7 +82,7 @@ export const Statement: FC = () => {
 
   return (
     <Flex flexDir="column" gap="1">
-      {(statement.value.length > 0 || isEditing) && (
+      {isEditing && (
         <Flex
           flexDir="column"
           gap="1.5"
