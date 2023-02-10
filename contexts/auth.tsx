@@ -12,6 +12,7 @@ import { IExpirationStatus, ISession } from 'types';
 import Cookies from 'universal-cookie';
 import { checkExpirationStatus } from 'utils';
 import { useAccount, useDisconnect, useSignMessage } from 'wagmi';
+import { useDAO } from './dao';
 import { useDelegates } from './delegates';
 import { useWallet } from './wallet';
 
@@ -44,6 +45,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const { disconnect: disconnectWallet } = useDisconnect();
   const { searchProfileModal } = useDelegates();
+  const { daoData } = useDAO();
 
   const cookies = new Cookies();
 
@@ -77,6 +79,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
     try {
       const response = await api.post(`/auth/login`, {
         publicAddress,
+        daoName: daoData?.name,
       });
       const { nonceMessage } = response.data.data;
       return nonceMessage;
@@ -148,7 +151,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
     if (isConnected && isAuthenticating && !isAuthenticated) {
       authenticate();
     }
-  }, [isConnected]);
+  }, [isConnected, daoData]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
