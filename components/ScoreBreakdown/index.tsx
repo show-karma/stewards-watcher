@@ -109,21 +109,6 @@ export const ScoreBreakdown: React.FC = () => {
             <Td>VALUE</Td>
             <Td display="flex" gap={2} alignItems="center">
               WEIGHT
-              <Tooltip
-                placement="top"
-                label={tooltipText}
-                hasArrow
-                bgColor="white"
-                color="rgba(0,0,0,0.7)"
-                fontWeight="normal"
-                fontSize="sm"
-                borderRadius={10}
-                padding={3}
-              >
-                <Text as="span">
-                  <BsFillInfoCircleFill cursor="help" />
-                </Text>
-              </Tooltip>
             </Td>
           </Tr>
           <InputTree address={address} />
