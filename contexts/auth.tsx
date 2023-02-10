@@ -18,7 +18,7 @@ import { useWallet } from './wallet';
 
 interface IAuthProps {
   isAuthenticated: boolean;
-  authenticate: (daoName?: string) => Promise<boolean>;
+  authenticate: () => Promise<boolean>;
   authToken: string | null;
   disconnect: () => void;
 }
@@ -75,11 +75,11 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
     return true;
   };
 
-  const getNonce = async (publicAddress: string, daoName?: string) => {
+  const getNonce = async (publicAddress: string) => {
     try {
       const response = await api.post(`/auth/login`, {
         publicAddress,
-        daoName,
+        daoName: daoData?.name,
       });
       const { nonceMessage } = response.data.data;
       return nonceMessage;
@@ -125,14 +125,14 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
-  const authenticate = async (daoName?: string) => {
+  const authenticate = async () => {
     if (!isConnected || !address) {
       setIsAuthenticating(true);
       openConnectModal?.();
       return false;
     }
     try {
-      const nonceMessage = await getNonce(address, daoName);
+      const nonceMessage = await getNonce(address);
       const signedMessage = await signMessage(nonceMessage);
       if (!signedMessage) return false;
       const token = await getAccountToken(address, signedMessage);
@@ -149,9 +149,9 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
 
   useEffect(() => {
     if (isConnected && isAuthenticating && !isAuthenticated) {
-      authenticate(daoData?.name);
+      authenticate();
     }
-  }, [isConnected]);
+  }, [isConnected, daoData]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {

@@ -24,7 +24,7 @@ interface IDelegateLogin {
 
 export const DelegateLoginModal: FC<IDelegateLogin> = ({ isOpen, onClose }) => {
   const { authenticate } = useAuth();
-  const { daoData, daoInfo, theme } = useDAO();
+  const { daoInfo, theme } = useDAO();
   const { isConnected } = useWallet();
   const { isAuthenticated } = useAuth();
   const { config } = daoInfo;
@@ -155,7 +155,7 @@ export const DelegateLoginModal: FC<IDelegateLogin> = ({ isOpen, onClose }) => {
             </Text>
             <Button
               onClick={() => {
-                authenticate(daoData?.name);
+                authenticate();
               }}
               color={theme.loginModal.button.text}
               background={theme.loginModal.button.bg}

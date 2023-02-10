@@ -232,7 +232,7 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
       return;
     }
 
-    const tryToAuth = await authenticate(daoData?.name);
+    const tryToAuth = await authenticate();
 
     if (tryToAuth) {
       setIsEditing(true);
