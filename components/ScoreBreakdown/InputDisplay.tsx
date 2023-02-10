@@ -21,7 +21,7 @@ export const InputDisplay: React.FC<{
           step="0.1"
           sx={{
             appearance: isSelected && 'initial !important',
-            border: 'none',
+            border: 'rgba(255,255,255,0.05) 1px solid',
           }}
           cursor={isSelected ? 'text' : 'pointer'}
           onFocus={() => {
