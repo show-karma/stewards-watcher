@@ -183,7 +183,9 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
     setIsEditing(true);
     setEditSaving(true);
     try {
-      const hasStatement = profileSelected?.delegatePitch;
+      const hasStatement =
+        profileSelected?.delegatePitch ||
+        profileSelected?.delegatePitch?.customFields?.length;
       const authorizedAPI = axios.create({
         timeout: 30000,
         headers: {
