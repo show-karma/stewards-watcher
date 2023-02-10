@@ -1,4 +1,4 @@
-export * from './axiosInstance';
+export * from './checkExpirationStatus';
 export * from './commonAddresses';
 export * from './convertHexToRGBA';
 export * from './formatDate';
@@ -7,5 +7,7 @@ export * from './getIdBySnapshotId';
 export * from './getTimeFromNow';
 export * from './getUserForumUrl';
 export * from './GraphQL';
+export * from './onChainDyDxVotesProvider';
+export * from './removeHtmlTagWithRegex';
 export * from './removeLinkPrefix';
 export * from './truncateAddress';

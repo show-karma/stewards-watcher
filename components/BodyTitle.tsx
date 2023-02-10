@@ -12,6 +12,7 @@ import { FC, useState } from 'react';
 import { IDAOTheme } from 'types';
 import { IoClose } from 'react-icons/io5';
 import { TbExternalLink } from 'react-icons/tb';
+import { getTimeFromNow } from 'utils';
 import { Filters } from './Filters';
 import { ClearButton } from './Filters/ClearButton';
 import { SortBy } from './Filters/SortBy';
@@ -22,20 +23,45 @@ const DelegatesCounter: FC<{
   theme: IDAOTheme;
   delegateCount?: number;
 }> = ({ isLoading, isSearchDirty, theme, delegateCount = 0 }) => {
+  const { delegates, lastUpdate } = useDelegates();
   if (isLoading) return <Skeleton w="40" h="6" />;
-  if (!isSearchDirty) return <Flex />;
+
   return (
     <Flex align="center" w="full" justifyContent="flex-start">
-      <Text
-        fontSize="md"
-        color={theme.text}
-        w="max-content"
-        align="center"
-        textAlign="start"
-      >
-        {delegateCount} delegate{delegateCount > 1 && 's'} found
-      </Text>
-      <ClearButton />
+      <Flex flexDir="column">
+        <Text
+          fontSize="lg"
+          color={theme.text}
+          w="max-content"
+          align="center"
+          textAlign="start"
+        >
+          {delegateCount} delegate{delegateCount > 1 && 's'}
+        </Text>
+        {delegates.length > 0 && (
+          <Flex
+            flexDir="row"
+            gap="1"
+            justifyContent="end"
+            color={{
+              base: theme.hat.text.lastUpdated,
+              md: theme.hat.text.secondary,
+            }}
+            fontSize={{ base: 'sm', lg: 'xs' }}
+            w="max-content"
+          >
+            <Text>Last updated</Text>
+            {isLoading ? (
+              <Skeleton w="16" h="5">
+                00 hours ago
+              </Skeleton>
+            ) : (
+              <Text>{getTimeFromNow(lastUpdate)}</Text>
+            )}
+          </Flex>
+        )}
+      </Flex>
+      {isSearchDirty && <ClearButton />}
     </Flex>
   );
 };
@@ -223,7 +249,7 @@ export const BodyTitle: FC = () => {
         w="full"
         gap="6"
         justify="space-between"
-        px={{ base: '0', md: '6' }}
+        px="0"
         py="6"
       >
         <DelegatesCounter

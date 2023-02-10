@@ -67,6 +67,15 @@ const dark: IDAOTheme = {
     workstream: { bg: '#FFFFFF', text: '#222429' },
     socialMedia: '#FFFFFF',
   },
+  loginModal: {
+    background: '#222429',
+    text: '#FFFFFF',
+    footer: { bg: '#403E4F', text: '#FFFFFF' },
+    button: {
+      bg: '#137cbd',
+      text: '#FFFFFF',
+    },
+  },
   modal: {
     background: '#222429',
     header: {
@@ -206,6 +215,15 @@ const light: IDAOTheme = {
     interests: { bg: '#EBEDEF', text: '#2C2E32' },
     workstream: { bg: '#595A5E', text: '#FFFFFF' },
     socialMedia: '#595A5E',
+  },
+  loginModal: {
+    background: '#FFFFFF',
+    text: '#212328',
+    footer: { bg: '#EBEDEF', text: '#212328' },
+    button: {
+      bg: '#137cbd',
+      text: '#FFFFFF',
+    },
   },
   modal: {
     background: '#222429',

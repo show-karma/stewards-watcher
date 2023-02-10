@@ -6,14 +6,24 @@ import {
   Icon,
   Img,
   Link,
+  Spinner,
   Text,
+  Tooltip,
 } from '@chakra-ui/react';
-import { ImgWithFallback, DelegateButton } from 'components';
-import { useDAO } from 'contexts';
-import { FC, ReactNode } from 'react';
-import { BsTwitter } from 'react-icons/bs';
+import {
+  ImgWithFallback,
+  DelegateButton,
+  ForumIcon,
+  TwitterIcon,
+  DiscordIcon,
+} from 'components';
+import { useDAO, useEditStatement, useHandles, useWallet } from 'contexts';
+import { useAuth } from 'contexts/auth';
+import { useToasty } from 'hooks';
+import { FC, ReactNode, useMemo, useState } from 'react';
 import { IActiveTab, IProfile } from 'types';
-import { truncateAddress } from 'utils';
+import { convertHexToRGBA, getUserForumUrl, truncateAddress } from 'utils';
+import { useAccount } from 'wagmi';
 
 interface INavButton extends ButtonProps {
   children: ReactNode;
@@ -52,14 +62,188 @@ const NavButton: FC<INavButton> = ({ children, isActive, ...props }) => {
   );
 };
 
-interface IUserSection {
+type IMedias = 'twitter' | 'forum' | 'discord';
+interface IMediaIcon {
   profile: IProfile;
+  media: IMedias;
+  changeTab: (selectedTab: IActiveTab) => void;
+  isSamePerson: boolean;
+  children: ReactNode;
 }
 
-const UserSection: FC<IUserSection> = ({ profile }) => {
-  const { address: fullAddress, ensName, twitter, realName } = profile;
-  const address = truncateAddress(fullAddress);
-  const { theme } = useDAO();
+interface IMediasObj {
+  [key: string]: {
+    url: string;
+    value?: string;
+    disabledCondition?: boolean;
+  };
+}
+
+const MediaIcon: FC<IMediaIcon> = ({
+  media,
+  profile,
+  changeTab,
+  children,
+  isSamePerson,
+}) => {
+  const { theme, daoData, daoInfo } = useDAO();
+
+  const { isConnected } = useWallet();
+  const { config } = daoInfo;
+  const { twitterOnOpen, forumOnOpen } = useHandles();
+
+  const medias: IMediasObj = {
+    twitter: {
+      url: `https://twitter.com/${profile.twitter}`,
+      value: profile.twitter,
+    },
+    forum: {
+      url:
+        profile?.forumHandle &&
+        daoData?.socialLinks.forum &&
+        config.DAO_FORUM_TYPE
+          ? getUserForumUrl(
+              profile?.forumHandle,
+              config.DAO_FORUM_TYPE,
+              config.DAO_FORUM_URL || daoData?.socialLinks.forum
+            )
+          : '',
+      value: profile.forumHandle,
+      disabledCondition: !daoData?.forumTopicURL,
+    },
+    discord: {
+      url: `https://discord.com/users/${profile.discordHandle}`,
+      value: profile.discordHandle,
+    },
+  };
+  const chosenMedia = medias[media];
+
+  if (chosenMedia.value)
+    return (
+      <Link
+        href={chosenMedia.url}
+        isExternal
+        color={theme.card.socialMedia}
+        opacity="1"
+        _hover={{
+          transform: 'scale(1.5)',
+        }}
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        boxSize="6"
+        px="0"
+        py="0"
+        minW="max-content"
+      >
+        {children}
+      </Link>
+    );
+
+  const handleClick = () => {
+    if (!isSamePerson) return;
+    changeTab('handles');
+    const onOpens: { [key: string]: () => void } = {
+      twitter: twitterOnOpen,
+      forum: forumOnOpen,
+    };
+    if (onOpens[media]) onOpens[media]();
+  };
+
+  return (
+    <Tooltip
+      label={
+        isConnected
+          ? `Update your ${media} handle now`
+          : `Login to update your ${media} handle`
+      }
+      placement="top"
+      hasArrow
+    >
+      <Button
+        onClick={() => handleClick()}
+        px="0"
+        py="0"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        bgColor="transparent"
+        _active={{}}
+        _focus={{}}
+        _focusWithin={{}}
+        _focusVisible={{}}
+        color={theme.modal.header.title}
+        opacity="0.25"
+        _hover={{}}
+        h="6"
+        w="max-content"
+        minW="max-content"
+        cursor={isSamePerson ? 'pointer' : 'default'}
+        isDisabled={chosenMedia?.disabledCondition}
+      >
+        {children}
+      </Button>
+    </Tooltip>
+  );
+};
+
+interface IUserSection {
+  profile: IProfile;
+  changeTab: (selectedTab: IActiveTab) => void;
+}
+
+const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
+  const { address: fullAddress, ensName, realName } = profile;
+  const truncatedAddress = truncateAddress(fullAddress);
+  const { isConnected, openConnectModal } = useWallet();
+  const { theme, daoInfo, daoData } = useDAO();
+  const { config } = daoInfo;
+  const { isEditing, setIsEditing, saveEdit, isEditSaving } =
+    useEditStatement();
+  const { address } = useAccount();
+  const { authenticate, isAuthenticated } = useAuth();
+  const { toast } = useToasty();
+  const [isConnecting, setConnecting] = useState(false);
+
+  const isSamePerson =
+    isConnected && address?.toLowerCase() === fullAddress?.toLowerCase();
+
+  const handleAuth = async () => {
+    if (!isConnected) {
+      openConnectModal?.();
+      setConnecting(true);
+      return;
+    }
+    changeTab('statement');
+    setConnecting(false);
+    if (address?.toLowerCase() !== fullAddress?.toLowerCase()) {
+      toast({
+        description: 'You can only edit your own profile.',
+        status: 'error',
+      });
+      return;
+    }
+    if (
+      address?.toLowerCase() === fullAddress?.toLowerCase() &&
+      isConnected &&
+      isAuthenticated
+    ) {
+      setIsEditing(true);
+      return;
+    }
+
+    const tryToAuth = await authenticate();
+
+    if (tryToAuth) {
+      setIsEditing(true);
+    }
+  };
+
+  useMemo(() => {
+    if (isConnecting && isConnected) {
+      handleAuth();
+    }
+  }, [isConnected]);
 
   return (
     <Flex
@@ -87,7 +271,7 @@ const UserSection: FC<IUserSection> = ({ profile }) => {
               flexDir="row"
               gap="2"
               align="center"
-              width={{ base: '200px', sm: '300px', md: '600px', lg: '440px' }}
+              width={{ base: '200px', sm: '300px', md: '600px', lg: '340px' }}
             >
               <Text
                 fontFamily="body"
@@ -98,33 +282,93 @@ const UserSection: FC<IUserSection> = ({ profile }) => {
                 overflow="hidden"
                 textOverflow="ellipsis"
               >
-                {realName || ensName || address}
+                {realName || ensName || truncatedAddress}
               </Text>
-              {twitter && (
-                <Link href={`https://twitter.com/${twitter}`} isExternal>
-                  <Icon
-                    as={BsTwitter}
-                    color={theme.modal.header.twitter}
-                    w="1.375rem"
-                    h="1.03rem"
-                    _hover={{
-                      color: 'blue.400',
-                      transition: 'all 0.2s ease-in-out',
-                    }}
-                  />
-                </Link>
-              )}
+              <Flex flexDir="row" gap="4" ml="4">
+                <MediaIcon
+                  profile={profile}
+                  media="twitter"
+                  changeTab={changeTab}
+                  isSamePerson={isSamePerson}
+                >
+                  <TwitterIcon boxSize="6" color={theme.modal.header.title} />
+                </MediaIcon>
+                {daoData?.forumTopicURL && (
+                  <MediaIcon
+                    profile={profile}
+                    media="forum"
+                    changeTab={changeTab}
+                    isSamePerson={isSamePerson}
+                  >
+                    <ForumIcon boxSize="6" color={theme.modal.header.title} />
+                  </MediaIcon>
+                )}
+                {/* <MediaIcon
+                  profile={profile}
+                  media="discord"
+                  changeTab={changeTab}
+                >
+                  <DiscordIcon boxSize="6" />
+                </MediaIcon> */}
+              </Flex>
             </Flex>
             <Text
               fontWeight="medium"
               fontSize={{ base: 'sm', lg: 'md' }}
               color={theme.modal.header.subtitle}
             >
-              {address}
+              {truncatedAddress}
             </Text>
           </Flex>
-          <Flex display={{ base: 'none', lg: 'flex' }} w="max-content">
-            <DelegateButton delegated={fullAddress} text="Select as Delegate" />
+          <Flex
+            display={{ base: 'none', lg: 'flex' }}
+            w="max-content"
+            align="center"
+          >
+            {!isEditing &&
+              profile.address.toLowerCase() === address?.toLowerCase() && (
+                <Button
+                  fontWeight="normal"
+                  bgColor="transparent"
+                  color={theme.modal.header.title}
+                  _hover={{}}
+                  _active={{}}
+                  _focus={{}}
+                  _focusVisible={{}}
+                  _focusWithin={{}}
+                  onClick={() => handleAuth()}
+                >
+                  Edit profile
+                </Button>
+              )}
+
+            {isEditing ? (
+              <Button
+                bgColor={theme.branding}
+                px={['4', '6']}
+                py={['3', '6']}
+                h="10"
+                fontSize={['md']}
+                fontWeight="medium"
+                onClick={saveEdit}
+                _hover={{
+                  backgroundColor: convertHexToRGBA(theme.branding, 0.8),
+                }}
+                _focus={{}}
+                _active={{}}
+                color={theme.buttonText}
+              >
+                <Flex gap="2" align="center">
+                  {isEditSaving && <Spinner />}
+                  Save profile
+                </Flex>
+              </Button>
+            ) : (
+              <DelegateButton
+                delegated={fullAddress}
+                text="Select as Delegate"
+              />
+            )}
           </Flex>
         </Flex>
       </Flex>
@@ -148,8 +392,20 @@ interface IHeader {
 
 export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
   const { theme } = useDAO();
+  const { address: fullAddress } = profile;
+  const { isConnected } = useWallet();
+  const { address } = useAccount();
+
+  const isSamePerson =
+    isConnected && address?.toLowerCase() === fullAddress?.toLowerCase();
 
   const isActiveTab = (section: IActiveTab) => activeTab === section;
+
+  useMemo(() => {
+    if (activeTab === 'handles' && !isSamePerson) {
+      changeTab('statement');
+    }
+  }, [isSamePerson, activeTab]);
 
   return (
     <Flex
@@ -170,7 +426,7 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
           h="180"
         />
 
-        <UserSection profile={profile} />
+        <UserSection profile={profile} changeTab={changeTab} />
       </Flex>
       <Flex
         px={{ base: '1.25rem', lg: '2.5rem' }}
@@ -198,6 +454,14 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
           >
             Voting History
           </NavButton>
+          {isSamePerson && (
+            <NavButton
+              isActive={isActiveTab('handles')}
+              onClick={() => changeTab('handles')}
+            >
+              Handles
+            </NavButton>
+          )}
         </Flex>
         <Divider bgColor={theme.modal.header.divider} w="full" />
       </Flex>
