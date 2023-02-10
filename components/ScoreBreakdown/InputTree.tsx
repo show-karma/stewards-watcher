@@ -1,6 +1,5 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { Flex, Input, Table, Td, Th, Thead, Tr } from '@chakra-ui/react';
 import { IBreakdownProps, useScoreBreakdown } from 'contexts/scoreBreakdown';
 import { ScoreBreakdownCalc } from 'karma-score';
 import { InputDisplay } from './InputDisplay';
@@ -47,7 +46,7 @@ export const InputTree: React.FC<Props> = ({
     <>
       {child.map((item, idx) => (
         <>
-          {!!item.weight && (
+          {typeof item.weight !== 'undefined' && (
             <InputDisplay item={item} index={idx} onChange={onChange} />
           )}
           {item.children ? (
@@ -65,7 +64,7 @@ export const InputTree: React.FC<Props> = ({
     <>
       {breakdown.map((item, idx) => (
         <>
-          {!!item.weight && (
+          {typeof item.weight !== 'undefined' && (
             <InputDisplay item={item} index={idx} onChange={onChange} />
           )}
           {item.children ? (

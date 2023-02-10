@@ -653,7 +653,13 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           </Flex>
         </Flex>
       </Flex>
-      <StyledModal isOpen={isOpen} title="Score Breakdown" onClose={onClose}>
+      <StyledModal
+        isOpen={isOpen}
+        title="Score Breakdown"
+        description="desc"
+        headerLogo
+        onClose={onClose}
+      >
         {data?.address ? (
           <ScoreBreakdownProvider
             address={data.address}
