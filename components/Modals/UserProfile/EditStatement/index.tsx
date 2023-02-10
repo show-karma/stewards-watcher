@@ -1,0 +1,77 @@
+import { Flex, Text } from '@chakra-ui/react';
+import { useDAO, useEditStatement } from 'contexts';
+import { FC } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
+const modules = {
+  toolbar: [['bold', 'italic', 'underline', 'strike'], ['link'], ['clean']],
+};
+
+export const EditStatement: FC = () => {
+  const { theme } = useDAO();
+  const { newStatement, editStatementText } = useEditStatement();
+  const newStatementValue = newStatement.value as string;
+
+  const editorStyle = {
+    '.quill': { minHeight: '200px' },
+    '.ql-toolbar': {
+      bg: theme.modal.background,
+      color: theme.modal.statement.text,
+      border: `1px solid ${theme.modal.statement.sidebar.item.border}`,
+      borderTopRadius: '8px',
+      fontFamily: 'Poppins, sans-serif',
+    },
+    '.ql-snow.ql-toolbar button:hover .ql-stroke ': {
+      stroke: theme.modal.statement.sidebar.item.border,
+    },
+    '.ql-snow.ql-toolbar button.ql-active .ql-stroke': {
+      stroke: theme.modal.statement.sidebar.item.border,
+    },
+    '.ql-snow.ql-toolbar button.ql-active': {
+      color: theme.modal.statement.sidebar.item.border,
+      stroke: theme.modal.statement.sidebar.item.border,
+    },
+    '.ql-formats': {
+      button: {
+        '.ql-stroke': {
+          color: theme.modal.statement.sidebar.section,
+          stroke: theme.modal.statement.sidebar.section,
+        },
+        '.ql-fill': {
+          color: theme.modal.statement.sidebar.section,
+          stroke: theme.modal.statement.sidebar.section,
+          fill: theme.modal.statement.sidebar.section,
+        },
+      },
+    },
+    '.ql-picker-label': {
+      color: theme.modal.statement.text,
+    },
+    '.ql-editor': {
+      color: theme.modal.statement.sidebar.section,
+      fontSize: 'sm',
+    },
+    '.ql-container': {},
+
+    '.ql-active': {
+      color: `${theme.modal.statement.text}`,
+      '.ql-stroke': {
+        stroke: `${theme.modal.statement.text}`,
+      },
+    },
+  };
+
+  return (
+    <Flex maxW="30rem" gap="4" flexDir="column" flex="1" sx={editorStyle}>
+      <ReactQuill
+        theme="snow"
+        value={newStatementValue}
+        onChange={editStatementText}
+        modules={modules}
+      />
+    </Flex>
+  );
+};
+
+export default EditStatement;

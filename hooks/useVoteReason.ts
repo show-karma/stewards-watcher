@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useDAO } from 'contexts';
-import { KARMA_API } from 'helpers';
-import { axiosInstance } from 'utils';
+import { api, KARMA_API } from 'helpers';
 
 interface IUseVoteReason {
   address: string;
@@ -21,7 +20,7 @@ export const useVoteReason = (args: IUseVoteReason) => {
   const { data, error, isLoading } = useQuery({
     queryKey: ['voteReason', address, daoInfo.config.DAO_KARMA_ID],
     queryFn: () =>
-      axiosInstance.get(
+      api.get(
         `${KARMA_API.base_url}/forum-user/${daoInfo.config.DAO_KARMA_ID}/vote-reason/${address}`
       ),
   });

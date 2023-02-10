@@ -8,78 +8,53 @@ import {
   useBreakpointValue,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { useDAO, useDelegates } from 'contexts';
+import { useDAO } from 'contexts';
 import { FC } from 'react';
-import { getTimeFromNow } from 'utils';
 
 export const Madeby: FC<FlexProps> = props => {
   const { theme } = useDAO();
-  const { delegates, isLoading, lastUpdate } = useDelegates();
   const variantImg = useBreakpointValue({
     base: useColorModeValue(
       '/images/karma_logo_black.svg',
-      '/images/karma_logo_white.svg'
+      '/images/karma_logo_white.png'
     ),
     md: useColorModeValue(
       theme.headerBg === '#FFFFFF'
         ? '/images/karma_logo_black.svg'
-        : '/images/karma_logo_white.svg',
-      '/images/karma_logo_white.svg'
+        : '/images/karma_logo_white.png',
+      '/images/karma_logo_white.png'
     ),
   });
   return (
     <Flex
-      flexDir={{ base: 'column', sm: 'row', lg: 'column' }}
       align={{ base: 'center', lg: 'flex-start' }}
       justify={{ base: 'center', lg: 'flex-start' }}
       gap="2"
-      py={{ base: '2', lg: '0' }}
+      py="0"
       {...props}
     >
       <Flex
-        gap={{ base: '2', lg: '0' }}
-        flexDir={{ base: 'row', lg: 'column' }}
-        align={{ base: 'center', lg: 'flex-start' }}
+        gap={{ base: '2' }}
+        flexDir={{ base: 'row' }}
+        align={{ base: 'center' }}
       >
         <Text
           fontSize={['sm', 'md']}
           fontWeight="normal"
           color={theme.hat.text.madeBy}
         >
-          Built by
+          Powered by
         </Text>
 
         <Link href="https://karmahq.xyz" isExternal>
           <Img
-            w={{ base: '96px', lg: '140px' }}
+            w={{ base: '96px', lg: '80px' }}
             h={{ base: '24px', lg: '35px' }}
             objectFit="contain"
             src={variantImg}
           />
         </Link>
       </Flex>
-      {delegates.length > 0 && (
-        <Flex
-          flexDir="row"
-          gap="1"
-          justifyContent="end"
-          color={{
-            base: theme.hat.text.lastUpdated,
-            md: theme.hat.text.secondary,
-          }}
-          fontSize={{ base: 'sm', lg: 'xs' }}
-          w="max-content"
-        >
-          <Text>Last updated</Text>
-          {isLoading ? (
-            <Skeleton w="16" h="5">
-              00 hours ago
-            </Skeleton>
-          ) : (
-            <Text>{getTimeFromNow(lastUpdate)}</Text>
-          )}
-        </Flex>
-      )}
     </Flex>
   );
 };

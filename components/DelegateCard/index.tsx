@@ -102,6 +102,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   const [stats, setStats] = useState<ICardStat[]>(allStats);
 
   const customFields: ICustomFields[] = data?.delegatePitch?.customFields || [];
+
   const emptyField: ICustomFields = { label: '', value: [] };
 
   const score: ICardStat = {
@@ -153,7 +154,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           ? `${formatNumberPercentage(data?.votingWeight)}`
           : '-',
         id: 'votingWeight',
-        tooltipText: `Based on ${data?.delegators} delegators`,
+        tooltipText: `Based on ${data?.delegators || 0} delegators`,
       });
 
     const order = [
@@ -209,8 +210,10 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
 
   const findStatement = customFields.find(
     item =>
-      item.displayAs === 'headline' || item.label.toLowerCase() === 'statement'
+      item?.displayAs === 'headline' ||
+      item?.label?.toLowerCase() === 'statement'
   )?.value;
+
   const userStatement = Array.isArray(findStatement)
     ? findStatement[0]
     : findStatement;

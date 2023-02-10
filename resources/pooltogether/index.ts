@@ -68,6 +68,15 @@ const dark: IDAOTheme = {
     workstream: { bg: '#FFFFFF', text: '#222429' },
     socialMedia: '#FFFFFF',
   },
+  loginModal: {
+    background: '#222429',
+    text: '#FFFFFF',
+    footer: { bg: 'rgba(102, 102, 102, 0.15)', text: '#FFFFFF' },
+    button: {
+      bg: '#C80925',
+      text: '#FFFFFF',
+    },
+  },
   modal: {
     background: '#222429',
     header: {
@@ -167,6 +176,7 @@ const dark: IDAOTheme = {
 };
 
 const light: IDAOTheme = {
+  logo: '/daos/pooltogether/logo_black.svg',
   background: '#F2F4F9',
   bodyBg: '#F2F4F9',
   title: '#222429',
@@ -207,6 +217,15 @@ const light: IDAOTheme = {
     interests: { bg: '#EBEDEF', text: '#2C2E32' },
     workstream: { bg: '#595A5E', text: '#FFFFFF' },
     socialMedia: '#595A5E',
+  },
+  loginModal: {
+    background: '#FFFFFF',
+    text: '#222429',
+    footer: { bg: 'rgba(102, 102, 102, 0.15)', text: '#212328' },
+    button: {
+      bg: '#C80925',
+      text: '#FFFFFF',
+    },
   },
   modal: {
     background: '#222429',

@@ -1,4 +1,5 @@
 export interface IDAOTheme {
+  logo?: string;
   background: string;
   bodyBg: string;
   bodyShadow?: string;
@@ -144,6 +145,18 @@ export interface IDAOTheme {
           border: string;
         };
       };
+    };
+  };
+  loginModal: {
+    background: string;
+    text: string;
+    footer: {
+      bg: string;
+      text: string;
+    };
+    button: {
+      bg: string;
+      text: string;
     };
   };
 }

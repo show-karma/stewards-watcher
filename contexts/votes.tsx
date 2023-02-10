@@ -1,8 +1,6 @@
-import { useOffChainVotes, useOnChainVotes, usePicasso } from 'hooks';
+import { useOffChainVotes, useOnChainVotes } from 'hooks';
 import React, { useContext, createContext, useMemo, useState } from 'react';
-import { supportedDAOs } from 'resources';
-import { IChainRow, IDAOData, IDAOInfo, IDAOTheme, IProfile } from 'types';
-import { axiosInstance } from 'utils';
+import { IChainRow, IProfile } from 'types';
 import debounce from 'lodash.debounce';
 import moment from 'moment';
 import { useDelegates } from './delegates';

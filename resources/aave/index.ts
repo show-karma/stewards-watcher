@@ -164,9 +164,19 @@ const dark: IDAOTheme = {
       },
     },
   },
+  loginModal: {
+    background: '#292E41',
+    text: '#FFFFFF',
+    footer: { bg: '#FFFFFF', text: '#292E41' },
+    button: {
+      bg: '#6C1E6D',
+      text: '#FFFFFF',
+    },
+  },
 };
 
 const light: IDAOTheme = {
+  logo: '/daos/aave/logo_black.svg',
   background: '#F2F4F9',
   bodyBg: '#F2F4F9',
   title: '#292E41',
@@ -302,6 +312,15 @@ const light: IDAOTheme = {
           unSelectedText: '#ADB8C0',
         },
       },
+    },
+  },
+  loginModal: {
+    text: '#212328',
+    background: '#FFFFFF',
+    footer: { bg: '#EBEDEF', text: '#292E41' },
+    button: {
+      bg: '#6C1E6D',
+      text: '#FFFFFF',
     },
   },
 };

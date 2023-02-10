@@ -1,4 +1,5 @@
 export * from './useDelegation';
+export * from './useIsMounted';
 export * from './useMixpanel';
 export * from './useOffChainVotes';
 export * from './useOnChainVotes';
