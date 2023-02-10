@@ -7,13 +7,7 @@ import {
 import { MainLayout } from 'layouts';
 import Head from 'next/head';
 import React from 'react';
-import {
-  RainbowWrapper,
-  DelegatesList,
-  HeaderHat,
-  BodyTitle,
-  FAQPage,
-} from 'components';
+import { RainbowWrapper, HeaderHat, FAQPage } from 'components';
 import { Flex } from '@chakra-ui/react';
 import Script from 'next/script';
 import { AuthProvider } from 'contexts/auth';

@@ -1,9 +1,8 @@
 import { DAOProvider } from 'contexts/dao';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
-import { DAOContainer, FAQContainer } from 'containers';
+import { FAQContainer } from 'containers';
 import fs from 'fs';
-import matter from 'gray-matter';
 
 const supportedDAOs: Record<string, string> = {
   aave: 'aave',
@@ -62,8 +61,6 @@ export const getStaticProps: GetStaticProps<FAQProps, PathProps> = async ({
       notFound: true,
     };
   }
-  //   const parsedContent = matter(file);
-  //   const { data } = parsedContent;
 
   return {
     props: { dao: site, markdown: file },
