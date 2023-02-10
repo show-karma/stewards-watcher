@@ -232,7 +232,6 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
       return;
     }
 
-    console.log(daoData?.name);
     const tryToAuth = await authenticate(daoData?.name);
 
     if (tryToAuth) {

@@ -76,7 +76,6 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
   };
 
   const getNonce = async (publicAddress: string, daoName?: string) => {
-    console.log({ publicAddress, daoName });
     try {
       const response = await api.post(`/auth/login`, {
         publicAddress,
@@ -127,7 +126,6 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
   const authenticate = async (daoName?: string) => {
-    console.log('inside: ', daoName);
     if (!isConnected || !address) {
       setIsAuthenticating(true);
       openConnectModal?.();
