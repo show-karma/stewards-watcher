@@ -131,9 +131,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     icon: IoPersonOutline,
     value: getScore(),
     id: 'karmaScore',
-    tooltipText: data?.gitcoinHealthScore
-      ? 'Total gitcoin health score'
-      : 'Total Score based on all the delegate activity',
   };
 
   const getInterests = () => {
