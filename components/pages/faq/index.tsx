@@ -6,9 +6,22 @@ interface IFAQPage {
   markdown: string;
 }
 
-export const FAQPage: FC<IFAQPage> = ({ markdown }) => {
-  //   const { markdownPath } = props;
-  console.log(markdown);
-
-  return <ReactMarkdown>{markdown}</ReactMarkdown>;
-};
+export const FAQPage: FC<IFAQPage> = ({ markdown }) => (
+  <Flex
+    flexDir="column"
+    align="left"
+    w="full"
+    py="8"
+    sx={{
+      'ol, ul': {
+        marginLeft: '32px',
+      },
+      // eslint-disable-next-line id-length
+      a: {
+        color: 'blue.400',
+      },
+    }}
+  >
+    <ReactMarkdown>{markdown}</ReactMarkdown>
+  </Flex>
+);
