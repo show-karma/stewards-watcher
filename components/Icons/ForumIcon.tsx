@@ -1,7 +1,7 @@
 /* eslint-disable id-length */
 import { Icon, IconProps } from '@chakra-ui/react';
-import { FaDiscourse } from 'react-icons/fa';
+import { SiDiscourse } from 'react-icons/si';
 
 export const ForumIcon = (props: IconProps) => (
-  <Icon as={FaDiscourse} {...props} />
+  <Icon as={SiDiscourse} {...props} />
 );
