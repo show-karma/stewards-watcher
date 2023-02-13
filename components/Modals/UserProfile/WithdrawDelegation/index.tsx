@@ -11,6 +11,7 @@ export const WithdrawDelegation: FC = () => {
         fontSize="2xl"
         fontWeight="semibold"
         color={theme.modal.header.title}
+        mt="6"
       >
         No longer active?
       </Text>
