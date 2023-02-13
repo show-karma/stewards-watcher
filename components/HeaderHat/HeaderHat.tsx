@@ -1,10 +1,12 @@
 import {
   Button,
+  ButtonProps,
   Center,
   Divider,
   Flex,
   Icon,
   Img,
+  Link,
   Text,
   useColorModeValue,
   useDisclosure,
@@ -19,13 +21,12 @@ import { HeaderBurgerMenu } from './HeaderBurgerMenu';
 import { Madeby } from './Madeby';
 import { ThemeButton } from './ThemeButton';
 
-const DelegateToAnyoneButton: FC<{ onToggle: () => void }> = ({ onToggle }) => {
+const StyledButton: FC<ButtonProps> = ({ children, ...rest }) => {
   const { theme } = useDAO();
   return (
     <Button
       color={useColorModeValue(theme.branding, 'white')}
       bgColor="transparent"
-      onClick={onToggle}
       px="6"
       py="6"
       fontWeight="semibold"
@@ -33,8 +34,9 @@ const DelegateToAnyoneButton: FC<{ onToggle: () => void }> = ({ onToggle }) => {
       _focus={{}}
       _hover={{}}
       minH="52px"
+      {...rest}
     >
-      Delegate to Anyone
+      {children}
     </Button>
   );
 };
@@ -106,7 +108,7 @@ export const HeaderHat = () => {
               w={{ base: 'max-content', lg: 'full' }}
             >
               <Flex
-                display={{ base: 'flex', md: 'none' }}
+                display={{ base: 'flex', lg: 'none' }}
                 w="max-content"
                 align="center"
                 justify="center"
@@ -128,11 +130,16 @@ export const HeaderHat = () => {
                 justify="center"
                 alignItems="center"
                 height="100%"
-                display={{ base: 'none', md: 'flex' }}
+                display={{ base: 'none', lg: 'flex' }}
                 gap="4"
               >
                 <ThemeButton />
-                <DelegateToAnyoneButton onToggle={onToggle} />
+                <Link href="/faq" _hover={{}}>
+                  <StyledButton>FAQ</StyledButton>
+                </Link>
+                <StyledButton onClick={onToggle}>
+                  Delegate to Anyone
+                </StyledButton>
                 <DelegateLoginButton onOpen={onOpenDelegateLogin} />
               </Flex>
             </Flex>
@@ -141,7 +148,10 @@ export const HeaderHat = () => {
         <HeaderBurgerMenu isOpen={isBurgerMenuOpen} onClose={closeBurgerMenu}>
           <Flex flexDir="column" gap="4">
             <ThemeButton />
-            <DelegateToAnyoneButton onToggle={onToggle} />
+            <Link href="/faq" _hover={{}}>
+              <StyledButton w="full">FAQ</StyledButton>
+            </Link>
+            <StyledButton onClick={onToggle}>Delegate to Anyone</StyledButton>
             <DelegateLoginButton onOpen={onOpenDelegateLogin} />
           </Flex>
         </HeaderBurgerMenu>

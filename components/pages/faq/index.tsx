@@ -8,20 +8,32 @@ interface IFAQPage {
 
 export const FAQPage: FC<IFAQPage> = ({ markdown }) => (
   <Flex
-    flexDir="column"
-    align="left"
-    w="full"
+    alignItems="center"
+    w={{ base: 'full' }}
     py="8"
-    sx={{
-      'ol, ul': {
-        marginLeft: '32px',
-      },
-      // eslint-disable-next-line id-length
-      a: {
-        color: 'blue.400',
-      },
-    }}
+    px={{ base: '4', lg: '20' }}
+    flexDir="column"
   >
-    <ReactMarkdown>{markdown}</ReactMarkdown>
+    <Flex
+      w={{ base: 'full', '2xl': '1360px' }}
+      flexDir="column"
+      sx={{
+        lineBreak: 'anywhere',
+        'ol, ul': {
+          marginLeft: '32px',
+        },
+        // eslint-disable-next-line id-length
+        a: {
+          color: 'blue.400',
+        },
+        code: {
+          whiteSpace: 'pre-wrap',
+          lineBreak: 'anywhere',
+        },
+      }}
+      align="left"
+    >
+      <ReactMarkdown>{markdown}</ReactMarkdown>
+    </Flex>
   </Flex>
 );

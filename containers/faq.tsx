@@ -99,7 +99,7 @@ export const FAQContainer: React.FC<IFAQContainer> = ({ markdown }) => {
                 bgColor={theme.background}
               >
                 <HeaderHat />
-                <MainLayout px="0" w="full" maxW="1360px">
+                <MainLayout px="0" w="full">
                   <FAQPage markdown={markdown} />
                 </MainLayout>
               </Flex>
