@@ -23,6 +23,7 @@ export interface IDelegateFromAPI {
   realName?: string;
   profilePicture?: string;
   voteWeight?: number;
+  status?: string;
   scoreBreakdown: {
     name: string;
     pct: number;

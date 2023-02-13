@@ -21,6 +21,7 @@ import { AboutMe } from './AboutMe';
 import { VotingHistory } from './VotingHistory';
 import { Header } from './Header';
 import { Handles } from './Handles';
+import { WithdrawDelegation } from './WithdrawDelegation';
 
 interface ITab {
   activeTab: IActiveTab;
@@ -40,6 +41,9 @@ const Tab: FC<ITab> = ({ activeTab, profile, isSamePerson }) => {
   }
   if (activeTab === 'handles') {
     return <Handles />;
+  }
+  if (activeTab === 'withdraw') {
+    return <WithdrawDelegation />;
   }
   return <Statement />;
 };
