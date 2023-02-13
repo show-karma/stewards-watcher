@@ -30,6 +30,7 @@ const config: IDAOConfig = {
   DAO_GTAG: 'G-67LDHT697P',
   EXCLUDED_CARD_FIELDS: ['healthScore'],
   DAO_DEFAULT_SETTINGS: {
+    FAQ: true,
     STATUS_FILTER: {
       SHOW: true,
       DEFAULT_STATUSES: ['active', 'recognized'],

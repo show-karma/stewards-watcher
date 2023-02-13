@@ -134,9 +134,11 @@ export const HeaderHat = () => {
                 gap="4"
               >
                 <ThemeButton />
-                <Link href="/faq" _hover={{}}>
-                  <StyledButton>FAQ</StyledButton>
-                </Link>
+                {daoInfo.config.DAO_DEFAULT_SETTINGS?.FAQ && (
+                  <Link href="/faq" _hover={{}}>
+                    <StyledButton>FAQ</StyledButton>
+                  </Link>
+                )}
                 <StyledButton onClick={onToggle}>
                   Delegate to Anyone
                 </StyledButton>
@@ -148,9 +150,11 @@ export const HeaderHat = () => {
         <HeaderBurgerMenu isOpen={isBurgerMenuOpen} onClose={closeBurgerMenu}>
           <Flex flexDir="column" gap="4">
             <ThemeButton />
-            <Link href="/faq" _hover={{}}>
-              <StyledButton w="full">FAQ</StyledButton>
-            </Link>
+            {daoInfo.config.DAO_DEFAULT_SETTINGS?.FAQ && (
+              <Link href="/faq" _hover={{}}>
+                <StyledButton>FAQ</StyledButton>
+              </Link>
+            )}
             <StyledButton onClick={onToggle}>Delegate to Anyone</StyledButton>
             <DelegateLoginButton onOpen={onOpenDelegateLogin} />
           </Flex>
