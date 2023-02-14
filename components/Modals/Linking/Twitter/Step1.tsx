@@ -157,12 +157,12 @@ export const Step1: React.FC<IModal> = ({
         textTransform="none"
         disabled={!username}
         isDisabled={!username}
+        _hover={{
+          opacity: 0.9,
+        }}
         _disabled={{
           opacity: 0.25,
           cursor: 'not-allowed',
-        }}
-        _hover={{
-          opacity: 0.9,
         }}
         _active={{}}
         _focus={{}}

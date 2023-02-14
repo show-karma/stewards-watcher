@@ -402,7 +402,10 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
   const isActiveTab = (section: IActiveTab) => activeTab === section;
 
   useMemo(() => {
-    if (activeTab === 'handles' && !isSamePerson) {
+    if (
+      (activeTab === 'handles' || activeTab === 'withdraw') &&
+      !isSamePerson
+    ) {
       changeTab('statement');
     }
   }, [isSamePerson, activeTab]);
@@ -433,11 +436,12 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
         flexDir="column"
         gap="1.5rem"
       >
-        <Flex w="full">
+        <Flex w="full" flexWrap="wrap" justifyContent="space-evenly">
           {profile.aboutMe && (
             <NavButton
               isActive={isActiveTab('aboutme')}
               onClick={() => changeTab('aboutme')}
+              w="max-content"
             >
               About me
             </NavButton>
@@ -445,22 +449,34 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
           <NavButton
             isActive={isActiveTab('statement')}
             onClick={() => changeTab('statement')}
+            w="max-content"
           >
             Statement
           </NavButton>
           <NavButton
             isActive={isActiveTab('votinghistory')}
             onClick={() => changeTab('votinghistory')}
+            w="max-content"
           >
             Voting History
           </NavButton>
           {isSamePerson && (
-            <NavButton
-              isActive={isActiveTab('handles')}
-              onClick={() => changeTab('handles')}
-            >
-              Handles
-            </NavButton>
+            <>
+              <NavButton
+                isActive={isActiveTab('withdraw')}
+                onClick={() => changeTab('withdraw')}
+                w="max-content"
+              >
+                Withdraw
+              </NavButton>
+              <NavButton
+                isActive={isActiveTab('handles')}
+                onClick={() => changeTab('handles')}
+                w="max-content"
+              >
+                Handles
+              </NavButton>
+            </>
           )}
         </Flex>
         <Divider bgColor={theme.modal.header.divider} w="full" />
