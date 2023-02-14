@@ -319,6 +319,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           realName: item.realName,
           profilePicture: item.profilePicture,
           workstreams: item.workstreams,
+          status: item.status,
         };
       });
       setDelegates(delegatesList);
@@ -396,14 +397,15 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         twitterHandle: fetchedDelegate.twitterHandle,
         discourseHandle: fetchedDelegate.discourseHandle,
         updatedAt: fetchedPeriod?.updatedAt,
-        status: fetchedDelegate.status,
         karmaScore: fetchedPeriod?.karmaScore || 0,
         delegatePitch: fetchedDelegate.delegatePitch,
         aboutMe: fetchedDelegate.aboutMe,
         realName: fetchedDelegate.realName,
         profilePicture: fetchedDelegate.profilePicture,
         workstreams: fetchedDelegate.workstreams,
+        status: fetchedDelegate.status,
       };
+
       const getTab = asPath.split('#');
       const tabs: IActiveTab[] = [
         'votinghistory',

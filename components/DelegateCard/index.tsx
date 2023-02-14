@@ -12,6 +12,7 @@ import {
   useClipboard,
   useDisclosure,
   Icon,
+  Tooltip,
 } from '@chakra-ui/react';
 import { FC, useState, useMemo, useCallback } from 'react';
 import { BsChat } from 'react-icons/bs';
@@ -632,9 +633,28 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                 </Flex>
                 <Flex flexDir="row">
                   <UserInfoButton onOpen={selectProfile} profile={data} />
-                  {canDelegate && (
-                    <DelegateButton delegated={data.address} px={['4', '8']} />
-                  )}
+                  {canDelegate &&
+                    (data?.status === 'withdrawn' ? (
+                      <Tooltip
+                        label="This delegate has indicated that they are no longer accepting delegations."
+                        bg={theme.card.statBg}
+                        color={theme.card.text}
+                      >
+                        <Flex>
+                          <DelegateButton
+                            delegated={data.address}
+                            px={['4', '8']}
+                            disabled
+                            isDisabled
+                          />
+                        </Flex>
+                      </Tooltip>
+                    ) : (
+                      <DelegateButton
+                        delegated={data.address}
+                        px={['4', '8']}
+                      />
+                    ))}
                 </Flex>
               </Flex>
             ) : (

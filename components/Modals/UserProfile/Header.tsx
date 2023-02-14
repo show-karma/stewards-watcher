@@ -17,7 +17,13 @@ import {
   TwitterIcon,
   DiscordIcon,
 } from 'components';
-import { useDAO, useEditStatement, useHandles, useWallet } from 'contexts';
+import {
+  useDAO,
+  useDelegates,
+  useEditStatement,
+  useHandles,
+  useWallet,
+} from 'contexts';
 import { useAuth } from 'contexts/auth';
 import { useToasty } from 'hooks';
 import { FC, ReactNode, useMemo, useState } from 'react';
@@ -187,6 +193,31 @@ const MediaIcon: FC<IMediaIcon> = ({
   );
 };
 
+const DelegateCases: FC<{ status?: string; fullAddress: string }> = ({
+  status,
+  fullAddress,
+}) => {
+  const { theme } = useDAO();
+  if (status === 'withdrawn')
+    return (
+      <Tooltip
+        label="This delegate has indicated that they are no longer accepting delegations."
+        bg={theme.card.statBg}
+        color={theme.card.text}
+      >
+        <Flex>
+          <DelegateButton
+            delegated={fullAddress}
+            text="Select as Delegate"
+            isDisabled
+            disabled
+          />
+        </Flex>
+      </Tooltip>
+    );
+  return <DelegateButton delegated={fullAddress} text="Select as Delegate" />;
+};
+
 interface IUserSection {
   profile: IProfile;
   changeTab: (selectedTab: IActiveTab) => void;
@@ -194,10 +225,12 @@ interface IUserSection {
 
 const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
   const { address: fullAddress, ensName, realName } = profile;
+
   const truncatedAddress = truncateAddress(fullAddress);
   const { isConnected, openConnectModal } = useWallet();
   const { theme, daoInfo, daoData } = useDAO();
   const { config } = daoInfo;
+  const { profileSelected } = useDelegates();
   const { isEditing, setIsEditing, saveEdit, isEditSaving } =
     useEditStatement();
   const { address } = useAccount();
@@ -364,9 +397,9 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
                 </Flex>
               </Button>
             ) : (
-              <DelegateButton
-                delegated={fullAddress}
-                text="Select as Delegate"
+              <DelegateCases
+                fullAddress={fullAddress}
+                status={profileSelected?.status}
               />
             )}
           </Flex>
@@ -378,7 +411,10 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
         align="center"
         justify="center"
       >
-        <DelegateButton delegated={fullAddress} text="Select as Delegate" />
+        <DelegateCases
+          fullAddress={fullAddress}
+          status={profileSelected?.status}
+        />
       </Flex>
     </Flex>
   );
@@ -436,7 +472,7 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
         flexDir="column"
         gap="1.5rem"
       >
-        <Flex w="full" flexWrap="wrap" justifyContent="space-evenly">
+        <Flex w="full" flexWrap="wrap" justifyContent="flex-start">
           {profile.aboutMe && (
             <NavButton
               isActive={isActiveTab('aboutme')}
