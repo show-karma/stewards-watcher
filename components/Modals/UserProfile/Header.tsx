@@ -467,7 +467,7 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
                 onClick={() => changeTab('withdraw')}
                 w="max-content"
               >
-                Withdraw Delegation
+                Withdraw
               </NavButton>
               <NavButton
                 isActive={isActiveTab('handles')}

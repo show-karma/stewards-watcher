@@ -40,7 +40,7 @@ export const WithdrawPopover: FC = () => {
         },
       });
       toast({
-        title: 'Withdrawing delegation',
+        title: 'Withdrawing nomination',
         description: 'Please wait...',
         status: 'info',
         duration: 10000,
@@ -55,8 +55,9 @@ export const WithdrawPopover: FC = () => {
         .then(() => {
           onClose();
           updateState({
-            title: 'Delegation withdrawn',
-            description: 'Your delegation has been withdrawn.',
+            title: 'Nomination withdrawn',
+            description:
+              'You have successfully withdrawn your nomination to be a delegate.',
             status: 'success',
             duration: 5000,
           });
@@ -65,8 +66,8 @@ export const WithdrawPopover: FC = () => {
         });
     } catch (error) {
       updateState({
-        title: 'Error withdrawing delegation',
-        description: 'There was an error withdrawing your delegation.',
+        title: 'Error withdrawing nomination',
+        description: 'There was an error withdrawing your nomination.',
         status: 'error',
         duration: 5000,
       });
@@ -104,14 +105,14 @@ export const WithdrawPopover: FC = () => {
           isDisabled={profileSelected?.status === 'withdrawn'}
           onClick={onToggle}
         >
-          Withdraw delegation
+          Withdraw nomination
         </Button>
       </PopoverTrigger>
       <PopoverContent
         background="#191A1C"
         border="none"
         maxW="max-content"
-        w={{ base: '300px', lg: 'full' }}
+        w={{ base: '300px', md: '500px', xl: 'full' }}
         px="5"
         mt="4"
       >
@@ -122,7 +123,7 @@ export const WithdrawPopover: FC = () => {
             fontWeight="semibold"
             fontSize={{ base: 'md', lg: 'lg' }}
           >
-            Really withdraw your delegation?
+            Really withdraw your nomination?
           </Text>
         </PopoverHeader>
         <PopoverBody px="0">
@@ -134,8 +135,8 @@ export const WithdrawPopover: FC = () => {
             wordBreak="break-word"
             color={theme.modal.header.subtitle}
           >
-            You can not undo withdrawing your delegation. Be sure this is what
-            you would like to do.
+            After withdrawing, token holders will not be able to delegate tokens
+            to you through our dashboard.
           </Text>
           <Flex gap="4" flexDir={{ base: 'column', lg: 'row' }} mb="6">
             <Button
@@ -157,7 +158,7 @@ export const WithdrawPopover: FC = () => {
               isLoading={isLoading}
               w={{ base: 'full', lg: 'max-content' }}
             >
-              Yes I am sure, withdraw delegation
+              Yes I am sure, withdraw nomination
             </Button>
             <Button
               px="6"
