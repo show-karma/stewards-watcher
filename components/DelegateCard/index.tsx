@@ -637,8 +637,8 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                     (data?.status === 'withdrawn' ? (
                       <Tooltip
                         label="This delegate has indicated that they are no longer accepting delegations."
-                        bg={theme.card.statBg}
-                        color={theme.card.text}
+                        bgColor={theme.collapse.bg || theme.card.background}
+                        color={theme.collapse.text}
                       >
                         <Flex>
                           <DelegateButton
