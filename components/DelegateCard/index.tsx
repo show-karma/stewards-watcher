@@ -12,6 +12,7 @@ import {
   useClipboard,
   useDisclosure,
   Icon,
+  Box,
 } from '@chakra-ui/react';
 import { FC, useState, useMemo, useCallback } from 'react';
 import { BsChat } from 'react-icons/bs';
@@ -53,14 +54,16 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   const { daoInfo, theme, daoData } = useDAO();
   const { selectProfile, period } = useDelegates();
   const { onCopy } = useClipboard(data?.address || '');
+  const [scoreType, setScoreType] =
+    useState<IBreakdownProps['type']>('karmaScore');
 
-  const scoreType = useMemo(
-    (): IBreakdownProps['type'] =>
-      daoInfo.config.DAO_KARMA_ID === 'gitcoin'
-        ? 'gitcoinHealthScore'
-        : 'karmaScore',
-    [data]
-  );
+  const karmaScoreType = useMemo((): IBreakdownProps['type'] => {
+    if (scoreType === 'forumScore') return scoreType;
+
+    return daoInfo.config.DAO_KARMA_ID === 'gitcoin'
+      ? 'gitcoinHealthScore'
+      : 'karmaScore';
+  }, [data, scoreType]);
 
   const { onOpen, onClose, isOpen } = useDisclosure();
 
@@ -465,6 +468,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                     right="0"
                     top="0"
                     onClick={() => {
+                      setScoreType('karmaScore');
                       openScoreBreakdown();
                     }}
                   >
@@ -540,19 +544,18 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                             data?.discourseHandle &&
                             daoData?.socialLinks.forum &&
                             config.DAO_FORUM_TYPE ? (
-                              <Link
-                                href={getUserForumUrl(
-                                  data.discourseHandle,
-                                  config.DAO_FORUM_TYPE,
-                                  config.DAO_FORUM_URL ||
-                                    daoData.socialLinks.forum
-                                )}
-                                isExternal
+                              <Box
+                                role="button"
+                                background="transparent"
+                                onClick={() => {
+                                  setScoreType('forumScore');
+                                  openScoreBreakdown();
+                                }}
                                 _hover={{}}
                                 h="max-content"
                               >
                                 <DelegateStat stat={statItem} />
-                              </Link>
+                              </Box>
                             ) : (
                               <DelegateStat stat={statItem} />
                             )}
@@ -675,7 +678,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           <ScoreBreakdownProvider
             address={data.address}
             period={period}
-            type={scoreType}
+            type={karmaScoreType}
           >
             <ScoreBreakdown />
           </ScoreBreakdownProvider>
