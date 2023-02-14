@@ -20,6 +20,7 @@ export interface IDelegate {
   aboutMe?: string;
   realName?: string;
   profilePicture?: string;
+  status?: string;
   delegatePitch?: {
     threadId: number;
     customFields: ICustomFields[];

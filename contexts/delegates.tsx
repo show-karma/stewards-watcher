@@ -250,6 +250,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           karmaScore: fetchedPeriod?.karmaScore || 0,
           aboutMe: item.aboutMe,
           realName: item.realName,
+          status: item.status,
           profilePicture: item.profilePicture,
           workstreams: item.workstreams,
         };
@@ -395,6 +396,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         twitterHandle: fetchedDelegate.twitterHandle,
         discourseHandle: fetchedDelegate.discourseHandle,
         updatedAt: fetchedPeriod?.updatedAt,
+        status: fetchedDelegate.status,
         karmaScore: fetchedPeriod?.karmaScore || 0,
         delegatePitch: fetchedDelegate.delegatePitch,
         aboutMe: fetchedDelegate.aboutMe,
@@ -403,7 +405,12 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         workstreams: fetchedDelegate.workstreams,
       };
       const getTab = asPath.split('#');
-      const tabs: IActiveTab[] = ['votinghistory', 'statement', 'handles'];
+      const tabs: IActiveTab[] = [
+        'votinghistory',
+        'statement',
+        'handles',
+        'withdraw',
+      ];
       if (userFound.aboutMe) tabs.push('aboutme');
       const checkTab = tabs.includes(getTab[1] as IActiveTab);
       const shouldOpenTab = defaultTab || (getTab[1] as IActiveTab);
