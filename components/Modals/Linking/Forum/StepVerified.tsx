@@ -3,6 +3,7 @@ import React from 'react';
 import Img from 'next/image';
 import { ImgWithFallback } from 'components';
 import { IoClose } from 'react-icons/io5';
+import { useDelegates } from 'contexts';
 
 interface IModal {
   handleModal: () => void;
@@ -19,10 +20,11 @@ export const StepVerified: React.FC<IModal> = ({
   daoInfo,
 }) => {
   const { name: daoName, logoUrl } = daoInfo;
+  const { searchProfileModal, profileSelected } = useDelegates();
 
   const closeModal = () => {
+    if (profileSelected) searchProfileModal(profileSelected?.address);
     handleModal();
-    document.location.reload();
   };
 
   return (

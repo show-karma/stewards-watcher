@@ -18,6 +18,10 @@ const config: IDAOConfig = {
     URL: `https://apecoin.karmahq.xyz`,
   },
   DAO_CHAIN: chain.mainnet,
+  DAO_DEFAULT_SETTINGS: {
+    TIMEPERIOD: '180d',
+    ORDERSTAT: 'karmaScore',
+  },
   DAO_DELEGATE_CONTRACT: '',
   DAO_DELEGATE_MODE: 'snapshot',
   DAO_FORUM_TYPE: 'discourse',

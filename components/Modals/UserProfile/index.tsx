@@ -12,7 +12,7 @@ import {
   VotesProvider,
 } from 'contexts';
 import { useRouter } from 'next/router';
-import { FC, useMemo, useState } from 'react';
+import { FC, useMemo, useRef, useState } from 'react';
 import { IActiveTab, IProfile } from 'types';
 import { useMixpanel } from 'hooks';
 import { useAccount } from 'wagmi';
@@ -21,6 +21,7 @@ import { AboutMe } from './AboutMe';
 import { VotingHistory } from './VotingHistory';
 import { Header } from './Header';
 import { Handles } from './Handles';
+import { WithdrawDelegation } from './WithdrawDelegation';
 
 interface ITab {
   activeTab: IActiveTab;
@@ -40,6 +41,9 @@ const Tab: FC<ITab> = ({ activeTab, profile, isSamePerson }) => {
   }
   if (activeTab === 'handles') {
     return <Handles />;
+  }
+  if (activeTab === 'withdraw') {
+    return <WithdrawDelegation />;
   }
   return <Statement />;
 };
@@ -109,7 +113,7 @@ export const UserProfile: FC<IUserProfileProps> = props => {
 
   return (
     <EditStatementProvider>
-      <Modal isOpen={isOpen} onClose={onCloseModal}>
+      <Modal isOpen={isOpen} onClose={onCloseModal} trapFocus={false}>
         <ModalOverlay
           background="linear-gradient(359.86deg, rgba(20, 21, 24, 0.85) 41.37%, rgba(33, 35, 40, 0) 101.24%)"
           backdropFilter="blur(4px)"

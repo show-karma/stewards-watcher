@@ -45,7 +45,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const { disconnect: disconnectWallet } = useDisconnect();
   const { searchProfileModal } = useDelegates();
-  const { daoData } = useDAO();
+  const { daoData, daoInfo } = useDAO();
 
   const cookies = new Cookies();
 
@@ -79,7 +79,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
     try {
       const response = await api.post(`/auth/login`, {
         publicAddress,
-        daoName: daoData?.name,
+        daoName: daoData?.name || daoInfo.config.DAO_KARMA_ID,
       });
       const { nonceMessage } = response.data.data;
       return nonceMessage;

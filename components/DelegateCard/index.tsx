@@ -10,7 +10,9 @@ import {
   SkeletonText,
   Text,
   useClipboard,
+  useDisclosure,
   Icon,
+  Tooltip,
 } from '@chakra-ui/react';
 import { FC, useState, useMemo, useCallback } from 'react';
 import { BsChat } from 'react-icons/bs';
@@ -29,6 +31,12 @@ import {
 } from 'utils';
 import { useRouter } from 'next/router';
 import { useToasty } from 'hooks';
+import { ScoreBreakdown } from 'components/ScoreBreakdown';
+import { StyledModal } from 'components/Modals/DelegateVotes/StyledModal';
+import {
+  IBreakdownProps,
+  ScoreBreakdownProvider,
+} from 'contexts/scoreBreakdown';
 import { ImgWithFallback } from '../ImgWithFallback';
 import { DelegateButton } from '../DelegateButton';
 import { UserInfoButton } from '../UserInfoButton';
@@ -44,8 +52,18 @@ interface IDelegateCardProps {
 export const DelegateCard: FC<IDelegateCardProps> = props => {
   const { data } = props;
   const { daoInfo, theme, daoData } = useDAO();
-  const { selectProfile } = useDelegates();
+  const { selectProfile, period } = useDelegates();
   const { onCopy } = useClipboard(data?.address || '');
+
+  const scoreType = useMemo(
+    (): IBreakdownProps['type'] =>
+      daoInfo.config.DAO_KARMA_ID === 'gitcoin'
+        ? 'gitcoinHealthScore'
+        : 'karmaScore',
+    [data]
+  );
+
+  const { onOpen, onClose, isOpen } = useDisclosure();
 
   const { config } = daoInfo;
   const isLoaded = !!data;
@@ -55,6 +73,10 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     if (data?.karmaScore && daoInfo.config.DAO_KARMA_ID !== 'gitcoin')
       return formatNumber(data?.karmaScore);
     return '-';
+  };
+
+  const openScoreBreakdown = () => {
+    onOpen();
   };
 
   const allStats: ICardStat[] = [
@@ -110,9 +132,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     icon: IoPersonOutline,
     value: getScore(),
     id: 'karmaScore',
-    tooltipText: data?.gitcoinHealthScore
-      ? 'Total gitcoin health score'
-      : 'Total Score based on all the delegate activity',
   };
 
   const getInterests = () => {
@@ -441,7 +460,15 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
             !config.SHOULD_NOT_SHOW?.includes('stats') && (
               <>
                 {isLoaded ? (
-                  <Flex position="absolute" right="0" top="0">
+                  <Flex
+                    position="absolute"
+                    cursor="pointer"
+                    right="0"
+                    top="0"
+                    onClick={() => {
+                      openScoreBreakdown();
+                    }}
+                  >
                     <DelegateStat stat={score} />
                   </Flex>
                 ) : (
@@ -606,9 +633,28 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                 </Flex>
                 <Flex flexDir="row">
                   <UserInfoButton onOpen={selectProfile} profile={data} />
-                  {canDelegate && (
-                    <DelegateButton delegated={data.address} px={['4', '8']} />
-                  )}
+                  {canDelegate &&
+                    (data?.status === 'withdrawn' ? (
+                      <Tooltip
+                        label="This delegate has indicated that they are no longer accepting delegations."
+                        bgColor={theme.collapse.bg || theme.card.background}
+                        color={theme.collapse.text}
+                      >
+                        <Flex>
+                          <DelegateButton
+                            delegated={data.address}
+                            px={['4', '8']}
+                            disabled
+                            isDisabled
+                          />
+                        </Flex>
+                      </Tooltip>
+                    ) : (
+                      <DelegateButton
+                        delegated={data.address}
+                        px={['4', '8']}
+                      />
+                    ))}
                 </Flex>
               </Flex>
             ) : (
@@ -627,6 +673,34 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           </Flex>
         </Flex>
       </Flex>
+      <StyledModal
+        isOpen={isOpen}
+        title="Score Breakdown"
+        description={
+          <>
+            <Text>
+              Below is a breakdown of the user’s activities and actions in the
+              DAO.
+            </Text>
+            <Text>
+              The total score is calculated through a formula and represents
+              their total contributions to the DAO.
+            </Text>
+          </>
+        }
+        headerLogo
+        onClose={onClose}
+      >
+        {data?.address ? (
+          <ScoreBreakdownProvider
+            address={data.address}
+            period={period}
+            type={scoreType}
+          >
+            <ScoreBreakdown />
+          </ScoreBreakdownProvider>
+        ) : null}
+      </StyledModal>
     </Flex>
   );
 };
