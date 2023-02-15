@@ -1,12 +1,12 @@
-import { Flex } from '@chakra-ui/react';
+import { Flex, FlexProps } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
-import React from 'react';
+import React, { ReactNode } from 'react';
 
-interface IMainLayout {
-  children: React.ReactNode;
+interface IMainLayout extends FlexProps {
+  children: ReactNode;
 }
 
-export const MainLayout: React.FC<IMainLayout> = ({ children }) => {
+export const MainLayout: React.FC<IMainLayout> = ({ children, ...rest }) => {
   const { theme } = useDAO();
 
   return (
@@ -18,6 +18,7 @@ export const MainLayout: React.FC<IMainLayout> = ({ children }) => {
       align="center"
       px={{ base: 0, lg: '20' }}
       zIndex="1"
+      {...rest}
     >
       {children}
     </Flex>

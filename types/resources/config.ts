@@ -28,6 +28,7 @@ export interface IDAOConfig {
   DAO_FORUM_URL?: string;
   DAO_GTAG?: string;
   DAO_DEFAULT_SETTINGS?: {
+    FAQ?: boolean;
     TIMEPERIOD?: IFilterPeriod;
     ORDERSTAT?: IStats;
     STATUS_FILTER?: {
