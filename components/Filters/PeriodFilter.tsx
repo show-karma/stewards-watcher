@@ -13,6 +13,7 @@ const periodOptions: IPeriodOptions[] = [
   { title: 'Lifetime', period: 'lifetime' },
   { title: '30 days', period: '30d' },
   { title: '180 days', period: '180d' },
+  { title: 'Custom', period: 'custom' },
 ];
 
 export const PeriodFilter = () => {
@@ -22,6 +23,7 @@ export const PeriodFilter = () => {
   const selectedPeriod = periodOptions.find(
     option => option.period === period
   )?.title;
+
   return (
     <Menu isLazy id="period-filter">
       <MenuButton

@@ -3,10 +3,11 @@ import { useDAO, useDelegates } from 'contexts';
 import { DelegateStatusFilter } from './DelegateStatusFilter';
 import { InterestsFilter } from './InterestsFilter';
 import { PeriodFilter } from './PeriodFilter';
+import { RangePickerFilter } from './RangePickerFilter';
 import { WorkstreamFilter } from './WorkstreamFilter';
 
 export const OrderByFilters = () => {
-  const { interests, workstreams } = useDelegates();
+  const { interests, workstreams, period } = useDelegates();
   const { theme, daoInfo } = useDAO();
 
   return (
@@ -22,6 +23,7 @@ export const OrderByFilters = () => {
             <DelegateStatusFilter />
           )}
           <PeriodFilter />
+          {period === 'custom' && <RangePickerFilter />}
         </Flex>
       </Flex>
     </Flex>

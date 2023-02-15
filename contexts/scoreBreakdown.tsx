@@ -11,7 +11,7 @@ import { fetchScoreBreakdown } from 'utils/fetchScoreBreakdown';
 
 export interface IBreakdownProps {
   address: string;
-  period?: 'lifetime' | '180d' | '30d';
+  period?: 'lifetime' | '180d' | '30d' | 'custom';
   type?: 'gitcoinHealthScore' | 'forumScore' | 'karmaScore';
 }
 
@@ -50,7 +50,7 @@ export const ScoreBreakdownProvider: React.FC<
         address,
         config.DAO_KARMA_ID,
         type,
-        period
+        period === 'custom' ? 'lifetime' : period
       );
       setBreakdown(result.breakdown);
     } catch {

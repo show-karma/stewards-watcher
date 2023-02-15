@@ -67,6 +67,7 @@ interface IDelegateProps {
   workstreamsFilter: string[];
   statusesOptions: IStatusOptions[];
   selectWorkstream: (index: number) => void;
+  filterByCustomDate: (date: Date[]) => void;
 }
 
 export const DelegatesContext = createContext({} as IDelegateProps);
@@ -200,7 +201,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           offset: _offset,
           order,
           field: stat,
-          period,
+          period: period === 'custom' ? undefined : period,
           pageSize: 10,
           workstreamId: getWorkstreams(),
           statuses: statuses.length
@@ -266,6 +267,99 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     }
   };
 
+  const getIdByCustomDate = async (dates: Date[]) => {
+    try {
+      const startDate = dates[0].toISOString();
+      const endDate = dates[1].toISOString();
+
+      const callCustomDateId = await api.post(`/dao/stats`, {
+        daoName: config.DAO_KARMA_ID,
+        startDate,
+        endDate,
+      });
+
+      const { data: callIdData } = callCustomDateId.data;
+      const { id } = callIdData;
+      return id;
+    } catch {
+      return undefined;
+    }
+  };
+
+  const filterByCustomDate = async (dates: Date[]) => {
+    setLoading(true);
+    setDelegates([]);
+
+    const customDateId = await getIdByCustomDate(dates);
+
+    let retries = 0;
+
+    const checkCallStatus = async (retry = 10) => {
+      try {
+        const callStatusData = await api.get(`/dao/stats/${customDateId}`);
+        const { status, stat: fetchedData } = callStatusData.data.data;
+
+        if (status !== 'done') {
+          throw new Error('Call not done');
+        } else {
+          const { delegates: foundDelegates, count } = fetchedData;
+
+          if (!foundDelegates.length) {
+            throw new Error('Not found');
+          }
+          const delegatesList = foundDelegates.map((item: IDelegateFromAPI) => {
+            const fetchedPeriod = item.stats.find(
+              fetchedStat => fetchedStat.period === 'lifetime'
+            );
+
+            return {
+              address: item.publicAddress,
+              ensName: item.ensName,
+              forumActivity: fetchedPeriod?.forumActivityScore || 0,
+              delegateSince: item.joinDateAt || item.firstTokenDelegatedAt,
+              delegators: item.delegatorCount || 0,
+              voteParticipation: {
+                onChain: fetchedPeriod?.onChainVotesPct || 0,
+                offChain: fetchedPeriod?.offChainVotesPct || 0,
+              },
+              delegatePitch: item.delegatePitch,
+              gitcoinHealthScore: fetchedPeriod?.gitcoinHealthScore || 0,
+              votingWeight: item.voteWeight,
+              delegatedVotes:
+                item.delegatedVotes || item.snapshotDelegatedVotes,
+              twitterHandle: item.twitterHandle,
+              discourseHandle: item.discourseHandle,
+              updatedAt: fetchedPeriod?.updatedAt,
+              karmaScore: fetchedPeriod?.karmaScore || 0,
+              aboutMe: item.aboutMe,
+              realName: item.realName,
+              status: item.status,
+              profilePicture: item.profilePicture,
+              workstreams: item.workstreams,
+            };
+          });
+          setDelegates(delegatesList);
+          setDelegateCount(count || 0);
+          setLoading(false);
+        }
+      } catch (error: any) {
+        if (error.message.includes('Call not done') || retries < retry) {
+          setTimeout(async () => {
+            retries += 1;
+            await checkCallStatus();
+          }, 1000);
+          return;
+        }
+
+        setDelegateCount(0);
+        setLoading(false);
+        setDelegates([]);
+      }
+    };
+
+    await checkCallStatus();
+  };
+
   useEffect(() => {
     setHasMore(delegates.length < delegateCount);
   }, [delegates.length, delegateCount]);
@@ -280,7 +374,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           user: userToFind,
           pageSize: 10,
           offset,
-          period,
+          period: period === 'custom' ? undefined : period,
           order,
           dao: config.DAO_KARMA_ID,
         },
@@ -449,7 +543,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           offset: newOffset,
           order,
           field: stat,
-          period,
+          period: period === 'custom' ? undefined : period,
           pageSize: 10,
           workstreamId: getWorkstreams(),
           statuses: statuses.length
@@ -505,6 +599,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   };
 
   useMemo(() => {
+    if (period === 'custom') return;
     setOffset(0);
     if (userToFind) {
       findDelegate();
@@ -694,6 +789,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       selectWorkstream,
       workstreamsFilter,
       statusesOptions,
+      filterByCustomDate,
     }),
     [
       profileSelected,
@@ -718,6 +814,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       workstreams,
       workstreamsFilter,
       statusesOptions,
+      filterByCustomDate,
     ]
   );
 
