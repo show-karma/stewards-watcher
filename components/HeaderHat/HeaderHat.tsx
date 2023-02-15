@@ -92,13 +92,15 @@ export const HeaderHat = () => {
               flex={['1', 'none']}
               align={['flex-start', 'flex-start']}
             >
-              <Img
-                w="auto"
-                maxW="36"
-                h="10"
-                objectFit="contain"
-                src={config.DAO_LOGO}
-              />
+              <Link href="/">
+                <Img
+                  w="auto"
+                  maxW="36"
+                  h="10"
+                  objectFit="contain"
+                  src={config.DAO_LOGO}
+                />
+              </Link>
               <Madeby />
             </Flex>
             <Flex
