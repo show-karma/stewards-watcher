@@ -12,11 +12,7 @@ import { Flex } from '@chakra-ui/react';
 import Script from 'next/script';
 import { AuthProvider } from 'contexts/auth';
 
-interface IFAQContainer {
-  markdown: string;
-}
-
-export const FAQContainer: React.FC<IFAQContainer> = ({ markdown }) => {
+export const FAQContainer: React.FC = () => {
   const { daoInfo, theme } = useDAO();
   const { config } = daoInfo;
 
@@ -100,7 +96,7 @@ export const FAQContainer: React.FC<IFAQContainer> = ({ markdown }) => {
               >
                 <HeaderHat />
                 <MainLayout px="0" w="full">
-                  <FAQPage markdown={markdown} />
+                  <FAQPage />
                 </MainLayout>
               </Flex>
             </HandlesProvider>
