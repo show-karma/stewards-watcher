@@ -15,10 +15,6 @@ export const Madeby: FC<FlexProps> = props => {
   const { theme } = useDAO();
   const variantImg = useBreakpointValue({
     base: useColorModeValue(
-      '/images/karma_logo_black.svg',
-      '/images/karma_logo_white.png'
-    ),
-    md: useColorModeValue(
       theme.headerBg === '#FFFFFF'
         ? '/images/karma_logo_black.svg'
         : '/images/karma_logo_white.png',
