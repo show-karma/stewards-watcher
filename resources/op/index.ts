@@ -204,7 +204,7 @@ const light: IDAOTheme = {
     bg: 'transparent',
     listBg: '#FFFFFF',
     listText: '#666666',
-    activeBg: '#3E4247',
+    activeBg: '#EBEDEF',
   },
   card: {
     icon: '#ADB8C0',
