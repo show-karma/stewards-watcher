@@ -62,7 +62,7 @@ export const ScoreBreakdownProvider: React.FC<
 
   useEffect(() => {
     fetchBreakdown();
-  }, [address]);
+  }, [address, type, period]);
 
   const values = useMemo(
     () => ({

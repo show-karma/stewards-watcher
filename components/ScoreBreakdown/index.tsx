@@ -10,15 +10,21 @@ import {
   Tr,
 } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
-import { useScoreBreakdown } from 'contexts/scoreBreakdown';
+import { IBreakdownProps, useScoreBreakdown } from 'contexts/scoreBreakdown';
 import { ScoreCalculator } from 'karma-score';
 import { useMemo } from 'react';
 import { BsFillInfoCircleFill } from 'react-icons/bs';
 import { InputTree } from './InputTree';
 
 export const ScoreBreakdown: React.FC = () => {
-  const { score, address, period, breakdown, loading } = useScoreBreakdown();
-  const { theme } = useDAO();
+  const { score, address, period, breakdown, loading, type } =
+    useScoreBreakdown();
+  const {
+    theme,
+    daoInfo: {
+      config: { DAO_KARMA_ID },
+    },
+  } = useDAO();
 
   const [formulaWithLabels, formula] = useMemo(
     () => [
@@ -33,8 +39,16 @@ export const ScoreBreakdown: React.FC = () => {
     [period]
   );
 
+  const [roundType, roundedResult] = useMemo((): [
+    'Round' | 'Floor',
+    number
+  ] => {
+    if (type === 'gitcoinHealthScore') return ['Floor', Math.floor(score)];
+    return ['Round', Math.round(score)];
+  }, [score, DAO_KARMA_ID]);
+
   const totalScoreLeftOffset = useMemo(() => {
-    const roundedScore = Math.floor(score).toString();
+    const roundedScore = roundedResult.toString();
     switch (roundedScore.length) {
       case 1:
         return -1.5;
@@ -93,6 +107,15 @@ export const ScoreBreakdown: React.FC = () => {
     },
   };
 
+  const formattedScoreType = useMemo(() => {
+    const scores: Record<string, string> = {
+      forumScore: 'Forum Score',
+      gitcoinHealthScore: 'Gitcoin Health Score',
+      karmaScore: 'Karma Score',
+    };
+    return scores[type ?? 'karmaScore'];
+  }, [type]);
+
   return (
     <Box>
       <Flex flex="1">
@@ -138,7 +161,7 @@ export const ScoreBreakdown: React.FC = () => {
                   w="4ch"
                   style={{ wordWrap: 'initial' }}
                 >
-                  {Math.floor(score)}
+                  {roundedResult}
                 </Text>
               </SkeletonText>
             </Td>
@@ -153,6 +176,14 @@ export const ScoreBreakdown: React.FC = () => {
           </Td>
         </Tr>
         <Tr>
+          <Td>Score Type</Td>
+          <Td>
+            <SkeletonText isLoaded={!loading}>
+              {formattedScoreType}
+            </SkeletonText>
+          </Td>
+        </Tr>
+        <Tr>
           <Td>Scoring Formula</Td>
           <Td>
             <SkeletonText isLoaded={!loading}>
@@ -164,8 +195,8 @@ export const ScoreBreakdown: React.FC = () => {
           <Td>Score:</Td>
           <Td>
             <SkeletonText isLoaded={!loading}>
-              <Text fontWeight="light">{formula}</Text>= Floor({score}) ={' '}
-              {Math.floor(score)}
+              <Text fontWeight="light">{formula}</Text>= {roundType}({score}) ={' '}
+              {roundedResult}
             </SkeletonText>
           </Td>
         </Tr>
