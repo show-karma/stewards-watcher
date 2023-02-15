@@ -8,6 +8,7 @@ interface IDAOProps {
   daoInfo: IDAOInfo;
   theme: IDAOTheme;
   daoData: IDAOData | undefined;
+  selectedDAO: string;
 }
 
 export const DAOContext = createContext({} as IDAOProps);
@@ -51,6 +52,7 @@ export const DAOProvider: React.FC<ProviderProps> = ({
       daoInfo,
       theme,
       daoData,
+      selectedDAO,
     }),
     [daoInfo, theme, daoData]
   );
