@@ -22,5 +22,5 @@ Join dYdX Discord server and type in the following command to link your Discord 
 
 **5. I have more questions, how can I contact you?**
 
-Please reach out to us at dao@karmahq.xyz or join our Discord server https://discord.com/invite/hnZm3MffqQ and ask questions.
+Please reach out to us at dao@karmahq.xyz or join our [Discord Server](https://discord.com/invite/hnZm3MffqQ) and ask questions.
 
