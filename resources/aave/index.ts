@@ -19,7 +19,7 @@ const config: IDAOConfig = {
     URL: `https://aave.karmahq.xyz`,
   },
   DAO_DEFAULT_SETTINGS: {
-    FAQ: true,
+    FAQ: false,
   },
   DAO_CHAIN: chain.mainnet,
   DAO_DELEGATE_CONTRACT: '0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9',
