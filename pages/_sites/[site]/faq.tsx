@@ -3,6 +3,8 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
 import { FAQContainer } from 'containers';
 import fs from 'fs';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const supportedDAOs: Record<string, string> = {
   aave: 'aave',
@@ -26,7 +28,6 @@ interface PathProps extends ParsedUrlQuery {
 
 interface FAQProps {
   dao: string;
-  markdown: string;
 }
 
 export const getStaticPaths: GetStaticPaths<PathProps> = async () => {
@@ -53,28 +54,18 @@ export const getStaticProps: GetStaticProps<FAQProps, PathProps> = async ({
     };
   }
 
-  const markdownPath = `resources/${site}/faq.md`;
-  const file = fs.readFileSync(markdownPath, 'utf-8');
-
-  if (!file) {
-    return {
-      notFound: true,
-    };
-  }
-
   return {
-    props: { dao: site, markdown: file },
+    props: { dao: site },
   };
 };
 
 interface IFAQ {
   dao: string;
-  markdown: string;
 }
 
-const FAQ = ({ dao, markdown }: IFAQ) => (
+const FAQ = ({ dao }: IFAQ) => (
   <DAOProvider selectedDAO={dao}>
-    <FAQContainer markdown={markdown} />
+    <FAQContainer />
   </DAOProvider>
 );
 

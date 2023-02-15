@@ -1,19 +1,30 @@
 import { Flex } from '@chakra-ui/react';
+import axios from 'axios';
+import { useDAO } from 'contexts';
 import MarkdownIt from 'markdown-it';
-import React, { FC, useEffect, useRef } from 'react';
-
-interface IFAQPage {
-  markdown: string;
-}
+import React, { FC, useEffect, useRef, useState } from 'react';
 
 const setCheckboxes = (str: string) =>
   str
     .replace(/(\[x\])/gim, '\t<input type="checkbox" checked>')
     .replace(/(\[ \])/gim, '\t<input type="checkbox">');
 
-export const FAQPage: FC<IFAQPage> = ({ markdown }) => {
+export const FAQPage: FC = () => {
+  const [markdown, setMarkdown] = useState<string>('');
+  const { selectedDAO } = useDAO();
   const ref = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
+    async function getMarkdown() {
+      const { data: md } = await axios.get(`/daos/${selectedDAO}/faq.md`);
+      setMarkdown(md);
+    }
+
+    getMarkdown();
+  }, []);
+
+  useEffect(() => {
+    if (!markdown?.length) return;
     try {
       const md = new MarkdownIt();
       customElements.define(
@@ -41,7 +52,7 @@ export const FAQPage: FC<IFAQPage> = ({ markdown }) => {
     } catch (err) {
       // dev is defining twice so this is necessary
     }
-  }, []);
+  }, [markdown]);
 
   return (
     <Flex
