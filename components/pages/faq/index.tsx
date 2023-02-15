@@ -6,11 +6,10 @@ interface IFAQPage {
   markdown: string;
 }
 
-const setCheckboxes = (str: string) => {
-  return str
+const setCheckboxes = (str: string) =>
+  str
     .replace(/(\[x\])/gim, '\t<input type="checkbox" checked>')
     .replace(/(\[ \])/gim, '\t<input type="checkbox">');
-};
 
 export const FAQPage: FC<IFAQPage> = ({ markdown }) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -21,6 +20,7 @@ export const FAQPage: FC<IFAQPage> = ({ markdown }) => {
         'faq-markdown',
         class extends HTMLElement {
           connectedCallback() {
+            // eslint-disable-next-line react/no-this-in-sfc
             const shadow = this.attachShadow({ mode: 'open' });
             shadow.innerHTML = `
             <style>
