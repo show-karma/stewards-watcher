@@ -161,7 +161,11 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     try {
       const { data } = await api.get(`/dao/interests/${config.DAO_KARMA_ID}`);
       if (Array.isArray(data?.data?.interests)) {
-        setInterests(data.data.interests);
+        const orderedInterests = data.data.interests.sort(
+          (interestA: string, interestB: string) =>
+            interestA.toLowerCase() > interestB.toLowerCase() ? 1 : -1
+        );
+        setInterests(orderedInterests);
       }
     } catch (error) {
       console.error(error);

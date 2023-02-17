@@ -37,8 +37,20 @@ export const WorkstreamFilter = () => {
       <MenuList
         bgColor={theme.filters.listBg}
         color={theme.filters.listText}
-        h={{ base: '64' }}
+        h={{ base: 'max-content' }}
+        maxH={{ base: '64' }}
         overflowY="auto"
+        sx={{
+          '&::-webkit-scrollbar': {
+            width: '8px',
+            marginX: '4px',
+            borderRadius: '8px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            borderRadius: '8px',
+            bgColor: theme.filters.activeBg,
+          },
+        }}
       >
         <MenuOptionGroup type="checkbox" value={workstreamsFilter}>
           {workstreams.map((option, index) => (
@@ -46,7 +58,7 @@ export const WorkstreamFilter = () => {
               key={+index}
               value={option.id.toString()}
               onClick={() => selectWorkstream(index)}
-              bgColor={theme.filters.bg}
+              bgColor="transparent"
               _hover={{
                 bg: theme.filters.activeBg,
               }}

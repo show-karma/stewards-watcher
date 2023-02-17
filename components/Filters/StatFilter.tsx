@@ -21,7 +21,7 @@ export const StatFilter = () => {
             boxSize="5"
           />
         }
-        bgColor={theme.card.background}
+        bgColor={theme.filters.bg}
         boxShadow={theme.filters.shadow}
         color={theme.filters.title}
         fontFamily="heading"
@@ -43,12 +43,29 @@ export const StatFilter = () => {
       >
         {selectedStat}
       </MenuButton>
-      <MenuList bgColor={theme.filters.listBg} color={theme.filters.listText}>
+      <MenuList
+        bgColor={theme.filters.listBg}
+        color={theme.filters.listText}
+        h={{ base: 'max-content' }}
+        maxH={{ base: '64' }}
+        overflowY="auto"
+        sx={{
+          '&::-webkit-scrollbar': {
+            width: '8px',
+            marginX: '4px',
+            borderRadius: '8px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            borderRadius: '8px',
+            bgColor: theme.filters.activeBg,
+          },
+        }}
+      >
         {statOptions.map((option, index) => (
           <MenuItem
             key={+index}
             onClick={() => selectStat(option.id)}
-            bgColor={theme.filters.bg}
+            bgColor="transparent"
             _hover={{
               bg: theme.filters.activeBg,
             }}
