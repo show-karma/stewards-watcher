@@ -416,36 +416,49 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                       {interests.value.length > 0 &&
                         (interests.value.slice(0, 3) as string[]).map(
                           (interest, index) => (
-                            <Text
-                              color={theme.card.interests.text}
-                              bgColor={theme.card.interests.bg}
-                              px="2"
-                              py="1"
-                              borderRadius="md"
-                              fontSize="10px"
-                              fontWeight="medium"
+                            <Tooltip
+                              label={interest}
                               key={+index}
-                              h="max-content"
-                              maxW="20"
-                              textOverflow="ellipsis"
-                              whiteSpace="nowrap"
-                              overflow="hidden"
-                              _hover={{
-                                backgroundColor: () => {
-                                  if (theme.card.statBg.includes('rgba'))
-                                    return theme.card.statBg.replace(
-                                      '0.15',
-                                      '0.30'
-                                    );
-                                  return convertHexToRGBA(
-                                    theme.card.statBg,
-                                    0.1
-                                  );
-                                },
-                              }}
+                              color={theme.card.interests.text}
+                              bgColor={theme.headerBg}
+                              hasArrow
+                              placement="top"
+                              boxShadow="2xl"
+                              border="1px solid"
+                              borderColor={theme.card.border}
+                              arrowShadowColor={theme.card.border}
                             >
-                              {interest}
-                            </Text>
+                              <Text
+                                color={theme.card.interests.text}
+                                bgColor={theme.card.interests.bg}
+                                px="2"
+                                py="1"
+                                borderRadius="md"
+                                fontSize="10px"
+                                fontWeight="medium"
+                                key={+index}
+                                h="max-content"
+                                maxW="20"
+                                textOverflow="ellipsis"
+                                whiteSpace="nowrap"
+                                overflow="hidden"
+                                _hover={{
+                                  backgroundColor: () => {
+                                    if (theme.card.statBg.includes('rgba'))
+                                      return theme.card.statBg.replace(
+                                        '0.15',
+                                        '0.30'
+                                      );
+                                    return convertHexToRGBA(
+                                      theme.card.statBg,
+                                      0.1
+                                    );
+                                  },
+                                }}
+                              >
+                                {interest}
+                              </Text>
+                            </Tooltip>
                           )
                         )}
                     </>

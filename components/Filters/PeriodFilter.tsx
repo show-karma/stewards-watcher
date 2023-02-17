@@ -62,12 +62,29 @@ export const PeriodFilter = () => {
       >
         {selectedPeriod}
       </MenuButton>
-      <MenuList bgColor={theme.filters.listBg} color={theme.filters.listText}>
+      <MenuList
+        bgColor={theme.filters.listBg}
+        color={theme.filters.listText}
+        h={{ base: 'max-content' }}
+        maxH={{ base: '64' }}
+        overflowY="auto"
+        sx={{
+          '&::-webkit-scrollbar': {
+            width: '8px',
+            marginX: '4px',
+            borderRadius: '8px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            borderRadius: '8px',
+            bgColor: theme.filters.activeBg,
+          },
+        }}
+      >
         {periodOptions.map((option, index) => (
           <MenuItem
             key={+index}
             onClick={() => selectPeriod(option.period)}
-            bgColor={theme.filters.bg}
+            bgColor="transparent"
             _hover={{
               bg: theme.filters.activeBg,
             }}
