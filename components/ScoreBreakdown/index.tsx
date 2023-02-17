@@ -99,10 +99,7 @@ export const ScoreBreakdown: React.FC = () => {
     'td:first-of-type': {
       background: 'rgba(0,0,0,0.125)',
     },
-    'tr:last-of-type': {
-      borderTop: `2px ${theme.background} solid`,
-    },
-    'tr:first-of-type,': {
+    'tr:not(:last-of-type),': {
       borderBottom: `2px ${theme.background} solid`,
     },
   };
