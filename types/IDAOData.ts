@@ -13,6 +13,7 @@ export interface IDAOData {
     tally: string;
     twitter: string;
   };
+  logoUrl?: string;
   onChainId: null;
   snapshotIds: string[];
   fullName: string;

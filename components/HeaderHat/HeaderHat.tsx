@@ -12,7 +12,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { DelegateLoginButton, DelegateLoginModal } from 'components';
-import { DelegateVotesModal } from 'components/Modals/DelegateVotes';
+import { DelegateVotesModal } from 'components/Modals/DelegateToAnyone';
 import { useDAO } from 'contexts';
 import { useAuth } from 'contexts/auth';
 import { FC } from 'react';

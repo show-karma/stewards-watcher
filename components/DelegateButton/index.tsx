@@ -1,5 +1,5 @@
 import { Button, ButtonProps, Flex, Spinner } from '@chakra-ui/react';
-import { useDAO, useWallet } from 'contexts';
+import { useDAO, useWallet, useGovernanceVotes } from 'contexts';
 import { useDelegation, useMixpanel } from 'hooks';
 import { convertHexToRGBA } from 'utils';
 import { FC, useEffect, useState } from 'react';
@@ -20,6 +20,7 @@ export const DelegateButton: FC<IDelegateButton> = ({
   const { daoInfo, theme } = useDAO();
   const { config } = daoInfo;
   const { mixpanel } = useMixpanel();
+  const { votes } = useGovernanceVotes();
 
   const [writeAfterAction, setWriteAfterAction] = useState(false);
 
@@ -29,11 +30,19 @@ export const DelegateButton: FC<IDelegateButton> = ({
   });
 
   useEffect(() => {
-    if (write && isConnected && writeAfterAction) {
+    if (
+      write &&
+      isConnected &&
+      writeAfterAction &&
+      votes !== '0' &&
+      chain?.id === config.DAO_CHAIN.id
+    ) {
       setWriteAfterAction(false);
       write();
     }
-  }, [write && isConnected && chain?.id === config.DAO_CHAIN.id]);
+  }, [
+    write && isConnected && chain?.id === config.DAO_CHAIN.id && votes !== '0',
+  ]);
 
   const handleCase = () => {
     mixpanel.reportEvent({
