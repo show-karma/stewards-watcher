@@ -5,8 +5,8 @@ import ABI from './ABI.json';
 
 const config: IDAOConfig = {
   DAO: 'dYdX',
-  DAO_DESCRIPTION: `The Delegates of dYdX DAO play a vital role in driving the dYdX ecosystem forward through their work in governance.`,
-  DAO_SUBDESCRIPTION: `This site will help boost transparency by displaying delegate contribution to indicate their involvement and engagement in the DAO.`,
+  DAO_DESCRIPTION: `dYdX delegates and members play a vital role in driving the ecosystem forward through their contributions to the community.`,
+  DAO_SUBDESCRIPTION: `This dashboard will help scoring and tracking contributors by displaying community member engagements across the dYdX DAO.`,
   DAO_URL: 'https://dydx.foundation/',
   GOVERNANCE_FORUM: 'https://forums.dydx.community',
   DAO_KARMA_ID: 'dydx',
