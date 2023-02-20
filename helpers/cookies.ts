@@ -5,4 +5,5 @@ export const cookieNames = {
   isConnected: `${cookiePrefix}isConnected`, // cookie value ->"true"
   orgInfo: `${cookiePrefix}orgInfo`, // cookie value ->Object
   orgAddress: `${cookiePrefix}orgAddress`, // cookie value ->"string"
+  daoAdmin: `${cookiePrefix}daoAdmin`,
 };
