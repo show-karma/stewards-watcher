@@ -21,6 +21,7 @@ interface IAuthProps {
   authenticate: () => Promise<boolean>;
   authToken: string | null;
   disconnect: () => void;
+  isDaoAdmin: boolean;
 }
 
 export const AuthContext = createContext({} as IAuthProps);
@@ -40,6 +41,7 @@ const api = axios.create({
 
 export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isDaoAdmin, setIsDaoAdmin] = useState(false);
   const [authToken, setToken] = useState<string | null>(null);
   const { openConnectModal } = useWallet();
 
@@ -56,6 +58,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
     setIsAuthenticated(false);
     disconnectWallet();
     cookies.remove(cookieNames.cookieAuth);
+    cookies.remove(cookieNames.daoAdmin);
     window.location.reload();
   };
 
@@ -110,12 +113,20 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
     signedMessage: string
   ) => {
     try {
-      const response = await api.post('/auth/authentication', {
+      const response = await api.post<{
+        data: { token: string; daosManaged?: string[] };
+      }>('/auth/authentication', {
         publicAddress,
         signedMessage,
       });
-      const { token } = response.data.data;
+      const { token, daosManaged } = response.data.data;
       setToken(token);
+      const daoAdmin = Array.isArray(daosManaged)
+        ? daosManaged.includes(daoInfo.config.DAO_KARMA_ID)
+        : false;
+      setIsDaoAdmin(daoAdmin);
+      cookies.set(cookieNames.daoAdmin, daoAdmin ? 1 : 0);
+
       return token;
     } catch (error) {
       console.log('Error in getAccountAssets', error);
@@ -157,6 +168,8 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
     if (typeof window !== 'undefined') {
       const savedToken = cookies.get(cookieNames.cookieAuth);
       const isValid = isTokenValid(savedToken);
+      const daoAdmin = cookies.get(cookieNames.daoAdmin);
+      setIsDaoAdmin(!!+daoAdmin);
       if (savedToken && isValid) saveToken(savedToken);
     }
   }, []);
@@ -167,8 +180,9 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
       authenticate,
       authToken,
       disconnect,
+      isDaoAdmin,
     }),
-    [isAuthenticated, authenticate, authToken, disconnect]
+    [isAuthenticated, authenticate, authToken, disconnect, isDaoAdmin]
   );
 
   return (
