@@ -53,6 +53,7 @@ export const DelegateButton: FC<IDelegateButton> = ({
       setWriteAfterAction(true);
       return openChainModal && openChainModal();
     }
+    console.info('write', write);
     return write && write();
   };
 

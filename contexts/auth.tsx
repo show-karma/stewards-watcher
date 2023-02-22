@@ -182,7 +182,14 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
       disconnect,
       isDaoAdmin,
     }),
-    [isAuthenticated, authenticate, authToken, disconnect, isDaoAdmin]
+    [
+      isAuthenticated,
+      authenticate,
+      authToken,
+      disconnect,
+      isDaoAdmin,
+      isConnected,
+    ]
   );
 
   return (
