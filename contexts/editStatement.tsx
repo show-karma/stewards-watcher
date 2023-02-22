@@ -158,13 +158,20 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
       const filtered = newInterestsValue.filter(
         (item: string) => item !== selectedInterest
       );
-      setNewInterests({ ...newInterests, value: filtered });
+      setNewInterests({
+        ...newInterests,
+        value: filtered,
+        label: 'Interests',
+        displayAs: 'interests',
+      });
       return;
     }
     newInterestsValue.push(selectedInterest);
     setNewInterests({
       ...newInterests,
       value: newInterestsValue,
+      label: 'Interests',
+      displayAs: 'interests',
     });
   };
 
