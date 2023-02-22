@@ -1,5 +1,5 @@
 import { IDAOConfig, IDAOTheme } from 'types';
-import { chain } from 'wagmi';
+import { optimism } from 'wagmi/chains';
 import ABI from './ABI.json';
 
 const config: IDAOConfig = {
@@ -19,7 +19,7 @@ const config: IDAOConfig = {
     FAVICON: '/daos/optimism/favicon.png',
     URL: `https://optimism.karmahq.xyz`,
   },
-  DAO_CHAIN: chain.optimism,
+  DAO_CHAIN: optimism,
   DAO_DELEGATE_CONTRACT: '0x4200000000000000000000000000000000000042',
   DAO_DELEGATE_MODE: 'custom',
   DAO_FORUM_TYPE: 'discourse',

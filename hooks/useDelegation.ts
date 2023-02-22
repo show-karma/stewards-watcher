@@ -16,7 +16,7 @@ export const useDelegation = (args: IDelegation) => {
   const getAddressOrName = () => {
     if (type === 'snapshot')
       return '0x469788fe6e9e9681c6ebf3bf78e7fd26fc015446';
-    return daoInfo.config.DAO_DELEGATE_CONTRACT;
+    return daoInfo.config.DAO_DELEGATE_CONTRACT as `0x${string}`;
   };
 
   const getABI = () => {
@@ -38,8 +38,8 @@ export const useDelegation = (args: IDelegation) => {
   };
 
   const { config } = usePrepareContractWrite({
-    addressOrName: getAddressOrName(),
-    contractInterface: getABI(),
+    address: getAddressOrName(),
+    abi: getABI(),
     functionName: getFunctionName(),
     args: getArgs(),
   });

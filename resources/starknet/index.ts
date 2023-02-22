@@ -1,5 +1,5 @@
 import { IDAOConfig, IDAOTheme } from 'types';
-import { chain } from 'wagmi';
+import { mainnet } from 'wagmi/chains';
 
 const config: IDAOConfig = {
   DAO: 'Starknet',
@@ -17,7 +17,7 @@ const config: IDAOConfig = {
     FAVICON: '/daos/starknet/favicon.svg',
     URL: `https://starknet.karmahq.xyz`,
   },
-  DAO_CHAIN: chain.mainnet,
+  DAO_CHAIN: mainnet,
   DAO_DELEGATE_CONTRACT: '',
   DAO_DELEGATE_MODE: 'snapshot',
   DAO_FORUM_TYPE: 'discourse',
