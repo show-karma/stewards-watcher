@@ -15,7 +15,7 @@ export const VotesToDelegate: React.FC<IVotesToDelegate> = ({
   daoName,
   votes,
 }) => {
-  const { isLoadingVotes } = useGovernanceVotes();
+  const { isLoadingVotes, symbol } = useGovernanceVotes();
   return (
     <Flex
       padding="16px 20px"
@@ -49,7 +49,7 @@ export const VotesToDelegate: React.FC<IVotesToDelegate> = ({
             fontWeight="500"
             fontSize="20px"
             color="#000000"
-          >{`${votes} ${daoName}`}</Text>
+          >{`${votes} ${symbol}`}</Text>
         )}
       </Flex>
       {(votes === '0' || !votes) && (

@@ -14,6 +14,7 @@ interface IGovernanceVotesProps {
   votes: string;
   isLoadingVotes: boolean;
   delegatedBefore: string;
+  symbol: string;
 }
 
 export const GovernanceVotesContext = createContext(
@@ -30,6 +31,7 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
   const { daoInfo } = useDAO();
   const { address: walletAddress } = useAccount();
   const [votes, setVotes] = useState('0');
+  const [symbol, setSymbol] = useState('');
 
   const [delegatedBefore, setDelegatedBefore] = useState('');
   const { data: voteAmount, isFetching: isLoadingVotes } = useContractRead({
@@ -48,6 +50,13 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
     args: [walletAddress],
     chainId: daoInfo.config.DAO_CHAIN.id,
     enabled: !!walletAddress,
+  });
+
+  const { data: fetchedSymbol } = useContractRead({
+    addressOrName: daoInfo.config.DAO_DELEGATE_CONTRACT,
+    contractInterface: daoInfo.ABI,
+    functionName: 'symbol',
+    chainId: daoInfo.config.DAO_CHAIN.id,
   });
 
   const getVotes = async () => {
@@ -80,13 +89,26 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
     getDelegated();
   }, [walletAddress]);
 
+  const getSymbol = async () => {
+    if (!fetchedSymbol) {
+      setSymbol('');
+      return;
+    }
+    setSymbol(fetchedSymbol.toString());
+  };
+
+  useEffect(() => {
+    getSymbol();
+  }, [fetchedSymbol]);
+
   const providerValue = useMemo(
     () => ({
       votes,
       isLoadingVotes,
       delegatedBefore,
+      symbol,
     }),
-    [votes, isLoadingVotes, delegatedBefore]
+    [votes, isLoadingVotes, delegatedBefore, symbol]
   );
 
   return (
