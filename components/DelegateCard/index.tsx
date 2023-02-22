@@ -252,6 +252,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   const restRowStats = stats.slice(columnsCalculator(), stats.length);
 
   const { toast } = useToasty();
+
   const copyText = () => {
     onCopy();
     toast({
