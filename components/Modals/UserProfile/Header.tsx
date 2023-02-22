@@ -260,13 +260,12 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
 
   const truncatedAddress = truncateAddress(fullAddress);
   const { isConnected, openConnectModal } = useWallet();
-  const { theme, daoInfo, daoData } = useDAO();
-  const { config } = daoInfo;
+  const { theme, daoData } = useDAO();
   const { profileSelected } = useDelegates();
   const { isEditing, setIsEditing, saveEdit, isEditSaving } =
     useEditStatement();
   const { address } = useAccount();
-  const { authenticate, isAuthenticated } = useAuth();
+  const { authenticate, isAuthenticated, isDaoAdmin } = useAuth();
   const { toast } = useToasty();
   const [isConnecting, setConnecting] = useState(false);
 
@@ -274,7 +273,8 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
     useDisclosure();
 
   const isSamePerson =
-    isConnected && address?.toLowerCase() === fullAddress?.toLowerCase();
+    isConnected &&
+    (address?.toLowerCase() === fullAddress?.toLowerCase() || isDaoAdmin);
 
   const handleAuth = async () => {
     if (!isConnected) {
@@ -284,7 +284,8 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
     }
     changeTab('statement');
     setConnecting(false);
-    if (address?.toLowerCase() !== fullAddress?.toLowerCase()) {
+    console.info('isDaoAdmin', isDaoAdmin);
+    if (address?.toLowerCase() !== fullAddress?.toLowerCase() && !isDaoAdmin) {
       toast({
         description: 'You can only edit your own profile.',
         status: 'error',
@@ -292,7 +293,7 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
       return;
     }
     if (
-      address?.toLowerCase() === fullAddress?.toLowerCase() &&
+      (address?.toLowerCase() === fullAddress?.toLowerCase() || isDaoAdmin) &&
       isConnected &&
       isAuthenticated
     ) {
@@ -394,7 +395,8 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
             align="center"
           >
             {!isEditing &&
-              profile.address.toLowerCase() === address?.toLowerCase() && (
+              (profile.address.toLowerCase() === address?.toLowerCase() ||
+                isDaoAdmin) && (
                 <Button
                   fontWeight="normal"
                   bgColor="transparent"

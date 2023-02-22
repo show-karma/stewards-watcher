@@ -99,10 +99,7 @@ export const ScoreBreakdown: React.FC = () => {
     'td:first-of-type': {
       background: 'rgba(0,0,0,0.125)',
     },
-    'tr:last-of-type': {
-      borderTop: `2px ${theme.background} solid`,
-    },
-    'tr:first-of-type,': {
+    'tr:not(:last-of-type),': {
       borderBottom: `2px ${theme.background} solid`,
     },
   };
@@ -168,7 +165,16 @@ export const ScoreBreakdown: React.FC = () => {
           </Tr>
         </Table>
       </Flex>
-      <Table mt="14" sx={resultTableStyles} fontSize={14}>
+      <Table
+        mt="14"
+        sx={resultTableStyles}
+        fontSize={14}
+        style={{
+          boxShadow: '0 0 1em 0.3em rgba(255, 255, 255, 0.05)',
+          borderRadius: '8px',
+          overflow: 'hidden',
+        }}
+      >
         <Tr>
           <Td>Period</Td>
           <Td>

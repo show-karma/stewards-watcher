@@ -56,8 +56,9 @@ const dark: IDAOTheme = {
     border: '#ADB8C033',
     title: 'white',
     bg: 'transparent',
-    listBg: '#292E41',
+    listBg: '#1B2030',
     listText: 'white',
+    activeBg: 'rgba(102, 102, 102, 0.15)',
   },
   card: {
     icon: '#ADB8C0',
@@ -205,8 +206,9 @@ const light: IDAOTheme = {
     border: '#ADB8C033',
     title: '#666666',
     bg: 'transparent',
-    listBg: '#FFFFFF',
+    listBg: '#F2F4F9',
     listText: '#666666',
+    activeBg: '#EBEDEF',
   },
   card: {
     icon: '#ADB8C0',

@@ -52,14 +52,31 @@ export const DelegateStatusFilter = () => {
       >
         Status
       </MenuButton>
-      <MenuList bgColor={theme.filters.listBg} color={theme.filters.listText}>
+      <MenuList
+        bgColor={theme.filters.listBg}
+        color={theme.filters.listText}
+        h={{ base: 'max-content' }}
+        maxH={{ base: '64' }}
+        overflowY="auto"
+        sx={{
+          '&::-webkit-scrollbar': {
+            width: '8px',
+            marginX: '4px',
+            borderRadius: '8px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            borderRadius: '8px',
+            bgColor: theme.filters.activeBg,
+          },
+        }}
+      >
         <MenuOptionGroup type="checkbox" value={statuses}>
           {statusesOptions.map((option, index) => (
             <MenuItemOption
               key={+index}
               value={option}
               onClick={() => selectStatus(index)}
-              bgColor={theme.filters.bg}
+              bgColor="transparent"
               _hover={{
                 bg: theme.filters.activeBg,
               }}

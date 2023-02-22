@@ -45,8 +45,7 @@ export const ExpandableCardText: FC<IExpandableText> = props => {
           textAlign="left"
           color={theme.text}
           dangerouslySetInnerHTML={{ __html: text as string }}
-          wordBreak="break-all"
-          style={{ lineBreak: 'anywhere' }}
+          wordBreak="break-word"
         />
       ) : (
         <Flex flexDir="column" w="full" ref={flexRef}>
@@ -62,8 +61,7 @@ export const ExpandableCardText: FC<IExpandableText> = props => {
               opacity: isExpanded ? 0.9 : 'unset',
             }}
             flex="1"
-            wordBreak="break-all"
-            style={{ lineBreak: 'anywhere' }}
+            wordBreak="break-word"
           >
             {`${formattedText.substring(0, isMobile ? 90 : newMaxChars)}... `}
             <Text

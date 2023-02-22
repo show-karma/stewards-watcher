@@ -35,26 +35,13 @@ interface ProviderProps {
   children: React.ReactNode;
 }
 
-const defaultInterests = [
-  'Accessibility',
-  'DAOs',
-  'Data analytics',
-  'DeFi',
-  'Writing',
-  'Economics',
-  'Events',
+const presetInterests = [
   'Identity',
-  'Environment',
-  'Governance',
-  'Infrastructure',
-  'Legal',
-  'NFT',
-  'Music',
-  'Messaging',
-  'Oracles',
-  'Privacy',
   'Security',
-  'Social Impact',
+  'NFT',
+  'DAOs',
+  'Governance',
+  'Legal',
 ];
 
 export const EditStatementProvider: React.FC<ProviderProps> = ({
@@ -66,11 +53,15 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
   const [isEditSaving, setEditSaving] = useState(false);
   const [value, setValue] = useState('');
   const { toast } = useToasty();
-  const { profileSelected } = useDelegates();
+  const { profileSelected, interests: delegatesInterests } = useDelegates();
   const { daoInfo } = useDAO();
   const { address } = useAccount();
-  const { authToken, isAuthenticated } = useAuth();
+  const { authToken, isAuthenticated, isDaoAdmin } = useAuth();
   const { config } = daoInfo;
+
+  const defaultInterests = delegatesInterests.length
+    ? delegatesInterests
+    : presetInterests;
 
   const [statement, setStatement] = useState<ICustomFields>({
     label: '',
@@ -121,8 +112,10 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
       const emptyField: ICustomFields = { label: '', value: [] };
 
       let fetchedInterests =
-        customFields?.find(item =>
-          item.label.toLowerCase().includes('interests')
+        customFields?.find(
+          item =>
+            item.label.toLowerCase().includes('interests') ||
+            item.displayAs === 'interests'
         ) || emptyField;
 
       const fetchedStatement =
@@ -165,13 +158,20 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
       const filtered = newInterestsValue.filter(
         (item: string) => item !== selectedInterest
       );
-      setNewInterests({ ...newInterests, value: filtered });
+      setNewInterests({
+        ...newInterests,
+        value: filtered,
+        label: 'Interests',
+        displayAs: 'interests',
+      });
       return;
     }
     newInterestsValue.push(selectedInterest);
     setNewInterests({
       ...newInterests,
       value: newInterestsValue,
+      label: 'Interests',
+      displayAs: 'interests',
     });
   };
 
@@ -254,9 +254,10 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
   useMemo(() => {
     setIsEditing(false);
     if (
-      address?.toLowerCase() === profileSelected?.address?.toLowerCase() &&
-      isConnected &&
-      isAuthenticated
+      (address?.toLowerCase() === profileSelected?.address?.toLowerCase() &&
+        isConnected &&
+        isAuthenticated) ||
+      isDaoAdmin
     ) {
       setIsEditing(true);
     }
