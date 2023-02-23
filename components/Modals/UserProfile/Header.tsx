@@ -235,7 +235,10 @@ const DelegateCases: FC<{ status?: string; openModal: () => void }> = ({
 }) => {
   const { theme } = useDAO();
 
-  if (status === 'withdrawn')
+  const { address } = useAccount();
+  if (fullAddress.toLowerCase() === address?.toLowerCase()) return null;
+
+if (status === 'withdrawn')
     return (
       <Tooltip
         label="This delegate has indicated that they are no longer accepting delegations."
