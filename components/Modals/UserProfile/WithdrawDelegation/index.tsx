@@ -46,7 +46,7 @@ export const WithdrawDelegation: FC = () => {
             mt="1"
             fontFamily="heading"
           >
-            If you are no longer active in the DAO and would like to withdraw
+            If you are not interested in being a delegate and would like to withdraw
             your nomination, click the button below.
           </Text>
           <WithdrawPopover />
