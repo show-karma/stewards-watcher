@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useRef } from 'react';
 import {
   IconButton,
   Icon,
@@ -11,6 +11,7 @@ import { MdContentCopy } from 'react-icons/md';
 import { BsArrowLeft } from 'react-icons/bs';
 import { IoClose } from 'react-icons/io5';
 import { useToasty } from 'hooks';
+import { useDAO } from 'contexts';
 import { ESteps } from './ESteps';
 
 interface IModal {
@@ -30,11 +31,12 @@ export const Step3: React.FC<IModal> = ({
   step,
   verifyPublication,
 }) => {
+  const {
+    daoInfo: { config },
+  } = useDAO();
   const textRef = useRef<HTMLParagraphElement>(null);
-  const textToCopy = `Verifying my Twitter account for Karma
-  addr: ${publicAddress}
-  sig: ${signature}
-  @karmahq_ #karmahq`;
+  // \n was taking chars from tweet
+  const textToCopy = `Verifying my Twitter account for ${config.DAO} ${window?.location?.hostname} powered by @karmahq_ addr: ${publicAddress} sig: ${signature}`;
   const backStep = () => setStep(ESteps.SIGN);
   const { onCopy } = useClipboard(textToCopy);
   const { toast } = useToasty();
