@@ -30,7 +30,7 @@ export const DelegateLoginModal: FC<IDelegateLogin> = ({ isOpen, onClose }) => {
   const { config } = daoInfo;
   const points = [
     {
-      text: 'Become a delegate',
+      text: 'Become a delegate and update your pitch and interests',
       icon: '/icons/user.svg',
     },
     {
@@ -38,11 +38,11 @@ export const DelegateLoginModal: FC<IDelegateLogin> = ({ isOpen, onClose }) => {
       icon: '/icons/withdraw.svg',
     },
     {
-      text: 'Manage your interests and statement',
+      text: 'Verify and link your social handles',
       icon: '/icons/edit.svg',
     },
     {
-      text: 'Add voting reason for proposals you have worked on',
+      text: 'Add voting reason to proposals you have voted on',
       icon: '/icons/votingcheck.svg',
     },
   ];
@@ -109,7 +109,7 @@ export const DelegateLoginModal: FC<IDelegateLogin> = ({ isOpen, onClose }) => {
               pr="25"
               color={theme.loginModal.text}
             >
-              Welcome to the Delegate dashboard.
+              Welcome to the Delegate Dashboard
             </Text>
             <Text
               fontWeight="normal"
@@ -118,7 +118,7 @@ export const DelegateLoginModal: FC<IDelegateLogin> = ({ isOpen, onClose }) => {
               mt="6px"
               mb="8"
             >
-              If you are a delegate, login with your wallet to:
+              If you are a contributor, login with your wallet to:
             </Text>
             <Grid templateColumns="repeat(2, 1fr)" gap="4" mb="8">
               {points.map(point => (
