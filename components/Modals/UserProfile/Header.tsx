@@ -229,16 +229,21 @@ const OpenDelegateButton: FC<IOpenDelegateButton> = ({
   );
 };
 
-const DelegateCases: FC<{ status?: string; openModal: () => void }> = ({
-  status,
-  openModal,
-}) => {
+const DelegateCases: FC<{
+  status?: string;
+  openModal: () => void;
+  delegateAddress?: string;
+}> = ({ status, openModal, delegateAddress }) => {
   const { theme } = useDAO();
 
   const { address } = useAccount();
-  if (fullAddress.toLowerCase() === address?.toLowerCase()) return null;
+  if (
+    delegateAddress &&
+    delegateAddress.toLowerCase() === address?.toLowerCase()
+  )
+    return null;
 
-if (status === 'withdrawn')
+  if (status === 'withdrawn')
     return (
       <Tooltip
         label="This delegate has indicated that they are no longer accepting delegations."
@@ -440,6 +445,7 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
               <DelegateCases
                 openModal={toggleDelegateModal}
                 status={profileSelected?.status}
+                delegateAddress={profileSelected?.address}
               />
             )}
           </Flex>
@@ -454,6 +460,7 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
         <DelegateCases
           openModal={toggleDelegateModal}
           status={profileSelected?.status}
+          delegateAddress={profileSelected?.address}
         />
       </Flex>
       {profileSelected && (

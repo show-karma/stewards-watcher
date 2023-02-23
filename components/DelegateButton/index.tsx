@@ -21,12 +21,18 @@ export const DelegateButton: FC<IDelegateButton> = ({
   beforeOnClick,
   ...props
 }) => {
-  const { openChainModal, isConnected, chain, connectIsOpen } = useWallet();
+  const {
+    openChainModal,
+    isConnected,
+    chain,
+    connectIsOpen,
+    openConnectModal,
+  } = useWallet();
   const { daoInfo, theme } = useDAO();
   const { config } = daoInfo;
   const { mixpanel } = useMixpanel();
   const { votes } = useGovernanceVotes();
-  const { connectOnToggle, delegateOnToggle, delegateIsOpen } = useWallet();
+  const { delegateOnToggle, delegateIsOpen } = useWallet();
 
   const [writeAfterAction, setWriteAfterAction] = useState(false);
 
@@ -55,7 +61,7 @@ export const DelegateButton: FC<IDelegateButton> = ({
 
     if (!isConnected) {
       setWriteAfterAction(true);
-      return connectOnToggle();
+      return openConnectModal?.();
     }
 
     if (chain && !sameNetwork) {
