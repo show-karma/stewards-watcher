@@ -1,20 +1,16 @@
 import {
   Button,
   ButtonProps,
-  Center,
-  Divider,
   Flex,
   Icon,
   Img,
   Link,
-  Text,
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
 import { DelegateLoginButton, DelegateLoginModal } from 'components';
 import { DelegateVotesModal } from 'components/Modals/DelegateToAnyone';
 import { useDAO } from 'contexts';
-import { useAuth } from 'contexts/auth';
 import { FC } from 'react';
 import { IoMenu } from 'react-icons/io5';
 import { HeaderBurgerMenu } from './HeaderBurgerMenu';
@@ -45,6 +41,7 @@ export const HeaderHat = () => {
   const { daoInfo, theme } = useDAO();
   const { config } = daoInfo;
   const { isOpen, onToggle } = useDisclosure();
+
   const {
     onClose: onCloseDelegateLogin,
     isOpen: isOpenDelegateLogin,

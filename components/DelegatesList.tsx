@@ -1,11 +1,11 @@
 /* eslint-disable no-nested-ternary */
-import { Flex, Grid, SimpleGrid, Spinner, Text } from '@chakra-ui/react';
-import { useDAO, useDelegates } from 'contexts';
+import { Flex, Grid, Spinner, Text, useDisclosure } from '@chakra-ui/react';
+import { useDAO, useDelegates, useWallet } from 'contexts';
 import { FC, useMemo } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { IDelegate } from 'types';
 import { DelegateCard } from './DelegateCard';
-import { UserProfile } from './Modals';
+import { DelegateLoginModal, DelegateModal, UserProfile } from './Modals';
 
 const loadingArray = Array(3).fill(undefined);
 
@@ -75,6 +75,8 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
     delegates,
   } = useDelegates();
   const { daoInfo } = useDAO();
+  const { connectOnClose, connectIsOpen, delegateIsOpen, delegateOnToggle } =
+    useWallet();
   const { config } = daoInfo;
 
   const searchProfileSelected = async (userToSearch: string) => {
@@ -105,6 +107,19 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
           selectedTab={selectedTab}
         />
       )}
+
+      {connectIsOpen && (
+        <DelegateLoginModal isOpen={connectIsOpen} onClose={connectOnClose} />
+      )}
+
+      {profileSelected && delegateIsOpen && (
+        <DelegateModal
+          delegateData={profileSelected}
+          open={delegateIsOpen}
+          handleModal={delegateOnToggle}
+        />
+      )}
+
       <Flex flexDir="column" align="center" w="full" maxW="1360px">
         {!!interestFilter.length && (
           <Flex textAlign="start" w={{ base: 'full' }} fontSize={12} mb={4}>

@@ -21,7 +21,7 @@ import { IoCopy, IoPersonOutline } from 'react-icons/io5';
 import { IoIosCheckboxOutline } from 'react-icons/io';
 import { AiOutlineThunderbolt } from 'react-icons/ai';
 import { ICardStat, ICustomFields, IDelegate } from 'types';
-import { useDAO, useDelegates } from 'contexts';
+import { useDAO, useDelegates, useWallet } from 'contexts';
 import {
   convertHexToRGBA,
   formatDate,
@@ -38,9 +38,9 @@ import {
   IBreakdownProps,
   ScoreBreakdownProvider,
 } from 'contexts/scoreBreakdown';
-import { DelegateModal } from 'components/Modals';
+import { DelegateLoginModal, DelegateModal } from 'components/Modals';
+import { DelegateButton } from 'components/DelegateButton';
 import { ImgWithFallback } from '../ImgWithFallback';
-import { DelegateButton } from '../DelegateButton';
 import { UserInfoButton } from '../UserInfoButton';
 import { ForumIcon, TwitterIcon } from '../Icons';
 import { ExpandableCardText } from './ExpandableCardText';
@@ -54,7 +54,7 @@ interface IDelegateCardProps {
 export const DelegateCard: FC<IDelegateCardProps> = props => {
   const { data } = props;
   const { daoInfo, theme, daoData } = useDAO();
-  const { selectProfile, period } = useDelegates();
+  const { selectProfile, period, setSelectedProfileData } = useDelegates();
   const { onCopy } = useClipboard(data?.address || '');
   const [scoreType, setScoreType] =
     useState<IBreakdownProps['type']>('karmaScore');
@@ -68,8 +68,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   }, [data, scoreType]);
 
   const { onOpen, onClose, isOpen } = useDisclosure();
-  const { onToggle: delegateOnToggle, isOpen: delegateIsOpen } =
-    useDisclosure();
 
   const { config } = daoInfo;
   const isLoaded = !!data;
@@ -662,55 +660,21 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                     <UserInfoButton onOpen={selectProfile} profile={data} />
                     {canDelegate &&
                       (data?.status === 'withdrawn' ? (
-                        <Tooltip
-                          label="This delegate has indicated that they are no longer accepting delegations."
-                          bgColor={theme.collapse.bg || theme.card.background}
-                          color={theme.collapse.text}
-                        >
-                          <Flex>
-                            <Button
-                              bgColor={theme.branding}
-                              py={['3', '6']}
-                              h="10"
-                              fontSize={['md']}
-                              fontWeight="medium"
-                              onClick={delegateOnToggle}
-                              _hover={{
-                                backgroundColor: convertHexToRGBA(
-                                  theme.branding,
-                                  0.8
-                                ),
-                              }}
-                              _focus={{}}
-                              _active={{}}
-                              color={theme.buttonText}
-                              px={['4', '8']}
-                            >
-                              Delegate
-                            </Button>
-                          </Flex>
-                        </Tooltip>
-                      ) : (
-                        <Button
-                          bgColor={theme.branding}
-                          py={['3', '6']}
-                          h="10"
-                          fontSize={['md']}
-                          fontWeight="medium"
-                          onClick={delegateOnToggle}
-                          _hover={{
-                            backgroundColor: convertHexToRGBA(
-                              theme.branding,
-                              0.8
-                            ),
-                          }}
-                          _focus={{}}
-                          _active={{}}
-                          color={theme.buttonText}
+                        <DelegateButton
+                          delegated={data.address}
                           px={['4', '8']}
-                        >
-                          Delegate
-                        </Button>
+                          isDisabled
+                          disabled
+                          tooltipText="This delegate has indicated that they are no longer accepting delegations."
+                        />
+                      ) : (
+                        <DelegateButton
+                          delegated={data.address}
+                          px={['4', '8']}
+                          beforeOnClick={() => {
+                            setSelectedProfileData(data);
+                          }}
+                        />
                       ))}
                   </Flex>
                 </Flex>
@@ -759,13 +723,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           ) : null}
         </StyledModal>
       </Flex>
-      {data && delegateIsOpen && (
-        <DelegateModal
-          delegateData={data}
-          open={delegateIsOpen}
-          handleModal={delegateOnToggle}
-        />
-      )}
     </>
   );
 };

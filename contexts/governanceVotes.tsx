@@ -9,6 +9,7 @@ import numbro from 'numbro';
 import { useAccount, useContractRead } from 'wagmi';
 import { formatEther } from 'utils';
 import { useDAO } from './dao';
+import { useWallet } from './wallet';
 
 interface IGovernanceVotesProps {
   votes: string;
@@ -29,7 +30,7 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
   children,
 }) => {
   const { daoInfo } = useDAO();
-  const { address: walletAddress } = useAccount();
+  const { address: walletAddress, isConnected } = useWallet();
   const [votes, setVotes] = useState('0');
   const [symbol, setSymbol] = useState('');
 
@@ -40,7 +41,6 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
     functionName: 'balanceOf',
     args: [walletAddress],
     chainId: daoInfo.config.DAO_CHAIN.id,
-    enabled: !!walletAddress,
   });
 
   const { data: delegated } = useContractRead({
@@ -75,7 +75,7 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
 
   useEffect(() => {
     getVotes();
-  }, [walletAddress, voteAmount]);
+  }, [walletAddress, voteAmount, isConnected]);
 
   const getDelegated = async () => {
     if (!delegated) {
@@ -87,7 +87,7 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
 
   useEffect(() => {
     getDelegated();
-  }, [walletAddress]);
+  }, [walletAddress, isConnected]);
 
   const getSymbol = async () => {
     if (!fetchedSymbol) {
@@ -99,7 +99,7 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
 
   useEffect(() => {
     getSymbol();
-  }, [fetchedSymbol]);
+  }, [fetchedSymbol, isConnected]);
 
   const providerValue = useMemo(
     () => ({
@@ -107,8 +107,9 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
       isLoadingVotes,
       delegatedBefore,
       symbol,
+      isConnected,
     }),
-    [votes, isLoadingVotes, delegatedBefore, symbol]
+    [votes, isLoadingVotes, delegatedBefore, symbol, isConnected]
   );
 
   return (

@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 import {
   Modal,
   ModalOverlay,
@@ -11,11 +11,10 @@ import {
   Img,
   Button,
   Grid,
-  useBreakpointValue,
   useColorModeValue,
 } from '@chakra-ui/react';
 import { useAuth } from 'contexts/auth';
-import { useDAO, useWallet } from 'contexts';
+import { useDAO } from 'contexts';
 
 interface IDelegateLogin {
   isOpen: boolean;
@@ -23,10 +22,9 @@ interface IDelegateLogin {
 }
 
 export const DelegateLoginModal: FC<IDelegateLogin> = ({ isOpen, onClose }) => {
-  const { authenticate } = useAuth();
+  const { authenticate, isLoadingSign } = useAuth();
   const { daoInfo, theme } = useDAO();
-  const { isConnected } = useWallet();
-  const { isAuthenticated } = useAuth();
+
   const { config } = daoInfo;
   const points = [
     {
@@ -46,16 +44,11 @@ export const DelegateLoginModal: FC<IDelegateLogin> = ({ isOpen, onClose }) => {
       icon: '/icons/votingcheck.svg',
     },
   ];
-  useMemo(() => {
-    if (isConnected && isOpen && isAuthenticated) onClose();
-  }, [isConnected, isAuthenticated]);
 
-  const variantImg = useBreakpointValue({
-    base: useColorModeValue(
-      '/images/karma_logo_green_and_black.svg',
-      '/images/karma_logo_white.png'
-    ),
-  });
+  const variantImg = useColorModeValue(
+    '/images/karma_logo_green_and_black.svg',
+    '/images/karma_logo_white.png'
+  );
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -166,6 +159,7 @@ export const DelegateLoginModal: FC<IDelegateLogin> = ({ isOpen, onClose }) => {
               _focus={{}}
               _focusWithin={{}}
               _focusVisible={{}}
+              isLoading={isLoadingSign}
             >
               Connect wallet
             </Button>

@@ -67,6 +67,7 @@ interface IDelegateProps {
   workstreamsFilter: string[];
   statusesOptions: IStatusOptions[];
   selectWorkstream: (index: number) => void;
+  setSelectedProfileData: (selected: IDelegate) => void;
 }
 
 export const DelegatesContext = createContext({} as IDelegateProps);
@@ -183,6 +184,10 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const setSelectedProfileData = (selected: IDelegate) => {
+    setProfileSelected(selected);
   };
 
   const getWorkstreams = () => {
@@ -698,6 +703,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       selectWorkstream,
       workstreamsFilter,
       statusesOptions,
+      setSelectedProfileData,
     }),
     [
       profileSelected,
@@ -722,6 +728,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       workstreams,
       workstreamsFilter,
       statusesOptions,
+      setSelectedProfileData,
     ]
   );
 
