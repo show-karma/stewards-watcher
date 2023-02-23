@@ -47,6 +47,7 @@ export const useDelegation = (args: IDelegation) => {
   const { data, isLoading, isSuccess, write } = useContractWrite({
     ...config,
     onSuccess() {
+      console.log('success');
       onSuccessFunction?.();
       toast({
         title: 'Success',
@@ -55,6 +56,7 @@ export const useDelegation = (args: IDelegation) => {
       });
     },
     onError(error) {
+      console.log(error);
       if (
         error.stack?.includes('code=ACTION_REJECTED') ||
         error.stack?.includes('code=4001')
