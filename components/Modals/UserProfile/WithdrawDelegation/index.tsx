@@ -46,8 +46,8 @@ export const WithdrawDelegation: FC = () => {
             mt="1"
             fontFamily="heading"
           >
-            If you are not interested in being a delegate and would like to withdraw
-            your nomination, click the button below.
+            If you are not interested in being a delegate and would like to
+            withdraw your nomination, click the button below.
           </Text>
           <WithdrawPopover />
         </>
