@@ -198,6 +198,8 @@ const DelegateCases: FC<{ status?: string; fullAddress: string }> = ({
   fullAddress,
 }) => {
   const { theme } = useDAO();
+  const { address } = useAccount();
+  if (fullAddress.toLowerCase() === address?.toLowerCase()) return null;
   if (status === 'withdrawn')
     return (
       <Tooltip

@@ -40,11 +40,9 @@ const LoginMenu = () => {
         fontWeight="semibold"
         minH={{ base: '52px', lg: 'max-content' }}
         _hover={{
-          bg: theme.filters.activeBg,
+          opacity: 0.8,
         }}
-        _active={{
-          bg: theme.filters.activeBg,
-        }}
+        _active={{}}
         _focus={{}}
         _focusWithin={{}}
       >
