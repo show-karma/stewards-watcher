@@ -14,11 +14,11 @@ We worked with the dYdX team and came up with weights for each metric. You can c
 
 **3. My forum score is blank**
 
-Login to the dashboard using your wallet and navigate to Handles section. Click on the Forum button to follow the steps to link your forum handle to your wallet. This will help you accrue your forum score towards your overall score.
+Please make sure that the wallet you use to login to the [Forum](https://forums.dydx.community/overview) is same as the one used for voting.
 
 **4. My Discord score is blank**
 
-Join dYdX Discord server and type in the following command to link your Discord handle to your wallet.
+Join dYdX Discord server and go to the [support channel](https://discord.com/channels/724804754382782534/953825156374085692). Type the following command to link your Discord handle to your wallet. After a few minutes, your Discord score will be displayed.
 
 ```
 /karma linkwallet <your wallet address>
