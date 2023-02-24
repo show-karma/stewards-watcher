@@ -17,6 +17,7 @@ export interface IDelegateFromAPI {
   publicAddress: string;
   score: number;
   twitterHandle: string;
+  discordHandle: string;
   discourseHandle: string;
   userType: string;
   aboutMe?: string;
