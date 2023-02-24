@@ -26,7 +26,7 @@ const config: IDAOConfig = {
   DAO_DELEGATE_MODE: 'snapshot',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
-  EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'healthScore'],
+  EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'healthScore', 'discordScore'],
 };
 
 const dark: IDAOTheme = {

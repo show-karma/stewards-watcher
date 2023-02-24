@@ -82,6 +82,7 @@ const statDefaultOptions: IStatOptions[] = [
   { title: 'On-chain votes', id: 'onChainVotesPct', stat: 'onChainVotesPct' },
   { title: 'Score', id: 'score', stat: 'karmaScore' },
   { title: 'Health', id: 'healthScore', stat: 'healthScore' },
+  { title: 'Discord Score', id: 'discordScore', stat: 'discordScore' },
 ];
 
 const defaultStatuses: IStatusOptions[] = [
@@ -238,6 +239,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           address: item.publicAddress,
           ensName: item.ensName,
           forumActivity: fetchedPeriod?.forumActivityScore || 0,
+          discordScore: fetchedPeriod?.discordScore || 0,
           delegateSince: item.joinDateAt || item.firstTokenDelegatedAt,
           delegators: item.delegatorCount || 0,
           voteParticipation: {
@@ -305,6 +307,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           address: item.publicAddress,
           ensName: item.ensName,
           forumActivity: fetchedPeriod?.forumActivityScore || 0,
+          discordScore: fetchedPeriod?.discordScore || 0,
           delegateSince: item.joinDateAt || item.firstTokenDelegatedAt,
           delegators: item.delegatorCount || 0,
           voteParticipation: {
@@ -386,6 +389,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         address: fetchedDelegate.publicAddress,
         ensName: fetchedDelegate.ensName,
         forumActivity: fetchedPeriod?.forumActivityScore || 0,
+        discordScore: fetchedPeriod?.discordScore || 0,
         delegateSince:
           fetchedDelegate.joinDateAt || fetchedDelegate.firstTokenDelegatedAt,
         delegators: fetchedDelegate.delegatorCount || 0,
@@ -479,6 +483,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           address: item.publicAddress,
           ensName: item.ensName,
           forumActivity: fetchedPeriod?.forumActivityScore || 0,
+          discordScore: fetchedPeriod?.discordScore || 0,
           delegateSince: item.joinDateAt || item.firstTokenDelegatedAt,
           delegators: item.delegatorCount || 0,
           voteParticipation: {

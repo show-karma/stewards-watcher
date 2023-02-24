@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import { Flex, Grid, SimpleGrid, Spinner, Text } from '@chakra-ui/react';
+import { Flex, Grid, Spinner, Text } from '@chakra-ui/react';
 import { useDAO, useDelegates } from 'contexts';
 import { FC, useMemo } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';

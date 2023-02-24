@@ -251,7 +251,6 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
     }
     changeTab('statement');
     setConnecting(false);
-    console.info('isDaoAdmin', isDaoAdmin);
     if (address?.toLowerCase() !== fullAddress?.toLowerCase() && !isDaoAdmin) {
       toast({
         description: 'You can only edit your own profile.',

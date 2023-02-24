@@ -28,6 +28,7 @@ const config: IDAOConfig = {
     'healthScore',
     'delegatedVotes',
     'votingWeight',
+    'discordScore',
   ],
   DAO_DEFAULT_SETTINGS: {
     STATUS_FILTER: {

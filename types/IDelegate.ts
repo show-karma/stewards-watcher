@@ -9,6 +9,7 @@ export interface IDelegate {
   delegatedVotes?: number;
   delegators: number;
   karmaScore: number;
+  discordScore: number;
   gitcoinHealthScore?: number;
   voteParticipation: {
     onChain: number;
