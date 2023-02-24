@@ -118,6 +118,13 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       id: 'forumScore',
       tooltipText: 'Score based on their contribution in the forum',
     },
+    {
+      title: 'Discord Score',
+      icon: BsChat,
+      value: data?.discordScore ? formatNumber(data.discordScore) : '-',
+      id: 'discordScore',
+      tooltipText: 'Score based on their contribution in the discord',
+    },
   ];
 
   const router = useRouter();
@@ -186,6 +193,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       'onChainVotesPct',
       'forumScore',
       'karmaScore',
+      'discordScore',
     ];
 
     filtereds.sort((one, two) => order.indexOf(one.id) - order.indexOf(two.id));

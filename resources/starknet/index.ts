@@ -23,7 +23,7 @@ const config: IDAOConfig = {
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
   SHOULD_NOT_SHOW: 'stats',
-  EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'healthScore'],
+  EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'healthScore', 'discordScore'],
 };
 
 const dark: IDAOTheme = {

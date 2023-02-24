@@ -39,6 +39,7 @@ export interface IDelegateFromAPI {
     gitcoinHealthScore: number;
     karmaRank: number;
     karmaScore: number;
+    discordScore: number;
     offChainVotesPct: number;
     onChainVotesPct: number;
     percentile: number;

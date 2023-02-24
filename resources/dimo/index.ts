@@ -29,6 +29,7 @@ const config: IDAOConfig = {
     'karmaScore',
     'onChainVotesPct',
     'forumScore',
+    'discordScore',
   ],
   DAO_DEFAULT_SETTINGS: {
     STATUS_FILTER: {

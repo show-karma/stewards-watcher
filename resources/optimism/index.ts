@@ -29,6 +29,7 @@ const config: IDAOConfig = {
     'forumScore',
     'healthScore',
     'karmaScore',
+    'discordScore',
   ],
 };
 

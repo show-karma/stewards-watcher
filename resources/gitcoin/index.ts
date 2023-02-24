@@ -28,7 +28,7 @@ const config: IDAOConfig = {
     TIMEPERIOD: '180d',
     ORDERSTAT: 'healthScore',
   },
-  EXCLUDED_CARD_FIELDS: ['onChainVotesPct'],
+  EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'discordScore'],
 };
 
 const dark: IDAOTheme = {
