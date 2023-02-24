@@ -16,6 +16,7 @@ export interface IDelegate {
     offChain: number;
   };
   twitterHandle?: string;
+  discordHandle?: string;
   discourseHandle?: string;
   updatedAt?: string;
   aboutMe?: string;

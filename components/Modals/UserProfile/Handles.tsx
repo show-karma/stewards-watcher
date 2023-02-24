@@ -36,11 +36,15 @@ export const Handles: FC = () => {
       },
       handle: profileSelected?.discourseHandle,
     },
-    // {
-    //   icon: DiscordIcon,
-    //   name: 'Discord',
-    //   action: undefined,
-    // },
+    {
+      icon: DiscordIcon,
+      name: 'Discord',
+      action: () => null,
+      disabledCondition: !profileSelected?.discordHandle,
+      handle: profileSelected?.discordHandle
+        ? `@${profileSelected?.discordHandle}`
+        : undefined,
+    },
   ];
 
   return (

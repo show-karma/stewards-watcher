@@ -10,7 +10,7 @@ import {
   Tr,
 } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
-import { IBreakdownProps, useScoreBreakdown } from 'contexts/scoreBreakdown';
+import { useScoreBreakdown } from 'contexts/scoreBreakdown';
 import { ScoreCalculator } from 'karma-score';
 import { useMemo } from 'react';
 import { BsFillInfoCircleFill } from 'react-icons/bs';
