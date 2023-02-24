@@ -3,7 +3,6 @@ import {
   Button,
   Divider,
   Flex,
-  Grid,
   Link,
   Skeleton,
   SkeletonCircle,
@@ -45,6 +44,7 @@ import { ForumIcon, TwitterIcon } from '../Icons';
 import { ExpandableCardText } from './ExpandableCardText';
 import { DelegateStat } from './DelegateStat';
 import { RestStatsRows } from './RestStatsRows';
+import { StatPopover } from './StatPopover';
 
 interface IDelegateCardProps {
   data?: IDelegate;
@@ -115,6 +115,20 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       title: 'Forum score',
       icon: BsChat,
       value: data?.forumActivity ? formatNumber(data.forumActivity) : '-',
+      id: 'forumScore',
+      tooltipText: 'Score based on their contribution in the forum',
+    },
+    {
+      title: 'Xsadasdd',
+      icon: BsChat,
+      value: 1 ? formatNumber(100) : '-',
+      id: 'forumScore',
+      tooltipText: 'Score based on their contribution in the forum',
+    },
+    {
+      title: 'DASDSDASD dasdasda',
+      icon: BsChat,
+      value: 2 ? formatNumber(9) : '-',
       id: 'forumScore',
       tooltipText: 'Score based on their contribution in the forum',
     },
@@ -258,6 +272,24 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     });
   };
 
+  const statBorderWidth = (index: number) => {
+    if (index === 0) return '1px 0 1px 1px';
+    if (index === 1) return '1px';
+    if (index === 2) return '1px 1px 1px 0';
+    return '1px 1px 1px 0';
+  };
+
+  const statBorderRadius = (index: number) => {
+    if (index === 0) return '8px 0 0 8px';
+    if (index === 3) return '0 8px 8px 0';
+    return '0 0 0 0';
+  };
+
+  const getDataStatusColor = (status: string) => {
+    if (status === 'inactive' || status === 'withdrawn') return '#F4EB0F';
+    return 'green.500';
+  };
+
   return (
     <Flex
       bgColor={theme.card.background}
@@ -303,7 +335,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                 `${config.IMAGE_PREFIX_URL}${data.address}`
               }
               fallback={data.address}
-              boxShadow="0px 0px 0px 2px white"
             />
           </Flex>
         ) : (
@@ -343,7 +374,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   fontSize="lg"
                   fontWeight="bold"
                   maxH="30px"
-                  maxW="286px"
+                  maxW={{ base: '250px', xl: '286px' }}
                   textOverflow="ellipsis"
                   overflow="hidden"
                   whiteSpace="nowrap"
@@ -387,6 +418,22 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                     </Flex>
                   )}
                 </Flex>
+                {data?.status ? (
+                  <Flex gap="1" align="center">
+                    <Flex
+                      borderRadius="full"
+                      w="7px"
+                      h="7px"
+                      backgroundColor={getDataStatusColor(data.status)}
+                    />
+                    <Text fontWeight="400" fontSize="10px" color={theme.title}>
+                      {data.status.charAt(0).toUpperCase() +
+                        data.status.slice(1)}
+                    </Text>
+                  </Flex>
+                ) : (
+                  <Flex h="15px" />
+                )}
                 <Flex
                   flexDir="row"
                   gap="1.5"
@@ -528,24 +575,17 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
               {isLoaded ? (
                 <>
                   {stats.length > 0 && (
-                    <Flex flexDir="column" w="full">
-                      <Grid
-                        gridColumnGap="1"
-                        gridRowGap="1"
-                        w="full"
+                    <Flex flexDir="column" w="full" align="center">
+                      <Flex
+                        gridColumnGap="0"
                         bgColor={theme.card.statBg}
-                        px="2"
-                        py="2"
-                        borderRadius="xl"
+                        borderRadius="8px"
                         h="full"
-                        templateColumns={{
-                          base: 'repeat(2, 1fr)',
-                          sm: 'repeat(3, 1fr)',
-                          md: 'repeat(3, 1fr)',
-                          lg: 'repeat(4, 1fr)',
-                        }}
+                        w="full"
+                        flexDir="row"
                         justifyItems="center"
                         alignItems="center"
+                        position="relative"
                       >
                         {firstRowStats.map((statItem, index) => (
                           <Flex
@@ -553,6 +593,13 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                             justify="center"
                             key={+index}
                             w="max-content"
+                            borderWidth={statBorderWidth(index)}
+                            borderStyle="solid"
+                            borderColor={theme.card.border}
+                            px="2"
+                            py="2"
+                            borderRadius={statBorderRadius(index)}
+                            flex="1"
                           >
                             {statItem.id === 'forumScore' &&
                             data?.discourseHandle &&
@@ -575,15 +622,8 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                             )}
                           </Flex>
                         ))}
-                      </Grid>
-                      <Flex minH={showSecondRow ? '76px' : '0px'}>
-                        {(stats.length > 4 || showSecondRow) && (
-                          <RestStatsRows
-                            restRowStats={restRowStats}
-                            config={config}
-                            daoData={daoData}
-                            data={data}
-                          />
+                        {restRowStats.length > 0 && (
+                          <StatPopover stats={restRowStats} />
                         )}
                       </Flex>
                     </Flex>
@@ -608,6 +648,28 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           <Flex justify="left" align="center" gap="4">
             {isLoaded ? (
               <Flex flexDir="row" justifyContent="space-between" w="full">
+                <Flex flexDir="row" gap="3">
+                  {canDelegate &&
+                    (data?.status === 'withdrawn' ? (
+                      <Tooltip
+                        label="This delegate has indicated that they are no longer accepting delegations."
+                        bgColor={theme.collapse.bg || theme.card.background}
+                        color={theme.collapse.text}
+                      >
+                        <Flex>
+                          <DelegateButton
+                            delegated={data.address}
+                            px={['4', '8']}
+                            disabled
+                            isDisabled
+                          />
+                        </Flex>
+                      </Tooltip>
+                    ) : (
+                      <DelegateButton delegated={data.address} />
+                    ))}
+                  <UserInfoButton onOpen={selectProfile} profile={data} />
+                </Flex>
                 <Flex gap="4" align="center" justify="center">
                   {data?.twitterHandle && (
                     <Link
@@ -646,31 +708,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   >
                     <Icon as={FaDiscord} w="5" h="5" />
                   </Link> */}
-                </Flex>
-                <Flex flexDir="row">
-                  <UserInfoButton onOpen={selectProfile} profile={data} />
-                  {canDelegate &&
-                    (data?.status === 'withdrawn' ? (
-                      <Tooltip
-                        label="This delegate has indicated that they are no longer accepting delegations."
-                        bgColor={theme.collapse.bg || theme.card.background}
-                        color={theme.collapse.text}
-                      >
-                        <Flex>
-                          <DelegateButton
-                            delegated={data.address}
-                            px={['4', '8']}
-                            disabled
-                            isDisabled
-                          />
-                        </Flex>
-                      </Tooltip>
-                    ) : (
-                      <DelegateButton
-                        delegated={data.address}
-                        px={['4', '8']}
-                      />
-                    ))}
                 </Flex>
               </Flex>
             ) : (
