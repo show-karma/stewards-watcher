@@ -43,7 +43,7 @@ import { UserInfoButton } from '../UserInfoButton';
 import { ForumIcon, TwitterIcon } from '../Icons';
 import { ExpandableCardText } from './ExpandableCardText';
 import { DelegateStat } from './DelegateStat';
-import { RestStatsRows } from './RestStatsRows';
+import { ScoreStat } from './ScoreStat';
 import { StatPopover } from './StatPopover';
 
 interface IDelegateCardProps {
@@ -269,13 +269,13 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   const statBorderWidth = (index: number) => {
     if (index === 0) return '1px 0 1px 1px';
     if (index === 1) return '1px';
-    if (index === 2) return '1px 1px 1px 0';
+    if (index === firstRowStats.length - 1) return '1px 1px 1px 0';
     return '1px 1px 1px 0';
   };
 
   const statBorderRadius = (index: number) => {
     if (index === 0) return '8px 0 0 8px';
-    if (index === 3) return '0 8px 8px 0';
+    if (index === firstRowStats.length - 1) return '0 8px 8px 0';
     return '0 0 0 0';
   };
 
@@ -329,6 +329,8 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                 `${config.IMAGE_PREFIX_URL}${data.address}`
               }
               fallback={data.address}
+              onClick={() => selectProfile(data, 'statement')}
+              cursor="pointer"
             />
           </Flex>
         ) : (
@@ -345,12 +347,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
             />
           </Flex>
         )}
-        <Flex
-          w="full"
-          justifyContent="space-between"
-          align="center"
-          position="relative"
-        >
+        <Flex w="full" justifyContent="space-between" align="flex-start">
           <Flex
             flexDir="column"
             gap="1"
@@ -368,10 +365,12 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   fontSize="lg"
                   fontWeight="bold"
                   maxH="30px"
-                  maxW={{ base: '250px', xl: '286px' }}
+                  maxW={{ base: '250px' }}
                   textOverflow="ellipsis"
                   overflow="hidden"
                   whiteSpace="nowrap"
+                  onClick={() => selectProfile(data, 'statement')}
+                  cursor="pointer"
                 >
                   {data.realName || data.ensName || shortAddress}
                 </Text>
@@ -518,7 +517,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
               <>
                 {isLoaded ? (
                   <Flex
-                    position="absolute"
                     cursor="pointer"
                     right="0"
                     top="0"
@@ -527,7 +525,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                       openScoreBreakdown();
                     }}
                   >
-                    <DelegateStat stat={score} />
+                    <ScoreStat stat={score} />
                   </Flex>
                 ) : (
                   <Skeleton w="16" h="8" />
@@ -577,23 +575,24 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                         h="full"
                         w="full"
                         flexDir="row"
-                        justifyItems="center"
+                        justifyContent="space-between"
                         alignItems="center"
                         position="relative"
+                        boxShadow="0px 0px 6px rgba(255, 255, 255, 0.03)"
                       >
                         {firstRowStats.map((statItem, index) => (
                           <Flex
                             align="center"
                             justify="center"
                             key={+index}
-                            w="max-content"
-                            borderWidth={statBorderWidth(index)}
+                            flex="1"
                             borderStyle="solid"
                             borderColor={theme.card.border}
-                            px="2"
                             py="2"
+                            px="2"
+                            borderWidth={statBorderWidth(index)}
                             borderRadius={statBorderRadius(index)}
-                            flex="1"
+                            maxW="full"
                           >
                             {statItem.id === 'forumScore' &&
                             data?.discourseHandle &&
@@ -632,92 +631,101 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
 
         <Divider borderColor={theme.card.divider} w="full" mt={{ base: '3' }} />
         <Flex
-          flexDir="column"
+          flexDir="row"
           gap="3"
           mt={{ base: '3' }}
           h="max-content"
           px={{ base: '14px', lg: '5' }}
           pb={{ base: '5', lg: '5' }}
+          align="center"
+          justify="space-between"
+          w="full"
         >
-          <Flex justify="left" align="center" gap="4">
-            {isLoaded ? (
-              <Flex flexDir="row" justifyContent="space-between" w="full">
-                <Flex flexDir="row" gap="3">
-                  {canDelegate &&
-                    (data?.status === 'withdrawn' ? (
-                      <Tooltip
-                        label="This delegate has indicated that they are no longer accepting delegations."
-                        bgColor={theme.collapse.bg || theme.card.background}
-                        color={theme.collapse.text}
-                      >
-                        <Flex>
-                          <DelegateButton
-                            delegated={data.address}
-                            px={['4', '8']}
-                            disabled
-                            isDisabled
-                          />
-                        </Flex>
-                      </Tooltip>
-                    ) : (
-                      <DelegateButton delegated={data.address} />
-                    ))}
-                  <UserInfoButton onOpen={selectProfile} profile={data} />
-                </Flex>
-                <Flex gap="4" align="center" justify="center">
-                  {data?.twitterHandle && (
+          {isLoaded ? (
+            <Flex flexDir="row" justifyContent="space-between" w="full">
+              <Flex flexDir="row" gap="3">
+                {canDelegate &&
+                  (data?.status === 'withdrawn' ? (
+                    <Tooltip
+                      label="This delegate has indicated that they are no longer accepting delegations."
+                      bgColor={theme.collapse.bg || theme.card.background}
+                      color={theme.collapse.text}
+                    >
+                      <Flex>
+                        <DelegateButton
+                          delegated={data.address}
+                          px={['4', '8']}
+                          disabled
+                          isDisabled
+                        />
+                      </Flex>
+                    </Tooltip>
+                  ) : (
+                    <DelegateButton delegated={data.address} />
+                  ))}
+                <UserInfoButton onOpen={selectProfile} profile={data} />
+              </Flex>
+              <Flex gap="4" align="center" justify="center">
+                {data?.twitterHandle && (
+                  <Link
+                    href={`https://twitter.com/${data.twitterHandle}`}
+                    isExternal
+                    color={theme.card.socialMedia}
+                    _hover={{
+                      transform: 'scale(1.5)',
+                    }}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    h="max-content"
+                  >
+                    <TwitterIcon w="5" h="5" />
+                  </Link>
+                )}
+                {data?.discourseHandle &&
+                  daoData?.socialLinks.forum &&
+                  config.DAO_FORUM_TYPE && (
                     <Link
-                      href={`https://twitter.com/${data.twitterHandle}`}
+                      href={getUserForumUrl(
+                        data.discourseHandle,
+                        config.DAO_FORUM_TYPE,
+                        config.DAO_FORUM_URL || daoData.socialLinks.forum
+                      )}
                       isExternal
                       color={theme.card.socialMedia}
                       _hover={{
                         transform: 'scale(1.5)',
                       }}
+                      h="max-content"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
                     >
-                      <TwitterIcon w="5" h="5" />
+                      <ForumIcon w="5" h="5" />
                     </Link>
                   )}
-                  {data?.discourseHandle &&
-                    daoData?.socialLinks.forum &&
-                    config.DAO_FORUM_TYPE && (
-                      <Link
-                        href={getUserForumUrl(
-                          data.discourseHandle,
-                          config.DAO_FORUM_TYPE,
-                          config.DAO_FORUM_URL || daoData.socialLinks.forum
-                        )}
-                        isExternal
-                        color={theme.card.socialMedia}
-                        _hover={{
-                          transform: 'scale(1.5)',
-                        }}
-                      >
-                        <ForumIcon w="5" h="5" />
-                      </Link>
-                    )}
-                  {/* <Link
+                {/* <Link
                     href={`https://discordapp.com/users/${1234}`}
                     isExternal
                     color={theme.card.socialMedia}
                   >
                     <Icon as={FaDiscord} w="5" h="5" />
                   </Link> */}
-                </Flex>
               </Flex>
-            ) : (
-              <>
-                <Skeleton isLoaded={isLoaded} w="full" h="12">
-                  SkeletonText
-                </Skeleton>
-                <Skeleton isLoaded={isLoaded} w="full" h="12">
-                  SkeletonText
-                </Skeleton>
-                <Skeleton isLoaded={isLoaded} w="full" h="12">
-                  SkeletonText
-                </Skeleton>
-              </>
-            )}
-          </Flex>
+            </Flex>
+          ) : (
+            <>
+              <Skeleton isLoaded={isLoaded} w="full" h="12">
+                SkeletonText
+              </Skeleton>
+              <Skeleton isLoaded={isLoaded} w="full" h="12">
+                SkeletonText
+              </Skeleton>
+              <Skeleton isLoaded={isLoaded} w="full" h="12">
+                SkeletonText
+              </Skeleton>
+            </>
+          )}
         </Flex>
       </Flex>
       <StyledModal

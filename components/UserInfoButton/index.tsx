@@ -37,12 +37,9 @@ export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen, profile }) => {
   return (
     <Button
       as={Button}
-      h={['10', '12']}
       fontSize="sm"
       fontWeight="medium"
-      bg="transparent"
       color={theme.buttonTextSec}
-      borderStyle="solid"
       _hover={{
         backgroundColor: theme.card.statBg,
         opacity: 0.8,
@@ -54,8 +51,9 @@ export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen, profile }) => {
       fontFamily="heading"
       backgroundColor={theme.card.statBg}
       gap="6px"
+      h="10"
       px="2"
-      py="3"
+      py={['3', '6']}
       onClick={() => redirectWithoutRefresh('votinghistory')}
     >
       <HistoryIcon boxSize="22px" />

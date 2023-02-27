@@ -61,10 +61,10 @@ export const DelegateButton: FC<IDelegateButton> = ({
   return config.DAO_DELEGATE_MODE !== 'hidden' ? (
     <Button
       bgColor={theme.branding}
-      px={['4', '6']}
+      px={['4', '4', '4', '6']}
       py={['3', '6']}
       h="10"
-      fontSize={['md']}
+      fontSize={['sm', 'md']}
       fontWeight="medium"
       onClick={handleCase}
       _hover={{
@@ -74,12 +74,10 @@ export const DelegateButton: FC<IDelegateButton> = ({
       _active={{}}
       disabled={isLoading}
       color={theme.buttonText}
+      isLoading={isLoading}
       {...props}
     >
-      <Flex gap="2">
-        {isLoading && <Spinner />}
-        {text}
-      </Flex>
+      <Flex gap="2">{text}</Flex>
     </Button>
   ) : null;
 };
