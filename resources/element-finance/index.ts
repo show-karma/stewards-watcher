@@ -19,7 +19,7 @@ const config: IDAOConfig = {
   },
   DAO_CHAIN: mainnet,
   DAO_DELEGATE_CONTRACT: '',
-  DAO_DELEGATE_MODE: 'snapshot',
+  DAO_DELEGATE_MODE: 'hidden',
   DAO_FORUM_TYPE: 'commonwealth',
   DAO_FORUM_URL: 'https://forum.element.fi/',
   DAO_GTAG: 'G-67LDHT697P',
