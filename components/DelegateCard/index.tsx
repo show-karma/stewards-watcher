@@ -365,7 +365,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   fontSize="lg"
                   fontWeight="bold"
                   maxH="30px"
-                  maxW={{ base: '250px' }}
+                  maxW={{ base: '200px', lg: '250px' }}
                   textOverflow="ellipsis"
                   overflow="hidden"
                   whiteSpace="nowrap"
