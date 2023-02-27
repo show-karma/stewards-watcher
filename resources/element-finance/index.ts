@@ -1,5 +1,5 @@
 import { IDAOConfig, IDAOTheme } from 'types';
-import { chain } from 'wagmi';
+import { mainnet } from 'wagmi/chains';
 
 const config: IDAOConfig = {
   DAO: 'Element Finance',
@@ -17,9 +17,9 @@ const config: IDAOConfig = {
     FAVICON: '/daos/element-finance/favicon.png',
     URL: `https://elementfinance.karmahq.xyz`,
   },
-  DAO_CHAIN: chain.mainnet,
+  DAO_CHAIN: mainnet,
   DAO_DELEGATE_CONTRACT: '',
-  DAO_DELEGATE_MODE: 'snapshot',
+  DAO_DELEGATE_MODE: 'hidden',
   DAO_FORUM_TYPE: 'commonwealth',
   DAO_FORUM_URL: 'https://forum.element.fi/',
   DAO_GTAG: 'G-67LDHT697P',
