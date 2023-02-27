@@ -1,5 +1,5 @@
 import { IDAOConfig, IDAOTheme } from 'types';
-import { chain } from 'wagmi';
+import { mainnet } from 'wagmi/chains';
 import ABI from './ABI.json';
 
 const config: IDAOConfig = {
@@ -19,7 +19,7 @@ const config: IDAOConfig = {
     FAVICON: '/daos/pooltogether/favicon.png',
     URL: `https://pooltogether.karmahq.xyz`,
   },
-  DAO_CHAIN: chain.mainnet,
+  DAO_CHAIN: mainnet,
   DAO_DELEGATE_CONTRACT: '0x0cec1a9154ff802e7934fc916ed7ca50bde6844e',
   DAO_DELEGATE_MODE: 'custom',
   DAO_FORUM_TYPE: 'discourse',

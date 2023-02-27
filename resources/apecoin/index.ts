@@ -1,5 +1,5 @@
 import { IDAOConfig, IDAOTheme } from 'types';
-import { chain } from 'wagmi';
+import { mainnet } from 'wagmi/chains';
 
 const config: IDAOConfig = {
   DAO: 'Apecoin',
@@ -17,7 +17,7 @@ const config: IDAOConfig = {
     FAVICON: '/daos/apecoin/favicon.png',
     URL: `https://apecoin.karmahq.xyz`,
   },
-  DAO_CHAIN: chain.mainnet,
+  DAO_CHAIN: mainnet,
   DAO_DEFAULT_SETTINGS: {
     TIMEPERIOD: '180d',
     ORDERSTAT: 'karmaScore',
