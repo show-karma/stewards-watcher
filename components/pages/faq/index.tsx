@@ -9,6 +9,9 @@ const setCheckboxes = (str: string) =>
     .replace(/(\[x\])/gim, '\t<input type="checkbox" checked>')
     .replace(/(\[ \])/gim, '\t<input type="checkbox">');
 
+const addBlankToLinkTag = (str: string) =>
+  str.replace(/(<a)/gim, '$1 target="_blank"');
+
 export const FAQPage: FC = () => {
   const [markdown, setMarkdown] = useState<string>('');
   const { selectedDAO } = useDAO();
@@ -43,7 +46,7 @@ export const FAQPage: FC = () => {
               table tr:nth-of-type(2n-1){border-bottom:1px solid;background:rgba(155,155,155,0.125)}
               table tr:nth-of-type(2n){border-bottom:1px solid;background:rgba(155,155,155,0.225)}
             </style>
-            ${setCheckboxes(md.render(markdown))}`;
+            ${addBlankToLinkTag(setCheckboxes(md.render(markdown)))}`;
           }
         }
       );

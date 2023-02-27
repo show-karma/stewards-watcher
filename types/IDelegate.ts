@@ -9,12 +9,14 @@ export interface IDelegate {
   delegatedVotes?: number;
   delegators: number;
   karmaScore: number;
+  discordScore: number;
   gitcoinHealthScore?: number;
   voteParticipation: {
     onChain: number;
     offChain: number;
   };
   twitterHandle?: string;
+  discordHandle?: string;
   discourseHandle?: string;
   updatedAt?: string;
   aboutMe?: string;

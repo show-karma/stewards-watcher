@@ -1,5 +1,5 @@
 import { IDAOConfig, IDAOTheme } from 'types';
-import { chain } from 'wagmi';
+import { mainnet } from 'wagmi/chains';
 
 const config: IDAOConfig = {
   DAO: 'SSV Network',
@@ -17,12 +17,17 @@ const config: IDAOConfig = {
     FAVICON: '/daos/ssvnetwork/favicon.png',
     URL: `https://ssvnetwork.karmahq.xyz`,
   },
-  DAO_CHAIN: chain.mainnet,
-  DAO_DELEGATE_CONTRACT: '',
+  DAO_CHAIN: mainnet,
+  DAO_DELEGATE_CONTRACT: undefined,
   DAO_DELEGATE_MODE: 'snapshot',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
-  EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'healthScore', 'karmaScore'],
+  EXCLUDED_CARD_FIELDS: [
+    'onChainVotesPct',
+    'healthScore',
+    'karmaScore',
+    'discordScore',
+  ],
 };
 
 const dark: IDAOTheme = {

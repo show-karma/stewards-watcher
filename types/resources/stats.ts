@@ -5,6 +5,7 @@ export type IStats =
   | 'karmaScore'
   | 'forumScore'
   | 'healthScore'
+  | 'discordScore'
   | 'votingWeight';
 
 export type IStatsID =

@@ -1,5 +1,5 @@
 import { IDAOConfig, IDAOTheme } from 'types';
-import { chain } from 'wagmi';
+import { mainnet } from 'wagmi/chains';
 
 const config: IDAOConfig = {
   DAO: 'Starknet',
@@ -17,13 +17,13 @@ const config: IDAOConfig = {
     FAVICON: '/daos/starknet/favicon.svg',
     URL: `https://starknet.karmahq.xyz`,
   },
-  DAO_CHAIN: chain.mainnet,
-  DAO_DELEGATE_CONTRACT: '',
+  DAO_CHAIN: mainnet,
+  DAO_DELEGATE_CONTRACT: undefined,
   DAO_DELEGATE_MODE: 'snapshot',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
   SHOULD_NOT_SHOW: 'stats',
-  EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'healthScore'],
+  EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'healthScore', 'discordScore'],
 };
 
 const dark: IDAOTheme = {

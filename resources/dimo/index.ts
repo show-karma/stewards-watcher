@@ -1,5 +1,5 @@
 import { IDAOConfig, IDAOTheme } from 'types';
-import { chain } from 'wagmi';
+import { polygon } from 'wagmi/chains';
 import ABI from './ABI.json';
 
 const config: IDAOConfig = {
@@ -19,7 +19,7 @@ const config: IDAOConfig = {
     FAVICON: '/daos/dimo/favicon.png',
     URL: `https://dimo.karmahq.xyz`,
   },
-  DAO_CHAIN: chain.polygon,
+  DAO_CHAIN: polygon,
   DAO_DELEGATE_CONTRACT: '0xE261D618a959aFfFd53168Cd07D12E37B26761db',
   DAO_DELEGATE_MODE: 'custom',
   DAO_FORUM_TYPE: undefined,
@@ -29,6 +29,7 @@ const config: IDAOConfig = {
     'karmaScore',
     'onChainVotesPct',
     'forumScore',
+    'discordScore',
   ],
   DAO_DEFAULT_SETTINGS: {
     STATUS_FILTER: {

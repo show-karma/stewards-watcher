@@ -1,5 +1,5 @@
 import { IDAOConfig, IDAOTheme } from 'types';
-import { chain } from 'wagmi';
+import { mainnet } from 'wagmi/chains';
 
 const config: IDAOConfig = {
   DAO: 'Developer DAO',
@@ -17,8 +17,8 @@ const config: IDAOConfig = {
     FAVICON: '/daos/developerdao/favicon.png',
     URL: `https://developerdao.karmahq.xyz`,
   },
-  DAO_CHAIN: chain.mainnet,
-  DAO_DELEGATE_CONTRACT: '',
+  DAO_CHAIN: mainnet,
+  DAO_DELEGATE_CONTRACT: undefined,
   DAO_DELEGATE_MODE: 'hidden',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
@@ -28,6 +28,7 @@ const config: IDAOConfig = {
     'healthScore',
     'delegatedVotes',
     'votingWeight',
+    'discordScore',
   ],
   DAO_DEFAULT_SETTINGS: {
     STATUS_FILTER: {

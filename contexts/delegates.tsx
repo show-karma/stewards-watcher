@@ -83,6 +83,7 @@ const statDefaultOptions: IStatOptions[] = [
   { title: 'On-chain votes', id: 'onChainVotesPct', stat: 'onChainVotesPct' },
   { title: 'Score', id: 'score', stat: 'karmaScore' },
   { title: 'Health', id: 'healthScore', stat: 'healthScore' },
+  { title: 'Discord Score', id: 'discordScore', stat: 'discordScore' },
 ];
 
 const defaultStatuses: IStatusOptions[] = [
@@ -243,6 +244,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           address: item.publicAddress,
           ensName: item.ensName,
           forumActivity: fetchedPeriod?.forumActivityScore || 0,
+          discordScore: fetchedPeriod?.discordScore || 0,
           delegateSince: item.joinDateAt || item.firstTokenDelegatedAt,
           delegators: item.delegatorCount || 0,
           voteParticipation: {
@@ -255,6 +257,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           delegatedVotes: item.delegatedVotes || item.snapshotDelegatedVotes,
           twitterHandle: item.twitterHandle,
           discourseHandle: item.discourseHandle,
+          discordHandle: item.discordHandle,
           updatedAt: fetchedPeriod?.updatedAt,
           karmaScore: fetchedPeriod?.karmaScore || 0,
           aboutMe: item.aboutMe,
@@ -310,6 +313,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           address: item.publicAddress,
           ensName: item.ensName,
           forumActivity: fetchedPeriod?.forumActivityScore || 0,
+          discordScore: fetchedPeriod?.discordScore || 0,
           delegateSince: item.joinDateAt || item.firstTokenDelegatedAt,
           delegators: item.delegatorCount || 0,
           voteParticipation: {
@@ -317,6 +321,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
             offChain: fetchedPeriod?.offChainVotesPct || 0,
           },
           discourseHandle: item.discourseHandle,
+          discordHandle: item.discordHandle,
           votingWeight: item.voteWeight,
           delegatePitch: item.delegatePitch,
           delegatedVotes: item.delegatedVotes || item.snapshotDelegatedVotes,
@@ -391,6 +396,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         address: fetchedDelegate.publicAddress,
         ensName: fetchedDelegate.ensName,
         forumActivity: fetchedPeriod?.forumActivityScore || 0,
+        discordScore: fetchedPeriod?.discordScore || 0,
         delegateSince:
           fetchedDelegate.joinDateAt || fetchedDelegate.firstTokenDelegatedAt,
         delegators: fetchedDelegate.delegatorCount || 0,
@@ -405,6 +411,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         gitcoinHealthScore: fetchedPeriod?.gitcoinHealthScore || 0,
         twitterHandle: fetchedDelegate.twitterHandle,
         discourseHandle: fetchedDelegate.discourseHandle,
+        discordHandle: fetchedDelegate.discordHandle,
         updatedAt: fetchedPeriod?.updatedAt,
         karmaScore: fetchedPeriod?.karmaScore || 0,
         delegatePitch: fetchedDelegate.delegatePitch,
@@ -484,6 +491,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           address: item.publicAddress,
           ensName: item.ensName,
           forumActivity: fetchedPeriod?.forumActivityScore || 0,
+          discordScore: fetchedPeriod?.discordScore || 0,
           delegateSince: item.joinDateAt || item.firstTokenDelegatedAt,
           delegators: item.delegatorCount || 0,
           voteParticipation: {
@@ -494,6 +502,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           delegatedVotes: item.delegatedVotes || item.snapshotDelegatedVotes,
           twitterHandle: item.twitterHandle,
           discourseHandle: item.discourseHandle,
+          discordHandle: item.discordHandle,
           delegatePitch: item.delegatePitch,
           updatedAt: fetchedPeriod?.updatedAt || '-',
           karmaScore: fetchedPeriod?.karmaScore || 0,

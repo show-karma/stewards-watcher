@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import { Flex, Grid, Spinner, Text, useDisclosure } from '@chakra-ui/react';
+import { Flex, Grid, Spinner, Text } from '@chakra-ui/react';
 import { useDAO, useDelegates, useWallet } from 'contexts';
 import { FC, useMemo } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -75,9 +75,10 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
     delegates,
   } = useDelegates();
   const { daoInfo } = useDAO();
+  const { config } = daoInfo;
+
   const { connectOnClose, connectIsOpen, delegateIsOpen, delegateOnToggle } =
     useWallet();
-  const { config } = daoInfo;
 
   const searchProfileSelected = async (userToSearch: string) => {
     await searchProfileModal(userToSearch);
@@ -107,19 +108,6 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
           selectedTab={selectedTab}
         />
       )}
-
-      {connectIsOpen && (
-        <DelegateLoginModal isOpen={connectIsOpen} onClose={connectOnClose} />
-      )}
-
-      {profileSelected && delegateIsOpen && (
-        <DelegateModal
-          delegateData={profileSelected}
-          open={delegateIsOpen}
-          handleModal={delegateOnToggle}
-        />
-      )}
-
       <Flex flexDir="column" align="center" w="full" maxW="1360px">
         {!!interestFilter.length && (
           <Flex textAlign="start" w={{ base: 'full' }} fontSize={12} mb={4}>
@@ -129,6 +117,18 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
             </Text>
           </Flex>
         )}
+        {connectIsOpen && (
+          <DelegateLoginModal isOpen={connectIsOpen} onClose={connectOnClose} />
+        )}
+
+        {profileSelected && delegateIsOpen && (
+          <DelegateModal
+            delegateData={profileSelected}
+            open={delegateIsOpen}
+            handleModal={delegateOnToggle}
+          />
+        )}
+
         <InfiniteScroll
           pageStart={0}
           loadMore={() => {

@@ -21,7 +21,7 @@ export interface IDAOConfig {
     URL: string;
   };
   DAO_CHAIN: Chain;
-  DAO_DELEGATE_CONTRACT: string;
+  DAO_DELEGATE_CONTRACT?: `0x${string}`;
   DAO_DELEGATE_MODE: 'custom' | 'snapshot' | 'hidden';
   DAO_DELEGATE_ACTION?: () => void;
   DAO_FORUM_TYPE?: IForumType;

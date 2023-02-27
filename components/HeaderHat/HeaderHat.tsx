@@ -8,9 +8,14 @@ import {
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
-import { DelegateLoginButton, DelegateLoginModal } from 'components';
+import {
+  DelegateLoginButton,
+  DelegateLoginModal,
+  UserProfile,
+} from 'components';
 import { DelegateVotesModal } from 'components/Modals/DelegateToAnyone';
-import { useDAO } from 'contexts';
+import { useDAO, useDelegates } from 'contexts';
+import { useAuth } from 'contexts/auth';
 import { FC } from 'react';
 import { IoMenu } from 'react-icons/io5';
 import { HeaderBurgerMenu } from './HeaderBurgerMenu';
@@ -41,7 +46,8 @@ export const HeaderHat = () => {
   const { daoInfo, theme } = useDAO();
   const { config } = daoInfo;
   const { isOpen, onToggle } = useDisclosure();
-
+  const { isOpenProfile, onCloseProfile, profileSelected, selectedTab } =
+    useDelegates();
   const {
     onClose: onCloseDelegateLogin,
     isOpen: isOpenDelegateLogin,
@@ -164,6 +170,24 @@ export const HeaderHat = () => {
         isOpen={isOpenDelegateLogin}
         onClose={onCloseDelegateLogin}
       />
+      {profileSelected && (
+        <UserProfile
+          isOpen={isOpenProfile}
+          onClose={onCloseProfile}
+          profile={{
+            address: profileSelected.address,
+            avatar:
+              profileSelected.profilePicture ||
+              `${config.IMAGE_PREFIX_URL}${profileSelected.address}`,
+            ensName: profileSelected.ensName,
+            twitter: profileSelected.twitterHandle,
+            aboutMe: profileSelected.aboutMe,
+            realName: profileSelected.realName,
+            forumHandle: profileSelected.discourseHandle,
+          }}
+          selectedTab={selectedTab}
+        />
+      )}
     </Flex>
   );
 };

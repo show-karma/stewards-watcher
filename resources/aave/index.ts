@@ -1,5 +1,5 @@
 import { IDAOConfig, IDAOTheme } from 'types';
-import { chain } from 'wagmi';
+import { mainnet } from 'wagmi/chains';
 import ABI from './ABI.json';
 
 const config: IDAOConfig = {
@@ -21,13 +21,13 @@ const config: IDAOConfig = {
   DAO_DEFAULT_SETTINGS: {
     FAQ: false,
   },
-  DAO_CHAIN: chain.mainnet,
+  DAO_CHAIN: mainnet,
   DAO_DELEGATE_CONTRACT: '0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9',
   DAO_DELEGATE_MODE: 'custom',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
 
-  EXCLUDED_CARD_FIELDS: ['healthScore', 'karmaScore'],
+  EXCLUDED_CARD_FIELDS: ['healthScore', 'karmaScore', 'discordScore'],
 };
 
 const dark: IDAOTheme = {

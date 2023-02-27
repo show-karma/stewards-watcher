@@ -1,5 +1,5 @@
 import { IDAOConfig, IDAOTheme } from 'types';
-import { chain } from 'wagmi';
+import { mainnet } from 'wagmi/chains';
 import ABI from './ABI.json';
 
 const config: IDAOConfig = {
@@ -19,7 +19,7 @@ const config: IDAOConfig = {
     FAVICON: '/daos/gitcoin/favicon.png',
     URL: `https://gitcoin.karmahq.xyz`,
   },
-  DAO_CHAIN: chain.mainnet,
+  DAO_CHAIN: mainnet,
   DAO_DELEGATE_CONTRACT: '0xde30da39c46104798bb5aa3fe8b9e0e1f348163f',
   DAO_DELEGATE_MODE: 'custom',
   DAO_FORUM_TYPE: 'discourse',
@@ -28,7 +28,7 @@ const config: IDAOConfig = {
     TIMEPERIOD: '180d',
     ORDERSTAT: 'healthScore',
   },
-  EXCLUDED_CARD_FIELDS: ['onChainVotesPct'],
+  EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'discordScore'],
 };
 
 const dark: IDAOTheme = {

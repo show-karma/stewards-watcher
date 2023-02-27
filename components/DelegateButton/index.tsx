@@ -3,6 +3,7 @@ import { useDAO, useWallet, useGovernanceVotes } from 'contexts';
 import { useDelegation, useMixpanel } from 'hooks';
 import { convertHexToRGBA } from 'utils';
 import { FC, useEffect, useState } from 'react';
+import { useAccount } from 'wagmi';
 
 interface IDelegateButton extends ButtonProps {
   delegated: string;
@@ -21,13 +22,9 @@ export const DelegateButton: FC<IDelegateButton> = ({
   beforeOnClick,
   ...props
 }) => {
-  const {
-    openChainModal,
-    isConnected,
-    chain,
-    connectIsOpen,
-    openConnectModal,
-  } = useWallet();
+  const { openConnectModal, openChainModal, chain, connectIsOpen } =
+    useWallet();
+  const { isConnected } = useAccount();
   const { daoInfo, theme } = useDAO();
   const { config } = daoInfo;
   const { mixpanel } = useMixpanel();

@@ -36,16 +36,16 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
 
   const [delegatedBefore, setDelegatedBefore] = useState('');
   const { data: voteAmount, isFetching: isLoadingVotes } = useContractRead({
-    addressOrName: daoInfo.config.DAO_DELEGATE_CONTRACT,
-    contractInterface: daoInfo.ABI,
+    address: daoInfo.config.DAO_DELEGATE_CONTRACT,
+    abi: daoInfo.ABI,
     functionName: 'balanceOf',
     args: [walletAddress],
     chainId: daoInfo.config.DAO_CHAIN.id,
   });
 
   const { data: delegated } = useContractRead({
-    addressOrName: daoInfo.config.DAO_DELEGATE_CONTRACT,
-    contractInterface: daoInfo.ABI,
+    address: daoInfo.config.DAO_DELEGATE_CONTRACT,
+    abi: daoInfo.ABI,
     functionName: 'delegates',
     args: [walletAddress],
     chainId: daoInfo.config.DAO_CHAIN.id,
@@ -53,8 +53,8 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
   });
 
   const { data: fetchedSymbol } = useContractRead({
-    addressOrName: daoInfo.config.DAO_DELEGATE_CONTRACT,
-    contractInterface: daoInfo.ABI,
+    address: daoInfo.config.DAO_DELEGATE_CONTRACT,
+    abi: daoInfo.ABI,
     functionName: 'symbol',
     chainId: daoInfo.config.DAO_CHAIN.id,
   });
@@ -64,7 +64,7 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
       setVotes('0');
       return;
     }
-    const fromWeiAmount = formatEther(voteAmount);
+    const fromWeiAmount = formatEther(voteAmount.toString());
     const formattedAmount = numbro(fromWeiAmount).format({
       thousandSeparated: true,
       mantissa: 3,

@@ -1,6 +1,6 @@
 import { IDAOConfig, IDAOTheme } from 'types';
 import { onChainDyDxVotesProvider } from 'utils/onChainDyDxVotesProvider';
-import { chain } from 'wagmi';
+import { mainnet } from 'wagmi/chains';
 import ABI from './ABI.json';
 
 const config: IDAOConfig = {
@@ -19,7 +19,7 @@ const config: IDAOConfig = {
     FAVICON: '/daos/dydx/favicon.png',
     URL: `https://dydx.karmahq.xyz`,
   },
-  DAO_CHAIN: chain.mainnet,
+  DAO_CHAIN: mainnet,
   DAO_DELEGATE_CONTRACT: '0x92D6C1e31e14520e676a687F0a93788B716BEff5',
   DAO_DELEGATE_MODE: 'custom',
   DAO_DELEGATE_ACTION: () =>
