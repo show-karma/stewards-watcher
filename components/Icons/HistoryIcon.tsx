@@ -4,9 +4,9 @@ import { Icon, IconProps } from '@chakra-ui/react';
 export const HistoryIcon = (props: IconProps) => (
   <Icon display="flex" alignItems="center" justifyItems="center" {...props}>
     <svg
-      width="22"
-      height="19"
-      viewBox="0 0 22 19"
+      width="24"
+      height="24"
+      viewBox="0 0 22 22"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >

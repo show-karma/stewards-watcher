@@ -12,7 +12,8 @@ import {
 } from '@chakra-ui/react';
 import { LeftCircleArrowIcon, RightCircleArrowIcon } from 'components/Icons';
 import { useDAO } from 'contexts';
-import { FC, useEffect } from 'react';
+import { motion, useAnimationControls } from 'framer-motion';
+import { FC, useEffect, useState } from 'react';
 import { ICardStat } from 'types';
 
 interface IStatPopoverProps {
@@ -23,18 +24,14 @@ export const StatPopover: FC<IStatPopoverProps> = ({ stats }) => {
   const { isOpen, onToggle, onClose } = useDisclosure();
   const { theme } = useDAO();
 
+  const MotionIconButton = motion(IconButton);
+
   return (
     <Popover isOpen={isOpen} onClose={onClose} placement="right">
       <PopoverTrigger>
-        <IconButton
+        <MotionIconButton
           aria-label="Stat extension showing"
-          icon={
-            isOpen ? (
-              <RightCircleArrowIcon boxSize="4" />
-            ) : (
-              <LeftCircleArrowIcon boxSize="4" />
-            )
-          }
+          icon={<LeftCircleArrowIcon boxSize="4" />}
           position="absolute"
           right="-16px"
           px="2"
@@ -49,6 +46,9 @@ export const StatPopover: FC<IStatPopoverProps> = ({ stats }) => {
           _focusVisible={{}}
           onClick={onToggle}
           color={theme.card.statBg}
+          initial={{ rotate: isOpen ? 0 : 180 }}
+          animate={{ rotate: isOpen ? 180 : 0 }}
+          transition={{ duration: 0.3 }}
         />
       </PopoverTrigger>
       <PopoverContent

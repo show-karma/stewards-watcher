@@ -419,7 +419,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                       h="7px"
                       backgroundColor={getDataStatusColor(data.status)}
                     />
-                    <Text fontWeight="400" fontSize="10px" color={theme.title}>
+                    <Text fontWeight="400" fontSize="13px" color={theme.title}>
                       {data.status.charAt(0).toUpperCase() +
                         data.status.slice(1)}
                     </Text>
@@ -453,7 +453,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                     <Flex h="21px" />
                   ) : (
                     <>
-                      {interests.value.length > 0 &&
+                      {interests.value.length > 0 ? (
                         (interests.value.slice(0, 3) as string[]).map(
                           (interest, index) => (
                             <Tooltip
@@ -500,7 +500,10 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                               </Text>
                             </Tooltip>
                           )
-                        )}
+                        )
+                      ) : (
+                        <Flex h="23px" w="30px" />
+                      )}
                     </>
                   )}
                 </Flex>
