@@ -77,7 +77,7 @@ interface ProviderProps {
 
 const statDefaultOptions: IStatOptions[] = [
   { title: 'Voting weight', id: 'delegatedVotes', stat: 'delegatedVotes' },
-  { title: 'Forum score', id: 'forumScore', stat: 'forumScore' },
+  { title: 'Forum Activity', id: 'forumScore', stat: 'forumScore' },
   { title: 'Snapshot votes', id: 'offChainVotesPct', stat: 'offChainVotesPct' },
   { title: 'On-chain votes', id: 'onChainVotesPct', stat: 'onChainVotesPct' },
   { title: 'Score', id: 'score', stat: 'karmaScore' },

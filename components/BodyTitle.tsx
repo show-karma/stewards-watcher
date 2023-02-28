@@ -76,6 +76,45 @@ export const BodyTitle: FC = () => {
     setShowHeaderText(false);
   };
 
+  const getCustomDescription = () => {
+    if (config.DAO_KARMA_ID === 'starknet') {
+      return (
+        <Text
+          color={theme.collapse.text}
+          textAlign={{ base: 'start' }}
+          fontSize={{ base: 'lg', sm: '2xl' }}
+          lineHeight="9"
+          fontWeight="600"
+          fontFamily="body"
+        >
+          Starknet delegates play a vital role in decentralizing the upgrade
+          process for Starknet mainnet. Delegates vote to approve protocol
+          upgrades before they go live on mainnet. Read more about delegate
+          responsibilities{' '}
+          <Link
+            href="https://community.starknet.io/t/delegate-onboarding-announcement/4047"
+            isExternal
+            textDecor="underline"
+          >
+            here.
+          </Link>
+        </Text>
+      );
+    }
+    return (
+      <Text
+        color={theme.collapse.text}
+        textAlign={{ base: 'start' }}
+        fontSize={{ base: 'lg', sm: '2xl' }}
+        lineHeight="9"
+        fontWeight="600"
+        fontFamily="body"
+      >
+        {config.DAO_DESCRIPTION}
+      </Text>
+    );
+  };
+
   return (
     <Flex
       flexDir="column"
@@ -111,16 +150,7 @@ export const BodyTitle: FC = () => {
               maxW={{ base: '100%', lg: '80%' }}
               py="5"
             >
-              <Text
-                color={theme.collapse.text}
-                textAlign={{ base: 'start' }}
-                fontSize={{ base: 'lg', sm: '2xl' }}
-                lineHeight="9"
-                fontWeight="600"
-                fontFamily="body"
-              >
-                {config.DAO_DESCRIPTION}
-              </Text>
+              {getCustomDescription()}
               <Text
                 color={theme.collapse.subtext}
                 fontSize={{ base: 'md', md: 'xl' }}
