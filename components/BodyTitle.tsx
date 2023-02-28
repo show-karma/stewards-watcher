@@ -88,7 +88,7 @@ export const BodyTitle: FC = () => {
           fontFamily="body"
         >
           Starknet delegates play a vital role in decentralizing the upgrade
-          process for Starknet mainnet. Delegates votes to approve protocol
+          process for Starknet mainnet. Delegates vote to approve protocol
           upgrades before they go live on mainnet. Read more about delegate
           responsibilities{' '}
           <Link
