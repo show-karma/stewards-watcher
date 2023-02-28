@@ -3,7 +3,7 @@ import { mainnet } from 'wagmi/chains';
 
 const config: IDAOConfig = {
   DAO: 'Starknet',
-  DAO_DESCRIPTION: `The Delegates of Starknet DAO play a vital role in driving the Starknet ecosystem forward through their work in governance and workstreams.`,
+  DAO_DESCRIPTION: `Starknet delegates play a vital role in decentralizing the upgrade process for Starknet mainnet. Delegates votes to approve protocol upgrades before they go live on mainnet. Read more about delegate responsibilities here.`,
   DAO_SUBDESCRIPTION: `This site will help boost transparency with health cards for each Delegate that display metrics and links on their involvement and engagement in the DAO.`,
   DAO_URL: 'https://starkware.co/starknet',
   GOVERNANCE_FORUM: 'https://community.starknet.io/',
@@ -16,6 +16,9 @@ const config: IDAOConfig = {
     IMAGE: '/daos/starknet/meta.png',
     FAVICON: '/daos/starknet/favicon.svg',
     URL: `https://starknet.karmahq.xyz`,
+  },
+  DAO_DEFAULT_SETTINGS: {
+    ORDERSTAT: 'forumScore',
   },
   DAO_CHAIN: mainnet,
   DAO_DELEGATE_CONTRACT: '',
