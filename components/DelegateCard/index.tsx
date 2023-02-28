@@ -411,22 +411,22 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                     </Flex>
                   )}
                 </Flex>
-                {data?.status ? (
-                  <Flex gap="1" align="center">
-                    <Flex
-                      borderRadius="full"
-                      w="7px"
-                      h="7px"
-                      backgroundColor={getDataStatusColor(data.status)}
-                    />
-                    <Text fontWeight="400" fontSize="13px" color={theme.title}>
-                      {data.status.charAt(0).toUpperCase() +
-                        data.status.slice(1)}
-                    </Text>
-                  </Flex>
-                ) : (
-                  <Flex h="15px" />
-                )}
+                <Flex gap="1" align="center">
+                  <Flex
+                    borderRadius="full"
+                    w="7px"
+                    h="7px"
+                    backgroundColor={getDataStatusColor(
+                      data.status || 'active'
+                    )}
+                  />
+                  <Text fontWeight="400" fontSize="13px" color={theme.title}>
+                    {data.status
+                      ? data.status.charAt(0).toUpperCase() +
+                        data.status.slice(1)
+                      : 'Active'}
+                  </Text>
+                </Flex>
                 <Flex
                   flexDir="row"
                   gap="1.5"
@@ -453,7 +453,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                     <Flex h="21px" />
                   ) : (
                     <>
-                      {interests.value.length > 0 ? (
+                      {interests.value.length > 0 &&
                         (interests.value.slice(0, 3) as string[]).map(
                           (interest, index) => (
                             <Tooltip
@@ -500,10 +500,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                               </Text>
                             </Tooltip>
                           )
-                        )
-                      ) : (
-                        <Flex h="23px" w="30px" />
-                      )}
+                        )}
                     </>
                   )}
                 </Flex>
