@@ -4,7 +4,7 @@ import { mainnet } from 'wagmi/chains';
 const config: IDAOConfig = {
   DAO: 'Apecoin',
   DAO_DESCRIPTION: `The Delegates of Apecoin DAO play a vital role in driving the Apecoin ecosystem forward through their work in governance and workstreams.`,
-  DAO_SUBDESCRIPTION: `This site will help boost transparency with health cards for each Delegate that display metrics and links on their involvement and engagement in the DAO.`,
+  DAO_SUBDESCRIPTION: `This site helps token holders choose delegates and boost transparency by displaying delegate contribution to indicate their involvement in the DAO.`,
   DAO_URL: 'https://apecoin.com',
   GOVERNANCE_FORUM: 'https://forum.apecoin.com',
   DAO_KARMA_ID: 'apecoin',

@@ -6,7 +6,7 @@ const config: IDAOConfig = {
   DAO: 'Gitcoin',
   DAO_DESCRIPTION: `The Delegates of Gitcoin DAO play a vital role in driving the Gitcoin
   ecosystem forward through their work in governance.`,
-  DAO_SUBDESCRIPTION: `This site will help boost transparency by displaying delegate contribution to indicate their involvement and engagement in the DAO.`,
+  DAO_SUBDESCRIPTION: `This site helps token holders choose delegates and boost transparency by displaying delegate contribution to indicate their involvement in the DAO.`,
   DAO_URL: 'https://gitcoin.co',
   GOVERNANCE_FORUM: 'https://gov.gitcoin.co',
   DAO_KARMA_ID: 'gitcoin',
