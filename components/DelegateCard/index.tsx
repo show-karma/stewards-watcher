@@ -672,7 +672,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                     isExternal
                     color={theme.card.socialMedia}
                     _hover={{
-                      transform: 'scale(1.5)',
+                      transform: 'scale(1.25)',
                     }}
                     display="flex"
                     alignItems="center"
@@ -694,7 +694,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                       isExternal
                       color={theme.card.socialMedia}
                       _hover={{
-                        transform: 'scale(1.5)',
+                        transform: 'scale(1.25)',
                       }}
                       h="max-content"
                       display="flex"

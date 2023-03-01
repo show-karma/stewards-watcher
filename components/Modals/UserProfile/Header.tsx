@@ -132,7 +132,7 @@ const MediaIcon: FC<IMediaIcon> = ({
         color={theme.card.socialMedia}
         opacity="1"
         _hover={{
-          transform: 'scale(1.5)',
+          transform: 'scale(1.25)',
         }}
         display="flex"
         alignItems="center"
