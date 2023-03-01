@@ -84,6 +84,13 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
 
   const allStats: ICardStat[] = [
     {
+      title: 'Total Delegators',
+      icon: BsChat,
+      value: data?.delegatorCount ? formatNumber(data.delegatorCount) : '-',
+      id: 'delegatorCount',
+      tooltipText: 'Total of delegators for this delegate',
+    },
+    {
       title: 'Delegated Tokens',
       icon: IoIosCheckboxOutline,
       value: data?.delegatedVotes ? formatNumber(data?.delegatedVotes) : '-',
@@ -183,7 +190,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           ? `${formatNumberPercentage(data?.votingWeight)}`
           : '-',
         id: 'votingWeight',
-        tooltipText: `Based on ${data?.delegators || 0} delegators`,
+        tooltipText: `Based on ${data?.delegatorCount || 0} delegators`,
       });
 
     const order = [
@@ -191,6 +198,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       'votingWeight',
       'offChainVotesPct',
       'onChainVotesPct',
+      'delegatorCount',
       'forumScore',
       'karmaScore',
       'discordScore',
@@ -212,10 +220,30 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     setStats(filtereds);
   }, [config, data]);
 
-  const showSecondRow =
-    config.DAO_KARMA_ID !== 'gitcoin' &&
-    config.EXCLUDED_CARD_FIELDS.length < 2 &&
-    !config.SHOULD_NOT_SHOW?.includes('stats');
+  const renderWorkstream = () => {
+    if (
+      !data?.workstreams ||
+      !(data.workstreams.length > 0) ||
+      data.workstreams[0]?.description.toLowerCase() === 'general'
+    )
+      return undefined;
+    return (
+      <Text
+        color={theme.card.workstream.text}
+        bgColor={theme.card.workstream.bg}
+        px="2"
+        py="1"
+        borderRadius="md"
+        fontSize="10px"
+        fontWeight="medium"
+        _hover={{
+          backgroundColor: convertHexToRGBA(theme.title, 0.8),
+        }}
+      >
+        {data?.workstreams[0]?.name}
+      </Text>
+    );
+  };
 
   const shortAddress = data && truncateAddress(data.address);
 
@@ -228,15 +256,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   };
 
   const canDelegate = checkIfDelegate();
-
-  const [isOverflowingInterest, setIsOverflowingInterest] = useState(false);
-  const [interestsNumberToShow, setInterestsNumberToShow] = useState(4);
-  const handleInterestOverflow = useCallback((ref: HTMLDivElement) => {
-    if (ref?.clientHeight > 25 || ref?.scrollHeight > 25) {
-      setIsOverflowingInterest(true);
-      setInterestsNumberToShow(previous => previous - 1);
-    }
-  }, []);
 
   const findStatement = customFields.find(
     item =>
@@ -433,22 +452,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   overflowX="hidden"
                   width="max-content"
                 >
-                  {data.workstreams && data.workstreams.length > 0 && (
-                    <Text
-                      color={theme.card.workstream.text}
-                      bgColor={theme.card.workstream.bg}
-                      px="2"
-                      py="1"
-                      borderRadius="md"
-                      fontSize="10px"
-                      fontWeight="medium"
-                      _hover={{
-                        backgroundColor: convertHexToRGBA(theme.title, 0.8),
-                      }}
-                    >
-                      {data?.workstreams[0]?.name}
-                    </Text>
-                  )}
+                  {renderWorkstream()}
                   {!isLoaded ? (
                     <Flex h="21px" />
                   ) : (
