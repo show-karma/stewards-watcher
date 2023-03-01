@@ -34,7 +34,6 @@ export const OrderFilter = () => {
           />
         }
         bgColor={theme.filters.bg}
-        boxShadow={theme.filters.shadow}
         color={theme.filters.title}
         gap="1"
         fontFamily="heading"

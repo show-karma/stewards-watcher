@@ -380,7 +380,7 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
 
             {isEditing ? (
               <Button
-                bgColor={theme.branding}
+                background={theme.branding}
                 px={['4', '6']}
                 py={['3', '6']}
                 h="10"

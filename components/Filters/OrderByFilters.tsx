@@ -10,9 +10,9 @@ export const OrderByFilters = () => {
   const { theme, daoInfo } = useDAO();
 
   return (
-    <Flex gap="4" align="end" flexDir={['row']} flexWrap="wrap">
+    <Flex align="end" flexDir={['row']} flexWrap="wrap">
       <Flex flexDir="column" w={{ base: 'full', md: 'max-content' }}>
-        <Text fontFamily="heading" color={theme.filters.head}>
+        <Text fontFamily="heading" color={theme.filters.head} pb="5px">
           Filter by
         </Text>
         <Flex flexDir="row" gap="4" flexWrap="wrap">

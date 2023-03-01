@@ -118,104 +118,63 @@ export const BodyTitle: FC = () => {
   return (
     <Flex
       flexDir="column"
-      w={{ base: 'full', '2xl': '1360px' }}
+      w={{ base: 'full' }}
+      maxW="1360px"
       px={{ base: '4', lg: '0' }}
       zIndex="4"
       py={showHeaderText ? '0' : { base: '0', md: '2rem' }}
       align={{ base: 'center', md: 'flex-start' }}
     >
-      <Collapse in={showHeaderText} style={{ width: '100%' }}>
+      <Collapse
+        in={showHeaderText}
+        style={{
+          width: '100%',
+          boxShadow: theme.card.shadow,
+          marginTop: '1.5rem',
+          marginBottom: '1.5rem',
+          borderRadius: '0.75rem',
+        }}
+      >
         <Flex
           align="center"
           justify="space-between"
           flexWrap="wrap"
-          py="6"
           w="full"
+          position="relative"
+          textAlign="start"
+          flexDir="row"
+          px="4"
+          bgColor={theme.collapse.bg || theme.card.background}
         >
           <Flex
-            position="relative"
-            textAlign="start"
-            align="flex-start"
-            justify="flex-start"
-            flexDir="row"
-            w="100%"
-            bgColor={theme.collapse.bg || theme.card.background}
-            px="4"
-            borderRadius="md"
+            flexDir="column"
+            gap="2"
+            w="full"
+            maxW={{ base: '100%', lg: '80%' }}
+            py="5"
           >
-            <Flex
-              flexDir="column"
-              gap="2"
-              w="full"
-              maxW={{ base: '100%', lg: '80%' }}
-              py="5"
+            {getCustomDescription()}
+            <Text
+              color={theme.collapse.subtext}
+              fontSize={{ base: 'md', md: 'xl' }}
+              textAlign={{ base: 'start' }}
+              fontWeight="light"
+              fontFamily="heading"
+              pt={{ base: '4', md: '0' }}
+              pb={{ base: '8', md: '5px' }}
             >
-              {getCustomDescription()}
-              <Text
-                color={theme.collapse.subtext}
-                fontSize={{ base: 'md', md: 'xl' }}
-                textAlign={{ base: 'start' }}
-                fontWeight="light"
-                fontFamily="heading"
-                pt={{ base: '4', md: '0' }}
-                pb={{ base: '8', md: '0' }}
-              >
-                {config.DAO_SUBDESCRIPTION}
-              </Text>
-              <Flex
-                alignItems={{ base: 'center' }}
-                justifyContent={{ base: 'center', md: 'flex-start' }}
-                gap={['4']}
-                flexWrap="wrap"
-                w="full"
-              >
-                {config.GOVERNANCE_FORUM && (
-                  <Link
-                    href={config.GOVERNANCE_FORUM}
-                    isExternal
-                    _hover={{}}
-                    w={{ base: 'full', md: 'max-content' }}
-                  >
-                    <Button
-                      px={{ base: '3', md: '6' }}
-                      py={{ base: '4', md: '6' }}
-                      justifyContent={{ base: 'space-between', lg: 'center' }}
-                      borderRadius="base"
-                      bgColor={theme.branding}
-                      fontSize={{ base: 'sm', md: 'md' }}
-                      fontFamily="heading"
-                      color={theme.buttonText}
-                      _hover={{
-                        bgColor: theme.branding,
-                        opacity: 0.8,
-                      }}
-                      _focusVisible={{
-                        bgColor: theme.branding,
-                        opacity: 0.8,
-                      }}
-                      _focusWithin={{
-                        bgColor: theme.branding,
-                        opacity: 0.8,
-                      }}
-                      _focus={{
-                        opacity: 0.8,
-                      }}
-                      _active={{
-                        opacity: 0.8,
-                      }}
-                      w={{ base: 'full', md: 'max-content' }}
-                    >
-                      View discussion
-                      <Icon
-                        as={TbExternalLink}
-                        ml="2.5"
-                        boxSize={{ base: '4', lg: '4' }}
-                      />
-                    </Button>
-                  </Link>
-                )}
+              {config.DAO_SUBDESCRIPTION}
+            </Text>
+            <Flex
+              alignItems={{ base: 'center' }}
+              justifyContent={{ base: 'center', md: 'flex-start' }}
+              gap={['4']}
+              flexWrap="wrap"
+              w="full"
+            >
+              {config.GOVERNANCE_FORUM && (
                 <Link
-                  href={config.DAO_URL}
+                  href={config.GOVERNANCE_FORUM}
                   isExternal
                   _hover={{}}
                   w={{ base: 'full', md: 'max-content' }}
@@ -223,22 +182,22 @@ export const BodyTitle: FC = () => {
                   <Button
                     px={{ base: '3', md: '6' }}
                     py={{ base: '4', md: '6' }}
-                    color={theme.collapse.text}
                     justifyContent={{ base: 'space-between', lg: 'center' }}
                     borderRadius="base"
+                    background={theme.branding}
                     fontSize={{ base: 'sm', md: 'md' }}
                     fontFamily="heading"
-                    background="none"
-                    borderWidth="1px"
-                    borderColor={theme.collapse.text}
-                    borderStyle="solid"
+                    color={theme.buttonText}
                     _hover={{
+                      bgColor: theme.branding,
                       opacity: 0.8,
                     }}
                     _focusVisible={{
+                      bgColor: theme.branding,
                       opacity: 0.8,
                     }}
                     _focusWithin={{
+                      bgColor: theme.branding,
                       opacity: 0.8,
                     }}
                     _focus={{
@@ -249,7 +208,7 @@ export const BodyTitle: FC = () => {
                     }}
                     w={{ base: 'full', md: 'max-content' }}
                   >
-                    Learn more & Get Involved
+                    View discussion
                     <Icon
                       as={TbExternalLink}
                       ml="2.5"
@@ -257,20 +216,63 @@ export const BodyTitle: FC = () => {
                     />
                   </Button>
                 </Link>
-              </Flex>
+              )}
+              <Link
+                href={config.DAO_URL}
+                isExternal
+                _hover={{}}
+                w={{ base: 'full', md: 'max-content' }}
+              >
+                <Button
+                  px={{ base: '3', md: '6' }}
+                  py={{ base: '4', md: '6' }}
+                  color={theme.collapse.text}
+                  justifyContent={{ base: 'space-between', lg: 'center' }}
+                  borderRadius="base"
+                  fontSize={{ base: 'sm', md: 'md' }}
+                  fontFamily="heading"
+                  background="none"
+                  borderWidth="1px"
+                  borderColor={theme.collapse.text}
+                  borderStyle="solid"
+                  _hover={{
+                    opacity: 0.8,
+                  }}
+                  _focusVisible={{
+                    opacity: 0.8,
+                  }}
+                  _focusWithin={{
+                    opacity: 0.8,
+                  }}
+                  _focus={{
+                    opacity: 0.8,
+                  }}
+                  _active={{
+                    opacity: 0.8,
+                  }}
+                  w={{ base: 'full', md: 'max-content' }}
+                >
+                  Learn more & Get Involved
+                  <Icon
+                    as={TbExternalLink}
+                    ml="2.5"
+                    boxSize={{ base: '4', lg: '4' }}
+                  />
+                </Button>
+              </Link>
             </Flex>
-            <Icon
-              as={IoClose}
-              w="6"
-              h="6"
-              color={theme.themeIcon}
-              onClick={hideHeaderText}
-              position="absolute"
-              top={{ base: '3' }}
-              right="3"
-              cursor="pointer"
-            />
           </Flex>
+          <Icon
+            as={IoClose}
+            w="6"
+            h="6"
+            color={theme.themeIcon}
+            onClick={hideHeaderText}
+            position="absolute"
+            top={{ base: '3' }}
+            right="3"
+            cursor="pointer"
+          />
         </Flex>
       </Collapse>
       <Filters />

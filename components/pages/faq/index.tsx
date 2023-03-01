@@ -67,7 +67,8 @@ export const FAQPage: FC = () => {
     >
       <Flex
         ref={ref}
-        w={{ base: 'full', '2xl': '1360px' }}
+        w={{ base: 'full' }}
+        maxW="1360px"
         flexDir="column"
         sx={{
           'ol, ul': {

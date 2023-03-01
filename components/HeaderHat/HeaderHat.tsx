@@ -29,14 +29,16 @@ const StyledButton: FC<ButtonProps> = ({ children, ...rest }) => {
   const { theme } = useDAO();
   return (
     <Button
-      color={useColorModeValue(theme.branding, 'white')}
+      color={theme.hat.text.primary}
       bgColor="transparent"
       px="6"
       py="6"
       fontWeight="semibold"
       _active={{}}
       _focus={{}}
-      _hover={{}}
+      _hover={{
+        color: theme.hat.text.secondary,
+      }}
       minH="52px"
       {...rest}
     >
@@ -71,15 +73,13 @@ export const HeaderHat = () => {
         w="full"
         align="center"
         justify="center"
-        px={{ base: '4', lg: '20' }}
+        px={{ base: '4', lg: '8' }}
         zIndex="2"
-        boxShadow={useColorModeValue(
-          '0px 4px 10px rgba(0, 0, 0, 0.1);',
-          'none'
-        )}
+        boxShadow={useColorModeValue('0px 4px 10px rgba(0, 0, 0, 0.1)', 'none')}
       >
         <Flex
-          w={{ base: 'full', '2xl': '1360px' }}
+          w={{ base: 'full' }}
+          maxW="1360px"
           flexDir="row"
           justify="space-between"
           gap="4"
@@ -97,6 +97,7 @@ export const HeaderHat = () => {
               flexDir="column"
               flex={['1', 'none']}
               align={['flex-start', 'flex-start']}
+              gap="1"
             >
               <Link href="/">
                 <Img

@@ -23,34 +23,29 @@ export const Madeby: FC<FlexProps> = props => {
   });
   return (
     <Flex
-      align={{ base: 'center', lg: 'flex-start' }}
+      gap={{ base: '2' }}
+      flexDir={{ base: 'row' }}
+      align={{ base: 'center' }}
+      h="max-content"
       justify={{ base: 'center', lg: 'flex-start' }}
-      gap="2"
       py="0"
-      {...props}
     >
-      <Flex
-        gap={{ base: '2' }}
-        flexDir={{ base: 'row' }}
-        align={{ base: 'center' }}
+      <Text
+        fontSize={['sm', 'md']}
+        fontWeight="normal"
+        color={theme.hat.text.madeBy}
       >
-        <Text
-          fontSize={['sm', 'md']}
-          fontWeight="normal"
-          color={theme.hat.text.madeBy}
-        >
-          Powered by
-        </Text>
+        Powered by
+      </Text>
 
-        <Link href="https://karmahq.xyz" isExternal>
-          <Img
-            w={{ base: '96px', lg: '80px' }}
-            h={{ base: '24px', lg: '35px' }}
-            objectFit="contain"
-            src={variantImg}
-          />
-        </Link>
-      </Flex>
+      <Link href="https://karmahq.xyz" isExternal h="max-content">
+        <Img
+          w={{ base: '96px', lg: '80px' }}
+          h={{ base: '24px', lg: '24px' }}
+          objectFit="contain"
+          src={variantImg}
+        />
+      </Link>
     </Flex>
   );
 };

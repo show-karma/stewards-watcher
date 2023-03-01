@@ -593,7 +593,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                             borderStyle="solid"
                             borderColor={theme.card.border}
                             py="2"
-                            px="2"
+                            px="1.5"
                             borderWidth={statBorderWidth(index)}
                             borderRadius={statBorderRadius(index)}
                             maxW="full"
@@ -620,7 +620,12 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                           </Flex>
                         ))}
                         {restRowStats.length > 0 && (
-                          <StatPopover stats={restRowStats} />
+                          <StatPopover
+                            stats={restRowStats}
+                            data={data}
+                            openScoreBreakdown={openScoreBreakdown}
+                            setScoreType={setScoreType}
+                          />
                         )}
                       </Flex>
                     </Flex>
