@@ -36,7 +36,9 @@ const StyledButton: FC<ButtonProps> = ({ children, ...rest }) => {
       fontWeight="semibold"
       _active={{}}
       _focus={{}}
-      _hover={{}}
+      _hover={{
+        color: theme.hat.text.secondary,
+      }}
       minH="52px"
       {...rest}
     >

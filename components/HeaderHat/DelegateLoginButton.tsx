@@ -40,11 +40,23 @@ const LoginMenu = () => {
         fontWeight="semibold"
         minH={{ base: '52px', lg: 'max-content' }}
         _hover={{
+          bgColor: theme.branding,
           opacity: 0.8,
         }}
-        _active={{}}
-        _focus={{}}
-        _focusWithin={{}}
+        _focusVisible={{
+          bgColor: theme.branding,
+          opacity: 0.8,
+        }}
+        _focusWithin={{
+          bgColor: theme.branding,
+          opacity: 0.8,
+        }}
+        _focus={{
+          opacity: 0.8,
+        }}
+        _active={{
+          opacity: 0.8,
+        }}
       >
         {truncateAddress(address || '')}
       </MenuButton>
@@ -95,9 +107,24 @@ const LoginButton: FC<{ onOpen: () => void }> = ({ onOpen }) => {
       px="5"
       py="3"
       fontWeight="semibold"
-      _active={{}}
-      _focus={{}}
-      _hover={{}}
+      _hover={{
+        bgColor: theme.branding,
+        opacity: 0.8,
+      }}
+      _focusVisible={{
+        bgColor: theme.branding,
+        opacity: 0.8,
+      }}
+      _focusWithin={{
+        bgColor: theme.branding,
+        opacity: 0.8,
+      }}
+      _focus={{
+        opacity: 0.8,
+      }}
+      _active={{
+        opacity: 0.8,
+      }}
       minH={{ base: '52px', lg: 'max-content' }}
       onClick={() => {
         if (isAuthenticated && isConnected) {

@@ -6,6 +6,7 @@ import {
   InputGroup,
   InputLeftElement,
   Text,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { BiSearch } from 'react-icons/bi';
 import { useDAO, useDelegates } from 'contexts';
@@ -36,8 +37,7 @@ export const SearchFilter = () => {
           px="4"
           py="5"
           _focusVisible={{
-            borderColor: theme.title,
-            boxShadow: `0 0 0 1px ${theme.title}`,
+            borderColor: useColorModeValue('gray.500', 'gray.500'),
           }}
         />
       </InputGroup>

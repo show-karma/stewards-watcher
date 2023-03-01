@@ -64,7 +64,7 @@ export const StatPopover: FC<IStatPopoverProps> = ({ stats }) => {
           bgColor={theme.card.statBg}
           border="1px"
           borderStyle="solid"
-          borderColor={theme.card.border}
+          borderColor={theme.card.divider}
           borderRadius="5px"
         >
           {stats.map((stat, index) => (
