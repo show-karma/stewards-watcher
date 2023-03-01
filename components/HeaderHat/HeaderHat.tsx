@@ -71,12 +71,13 @@ export const HeaderHat = () => {
         w="full"
         align="center"
         justify="center"
-        px={{ base: '4', lg: '20' }}
+        px={{ base: '4', lg: '8' }}
         zIndex="2"
         boxShadow={useColorModeValue('0px 4px 10px rgba(0, 0, 0, 0.1)', 'none')}
       >
         <Flex
-          w={{ base: 'full', '2xl': '1360px' }}
+          w={{ base: 'full' }}
+          maxW="1360px"
           flexDir="row"
           justify="space-between"
           gap="4"

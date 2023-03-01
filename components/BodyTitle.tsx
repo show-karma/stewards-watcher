@@ -118,7 +118,8 @@ export const BodyTitle: FC = () => {
   return (
     <Flex
       flexDir="column"
-      w={{ base: 'full', '2xl': '1360px' }}
+      w={{ base: 'full' }}
+      maxW="1360px"
       px={{ base: '4', lg: '0' }}
       zIndex="4"
       py={showHeaderText ? '0' : { base: '0', md: '2rem' }}

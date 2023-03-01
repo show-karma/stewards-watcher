@@ -593,7 +593,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                             borderStyle="solid"
                             borderColor={theme.card.border}
                             py="2"
-                            px="2"
+                            px="1.5"
                             borderWidth={statBorderWidth(index)}
                             borderRadius={statBorderRadius(index)}
                             maxW="full"
