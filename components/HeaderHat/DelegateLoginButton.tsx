@@ -33,8 +33,8 @@ const LoginMenu = () => {
             boxSize="5"
           />
         }
-        bgColor={useColorModeValue(theme.branding, 'white')}
-        color={useColorModeValue(theme.buttonText, 'black')}
+        background={theme.secondaryButton?.bg || theme.branding}
+        color={theme.secondaryButton?.text || theme.buttonText}
         px="5"
         py="3"
         fontWeight="semibold"
@@ -90,7 +90,7 @@ const LoginButton: FC<{ onOpen: () => void }> = ({ onOpen }) => {
   const { isConnected } = useAccount();
   return (
     <Button
-      bgColor={theme.branding}
+      background={theme.branding}
       color={theme.buttonText}
       px="5"
       py="3"

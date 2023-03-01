@@ -73,10 +73,7 @@ export const HeaderHat = () => {
         justify="center"
         px={{ base: '4', lg: '20' }}
         zIndex="2"
-        boxShadow={useColorModeValue(
-          '0px 4px 10px rgba(0, 0, 0, 0.1);',
-          'none'
-        )}
+        boxShadow={useColorModeValue('0px 4px 10px rgba(0, 0, 0, 0.1)', 'none')}
       >
         <Flex
           w={{ base: 'full', '2xl': '1360px' }}

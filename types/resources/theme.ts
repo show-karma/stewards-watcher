@@ -1,10 +1,7 @@
 export interface IDAOTheme {
   logo?: string;
   background: string;
-  secondBg?: {
-    isGradient: boolean;
-    colorOrGradient: string;
-  };
+  secondBg?: string;
   bodyBg: string;
   bodyShadow?: string;
   title: string;
@@ -16,6 +13,10 @@ export interface IDAOTheme {
   headerBg: string;
   gradientBall: string;
   themeIcon: string;
+  secondaryButton?: {
+    bg: string;
+    text: string;
+  };
   collapse: {
     bg?: string;
     text: string;

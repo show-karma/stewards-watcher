@@ -101,16 +101,7 @@ export const DAOContainer: React.FC<IDAOContainer> = ({ user }) => {
                 w="full"
                 flexDir="column"
                 align="center"
-                bgColor={
-                  theme.secondBg?.isGradient === true
-                    ? undefined
-                    : theme.secondBg?.colorOrGradient || theme.bodyBg
-                }
-                background={
-                  theme.secondBg?.isGradient === true
-                    ? theme.secondBg?.colorOrGradient
-                    : undefined
-                }
+                background={theme.secondBg || theme.bodyBg}
               >
                 <HeaderHat />
                 <MainLayout>

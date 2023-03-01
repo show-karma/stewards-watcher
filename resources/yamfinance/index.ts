@@ -205,7 +205,7 @@ const light: IDAOTheme = {
     listText: '#666666',
     bg: '#FFFFFF',
     activeBg: '#EBEDEF',
-    shadow: '0px 0px 4px rgba(0, 0, 0, 0.1);',
+    shadow: '0px 0px 4px rgba(0, 0, 0, 0.1)',
   },
   card: {
     icon: '#ADB8C0',
@@ -214,7 +214,7 @@ const light: IDAOTheme = {
     text: { primary: '#212328', secondary: '#666666' },
     statBg: '#EBEDEF',
     border: 'none',
-    shadow: '0px 0px 4px rgba(0, 0, 0, 0.1);',
+    shadow: '0px 0px 4px rgba(0, 0, 0, 0.1)',
     common: '#727B81',
     interests: { bg: '#EBEDEF', text: '#2C2E32' },
     workstream: { bg: '#595A5E', text: '#FFFFFF' },

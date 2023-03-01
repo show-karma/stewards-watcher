@@ -188,7 +188,7 @@ const light: IDAOTheme = {
   headerBg: '#FFFFFF',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
-  collapse: { bg: '#2C2E32', text: '#FFFFFF', subtext: '#ADB8C0' },
+  collapse: { bg: '#FFFFFF', text: '#2C2E32', subtext: '#212328' },
   hat: {
     text: {
       primary: '#212328',
@@ -205,7 +205,7 @@ const light: IDAOTheme = {
     listBg: '#FFFFFF',
     listText: '#666666',
     activeBg: '#EBEDEF',
-    shadow: '0px 0px 4px rgba(0, 0, 0, 0.1);',
+    shadow: '0px 0px 4px rgba(0, 0, 0, 0.1)',
   },
   card: {
     icon: '#ADB8C0',
@@ -214,7 +214,7 @@ const light: IDAOTheme = {
     divider: 'rgba(102, 102, 102, 0.5)',
     text: { primary: '#212328', secondary: '#666666' },
     border: 'none',
-    shadow: '0px 0px 4px rgba(0, 0, 0, 0.1);',
+    shadow: '0px 0px 4px rgba(0, 0, 0, 0.1)',
     common: '#727B81',
     interests: { bg: '#EBEDEF', text: '#2C2E32' },
     workstream: { bg: '#595A5E', text: '#FFFFFF' },
