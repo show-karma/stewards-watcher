@@ -33,7 +33,7 @@ export const ThemeButton: FC<ButtonProps> = props => {
       {...props}
     >
       <Text display={{ base: 'unset', md: 'none' }}>Theme</Text>
-      <Icon as={useColorModeValue(BsFillSunFill, BsFillMoonFill)} w="5" h="5" />
+      <Icon as={useColorModeValue(BsFillMoonFill, BsFillSunFill)} w="5" h="5" />
     </Button>
   );
 };

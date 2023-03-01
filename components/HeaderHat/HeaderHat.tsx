@@ -29,7 +29,7 @@ const StyledButton: FC<ButtonProps> = ({ children, ...rest }) => {
   const { theme } = useDAO();
   return (
     <Button
-      color={useColorModeValue(theme.branding, 'white')}
+      color={theme.hat.text.primary}
       bgColor="transparent"
       px="6"
       py="6"
@@ -97,6 +97,7 @@ export const HeaderHat = () => {
               flexDir="column"
               flex={['1', 'none']}
               align={['flex-start', 'flex-start']}
+              gap="1"
             >
               <Link href="/">
                 <Img

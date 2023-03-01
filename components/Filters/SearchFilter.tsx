@@ -16,7 +16,7 @@ export const SearchFilter = () => {
 
   return (
     <Flex flexDir="column" maxW="27rem" width="full">
-      <Text fontFamily="heading" color={theme.filters.head}>
+      <Text fontFamily="heading" color={theme.filters.head} pb="5px">
         Search
       </Text>
       <InputGroup>

@@ -1,6 +1,10 @@
 export interface IDAOTheme {
   logo?: string;
   background: string;
+  secondBg?: {
+    isGradient: boolean;
+    colorOrGradient: string;
+  };
   bodyBg: string;
   bodyShadow?: string;
   title: string;

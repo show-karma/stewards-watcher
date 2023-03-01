@@ -192,7 +192,7 @@ const light: IDAOTheme = {
   headerBg: '#212328',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
-  collapse: { text: '#FFFFFF', subtext: '#ADB8C0', bg: '#212328' },
+  collapse: { text: '#676767', subtext: '#2A2C32', bg: '#FFFFFF' },
   hat: {
     text: {
       primary: '#FFFFFF',
@@ -209,6 +209,7 @@ const light: IDAOTheme = {
     listBg: '#F2F4F9',
     listText: '#666666',
     activeBg: '#EBEDEF',
+    shadow: '0px 0px 4px rgba(0, 0, 0, 0.1);',
   },
   card: {
     icon: '#ADB8C0',

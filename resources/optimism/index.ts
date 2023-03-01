@@ -211,6 +211,7 @@ const light: IDAOTheme = {
     listBg: '#FFFFFF',
     listText: '#666666',
     activeBg: '#EBEDEF',
+    shadow: '0px 0px 4px rgba(0, 0, 0, 0.1)',
   },
   card: {
     icon: '#ADB8C0',

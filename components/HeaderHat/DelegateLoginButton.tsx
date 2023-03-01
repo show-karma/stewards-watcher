@@ -90,8 +90,8 @@ const LoginButton: FC<{ onOpen: () => void }> = ({ onOpen }) => {
   const { isConnected } = useAccount();
   return (
     <Button
-      bgColor={useColorModeValue(theme.branding, 'white')}
-      color={useColorModeValue(theme.buttonText, 'black')}
+      bgColor={theme.branding}
+      color={theme.buttonText}
       px="5"
       py="3"
       fontWeight="semibold"

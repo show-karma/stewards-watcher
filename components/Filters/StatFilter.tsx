@@ -22,7 +22,6 @@ export const StatFilter = () => {
           />
         }
         bgColor={theme.filters.bg}
-        boxShadow={theme.filters.shadow}
         color={theme.filters.title}
         fontFamily="heading"
         fontWeight="normal"

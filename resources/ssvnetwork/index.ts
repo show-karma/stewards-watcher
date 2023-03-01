@@ -35,8 +35,12 @@ const dark: IDAOTheme = {
   bodyBg: '#1C1D20',
   title: '#FFFFFF',
   subtitle: '#a0aec0',
+  secondBg: {
+    isGradient: false,
+    colorOrGradient: '#448BF2',
+  },
   text: '#FFFFFF',
-  branding: '#C80925',
+  branding: '#448BF2',
   buttonText: '#FFFFFF',
   buttonTextSec: '#FFFFFF',
   headerBg: '#212328',
@@ -186,13 +190,13 @@ const light: IDAOTheme = {
   title: '#222429',
   subtitle: '#666666',
   text: '#222429',
-  branding: '#C80925',
+  branding: '#448BF2',
   buttonText: '#FFFFFF',
   buttonTextSec: '#222429',
   headerBg: '#212328',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
-  collapse: { text: '#FFFFFF', subtext: '#ADB8C0', bg: '#212328' },
+  collapse: { text: '#676767', subtext: '#2A2C32', bg: '#FFFFFF' },
   hat: {
     text: {
       primary: '#FFFFFF',
@@ -209,6 +213,7 @@ const light: IDAOTheme = {
     listText: '#666666',
     bg: '#FFFFFF',
     activeBg: '#EBEDEF',
+    shadow: '0px 0px 4px rgba(0, 0, 0, 0.1);',
   },
   card: {
     icon: '#ADB8C0',

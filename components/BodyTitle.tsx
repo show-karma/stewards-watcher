@@ -158,7 +158,7 @@ export const BodyTitle: FC = () => {
                 fontWeight="light"
                 fontFamily="heading"
                 pt={{ base: '4', md: '0' }}
-                pb={{ base: '8', md: '0' }}
+                pb={{ base: '8', md: '5px' }}
               >
                 {config.DAO_SUBDESCRIPTION}
               </Text>
