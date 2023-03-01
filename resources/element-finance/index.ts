@@ -23,7 +23,12 @@ const config: IDAOConfig = {
   DAO_FORUM_TYPE: 'commonwealth',
   DAO_FORUM_URL: 'https://forum.element.fi/',
   DAO_GTAG: 'G-67LDHT697P',
-  EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'healthScore', 'discordScore'],
+  EXCLUDED_CARD_FIELDS: [
+    'delegatorCount',
+    'onChainVotesPct',
+    'healthScore',
+    'discordScore',
+  ],
 };
 
 const dark: IDAOTheme = {

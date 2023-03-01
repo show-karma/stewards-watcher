@@ -27,6 +27,10 @@ const config: IDAOConfig = {
   DAO_DEFAULT_SETTINGS: {
     TIMEPERIOD: '180d',
     ORDERSTAT: 'healthScore',
+    STATUS_FILTER: {
+      SHOW: true,
+      DEFAULT_STATUSES: ['active', 'recognized'],
+    },
   },
   EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'discordScore'],
 };
