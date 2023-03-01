@@ -24,6 +24,7 @@ const config: IDAOConfig = {
   DAO_GTAG: 'G-67LDHT697P',
   SHOULD_NOT_SHOW: 'statement',
   EXCLUDED_CARD_FIELDS: [
+    'delegatorCount',
     'onChainVotesPct',
     'healthScore',
     'delegatedVotes',

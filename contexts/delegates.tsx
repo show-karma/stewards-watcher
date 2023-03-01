@@ -238,10 +238,10 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         return {
           address: item.publicAddress,
           ensName: item.ensName,
+          delegatorCount: item.delegatorCount || 0,
           forumActivity: fetchedPeriod?.forumActivityScore || 0,
           discordScore: fetchedPeriod?.discordScore || 0,
           delegateSince: item.joinDateAt || item.firstTokenDelegatedAt,
-          delegators: item.delegatorCount || 0,
           voteParticipation: {
             onChain: fetchedPeriod?.onChainVotesPct || 0,
             offChain: fetchedPeriod?.offChainVotesPct || 0,
@@ -307,10 +307,10 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         return {
           address: item.publicAddress,
           ensName: item.ensName,
+          delegatorCount: item.delegatorCount,
           forumActivity: fetchedPeriod?.forumActivityScore || 0,
           discordScore: fetchedPeriod?.discordScore || 0,
           delegateSince: item.joinDateAt || item.firstTokenDelegatedAt,
-          delegators: item.delegatorCount || 0,
           voteParticipation: {
             onChain: fetchedPeriod?.onChainVotesPct || 0,
             offChain: fetchedPeriod?.offChainVotesPct || 0,
@@ -390,11 +390,11 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       const userFound: IDelegate = {
         address: fetchedDelegate.publicAddress,
         ensName: fetchedDelegate.ensName,
+        delegatorCount: fetchedDelegate.delegatorCount || 0,
         forumActivity: fetchedPeriod?.forumActivityScore || 0,
         discordScore: fetchedPeriod?.discordScore || 0,
         delegateSince:
           fetchedDelegate.joinDateAt || fetchedDelegate.firstTokenDelegatedAt,
-        delegators: fetchedDelegate.delegatorCount || 0,
         voteParticipation: {
           onChain: fetchedPeriod?.onChainVotesPct || 0,
           offChain: fetchedPeriod?.offChainVotesPct || 0,
@@ -485,10 +485,10 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         delegates.push({
           address: item.publicAddress,
           ensName: item.ensName,
+          delegatorCount: item.delegatorCount || 0,
           forumActivity: fetchedPeriod?.forumActivityScore || 0,
           discordScore: fetchedPeriod?.discordScore || 0,
           delegateSince: item.joinDateAt || item.firstTokenDelegatedAt,
-          delegators: item.delegatorCount || 0,
           voteParticipation: {
             onChain: fetchedPeriod?.onChainVotesPct || 0,
             offChain: fetchedPeriod?.offChainVotesPct || 0,
