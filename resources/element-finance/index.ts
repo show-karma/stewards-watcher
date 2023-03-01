@@ -4,7 +4,7 @@ import { mainnet } from 'wagmi/chains';
 const config: IDAOConfig = {
   DAO: 'Element Finance',
   DAO_DESCRIPTION: `The Delegates of Element Finance DAO play a vital role in driving the Element Finance ecosystem forward through their work in governance and workstreams.`,
-  DAO_SUBDESCRIPTION: `This site will help boost transparency with health cards for each Delegate that display metrics and links on their involvement and engagement in the DAO.`,
+  DAO_SUBDESCRIPTION: `This site helps token holders choose delegates and boost transparency by displaying delegate contribution to indicate their involvement in the DAO.`,
   DAO_URL: 'https://www.element.fi/',
   GOVERNANCE_FORUM: 'https://forum.element.fi/',
   DAO_KARMA_ID: 'elementfinance',

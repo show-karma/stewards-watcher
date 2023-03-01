@@ -6,7 +6,7 @@ const config: IDAOConfig = {
   DAO: 'Optimism',
   DAO_DESCRIPTION: `The Delegates of Optimism DAO play a vital role in driving the Optimism
   ecosystem forward through their work in governance.`,
-  DAO_SUBDESCRIPTION: `This site will help boost transparency by displaying delegate contribution to indicate their involvement and engagement in the DAO.`,
+  DAO_SUBDESCRIPTION: `This site helps token holders choose delegates and boost transparency by displaying delegate contribution to indicate their involvement in the DAO.`,
   DAO_URL: 'https://www.optimism.io',
   GOVERNANCE_FORUM: 'https://gov.optimism.io',
   DAO_KARMA_ID: 'optimism',
