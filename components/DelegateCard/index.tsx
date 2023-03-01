@@ -620,7 +620,12 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                           </Flex>
                         ))}
                         {restRowStats.length > 0 && (
-                          <StatPopover stats={restRowStats} />
+                          <StatPopover
+                            stats={restRowStats}
+                            data={data}
+                            openScoreBreakdown={openScoreBreakdown}
+                            setScoreType={setScoreType}
+                          />
                         )}
                       </Flex>
                     </Flex>

@@ -13,16 +13,29 @@ import {
 import { LeftCircleArrowIcon, RightCircleArrowIcon } from 'components/Icons';
 import { useDAO } from 'contexts';
 import { motion, useAnimationControls } from 'framer-motion';
-import { FC, useEffect, useState } from 'react';
-import { ICardStat } from 'types';
+import { FC, SetStateAction, useEffect, useState } from 'react';
+import { ICardStat, IDelegate } from 'types';
 
 interface IStatPopoverProps {
   stats: ICardStat[];
+  openScoreBreakdown: () => void;
+  setScoreType: (
+    value: SetStateAction<
+      'forumScore' | 'gitcoinHealthScore' | 'karmaScore' | undefined
+    >
+  ) => void;
+  data?: IDelegate;
 }
 
-export const StatPopover: FC<IStatPopoverProps> = ({ stats }) => {
+export const StatPopover: FC<IStatPopoverProps> = ({
+  stats,
+  openScoreBreakdown,
+  setScoreType,
+  data,
+}) => {
   const { isOpen, onToggle, onClose } = useDisclosure();
-  const { theme } = useDAO();
+  const { theme, daoData, daoInfo } = useDAO();
+  const { config } = daoInfo;
 
   const MotionIconButton = motion(IconButton);
 
@@ -67,34 +80,57 @@ export const StatPopover: FC<IStatPopoverProps> = ({ stats }) => {
           borderColor={theme.card.divider}
           borderRadius="5px"
         >
-          {stats.map((stat, index) => (
-            <Flex key={+index} flexDir="column">
-              <Flex px="3" py="1.5" gap="2" flexDirection="row" align="center">
-                <Text
-                  minW="6"
-                  fontFamily="heading"
-                  fontStyle="normal"
-                  fontWeight="700"
-                  fontSize="14px"
-                  color={theme.card.text.primary}
+          {stats.map((stat, index) => {
+            const shouldOpenScoreBreakdown =
+              stat.id === 'forumScore' &&
+              data?.discourseHandle &&
+              daoData?.socialLinks.forum &&
+              config.DAO_FORUM_TYPE;
+            return (
+              <Flex
+                key={+index}
+                flexDir="column"
+                onClick={() => {
+                  if (shouldOpenScoreBreakdown) {
+                    setScoreType('forumScore');
+                    openScoreBreakdown();
+                  }
+                }}
+                cursor={shouldOpenScoreBreakdown ? 'pointer' : 'default'}
+              >
+                <Flex
+                  px="3"
+                  py="1.5"
+                  gap="2"
+                  flexDirection="row"
+                  align="center"
                 >
-                  {stat.value}
-                </Text>
-                <Text
-                  fontFamily="heading"
-                  fontStyle="normal"
-                  fontWeight="400"
-                  fontSize="12px"
-                  color={theme.card.text.primary}
-                >
-                  {stat.title}
-                </Text>
+                  <Text
+                    minW="6"
+                    fontFamily="heading"
+                    fontStyle="normal"
+                    fontWeight="700"
+                    fontSize="14px"
+                    color={theme.card.text.primary}
+                  >
+                    {stat.value}
+                  </Text>
+                  <Text
+                    fontFamily="heading"
+                    fontStyle="normal"
+                    fontWeight="400"
+                    fontSize="12px"
+                    color={theme.card.text.primary}
+                  >
+                    {stat.title}
+                  </Text>
+                </Flex>
+                {stats.length !== index + 1 && stats.length > 1 && (
+                  <Divider bgColor={theme.card.border} h="1px" />
+                )}
               </Flex>
-              {stats.length !== index + 1 && stats.length > 1 && (
-                <Divider bgColor={theme.card.border} h="1px" />
-              )}
-            </Flex>
-          ))}
+            );
+          })}
         </PopoverBody>
       </PopoverContent>
     </Popover>
