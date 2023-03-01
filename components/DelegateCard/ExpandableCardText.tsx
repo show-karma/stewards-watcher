@@ -13,10 +13,6 @@ interface IExpandableText {
 
 export const ExpandableCardText: FC<IExpandableText> = props => {
   const { theme } = useDAO();
-  const [isMobile] = useMediaQuery('(max-width: 425px)', {
-    ssr: true,
-    fallback: false,
-  });
 
   const {
     text,
@@ -27,13 +23,6 @@ export const ExpandableCardText: FC<IExpandableText> = props => {
   } = props;
 
   const formattedText = removeHtmlTagWithRegex(text.replaceAll(/\s/g, ' '));
-
-  const flexRef = useRef<HTMLDivElement>(null);
-
-  const newMaxChars =
-    flexRef.current && flexRef.current?.clientHeight > 50
-      ? maxChars - 30
-      : maxChars;
 
   return (
     <Flex flexDir="column" gap="2.5" h="full">
@@ -48,37 +37,50 @@ export const ExpandableCardText: FC<IExpandableText> = props => {
           wordBreak="break-word"
         />
       ) : (
-        <Flex flexDir="column" w="full" ref={flexRef}>
-          <Text
-            maxW="full"
-            fontSize="sm"
-            fontWeight="normal"
-            textAlign="left"
-            color={theme.text}
-            onClick={isExpanded ? toggleIsExpanded : undefined}
-            _hover={{
-              cursor: isExpanded ? 'pointer' : 'unset',
-              opacity: isExpanded ? 0.9 : 'unset',
+        <Flex flexDir="column" w="full">
+          <Flex
+            flexDir="column"
+            w="full"
+            sx={{
+              display: '-webkit-box',
+              '-webkit-box-orient': 'vertical',
+              '-webkit-line-clamp': '2',
             }}
-            flex="1"
-            wordBreak="break-word"
+            textOverflow="ellipsis"
+            overflow="hidden"
+            maxH="max-content"
           >
-            {`${formattedText.substring(0, isMobile ? 90 : newMaxChars)}... `}
             <Text
-              onClick={selectProfile}
-              cursor="pointer"
-              color={theme.card.text.primary}
-              w="max-content"
-              as="span"
-              fontWeight="bold"
+              maxW="full"
+              fontSize="sm"
+              fontWeight="normal"
+              textAlign="left"
+              color={theme.text}
+              onClick={isExpanded ? toggleIsExpanded : undefined}
               _hover={{
-                textDecoration: 'underline',
-                cursor: 'pointer',
+                cursor: isExpanded ? 'pointer' : 'unset',
+                opacity: isExpanded ? 0.9 : 'unset',
               }}
+              flex="1"
+              wordBreak="break-word"
             >
-              view statement
+              {formattedText}
             </Text>
-          </Text>
+          </Flex>
+          <Flex
+            onClick={selectProfile}
+            cursor="pointer"
+            color={theme.card.text.primary}
+            w="max-content"
+            as="span"
+            fontWeight="bold"
+            _hover={{
+              textDecoration: 'underline',
+              cursor: 'pointer',
+            }}
+          >
+            view statement
+          </Flex>
         </Flex>
       )}
     </Flex>
