@@ -68,6 +68,7 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
     const formattedAmount = numbro(fromWeiAmount).format({
       thousandSeparated: true,
       mantissa: 2,
+      trimMantissa: true,
       average: true,
     });
     setVotes(formattedAmount.toString());

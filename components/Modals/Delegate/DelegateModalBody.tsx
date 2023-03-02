@@ -1,10 +1,5 @@
-import { Flex, FlexProps, Text } from '@chakra-ui/react';
-import { ImgWithFallback } from 'components/ImgWithFallback';
-import makeBlockie from 'ethereum-blockies-base64';
+import { Flex, FlexProps } from '@chakra-ui/react';
 import { ReactNode } from 'react';
-import { IDelegate } from 'types';
-import { ModalDelegateButton } from './ModalDelegateButton';
-import { VotesToDelegate } from './VotesToDelegate';
 
 export const DelegateModalBody: React.FC<{
   flexProps?: FlexProps;

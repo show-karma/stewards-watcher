@@ -60,6 +60,7 @@ export const VotesToDelegate: React.FC<IVotesToDelegate> = ({
           top="12px"
           right="12px"
           padding="8px 12px"
+          mr={10}
           alignItems="center"
         >
           <Icon as={IoAlertCircleOutline} boxSize="20px" />
