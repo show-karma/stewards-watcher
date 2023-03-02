@@ -29,6 +29,7 @@ export const DelegateModalHeader: React.FC<{
       aria-label="close"
       onClick={() => handleModal?.()}
       color="gray.500"
+      mr={3}
     >
       <Icon as={IoClose} boxSize="6" />
     </IconButton>

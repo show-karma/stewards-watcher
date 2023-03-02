@@ -40,6 +40,7 @@ export const SubmitEmailInput: React.FC<{
         placeholder="Your best e-mail"
         pr={8}
         fontSize={12}
+        onKeyUp={event => event.key === 'Enter' && submit()}
         _placeholder={{
           color: 'rgba(0,0,0,0.5)',
         }}
