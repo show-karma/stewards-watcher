@@ -39,11 +39,7 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
     address: daoInfo.config.DAO_DELEGATE_CONTRACT,
     abi: daoInfo.ABI,
     functionName: 'balanceOf',
-    args: [
-      walletAddress
-        ? '0x01cf9fd2efa5fdf178bd635c3e2adf25b2052712'
-        : walletAddress,
-    ],
+    args: [walletAddress],
     chainId: daoInfo.config.DAO_CHAIN.id,
   });
 
