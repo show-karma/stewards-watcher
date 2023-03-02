@@ -1,10 +1,12 @@
-import makeBlockie from 'ethereum-blockies-base64';
 import React from 'react';
 import { useDAO } from 'contexts';
-import { IconButton, Icon, Flex, Text, Button } from '@chakra-ui/react';
-import { IoClose } from 'react-icons/io5';
-import { ImgWithFallback } from 'components';
+import { Button, Flex, Text } from '@chakra-ui/react';
 import { IDelegate } from 'types';
+import { ImgWithFallback } from 'components/ImgWithFallback';
+import makeBlockie from 'ethereum-blockies-base64';
+import { DelegateModalHeader } from './DelegateModalHeader';
+import { DelegateModalFooter } from './DelegateModalFooter';
+import { DelegateModalBody } from './DelegateModalBody';
 import { ModalDelegateButton } from './ModalDelegateButton';
 import { VotesToDelegate } from './VotesToDelegate';
 
@@ -24,60 +26,40 @@ export const Step1: React.FC<StepProps> = ({
   const { name: daoName, socialLinks } = daoData;
   const { logoUrl } = socialLinks;
 
+  const modalSpacing = {
+    padding: '16px 32px',
+  };
+
   return (
     <Flex
       flexDir="column"
       width="550px"
       height="max-content"
       backgroundColor="white"
-      padding="16px 32px"
       borderRadius="6px"
     >
-      <Flex
-        display="flex"
-        flexDirection="row"
-        gap="100px"
-        alignItems="center"
-        justifyContent="space-between"
+      <DelegateModalHeader handleModal={handleModal} />
+      <DelegateModalBody
+        flexProps={{
+          ...modalSpacing,
+          boxShadow: '0px 15px 10px rgba(0, 0, 0, 0.05)',
+          paddingBottom: 7,
+        }}
       >
-        <Text
-          fontStyle="normal"
-          fontWeight="700"
-          fontSize="20px"
-          color="#000000"
-          width="100%"
+        <Flex
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          gap="2"
+          margin="0 0 23px 0"
         >
-          Delegate
-        </Text>
-        <IconButton
-          bgColor="transparent"
-          aria-label="close"
-          onClick={handleModal}
-          color="gray.500"
-        >
-          <Icon as={IoClose} boxSize="6" />
-        </IconButton>
-      </Flex>
-      <Flex
-        fontWeight="500"
-        fontSize="14px"
-        color="#687785"
-        marginBottom="32px"
-        flexDir="column"
-      >
-        <Text
-          fontWeight="500"
-          fontSize="14px"
-          lineHeight="17px"
-          color="#687785"
-          marginBottom="32px"
-        >
-          Please make sure the following details look correct
-        </Text>
-        <Flex display="flex" flexDirection="column" gap="2" margin="0 0 18px 0">
           <VotesToDelegate logoUrl={logoUrl} daoName={daoName} votes={votes} />
+          <Text fontStyle="normal" fontSize="14px" color="black">
+            to
+          </Text>
           <Flex
-            padding="16px 20px"
+            paddingX={2}
+            paddingY={1}
             border="1px solid #ebedf0"
             boxSizing="border-box"
             borderRadius="6px"
@@ -86,19 +68,10 @@ export const Step1: React.FC<StepProps> = ({
             background="#ebedf0"
             flexDirection="column"
           >
-            <Text
-              fontStyle="normal"
-              fontWeight="700"
-              fontSize="12px"
-              color="#adb8c0"
-            >
-              You’re delegating to
-            </Text>
             <Flex
               display="flex"
               flexDirection="row"
               gap="8px"
-              marginTop="8px"
               alignItems="center"
             >
               <ImgWithFallback
@@ -114,14 +87,18 @@ export const Step1: React.FC<StepProps> = ({
               <Text
                 fontStyle="normal"
                 fontWeight="500"
-                fontSize="20px"
+                fontSize="14px"
                 color="#000000"
+                textOverflow="ellipsis"
+                whiteSpace="nowrap"
+                overflow="hidden"
               >{`${delegatedUser.ensName || delegatedUser.address}`}</Text>
             </Flex>
           </Flex>
         </Flex>
         <ModalDelegateButton delegated={delegatedUser.address} votes={votes} />
-      </Flex>
+      </DelegateModalBody>
+      <DelegateModalFooter flexProps={{ ...modalSpacing }} />
     </Flex>
   );
 };

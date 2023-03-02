@@ -17,40 +17,36 @@ export const VotesToDelegate: React.FC<IVotesToDelegate> = ({
 }) => {
   const { isLoadingVotes, symbol } = useGovernanceVotes();
   return (
-    <Flex
-      padding="16px 20px"
-      border="1px solid #ebedf0"
-      boxSizing="border-box"
-      borderRadius="6px"
-      position="relative"
-      flexDirection="column"
-    >
-      <Text fontStyle="normal" fontWeight="700" fontSize="12px" color="#adb8c0">
-        Votes to be delegated
+    <Flex alignItems="center">
+      <Text fontStyle="normal" fontSize="14px" marginRight="3" color="black">
+        You are delegating
       </Text>
       <Flex
         display="flex"
         flexDirection="row"
-        gap="8px"
-        marginTop="8px"
         alignItems="center"
+        gap="4px"
+        paddingX={2}
+        paddingY={1}
+        borderRadius={5}
+        backgroundColor="rgba(217, 217, 217, 0.5)"
       >
-        <ImgWithFallback
-          fallback={daoName}
-          src={logoUrl}
-          boxSize="20px"
-          borderRadius="full"
-        />
         {isLoadingVotes ? (
           <Skeleton height="24px" width="100px" bg="gray.100" />
         ) : (
           <Text
             fontStyle="normal"
             fontWeight="500"
-            fontSize="20px"
+            fontSize="1.15em"
             color="#000000"
           >{`${votes} ${symbol}`}</Text>
         )}
+        <ImgWithFallback
+          fallback={daoName}
+          src={logoUrl}
+          boxSize="20px"
+          borderRadius="full"
+        />
       </Flex>
       {(votes === '0' || !votes) && (
         <Flex

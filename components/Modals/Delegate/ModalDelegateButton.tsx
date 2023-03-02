@@ -16,11 +16,9 @@ export const ModalDelegateButton: FC<IDelegateButtonProps> = props => {
     <DelegateButton
       delegated={delegated}
       fontStyle="normal"
-      fontWeight="700"
       fontSize="16px"
-      color="#000000"
-      bg="none"
-      border="2px solid #000000"
+      color="#FFF"
+      bg="black"
       boxSizing="border-box"
       borderRadius="6px"
       width="100%"
@@ -40,7 +38,7 @@ export const ModalDelegateButton: FC<IDelegateButtonProps> = props => {
       _focusVisible={{}}
       _focusWithin={{}}
     >
-      Delegate
+      Delegate Tokens
     </DelegateButton>
   );
 };

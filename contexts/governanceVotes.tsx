@@ -39,7 +39,11 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
     address: daoInfo.config.DAO_DELEGATE_CONTRACT,
     abi: daoInfo.ABI,
     functionName: 'balanceOf',
-    args: [walletAddress],
+    args: [
+      walletAddress
+        ? '0x01cf9fd2efa5fdf178bd635c3e2adf25b2052712'
+        : walletAddress,
+    ],
     chainId: daoInfo.config.DAO_CHAIN.id,
   });
 
@@ -67,8 +71,8 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
     const fromWeiAmount = formatEther(voteAmount.toString());
     const formattedAmount = numbro(fromWeiAmount).format({
       thousandSeparated: true,
-      mantissa: 3,
-      trimMantissa: true,
+      mantissa: 2,
+      average: true,
     });
     setVotes(formattedAmount.toString());
   };
