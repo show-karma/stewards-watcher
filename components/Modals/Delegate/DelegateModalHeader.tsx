@@ -4,7 +4,8 @@ import { IoClose } from 'react-icons/io5';
 export const DelegateModalHeader: React.FC<{
   handleModal: () => void;
   flexProps?: FlexProps;
-}> = ({ handleModal, flexProps }) => (
+  title?: string;
+}> = ({ handleModal, flexProps, title = 'Delegate' }) => (
   <Flex
     gap="100px"
     alignItems="center"
@@ -21,7 +22,7 @@ export const DelegateModalHeader: React.FC<{
         color="#000000"
         width="100%"
       >
-        Delegate
+        {title}
       </Text>
     </Flex>
     <IconButton
