@@ -18,9 +18,6 @@ export const VotesToDelegate: React.FC<IVotesToDelegate> = ({
   const { isLoadingVotes, symbol } = useGovernanceVotes();
   return (
     <Flex alignItems="center">
-      <Text fontStyle="normal" fontSize="14px" marginRight="3" color="black">
-        You are delegating
-      </Text>
       <Flex
         display="flex"
         flexDirection="row"
@@ -67,8 +64,8 @@ export const VotesToDelegate: React.FC<IVotesToDelegate> = ({
           <Text
             color="#ffa552"
             fontStyle="normal"
-            fontWeight="700"
-            fontSize="12px"
+            fontWeight={['400', '400', '700']}
+            fontSize={['10px', '10px', '12px']}
           >
             No tokens to delegate
           </Text>

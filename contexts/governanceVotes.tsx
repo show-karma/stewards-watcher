@@ -6,7 +6,7 @@ import React, {
   useEffect,
 } from 'react';
 import numbro from 'numbro';
-import { useAccount, useContractRead } from 'wagmi';
+import { useContractRead } from 'wagmi';
 import { formatEther } from 'utils';
 import { useDAO } from './dao';
 import { useWallet } from './wallet';

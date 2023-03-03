@@ -35,7 +35,7 @@ export const Step1: React.FC<StepProps> = ({
   return (
     <Flex
       flexDir="column"
-      width="550px"
+      width={['340px', '390px', '550px']}
       height="max-content"
       backgroundColor="white"
       borderRadius="6px"
@@ -49,52 +49,67 @@ export const Step1: React.FC<StepProps> = ({
         }}
       >
         <Flex
-          display="flex"
+          flex="1"
           alignItems="center"
-          justifyContent="space-between"
+          flexWrap="wrap"
           gap="2"
           margin="0 0 23px 0"
         >
-          <VotesToDelegate logoUrl={logoUrl} daoName={daoName} votes={votes} />
-          <Text fontStyle="normal" fontSize="14px" color="black">
-            to
-          </Text>
-          <Flex
-            paddingX={2}
-            paddingY={1}
-            border="1px solid #ebedf0"
-            boxSizing="border-box"
-            borderRadius="6px"
-            wordBreak="break-all"
-            position="relative"
-            background="#ebedf0"
-            flexDirection="column"
+          <Text
+            fontStyle="normal"
+            fontSize="14px"
+            marginRight="3"
+            color="black"
           >
+            You are delegating
+          </Text>
+          <Flex alignItems="center" justifyContent="space-between" flex="2">
+            <VotesToDelegate
+              logoUrl={logoUrl}
+              daoName={daoName}
+              votes={votes}
+            />
+            <Text fontStyle="normal" fontSize="14px" color="black">
+              to
+            </Text>
             <Flex
-              display="flex"
-              flexDirection="row"
-              gap="8px"
-              alignItems="center"
+              paddingX={2}
+              paddingY={1}
+              border="1px solid #ebedf0"
+              boxSizing="border-box"
+              borderRadius="6px"
+              wordBreak="break-all"
+              position="relative"
+              background="#ebedf0"
+              flexDirection="column"
             >
-              <ImgWithFallback
-                fallback={daoName}
-                src={makeBlockie(
-                  delegatedUser.ensName ||
-                    delegatedUser.address ||
-                    Math.random().toString()
-                )}
-                boxSize="20px"
-                borderRadius="full"
-              />
-              <Text
-                fontStyle="normal"
-                fontWeight="500"
-                fontSize="14px"
-                color="#000000"
-                textOverflow="ellipsis"
-                whiteSpace="nowrap"
-                overflow="hidden"
-              >{`${delegatedUser.ensName || delegatedUser.address}`}</Text>
+              <Flex
+                display="flex"
+                flexDirection="row"
+                gap="8px"
+                alignItems="center"
+              >
+                <ImgWithFallback
+                  fallback={daoName}
+                  src={makeBlockie(
+                    delegatedUser.ensName ||
+                      delegatedUser.address ||
+                      Math.random().toString()
+                  )}
+                  boxSize="20px"
+                  borderRadius="full"
+                />
+                <Text
+                  fontStyle="normal"
+                  fontWeight="500"
+                  fontSize="14px"
+                  color="#000000"
+                  textOverflow="ellipsis"
+                  maxW={[100, 100, 130]}
+                  whiteSpace="nowrap"
+                  overflow="hidden"
+                >{`${delegatedUser.ensName || delegatedUser.address}`}</Text>
+              </Flex>
             </Flex>
           </Flex>
         </Flex>

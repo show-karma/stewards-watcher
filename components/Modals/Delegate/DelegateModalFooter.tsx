@@ -42,7 +42,10 @@ export const DelegateModalFooter: React.FC<{
         Give us your e-mail address and we’ll send you notifications regarding
         this delegate or other updates. We promise not to spam!
       </Text>
-      <SubmitEmailInput onSubmit={submit} flexProps={{ maxW: '60%', mt: 5 }} />
+      <SubmitEmailInput
+        onSubmit={submit}
+        flexProps={{ maxW: ['100%', '100%', '60%'], mt: 5 }}
+      />
     </Box>
   );
 };

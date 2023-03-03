@@ -1,4 +1,4 @@
-import { Flex, IconButton, Text, Icon, FlexProps, Box } from '@chakra-ui/react';
+import { Flex, IconButton, Text, Icon, FlexProps } from '@chakra-ui/react';
 import { IoClose } from 'react-icons/io5';
 
 export const DelegateModalHeader: React.FC<{
