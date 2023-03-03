@@ -29,6 +29,7 @@ interface StepProps {
   votes: string;
   delegatedUser: IDelegate;
   delegatedBefore: string;
+  walletAddress?: string;
 }
 
 export const StepChange: React.FC<StepProps> = ({
@@ -36,6 +37,7 @@ export const StepChange: React.FC<StepProps> = ({
   votes,
   delegatedUser,
   delegatedBefore,
+  walletAddress,
 }) => {
   const [beforeENSName, setBeforeEnsName] = useState('');
   const [beforeImage, setBeforeImage] = useState(
@@ -228,7 +230,11 @@ export const StepChange: React.FC<StepProps> = ({
           />
         </DelegateModalBody>
       </Flex>
-      <DelegateModalFooter flexProps={{ ...modalSpacing }} />
+      <DelegateModalFooter
+        flexProps={{ ...modalSpacing }}
+        delegateAddress={delegatedUser.address}
+        publicAddress={walletAddress}
+      />
     </Flex>
   );
 };

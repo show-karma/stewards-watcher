@@ -14,12 +14,14 @@ interface StepProps {
   handleModal: () => void;
   votes: string;
   delegatedUser: IDelegate;
+  walletAddress?: string;
 }
 
 export const Step1: React.FC<StepProps> = ({
   handleModal,
   votes,
   delegatedUser,
+  walletAddress,
 }) => {
   const { daoData } = useDAO();
   if (!daoData) return null;
@@ -98,7 +100,11 @@ export const Step1: React.FC<StepProps> = ({
         </Flex>
         <ModalDelegateButton delegated={delegatedUser.address} votes={votes} />
       </DelegateModalBody>
-      <DelegateModalFooter flexProps={{ ...modalSpacing }} />
+      <DelegateModalFooter
+        flexProps={{ ...modalSpacing }}
+        delegateAddress={delegatedUser.address}
+        publicAddress={walletAddress}
+      />
     </Flex>
   );
 };

@@ -16,6 +16,7 @@ interface IGovernanceVotesProps {
   isLoadingVotes: boolean;
   delegatedBefore: string;
   symbol: string;
+  walletAddress: string;
 }
 
 export const GovernanceVotesContext = createContext(
@@ -109,8 +110,9 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
       delegatedBefore,
       symbol,
       isConnected,
+      walletAddress,
     }),
-    [votes, isLoadingVotes, delegatedBefore, symbol, isConnected]
+    [votes, isLoadingVotes, delegatedBefore, symbol, isConnected, walletAddress]
   );
 
   return (

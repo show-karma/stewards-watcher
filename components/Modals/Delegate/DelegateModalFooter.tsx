@@ -2,14 +2,26 @@ import { Box, FlexProps, Text, Icon } from '@chakra-ui/react';
 import { SubmitEmailInput } from 'components/Inputs/SubmitEmailInput';
 import { useToasty } from 'hooks';
 import { BsExclamationCircleFill } from 'react-icons/bs';
+import { saveLeadEmail } from 'utils/sendLeadEmail';
 
 export const DelegateModalFooter: React.FC<{
   flexProps?: FlexProps;
-}> = ({ flexProps }) => {
+  delegateAddress?: string;
+  publicAddress?: string;
+}> = ({ flexProps, delegateAddress, publicAddress }) => {
   const { toast } = useToasty();
 
-  const submit = (email: string) => {
-    console.log(email);
+  const submit = async (email: string) => {
+    if (!publicAddress) return;
+    await saveLeadEmail({
+      email,
+      publicAddress,
+      interest: {
+        activator: delegateAddress ? 'delegator' : 'rss',
+        target: delegateAddress || 'feed',
+      },
+    });
+
     toast({
       title: 'Thank you!',
     });
