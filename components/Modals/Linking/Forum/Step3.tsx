@@ -68,7 +68,8 @@ export const Step3: React.FC<IModal> = ({
   return (
     <Flex
       flexDir="column"
-      width="550px"
+      maxWidth="550px"
+      w="full"
       height="max-content"
       backgroundColor="white"
       padding="24px 32px"
@@ -79,9 +80,8 @@ export const Step3: React.FC<IModal> = ({
         display="flex"
         alignItems="center"
         justifyContent="space-between"
-        gap="100px"
+        gap={{ base: '10px', lg: '100px' }}
         width="100%"
-        minWidth="490px"
       >
         <Flex display="flex" flexDirection="row" alignItems="center" gap="15px">
           <IconButton aria-label="close" onClick={backStep} color="gray.500">
@@ -151,7 +151,7 @@ export const Step3: React.FC<IModal> = ({
           <Icon as={MdContentCopy} boxSize="6" />
         </IconButton>
       </Flex>
-      <Flex flexDir="row">
+      <Flex flexDir={{ base: 'column', md: 'row' }} w="full">
         <Button
           fontStyle="normal"
           fontWeight="700"
@@ -159,7 +159,7 @@ export const Step3: React.FC<IModal> = ({
           lineHeight="20px"
           bg="ffffff"
           color="black"
-          width="50%"
+          width={{ base: 'full', md: '50%' }}
           padding="12px 0"
           text-transform="none"
           marginTop="32px"
@@ -189,7 +189,7 @@ export const Step3: React.FC<IModal> = ({
           lineHeight="20px"
           color="white"
           background="black"
-          width="50%"
+          width={{ base: 'full', md: '50%' }}
           padding="12px 0"
           text-transform="none"
           marginTop="32px"

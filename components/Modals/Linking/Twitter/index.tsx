@@ -133,7 +133,7 @@ export const TwitterModal: React.FC<IModal> = ({ open, handleModal }) => {
       aria-describedby="twitter-modal-description"
     >
       <ModalOverlay />
-      <ModalContent>{renderStep()}</ModalContent>
+      <ModalContent mx="2">{renderStep()}</ModalContent>
     </Modal>
   );
 };

@@ -136,7 +136,7 @@ export const GithubModal: React.FC<IModal> = ({ open, handleModal }) => {
       aria-describedby="github-modal-description"
     >
       <ModalOverlay />
-      <ModalContent>{renderStep()}</ModalContent>
+      <ModalContent mx="2">{renderStep()}</ModalContent>
     </Modal>
   );
 };

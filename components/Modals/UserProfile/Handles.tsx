@@ -55,10 +55,9 @@ export const Handles: FC = () => {
       action: () => {
         githubOnOpen();
       },
-      handle: undefined,
-      // handle: profileSelected?.githubHandle
-      //   ? `@${profileSelected?.githubHandle}`
-      //   : undefined,
+      handle: profileSelected?.githubHandle
+        ? `@${profileSelected?.githubHandle}`
+        : undefined,
     },
   ];
 
