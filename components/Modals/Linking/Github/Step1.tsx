@@ -1,10 +1,6 @@
+import { Button, Flex, IconButton, Input, Text, Icon } from '@chakra-ui/react';
+import { ImgWithFallback } from 'components/ImgWithFallback';
 import React from 'react';
-import makeBlockie from 'ethereum-blockies-base64';
-import { ImgWithFallback, XMarkIcon } from 'components';
-import { useSignMessage } from 'wagmi';
-import { IconButton, Icon, Flex, Text, Button } from '@chakra-ui/react';
-import { BsArrowLeft } from 'react-icons/bs';
-import { useWallet } from 'contexts';
 import { IoClose } from 'react-icons/io5';
 import { ESteps } from './ESteps';
 
@@ -12,36 +8,24 @@ interface IModal {
   handleModal: () => void;
   setStep: React.Dispatch<React.SetStateAction<ESteps>>;
   username: string;
-  setSignature: React.Dispatch<React.SetStateAction<string>>;
+  setUsername: React.Dispatch<React.SetStateAction<string>>;
   daoInfo: {
     name: string;
     logoUrl: string;
   };
 }
 
-export const Step2: React.FC<IModal> = ({
+export const Step1: React.FC<IModal> = ({
   handleModal,
   setStep,
+  setUsername,
   username,
-  setSignature,
   daoInfo,
 }) => {
+  const nextStep = () => setStep(ESteps.SIGN);
+  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setUsername(event.target.value);
   const { name: daoName, logoUrl } = daoInfo;
-  const { openConnectModal, isConnected } = useWallet();
-  const backStep = () => setStep(ESteps.INPUT);
-  const nextStep = () => setStep(ESteps.PUBLISH);
-  const { signMessageAsync, isLoading } = useSignMessage();
-
-  const signUsername = async () => {
-    if (!isConnected) openConnectModal?.();
-    try {
-      const sign = await signMessageAsync({ message: username });
-      setSignature(sign);
-      nextStep();
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <Flex
@@ -61,30 +45,20 @@ export const Step2: React.FC<IModal> = ({
         width="100%"
         minWidth="490px"
       >
-        <Flex display="flex" flexDirection="row" alignItems="center" gap="15px">
-          <IconButton
-            bgColor="transparent"
-            aria-label="close"
-            onClick={backStep}
-            color="gray.500"
-          >
-            <Icon as={BsArrowLeft} boxSize="6" />
-          </IconButton>
-          <Text
-            fontStyle="normal"
-            fontWeight="700"
-            fontSize="20px"
-            color="#000000"
-            width="100%"
-          >
-            2/3 Sign a message
-          </Text>
-        </Flex>
+        <Text
+          fontStyle="normal"
+          fontWeight="700"
+          fontSize="20px"
+          color="#000000"
+          width="100%"
+        >
+          1/3 Enter your github username
+        </Text>
         <IconButton
           bgColor="transparent"
           aria-label="close"
           onClick={handleModal}
-          color="gray.400"
+          color="gray.500"
         >
           <Icon as={IoClose} boxSize="6" />
         </IconButton>
@@ -96,8 +70,8 @@ export const Step2: React.FC<IModal> = ({
         color="#687785"
         marginBottom="32px"
       >
-        Sign a message that includes your twitter handle to prove you truly own
-        this wallet.
+        To display your github handle in your delegate profile, link your handle
+        to your wallet address.
       </Flex>
       <Flex
         display="flex"
@@ -110,34 +84,39 @@ export const Step2: React.FC<IModal> = ({
         flexWrap="wrap"
         gap="10px"
       >
+        <Input
+          padding="0 20px"
+          background="#ebedf0"
+          fontStyle="normal"
+          fontWeight="500"
+          fontSize="14px"
+          lineHeight="17px"
+          color="rgba(104, 119, 133, 1)"
+          border="none"
+          flex="1"
+          _placeholder={{
+            color: 'rgba(104, 119, 133, 0.58)',
+            fontStyle: 'normal',
+            fontWeight: '500',
+            fontSize: '14px',
+            lineHeight: '17px',
+          }}
+          _active={{
+            outline: 'none',
+          }}
+          _focusVisible={{
+            outline: 'none',
+          }}
+          placeholder="Type your github username"
+          type="text"
+          value={username}
+          onChange={handleInput}
+          onKeyDown={event => event.key === 'Enter' && nextStep()}
+        />
         <Flex
           display="flex"
           flexDirection="row"
-          alignItems="center"
-          gap="10px"
-          padding="0 10px"
-        >
-          <ImgWithFallback
-            borderRadius="100px"
-            width="26px"
-            height="26px"
-            fallback={username}
-            src={makeBlockie(username)}
-          />
-          <Text
-            fontStyle="normal"
-            fontWeight="500"
-            fontSize="14px"
-            lineHeight="17px"
-            color="#000000"
-          >
-            {username}
-          </Text>
-        </Flex>
-        <Flex
-          display="flex"
-          flexDirection="row"
-          alignItems="center"
+          alignItems=" center"
           justifyContent="center"
           gap="4px"
           background="rgba(173, 184, 192, 0.24)"
@@ -146,15 +125,14 @@ export const Step2: React.FC<IModal> = ({
           width="max-content"
         >
           <ImgWithFallback
-            borderRadius="100px"
-            width="22px"
-            height="22px"
             fallback={daoInfo.name}
             src={logoUrl}
+            width="22px"
+            height="22px"
+            borderRadius="1000px"
           />
           <Text
             width="max-content"
-            wordBreak="keep-all"
             fontStyle="normal"
             fontWeight="500"
             fontSize="14px"
@@ -177,6 +155,8 @@ export const Step2: React.FC<IModal> = ({
         marginTop="32px"
         type="submit"
         textTransform="none"
+        disabled={!username}
+        isDisabled={!username}
         _hover={{
           opacity: 0.9,
         }}
@@ -188,11 +168,9 @@ export const Step2: React.FC<IModal> = ({
         _focus={{}}
         _focusVisible={{}}
         _focusWithin={{}}
-        disabled={!username || isLoading}
-        isDisabled={!username || isLoading}
-        onClick={signUsername}
+        onClick={nextStep}
       >
-        Sign
+        Next
       </Button>
     </Flex>
   );

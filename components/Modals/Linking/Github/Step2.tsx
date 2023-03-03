@@ -96,8 +96,8 @@ export const Step2: React.FC<IModal> = ({
         color="#687785"
         marginBottom="32px"
       >
-        Sign a message that includes your twitter handle to prove you truly own
-        this wallet.
+        Sign a message that includes your github handle to prove you truly own
+        this wallet
       </Flex>
       <Flex
         display="flex"
@@ -132,6 +132,18 @@ export const Step2: React.FC<IModal> = ({
             color="#000000"
           >
             {username}
+          </Text>
+          <Text
+            padding="5px 20px"
+            fontSize="12px"
+            lineHeight="15px"
+            textTransform="capitalize"
+            color="#e64646"
+            border="1px solid #e64646"
+            boxSizing="border-box"
+            borderRadius="5px"
+          >
+            Unverified
           </Text>
         </Flex>
         <Flex

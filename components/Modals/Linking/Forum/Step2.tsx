@@ -30,7 +30,7 @@ export const Step2: React.FC<IModal> = ({
   const { openConnectModal, isConnected } = useWallet();
   const backStep = () => setStep(ESteps.INPUT);
   const nextStep = () => setStep(ESteps.PUBLISH);
-  const { signMessageAsync } = useSignMessage();
+  const { signMessageAsync, isLoading } = useSignMessage();
 
   const signUsername = async () => {
     if (!isConnected) openConnectModal?.();
@@ -189,18 +189,19 @@ export const Step2: React.FC<IModal> = ({
         marginTop="32px"
         type="submit"
         textTransform="none"
+        _hover={{
+          opacity: 0.9,
+        }}
         _disabled={{
           opacity: 0.25,
           cursor: 'not-allowed',
-        }}
-        _hover={{
-          opacity: 0.9,
         }}
         _active={{}}
         _focus={{}}
         _focusVisible={{}}
         _focusWithin={{}}
-        disabled={!username}
+        disabled={!username || isLoading}
+        isDisabled={!username || isLoading}
         onClick={signUsername}
       >
         Sign

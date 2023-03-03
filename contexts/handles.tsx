@@ -5,11 +5,15 @@ interface IHandlesProps {
   twitterIsOpen: boolean;
   twitterOnClose: () => void;
   twitterOnOpen: () => void;
+  twitterOnToggle: () => void;
   forumIsOpen: boolean;
   forumOnClose: () => void;
   forumOnOpen: () => void;
-  twitterOnToggle: () => void;
   forumOnToggle: () => void;
+  githubIsOpen: boolean;
+  githubOnClose: () => void;
+  githubOnOpen: () => void;
+  githubOnToggle: () => void;
 }
 
 export const HandlesContext = createContext({} as IHandlesProps);
@@ -31,6 +35,12 @@ export const HandlesProvider: React.FC<IProviderProps> = ({ children }) => {
     onOpen: forumOnOpen,
     onToggle: forumOnToggle,
   } = useDisclosure();
+  const {
+    isOpen: githubIsOpen,
+    onClose: githubOnClose,
+    onOpen: githubOnOpen,
+    onToggle: githubOnToggle,
+  } = useDisclosure();
 
   const providerValue = useMemo(
     () => ({
@@ -42,6 +52,10 @@ export const HandlesProvider: React.FC<IProviderProps> = ({ children }) => {
       forumOnClose,
       forumOnOpen,
       forumOnToggle,
+      githubIsOpen,
+      githubOnClose,
+      githubOnOpen,
+      githubOnToggle,
     }),
     [
       twitterIsOpen,
@@ -52,6 +66,10 @@ export const HandlesProvider: React.FC<IProviderProps> = ({ children }) => {
       forumOnClose,
       forumOnOpen,
       forumOnToggle,
+      githubIsOpen,
+      githubOnClose,
+      githubOnOpen,
+      githubOnToggle,
     ]
   );
 

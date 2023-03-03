@@ -1,46 +1,30 @@
+import { Flex, IconButton, Text, Icon, Button } from '@chakra-ui/react';
 import React from 'react';
-import makeBlockie from 'ethereum-blockies-base64';
-import { ImgWithFallback, XMarkIcon } from 'components';
-import { useSignMessage } from 'wagmi';
-import { IconButton, Icon, Flex, Text, Button } from '@chakra-ui/react';
-import { BsArrowLeft } from 'react-icons/bs';
-import { useWallet } from 'contexts';
+import Img from 'next/image';
+import { ImgWithFallback } from 'components';
 import { IoClose } from 'react-icons/io5';
-import { ESteps } from './ESteps';
+import { useDelegates } from 'contexts';
 
 interface IModal {
   handleModal: () => void;
-  setStep: React.Dispatch<React.SetStateAction<ESteps>>;
   username: string;
-  setSignature: React.Dispatch<React.SetStateAction<string>>;
   daoInfo: {
     name: string;
     logoUrl: string;
   };
 }
 
-export const Step2: React.FC<IModal> = ({
+export const StepVerified: React.FC<IModal> = ({
   handleModal,
-  setStep,
   username,
-  setSignature,
   daoInfo,
 }) => {
   const { name: daoName, logoUrl } = daoInfo;
-  const { openConnectModal, isConnected } = useWallet();
-  const backStep = () => setStep(ESteps.INPUT);
-  const nextStep = () => setStep(ESteps.PUBLISH);
-  const { signMessageAsync, isLoading } = useSignMessage();
+  const { searchProfileModal, profileSelected } = useDelegates();
 
-  const signUsername = async () => {
-    if (!isConnected) openConnectModal?.();
-    try {
-      const sign = await signMessageAsync({ message: username });
-      setSignature(sign);
-      nextStep();
-    } catch (error) {
-      console.log(error);
-    }
+  const closeModal = () => {
+    if (profileSelected) searchProfileModal(profileSelected?.address);
+    handleModal();
   };
 
   return (
@@ -56,48 +40,41 @@ export const Step2: React.FC<IModal> = ({
         flexDir="row"
         display="flex"
         alignItems="center"
-        justifyContent="space-between"
+        justifyContent="flex-end"
         gap="100px"
         width="100%"
         minWidth="490px"
       >
-        <Flex display="flex" flexDirection="row" alignItems="center" gap="15px">
-          <IconButton
-            bgColor="transparent"
-            aria-label="close"
-            onClick={backStep}
-            color="gray.500"
-          >
-            <Icon as={BsArrowLeft} boxSize="6" />
-          </IconButton>
-          <Text
-            fontStyle="normal"
-            fontWeight="700"
-            fontSize="20px"
-            color="#000000"
-            width="100%"
-          >
-            2/3 Sign a message
-          </Text>
-        </Flex>
         <IconButton
           bgColor="transparent"
           aria-label="close"
           onClick={handleModal}
-          color="gray.400"
+          color="gray.500"
         >
           <Icon as={IoClose} boxSize="6" />
         </IconButton>
       </Flex>
       <Flex
-        fontWeight="500"
-        fontSize="14px"
-        lineHeight="17px"
-        color="#687785"
-        marginBottom="32px"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        flexDirection="column"
+        paddingTop="36px"
+        paddingBottom="48px"
+        gap="16px"
       >
-        Sign a message that includes your twitter handle to prove you truly own
-        this wallet.
+        <Img src="/icons/check.svg" alt="Verified" height="32" width="32" />
+
+        <Text
+          fontStyle="normal"
+          fontWeight="500"
+          fontSize="18px"
+          lineHeight="22px"
+          textAlign="center"
+          color="#687785"
+        >
+          Verification Successful
+        </Text>
       </Flex>
       <Flex
         display="flex"
@@ -121,8 +98,7 @@ export const Step2: React.FC<IModal> = ({
             borderRadius="100px"
             width="26px"
             height="26px"
-            fallback={username}
-            src={makeBlockie(username)}
+            fallback={daoInfo.name}
           />
           <Text
             fontStyle="normal"
@@ -132,6 +108,18 @@ export const Step2: React.FC<IModal> = ({
             color="#000000"
           >
             {username}
+          </Text>
+          <Text
+            padding="5px 20px"
+            fontSize="12px"
+            lineHeight="15px"
+            textTransform="capitalize"
+            boxSizing="border-box"
+            borderRadius="5px"
+            color="#19cfa1"
+            border="1px solid #19cfa1"
+          >
+            Verified
           </Text>
         </Flex>
         <Flex
@@ -177,22 +165,20 @@ export const Step2: React.FC<IModal> = ({
         marginTop="32px"
         type="submit"
         textTransform="none"
-        _hover={{
-          opacity: 0.9,
-        }}
         _disabled={{
           opacity: 0.25,
           cursor: 'not-allowed',
+        }}
+        _hover={{
+          opacity: 0.9,
         }}
         _active={{}}
         _focus={{}}
         _focusVisible={{}}
         _focusWithin={{}}
-        disabled={!username || isLoading}
-        isDisabled={!username || isLoading}
-        onClick={signUsername}
+        onClick={closeModal}
       >
-        Sign
+        Close
       </Button>
     </Flex>
   );

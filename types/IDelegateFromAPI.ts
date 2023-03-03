@@ -19,6 +19,7 @@ export interface IDelegateFromAPI {
   twitterHandle: string;
   discordHandle: string;
   discourseHandle: string;
+  githubHandle: string;
   userType: string;
   aboutMe?: string;
   realName?: string;

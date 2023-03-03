@@ -3,6 +3,7 @@ export * from './DiscordIcon';
 export * from './DownChevron';
 export * from './EmptyCircle';
 export * from './ForumIcon';
+export * from './GithubIcon';
 export * from './HistoryIcon';
 export * from './Joystick';
 export * from './LeftCircleArrowIcon';

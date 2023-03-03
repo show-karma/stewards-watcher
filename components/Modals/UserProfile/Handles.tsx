@@ -1,8 +1,9 @@
 import { Flex, Text, Icon, Button } from '@chakra-ui/react';
-import { DiscordIcon, ForumIcon, TwitterIcon } from 'components';
+import { DiscordIcon, ForumIcon, GithubIcon, TwitterIcon } from 'components';
 import { useDAO, useDelegates, useHandles } from 'contexts';
 import { FC } from 'react';
 import { DiscourseModal, TwitterModal } from '../Linking';
+import { GithubModal } from '../Linking/Github';
 
 export const Handles: FC = () => {
   const { theme, daoData } = useDAO();
@@ -13,6 +14,9 @@ export const Handles: FC = () => {
     forumIsOpen,
     forumOnToggle,
     forumOnOpen,
+    githubIsOpen,
+    githubOnToggle,
+    githubOnOpen,
   } = useHandles();
   const { profileSelected } = useDelegates();
 
@@ -44,6 +48,17 @@ export const Handles: FC = () => {
       handle: profileSelected?.discordHandle
         ? `@${profileSelected?.discordHandle}`
         : undefined,
+    },
+    {
+      icon: GithubIcon,
+      name: 'Github',
+      action: () => {
+        githubOnOpen();
+      },
+      handle: undefined,
+      // handle: profileSelected?.githubHandle
+      //   ? `@${profileSelected?.githubHandle}`
+      //   : undefined,
     },
   ];
 
@@ -127,6 +142,7 @@ export const Handles: FC = () => {
         </Flex>
       </Flex>
       <TwitterModal open={twitterIsOpen} handleModal={twitterOnToggle} />
+      <GithubModal open={githubIsOpen} handleModal={githubOnToggle} />
       {daoData?.forumTopicURL && (
         <DiscourseModal open={forumIsOpen} handleModal={forumOnToggle} />
       )}
