@@ -23,6 +23,7 @@ import { FC } from 'react';
 import { IoMenu } from 'react-icons/io5';
 import { HeaderBurgerMenu } from './HeaderBurgerMenu';
 import { Madeby } from './Madeby';
+import { ResourcesMenu } from './ResourcesMenu';
 import { ThemeButton } from './ThemeButton';
 
 const StyledButton: FC<ButtonProps> = ({ children, ...rest }) => {
@@ -143,6 +144,8 @@ export const HeaderHat = () => {
                 gap="4"
               >
                 <ThemeButton />
+                {daoInfo.config.DAO_RESOURCES &&
+                  daoInfo.config.DAO_RESOURCES.length > 0 && <ResourcesMenu />}
                 {daoInfo.config.DAO_DEFAULT_SETTINGS?.FAQ && (
                   <Link href="/faq" _hover={{}}>
                     <StyledButton>FAQ</StyledButton>
@@ -164,6 +167,8 @@ export const HeaderHat = () => {
                 <StyledButton>FAQ</StyledButton>
               </Link>
             )}
+            {daoInfo.config.DAO_RESOURCES &&
+              daoInfo.config.DAO_RESOURCES.length > 0 && <ResourcesMenu />}
             <StyledButton onClick={onToggle}>Delegate to Anyone</StyledButton>
             <DelegateLoginButton onOpen={onOpenDelegateLogin} />
           </Flex>
