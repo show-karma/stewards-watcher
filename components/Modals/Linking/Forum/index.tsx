@@ -140,7 +140,9 @@ export const DiscourseModal: React.FC<IModal> = ({ open, handleModal }) => {
       aria-describedby="forum-modal-description"
     >
       <ModalOverlay />
-      <ModalContent mx="2">{renderStep()}</ModalContent>
+      <ModalContent mx="2" maxWidth="550px" w="100%">
+        {renderStep()}
+      </ModalContent>
     </Modal>
   );
 };
