@@ -31,6 +31,7 @@ export interface IDAOConfig {
     FAQ?: boolean;
     TIMEPERIOD?: IFilterPeriod;
     ORDERSTAT?: IStats;
+    DISABLE_LOGIN?: boolean;
     STATUS_FILTER?: {
       SHOW: boolean;
       DEFAULT_STATUSES?: IStatusOptions[];
