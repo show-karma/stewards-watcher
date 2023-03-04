@@ -19,6 +19,7 @@ const config: IDAOConfig = {
   },
   DAO_DEFAULT_SETTINGS: {
     ORDERSTAT: 'forumScore',
+    DISABLE_LOGIN: true,
   },
   DAO_CHAIN: mainnet,
   DAO_DELEGATE_CONTRACT: '',

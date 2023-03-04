@@ -142,6 +142,9 @@ const LoginButton: FC<{ onOpen: () => void }> = ({ onOpen }) => {
 export const DelegateLoginButton: FC<{ onOpen: () => void }> = ({ onOpen }) => {
   const { isAuthenticated } = useAuth();
   const { isConnected } = useAccount();
+  const { daoInfo } = useDAO();
+
+  if (daoInfo.config.DAO_DEFAULT_SETTINGS?.DISABLE_LOGIN) return null;
 
   return isAuthenticated && isConnected ? (
     <LoginMenu />
