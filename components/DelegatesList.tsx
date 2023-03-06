@@ -115,13 +115,13 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
       >
         <Grid
           flexWrap="wrap"
-          rowGap={{ base: '2', md: '4' }}
+          rowGap={{ base: '6', md: '4' }}
           columnGap={{ base: '4', md: '4' }}
           w="full"
           templateColumns={{
             base: 'repeat(1, 1fr)',
             sm: 'repeat(1, 1fr)',
-            md: 'repeat(2, 1fr)',
+            md: 'repeat(2, auto)',
             xl: 'repeat(3, 1fr)',
           }}
           alignItems="center"
