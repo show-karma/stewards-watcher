@@ -38,6 +38,7 @@ export interface IDAOConfig {
     };
   };
   SHOULD_NOT_SHOW?: 'statement' | 'stats';
+  SORT_OPTIONS?: IStats[];
   EXCLUDED_CARD_FIELDS: IStats[];
   /**
    * Defines a custom function to parse the votes with an external proposal provider.
