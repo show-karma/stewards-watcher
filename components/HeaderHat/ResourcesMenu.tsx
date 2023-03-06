@@ -46,10 +46,13 @@ export const ResourcesMenu: FC = () => {
               px="6"
               py="2"
               fontWeight="semibold"
-              _active={{}}
               _focus={{}}
               _hover={{
                 color: theme.hat.text.secondary,
+                bg: theme.filters.activeBg,
+              }}
+              _active={{
+                bg: theme.filters.activeBg,
               }}
               h="max-content"
               minH="max-content"

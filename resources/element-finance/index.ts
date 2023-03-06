@@ -17,6 +17,16 @@ const config: IDAOConfig = {
     FAVICON: '/daos/element-finance/favicon.png',
     URL: `https://elementfinance.karmahq.xyz`,
   },
+  DAO_RESOURCES: [
+    {
+      title: 'Gov Process',
+      url: 'https://forum.element.fi/discussion/8528-element-finance-governance-process-v0',
+    },
+    {
+      title: 'Gov Resources',
+      url: 'https://forum.element.fi/discussion/7046-governance-resources',
+    },
+  ],
   DAO_CHAIN: mainnet,
   DAO_DELEGATE_CONTRACT: '',
   DAO_DELEGATE_MODE: 'hidden',
