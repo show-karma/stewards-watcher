@@ -109,10 +109,18 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     const sortedDefaultOptions = statDefaultOptions.sort(element =>
       element.stat === config.DAO_DEFAULT_SETTINGS?.ORDERSTAT ? -1 : 1
     );
+
     const filteredStats = sortedDefaultOptions.filter(
       option => !config.EXCLUDED_CARD_FIELDS.includes(option.stat)
     );
-    return filteredStats;
+
+    const optionsStats = sortedDefaultOptions.filter(option =>
+      config.SORT_OPTIONS?.includes(option.stat)
+    );
+
+    const statsToShow = filteredStats.concat(optionsStats);
+
+    return statsToShow;
   };
 
   const [statuses, setStatuses] = useState<IStatusOptions[]>(

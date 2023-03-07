@@ -31,6 +31,7 @@ export interface IDAOConfig {
     FAQ?: boolean;
     TIMEPERIOD?: IFilterPeriod;
     ORDERSTAT?: IStats;
+    DISABLE_LOGIN?: boolean;
     STATUS_FILTER?: {
       SHOW: boolean;
       DEFAULT_STATUSES?: IStatusOptions[];
@@ -41,6 +42,7 @@ export interface IDAOConfig {
     url: string;
   }[];
   SHOULD_NOT_SHOW?: 'statement' | 'stats';
+  SORT_OPTIONS?: IStats[];
   EXCLUDED_CARD_FIELDS: IStats[];
   /**
    * Defines a custom function to parse the votes with an external proposal provider.
