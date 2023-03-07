@@ -125,9 +125,14 @@ export const ScoreBreakdown: React.FC = () => {
           sx={breakdownTableStyles}
         >
           <Tr fontWeight="600">
-            <Td>METRIC</Td>
-            <Td>VALUE</Td>
-            <Td display="flex" gap={2} alignItems="center">
+            <Td px={{ base: '3', md: '6' }}>METRIC</Td>
+            <Td px={{ base: '2', md: '6' }}>VALUE</Td>
+            <Td
+              display="flex"
+              gap={2}
+              alignItems="center"
+              px={{ base: '3', md: '6' }}
+            >
               WEIGHT
               <Tooltip
                 placement="top"
@@ -138,7 +143,7 @@ export const ScoreBreakdown: React.FC = () => {
                 fontWeight="normal"
                 fontSize="sm"
                 borderRadius={10}
-                padding={3}
+                p="3"
               >
                 <Text as="span">
                   <BsFillInfoCircleFill cursor="help" />
