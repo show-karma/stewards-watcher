@@ -16,7 +16,7 @@ export const InputDisplay: React.FC<{
       <Td px={{ base: '3', md: '6' }}>
         <Input
           type="number"
-          width="10ch"
+          width={{ base: '70px', md: '10ch' }}
           defaultValue={item.weight}
           step="0.1"
           px={{ base: '2', md: '2' }}

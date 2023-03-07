@@ -131,7 +131,7 @@ export const ScoreBreakdown: React.FC = () => {
               display="flex"
               gap={2}
               alignItems="center"
-              px={{ base: '3', md: '6' }}
+              px={{ base: '3', md: '3' }}
             >
               WEIGHT
               <Tooltip
