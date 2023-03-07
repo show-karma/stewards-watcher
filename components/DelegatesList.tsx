@@ -78,7 +78,12 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
   }, [pathUser]);
 
   return (
-    <Flex flexDir="column" align="center" w="full" maxW="1360px">
+    <Flex
+      flexDir="column"
+      align="center"
+      w="full"
+      maxW={{ base: '400px', md: '820px', lg: '944px', xl: '1360px' }}
+    >
       {!!interestFilter.length && (
         <Flex textAlign="start" w={{ base: 'full' }} fontSize={12} mb={4}>
           <Text as="span">

@@ -76,7 +76,7 @@ export const HeaderHat = () => {
       >
         <Flex
           w={{ base: 'full' }}
-          maxW="1360px"
+          maxW={{ base: '400px', md: '820px', lg: '944px', xl: '1360px' }}
           flexDir="row"
           justify="space-between"
           gap="4"
