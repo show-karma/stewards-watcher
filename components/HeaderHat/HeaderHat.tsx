@@ -63,20 +63,26 @@ export const HeaderHat = () => {
   } = useDisclosure();
 
   return (
-    <Flex flexDir="column" w="full">
+    <Flex
+      flexDir="column"
+      w="full"
+      bgColor={theme.headerBg}
+      align="center"
+      justify="center"
+    >
       <Flex
-        bgColor={theme.headerBg}
         py="3"
         w="full"
         align="center"
         justify="center"
-        px={{ base: '4', lg: '8' }}
+        px={{ base: '8', md: '8', lg: '4' }}
         zIndex="2"
         boxShadow={useColorModeValue('0px 4px 10px rgba(0, 0, 0, 0.1)', 'none')}
+        maxW={{ base: '400px', md: '820px', lg: '944px', xl: '1360px' }}
       >
         <Flex
-          w={{ base: 'full' }}
           maxW={{ base: '400px', md: '820px', lg: '944px', xl: '1360px' }}
+          w={{ base: 'full' }}
           flexDir="row"
           justify="space-between"
           gap="4"
@@ -128,6 +134,7 @@ export const HeaderHat = () => {
                   _focusVisible={{}}
                   onClick={openBurgerMenu}
                   color={theme.hat.text.primary}
+                  px="0"
                 >
                   <Icon as={IoMenu} boxSize="8" />
                 </Button>
