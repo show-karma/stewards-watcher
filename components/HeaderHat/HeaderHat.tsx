@@ -1,13 +1,10 @@
 import {
   Button,
   ButtonProps,
-  Center,
-  Divider,
   Flex,
   Icon,
   Img,
   Link,
-  Text,
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
@@ -18,7 +15,6 @@ import {
 } from 'components';
 import { DelegateVotesModal } from 'components/Modals/DelegateVotes';
 import { useDAO, useDelegates } from 'contexts';
-import { useAuth } from 'contexts/auth';
 import { FC } from 'react';
 import { IoMenu } from 'react-icons/io5';
 import { HeaderBurgerMenu } from './HeaderBurgerMenu';

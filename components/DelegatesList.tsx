@@ -26,7 +26,6 @@ const EmptyStates = () => {
     </Text>
   );
 };
-
 interface IDelegatesCasesProps {
   delegates: IDelegate[];
   isLoading: boolean;
