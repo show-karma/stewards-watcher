@@ -1,10 +1,13 @@
 import {
   Button,
   ButtonProps,
+  Center,
+  Divider,
   Flex,
   Icon,
   Img,
   Link,
+  Text,
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
@@ -15,11 +18,11 @@ import {
 } from 'components';
 import { DelegateVotesModal } from 'components/Modals/DelegateVotes';
 import { useDAO, useDelegates } from 'contexts';
+import { useAuth } from 'contexts/auth';
 import { FC } from 'react';
 import { IoMenu } from 'react-icons/io5';
 import { HeaderBurgerMenu } from './HeaderBurgerMenu';
 import { Madeby } from './Madeby';
-import { ResourcesMenu } from './ResourcesMenu';
 import { ThemeButton } from './ThemeButton';
 
 const StyledButton: FC<ButtonProps> = ({ children, ...rest }) => {
@@ -63,26 +66,20 @@ export const HeaderHat = () => {
   } = useDisclosure();
 
   return (
-    <Flex
-      flexDir="column"
-      w="full"
-      bgColor={theme.headerBg}
-      align="center"
-      justify="center"
-    >
+    <Flex flexDir="column" w="full">
       <Flex
+        bgColor={theme.headerBg}
         py="3"
         w="full"
         align="center"
         justify="center"
-        px={{ base: '8', md: '8', lg: '4' }}
+        px={{ base: '4', lg: '8' }}
         zIndex="2"
         boxShadow={useColorModeValue('0px 4px 10px rgba(0, 0, 0, 0.1)', 'none')}
-        maxW={{ base: '400px', md: '820px', lg: '944px', xl: '1360px' }}
       >
         <Flex
-          maxW={{ base: '400px', md: '820px', lg: '944px', xl: '1360px' }}
           w={{ base: 'full' }}
+          maxW={{ base: '400px', md: '820px', lg: '944px', xl: '1360px' }}
           flexDir="row"
           justify="space-between"
           gap="4"
@@ -134,7 +131,6 @@ export const HeaderHat = () => {
                   _focusVisible={{}}
                   onClick={openBurgerMenu}
                   color={theme.hat.text.primary}
-                  px="0"
                 >
                   <Icon as={IoMenu} boxSize="8" />
                 </Button>
@@ -146,34 +142,30 @@ export const HeaderHat = () => {
                 display={{ base: 'none', lg: 'flex' }}
                 gap="4"
               >
-                <ThemeButton />
-                {daoInfo.config.DAO_RESOURCES &&
-                  daoInfo.config.DAO_RESOURCES.length > 0 && <ResourcesMenu />}
                 {daoInfo.config.DAO_DEFAULT_SETTINGS?.FAQ && (
                   <Link href="/faq" _hover={{}}>
                     <StyledButton>FAQ</StyledButton>
                   </Link>
                 )}
-                <StyledButton onClick={onToggle}>
+                <StyledButton onClick={onToggle} px="4">
                   Delegate to Anyone
                 </StyledButton>
                 <DelegateLoginButton onOpen={onOpenDelegateLogin} />
+                <ThemeButton />
               </Flex>
             </Flex>
           </Flex>
         </Flex>
         <HeaderBurgerMenu isOpen={isBurgerMenuOpen} onClose={closeBurgerMenu}>
           <Flex flexDir="column" gap="4">
-            <ThemeButton />
             {daoInfo.config.DAO_DEFAULT_SETTINGS?.FAQ && (
               <Link href="/faq" _hover={{}}>
                 <StyledButton>FAQ</StyledButton>
               </Link>
             )}
-            {daoInfo.config.DAO_RESOURCES &&
-              daoInfo.config.DAO_RESOURCES.length > 0 && <ResourcesMenu />}
             <StyledButton onClick={onToggle}>Delegate to Anyone</StyledButton>
             <DelegateLoginButton onOpen={onOpenDelegateLogin} />
+            <ThemeButton />
           </Flex>
         </HeaderBurgerMenu>
         <DelegateVotesModal isOpen={isOpen} onClose={onToggle} />
