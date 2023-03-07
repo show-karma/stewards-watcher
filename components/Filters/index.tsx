@@ -18,6 +18,7 @@ export const Filters = () => {
       py="5"
       px="4"
       justify="space-between"
+      mt="1.5rem"
     >
       <SearchFilter />
       <OrderByFilters />
