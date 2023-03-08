@@ -37,6 +37,10 @@ export interface IDAOConfig {
       DEFAULT_STATUSES?: IStatusOptions[];
     };
   };
+  DAO_RESOURCES?: {
+    title: string;
+    url: string;
+  }[];
   SHOULD_NOT_SHOW?: 'statement' | 'stats';
   SORT_OPTIONS?: IStats[];
   EXCLUDED_CARD_FIELDS: IStats[];

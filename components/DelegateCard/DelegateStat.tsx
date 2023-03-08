@@ -40,7 +40,7 @@ export const DelegateStat: FC<{ stat: ICardStat }> = ({ stat }) => {
           fontSize={{ base: '10px', md: '11px' }}
           fontWeight="light"
           h="max-content"
-          w={{ base: 'min-content', lg: 'max-content' }}
+          w={{ base: 'min-content' }}
         >
           {stat.title}
         </Text>

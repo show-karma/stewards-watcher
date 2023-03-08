@@ -26,7 +26,6 @@ const EmptyStates = () => {
     </Text>
   );
 };
-
 interface IDelegatesCasesProps {
   delegates: IDelegate[];
   isLoading: boolean;
@@ -79,7 +78,12 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
   }, [pathUser]);
 
   return (
-    <Flex flexDir="column" align="center" w="full" maxW="1360px">
+    <Flex
+      flexDir="column"
+      align="center"
+      w="full"
+      maxW={{ base: '400px', md: '820px', lg: '944px', xl: '1360px' }}
+    >
       {!!interestFilter.length && (
         <Flex textAlign="start" w={{ base: 'full' }} fontSize={12} mb={4}>
           <Text as="span">
@@ -114,7 +118,6 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
         style={{ width: '100%' }}
       >
         <Grid
-          flexWrap="wrap"
           rowGap={{ base: '6', md: '4' }}
           columnGap={{ base: '4', md: '4' }}
           w="full"
@@ -125,7 +128,7 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
             xl: 'repeat(3, 1fr)',
           }}
           alignItems="center"
-          justifyItems="center"
+          justifyContent="space-between"
           mb="8"
           px={{ base: '4', lg: '0' }}
         >

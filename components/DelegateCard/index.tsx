@@ -329,7 +329,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
         gap={{ base: '2', md: '4' }}
         w="full"
         align="flex-start"
-        px={{ base: '14px', lg: '5' }}
+        px={{ base: '14px', lg: '5', xl: '4' }}
         pt={{ base: '5', lg: '5' }}
       >
         {isLoaded && data ? (
@@ -544,7 +544,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           align="flex-start"
           justify="space-between"
           h="full"
-          px={{ base: '3', lg: '5' }}
+          px={{ base: '3', lg: '5', xl: '4' }}
         >
           {isLoaded ? (
             <Flex mb="4">
@@ -644,7 +644,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           gap="3"
           mt={{ base: '3' }}
           h="max-content"
-          px={{ base: '14px', lg: '5' }}
+          px={{ base: '14px', lg: '5', xl: '4' }}
           pb={{ base: '5', lg: '5' }}
           align="center"
           justify="space-between"

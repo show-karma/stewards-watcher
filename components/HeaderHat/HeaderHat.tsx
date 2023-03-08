@@ -23,6 +23,7 @@ import { FC } from 'react';
 import { IoMenu } from 'react-icons/io5';
 import { HeaderBurgerMenu } from './HeaderBurgerMenu';
 import { Madeby } from './Madeby';
+import { ResourcesMenu } from './ResourcesMenu';
 import { ThemeButton } from './ThemeButton';
 
 const StyledButton: FC<ButtonProps> = ({ children, ...rest }) => {
@@ -79,7 +80,7 @@ export const HeaderHat = () => {
       >
         <Flex
           w={{ base: 'full' }}
-          maxW="1360px"
+          maxW={{ base: '400px', md: '820px', lg: '944px', xl: '1360px' }}
           flexDir="row"
           justify="space-between"
           gap="4"
@@ -142,30 +143,34 @@ export const HeaderHat = () => {
                 display={{ base: 'none', lg: 'flex' }}
                 gap="4"
               >
-                <ThemeButton />
                 {daoInfo.config.DAO_DEFAULT_SETTINGS?.FAQ && (
                   <Link href="/faq" _hover={{}}>
                     <StyledButton>FAQ</StyledButton>
                   </Link>
                 )}
-                <StyledButton onClick={onToggle}>
+                {daoInfo.config.DAO_RESOURCES &&
+                  daoInfo.config.DAO_RESOURCES.length > 0 && <ResourcesMenu />}
+                <StyledButton onClick={onToggle} px="2">
                   Delegate to Anyone
                 </StyledButton>
                 <DelegateLoginButton onOpen={onOpenDelegateLogin} />
+                <ThemeButton />
               </Flex>
             </Flex>
           </Flex>
         </Flex>
         <HeaderBurgerMenu isOpen={isBurgerMenuOpen} onClose={closeBurgerMenu}>
           <Flex flexDir="column" gap="4">
-            <ThemeButton />
             {daoInfo.config.DAO_DEFAULT_SETTINGS?.FAQ && (
               <Link href="/faq" _hover={{}}>
                 <StyledButton>FAQ</StyledButton>
               </Link>
             )}
+            {daoInfo.config.DAO_RESOURCES &&
+              daoInfo.config.DAO_RESOURCES.length > 0 && <ResourcesMenu />}
             <StyledButton onClick={onToggle}>Delegate to Anyone</StyledButton>
             <DelegateLoginButton onOpen={onOpenDelegateLogin} />
+            <ThemeButton />
           </Flex>
         </HeaderBurgerMenu>
         <DelegateVotesModal isOpen={isOpen} onClose={onToggle} />
