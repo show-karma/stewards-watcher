@@ -59,11 +59,12 @@ export const useDelegation = (args: IDelegation) => {
       console.log(error);
       if (
         error.stack?.includes('code=ACTION_REJECTED') ||
-        error.stack?.includes('code=4001')
+        error.stack?.includes('code=4001') ||
+        error.message.includes('User rejected')
       ) {
         toast({
           title: 'Error',
-          description: 'The transaction was cancelled. Please try again',
+          description: 'The transaction was cancelled. Please try again.',
           status: 'error',
         });
       } else {
