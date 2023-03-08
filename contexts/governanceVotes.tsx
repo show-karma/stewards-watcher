@@ -16,7 +16,7 @@ interface IGovernanceVotesProps {
   isLoadingVotes: boolean;
   delegatedBefore: string;
   symbol: string;
-  walletAddress: string;
+  walletAddress?: string;
 }
 
 export const GovernanceVotesContext = createContext(
