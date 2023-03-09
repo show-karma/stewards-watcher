@@ -19,7 +19,6 @@ export const GithubModal: React.FC<IModal> = ({ open, handleModal }) => {
   const [step, setStep] = useState(ESteps.INPUT);
   const [signature, setSignature] = useState('');
   const [username, setUsername] = useState('');
-  const [gistUrl, setGistUrl] = useState('');
   const { toast, updateState } = useToasty();
   const { address } = useAccount();
   const { daoData } = useDAO();
@@ -33,7 +32,7 @@ export const GithubModal: React.FC<IModal> = ({ open, handleModal }) => {
       // eslint-disable-next-line no-promise-executor-return
       request
         .post('/user/link/github', {
-          gistUrl,
+          message: username,
         })
         .then(() => {
           setStep(ESteps.VERIFIED);
@@ -105,8 +104,6 @@ export const GithubModal: React.FC<IModal> = ({ open, handleModal }) => {
           daoName={daoName}
           step={step}
           verifyPublication={verifyPublication}
-          gistUrl={gistUrl}
-          setGistUrl={setGistUrl}
         />
       );
     if (step === ESteps.VERIFIED)

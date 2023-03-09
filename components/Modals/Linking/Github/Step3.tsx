@@ -22,8 +22,6 @@ interface IModal {
   daoName: string;
   step: ESteps;
   verifyPublication: () => void;
-  gistUrl: string;
-  setGistUrl: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const Step3: React.FC<IModal> = ({
@@ -34,30 +32,27 @@ export const Step3: React.FC<IModal> = ({
   daoName,
   step,
   verifyPublication,
-  gistUrl,
-  setGistUrl,
 }) => {
   const textRef = useRef<HTMLParagraphElement>(null);
-  const textToCopy = `Verifying my github identity for ${daoName} governance
-  addr: ${publicAddress}
-  sig: ${signature}
-  #${daoName}governance`;
+  const textToCopy = `Verifying my github identity addr: ${publicAddress} sig: ${signature}`;
   const { onCopy } = useClipboard(textToCopy);
   const backStep = () => setStep(ESteps.SIGN);
   const { toast } = useToasty();
+
+  const getEnvLink =
+    process.env.NODE_ENV === 'production'
+      ? 'https://gist.github.com/karmahq/606e2646f2d3c783486c3e81e8f31b8e'
+      : 'https://gist.github.com/maheshmurthy/7e4f77c9dea61f20b51e6e8e73c0ba26';
 
   const openGithub = () => {
     if (typeof window !== 'undefined') {
       const { outerHeight, outerWidth } = window;
       const [width, height] = [outerWidth * 0.75, outerHeight * 0.75];
       const windowFeatures = `left=0,top=0,width=${width},height=${height}`;
-      window.open('https://gist.github.com/', '_blank', windowFeatures);
+      window.open(getEnvLink, '_blank', windowFeatures);
       setStep(ESteps.VERIFICATION);
     }
   };
-
-  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) =>
-    setGistUrl(event.target.value);
 
   const copyText = () => {
     if (textRef.current) {
@@ -100,7 +95,7 @@ export const Step3: React.FC<IModal> = ({
             color="#000000"
             width="100%"
           >
-            3/3 Create a secret gist
+            3/3 Comment on Github gist
           </Text>
         </Flex>
         <IconButton
@@ -119,8 +114,7 @@ export const Step3: React.FC<IModal> = ({
         color="#687785"
         marginBottom="32px"
       >
-        Copy the text below, click on open window and paste at github and create
-        a secret gist. Once you create, copy the url of the gist created, come
+        Copy the text below and post on the github gist. Once you comment, come
         back and click “Verify” to complete the linking.
       </Flex>
       <Flex
@@ -158,37 +152,6 @@ export const Step3: React.FC<IModal> = ({
           <Icon as={MdContentCopy} boxSize="6" />
         </IconButton>
       </Flex>
-      <Input
-        mt="4"
-        padding="8px 20px"
-        background="#ebedf0"
-        fontStyle="normal"
-        fontWeight="500"
-        fontSize="14px"
-        lineHeight="17px"
-        color="rgba(104, 119, 133, 1)"
-        border="none"
-        flex="1"
-        h="max-content"
-        _placeholder={{
-          color: 'rgba(104, 119, 133, 0.58)',
-          fontStyle: 'normal',
-          fontWeight: '500',
-          fontSize: '14px',
-          lineHeight: '17px',
-        }}
-        _active={{
-          outline: 'none',
-        }}
-        _focusVisible={{
-          outline: 'none',
-        }}
-        type="text"
-        placeholder="Paste the link of the gist created"
-        value={gistUrl}
-        onChange={handleInput}
-        onKeyDown={event => event.key === 'Enter' && verifyPublication()}
-      />
       <Flex flexDir={{ base: 'column', md: 'row' }} w="full">
         <Button
           fontStyle="normal"
@@ -245,8 +208,8 @@ export const Step3: React.FC<IModal> = ({
           _focus={{}}
           _focusVisible={{}}
           _focusWithin={{}}
-          disabled={step === ESteps.VERIFYING || !gistUrl}
-          isDisabled={step === ESteps.VERIFYING || !gistUrl}
+          disabled={step === ESteps.VERIFYING}
+          isDisabled={step === ESteps.VERIFYING}
           onClick={verifyPublication}
         >
           Verify Publication
