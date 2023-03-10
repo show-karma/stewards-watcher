@@ -31,11 +31,6 @@ const config: IDAOConfig = {
     'forumScore',
     'discordScore',
   ],
-  DAO_DEFAULT_SETTINGS: {
-    STATUS_FILTER: {
-      SHOW: true,
-    },
-  },
 };
 
 const dark: IDAOTheme = {

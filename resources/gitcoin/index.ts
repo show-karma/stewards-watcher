@@ -28,7 +28,6 @@ const config: IDAOConfig = {
     TIMEPERIOD: '180d',
     ORDERSTAT: 'healthScore',
     STATUS_FILTER: {
-      SHOW: true,
       DEFAULT_STATUSES: ['active', 'recognized'],
     },
   },
