@@ -162,11 +162,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   } = useDisclosure();
 
   const isSearchDirty = userToFind !== '';
-  const isFiltering =
-    interests.length > 0 ||
-    (config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER?.SHOW
-      ? Boolean(statuses)
-      : false);
+  const isFiltering = interests.length > 0;
 
   const fetchInterests = async () => {
     try {

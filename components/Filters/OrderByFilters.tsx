@@ -18,9 +18,7 @@ export const OrderByFilters = () => {
         <Flex flexDir="row" gap="4" flexWrap="wrap">
           {interests.length > 0 && <InterestsFilter />}
           {workstreams.length > 0 && <WorkstreamFilter />}
-          {daoInfo.config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER?.SHOW && (
-            <DelegateStatusFilter />
-          )}
+          <DelegateStatusFilter />
           <PeriodFilter />
         </Flex>
       </Flex>
