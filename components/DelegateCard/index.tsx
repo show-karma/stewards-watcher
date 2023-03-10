@@ -181,7 +181,8 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       filtereds.find(
         item => item.id === 'offChainVotesPct' || item.id === 'onChainVotesPct'
       ) &&
-      !config.EXCLUDED_CARD_FIELDS.includes('delegatedVotes')
+      !config.EXCLUDED_CARD_FIELDS.includes('delegatedVotes') &&
+      config.DAO_KARMA_ID !== 'dydx'
     )
       filtereds.push({
         title: 'Voting Weight',

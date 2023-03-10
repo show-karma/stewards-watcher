@@ -28,7 +28,6 @@ const config: IDAOConfig = {
   DAO_FORUM_TYPE: 'commonwealth',
   DAO_FORUM_URL: 'https://forums.dydx.community/',
   DAO_GTAG: 'G-67LDHT697P',
-  EXCLUDED_CARD_FIELDS: ['healthScore'],
   DAO_DEFAULT_SETTINGS: {
     FAQ: true,
     STATUS_FILTER: {
@@ -39,6 +38,7 @@ const config: IDAOConfig = {
   DAO_EXT_VOTES_PROVIDER: {
     onChain: onChainDyDxVotesProvider,
   },
+  EXCLUDED_CARD_FIELDS: ['votingWeight', 'healthScore'],
 };
 
 const dark: IDAOTheme = {
