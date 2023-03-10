@@ -5,7 +5,7 @@ import { IoChevronDownOutline } from 'react-icons/io5';
 
 export const StatFilter = () => {
   const { theme } = useDAO();
-  const { selectStat, statOptions, stat } = useDelegates();
+  const { selectStat, statOptions, stat, setupFilteringUrl } = useDelegates();
 
   const selectedStat = statOptions.find(option => option.id === stat)?.title;
 

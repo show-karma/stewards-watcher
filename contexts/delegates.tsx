@@ -567,13 +567,16 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   }, [delegates]);
 
   const setupFilteringUrl = () => {
-    console.log('setupFilteringUrl');
     const query = {
       sortby: stat,
       order,
       period,
-      statuses: statuses.join(','),
+      statuses: daoInfo.config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER?.SHOW
+        ? statuses.join(',')
+        : undefined,
     };
+    if (!daoInfo.config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER?.SHOW)
+      delete query.statuses;
     router.push(
       {
         pathname: '/',
@@ -698,7 +701,6 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       const validStatuses = queryStatuses
         .split(/(\\%2C|,)/)
         .filter(item => statusesOptions.includes(item as IStatusOptions));
-      console.log('validStatuses', validStatuses);
       if (validStatuses.length > 0)
         setStatuses(validStatuses as IStatusOptions[]);
     }
