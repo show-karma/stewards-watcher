@@ -33,7 +33,6 @@ export interface IDAOConfig {
     ORDERSTAT?: IStats;
     DISABLE_LOGIN?: boolean;
     STATUS_FILTER?: {
-      SHOW: boolean;
       DEFAULT_STATUSES?: IStatusOptions[];
     };
   };
