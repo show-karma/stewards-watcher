@@ -60,14 +60,17 @@ interface IDelegateProps {
   interestFilter: string[];
   selectInterests: (index: number) => void;
   delegateCount: number;
-  selectStatus: (selectedStatus: number) => void;
+  selectStatus: (items: IStatusOptions[]) => void;
   statuses: IStatusOptions[];
   isFiltering: boolean;
   workstreams: IWorkstream[];
   workstreamsFilter: string[];
   statusesOptions: IStatusOptions[];
   selectWorkstream: (index: number) => void;
-  setupFilteringUrl: () => void;
+  setupFilteringUrl: (
+    paramToSetup: 'sortby' | 'order' | 'period' | 'statuses',
+    paramValue: string
+  ) => void;
 }
 
 export const DelegatesContext = createContext({} as IDelegateProps);
@@ -562,17 +565,24 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     }
   }, [delegates]);
 
-  const setupFilteringUrl = () => {
-    const query = {
-      sortby: stat,
-      order,
-      period,
-      statuses: daoInfo.config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER?.SHOW
-        ? statuses.join(',')
-        : undefined,
+  const setupFilteringUrl = (
+    paramToSetup: 'sortby' | 'order' | 'period' | 'statuses',
+    paramValue: string
+  ) => {
+    const queries = router.query;
+    delete queries.site;
+
+    const filters = {
+      sortby: paramValue,
+      order: paramValue,
+      period: paramValue,
+      statuses: paramValue,
     };
-    if (!daoInfo.config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER?.SHOW)
-      delete query.statuses;
+    const query = {
+      ...queries,
+      [paramToSetup]: filters[paramToSetup],
+    };
+
     router.push(
       {
         pathname: '/',
@@ -641,25 +651,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     setWorkstreamsFilter(items);
   };
 
-  const selectStatus = (index: number) => {
-    if (!statusesOptions[index]) return;
-
-    // search for the index in the statuses array
-    const filterIdx = statuses.findIndex(
-      filter => filter === statusesOptions[index]
-    );
-
-    // clone the statuses array
-    const items = [...statuses];
-
-    // if the status is already in the statusesOptions array, remove it
-    if (filterIdx >= 0) {
-      items.splice(filterIdx, 1);
-    } else {
-      items.push(statusesOptions[index]);
-    }
-
-    // set the new statuses array
+  const selectStatus = (items: IStatusOptions[]) => {
     setStatuses(items);
   };
 
@@ -695,18 +687,13 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     }
     if (queryStatuses) {
       const validStatuses = queryStatuses
-        .split(/(\\%2C|,)/)
+        .split(/(%2C|,)/)
         .filter(item => statusesOptions.includes(item as IStatusOptions));
       if (validStatuses.length > 0)
         setStatuses(validStatuses as IStatusOptions[]);
     }
     setInitiated(true);
   };
-
-  useMemo(() => {
-    if (!hasInitiated) return;
-    setupFilteringUrl();
-  }, [stat, order, period, statuses, hasInitiated]);
 
   useMemo(() => {
     if (!hasInitiated) return;
