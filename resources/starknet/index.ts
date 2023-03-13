@@ -34,6 +34,7 @@ const config: IDAOConfig = {
     'offChainVotesPct',
     'forumScore',
     'karmaScore',
+    'delegatorCount',
   ],
 };
 
