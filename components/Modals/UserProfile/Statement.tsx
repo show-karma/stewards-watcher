@@ -35,6 +35,7 @@ const TextSection: FC<ITextSection> = ({ statement }) => {
           flexDir="column"
           wordBreak="break-word"
           listStyleType="none"
+          maxW="30rem"
           sx={{
             ol: {
               marginLeft: '32px',
@@ -42,6 +43,11 @@ const TextSection: FC<ITextSection> = ({ statement }) => {
             // eslint-disable-next-line id-length
             a: {
               color: 'blue.400',
+            },
+            pre: {
+              maxWidth: '30rem',
+              wordWrap: 'break-word',
+              whiteSpace: 'pre-line',
             },
           }}
         >
