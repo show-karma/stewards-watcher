@@ -18,8 +18,9 @@ const config: IDAOConfig = {
     URL: `https://starknet.karmahq.xyz`,
   },
   DAO_DEFAULT_SETTINGS: {
-    ORDERSTAT: 'forumScore',
+    ORDERSTAT: 'votingWeight',
     DISABLE_LOGIN: true,
+    SORT: 'delegatedVotes',
   },
   DAO_CHAIN: mainnet,
   DAO_DELEGATE_CONTRACT: '',

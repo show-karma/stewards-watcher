@@ -2,7 +2,7 @@ import { IFilterPeriod, IStatusOptions } from 'types/contexts';
 import { Chain } from 'wagmi';
 import { IChainRow } from 'types/IChainRow';
 import { IForumType } from './forum';
-import { IStats } from './stats';
+import { IStats, IStatsID } from './stats';
 
 export interface IDAOConfig {
   DAO: string;
@@ -32,6 +32,7 @@ export interface IDAOConfig {
     TIMEPERIOD?: IFilterPeriod;
     ORDERSTAT?: IStats;
     DISABLE_LOGIN?: boolean;
+    SORT?: IStatsID;
     STATUS_FILTER?: {
       DEFAULT_STATUSES?: IStatusOptions[];
     };
