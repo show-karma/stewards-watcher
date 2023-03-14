@@ -4,6 +4,7 @@ import { FC, useMemo, useState } from 'react';
 
 import { IChainRow, IProfile } from 'types';
 import { formatNumber } from 'utils';
+import { ContrarionIndexComponent } from './ContrarionIndex';
 import { DelegatedVotesChanges } from './DelegatedVotesChanges';
 import { Navigation } from './Navigation';
 import { ProposalVote } from './ProposalVote';
@@ -98,8 +99,9 @@ export const VotingHistory: FC<IVotingHistory> = ({ profile }) => {
           <Navigation />
         </Flex>
       </Flex>
-      <Flex flexDir="column" align="center">
+      <Flex flexDir="column" align="center" gap="5" maxW="400px">
         <DelegatedVotesChanges />
+        <ContrarionIndexComponent />
       </Flex>
     </Flex>
   );
