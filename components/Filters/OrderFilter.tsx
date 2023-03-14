@@ -15,12 +15,18 @@ const orderOptions: IOrderOptions[] = [
 ];
 
 export const OrderFilter = () => {
-  const { order, selectOrder } = useDelegates();
+  const { order, selectOrder, setupFilteringUrl } = useDelegates();
   const { theme } = useDAO();
 
   const selectedOrder = orderOptions.find(
     option => option.order === order
   )?.title;
+
+  const handleSelectOrder = async (option: IFilterOrder) => {
+    selectOrder(option);
+    setupFilteringUrl('order', option);
+  };
+
   return (
     <Menu isLazy id="order-filter">
       <MenuButton
@@ -78,7 +84,7 @@ export const OrderFilter = () => {
         {orderOptions.map((option, index) => (
           <MenuItem
             key={+index}
-            onClick={() => selectOrder(option.order)}
+            onClick={() => handleSelectOrder(option.order)}
             bgColor="transparent"
             _hover={{
               bg: theme.filters.activeBg,
