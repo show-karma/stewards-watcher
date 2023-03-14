@@ -201,6 +201,12 @@ export const DelegatedVotesChanges: FC = () => {
 
   const options: ChartOptions<'line'> = {
     responsive: true,
+    elements: {
+      point: {
+        radius: 5,
+        hoverRadius: 4,
+      },
+    },
     scales: {
       // eslint-disable-next-line id-length
       y: {
@@ -221,10 +227,10 @@ export const DelegatedVotesChanges: FC = () => {
           color: theme.modal.votingHistory.proposal.divider,
         },
         time: {
-          parser: 'MMM DD YY',
+          parser: 'MMM YY',
           unit: 'day',
           displayFormats: {
-            day: 'MMM DD, YY',
+            day: 'MMM, YY',
           },
         },
         ticks: {
@@ -265,7 +271,7 @@ export const DelegatedVotesChanges: FC = () => {
     //   item => item.timestamp >= getTimestamp - 2592000 * interval
     // );
     const formatDays = fetchedData.map(item =>
-      dayjs(item.timestamp * 1000).format('MMM DD YY')
+      dayjs(item.timestamp * 1000).format('MMM YY')
     );
     setLabels(formatDays);
     const formatBalances = fetchedData.map(item => {

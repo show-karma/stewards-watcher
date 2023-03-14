@@ -16,8 +16,8 @@ import { ExpandableReason } from './ExpandableReason';
 import { ExpandableTitle } from './ExpandableTitle';
 
 const iconStyle = {
-  width: '1.75rem',
-  height: '1.75rem',
+  width: '1rem',
+  height: '1rem',
 };
 
 const CheckDecision = (choice: string) => {
@@ -152,7 +152,7 @@ export const ProposalVote: FC<IProposalVote> = ({
       pt="4"
       pb={isLast ? '4' : '0'}
     >
-      <Flex flexDir="row" w="full" align="center" px="4">
+      <Flex flexDir="row" w="full" align="center" px="4" gap="2">
         <Flex flexDir="column" w="full">
           {isLoaded ? (
             <ExpandableTitle text={vote.proposal} />
@@ -207,10 +207,10 @@ export const ProposalVote: FC<IProposalVote> = ({
           )}
           {isLoaded ? (
             <Text
-              w="max-content"
+              w="fit-content"
               h="max-content"
               fontWeight="bold"
-              fontSize="md"
+              fontSize="sm"
               color={theme.modal.votingHistory.proposal.result}
               maxH="70px"
               overflow="hidden"
