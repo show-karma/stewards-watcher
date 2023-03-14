@@ -12,7 +12,7 @@ import { FC, useState } from 'react';
 import { IDAOTheme } from 'types';
 import { IoClose } from 'react-icons/io5';
 import { TbExternalLink } from 'react-icons/tb';
-import { getTimeFromNow } from 'utils';
+import { formatNumber, getTimeFromNow } from 'utils';
 import { Filters } from './Filters';
 import { ClearButton } from './Filters/ClearButton';
 import { SortBy } from './Filters/SortBy';
@@ -36,7 +36,7 @@ const DelegatesCounter: FC<{
           align="center"
           textAlign="start"
         >
-          {delegateCount} delegate{delegateCount > 1 && 's'}
+          {formatNumber(delegateCount)} delegate{delegateCount > 1 && 's'}
         </Text>
         {delegates.length > 0 && (
           <Flex

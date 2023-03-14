@@ -124,7 +124,6 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     );
 
     const statsToShow = filteredStats.concat(optionsStats);
-
     return statsToShow;
   };
 
@@ -137,7 +136,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const statOptions = prepareStatOptions();
 
-  const [stat, setStat] = useState<IStatsID>(statOptions[0].id);
+  const [stat, setStat] = useState<IStatsID>(
+    config.DAO_DEFAULT_SETTINGS?.SORT || statOptions[0].id
+  );
   const [order, setOrder] = useState<IFilterOrder>('desc');
   const [period, setPeriod] = useState<IFilterPeriod>(defaultTimePeriod);
   const [interests, setInterests] = useState<string[]>([]);

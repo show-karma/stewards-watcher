@@ -181,7 +181,8 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       filtereds.find(
         item => item.id === 'offChainVotesPct' || item.id === 'onChainVotesPct'
       ) &&
-      !config.EXCLUDED_CARD_FIELDS.includes('delegatedVotes')
+      !config.EXCLUDED_CARD_FIELDS.includes('delegatedVotes') &&
+      config.DAO_KARMA_ID !== 'dydx'
     )
       filtereds.push({
         title: 'Voting Weight',
@@ -286,15 +287,22 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   };
 
   const statBorderWidth = (index: number) => {
+    if (index === firstRowStats.length - 1) {
+      if (index === 0) return '1px 1px 1px 1px';
+      if (index === 1) return '1px';
+      return '1px 1px 1px 0';
+    }
     if (index === 0) return '1px 0 1px 1px';
     if (index === 1) return '1px';
-    if (index === firstRowStats.length - 1) return '1px 1px 1px 0';
     return '1px 1px 1px 0';
   };
 
   const statBorderRadius = (index: number) => {
+    if (index === firstRowStats.length - 1) {
+      if (index === 0) return '8px 8px 8px 8px';
+      return '0 8px 8px 0';
+    }
     if (index === 0) return '8px 0 0 8px';
-    if (index === firstRowStats.length - 1) return '0 8px 8px 0';
     return '0 0 0 0';
   };
 
