@@ -112,12 +112,16 @@ interface IProposalVote {
   vote: IChainRow;
   isLoading?: boolean;
   profile: IProfile;
+  isLast?: boolean;
+  index: number;
 }
 
 export const ProposalVote: FC<IProposalVote> = ({
   vote,
   isLoading,
   profile,
+  isLast,
+  index,
 }) => {
   const { theme } = useDAO();
   const { getVoteReason } = useVoteReason({ address: profile.address });
@@ -138,9 +142,17 @@ export const ProposalVote: FC<IProposalVote> = ({
 
   const voteReason = vote.voteId && getVoteReason(vote.voteId);
 
+  const isPair = (index + 1) % 2 === 0;
+
   return (
-    <Flex flexDir="column" w="full">
-      <Flex flexDir="row" w="full">
+    <Flex
+      flexDir="column"
+      w="full"
+      bg={isPair ? `${theme.modal.background}40` : `${theme.modal.background}`}
+      pt="4"
+      pb={isLast ? '4' : '0'}
+    >
+      <Flex flexDir="row" w="full" align="center" px="4">
         <Flex flexDir="column" w="full">
           {isLoaded ? (
             <ExpandableTitle text={vote.proposal} />
@@ -182,9 +194,10 @@ export const ProposalVote: FC<IProposalVote> = ({
         </Flex>
         <Flex
           h="max-content"
+          maxW="35%"
           w="max-content"
           align="center"
-          justify="center"
+          justify="flex-end"
           gap="2"
         >
           {isLoaded && vote ? (
@@ -199,6 +212,8 @@ export const ProposalVote: FC<IProposalVote> = ({
               fontWeight="bold"
               fontSize="md"
               color={theme.modal.votingHistory.proposal.result}
+              maxH="70px"
+              overflow="hidden"
             >
               {showChoice()}
             </Text>
@@ -207,11 +222,14 @@ export const ProposalVote: FC<IProposalVote> = ({
           )}
         </Flex>
       </Flex>
-      <Divider
-        bgColor={theme.modal.votingHistory.proposal.divider}
-        my="3"
-        h="1px"
-      />
+      {!isLast && (
+        <Divider
+          bgColor={`${theme.modal.votingHistory.reason.divider}0D`}
+          mt="4"
+          h="1px"
+        />
+      )}
+
       {voteReason && (
         <Flex flexDir="column" mt="1" mb="4">
           <ExpandableReason text={voteReason} />

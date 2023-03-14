@@ -23,7 +23,7 @@ const TextSection: FC<ITextSection> = ({ statement }) => {
     return html;
   };
   return (
-    <Flex maxW="30rem" gap="4" flexDir="column" flex="1">
+    <Flex maxW="30rem" gap="4" flexDir="column" flex="1" pt="4">
       {statement && statement.value && (
         <Flex
           color={theme.modal.statement.text}

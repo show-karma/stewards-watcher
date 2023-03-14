@@ -1,197 +1,29 @@
 import {
   Button,
-  ButtonProps,
-  Divider,
-  Flex,
   Icon,
+  Flex,
   Img,
-  Link,
   Spinner,
   Text,
   Tooltip,
+  useClipboard,
 } from '@chakra-ui/react';
 import {
   ImgWithFallback,
   DelegateButton,
   ForumIcon,
   TwitterIcon,
-  DiscordIcon,
 } from 'components';
-import {
-  useDAO,
-  useDelegates,
-  useEditStatement,
-  useHandles,
-  useWallet,
-} from 'contexts';
+import { useDAO, useDelegates, useEditStatement, useWallet } from 'contexts';
 import { useAuth } from 'contexts/auth';
 import { useToasty } from 'hooks';
-import { FC, ReactNode, useMemo, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
+import { IoCopy } from 'react-icons/io5';
 import { IActiveTab, IProfile } from 'types';
-import { convertHexToRGBA, getUserForumUrl, truncateAddress } from 'utils';
+import { convertHexToRGBA, truncateAddress } from 'utils';
 import { useAccount } from 'wagmi';
-
-interface INavButton extends ButtonProps {
-  children: ReactNode;
-  isActive: boolean;
-}
-
-const NavButton: FC<INavButton> = ({ children, isActive, ...props }) => {
-  const { theme } = useDAO();
-
-  return (
-    <Button
-      bgColor={theme.modal.buttons.navBg}
-      color={
-        isActive
-          ? theme.modal.buttons.navText
-          : theme.modal.buttons.navUnselectedText
-      }
-      borderBottomWidth="2px"
-      borderBottomStyle="solid"
-      borderBottomColor={
-        isActive ? theme.modal.buttons.navBorder : 'transparent'
-      }
-      borderRadius="0"
-      _hover={{
-        borderBottomColor: theme.modal.buttons.navBorder,
-        color: theme.modal.buttons.navText,
-      }}
-      fontSize={{ base: 'sm', lg: 'md' }}
-      _focus={{}}
-      _focusWithin={{}}
-      _active={{}}
-      {...props}
-    >
-      {children}
-    </Button>
-  );
-};
-
-type IMedias = 'twitter' | 'forum' | 'discord';
-interface IMediaIcon {
-  profile: IProfile;
-  media: IMedias;
-  changeTab: (selectedTab: IActiveTab) => void;
-  isSamePerson: boolean;
-  children: ReactNode;
-}
-
-interface IMediasObj {
-  [key: string]: {
-    url: string;
-    value?: string;
-    disabledCondition?: boolean;
-  };
-}
-
-const MediaIcon: FC<IMediaIcon> = ({
-  media,
-  profile,
-  changeTab,
-  children,
-  isSamePerson,
-}) => {
-  const { theme, daoData, daoInfo } = useDAO();
-
-  const { isConnected } = useWallet();
-  const { config } = daoInfo;
-  const { twitterOnOpen, forumOnOpen } = useHandles();
-
-  const medias: IMediasObj = {
-    twitter: {
-      url: `https://twitter.com/${profile.twitter}`,
-      value: profile.twitter,
-    },
-    forum: {
-      url:
-        profile?.forumHandle &&
-        daoData?.socialLinks.forum &&
-        config.DAO_FORUM_TYPE
-          ? getUserForumUrl(
-              profile?.forumHandle,
-              config.DAO_FORUM_TYPE,
-              config.DAO_FORUM_URL || daoData?.socialLinks.forum
-            )
-          : '',
-      value: profile.forumHandle,
-      disabledCondition: !daoData?.forumTopicURL,
-    },
-    discord: {
-      url: `https://discord.com/users/${profile.discordHandle}`,
-      value: profile.discordHandle,
-    },
-  };
-  const chosenMedia = medias[media];
-
-  if (chosenMedia.value)
-    return (
-      <Link
-        href={chosenMedia.url}
-        isExternal
-        color={theme.card.socialMedia}
-        opacity="1"
-        _hover={{
-          transform: 'scale(1.25)',
-        }}
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        boxSize="6"
-        px="0"
-        py="0"
-        minW="max-content"
-      >
-        {children}
-      </Link>
-    );
-
-  const handleClick = () => {
-    if (!isSamePerson) return;
-    changeTab('handles');
-    const onOpens: { [key: string]: () => void } = {
-      twitter: twitterOnOpen,
-      forum: forumOnOpen,
-    };
-    if (onOpens[media]) onOpens[media]();
-  };
-
-  return (
-    <Tooltip
-      label={
-        isConnected
-          ? `Update your ${media} handle now`
-          : `Login to update your ${media} handle`
-      }
-      placement="top"
-      hasArrow
-    >
-      <Button
-        onClick={() => handleClick()}
-        px="0"
-        py="0"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        bgColor="transparent"
-        _active={{}}
-        _focus={{}}
-        _focusWithin={{}}
-        _focusVisible={{}}
-        color={theme.modal.header.title}
-        opacity="0.25"
-        _hover={{}}
-        h="6"
-        w="max-content"
-        minW="max-content"
-        cursor={isSamePerson ? 'pointer' : 'default'}
-        isDisabled={chosenMedia?.disabledCondition}
-      >
-        {children}
-      </Button>
-    </Tooltip>
-  );
-};
+import { MediaIcon } from './MediaIcon';
+import { NavigatorRow } from './NavigatorRow';
 
 const DelegateCases: FC<{ status?: string; fullAddress: string }> = ({
   status,
@@ -238,10 +70,20 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
   const { authenticate, isAuthenticated, isDaoAdmin } = useAuth();
   const { toast } = useToasty();
   const [isConnecting, setConnecting] = useState(false);
+  const { onCopy } = useClipboard(fullAddress || '');
 
   const isSamePerson =
     isConnected &&
     (address?.toLowerCase() === fullAddress?.toLowerCase() || isDaoAdmin);
+
+  const copyText = () => {
+    onCopy();
+    toast({
+      title: 'Copied to clipboard',
+      description: 'Address copied',
+      duration: 3000,
+    });
+  };
 
   const handleAuth = async () => {
     if (!isConnected) {
@@ -280,6 +122,11 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
     }
   }, [isConnected]);
 
+  const getDataStatusColor = (status: string) => {
+    if (status === 'inactive' || status === 'withdrawn') return '#F4EB0F';
+    return '#30E320';
+  };
+
   return (
     <Flex
       px={{ base: '1.25rem', lg: '2.5rem' }}
@@ -287,15 +134,16 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
       mt={{ base: '-1.25rem', lg: '-3.5rem' }}
       flexDir="column"
       gap={{ base: '2rem', lg: '0' }}
+      pt="5"
     >
       <Flex w="full" gap={{ base: '1rem', lg: '1.375rem' }}>
         <ImgWithFallback
           w={{ base: '5.5rem', lg: '8.125rem' }}
           h={{ base: '5.5rem', lg: '8.125rem' }}
           borderRadius="full"
-          borderWidth="2px"
+          borderWidth="5px"
           borderStyle="solid"
-          borderColor={theme.modal.header.border}
+          borderColor={theme.modal.background}
           objectFit="cover"
           src={profile.avatar}
           fallback={profile.address}
@@ -347,13 +195,65 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
                 </MediaIcon> */}
               </Flex>
             </Flex>
-            <Text
-              fontWeight="medium"
-              fontSize={{ base: 'sm', lg: 'md' }}
-              color={theme.modal.header.subtitle}
-            >
-              {truncatedAddress}
-            </Text>
+            <Flex gap="1.5" flexDir="row" align="center">
+              <Text
+                fontWeight="medium"
+                fontSize={{ base: 'sm', lg: 'md' }}
+                color={theme.modal.header.subtitle}
+              >
+                {truncatedAddress}
+              </Text>
+              <Button
+                bg="transparent"
+                py="0"
+                px="0"
+                _hover={{
+                  opacity: 0.7,
+                }}
+                _active={{}}
+                _focus={{}}
+                onClick={copyText}
+                h="max-content"
+                w="min-content"
+                minW="min-content"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Icon as={IoCopy} color={theme.subtitle} boxSize="4" />
+              </Button>
+            </Flex>
+            <Flex gap="2">
+              <Text
+                fontWeight="medium"
+                fontSize={{ base: 'sm', lg: '14px' }}
+                color={theme.modal.header.subtitle}
+              >
+                Status:
+              </Text>
+              {profileSelected && (
+                <Flex gap="1" align="center">
+                  <Flex
+                    borderRadius="full"
+                    w="11px"
+                    h="11px"
+                    backgroundColor={getDataStatusColor(
+                      profileSelected.status || 'active'
+                    )}
+                  />
+                  <Text
+                    fontWeight="400"
+                    fontSize="14px"
+                    color={theme.modal.votingHistory.headline}
+                  >
+                    {profileSelected.status
+                      ? profileSelected.status.charAt(0).toUpperCase() +
+                        profileSelected.status.slice(1)
+                      : 'Active'}
+                  </Text>
+                </Flex>
+              )}
+            </Flex>
           </Flex>
           <Flex
             display={{ base: 'none', lg: 'flex' }}
@@ -438,8 +338,6 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
   const isSamePerson =
     isConnected && address?.toLowerCase() === fullAddress?.toLowerCase();
 
-  const isActiveTab = (section: IActiveTab) => activeTab === section;
-
   useMemo(() => {
     if (
       (activeTab === 'handles' || activeTab === 'withdraw') &&
@@ -470,56 +368,12 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
 
         <UserSection profile={profile} changeTab={changeTab} />
       </Flex>
-      <Flex
-        px={{ base: '1.25rem', lg: '2.5rem' }}
-        flexDir="column"
-        gap="1.5rem"
-      >
-        <Flex w="full" flexWrap="wrap" justifyContent="flex-start">
-          {profile.aboutMe && (
-            <NavButton
-              isActive={isActiveTab('aboutme')}
-              onClick={() => changeTab('aboutme')}
-              w="max-content"
-            >
-              About me
-            </NavButton>
-          )}
-          <NavButton
-            isActive={isActiveTab('statement')}
-            onClick={() => changeTab('statement')}
-            w="max-content"
-          >
-            Statement
-          </NavButton>
-          <NavButton
-            isActive={isActiveTab('votinghistory')}
-            onClick={() => changeTab('votinghistory')}
-            w="max-content"
-          >
-            Voting History
-          </NavButton>
-          {isSamePerson && (
-            <>
-              <NavButton
-                isActive={isActiveTab('withdraw')}
-                onClick={() => changeTab('withdraw')}
-                w="max-content"
-              >
-                Withdraw
-              </NavButton>
-              <NavButton
-                isActive={isActiveTab('handles')}
-                onClick={() => changeTab('handles')}
-                w="max-content"
-              >
-                Handles
-              </NavButton>
-            </>
-          )}
-        </Flex>
-        <Divider bgColor={theme.modal.header.divider} w="full" />
-      </Flex>
+      <NavigatorRow
+        activeTab={activeTab}
+        changeTab={changeTab}
+        isSamePerson={isSamePerson}
+        profile={profile}
+      />
     </Flex>
   );
 };

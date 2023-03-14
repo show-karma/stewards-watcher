@@ -301,7 +301,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
 
   const getDataStatusColor = (status: string) => {
     if (status === 'inactive' || status === 'withdrawn') return '#F4EB0F';
-    return 'green.500';
+    return '#30E320';
   };
 
   return (

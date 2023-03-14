@@ -96,7 +96,7 @@ const dark: IDAOTheme = {
     buttons: {
       selectBg: '#CCEEFB',
       selectText: '#FFFFFF',
-      navBg: 'transparent',
+      navBg: '#424141',
       navText: '#FFFFFF',
       navUnselectedText: '#ADB8C0',
       navBorder: '#FFFFFF',
@@ -156,12 +156,20 @@ const dark: IDAOTheme = {
         result: '#FFFFFF',
         verticalDivider: 'rgba(173, 184, 192, 0.5)',
         divider: 'rgba(173, 184, 192, 0.2)',
+        bg: '#424141',
         icons: {
           for: 'green.300',
           against: 'red.500',
           abstain: 'gray.300',
           notVoted: 'gray.300',
           multiple: 'green.300',
+        },
+      },
+      modules: {
+        chart: {
+          point: '#FFFFFF',
+          openGradient: '#ADB8C0',
+          endGradient: '#424141',
         },
       },
       reason: {
@@ -279,7 +287,7 @@ const light: IDAOTheme = {
     buttons: {
       selectBg: '#CCEEFB',
       selectText: '#FFFFFF',
-      navBg: 'transparent',
+      navBg: '#424141',
       navText: '#FFFFFF',
       navUnselectedText: '#ADB8C0',
       navBorder: '#FFFFFF',
@@ -308,12 +316,20 @@ const light: IDAOTheme = {
         result: '#FFFFFF',
         verticalDivider: 'rgba(173, 184, 192, 0.5)',
         divider: 'rgba(173, 184, 192, 0.2)',
+        bg: '#424141',
         icons: {
           for: 'green.300',
           against: 'red.500',
           abstain: 'gray.300',
           notVoted: 'gray.300',
           multiple: 'green.300',
+        },
+      },
+      modules: {
+        chart: {
+          point: '#FFFFFF',
+          openGradient: '#ADB8C0',
+          endGradient: '#424141',
         },
       },
       reason: {

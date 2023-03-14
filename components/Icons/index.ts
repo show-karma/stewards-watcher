@@ -4,6 +4,7 @@ export * from './DownChevron';
 export * from './EmptyCircle';
 export * from './ForumIcon';
 export * from './HistoryIcon';
+export * from './InfoIcon';
 export * from './Joystick';
 export * from './LeftCircleArrowIcon';
 export * from './RightCircleArrowIcon';
