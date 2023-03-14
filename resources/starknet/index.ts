@@ -18,16 +18,24 @@ const config: IDAOConfig = {
     URL: `https://starknet.karmahq.xyz`,
   },
   DAO_DEFAULT_SETTINGS: {
-    ORDERSTAT: 'forumScore',
+    ORDERSTAT: 'votingWeight',
     DISABLE_LOGIN: true,
+    SORT: 'delegatedVotes',
   },
   DAO_CHAIN: mainnet,
   DAO_DELEGATE_CONTRACT: '',
   DAO_DELEGATE_MODE: 'snapshot',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
-  SHOULD_NOT_SHOW: 'stats',
-  EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'healthScore', 'discordScore'],
+  EXCLUDED_CARD_FIELDS: [
+    'onChainVotesPct',
+    'healthScore',
+    'discordScore',
+    'offChainVotesPct',
+    'forumScore',
+    'karmaScore',
+    'delegatorCount',
+  ],
 };
 
 const dark: IDAOTheme = {

@@ -16,12 +16,18 @@ const periodOptions: IPeriodOptions[] = [
 ];
 
 export const PeriodFilter = () => {
-  const { period, selectPeriod } = useDelegates();
+  const { period, selectPeriod, setupFilteringUrl } = useDelegates();
   const { theme } = useDAO();
 
   const selectedPeriod = periodOptions.find(
     option => option.period === period
   )?.title;
+
+  const handleSelectPeriod = async (option: IFilterPeriod) => {
+    selectPeriod(option);
+    setupFilteringUrl('period', option);
+  };
+
   return (
     <Menu isLazy id="period-filter">
       <MenuButton
@@ -83,7 +89,7 @@ export const PeriodFilter = () => {
         {periodOptions.map((option, index) => (
           <MenuItem
             key={+index}
-            onClick={() => selectPeriod(option.period)}
+            onClick={() => handleSelectPeriod(option.period)}
             bgColor="transparent"
             _hover={{
               bg: theme.filters.activeBg,
