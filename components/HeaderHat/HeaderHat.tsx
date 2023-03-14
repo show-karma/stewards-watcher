@@ -150,9 +150,11 @@ export const HeaderHat = () => {
                 )}
                 {daoInfo.config.DAO_RESOURCES &&
                   daoInfo.config.DAO_RESOURCES.length > 0 && <ResourcesMenu />}
-                <StyledButton onClick={onToggle} px="2">
-                  Delegate to Anyone
-                </StyledButton>
+                {daoInfo.config.DAO_DELEGATE_MODE !== 'hidden' && (
+                  <StyledButton onClick={onToggle} px="2">
+                    Delegate to Anyone
+                  </StyledButton>
+                )}
                 <DelegateLoginButton onOpen={onOpenDelegateLogin} />
                 <ThemeButton />
               </Flex>
@@ -168,7 +170,11 @@ export const HeaderHat = () => {
             )}
             {daoInfo.config.DAO_RESOURCES &&
               daoInfo.config.DAO_RESOURCES.length > 0 && <ResourcesMenu />}
-            <StyledButton onClick={onToggle}>Delegate to Anyone</StyledButton>
+            {daoInfo.config.DAO_DELEGATE_MODE !== 'hidden' && (
+              <StyledButton onClick={onToggle} px="2">
+                Delegate to Anyone
+              </StyledButton>
+            )}
             <DelegateLoginButton onOpen={onOpenDelegateLogin} />
             <ThemeButton />
           </Flex>
