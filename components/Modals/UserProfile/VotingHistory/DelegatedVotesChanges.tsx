@@ -74,7 +74,7 @@ const ChartComponent: FC<IChartComponentProps> = ({
   if (isLoading) {
     return (
       <Flex
-        w="350px"
+        w="400px"
         h="200px"
         align="center"
         justify="center"
@@ -110,7 +110,7 @@ const ChartComponent: FC<IChartComponentProps> = ({
   if (hasError) {
     return (
       <Flex
-        w="350px"
+        w="400px"
         h="200px"
         align="center"
         justify="center"
@@ -156,7 +156,7 @@ const ChartComponent: FC<IChartComponentProps> = ({
     );
   }
 
-  return <Line options={options} data={data} width="350px" height="200px" />;
+  return <Line options={options} data={data} width="400px" height="200px" />;
 };
 
 export const DelegatedVotesChanges: FC = () => {
@@ -270,7 +270,7 @@ export const DelegatedVotesChanges: FC = () => {
       setIsLoading(true);
       const { data: fetchedData } = (
         await axios.get(
-          `https://api.karmahq.xyz/api/dao/${daoInfo.config.DAO_KARMA_ID}/delegates/${profileSelected?.address}/voting-power-timeline`
+          `${process.env.NEXT_PUBLIC_KARMA_API}/dao/${daoInfo.config.DAO_KARMA_ID}/delegates/${profileSelected?.address}/voting-power-timeline`
         )
       ).data;
       const { timeline } = fetchedData;
@@ -294,7 +294,7 @@ export const DelegatedVotesChanges: FC = () => {
   // };
 
   return (
-    <Flex borderRadius="md" flexDir="column">
+    <Flex borderRadius="md" flexDir="column" w="full">
       <Flex
         align="center"
         gap="20"

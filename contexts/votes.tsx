@@ -1,9 +1,12 @@
 import { useOffChainVotes, useOnChainVotes } from 'hooks';
 import React, { useContext, createContext, useMemo, useState } from 'react';
-import { IChainRow, IProfile } from 'types';
+import { IChainRow, IProfile, IVoteBreakdown } from 'types';
 import debounce from 'lodash.debounce';
 import moment from 'moment';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { useDelegates } from './delegates';
+import { useDAO } from './dao';
 
 interface IVotesProps {
   isLoading: boolean;
@@ -16,6 +19,9 @@ interface IVotesProps {
   limit: number;
   offset: number;
   changeOffset: (newOffset: number) => void;
+  isVoteBreakdownLoading: boolean;
+  isVoteBreakdownError: boolean;
+  voteBreakdown: IVoteBreakdown;
 }
 
 export const VotesContext = createContext({} as IVotesProps);
@@ -29,6 +35,7 @@ export const VotesProvider: React.FC<ProviderProps> = ({
   children,
   profile,
 }) => {
+  const { daoInfo } = useDAO();
   const { voteInfos } = useDelegates();
   const { data: dataOffChainVotes } = useOffChainVotes(
     voteInfos.snapshotIds,
@@ -47,6 +54,25 @@ export const VotesProvider: React.FC<ProviderProps> = ({
   );
   const [isLoading, setIsLoading] = useState(true);
   const [offset, setOffset] = useState(0);
+  const {
+    isLoading: isVoteBreakdownLoading,
+    isError: isVoteBreakdownError,
+    data: voteBreakdown,
+  } = useQuery({
+    queryKey: ['vote-breakdown'],
+    queryFn: async () => {
+      const { breakdown } = (
+        await axios.get(
+          `${process.env.NEXT_PUBLIC_KARMA_API}/dao/${daoInfo.config.DAO_KARMA_ID}/delegates/${profile.address}/vote-breakdown`
+        )
+      ).data.data;
+      return breakdown;
+    },
+    enabled: !!profile.address,
+    cacheTime: 0,
+    retry: 2,
+  });
+
   const limit = 6;
 
   const changeOffset = (newOffset: number) => setOffset(newOffset);
@@ -106,6 +132,9 @@ export const VotesProvider: React.FC<ProviderProps> = ({
       allVotes,
       limit,
       offset,
+      isVoteBreakdownLoading,
+      isVoteBreakdownError,
+      voteBreakdown,
     }),
     [
       offChainVotes,
@@ -116,6 +145,9 @@ export const VotesProvider: React.FC<ProviderProps> = ({
       allVotes,
       limit,
       offset,
+      isVoteBreakdownLoading,
+      isVoteBreakdownError,
+      voteBreakdown,
     ]
   );
 
