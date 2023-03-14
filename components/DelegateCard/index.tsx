@@ -88,7 +88,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       icon: BsChat,
       value: data?.delegatorCount ? formatNumber(data.delegatorCount) : '-',
       id: 'delegatorCount',
-      tooltipText: 'Total of delegators for this delegate',
+      // tooltipText: 'Total of delegators for this delegate',
     },
     {
       title: 'Delegated Tokens',
@@ -191,7 +191,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           ? `${formatNumberPercentage(data?.votingWeight)}`
           : '-',
         id: 'votingWeight',
-        tooltipText: `Based on ${data?.delegatorCount || 0} delegators`,
+        tooltipText: `Based on ${formatNumber(
+          data?.delegatorCount || 0
+        )} delegators`,
       });
 
     const order = [
