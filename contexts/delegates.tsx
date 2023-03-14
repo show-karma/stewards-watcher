@@ -60,13 +60,17 @@ interface IDelegateProps {
   interestFilter: string[];
   selectInterests: (index: number) => void;
   delegateCount: number;
-  selectStatus: (selectedStatus: number) => void;
+  selectStatus: (items: IStatusOptions[]) => void;
   statuses: IStatusOptions[];
   isFiltering: boolean;
   workstreams: IWorkstream[];
   workstreamsFilter: string[];
   statusesOptions: IStatusOptions[];
   selectWorkstream: (index: number) => void;
+  setupFilteringUrl: (
+    paramToSetup: 'sortby' | 'order' | 'period' | 'statuses',
+    paramValue: string
+  ) => void;
 }
 
 export const DelegatesContext = createContext({} as IDelegateProps);
@@ -104,6 +108,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const [offset, setOffset] = useState(0);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
   const [hasMore, setHasMore] = useState(false);
+  const [hasInitiated, setInitiated] = useState(false);
 
   const prepareStatOptions = () => {
     const sortedDefaultOptions = statDefaultOptions.sort(element =>
@@ -522,23 +527,6 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     }
   };
 
-  useMemo(() => {
-    setOffset(0);
-    if (userToFind) {
-      findDelegate();
-    } else {
-      fetchDelegates(0);
-    }
-  }, [
-    stat,
-    order,
-    period,
-    userToFind,
-    statuses,
-    interestFilter,
-    workstreamsFilter,
-  ]);
-
   useEffect(() => {
     fetchInterests();
     fetchWorkstreams();
@@ -578,8 +566,40 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     }
   }, [delegates]);
 
-  const selectStat = (_selectedStat: IStatsID) => setStat(_selectedStat);
-  const selectOrder = (selectedOrder: IFilterOrder) => setOrder(selectedOrder);
+  const setupFilteringUrl = (
+    paramToSetup: 'sortby' | 'order' | 'period' | 'statuses',
+    paramValue: string
+  ) => {
+    const queries = router.query;
+    delete queries.site;
+
+    const filters = {
+      sortby: paramValue,
+      order: paramValue,
+      period: paramValue,
+      statuses: paramValue,
+    };
+    const query = {
+      ...queries,
+      [paramToSetup]: filters[paramToSetup],
+    };
+
+    router.push(
+      {
+        pathname: '/',
+        query,
+      },
+      undefined,
+      { shallow: true }
+    );
+  };
+
+  const selectStat = (_selectedStat: IStatsID) => {
+    setStat(_selectedStat);
+  };
+  const selectOrder = (selectedOrder: IFilterOrder) => {
+    setOrder(selectedOrder);
+  };
   const selectPeriod = (selectedPeriod: IFilterPeriod) =>
     setPeriod(selectedPeriod);
 
@@ -632,27 +652,72 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     setWorkstreamsFilter(items);
   };
 
-  const selectStatus = (index: number) => {
-    if (!statusesOptions[index]) return;
-
-    // search for the index in the statuses array
-    const filterIdx = statuses.findIndex(
-      filter => filter === statusesOptions[index]
-    );
-
-    // clone the statuses array
-    const items = [...statuses];
-
-    // if the status is already in the statusesOptions array, remove it
-    if (filterIdx >= 0) {
-      items.splice(filterIdx, 1);
-    } else {
-      items.push(statusesOptions[index]);
-    }
-
-    // set the new statuses array
+  const selectStatus = (items: IStatusOptions[]) => {
     setStatuses(items);
   };
+
+  const setupQueryParams = () => {
+    // We will use asPath method instead of using router.query because router.query is some seconds slower than router.asPath
+    const queryString = router.asPath.split('?')[1];
+    if (!queryString) {
+      setInitiated(true);
+      return;
+    }
+    const querySortby = queryString?.match(/(?<=sortby=)[^&]*/i)?.[0];
+    // const querySortby = query?.sortby as string;
+    const queryOrder = queryString?.match(/(?<=order=)[^&]*/i)?.[0];
+    // const queryOrder = query?.order;
+    const queryPeriod = queryString?.match(/(?<=period=)[^&]*/i)?.[0];
+    // const queryPeriod = query?.period;
+    const queryStatuses = queryString?.match(/(?<=statuses=)[^&]*/i)?.[0];
+    // const queryStatuses = query?.statuses;
+    if (querySortby) {
+      const isStatValid = statOptions.find(item => item.id === querySortby);
+      if (isStatValid) setStat(querySortby as IStatsID);
+    }
+    if (queryOrder) {
+      const isOrderValid = queryOrder === 'asc' || queryOrder === 'desc';
+      if (isOrderValid) setOrder(queryOrder as IFilterOrder);
+    }
+    if (queryPeriod) {
+      const isPeriodValid = (
+        ['lifetime', '180d', '30d'] as IFilterPeriod[]
+      ).find(item => item === queryPeriod);
+
+      if (isPeriodValid) setPeriod(queryPeriod as IFilterPeriod);
+    }
+    if (queryStatuses) {
+      const validStatuses = queryStatuses
+        .split(/(%2C|,)/)
+        .filter(item => statusesOptions.includes(item as IStatusOptions));
+      if (validStatuses.length > 0)
+        setStatuses(validStatuses as IStatusOptions[]);
+    }
+    setInitiated(true);
+  };
+
+  useMemo(() => {
+    if (!hasInitiated) return;
+    setOffset(0);
+    if (userToFind) {
+      findDelegate();
+    } else {
+      fetchDelegates(0);
+    }
+  }, [
+    stat,
+    order,
+    period,
+    userToFind,
+    statuses,
+    interestFilter,
+    workstreamsFilter,
+    hasInitiated,
+  ]);
+
+  useEffect(() => {
+    setupQueryParams();
+  }, []);
 
   const handleSearch = debounce(text => {
     selectUserToFind(text);
@@ -712,6 +777,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       selectWorkstream,
       workstreamsFilter,
       statusesOptions,
+      setupFilteringUrl,
     }),
     [
       profileSelected,
@@ -736,6 +802,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       workstreams,
       workstreamsFilter,
       statusesOptions,
+      setupFilteringUrl,
     ]
   );
 
