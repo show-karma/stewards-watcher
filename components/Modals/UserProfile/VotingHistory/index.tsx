@@ -61,8 +61,9 @@ export const VotingHistory: FC<IVotingHistory> = ({ profile }) => {
       flexDir={{ base: 'column', lg: 'row' }}
       justify="space-between"
       pb="10"
+      gap="4"
     >
-      <Flex maxW="512px" w="full" flexDir="column">
+      <Flex maxW={{ base: 'full', md: '512px' }} w="full" flexDir="column">
         <Flex
           zIndex="1001"
           boxShadow={`0px 0px 18px 5px ${theme.modal.votingHistory.headline}0D`}
@@ -99,7 +100,13 @@ export const VotingHistory: FC<IVotingHistory> = ({ profile }) => {
           <Navigation />
         </Flex>
       </Flex>
-      <Flex flexDir="column" align="center" gap="5" maxW="400px">
+      <Flex
+        flexDir="column"
+        align="center"
+        gap="5"
+        maxW={{ base: 'full', sm: '400px' }}
+        w="full"
+      >
         <DelegatedVotesChanges />
         <ContrarionIndexComponent />
       </Flex>
