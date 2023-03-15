@@ -123,11 +123,15 @@ export const Navigation: FC = () => {
           >
             1
           </NavigationButton>
-          <Text
-            color={theme.modal.votingHistory.navigation.buttons.unSelectedText}
-          >
-            ...
-          </Text>
+          {activePage !== 2 && (
+            <Text
+              color={
+                theme.modal.votingHistory.navigation.buttons.unSelectedText
+              }
+            >
+              ...
+            </Text>
+          )}
         </>
       )}
       {pagesToDisplay.map((page, index) => (

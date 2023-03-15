@@ -24,7 +24,7 @@ export const NavigatorRow: FC<INavigatorRow> = ({
       px={{ base: '1.25rem', lg: '2.5rem' }}
       flexDir="column"
       gap="0"
-      w="max-content"
+      w="full"
     >
       <Flex
         w="full"
@@ -58,7 +58,7 @@ export const NavigatorRow: FC<INavigatorRow> = ({
           Voting History
         </NavButton>
 
-        {isSamePerson && (
+        {isSamePerson ? (
           <>
             <NavButton
               isActive={isActiveTab('withdraw')}
@@ -76,9 +76,18 @@ export const NavigatorRow: FC<INavigatorRow> = ({
               Handles
             </NavButton>
           </>
+        ) : (
+          <Flex
+            borderBottomWidth="1px"
+            borderBottomStyle="solid"
+            borderBottomColor={`${theme.modal.buttons.navBorder}0D`}
+            h="full"
+            minH="52px"
+            flex="1"
+            ml="-1px"
+          />
         )}
       </Flex>
-      <Divider bgColor={`${theme.modal.header.divider}0D`} w="full" />
     </Flex>
   );
 };

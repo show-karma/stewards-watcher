@@ -122,9 +122,7 @@ export const UserProfile: FC<IUserProfileProps> = props => {
           w={{ base: 'max-content', lg: '1024px' }}
           maxW={{ base: 'max-content', lg: '1024px' }}
           borderRadius="12px"
-          borderWidth="1px"
-          borderStyle="solid"
-          borderColor={theme.modal.header.border}
+          border="none"
           bgColor={theme.modal.background}
           mx="1rem"
         >
