@@ -61,7 +61,7 @@ export const DelegateButton: FC<IDelegateButton> = ({
   return config.DAO_DELEGATE_MODE !== 'hidden' ? (
     <Button
       background={theme.branding}
-      px={['4', '4', '4', '6']}
+      px={{ base: '3', sm: '4', md: '6' }}
       py={['3', '6']}
       h="10"
       fontSize={['sm', 'md']}

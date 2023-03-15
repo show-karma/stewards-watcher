@@ -661,7 +661,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           w="full"
         >
           {isLoaded ? (
-            <Flex flexDir="row" justifyContent="space-between" w="full">
+            <Flex flexDir="row" justifyContent="space-between" w="full" gap="3">
               <Flex flexDir="row" gap="3">
                 {canDelegate &&
                   (data?.status === 'withdrawn' ? (
@@ -673,7 +673,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                       <Flex>
                         <DelegateButton
                           delegated={data.address}
-                          px={['4', '8']}
                           disabled
                           isDisabled
                         />
