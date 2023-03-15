@@ -194,11 +194,12 @@ export const ProposalVote: FC<IProposalVote> = ({
         </Flex>
         <Flex
           h="max-content"
-          maxW="35%"
-          w="max-content"
+          maxW="25%"
+          w="full"
           align="center"
-          justify="flex-end"
+          justify="center"
           gap="2"
+          flexDir="column"
         >
           {isLoaded && vote ? (
             <VoteIcon vote={vote} />
@@ -214,6 +215,7 @@ export const ProposalVote: FC<IProposalVote> = ({
               color={theme.modal.votingHistory.proposal.result}
               maxH="70px"
               overflow="hidden"
+              textAlign="center"
             >
               {showChoice()}
             </Text>

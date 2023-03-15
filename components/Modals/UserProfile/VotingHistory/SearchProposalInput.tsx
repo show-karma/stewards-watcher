@@ -15,7 +15,7 @@ export const SearchProposalInput: FC = () => {
   return (
     <Flex flexDir="column" maxW="170px" flex="1" align="center">
       <InputGroup alignItems="center" display="flex">
-        <InputLeftElement pointerEvents="none" pt="10px">
+        <InputLeftElement pointerEvents="none">
           <Icon as={BiSearch} color={theme.modal.votingHistory.headline} />
         </InputLeftElement>
         <Input
@@ -35,7 +35,6 @@ export const SearchProposalInput: FC = () => {
             boxShadow: `0 0 0 0.1px ${theme.modal.votingHistory.reason.text}`,
           }}
           fontSize="sm"
-          py="6"
         />
       </InputGroup>
     </Flex>

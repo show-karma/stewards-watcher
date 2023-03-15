@@ -74,7 +74,7 @@ export const VotingHistory: FC<IVotingHistory> = ({ profile }) => {
             gap={['2']}
             align="center"
             flexWrap="wrap"
-            py="2"
+            py="4"
             bg={`${theme.modal.background}40`}
             px="4"
           >
@@ -108,7 +108,7 @@ export const VotingHistory: FC<IVotingHistory> = ({ profile }) => {
         w="full"
       >
         <DelegatedVotesChanges />
-        <ContrarionIndexComponent />
+        {/* <ContrarionIndexComponent /> */}
       </Flex>
     </Flex>
   );
