@@ -109,7 +109,7 @@ export const ProposalVote: FC<IProposalVote> = ({
       flexDir="column"
       w="full"
       bg={isPair ? `${theme.modal.background}40` : `${theme.modal.background}`}
-      pt="6"
+      pt="5"
       pb={isLast ? '4' : '0'}
     >
       <Flex flexDir="row" w="full" align="center" px="4" gap="2">

@@ -62,8 +62,9 @@ export const VotingHistory: FC<IVotingHistory> = ({ profile }) => {
       justify="space-between"
       pb="10"
       gap="4"
+      align={{ base: 'center', lg: 'flex-start' }}
     >
-      <Flex maxW={{ base: 'full', md: '512px' }} w="full" flexDir="column">
+      <Flex maxW={{ base: 'full', lg: '588px' }} w="full" flexDir="column">
         <Flex
           zIndex="1001"
           boxShadow={`0px 0px 18px 5px ${theme.modal.votingHistory.headline}0D`}
