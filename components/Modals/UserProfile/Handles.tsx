@@ -5,7 +5,7 @@ import { FC } from 'react';
 import { DiscourseModal, TwitterModal } from '../Linking';
 
 export const Handles: FC = () => {
-  const { theme, daoData } = useDAO();
+  const { theme, daoData, daoInfo } = useDAO();
   const {
     twitterIsOpen,
     twitterOnOpen,
@@ -20,6 +20,7 @@ export const Handles: FC = () => {
     {
       icon: TwitterIcon,
       name: 'Twitter',
+      disabledCondition: daoInfo.config.DAO_KARMA_ID === 'starknet',
       action: () => {
         twitterOnOpen();
       },
