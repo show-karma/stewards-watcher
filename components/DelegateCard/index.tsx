@@ -88,7 +88,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       icon: BsChat,
       value: data?.delegatorCount ? formatNumber(data.delegatorCount) : '-',
       id: 'delegatorCount',
-      tooltipText: 'Total of delegators for this delegate',
+      // tooltipText: 'Total of delegators for this delegate',
     },
     {
       title: 'Delegated Tokens',
@@ -191,7 +191,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           ? `${formatNumberPercentage(data?.votingWeight)}`
           : '-',
         id: 'votingWeight',
-        tooltipText: `Based on ${data?.delegatorCount || 0} delegators`,
+        tooltipText: `Based on ${formatNumber(
+          data?.delegatorCount || 0
+        )} delegators`,
       });
 
     const order = [
@@ -659,7 +661,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           w="full"
         >
           {isLoaded ? (
-            <Flex flexDir="row" justifyContent="space-between" w="full">
+            <Flex flexDir="row" justifyContent="space-between" w="full" gap="3">
               <Flex flexDir="row" gap="3">
                 {canDelegate &&
                   (data?.status === 'withdrawn' ? (
@@ -671,7 +673,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                       <Flex>
                         <DelegateButton
                           delegated={data.address}
-                          px={['4', '8']}
                           disabled
                           isDisabled
                         />
