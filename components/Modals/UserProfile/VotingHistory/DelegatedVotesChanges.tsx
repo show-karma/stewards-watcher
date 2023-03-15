@@ -15,12 +15,14 @@ import {
   ScriptableContext,
   ChartOptions,
   ChartData,
+  TimeScale,
 } from 'chart.js';
 import axios from 'axios';
 import { formatNumber } from 'utils';
 import dayjs from 'dayjs';
 import { monthDictionary } from 'helpers';
 import { InfoIcon } from 'components/Icons';
+import 'chartjs-adapter-moment';
 
 ChartJS.register(
   CategoryScale,
@@ -30,7 +32,8 @@ ChartJS.register(
   Title,
   Tooltip,
   Filler,
-  Legend
+  Legend,
+  TimeScale
 );
 
 interface IAPIData {
@@ -198,6 +201,12 @@ export const DelegatedVotesChanges: FC = () => {
 
   const options: ChartOptions<'line'> = {
     responsive: true,
+    elements: {
+      point: {
+        radius: 5,
+        hoverRadius: 4,
+      },
+    },
     scales: {
       // eslint-disable-next-line id-length
       y: {
@@ -212,9 +221,17 @@ export const DelegatedVotesChanges: FC = () => {
       },
       // eslint-disable-next-line id-length
       x: {
+        type: 'time',
         grid: {
           display: true,
           color: theme.modal.votingHistory.proposal.divider,
+        },
+        time: {
+          parser: 'MMM YY',
+          unit: 'day',
+          displayFormats: {
+            day: 'MMM, YY',
+          },
         },
         ticks: {
           autoSkip: true,
@@ -231,7 +248,7 @@ export const DelegatedVotesChanges: FC = () => {
       tooltip: {
         callbacks: {
           title(tooltipItems) {
-            return monthDictionary[tooltipItems[0].label];
+            return dayjs(tooltipItems[0].label).format('MMMM DD, YYYY');
           },
         },
       },
@@ -254,7 +271,7 @@ export const DelegatedVotesChanges: FC = () => {
     //   item => item.timestamp >= getTimestamp - 2592000 * interval
     // );
     const formatDays = fetchedData.map(item =>
-      dayjs(item.timestamp * 1000).format('MMM DD')
+      dayjs(item.timestamp * 1000).format('MMM YY')
     );
     setLabels(formatDays);
     const formatBalances = fetchedData.map(item => {

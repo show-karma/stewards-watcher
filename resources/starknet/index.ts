@@ -19,7 +19,6 @@ const config: IDAOConfig = {
   },
   DAO_DEFAULT_SETTINGS: {
     ORDERSTAT: 'votingWeight',
-    DISABLE_LOGIN: true,
     SORT: 'delegatedVotes',
   },
   DAO_CHAIN: mainnet,

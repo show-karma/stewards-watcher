@@ -19,7 +19,7 @@ export const NavButton: FC<INavButton> = ({ children, isActive, ...props }) => {
       borderBottomWidth="1px"
       borderBottomStyle="solid"
       borderBottomColor={
-        isActive ? `${theme.modal.buttons.navBorder}0D` : 'transparent'
+        isActive ? 'transparent' : `${theme.modal.buttons.navBorder}0D`
       }
       borderRadius="0"
       px="5"
@@ -32,6 +32,7 @@ export const NavButton: FC<INavButton> = ({ children, isActive, ...props }) => {
       _focus={{}}
       _focusWithin={{}}
       _active={{}}
+      w="max-content"
       minH="52px"
       minW="122px"
       {...props}

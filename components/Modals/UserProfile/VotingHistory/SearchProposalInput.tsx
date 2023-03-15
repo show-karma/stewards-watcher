@@ -13,9 +13,9 @@ export const SearchProposalInput: FC = () => {
   const { searchProposal } = useVotes();
   const { theme } = useDAO();
   return (
-    <Flex flexDir="column" maxW="170px" flex="1">
-      <InputGroup>
-        <InputLeftElement pointerEvents="none">
+    <Flex flexDir="column" maxW="170px" flex="1" align="center">
+      <InputGroup alignItems="center" display="flex">
+        <InputLeftElement pointerEvents="none" pt="10px">
           <Icon as={BiSearch} color={theme.modal.votingHistory.headline} />
         </InputLeftElement>
         <Input
@@ -32,9 +32,10 @@ export const SearchProposalInput: FC = () => {
           }}
           _focusVisible={{
             borderColor: theme.modal.votingHistory.reason.text,
-            boxShadow: `0 0 0 1px ${theme.modal.votingHistory.reason.text}`,
+            boxShadow: `0 0 0 0.1px ${theme.modal.votingHistory.reason.text}`,
           }}
           fontSize="sm"
+          py="6"
         />
       </InputGroup>
     </Flex>
