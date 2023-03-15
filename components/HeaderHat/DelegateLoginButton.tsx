@@ -40,15 +40,12 @@ const LoginMenu = () => {
         fontWeight="semibold"
         minH={{ base: '52px', lg: 'max-content' }}
         _hover={{
-          bgColor: theme.branding,
           opacity: 0.8,
         }}
         _focusVisible={{
-          bgColor: theme.branding,
           opacity: 0.8,
         }}
         _focusWithin={{
-          bgColor: theme.branding,
           opacity: 0.8,
         }}
         _focus={{
@@ -67,7 +64,7 @@ const LoginMenu = () => {
         minW="max-content"
       >
         <MenuItem
-          bgColor={theme.filters.bg}
+          bgColor={theme.filters.listBg}
           _hover={{
             bg: theme.filters.activeBg,
             opacity: 0.8,
@@ -80,7 +77,7 @@ const LoginMenu = () => {
         </MenuItem>
         <Divider orientation="horizontal" my="2" />
         <MenuItem
-          bgColor={theme.filters.bg}
+          bgColor={theme.filters.listBg}
           _hover={{
             bg: theme.filters.activeBg,
             opacity: 0.8,
