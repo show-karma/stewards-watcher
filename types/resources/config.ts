@@ -41,7 +41,7 @@ export interface IDAOConfig {
     title: string;
     url: string;
   }[];
-  SHOULD_NOT_SHOW?: 'statement' | 'stats';
+  SHOULD_NOT_SHOW?: 'statement' | 'stats' | 'twitter';
   SORT_OPTIONS?: IStats[];
   EXCLUDED_CARD_FIELDS: IStats[];
   /**
