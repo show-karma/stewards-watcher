@@ -233,7 +233,7 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
 
   const truncatedAddress = truncateAddress(fullAddress);
   const { isConnected, openConnectModal } = useWallet();
-  const { theme, daoData } = useDAO();
+  const { theme, daoData, daoInfo } = useDAO();
   const { profileSelected } = useDelegates();
   const { isEditing, setIsEditing, saveEdit, isEditSaving } =
     useEditStatement();
@@ -323,14 +323,16 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
                 {realName || ensName || truncatedAddress}
               </Text>
               <Flex flexDir="row" gap="4" ml="4">
-                <MediaIcon
-                  profile={profile}
-                  media="twitter"
-                  changeTab={changeTab}
-                  isSamePerson={isSamePerson}
-                >
-                  <TwitterIcon boxSize="6" color={theme.modal.header.title} />
-                </MediaIcon>
+                {daoInfo.config.DAO_KARMA_ID !== 'starknet' && (
+                  <MediaIcon
+                    profile={profile}
+                    media="twitter"
+                    changeTab={changeTab}
+                    isSamePerson={isSamePerson}
+                  >
+                    <TwitterIcon boxSize="6" color={theme.modal.header.title} />
+                  </MediaIcon>
+                )}
                 {daoData?.forumTopicURL && (
                   <MediaIcon
                     profile={profile}
