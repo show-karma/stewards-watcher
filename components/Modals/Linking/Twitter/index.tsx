@@ -131,7 +131,7 @@ export const TwitterModal: React.FC<IModal> = ({
   };
 
   useEffect(() => {
-    if (daoInfo.config.DAO_KARMA_ID === 'starknet') {
+    if (daoInfo.config.SHOULD_NOT_SHOW === 'twitter') {
       onClose();
     }
   }, [open]);

@@ -21,7 +21,8 @@ export const Handles: FC = () => {
     {
       icon: TwitterIcon,
       name: 'Twitter',
-      disabledCondition: daoInfo.config.DAO_KARMA_ID === 'starknet',
+      disabledCondition: daoInfo.config.SHOULD_NOT_SHOW === 'twitter',
+      hideCondition: daoInfo.config.SHOULD_NOT_SHOW === 'twitter',
       action: () => {
         twitterOnOpen();
       },

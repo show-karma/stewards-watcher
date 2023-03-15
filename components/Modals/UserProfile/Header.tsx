@@ -158,7 +158,7 @@ const MediaIcon: FC<IMediaIcon> = ({
 
   const disabledCondition =
     chosenMedia?.disabledCondition ||
-    daoInfo.config.DAO_KARMA_ID === 'starknet';
+    daoInfo.config.SHOULD_NOT_SHOW === 'twitter';
 
   const labelTooltip = () => {
     if (disabledCondition) return '';
@@ -325,14 +325,16 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
                 {realName || ensName || truncatedAddress}
               </Text>
               <Flex flexDir="row" gap="4" ml="4">
-                <MediaIcon
-                  profile={profile}
-                  media="twitter"
-                  changeTab={changeTab}
-                  isSamePerson={isSamePerson}
-                >
-                  <TwitterIcon boxSize="6" color={theme.modal.header.title} />
-                </MediaIcon>
+                {daoInfo.config.SHOULD_NOT_SHOW !== 'twitter' && (
+                  <MediaIcon
+                    profile={profile}
+                    media="twitter"
+                    changeTab={changeTab}
+                    isSamePerson={isSamePerson}
+                  >
+                    <TwitterIcon boxSize="6" color={theme.modal.header.title} />
+                  </MediaIcon>
+                )}
                 {daoData?.forumTopicURL && (
                   <MediaIcon
                     profile={profile}
@@ -435,7 +437,7 @@ interface IHeader {
 }
 
 export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
-  const { theme } = useDAO();
+  const { theme, daoInfo } = useDAO();
   const { address: fullAddress } = profile;
   const { isConnected } = useWallet();
   const { address } = useAccount();
@@ -447,8 +449,9 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
 
   useMemo(() => {
     if (
-      (activeTab === 'handles' || activeTab === 'withdraw') &&
-      !isSamePerson
+      ((activeTab === 'handles' || activeTab === 'withdraw') &&
+        !isSamePerson) ||
+      (activeTab === 'handles' && daoInfo.config.SHOULD_NOT_SHOW === 'twitter')
     ) {
       changeTab('statement');
     }
@@ -513,13 +516,15 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
               >
                 Withdraw
               </NavButton>
-              <NavButton
-                isActive={isActiveTab('handles')}
-                onClick={() => changeTab('handles')}
-                w="max-content"
-              >
-                Handles
-              </NavButton>
+              {daoInfo.config.SHOULD_NOT_SHOW !== 'twitter' && (
+                <NavButton
+                  isActive={isActiveTab('handles')}
+                  onClick={() => changeTab('handles')}
+                  w="max-content"
+                >
+                  Handles
+                </NavButton>
+              )}
             </>
           )}
         </Flex>
