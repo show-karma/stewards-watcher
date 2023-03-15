@@ -13,6 +13,7 @@ export const Handles: FC = () => {
     forumIsOpen,
     forumOnToggle,
     forumOnOpen,
+    twitterOnClose,
   } = useHandles();
   const { profileSelected } = useDelegates();
 
@@ -20,7 +21,8 @@ export const Handles: FC = () => {
     {
       icon: TwitterIcon,
       name: 'Twitter',
-      disabledCondition: daoInfo.config.DAO_KARMA_ID === 'starknet',
+      disabledCondition: daoInfo.config.SHOULD_NOT_SHOW === 'twitter',
+      hideCondition: daoInfo.config.SHOULD_NOT_SHOW === 'twitter',
       action: () => {
         twitterOnOpen();
       },
@@ -31,7 +33,7 @@ export const Handles: FC = () => {
     {
       icon: ForumIcon,
       name: 'Forum',
-      disabledCondition: !daoData?.forumTopicURL,
+      hideCondition: !daoData?.forumTopicURL,
       action: () => {
         forumOnOpen();
       },
@@ -41,7 +43,7 @@ export const Handles: FC = () => {
       icon: DiscordIcon,
       name: 'Discord',
       action: () => null,
-      disabledCondition: !profileSelected?.discordHandle,
+      hideCondition: !profileSelected?.discordHandle,
       handle: profileSelected?.discordHandle
         ? `@${profileSelected?.discordHandle}`
         : undefined,
@@ -74,7 +76,7 @@ export const Handles: FC = () => {
         <Flex flexDir="column" gap="4" py="6">
           {socialMedias.map(
             (media, index) =>
-              !media.disabledCondition && (
+              !media.hideCondition && (
                 <Flex
                   flexDir="row"
                   key={+index}
@@ -99,10 +101,9 @@ export const Handles: FC = () => {
                     </Text>
                   ) : (
                     <Button
-                      onClick={media.action}
-                      _disabled={{
-                        opacity: 0.4,
-                        cursor: 'not-allowed',
+                      onClick={() => {
+                        if (media.disabledCondition) return;
+                        media.action();
                       }}
                       bgColor={theme.modal.buttons.navBg}
                       color={theme.modal.buttons.navText}
@@ -111,6 +112,10 @@ export const Handles: FC = () => {
                       borderStyle="solid"
                       _hover={{
                         opacity: 0.7,
+                      }}
+                      _disabled={{
+                        opacity: 0.4,
+                        cursor: 'not-allowed',
                       }}
                       _active={{}}
                       _focus={{}}
@@ -127,7 +132,11 @@ export const Handles: FC = () => {
           )}
         </Flex>
       </Flex>
-      <TwitterModal open={twitterIsOpen} handleModal={twitterOnToggle} />
+      <TwitterModal
+        open={twitterIsOpen}
+        handleModal={twitterOnToggle}
+        onClose={twitterOnClose}
+      />
       {daoData?.forumTopicURL && (
         <DiscourseModal open={forumIsOpen} handleModal={forumOnToggle} />
       )}

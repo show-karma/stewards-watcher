@@ -17,7 +17,7 @@ export const NavigatorRow: FC<INavigatorRow> = ({
   activeTab,
   changeTab,
 }) => {
-  const { theme } = useDAO();
+  const { theme, daoInfo } = useDAO();
   const isActiveTab = (section: IActiveTab) => activeTab === section;
   return (
     <Flex
@@ -67,14 +67,15 @@ export const NavigatorRow: FC<INavigatorRow> = ({
             >
               Withdraw
             </NavButton>
-            <NavButton
-              isActive={isActiveTab('handles')}
-              onClick={() => changeTab('handles')}
-              w="max-content"
-              borderTopRightRadius={isSamePerson ? '5px' : '0'}
-            >
-              Handles
-            </NavButton>
+            {daoInfo.config.SHOULD_NOT_SHOW !== 'twitter' && (
+              <NavButton
+                isActive={isActiveTab('handles')}
+                onClick={() => changeTab('handles')}
+                w="max-content"
+              >
+                Handles
+              </NavButton>
+            )}
           </>
         ) : (
           <Flex
