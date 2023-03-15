@@ -6,7 +6,13 @@ import {
   SkeletonCircle,
   Text,
 } from '@chakra-ui/react';
-import { CheckIcon, EmptyCircleIcon, XMarkIcon } from 'components/Icons';
+import {
+  AbstainIcon,
+  AgainstIcon,
+  DidNotVoteIcon,
+  EmptyCircleIcon,
+  ForIcon,
+} from 'components/Icons';
 import { useDAO } from 'contexts';
 import { useVoteReason } from 'hooks';
 import { FC } from 'react';
@@ -23,80 +29,34 @@ const iconStyle = {
 const CheckDecision = (choice: string) => {
   const { theme } = useDAO();
   if (/not vote/gi.test(choice)) {
-    return (
-      <Icon
-        as={EmptyCircleIcon}
-        color={theme.modal.votingHistory.proposal.icons.notVoted}
-        {...iconStyle}
-      />
-    );
+    return <Icon as={DidNotVoteIcon} color="#FFF7AE" {...iconStyle} />;
   }
   // eslint-disable-next-line react/destructuring-assignment
   const choiceLowerCase = choice.toLocaleLowerCase();
   if (choiceLowerCase.substring(0, 2) === 'no' || /agai+nst/gi.test(choice)) {
-    return (
-      <Icon
-        as={XMarkIcon}
-        color={theme.modal.votingHistory.proposal.icons.against}
-        {...iconStyle}
-      />
-    );
+    return <Icon as={AgainstIcon} color="#CA4444" {...iconStyle} />;
   }
   if (/abstain/gi.test(choice))
-    return (
-      <Icon
-        as={EmptyCircleIcon}
-        color={theme.modal.votingHistory.proposal.icons.abstain}
-        {...iconStyle}
-      />
-    );
+    return <Icon as={AbstainIcon} color="#DFDFDF" {...iconStyle} />;
 
-  return (
-    <Icon
-      as={CheckIcon}
-      color={theme.modal.votingHistory.proposal.icons.for}
-      {...iconStyle}
-    />
-  );
+  return <Icon as={ForIcon} color="#02E2AC" {...iconStyle} />;
 };
 
 const VoteIcon: FC<{ vote: IChainRow }> = ({ vote }) => {
   const { theme } = useDAO();
   if (typeof vote === 'undefined')
-    return (
-      <Icon
-        as={EmptyCircleIcon}
-        color={theme.modal.votingHistory.proposal.icons.notVoted}
-        {...iconStyle}
-      />
-    );
+    return <Icon as={DidNotVoteIcon} color="#FFF7AE" {...iconStyle} />;
   if (vote.voteMethod !== 'On-chain' && typeof vote.choice === 'string')
     return CheckDecision(vote.choice);
   if (vote.solution)
-    return (
-      <Icon
-        as={CheckIcon}
-        color={theme.modal.votingHistory.proposal.icons.for}
-        {...iconStyle}
-      />
-    );
+    return <Icon as={ForIcon} color="#02E2AC" {...iconStyle} />;
   switch (vote.choice) {
     case 0:
-      return (
-        <Icon
-          as={XMarkIcon}
-          color={theme.modal.votingHistory.proposal.icons.against}
-          {...iconStyle}
-        />
-      );
+      return <Icon as={AgainstIcon} color="#CA4444" {...iconStyle} />;
     case 1:
-      return (
-        <Icon
-          as={CheckIcon}
-          color={theme.modal.votingHistory.proposal.icons.for}
-          {...iconStyle}
-        />
-      );
+      return <Icon as={ForIcon} color="#02E2AC" {...iconStyle} />;
+    case 'DID NOT VOTE':
+      return <Icon as={DidNotVoteIcon} color="#FFF7AE" {...iconStyle} />;
     default:
       return (
         <Icon
@@ -149,7 +109,7 @@ export const ProposalVote: FC<IProposalVote> = ({
       flexDir="column"
       w="full"
       bg={isPair ? `${theme.modal.background}40` : `${theme.modal.background}`}
-      pt="4"
+      pt="6"
       pb={isLast ? '4' : '0'}
     >
       <Flex flexDir="row" w="full" align="center" px="4" gap="2">
@@ -194,8 +154,8 @@ export const ProposalVote: FC<IProposalVote> = ({
         </Flex>
         <Flex
           h="max-content"
-          maxW="25%"
-          w="full"
+          maxW={{ base: 'fit-content', sm: '25%' }}
+          w={{ base: 'fit-content', sm: 'full' }}
           align="center"
           justify="center"
           gap="2"

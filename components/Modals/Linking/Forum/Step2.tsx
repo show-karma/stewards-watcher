@@ -1,6 +1,6 @@
 import React from 'react';
 import makeBlockie from 'ethereum-blockies-base64';
-import { ImgWithFallback, XMarkIcon } from 'components';
+import { ImgWithFallback } from 'components';
 import { useSignMessage } from 'wagmi';
 import { IconButton, Icon, Flex, Text, Button } from '@chakra-ui/react';
 import { BsArrowLeft } from 'react-icons/bs';

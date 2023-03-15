@@ -1,7 +1,10 @@
-export * from './Check';
+export * from './AbstainIcon';
+export * from './AgainstIcon';
+export * from './DidNotVoteIcon';
 export * from './DiscordIcon';
 export * from './DownChevron';
 export * from './EmptyCircle';
+export * from './ForIcon';
 export * from './ForumIcon';
 export * from './HistoryIcon';
 export * from './InfoIcon';
@@ -9,4 +12,4 @@ export * from './Joystick';
 export * from './LeftCircleArrowIcon';
 export * from './RightCircleArrowIcon';
 export * from './TwitterIcon';
-export * from './XMark';
+export * from './XMarkIcon';
