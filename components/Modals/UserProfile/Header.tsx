@@ -185,7 +185,10 @@ const MediaIcon: FC<IMediaIcon> = ({
         w="max-content"
         minW="max-content"
         cursor={isSamePerson ? 'pointer' : 'default'}
-        isDisabled={chosenMedia?.disabledCondition}
+        isDisabled={
+          chosenMedia?.disabledCondition ||
+          daoInfo.config.DAO_KARMA_ID === 'starknet'
+        }
       >
         {children}
       </Button>

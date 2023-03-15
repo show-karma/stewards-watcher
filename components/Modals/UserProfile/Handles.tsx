@@ -13,6 +13,7 @@ export const Handles: FC = () => {
     forumIsOpen,
     forumOnToggle,
     forumOnOpen,
+    twitterOnClose,
   } = useHandles();
   const { profileSelected } = useDelegates();
 
@@ -127,7 +128,11 @@ export const Handles: FC = () => {
           )}
         </Flex>
       </Flex>
-      <TwitterModal open={twitterIsOpen} handleModal={twitterOnToggle} />
+      <TwitterModal
+        open={twitterIsOpen}
+        handleModal={twitterOnToggle}
+        onClose={twitterOnClose}
+      />
       {daoData?.forumTopicURL && (
         <DiscourseModal open={forumIsOpen} handleModal={forumOnToggle} />
       )}
