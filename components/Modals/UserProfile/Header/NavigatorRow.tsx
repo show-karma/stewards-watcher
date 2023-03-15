@@ -31,7 +31,7 @@ export const NavigatorRow: FC<INavigatorRow> = ({
         justifyContent="flex-start"
         gap="1px"
         borderTopRadius="5px"
-        maxW="512px"
+        maxW="588px"
       >
         {profile.aboutMe && (
           <NavButton
@@ -85,6 +85,11 @@ export const NavigatorRow: FC<INavigatorRow> = ({
             minH="52px"
             flex="1"
             ml="-1px"
+            sx={{
+              '@media(max-width: 1116px)': {
+                display: 'none',
+              },
+            }}
           />
         )}
       </Flex>

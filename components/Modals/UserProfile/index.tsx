@@ -119,8 +119,8 @@ export const UserProfile: FC<IUserProfileProps> = props => {
           backdropFilter="blur(4px)"
         />
         <ModalContent
-          w={{ base: 'max-content', lg: '1024px' }}
-          maxW={{ base: 'max-content', lg: '1024px' }}
+          w={{ base: 'max-content', lg: 'full' }}
+          maxW={{ base: 'max-content', lg: '1100px' }}
           borderRadius="12px"
           border="none"
           bgColor={theme.modal.background}

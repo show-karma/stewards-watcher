@@ -20,7 +20,6 @@ import {
 import axios from 'axios';
 import { formatNumber } from 'utils';
 import dayjs from 'dayjs';
-import { monthDictionary } from 'helpers';
 import { InfoIcon } from 'components/Icons';
 import 'chartjs-adapter-moment';
 
@@ -77,7 +76,7 @@ const ChartComponent: FC<IChartComponentProps> = ({
   if (isLoading) {
     return (
       <Flex
-        w="400px"
+        w={{ base: 'full', sm: '400px' }}
         h="200px"
         align="center"
         justify="center"
@@ -113,7 +112,7 @@ const ChartComponent: FC<IChartComponentProps> = ({
   if (hasError) {
     return (
       <Flex
-        w="400px"
+        w={{ base: 'full', sm: '400px' }}
         h="200px"
         align="center"
         justify="center"
