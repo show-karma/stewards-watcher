@@ -6,6 +6,7 @@ import {
   InputGroup,
   InputLeftElement,
   Text,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { BiSearch } from 'react-icons/bi';
 import { useDAO, useDelegates } from 'contexts';
@@ -16,7 +17,7 @@ export const SearchFilter = () => {
 
   return (
     <Flex flexDir="column" maxW="27rem" width="full">
-      <Text fontFamily="heading" color={theme.filters.head}>
+      <Text fontFamily="heading" color={theme.filters.head} pb="5px">
         Search
       </Text>
       <InputGroup>
@@ -36,8 +37,7 @@ export const SearchFilter = () => {
           px="4"
           py="5"
           _focusVisible={{
-            borderColor: theme.title,
-            boxShadow: `0 0 0 1px ${theme.title}`,
+            borderColor: useColorModeValue('gray.500', 'gray.500'),
           }}
         />
       </InputGroup>

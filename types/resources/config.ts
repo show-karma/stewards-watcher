@@ -2,7 +2,7 @@ import { IFilterPeriod, IStatusOptions } from 'types/contexts';
 import { Chain } from 'wagmi';
 import { IChainRow } from 'types/IChainRow';
 import { IForumType } from './forum';
-import { IStats } from './stats';
+import { IStats, IStatsID } from './stats';
 
 export interface IDAOConfig {
   DAO: string;
@@ -31,12 +31,18 @@ export interface IDAOConfig {
     FAQ?: boolean;
     TIMEPERIOD?: IFilterPeriod;
     ORDERSTAT?: IStats;
+    DISABLE_LOGIN?: boolean;
+    SORT?: IStatsID;
     STATUS_FILTER?: {
-      SHOW: boolean;
       DEFAULT_STATUSES?: IStatusOptions[];
     };
   };
-  SHOULD_NOT_SHOW?: 'statement' | 'stats';
+  DAO_RESOURCES?: {
+    title: string;
+    url: string;
+  }[];
+  SHOULD_NOT_SHOW?: 'statement' | 'stats' | 'twitter';
+  SORT_OPTIONS?: IStats[];
   EXCLUDED_CARD_FIELDS: IStats[];
   /**
    * Defines a custom function to parse the votes with an external proposal provider.

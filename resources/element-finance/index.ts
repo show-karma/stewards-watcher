@@ -4,7 +4,7 @@ import { mainnet } from 'wagmi/chains';
 const config: IDAOConfig = {
   DAO: 'Element Finance',
   DAO_DESCRIPTION: `The Delegates of Element Finance DAO play a vital role in driving the Element Finance ecosystem forward through their work in governance and workstreams.`,
-  DAO_SUBDESCRIPTION: `This site will help boost transparency with health cards for each Delegate that display metrics and links on their involvement and engagement in the DAO.`,
+  DAO_SUBDESCRIPTION: `This site helps token holders choose delegates and boost transparency by displaying delegate contribution to indicate their involvement in the DAO.`,
   DAO_URL: 'https://www.element.fi/',
   GOVERNANCE_FORUM: 'https://forum.element.fi/',
   DAO_KARMA_ID: 'elementfinance',
@@ -17,13 +17,28 @@ const config: IDAOConfig = {
     FAVICON: '/daos/element-finance/favicon.png',
     URL: `https://elementfinance.karmahq.xyz`,
   },
+  DAO_RESOURCES: [
+    {
+      title: 'Gov Process',
+      url: 'https://forum.element.fi/discussion/8528-element-finance-governance-process-v0',
+    },
+    {
+      title: 'Gov Resources',
+      url: 'https://forum.element.fi/discussion/7046-governance-resources',
+    },
+  ],
   DAO_CHAIN: mainnet,
-  DAO_DELEGATE_CONTRACT: undefined,
-  DAO_DELEGATE_MODE: 'snapshot',
+  DAO_DELEGATE_CONTRACT: '',
+  DAO_DELEGATE_MODE: 'hidden',
   DAO_FORUM_TYPE: 'commonwealth',
   DAO_FORUM_URL: 'https://forum.element.fi/',
   DAO_GTAG: 'G-67LDHT697P',
-  EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'healthScore', 'discordScore'],
+  EXCLUDED_CARD_FIELDS: [
+    'delegatorCount',
+    'onChainVotesPct',
+    'healthScore',
+    'discordScore',
+  ],
 };
 
 const dark: IDAOTheme = {
@@ -61,7 +76,7 @@ const dark: IDAOTheme = {
     background: '#222429',
     divider: 'rgba(173, 184, 192, 0.2)',
     text: { primary: '#FFFFFF', secondary: '#ADB8C0' },
-    border: '#403E4F',
+    border: '#545454',
     common: '#727B81',
     statBg: '#403E4F',
     interests: { bg: 'rgba(255, 255, 255, 0.05)', text: '#ADB8C0' },
@@ -187,7 +202,7 @@ const light: IDAOTheme = {
   headerBg: '#FFFFFF',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
-  collapse: { text: '#FFFFFF', subtext: '#ADB8C0', bg: '#212328' },
+  collapse: { text: '#212328', subtext: '#212328', bg: '#FFFFFF' },
   hat: {
     text: {
       primary: '#212328',
@@ -204,6 +219,7 @@ const light: IDAOTheme = {
     listBg: '#FFFFFF',
     listText: '#666666',
     activeBg: '#EBEDEF',
+    shadow: '0px 0px 4px rgba(0, 0, 0, 0.1)',
   },
   card: {
     icon: '#ADB8C0',
@@ -211,8 +227,8 @@ const light: IDAOTheme = {
     divider: 'rgba(102, 102, 102, 0.5)',
     text: { primary: '#212328', secondary: '#666666' },
     statBg: '#EBEDEF',
-    border: 'none',
-    shadow: '0px 0px 4px rgba(0, 0, 0, 0.1);',
+    border: '#ADB8C0',
+    shadow: '0px 0px 4px rgba(0, 0, 0, 0.1)',
     common: '#727B81',
     interests: { bg: '#EBEDEF', text: '#2C2E32' },
     workstream: { bg: '#595A5E', text: '#FFFFFF' },

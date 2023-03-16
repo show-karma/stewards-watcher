@@ -9,6 +9,7 @@ export const Filters = () => {
     <Flex
       bgColor={theme.card.background}
       boxShadow={theme.card.shadow}
+      borderRadius="xl"
       w="full"
       flexDir={{ base: 'column', xl: 'row' }}
       flexWrap="wrap"
@@ -16,8 +17,8 @@ export const Filters = () => {
       align={{ base: 'flex-start', xl: 'center' }}
       py="5"
       px="4"
-      borderRadius="xl"
       justify="space-between"
+      mt="1.5rem"
     >
       <SearchFilter />
       <OrderByFilters />

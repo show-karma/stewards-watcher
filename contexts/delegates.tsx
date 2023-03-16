@@ -40,6 +40,7 @@ interface IDelegateProps {
   selectStat: (_selectedStat: IStatsID) => void;
   selectOrder: (selectedOrder: IFilterOrder) => void;
   selectPeriod: (selectedPeriod: IFilterPeriod) => void;
+  setSelectedProfileData: (selected: IDelegate) => void;
   selectUserToFind: (selectedUserToFind: string) => void;
   statOptions: IStatOptions[];
   stat: IStatsID;
@@ -60,14 +61,17 @@ interface IDelegateProps {
   interestFilter: string[];
   selectInterests: (index: number) => void;
   delegateCount: number;
-  selectStatus: (selectedStatus: number) => void;
+  selectStatus: (items: IStatusOptions[]) => void;
   statuses: IStatusOptions[];
   isFiltering: boolean;
   workstreams: IWorkstream[];
   workstreamsFilter: string[];
   statusesOptions: IStatusOptions[];
   selectWorkstream: (index: number) => void;
-  setSelectedProfileData: (selected: IDelegate) => void;
+  setupFilteringUrl: (
+    paramToSetup: 'sortby' | 'order' | 'period' | 'statuses',
+    paramValue: string
+  ) => void;
 }
 
 export const DelegatesContext = createContext({} as IDelegateProps);
@@ -78,7 +82,7 @@ interface ProviderProps {
 
 const statDefaultOptions: IStatOptions[] = [
   { title: 'Voting weight', id: 'delegatedVotes', stat: 'delegatedVotes' },
-  { title: 'Forum score', id: 'forumScore', stat: 'forumScore' },
+  { title: 'Forum Activity', id: 'forumScore', stat: 'forumScore' },
   { title: 'Snapshot votes', id: 'offChainVotesPct', stat: 'offChainVotesPct' },
   { title: 'On-chain votes', id: 'onChainVotesPct', stat: 'onChainVotesPct' },
   { title: 'Score', id: 'score', stat: 'karmaScore' },
@@ -105,15 +109,23 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const [offset, setOffset] = useState(0);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
   const [hasMore, setHasMore] = useState(false);
+  const [hasInitiated, setInitiated] = useState(false);
 
   const prepareStatOptions = () => {
     const sortedDefaultOptions = statDefaultOptions.sort(element =>
       element.stat === config.DAO_DEFAULT_SETTINGS?.ORDERSTAT ? -1 : 1
     );
+
     const filteredStats = sortedDefaultOptions.filter(
       option => !config.EXCLUDED_CARD_FIELDS.includes(option.stat)
     );
-    return filteredStats;
+
+    const optionsStats = sortedDefaultOptions.filter(option =>
+      config.SORT_OPTIONS?.includes(option.stat)
+    );
+
+    const statsToShow = filteredStats.concat(optionsStats);
+    return statsToShow;
   };
 
   const [statuses, setStatuses] = useState<IStatusOptions[]>(
@@ -125,7 +137,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const statOptions = prepareStatOptions();
 
-  const [stat, setStat] = useState<IStatsID>(statOptions[0].id);
+  const [stat, setStat] = useState<IStatsID>(
+    config.DAO_DEFAULT_SETTINGS?.SORT || statOptions[0].id
+  );
   const [order, setOrder] = useState<IFilterOrder>('desc');
   const [period, setPeriod] = useState<IFilterPeriod>(defaultTimePeriod);
   const [interests, setInterests] = useState<string[]>([]);
@@ -153,11 +167,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   } = useDisclosure();
 
   const isSearchDirty = userToFind !== '';
-  const isFiltering =
-    interests.length > 0 ||
-    (config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER?.SHOW
-      ? Boolean(statuses)
-      : false);
+  const isFiltering = interests.length > 0;
 
   const fetchInterests = async () => {
     try {
@@ -243,10 +253,10 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         return {
           address: item.publicAddress,
           ensName: item.ensName,
+          delegatorCount: item.delegatorCount || 0,
           forumActivity: fetchedPeriod?.forumActivityScore || 0,
           discordScore: fetchedPeriod?.discordScore || 0,
           delegateSince: item.joinDateAt || item.firstTokenDelegatedAt,
-          delegators: item.delegatorCount || 0,
           voteParticipation: {
             onChain: fetchedPeriod?.onChainVotesPct || 0,
             offChain: fetchedPeriod?.offChainVotesPct || 0,
@@ -254,7 +264,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           delegatePitch: item.delegatePitch,
           gitcoinHealthScore: fetchedPeriod?.gitcoinHealthScore || 0,
           votingWeight: item.voteWeight,
-          delegatedVotes: item.delegatedVotes || item.snapshotDelegatedVotes,
+          delegatedVotes: +item.delegatedVotes || item.snapshotDelegatedVotes,
           twitterHandle: item.twitterHandle,
           discourseHandle: item.discourseHandle,
           discordHandle: item.discordHandle,
@@ -312,10 +322,10 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         return {
           address: item.publicAddress,
           ensName: item.ensName,
+          delegatorCount: item.delegatorCount,
           forumActivity: fetchedPeriod?.forumActivityScore || 0,
           discordScore: fetchedPeriod?.discordScore || 0,
           delegateSince: item.joinDateAt || item.firstTokenDelegatedAt,
-          delegators: item.delegatorCount || 0,
           voteParticipation: {
             onChain: fetchedPeriod?.onChainVotesPct || 0,
             offChain: fetchedPeriod?.offChainVotesPct || 0,
@@ -324,7 +334,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           discordHandle: item.discordHandle,
           votingWeight: item.voteWeight,
           delegatePitch: item.delegatePitch,
-          delegatedVotes: item.delegatedVotes || item.snapshotDelegatedVotes,
+          delegatedVotes: +item.delegatedVotes || item.snapshotDelegatedVotes,
           gitcoinHealthScore: fetchedPeriod?.gitcoinHealthScore || 0,
           twitterHandle: item.twitterHandle,
           updatedAt: fetchedPeriod?.updatedAt,
@@ -395,11 +405,11 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       const userFound: IDelegate = {
         address: fetchedDelegate.publicAddress,
         ensName: fetchedDelegate.ensName,
+        delegatorCount: fetchedDelegate.delegatorCount || 0,
         forumActivity: fetchedPeriod?.forumActivityScore || 0,
         discordScore: fetchedPeriod?.discordScore || 0,
         delegateSince:
           fetchedDelegate.joinDateAt || fetchedDelegate.firstTokenDelegatedAt,
-        delegators: fetchedDelegate.delegatorCount || 0,
         voteParticipation: {
           onChain: fetchedPeriod?.onChainVotesPct || 0,
           offChain: fetchedPeriod?.offChainVotesPct || 0,
@@ -490,16 +500,16 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         delegates.push({
           address: item.publicAddress,
           ensName: item.ensName,
+          delegatorCount: item.delegatorCount || 0,
           forumActivity: fetchedPeriod?.forumActivityScore || 0,
           discordScore: fetchedPeriod?.discordScore || 0,
           delegateSince: item.joinDateAt || item.firstTokenDelegatedAt,
-          delegators: item.delegatorCount || 0,
           voteParticipation: {
             onChain: fetchedPeriod?.onChainVotesPct || 0,
             offChain: fetchedPeriod?.offChainVotesPct || 0,
           },
           votingWeight: item?.voteWeight,
-          delegatedVotes: item.delegatedVotes || item.snapshotDelegatedVotes,
+          delegatedVotes: +item.delegatedVotes || item.snapshotDelegatedVotes,
           twitterHandle: item.twitterHandle,
           discourseHandle: item.discourseHandle,
           discordHandle: item.discordHandle,
@@ -521,23 +531,6 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       setLoading(false);
     }
   };
-
-  useMemo(() => {
-    setOffset(0);
-    if (userToFind) {
-      findDelegate();
-    } else {
-      fetchDelegates(0);
-    }
-  }, [
-    stat,
-    order,
-    period,
-    userToFind,
-    statuses,
-    interestFilter,
-    workstreamsFilter,
-  ]);
 
   useEffect(() => {
     fetchInterests();
@@ -578,8 +571,40 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     }
   }, [delegates]);
 
-  const selectStat = (_selectedStat: IStatsID) => setStat(_selectedStat);
-  const selectOrder = (selectedOrder: IFilterOrder) => setOrder(selectedOrder);
+  const setupFilteringUrl = (
+    paramToSetup: 'sortby' | 'order' | 'period' | 'statuses',
+    paramValue: string
+  ) => {
+    const queries = router.query;
+    delete queries.site;
+
+    const filters = {
+      sortby: paramValue,
+      order: paramValue,
+      period: paramValue,
+      statuses: paramValue,
+    };
+    const query = {
+      ...queries,
+      [paramToSetup]: filters[paramToSetup],
+    };
+
+    router.push(
+      {
+        pathname: '/',
+        query,
+      },
+      undefined,
+      { shallow: true }
+    );
+  };
+
+  const selectStat = (_selectedStat: IStatsID) => {
+    setStat(_selectedStat);
+  };
+  const selectOrder = (selectedOrder: IFilterOrder) => {
+    setOrder(selectedOrder);
+  };
   const selectPeriod = (selectedPeriod: IFilterPeriod) =>
     setPeriod(selectedPeriod);
 
@@ -632,27 +657,72 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     setWorkstreamsFilter(items);
   };
 
-  const selectStatus = (index: number) => {
-    if (!statusesOptions[index]) return;
-
-    // search for the index in the statuses array
-    const filterIdx = statuses.findIndex(
-      filter => filter === statusesOptions[index]
-    );
-
-    // clone the statuses array
-    const items = [...statuses];
-
-    // if the status is already in the statusesOptions array, remove it
-    if (filterIdx >= 0) {
-      items.splice(filterIdx, 1);
-    } else {
-      items.push(statusesOptions[index]);
-    }
-
-    // set the new statuses array
+  const selectStatus = (items: IStatusOptions[]) => {
     setStatuses(items);
   };
+
+  const setupQueryParams = () => {
+    // We will use asPath method instead of using router.query because router.query is some seconds slower than router.asPath
+    const queryString = router.asPath.split('?')[1];
+    if (!queryString) {
+      setInitiated(true);
+      return;
+    }
+    const querySortby = queryString?.match(/(?<=sortby=)[^&]*/i)?.[0];
+    // const querySortby = query?.sortby as string;
+    const queryOrder = queryString?.match(/(?<=order=)[^&]*/i)?.[0];
+    // const queryOrder = query?.order;
+    const queryPeriod = queryString?.match(/(?<=period=)[^&]*/i)?.[0];
+    // const queryPeriod = query?.period;
+    const queryStatuses = queryString?.match(/(?<=statuses=)[^&]*/i)?.[0];
+    // const queryStatuses = query?.statuses;
+    if (querySortby) {
+      const isStatValid = statOptions.find(item => item.id === querySortby);
+      if (isStatValid) setStat(querySortby as IStatsID);
+    }
+    if (queryOrder) {
+      const isOrderValid = queryOrder === 'asc' || queryOrder === 'desc';
+      if (isOrderValid) setOrder(queryOrder as IFilterOrder);
+    }
+    if (queryPeriod) {
+      const isPeriodValid = (
+        ['lifetime', '180d', '30d'] as IFilterPeriod[]
+      ).find(item => item === queryPeriod);
+
+      if (isPeriodValid) setPeriod(queryPeriod as IFilterPeriod);
+    }
+    if (queryStatuses) {
+      const validStatuses = queryStatuses
+        .split(/(%2C|,)/)
+        .filter(item => statusesOptions.includes(item as IStatusOptions));
+      if (validStatuses.length > 0)
+        setStatuses(validStatuses as IStatusOptions[]);
+    }
+    setInitiated(true);
+  };
+
+  useMemo(() => {
+    if (!hasInitiated) return;
+    setOffset(0);
+    if (userToFind) {
+      findDelegate();
+    } else {
+      fetchDelegates(0);
+    }
+  }, [
+    stat,
+    order,
+    period,
+    userToFind,
+    statuses,
+    interestFilter,
+    workstreamsFilter,
+    hasInitiated,
+  ]);
+
+  useEffect(() => {
+    setupQueryParams();
+  }, []);
 
   const handleSearch = debounce(text => {
     selectUserToFind(text);
@@ -712,6 +782,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       selectWorkstream,
       workstreamsFilter,
       statusesOptions,
+      setupFilteringUrl,
       setSelectedProfileData,
     }),
     [
@@ -737,6 +808,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       workstreams,
       workstreamsFilter,
       statusesOptions,
+      setupFilteringUrl,
       setSelectedProfileData,
     ]
   );

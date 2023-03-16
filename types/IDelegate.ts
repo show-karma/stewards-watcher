@@ -7,7 +7,7 @@ export interface IDelegate {
   forumActivity: number;
   votingWeight?: number;
   delegatedVotes?: number;
-  delegators: number;
+  delegatorCount?: number;
   karmaScore: number;
   discordScore: number;
   gitcoinHealthScore?: number;

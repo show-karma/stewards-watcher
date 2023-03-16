@@ -5,7 +5,7 @@ import { FC, useMemo } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { IDelegate } from 'types';
 import { DelegateCard } from './DelegateCard';
-import { DelegateLoginModal, DelegateModal, UserProfile } from './Modals';
+import { DelegateModal } from './Modals';
 
 const loadingArray = Array(3).fill(undefined);
 
@@ -27,7 +27,6 @@ const EmptyStates = () => {
     </Text>
   );
 };
-
 interface IDelegatesCasesProps {
   delegates: IDelegate[];
   isLoading: boolean;
@@ -89,70 +88,68 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
   }, [pathUser]);
 
   return (
-    <>
-      {profileSelected && (
-        <UserProfile
-          isOpen={isOpenProfile}
-          onClose={onCloseProfile}
-          profile={{
-            address: profileSelected.address,
-            avatar:
-              profileSelected.profilePicture ||
-              `${config.IMAGE_PREFIX_URL}${profileSelected.address}`,
-            ensName: profileSelected.ensName,
-            twitter: profileSelected.twitterHandle,
-            aboutMe: profileSelected.aboutMe,
-            realName: profileSelected.realName,
-            forumHandle: profileSelected.discourseHandle,
-          }}
-          selectedTab={selectedTab}
-        />
+    <Flex
+      flexDir="column"
+      align="center"
+      w="full"
+      maxW={{ base: '400px', md: '820px', lg: '944px', xl: '1360px' }}
+    >
+      {!!interestFilter.length && (
+        <Flex textAlign="start" w={{ base: 'full' }} fontSize={12} mb={4}>
+          <Text as="span">
+            <Text as="b">Delegate Interests: </Text>
+            {interestFilter.join(', ')}
+          </Text>
+        </Flex>
       )}
-      <Flex flexDir="column" align="center" w="full" maxW="1360px">
-        {!!interestFilter.length && (
-          <Flex textAlign="start" w={{ base: 'full' }} fontSize={12} mb={4}>
-            <Text as="span">
-              <Text as="b">Delegate Interests: </Text>
-              {interestFilter.join(', ')}
-            </Text>
-          </Flex>
-        )}
-        {connectIsOpen && (
-          <DelegateLoginModal isOpen={connectIsOpen} onClose={connectOnClose} />
-        )}
-
-        {profileSelected && delegateIsOpen && (
+      {!!profileSelected &&
+        !!Object.values(profileSelected).length &&
+        delegateIsOpen && (
           <DelegateModal
             delegateData={profileSelected}
             open={delegateIsOpen}
             handleModal={delegateOnToggle}
           />
         )}
-
-        <InfiniteScroll
-          pageStart={0}
-          loadMore={() => {
-            if (delegates.length && !isLoading && delegates.length >= 10)
-              fetchNextDelegates();
+      <InfiniteScroll
+        pageStart={0}
+        loadMore={() => {
+          if (delegates.length && !isLoading && delegates.length >= 10)
+            fetchNextDelegates();
+        }}
+        hasMore={hasMore}
+        loader={
+          // eslint-disable-next-line react/jsx-no-useless-fragment
+          <div key="spinner">
+            {isLoading && delegates.length > 0 && (
+              <Flex
+                width="full"
+                py="16"
+                align="center"
+                justify="center"
+                key="loading-spinner"
+              >
+                <Spinner w="20" h="20" />
+              </Flex>
+            )}
+          </div>
+        }
+        style={{ width: '100%' }}
+      >
+        <Grid
+          rowGap={{ base: '6', md: '4' }}
+          columnGap={{ base: '4', md: '4' }}
+          w="full"
+          templateColumns={{
+            base: 'repeat(1, 1fr)',
+            sm: 'repeat(1, 1fr)',
+            md: 'repeat(2, auto)',
+            xl: 'repeat(3, 1fr)',
           }}
-          hasMore={hasMore}
-          loader={
-            // eslint-disable-next-line react/jsx-no-useless-fragment
-            <div key="spinner">
-              {isLoading && delegates.length > 0 && (
-                <Flex
-                  width="full"
-                  py="16"
-                  align="center"
-                  justify="center"
-                  key="loading-spinner"
-                >
-                  <Spinner w="20" h="20" />
-                </Flex>
-              )}
-            </div>
-          }
-          style={{ width: '100%' }}
+          alignItems="center"
+          justifyContent="space-between"
+          mb="8"
+          px={{ base: '4', lg: '0' }}
         >
           <Grid
             flexWrap="wrap"
@@ -172,9 +169,9 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
           >
             <DelegatesCases delegates={delegates} isLoading={isLoading} />
           </Grid>
-        </InfiniteScroll>
-        {!isLoading && !delegates.length && <EmptyStates />}
-      </Flex>
-    </>
+        </Grid>
+      </InfiniteScroll>
+      {!isLoading && !delegates.length && <EmptyStates />}
+    </Flex>
   );
 };

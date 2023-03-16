@@ -10,17 +10,15 @@ export const OrderByFilters = () => {
   const { theme, daoInfo } = useDAO();
 
   return (
-    <Flex gap="4" align="end" flexDir={['row']} flexWrap="wrap">
+    <Flex align="end" flexDir={['row']} flexWrap="wrap">
       <Flex flexDir="column" w={{ base: 'full', md: 'max-content' }}>
-        <Text fontFamily="heading" color={theme.filters.head}>
+        <Text fontFamily="heading" color={theme.filters.head} pb="5px">
           Filter by
         </Text>
         <Flex flexDir="row" gap="4" flexWrap="wrap">
           {interests.length > 0 && <InterestsFilter />}
           {workstreams.length > 0 && <WorkstreamFilter />}
-          {daoInfo.config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER?.SHOW && (
-            <DelegateStatusFilter />
-          )}
+          <DelegateStatusFilter />
           <PeriodFilter />
         </Flex>
       </Flex>

@@ -33,8 +33,8 @@ const LoginMenu = () => {
             boxSize="5"
           />
         }
-        bgColor={useColorModeValue(theme.branding, 'white')}
-        color={useColorModeValue(theme.buttonText, 'black')}
+        background={theme.secondaryButton?.bg || theme.branding}
+        color={theme.secondaryButton?.text || theme.buttonText}
         px="5"
         py="3"
         fontWeight="semibold"
@@ -42,9 +42,18 @@ const LoginMenu = () => {
         _hover={{
           opacity: 0.8,
         }}
-        _active={{}}
-        _focus={{}}
-        _focusWithin={{}}
+        _focusVisible={{
+          opacity: 0.8,
+        }}
+        _focusWithin={{
+          opacity: 0.8,
+        }}
+        _focus={{
+          opacity: 0.8,
+        }}
+        _active={{
+          opacity: 0.8,
+        }}
       >
         {truncateAddress(address || '')}
       </MenuButton>
@@ -55,7 +64,7 @@ const LoginMenu = () => {
         minW="max-content"
       >
         <MenuItem
-          bgColor={theme.filters.bg}
+          bgColor={theme.filters.listBg}
           _hover={{
             bg: theme.filters.activeBg,
             opacity: 0.8,
@@ -68,7 +77,7 @@ const LoginMenu = () => {
         </MenuItem>
         <Divider orientation="horizontal" my="2" />
         <MenuItem
-          bgColor={theme.filters.bg}
+          bgColor={theme.filters.listBg}
           _hover={{
             bg: theme.filters.activeBg,
             opacity: 0.8,
@@ -90,14 +99,29 @@ const LoginButton: FC<{ onOpen: () => void }> = ({ onOpen }) => {
   const { isConnected } = useAccount();
   return (
     <Button
-      bgColor={useColorModeValue(theme.branding, 'white')}
-      color={useColorModeValue(theme.buttonText, 'black')}
+      background={theme.branding}
+      color={theme.buttonText}
       px="5"
       py="3"
       fontWeight="semibold"
-      _active={{}}
-      _focus={{}}
-      _hover={{}}
+      _hover={{
+        bgColor: theme.branding,
+        opacity: 0.8,
+      }}
+      _focusVisible={{
+        bgColor: theme.branding,
+        opacity: 0.8,
+      }}
+      _focusWithin={{
+        bgColor: theme.branding,
+        opacity: 0.8,
+      }}
+      _focus={{
+        opacity: 0.8,
+      }}
+      _active={{
+        opacity: 0.8,
+      }}
       minH={{ base: '52px', lg: 'max-content' }}
       onClick={() => {
         if (isAuthenticated && isConnected) {
@@ -115,6 +139,9 @@ const LoginButton: FC<{ onOpen: () => void }> = ({ onOpen }) => {
 export const DelegateLoginButton: FC<{ onOpen: () => void }> = ({ onOpen }) => {
   const { isAuthenticated } = useAuth();
   const { isConnected } = useAccount();
+  const { daoInfo } = useDAO();
+
+  if (daoInfo.config.DAO_DEFAULT_SETTINGS?.DISABLE_LOGIN) return null;
 
   return isAuthenticated && isConnected ? (
     <LoginMenu />

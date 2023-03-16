@@ -72,7 +72,9 @@ export const StyledModal: React.FC<
           </Heading>
           <Box textAlign="left">{props.description}</Box>
         </Flex>
-        <ModalBody bgColor="transparent">{props.children}</ModalBody>
+        <ModalBody bgColor="transparent" px={{ base: '0', lg: '6' }}>
+          {props.children}
+        </ModalBody>
       </ModalContent>
     </Modal>
   );

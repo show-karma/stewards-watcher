@@ -6,7 +6,7 @@ const config: IDAOConfig = {
   DAO: 'Optimism',
   DAO_DESCRIPTION: `The Delegates of Optimism DAO play a vital role in driving the Optimism
   ecosystem forward through their work in governance.`,
-  DAO_SUBDESCRIPTION: `This site will help boost transparency by displaying delegate contribution to indicate their involvement and engagement in the DAO.`,
+  DAO_SUBDESCRIPTION: `This site helps token holders choose delegates and boost transparency by displaying delegate contribution to indicate their involvement in the DAO.`,
   DAO_URL: 'https://www.optimism.io',
   GOVERNANCE_FORUM: 'https://gov.optimism.io',
   DAO_KARMA_ID: 'optimism',
@@ -24,6 +24,7 @@ const config: IDAOConfig = {
   DAO_DELEGATE_MODE: 'custom',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
+  SORT_OPTIONS: ['forumScore', 'karmaScore'],
   EXCLUDED_CARD_FIELDS: [
     'onChainVotesPct',
     'forumScore',
@@ -194,7 +195,7 @@ const light: IDAOTheme = {
   headerBg: '#FFFFFF',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
-  collapse: { bg: '#2C2E32', text: '#FFFFFF', subtext: '#ADB8C0' },
+  collapse: { bg: '#FFFFFF', text: '#2C2E32', subtext: '#212328' },
   hat: {
     text: {
       primary: '#212328',
@@ -211,6 +212,7 @@ const light: IDAOTheme = {
     listBg: '#FFFFFF',
     listText: '#666666',
     activeBg: '#EBEDEF',
+    shadow: '0px 0px 4px rgba(0, 0, 0, 0.1)',
   },
   card: {
     icon: '#ADB8C0',
@@ -219,7 +221,7 @@ const light: IDAOTheme = {
     divider: 'rgba(102, 102, 102, 0.5)',
     text: { primary: '#212328', secondary: '#666666' },
     border: 'none',
-    shadow: '0px 0px 4px rgba(0, 0, 0, 0.1);',
+    shadow: '0px 0px 4px rgba(0, 0, 0, 0.1)',
     common: '#727B81',
     interests: { bg: '#EBEDEF', text: '#2C2E32' },
     workstream: { bg: '#595A5E', text: '#FFFFFF' },

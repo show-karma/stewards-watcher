@@ -1,4 +1,5 @@
-import { Button } from '@chakra-ui/react';
+import { Button, Text } from '@chakra-ui/react';
+import { HistoryIcon } from 'components/Icons';
 import { useDAO } from 'contexts';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
@@ -36,24 +37,30 @@ export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen, profile }) => {
   return (
     <Button
       as={Button}
-      h={['10', '12']}
-      fontSize={['md']}
+      fontSize="sm"
       fontWeight="medium"
-      bg="transparent"
       color={theme.buttonTextSec}
-      borderStyle="solid"
       _hover={{
-        textDecoration: 'underline',
-        cursor: 'pointer',
-        bg: 'transparent',
+        backgroundColor: theme.card.statBg,
+        opacity: 0.8,
       }}
       _active={{}}
       _focus={{}}
       _focusVisible={{}}
       _focusWithin={{}}
+      fontFamily="heading"
+      backgroundColor={theme.card.statBg}
+      gap="6px"
+      h="10"
+      px={{ base: '2', md: '3' }}
+      py={['3', '6']}
       onClick={() => redirectWithoutRefresh('votinghistory')}
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
     >
-      Activity
+      <HistoryIcon boxSize="17px" />
+      <Text h="max-content">Vote History</Text>
     </Button>
   );
 };

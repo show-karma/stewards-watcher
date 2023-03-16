@@ -8,11 +8,34 @@ import {
 } from '@chakra-ui/react';
 import { DownChevron } from 'components/Icons';
 import { useDAO, useDelegates } from 'contexts';
-import { IStatusOptions } from 'types';
 
 export const DelegateStatusFilter = () => {
-  const { selectStatus, statuses, statusesOptions } = useDelegates();
+  const { selectStatus, statuses, statusesOptions, setupFilteringUrl } =
+    useDelegates();
   const { theme } = useDAO();
+
+  const handleDelegateStatus = (index: number) => {
+    if (!statusesOptions[index]) return;
+
+    // search for the index in the statuses array
+    const filterIdx = statuses.findIndex(
+      filter => filter === statusesOptions[index]
+    );
+
+    // clone the statuses array
+    const items = [...statuses];
+
+    // if the status is already in the statusesOptions array, remove it
+    if (filterIdx >= 0) {
+      items.splice(filterIdx, 1);
+    } else {
+      items.push(statusesOptions[index]);
+    }
+
+    // set the new statuses array
+    selectStatus(items);
+    setupFilteringUrl('statuses', items.join(','));
+  };
 
   return (
     <Menu isLazy closeOnSelect={false} id="delegate-status-filter">
@@ -75,7 +98,7 @@ export const DelegateStatusFilter = () => {
             <MenuItemOption
               key={+index}
               value={option}
-              onClick={() => selectStatus(index)}
+              onClick={() => handleDelegateStatus(index)}
               bgColor="transparent"
               _hover={{
                 bg: theme.filters.activeBg,

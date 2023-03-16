@@ -2,12 +2,18 @@ import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { DownChevron } from 'components/Icons';
 import { useDAO, useDelegates } from 'contexts';
 import { IoChevronDownOutline } from 'react-icons/io5';
+import { IStatOptions } from 'types';
 
 export const StatFilter = () => {
   const { theme } = useDAO();
-  const { selectStat, statOptions, stat } = useDelegates();
+  const { selectStat, statOptions, stat, setupFilteringUrl } = useDelegates();
 
   const selectedStat = statOptions.find(option => option.id === stat)?.title;
+
+  const handleSelectStat = async (option: IStatOptions) => {
+    selectStat(option.id);
+    setupFilteringUrl('sortby', option.stat);
+  };
 
   return (
     <Menu isLazy id="stat-filter">
@@ -22,7 +28,6 @@ export const StatFilter = () => {
           />
         }
         bgColor={theme.filters.bg}
-        boxShadow={theme.filters.shadow}
         color={theme.filters.title}
         fontFamily="heading"
         fontWeight="normal"
@@ -64,7 +69,7 @@ export const StatFilter = () => {
         {statOptions.map((option, index) => (
           <MenuItem
             key={+index}
-            onClick={() => selectStat(option.id)}
+            onClick={() => handleSelectStat(option)}
             bgColor="transparent"
             _hover={{
               bg: theme.filters.activeBg,

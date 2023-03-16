@@ -31,11 +31,6 @@ const config: IDAOConfig = {
     'forumScore',
     'discordScore',
   ],
-  DAO_DEFAULT_SETTINGS: {
-    STATUS_FILTER: {
-      SHOW: true,
-    },
-  },
 };
 
 const dark: IDAOTheme = {
@@ -200,7 +195,7 @@ const light: IDAOTheme = {
   headerBg: '#212328',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
-  collapse: { text: '#FFFFFF', subtext: '#ADB8C0', bg: '#212328' },
+  collapse: { bg: '#FFFFFF', subtext: '#212328', text: '#212328' },
   hat: {
     text: {
       primary: '#FFFFFF',
@@ -217,6 +212,7 @@ const light: IDAOTheme = {
     listBg: '#F2F4F9',
     listText: '#666666',
     activeBg: '#EBEDEF',
+    shadow: '0px 0px 4px rgba(0, 0, 0, 0.1)',
   },
   card: {
     icon: '#ADB8C0',
@@ -225,7 +221,7 @@ const light: IDAOTheme = {
     divider: 'rgba(102, 102, 102, 0.5)',
     text: { primary: '#212328', secondary: '#666666' },
     border: 'none',
-    shadow: '0px 0px 4px rgba(0, 0, 0, 0.1);',
+    shadow: '0px 0px 4px rgba(0, 0, 0, 0.1)',
     common: '#727B81',
     interests: { bg: '#EBEDEF', text: '#2C2E32' },
     workstream: { bg: '#595A5E', text: '#FFFFFF' },

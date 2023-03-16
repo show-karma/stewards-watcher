@@ -1,4 +1,5 @@
 export * from './BodyTitle';
+export * from './ChakraLink';
 export * from './DelegateButton';
 export * from './DelegateCard';
 export * from './DelegatesList';

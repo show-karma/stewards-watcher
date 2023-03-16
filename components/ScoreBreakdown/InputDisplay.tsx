@@ -11,14 +11,15 @@ export const InputDisplay: React.FC<{
 
   return (
     <Tr fontSize={14}>
-      <Td>{item.label}</Td>
-      <Td>{item.value}</Td>
-      <Td>
+      <Td px={{ base: '3', md: '6' }}>{item.label}</Td>
+      <Td px={{ base: '2', md: '6' }}>{item.value}</Td>
+      <Td px={{ base: '3', md: '6' }}>
         <Input
           type="number"
-          width="10ch"
+          width={{ base: '70px', md: '10ch' }}
           defaultValue={item.weight}
           step="0.1"
+          px={{ base: '2', md: '2' }}
           sx={{
             appearance: isSelected && 'initial !important',
             border: 'rgba(255,255,255,0.05) 1px solid',

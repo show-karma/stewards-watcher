@@ -20,20 +20,23 @@ import { FC } from 'react';
 import { IoMenu } from 'react-icons/io5';
 import { HeaderBurgerMenu } from './HeaderBurgerMenu';
 import { Madeby } from './Madeby';
+import { ResourcesMenu } from './ResourcesMenu';
 import { ThemeButton } from './ThemeButton';
 
 const StyledButton: FC<ButtonProps> = ({ children, ...rest }) => {
   const { theme } = useDAO();
   return (
     <Button
-      color={useColorModeValue(theme.branding, 'white')}
+      color={theme.hat.text.primary}
       bgColor="transparent"
       px="6"
       py="6"
       fontWeight="semibold"
       _active={{}}
       _focus={{}}
-      _hover={{}}
+      _hover={{
+        color: theme.hat.text.secondary,
+      }}
       minH="52px"
       {...rest}
     >
@@ -68,15 +71,13 @@ export const HeaderHat = () => {
         w="full"
         align="center"
         justify="center"
-        px={{ base: '4', lg: '20' }}
+        px={{ base: '4', lg: '8' }}
         zIndex="2"
-        boxShadow={useColorModeValue(
-          '0px 4px 10px rgba(0, 0, 0, 0.1);',
-          'none'
-        )}
+        boxShadow={useColorModeValue('0px 4px 10px rgba(0, 0, 0, 0.1)', 'none')}
       >
         <Flex
-          w={{ base: 'full', '2xl': '1360px' }}
+          w={{ base: 'full' }}
+          maxW={{ base: '400px', md: '820px', lg: '944px', xl: '1360px' }}
           flexDir="row"
           justify="space-between"
           gap="4"
@@ -94,6 +95,7 @@ export const HeaderHat = () => {
               flexDir="column"
               flex={['1', 'none']}
               align={['flex-start', 'flex-start']}
+              gap="1"
             >
               <Link href="/">
                 <Img
@@ -138,30 +140,40 @@ export const HeaderHat = () => {
                 display={{ base: 'none', lg: 'flex' }}
                 gap="4"
               >
-                <ThemeButton />
                 {daoInfo.config.DAO_DEFAULT_SETTINGS?.FAQ && (
                   <Link href="/faq" _hover={{}}>
                     <StyledButton>FAQ</StyledButton>
                   </Link>
                 )}
-                <StyledButton onClick={onToggle}>
-                  Delegate to Anyone
-                </StyledButton>
+                {daoInfo.config.DAO_RESOURCES &&
+                  daoInfo.config.DAO_RESOURCES.length > 0 && <ResourcesMenu />}
+                {daoInfo.config.DAO_DELEGATE_MODE !== 'hidden' && (
+                  <StyledButton onClick={onToggle} px="2">
+                    Delegate to Anyone
+                  </StyledButton>
+                )}
                 <DelegateLoginButton onOpen={onOpenDelegateLogin} />
+                <ThemeButton />
               </Flex>
             </Flex>
           </Flex>
         </Flex>
         <HeaderBurgerMenu isOpen={isBurgerMenuOpen} onClose={closeBurgerMenu}>
           <Flex flexDir="column" gap="4">
-            <ThemeButton />
             {daoInfo.config.DAO_DEFAULT_SETTINGS?.FAQ && (
               <Link href="/faq" _hover={{}}>
                 <StyledButton>FAQ</StyledButton>
               </Link>
             )}
-            <StyledButton onClick={onToggle}>Delegate to Anyone</StyledButton>
+            {daoInfo.config.DAO_RESOURCES &&
+              daoInfo.config.DAO_RESOURCES.length > 0 && <ResourcesMenu />}
+            {daoInfo.config.DAO_DELEGATE_MODE !== 'hidden' && (
+              <StyledButton onClick={onToggle} px="2">
+                Delegate to Anyone
+              </StyledButton>
+            )}
             <DelegateLoginButton onOpen={onOpenDelegateLogin} />
+            <ThemeButton />
           </Flex>
         </HeaderBurgerMenu>
         <DelegateVotesModal isOpen={isOpen} onClose={onToggle} />

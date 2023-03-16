@@ -103,7 +103,7 @@ export const DAOContainer: React.FC<IDAOContainer> = ({ user }) => {
                   w="full"
                   flexDir="column"
                   align="center"
-                  bgColor={theme.background}
+                  background={theme.secondBg || theme.bodyBg}
                 >
                   <HeaderHat />
                   <MainLayout>

@@ -134,7 +134,7 @@ const MediaIcon: FC<IMediaIcon> = ({
         color={theme.card.socialMedia}
         opacity="1"
         _hover={{
-          transform: 'scale(1.5)',
+          transform: 'scale(1.25)',
         }}
         display="flex"
         alignItems="center"
@@ -158,18 +158,23 @@ const MediaIcon: FC<IMediaIcon> = ({
     if (onOpens[media]) onOpens[media]();
   };
 
+  const disabledCondition =
+    chosenMedia?.disabledCondition ||
+    daoInfo.config.SHOULD_NOT_SHOW === 'twitter';
+
+  const labelTooltip = () => {
+    if (disabledCondition) return '';
+    if (isConnected) return `Update your ${media} handle now`;
+    return `Login to update your ${media} handle`;
+  };
+
   return (
-    <Tooltip
-      label={
-        isConnected
-          ? `Update your ${media} handle now`
-          : `Login to update your ${media} handle`
-      }
-      placement="top"
-      hasArrow
-    >
+    <Tooltip label={labelTooltip()} placement="top" hasArrow>
       <Button
-        onClick={() => handleClick()}
+        onClick={() => {
+          if (disabledCondition) return;
+          handleClick();
+        }}
         px="0"
         py="0"
         display="flex"
@@ -187,7 +192,7 @@ const MediaIcon: FC<IMediaIcon> = ({
         w="max-content"
         minW="max-content"
         cursor={isSamePerson ? 'pointer' : 'default'}
-        isDisabled={chosenMedia?.disabledCondition}
+        isDisabled={disabledCondition}
       >
         {children}
       </Button>
@@ -268,7 +273,7 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
 
   const truncatedAddress = truncateAddress(fullAddress);
   const { isConnected, openConnectModal } = useWallet();
-  const { theme, daoData } = useDAO();
+  const { theme, daoData, daoInfo } = useDAO();
   const { profileSelected } = useDelegates();
   const { isEditing, setIsEditing, saveEdit, isEditSaving } =
     useEditStatement();
@@ -361,14 +366,16 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
                 {realName || ensName || truncatedAddress}
               </Text>
               <Flex flexDir="row" gap="4" ml="4">
-                <MediaIcon
-                  profile={profile}
-                  media="twitter"
-                  changeTab={changeTab}
-                  isSamePerson={isSamePerson}
-                >
-                  <TwitterIcon boxSize="6" color={theme.modal.header.title} />
-                </MediaIcon>
+                {daoInfo.config.SHOULD_NOT_SHOW !== 'twitter' && (
+                  <MediaIcon
+                    profile={profile}
+                    media="twitter"
+                    changeTab={changeTab}
+                    isSamePerson={isSamePerson}
+                  >
+                    <TwitterIcon boxSize="6" color={theme.modal.header.title} />
+                  </MediaIcon>
+                )}
                 {daoData?.forumTopicURL && (
                   <MediaIcon
                     profile={profile}
@@ -421,7 +428,7 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
 
             {isEditing ? (
               <Button
-                bgColor={theme.branding}
+                background={theme.branding}
                 px={['4', '6']}
                 py={['3', '6']}
                 h="10"
@@ -480,7 +487,7 @@ interface IHeader {
 }
 
 export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
-  const { theme } = useDAO();
+  const { theme, daoInfo } = useDAO();
   const { address: fullAddress } = profile;
   const { isConnected } = useWallet();
   const { address } = useAccount();
@@ -492,8 +499,9 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
 
   useMemo(() => {
     if (
-      (activeTab === 'handles' || activeTab === 'withdraw') &&
-      !isSamePerson
+      ((activeTab === 'handles' || activeTab === 'withdraw') &&
+        !isSamePerson) ||
+      (activeTab === 'handles' && daoInfo.config.SHOULD_NOT_SHOW === 'twitter')
     ) {
       changeTab('statement');
     }
@@ -558,13 +566,15 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
               >
                 Withdraw
               </NavButton>
-              <NavButton
-                isActive={isActiveTab('handles')}
-                onClick={() => changeTab('handles')}
-                w="max-content"
-              >
-                Handles
-              </NavButton>
+              {daoInfo.config.SHOULD_NOT_SHOW !== 'twitter' && (
+                <NavButton
+                  isActive={isActiveTab('handles')}
+                  onClick={() => changeTab('handles')}
+                  w="max-content"
+                >
+                  Handles
+                </NavButton>
+              )}
             </>
           )}
         </Flex>

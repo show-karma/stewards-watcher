@@ -4,7 +4,7 @@ import { mainnet } from 'wagmi/chains';
 const config: IDAOConfig = {
   DAO: 'Apecoin',
   DAO_DESCRIPTION: `The Delegates of Apecoin DAO play a vital role in driving the Apecoin ecosystem forward through their work in governance and workstreams.`,
-  DAO_SUBDESCRIPTION: `This site will help boost transparency with health cards for each Delegate that display metrics and links on their involvement and engagement in the DAO.`,
+  DAO_SUBDESCRIPTION: `This site helps token holders choose delegates and boost transparency by displaying delegate contribution to indicate their involvement in the DAO.`,
   DAO_URL: 'https://apecoin.com',
   GOVERNANCE_FORUM: 'https://forum.apecoin.com',
   DAO_KARMA_ID: 'apecoin',
@@ -42,6 +42,7 @@ const dark: IDAOTheme = {
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
   collapse: { text: '#FFFFFF', subtext: '#ADB8C0' },
+  secondBg: '#173ac5',
   hat: {
     text: {
       primary: '#FFFFFF',
@@ -191,7 +192,7 @@ const light: IDAOTheme = {
   headerBg: '#212328',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
-  collapse: { text: '#FFFFFF', subtext: '#ADB8C0', bg: '#212328' },
+  collapse: { bg: '#FFFFFF', subtext: '#212328', text: '#212328' },
   hat: {
     text: {
       primary: '#FFFFFF',
@@ -208,6 +209,7 @@ const light: IDAOTheme = {
     listBg: '#F2F4F9',
     listText: '#666666',
     activeBg: '#EBEDEF',
+    shadow: '0px 0px 4px rgba(0, 0, 0, 0.1)',
   },
   card: {
     icon: '#ADB8C0',
@@ -216,7 +218,7 @@ const light: IDAOTheme = {
     divider: 'rgba(102, 102, 102, 0.5)',
     text: { primary: '#212328', secondary: '#666666' },
     border: 'none',
-    shadow: '0px 0px 4px rgba(0, 0, 0, 0.1);',
+    shadow: '0px 0px 4px rgba(0, 0, 0, 0.1)',
     common: '#727B81',
     interests: { bg: '#EBEDEF', text: '#2C2E32' },
     workstream: { bg: '#595A5E', text: '#FFFFFF' },

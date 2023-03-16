@@ -71,42 +71,26 @@ export const DelegateButton: FC<IDelegateButton> = ({
     return write?.();
   };
 
-  const buttonDefaultStyles: ButtonProps = {
-    bgColor: theme.branding,
-    px: ['4', '6'],
-    py: ['3', '6'],
-    height: '10',
-    fontSize: ['md'],
-    fontWeight: 'medium',
-    onClick: handleCase,
-    _hover: {
-      backgroundColor: convertHexToRGBA(theme.branding, 0.8),
-    },
-    _focus: {},
-    _active: {},
-    disabled: isLoading,
-    color: theme.buttonText,
-  };
-
-  if (config.DAO_DELEGATE_MODE === 'hidden') {
-    return null;
-  }
-
-  return tooltipText && (props.disabled || props.isDisabled) ? (
-    <Tooltip
-      label="This delegate has indicated that they are no longer accepting delegations."
-      bgColor={theme.collapse.bg || theme.card.background}
-      color={theme.collapse.text}
+  return config.DAO_DELEGATE_MODE !== 'hidden' ? (
+    <Button
+      background={theme.branding}
+      px={{ base: '3', sm: '4', md: '6' }}
+      py={['3', '6']}
+      h="10"
+      fontSize={['sm', 'md']}
+      fontWeight="medium"
+      onClick={handleCase}
+      _hover={{
+        backgroundColor: convertHexToRGBA(theme.branding, 0.8),
+      }}
+      _focus={{}}
+      _active={{}}
+      disabled={isLoading}
+      color={theme.buttonText}
+      isLoading={isLoading}
+      {...props}
     >
-      <Flex>
-        <Button isLoading={isLoading} {...buttonDefaultStyles} {...props}>
-          <Flex gap="2">{text}</Flex>
-        </Button>
-      </Flex>
-    </Tooltip>
-  ) : (
-    <Button isLoading={isLoading} {...buttonDefaultStyles} {...props}>
       <Flex gap="2">{text}</Flex>
     </Button>
-  );
+  ) : null;
 };
