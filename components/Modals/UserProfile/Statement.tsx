@@ -99,7 +99,9 @@ export const Statement: FC = () => {
       gap="1"
       boxShadow={`0px 0px 18px 5px ${theme.modal.votingHistory.headline}0D`}
       px="4"
-      mb="4"
+      mb="10"
+      borderRightRadius="lg"
+      borderBottomRadius="lg"
     >
       {isEditing && (
         <Flex

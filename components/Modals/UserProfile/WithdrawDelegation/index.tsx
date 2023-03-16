@@ -12,7 +12,9 @@ export const WithdrawDelegation: FC = () => {
       minH={{ base: '400px' }}
       boxShadow={`0px 0px 18px 5px ${theme.modal.votingHistory.headline}0D`}
       px="4"
-      mb="4"
+      mb="10"
+      borderRightRadius="lg"
+      borderBottomRadius="lg"
     >
       {profileSelected?.status === 'withdrawn' ? (
         <>

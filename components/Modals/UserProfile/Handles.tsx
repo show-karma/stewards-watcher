@@ -54,10 +54,12 @@ export const Handles: FC = () => {
     <>
       <Flex
         flexDir="column"
-        mb={{ base: '5', lg: '5' }}
+        mb="10"
         boxShadow={`0px 0px 18px 5px ${theme.modal.votingHistory.headline}0D`}
         px="4"
         pt="5"
+        borderRightRadius="lg"
+        borderBottomRadius="lg"
       >
         <Text
           fontSize="2xl"
