@@ -270,6 +270,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           status: item.status,
           profilePicture: item.profilePicture,
           workstreams: item.workstreams,
+          userCreatedAt: item.userCreatedAt,
         };
       });
 
@@ -339,6 +340,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           profilePicture: item.profilePicture,
           workstreams: item.workstreams,
           status: item.status,
+          userCreatedAt: item.userCreatedAt,
         };
       });
       setDelegates(delegatesList);
@@ -425,6 +427,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         profilePicture: fetchedDelegate.profilePicture,
         workstreams: fetchedDelegate.workstreams,
         status: fetchedDelegate.status,
+        userCreatedAt: fetchedDelegate.userCreatedAt,
       };
 
       const getTab = asPath.split('#');
@@ -516,6 +519,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           profilePicture: item.profilePicture,
           workstreams: item.workstreams,
           gitcoinHealthScore: fetchedPeriod?.gitcoinHealthScore || 0,
+          userCreatedAt: item.userCreatedAt,
         });
       });
     } catch (error) {
