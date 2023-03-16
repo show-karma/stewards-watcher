@@ -120,7 +120,6 @@ export const ToDelegate: FC<IToDelegateProps> = ({
           setSelectedProfileData({
             address,
             forumActivity: 0,
-            delegators: 0,
             karmaScore: 0,
             voteParticipation: {
               onChain: 0,
