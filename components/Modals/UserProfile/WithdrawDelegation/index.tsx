@@ -15,6 +15,7 @@ export const WithdrawDelegation: FC = () => {
       mb="10"
       borderRightRadius="lg"
       borderBottomRadius="lg"
+      py="4"
     >
       {profileSelected?.status === 'withdrawn' ? (
         <>
@@ -22,7 +23,6 @@ export const WithdrawDelegation: FC = () => {
             fontSize="2xl"
             fontWeight="semibold"
             color={theme.modal.header.title}
-            mt="6"
           >
             You have withdrawn your nomination
           </Text>

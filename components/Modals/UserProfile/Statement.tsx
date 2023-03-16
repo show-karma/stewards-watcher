@@ -28,7 +28,6 @@ const TextSection: FC<ITextSection> = ({ statement }) => {
       gap="4"
       flexDir="column"
       flex="1"
-      py="4"
       w="full"
       borderBottomRadius="md"
     >
@@ -97,17 +96,13 @@ export const Statement: FC = () => {
       gap="1"
       boxShadow={`0px 0px 18px 5px ${theme.modal.votingHistory.headline}0D`}
       px="4"
+      py="4"
       mb="10"
       borderRightRadius="lg"
       borderBottomRadius="lg"
     >
       {isEditing && (
-        <Flex
-          flexDir="column"
-          gap="1.5"
-          mt={{ base: '5', lg: '6' }}
-          mb={{ base: '5', lg: '5' }}
-        >
+        <Flex flexDir="column" gap="1.5" mb={{ base: '5', lg: '5' }}>
           <Text
             fontSize="2xl"
             fontWeight="medium"
