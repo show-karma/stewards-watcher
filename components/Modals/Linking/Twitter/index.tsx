@@ -1,8 +1,9 @@
 import { ModalContent, ModalOverlay, Modal, Box } from '@chakra-ui/react';
-import { useDAO } from 'contexts';
+import { useDAO, useDelegates } from 'contexts';
 import { AxiosClient } from 'helpers';
 import { useToasty } from 'hooks';
 import React, { useEffect, useState } from 'react';
+import { lessThanDays } from 'utils';
 import { useAccount } from 'wagmi';
 import { ESteps } from './ESteps';
 import { Step1 } from './Step1';
@@ -27,6 +28,7 @@ export const TwitterModal: React.FC<IModal> = ({
   const { toast, updateState } = useToasty();
   const { address: publicAddress } = useAccount();
   const { daoData, daoInfo } = useDAO();
+  const { profileSelected } = useDelegates();
   const daoName = daoData?.name || '';
   const logoUrl = daoData?.socialLinks.logoUrl || '';
   const request = AxiosClient();
@@ -130,8 +132,14 @@ export const TwitterModal: React.FC<IModal> = ({
     );
   };
 
+  const notShowCondition =
+    daoInfo.config.SHOULD_NOT_SHOW === 'twitter' ||
+    (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
+      !!profileSelected?.userCreatedAt &&
+      lessThanDays(profileSelected?.userCreatedAt, 1));
+
   useEffect(() => {
-    if (daoInfo.config.SHOULD_NOT_SHOW === 'twitter') {
+    if (notShowCondition) {
       onClose();
     }
   }, [open]);

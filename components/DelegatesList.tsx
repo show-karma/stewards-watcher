@@ -151,24 +151,7 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
           mb="8"
           px={{ base: '4', lg: '0' }}
         >
-          <Grid
-            flexWrap="wrap"
-            rowGap={{ base: '2', md: '10' }}
-            columnGap={{ base: '6', md: '6' }}
-            w="full"
-            templateColumns={{
-              base: 'repeat(1, 1fr)',
-              sm: 'repeat(1, 1fr)',
-              md: 'repeat(2, 1fr)',
-              xl: 'repeat(3, 1fr)',
-            }}
-            alignItems="center"
-            justifyItems="center"
-            mb="8"
-            px={{ base: '4', lg: '0' }}
-          >
-            <DelegatesCases delegates={delegates} isLoading={isLoading} />
-          </Grid>
+          <DelegatesCases delegates={delegates} isLoading={isLoading} />
         </Grid>
       </InfiniteScroll>
       {!isLoading && !delegates.length && <EmptyStates />}

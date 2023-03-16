@@ -25,6 +25,7 @@ export interface IDelegateFromAPI {
   profilePicture?: string;
   voteWeight?: number;
   status?: string;
+  userCreatedAt?: string;
   scoreBreakdown: {
     name: string;
     pct: number;

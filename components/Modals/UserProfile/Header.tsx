@@ -30,7 +30,12 @@ import { useAuth } from 'contexts/auth';
 import { useToasty } from 'hooks';
 import { FC, ReactNode, useMemo, useState } from 'react';
 import { IActiveTab, IProfile } from 'types';
-import { convertHexToRGBA, getUserForumUrl, truncateAddress } from 'utils';
+import {
+  convertHexToRGBA,
+  getUserForumUrl,
+  lessThanDays,
+  truncateAddress,
+} from 'utils';
 import { useAccount } from 'wagmi';
 
 interface INavButton extends ButtonProps {
@@ -95,15 +100,23 @@ const MediaIcon: FC<IMediaIcon> = ({
   isSamePerson,
 }) => {
   const { theme, daoData, daoInfo } = useDAO();
+  const { profileSelected } = useDelegates();
 
   const { isConnected } = useWallet();
   const { config } = daoInfo;
   const { twitterOnOpen, forumOnOpen } = useHandles();
 
+  const twitterNotShowCondition =
+    daoInfo.config.SHOULD_NOT_SHOW === 'twitter' ||
+    (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
+      !!profileSelected?.userCreatedAt &&
+      lessThanDays(profileSelected?.userCreatedAt, 1));
+
   const medias: IMediasObj = {
     twitter: {
       url: `https://twitter.com/${profile.twitter}`,
       value: profile.twitter,
+      disabledCondition: twitterNotShowCondition,
     },
     forum: {
       url:
@@ -158,12 +171,11 @@ const MediaIcon: FC<IMediaIcon> = ({
     if (onOpens[media]) onOpens[media]();
   };
 
-  const disabledCondition =
-    chosenMedia?.disabledCondition ||
-    daoInfo.config.SHOULD_NOT_SHOW === 'twitter';
+  const disabledCondition = chosenMedia?.disabledCondition;
 
   const labelTooltip = () => {
-    if (disabledCondition) return '';
+    if (disabledCondition)
+      return 'We are validating your address. Please check back in 24 hrs to verify your handle.';
     if (isConnected) return `Update your ${media} handle now`;
     return `Login to update your ${media} handle`;
   };
@@ -325,6 +337,12 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
       handleAuth();
     }
   }, [isConnected]);
+
+  const twitterNotShowCondition =
+    daoInfo.config.SHOULD_NOT_SHOW === 'twitter' ||
+    (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
+      !!profileSelected?.userCreatedAt &&
+      lessThanDays(profileSelected?.userCreatedAt, 1));
 
   return (
     <Flex
@@ -491,11 +509,18 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
   const { address: fullAddress } = profile;
   const { isConnected } = useWallet();
   const { address } = useAccount();
+  const { profileSelected } = useDelegates();
 
   const isSamePerson =
     isConnected && address?.toLowerCase() === fullAddress?.toLowerCase();
 
   const isActiveTab = (section: IActiveTab) => activeTab === section;
+
+  const handleNotShowCondition =
+    daoInfo.config.SHOULD_NOT_SHOW === 'twitter' ||
+    (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
+      !!profileSelected?.userCreatedAt &&
+      lessThanDays(profileSelected?.userCreatedAt, 1));
 
   useMemo(() => {
     if (
