@@ -1,3 +1,4 @@
+import { useDisclosure } from '@chakra-ui/react';
 import axios from 'axios';
 import { cookieNames } from 'helpers';
 import jwtDecode from 'jwt-decode';
@@ -22,6 +23,7 @@ interface IAuthProps {
   authToken: string | null;
   disconnect: () => void;
   isDaoAdmin: boolean;
+  isLoadingSign: boolean;
 }
 
 export const AuthContext = createContext({} as IAuthProps);
@@ -43,15 +45,15 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isDaoAdmin, setIsDaoAdmin] = useState(false);
   const [authToken, setToken] = useState<string | null>(null);
-  const { openConnectModal } = useWallet();
+  const { openConnectModal, connectOnClose } = useWallet();
 
   const { disconnect: disconnectWallet } = useDisconnect();
-  const { searchProfileModal } = useDelegates();
+
   const { daoData, daoInfo } = useDAO();
 
   const cookies = new Cookies();
 
-  const { signMessageAsync } = useSignMessage();
+  const { signMessageAsync, isLoading: isLoadingSign } = useSignMessage();
 
   const disconnect = async () => {
     setToken(null);
@@ -148,7 +150,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
       if (!signedMessage) return false;
       const token = await getAccountToken(address, signedMessage);
       if (token) saveToken(token);
-      searchProfileModal(address, 'statement');
+      connectOnClose();
       return true;
     } catch (error) {
       console.log(error);
@@ -181,8 +183,16 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
       authToken,
       disconnect,
       isDaoAdmin,
+      isLoadingSign,
     }),
-    [isAuthenticated, authenticate, authToken, disconnect, isDaoAdmin]
+    [
+      isAuthenticated,
+      authenticate,
+      authToken,
+      disconnect,
+      isDaoAdmin,
+      isLoadingSign,
+    ]
   );
 
   return (

@@ -1,6 +1,7 @@
 export * from './checkExpirationStatus';
 export * from './commonAddresses';
 export * from './convertHexToRGBA';
+export * from './ethers';
 export * from './fetchScoreBreakdown';
 export * from './formatDate';
 export * from './formatNumber';
