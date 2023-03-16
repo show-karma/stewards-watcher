@@ -54,8 +54,10 @@ export const Handles: FC = () => {
     <>
       <Flex
         flexDir="column"
-        mt={{ base: '5', lg: '6' }}
         mb={{ base: '5', lg: '5' }}
+        boxShadow={`0px 0px 18px 5px ${theme.modal.votingHistory.headline}0D`}
+        px="4"
+        pt="5"
       >
         <Text
           fontSize="2xl"

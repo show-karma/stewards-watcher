@@ -23,7 +23,17 @@ const TextSection: FC<ITextSection> = ({ statement }) => {
     return html;
   };
   return (
-    <Flex maxW="30rem" gap="4" flexDir="column" flex="1" pt="4">
+    <Flex
+      maxW="588px"
+      gap="4"
+      flexDir="column"
+      flex="1"
+      py="4"
+      boxShadow={`0px 0px 18px 5px ${theme.modal.votingHistory.headline}0D`}
+      px="4"
+      w="full"
+      borderBottomRadius="md"
+    >
       {statement && statement.value && (
         <Flex
           color={theme.modal.statement.text}
@@ -71,9 +81,6 @@ const StatementCases: FC<IStatementCases> = ({
   isLoading,
   statement,
 }) => {
-  const { profileSelected } = useDelegates();
-  const { address, isConnected } = useAccount();
-
   if (isLoading)
     return <SkeletonText w="full" mt="4" noOfLines={4} spacing="4" />;
   if (isEditing) return <EditStatement />;
@@ -87,7 +94,13 @@ export const Statement: FC = () => {
     useEditStatement();
 
   return (
-    <Flex flexDir="column" gap="1">
+    <Flex
+      flexDir="column"
+      gap="1"
+      boxShadow={`0px 0px 18px 5px ${theme.modal.votingHistory.headline}0D`}
+      px="4"
+      mb="4"
+    >
       {isEditing && (
         <Flex
           flexDir="column"
