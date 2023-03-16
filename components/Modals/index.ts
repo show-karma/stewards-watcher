@@ -1,5 +1,6 @@
+export * from './Delegate';
 export * from './DelegateLoginModal';
-export * from './DelegateVotes';
+export * from './DelegateToAnyone';
 export * from './Linking';
 export * from './Sidebar';
 export * from './UserProfile';

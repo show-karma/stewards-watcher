@@ -3,6 +3,7 @@ import React, { useContext, createContext, useMemo } from 'react';
 import { useChainModal, useConnectModal } from '@rainbow-me/rainbowkit';
 import { Chain, useAccount, useNetwork } from 'wagmi';
 import { useIsMounted } from 'hooks/useIsMounted';
+import { useDisclosure } from '@chakra-ui/react';
 
 interface IWalletProps {
   isConnected: boolean;
@@ -13,6 +14,12 @@ interface IWalletProps {
         unsupported?: boolean | undefined;
       })
     | undefined;
+  connectOnClose: () => void;
+  connectIsOpen: boolean;
+  connectOnToggle: () => void;
+  delegateIsOpen: boolean;
+  delegateOnToggle: () => void;
+  address: string | undefined;
 }
 
 export const WalletContext = createContext({} as IWalletProps);
@@ -25,8 +32,17 @@ export const WalletProvider: React.FC<ProviderProps> = ({ children }) => {
   const isMounted = useIsMounted();
   const { openConnectModal } = useConnectModal();
   const { openChainModal } = useChainModal();
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
   const { chain } = useNetwork();
+
+  const {
+    onClose: connectOnClose,
+    isOpen: connectIsOpen,
+    onToggle: connectOnToggle,
+  } = useDisclosure();
+
+  const { onToggle: delegateOnToggle, isOpen: delegateIsOpen } =
+    useDisclosure();
 
   const providerValue = useMemo(
     () => ({
@@ -34,8 +50,25 @@ export const WalletProvider: React.FC<ProviderProps> = ({ children }) => {
       openConnectModal,
       openChainModal,
       chain,
+      connectOnClose,
+      connectIsOpen,
+      connectOnToggle,
+      delegateIsOpen,
+      delegateOnToggle,
+      address,
     }),
-    [isConnected, openConnectModal, openChainModal, chain]
+    [
+      isConnected,
+      openConnectModal,
+      openChainModal,
+      chain,
+      connectOnClose,
+      connectIsOpen,
+      connectOnToggle,
+      delegateIsOpen,
+      delegateOnToggle,
+      address,
+    ]
   );
 
   return isMounted ? (

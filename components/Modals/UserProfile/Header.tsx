@@ -9,6 +9,7 @@ import {
   Spinner,
   Text,
   Tooltip,
+  useDisclosure,
 } from '@chakra-ui/react';
 import {
   ImgWithFallback,
@@ -16,6 +17,7 @@ import {
   ForumIcon,
   TwitterIcon,
   DiscordIcon,
+  DelegateModal,
 } from 'components';
 import {
   useDAO,
@@ -210,13 +212,54 @@ const MediaIcon: FC<IMediaIcon> = ({
   );
 };
 
-const DelegateCases: FC<{ status?: string; fullAddress: string }> = ({
-  status,
-  fullAddress,
+interface IOpenDelegateButton extends ButtonProps {
+  openModal?: () => void;
+  isLoading?: boolean;
+}
+
+const OpenDelegateButton: FC<IOpenDelegateButton> = ({
+  openModal,
+  isLoading,
+  ...rest
 }) => {
   const { theme } = useDAO();
+  return (
+    <Button
+      bgColor={theme.branding}
+      px={['4', '6']}
+      py={['3', '6']}
+      h="10"
+      fontSize={['md']}
+      fontWeight="medium"
+      onClick={openModal}
+      _hover={{
+        backgroundColor: convertHexToRGBA(theme.branding, 0.8),
+      }}
+      _focus={{}}
+      _active={{}}
+      disabled={isLoading}
+      color={theme.buttonText}
+      {...rest}
+    >
+      Select as Delegate
+    </Button>
+  );
+};
+
+const DelegateCases: FC<{
+  status?: string;
+  openModal: () => void;
+  delegateAddress?: string;
+}> = ({ status, openModal, delegateAddress }) => {
+  const { theme } = useDAO();
+
   const { address } = useAccount();
-  if (fullAddress.toLowerCase() === address?.toLowerCase()) return null;
+  if (
+    delegateAddress &&
+    delegateAddress.toLowerCase() === address?.toLowerCase()
+  )
+    return null;
+
   if (status === 'withdrawn')
     return (
       <Tooltip
@@ -225,16 +268,11 @@ const DelegateCases: FC<{ status?: string; fullAddress: string }> = ({
         color={theme.collapse.text}
       >
         <Flex>
-          <DelegateButton
-            delegated={fullAddress}
-            text="Select as Delegate"
-            isDisabled
-            disabled
-          />
+          <OpenDelegateButton isDisabled disabled />
         </Flex>
       </Tooltip>
     );
-  return <DelegateButton delegated={fullAddress} text="Select as Delegate" />;
+  return <OpenDelegateButton openModal={openModal} />;
 };
 
 interface IUserSection {
@@ -255,6 +293,9 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
   const { authenticate, isAuthenticated, isDaoAdmin } = useAuth();
   const { toast } = useToasty();
   const [isConnecting, setConnecting] = useState(false);
+
+  const { isOpen: isOpenDelegateModal, onToggle: toggleDelegateModal } =
+    useDisclosure();
 
   const isSamePerson =
     isConnected &&
@@ -426,8 +467,9 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
               </Button>
             ) : (
               <DelegateCases
-                fullAddress={fullAddress}
+                openModal={toggleDelegateModal}
                 status={profileSelected?.status}
+                delegateAddress={profileSelected?.address}
               />
             )}
           </Flex>
@@ -440,10 +482,18 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
         justify="center"
       >
         <DelegateCases
-          fullAddress={fullAddress}
+          openModal={toggleDelegateModal}
           status={profileSelected?.status}
+          delegateAddress={profileSelected?.address}
         />
       </Flex>
+      {profileSelected && (
+        <DelegateModal
+          delegateData={profileSelected}
+          open={isOpenDelegateModal}
+          handleModal={toggleDelegateModal}
+        />
+      )}
     </Flex>
   );
 };

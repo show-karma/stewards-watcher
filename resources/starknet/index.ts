@@ -22,7 +22,7 @@ const config: IDAOConfig = {
     SORT: 'delegatedVotes',
   },
   DAO_CHAIN: mainnet,
-  DAO_DELEGATE_CONTRACT: '',
+  DAO_DELEGATE_CONTRACT: undefined,
   DAO_DELEGATE_MODE: 'snapshot',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',

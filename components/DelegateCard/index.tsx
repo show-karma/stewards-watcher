@@ -32,11 +32,11 @@ import {
 import { useRouter } from 'next/router';
 import { useToasty } from 'hooks';
 import { ScoreBreakdown } from 'components/ScoreBreakdown';
-import { StyledModal } from 'components/Modals/DelegateVotes/StyledModal';
 import {
   IBreakdownProps,
   ScoreBreakdownProvider,
 } from 'contexts/scoreBreakdown';
+import { StyledModal } from 'components/Modals/DelegateToAnyone/StyledModal';
 import { ImgWithFallback } from '../ImgWithFallback';
 import { DelegateButton } from '../DelegateButton';
 import { UserInfoButton } from '../UserInfoButton';
@@ -53,7 +53,7 @@ interface IDelegateCardProps {
 export const DelegateCard: FC<IDelegateCardProps> = props => {
   const { data } = props;
   const { daoInfo, theme, daoData } = useDAO();
-  const { selectProfile, period } = useDelegates();
+  const { selectProfile, period, setSelectedProfileData } = useDelegates();
   const { onCopy } = useClipboard(data?.address || '');
   const [scoreType, setScoreType] =
     useState<IBreakdownProps['type']>('karmaScore');
@@ -679,7 +679,13 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                       </Flex>
                     </Tooltip>
                   ) : (
-                    <DelegateButton delegated={data.address} />
+                    <DelegateButton
+                      delegated={data.address}
+                      px={['4', '8']}
+                      beforeOnClick={() => {
+                        setSelectedProfileData(data);
+                      }}
+                    />
                   ))}
                 <UserInfoButton onOpen={selectProfile} profile={data} />
               </Flex>

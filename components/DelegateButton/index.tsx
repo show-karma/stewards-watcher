@@ -1,5 +1,5 @@
-import { Button, ButtonProps, Flex, Spinner } from '@chakra-ui/react';
-import { useDAO, useWallet } from 'contexts';
+import { Button, ButtonProps, Flex, Spinner, Tooltip } from '@chakra-ui/react';
+import { useDAO, useWallet, useGovernanceVotes } from 'contexts';
 import { useDelegation, useMixpanel } from 'hooks';
 import { convertHexToRGBA } from 'utils';
 import { FC, useEffect, useState } from 'react';
@@ -9,19 +9,27 @@ interface IDelegateButton extends ButtonProps {
   delegated: string;
   text?: string;
   successEmitter?: () => void;
+  tooltipText?: string;
+  beforeOnClick?: () => void;
 }
 
 export const DelegateButton: FC<IDelegateButton> = ({
   delegated,
   text = 'Delegate',
   successEmitter,
+  tooltipText,
+
+  beforeOnClick,
   ...props
 }) => {
-  const { openConnectModal, openChainModal, chain } = useWallet();
+  const { openConnectModal, openChainModal, chain, connectIsOpen } =
+    useWallet();
   const { isConnected } = useAccount();
   const { daoInfo, theme } = useDAO();
   const { config } = daoInfo;
   const { mixpanel } = useMixpanel();
+  const { votes } = useGovernanceVotes();
+  const { delegateOnToggle, delegateIsOpen } = useWallet();
 
   const [writeAfterAction, setWriteAfterAction] = useState(false);
 
@@ -29,18 +37,20 @@ export const DelegateButton: FC<IDelegateButton> = ({
     delegatee: delegated,
     onSuccessFunction: successEmitter,
   });
+  const sameNetwork = chain?.id === config.DAO_CHAIN.id;
 
   useEffect(() => {
-    if (write && isConnected && writeAfterAction) {
+    if (isConnected && writeAfterAction && sameNetwork && !connectIsOpen) {
       setWriteAfterAction(false);
-      write();
+      delegateOnToggle();
     }
-  }, [write && isConnected && chain?.id === config.DAO_CHAIN.id]);
+  }, [isConnected && writeAfterAction && sameNetwork && !connectIsOpen]);
 
   const handleCase = () => {
     mixpanel.reportEvent({
       event: 'delegateButtonClick',
     });
+    beforeOnClick?.();
 
     if (config.DAO_DELEGATE_MODE === 'custom' && config.DAO_DELEGATE_ACTION) {
       return config.DAO_DELEGATE_ACTION();
@@ -48,14 +58,17 @@ export const DelegateButton: FC<IDelegateButton> = ({
 
     if (!isConnected) {
       setWriteAfterAction(true);
-      return openConnectModal && openConnectModal();
+      return openConnectModal?.();
     }
 
-    if (chain && chain.id !== config.DAO_CHAIN.id) {
+    if (chain && !sameNetwork) {
       setWriteAfterAction(true);
       return openChainModal && openChainModal();
     }
-    return write && write();
+
+    if (!delegateIsOpen) return delegateOnToggle();
+
+    return write?.();
   };
 
   return config.DAO_DELEGATE_MODE !== 'hidden' ? (

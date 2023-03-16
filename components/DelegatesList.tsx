@@ -1,10 +1,11 @@
 /* eslint-disable no-nested-ternary */
 import { Flex, Grid, Spinner, Text } from '@chakra-ui/react';
-import { useDAO, useDelegates } from 'contexts';
+import { useDAO, useDelegates, useWallet } from 'contexts';
 import { FC, useMemo } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { IDelegate } from 'types';
 import { DelegateCard } from './DelegateCard';
+import { DelegateModal } from './Modals';
 
 const loadingArray = Array(3).fill(undefined);
 
@@ -64,10 +65,19 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
     isLoading,
     fetchNextDelegates,
     hasMore,
+    isOpenProfile,
+    onCloseProfile,
+    profileSelected,
+    selectedTab,
     searchProfileModal,
     interestFilter,
     delegates,
   } = useDelegates();
+  const { daoInfo } = useDAO();
+  const { config } = daoInfo;
+
+  const { connectOnClose, connectIsOpen, delegateIsOpen, delegateOnToggle } =
+    useWallet();
 
   const searchProfileSelected = async (userToSearch: string) => {
     await searchProfileModal(userToSearch);
@@ -92,6 +102,15 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
           </Text>
         </Flex>
       )}
+      {!!profileSelected &&
+        !!Object.values(profileSelected).length &&
+        delegateIsOpen && (
+          <DelegateModal
+            delegateData={profileSelected}
+            open={delegateIsOpen}
+            handleModal={delegateOnToggle}
+          />
+        )}
       <InfiniteScroll
         pageStart={0}
         loadMore={() => {

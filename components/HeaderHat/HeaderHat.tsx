@@ -1,13 +1,10 @@
 import {
   Button,
   ButtonProps,
-  Center,
-  Divider,
   Flex,
   Icon,
   Img,
   Link,
-  Text,
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
@@ -16,7 +13,7 @@ import {
   DelegateLoginModal,
   UserProfile,
 } from 'components';
-import { DelegateVotesModal } from 'components/Modals/DelegateVotes';
+import { DelegateVotesModal } from 'components/Modals/DelegateToAnyone';
 import { useDAO, useDelegates } from 'contexts';
 import { useAuth } from 'contexts/auth';
 import { FC } from 'react';
