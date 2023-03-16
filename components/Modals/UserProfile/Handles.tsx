@@ -15,11 +15,12 @@ export const Handles: FC = () => {
     forumOnToggle,
     forumOnOpen,
     twitterOnClose,
+    forumOnClose,
   } = useHandles();
   const { profileSelected } = useDelegates();
 
-  const twitterNotShowCondition =
-    daoInfo.config.SHOULD_NOT_SHOW === 'twitter' ||
+  const notShowCondition =
+    daoInfo.config.SHOULD_NOT_SHOW === 'handles' ||
     (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
       !!profileSelected?.userCreatedAt &&
       lessThanDays(profileSelected?.userCreatedAt, 1));
@@ -28,7 +29,7 @@ export const Handles: FC = () => {
     {
       icon: TwitterIcon,
       name: 'Twitter',
-      disabledCondition: twitterNotShowCondition,
+      disabledCondition: notShowCondition,
       action: () => {
         twitterOnOpen();
       },
@@ -39,6 +40,7 @@ export const Handles: FC = () => {
     {
       icon: ForumIcon,
       name: 'Forum',
+      disabledCondition: notShowCondition,
       hideCondition: !daoData?.forumTopicURL,
       action: () => {
         forumOnOpen();
@@ -154,7 +156,11 @@ export const Handles: FC = () => {
         onClose={twitterOnClose}
       />
       {daoData?.forumTopicURL && (
-        <DiscourseModal open={forumIsOpen} handleModal={forumOnToggle} />
+        <DiscourseModal
+          open={forumIsOpen}
+          handleModal={forumOnToggle}
+          onClose={forumOnClose}
+        />
       )}
     </>
   );

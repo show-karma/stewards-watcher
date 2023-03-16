@@ -104,8 +104,8 @@ const MediaIcon: FC<IMediaIcon> = ({
   const { config } = daoInfo;
   const { twitterOnOpen, forumOnOpen } = useHandles();
 
-  const twitterNotShowCondition =
-    daoInfo.config.SHOULD_NOT_SHOW === 'twitter' ||
+  const notShowCondition =
+    daoInfo.config.SHOULD_NOT_SHOW === 'handles' ||
     (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
       !!profileSelected?.userCreatedAt &&
       lessThanDays(profileSelected?.userCreatedAt, 1));
@@ -114,7 +114,7 @@ const MediaIcon: FC<IMediaIcon> = ({
     twitter: {
       url: `https://twitter.com/${profile.twitter}`,
       value: profile.twitter,
-      disabledCondition: twitterNotShowCondition,
+      disabledCondition: notShowCondition,
     },
     forum: {
       url:
@@ -128,7 +128,7 @@ const MediaIcon: FC<IMediaIcon> = ({
             )
           : '',
       value: profile.forumHandle,
-      disabledCondition: !daoData?.forumTopicURL,
+      disabledCondition: !daoData?.forumTopicURL || notShowCondition,
     },
     discord: {
       url: `https://discord.com/users/${profile.discordHandle}`,
@@ -297,12 +297,6 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
     }
   }, [isConnected]);
 
-  const twitterNotShowCondition =
-    daoInfo.config.SHOULD_NOT_SHOW === 'twitter' ||
-    (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
-      !!profileSelected?.userCreatedAt &&
-      lessThanDays(profileSelected?.userCreatedAt, 1));
-
   return (
     <Flex
       px={{ base: '1.25rem', lg: '2.5rem' }}
@@ -343,7 +337,7 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
                 {realName || ensName || truncatedAddress}
               </Text>
               <Flex flexDir="row" gap="4" ml="4">
-                {daoInfo.config.SHOULD_NOT_SHOW !== 'twitter' && (
+                {daoInfo.config.SHOULD_NOT_SHOW !== 'handles' && (
                   <MediaIcon
                     profile={profile}
                     media="twitter"
@@ -466,17 +460,11 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
 
   const isActiveTab = (section: IActiveTab) => activeTab === section;
 
-  const handleNotShowCondition =
-    daoInfo.config.SHOULD_NOT_SHOW === 'twitter' ||
-    (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
-      !!profileSelected?.userCreatedAt &&
-      lessThanDays(profileSelected?.userCreatedAt, 1));
-
   useMemo(() => {
     if (
       ((activeTab === 'handles' || activeTab === 'withdraw') &&
         !isSamePerson) ||
-      (activeTab === 'handles' && daoInfo.config.SHOULD_NOT_SHOW === 'twitter')
+      (activeTab === 'handles' && daoInfo.config.SHOULD_NOT_SHOW === 'handles')
     ) {
       changeTab('statement');
     }
@@ -541,7 +529,7 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
               >
                 Withdraw
               </NavButton>
-              {daoInfo.config.SHOULD_NOT_SHOW !== 'twitter' && (
+              {daoInfo.config.SHOULD_NOT_SHOW !== 'handles' && (
                 <NavButton
                   isActive={isActiveTab('handles')}
                   onClick={() => changeTab('handles')}
