@@ -133,7 +133,7 @@ export const TwitterModal: React.FC<IModal> = ({
   };
 
   const notShowCondition =
-    daoInfo.config.SHOULD_NOT_SHOW === 'twitter' ||
+    daoInfo.config.SHOULD_NOT_SHOW === 'handles' ||
     (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
       !!profileSelected?.userCreatedAt &&
       lessThanDays(profileSelected?.userCreatedAt, 1));
