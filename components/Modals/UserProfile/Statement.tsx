@@ -29,8 +29,6 @@ const TextSection: FC<ITextSection> = ({ statement }) => {
       flexDir="column"
       flex="1"
       py="4"
-      boxShadow={`0px 0px 18px 5px ${theme.modal.votingHistory.headline}0D`}
-      px="4"
       w="full"
       borderBottomRadius="md"
     >
