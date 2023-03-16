@@ -40,7 +40,6 @@ interface IDelegateProps {
   selectStat: (_selectedStat: IStatsID) => void;
   selectOrder: (selectedOrder: IFilterOrder) => void;
   selectPeriod: (selectedPeriod: IFilterPeriod) => void;
-  setSelectedProfileData: (selected: IDelegate) => void;
   selectUserToFind: (selectedUserToFind: string) => void;
   statOptions: IStatOptions[];
   stat: IStatsID;
@@ -68,6 +67,7 @@ interface IDelegateProps {
   workstreamsFilter: string[];
   statusesOptions: IStatusOptions[];
   selectWorkstream: (index: number) => void;
+  setSelectedProfileData: (selected: IDelegate) => void;
   setupFilteringUrl: (
     paramToSetup: 'sortby' | 'order' | 'period' | 'statuses',
     paramValue: string
@@ -782,8 +782,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       selectWorkstream,
       workstreamsFilter,
       statusesOptions,
-      setupFilteringUrl,
       setSelectedProfileData,
+      setupFilteringUrl,
     }),
     [
       profileSelected,
@@ -808,8 +808,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       workstreams,
       workstreamsFilter,
       statusesOptions,
-      setupFilteringUrl,
       setSelectedProfileData,
+      setupFilteringUrl,
     ]
   );
 
