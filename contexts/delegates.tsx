@@ -67,6 +67,7 @@ interface IDelegateProps {
   workstreamsFilter: string[];
   statusesOptions: IStatusOptions[];
   selectWorkstream: (index: number) => void;
+  setSelectedProfileData: (selected: IDelegate) => void;
   setupFilteringUrl: (
     paramToSetup: 'sortby' | 'order' | 'period' | 'statuses',
     paramValue: string
@@ -196,6 +197,10 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     }
   };
 
+  const setSelectedProfileData = (selected: IDelegate) => {
+    setProfileSelected(selected);
+  };
+
   const getWorkstreams = () => {
     if (workstreamsFilter.length === 0 && config.DAO_KARMA_ID === 'gitcoin')
       return '6,4,3,7,1,2,5,12';
@@ -260,7 +265,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           delegatePitch: item.delegatePitch,
           gitcoinHealthScore: fetchedPeriod?.gitcoinHealthScore || 0,
           votingWeight: item.voteWeight,
-          delegatedVotes: item.delegatedVotes || item.snapshotDelegatedVotes,
+          delegatedVotes: +item.delegatedVotes || item.snapshotDelegatedVotes,
           twitterHandle: item.twitterHandle,
           discourseHandle: item.discourseHandle,
           discordHandle: item.discordHandle,
@@ -271,6 +276,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           status: item.status,
           profilePicture: item.profilePicture,
           workstreams: item.workstreams,
+          userCreatedAt: item.userCreatedAt,
         };
       });
 
@@ -330,7 +336,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           discordHandle: item.discordHandle,
           votingWeight: item.voteWeight,
           delegatePitch: item.delegatePitch,
-          delegatedVotes: item.delegatedVotes || item.snapshotDelegatedVotes,
+          delegatedVotes: +item.delegatedVotes || item.snapshotDelegatedVotes,
           gitcoinHealthScore: fetchedPeriod?.gitcoinHealthScore || 0,
           twitterHandle: item.twitterHandle,
           updatedAt: fetchedPeriod?.updatedAt,
@@ -340,6 +346,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           profilePicture: item.profilePicture,
           workstreams: item.workstreams,
           status: item.status,
+          userCreatedAt: item.userCreatedAt,
         };
       });
       setDelegates(delegatesList);
@@ -426,6 +433,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         profilePicture: fetchedDelegate.profilePicture,
         workstreams: fetchedDelegate.workstreams,
         status: fetchedDelegate.status,
+        userCreatedAt: fetchedDelegate.userCreatedAt,
       };
 
       const getTab = asPath.split('#');
@@ -505,7 +513,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
             offChain: fetchedPeriod?.offChainVotesPct || 0,
           },
           votingWeight: item?.voteWeight,
-          delegatedVotes: item.delegatedVotes || item.snapshotDelegatedVotes,
+          delegatedVotes: +item.delegatedVotes || item.snapshotDelegatedVotes,
           twitterHandle: item.twitterHandle,
           discourseHandle: item.discourseHandle,
           discordHandle: item.discordHandle,
@@ -517,6 +525,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           profilePicture: item.profilePicture,
           workstreams: item.workstreams,
           gitcoinHealthScore: fetchedPeriod?.gitcoinHealthScore || 0,
+          userCreatedAt: item.userCreatedAt,
         });
       });
     } catch (error) {
@@ -778,6 +787,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       selectWorkstream,
       workstreamsFilter,
       statusesOptions,
+      setSelectedProfileData,
       setupFilteringUrl,
     }),
     [
@@ -803,6 +813,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       workstreams,
       workstreamsFilter,
       statusesOptions,
+      setSelectedProfileData,
       setupFilteringUrl,
     ]
   );

@@ -1,6 +1,6 @@
 import { Flex, Input, Text } from '@chakra-ui/react';
 import { DelegateButton } from 'components';
-import { useDAO } from 'contexts';
+import { useDAO, useDelegates } from 'contexts';
 import { ethers } from 'ethers';
 import { FC, useMemo } from 'react';
 
@@ -18,6 +18,8 @@ export const ToDelegate: FC<IToDelegateProps> = ({
   success,
 }) => {
   const { theme } = useDAO();
+
+  const { setSelectedProfileData } = useDelegates();
   const { delegateTo: modalTheme } = theme.modal;
 
   const isEthAddress = useMemo(
@@ -114,6 +116,18 @@ export const ToDelegate: FC<IToDelegateProps> = ({
         borderRadius="4px"
         mt={4}
         successEmitter={emitSuccess}
+        beforeOnClick={() => {
+          setSelectedProfileData({
+            address,
+            forumActivity: 0,
+            karmaScore: 0,
+            voteParticipation: {
+              onChain: 0,
+              offChain: 0,
+            },
+            discordScore: 0,
+          });
+        }}
       />
     </Flex>
   );

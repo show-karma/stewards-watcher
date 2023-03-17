@@ -71,9 +71,6 @@ const StatementCases: FC<IStatementCases> = ({
   isLoading,
   statement,
 }) => {
-  const { profileSelected } = useDelegates();
-  const { address, isConnected } = useAccount();
-
   if (isLoading)
     return <SkeletonText w="full" mt="4" noOfLines={4} spacing="4" />;
   if (isEditing) return <EditStatement />;
@@ -86,6 +83,7 @@ export const Statement: FC = () => {
   const { isEditing, statement, interests, isLoadingStatement } =
     useEditStatement();
 
+  console.log(statement);
   return (
     <Flex flexDir="column" gap="1">
       {isEditing && (

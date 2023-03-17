@@ -32,11 +32,11 @@ import {
 import { useRouter } from 'next/router';
 import { useToasty } from 'hooks';
 import { ScoreBreakdown } from 'components/ScoreBreakdown';
-import { StyledModal } from 'components/Modals/DelegateVotes/StyledModal';
 import {
   IBreakdownProps,
   ScoreBreakdownProvider,
 } from 'contexts/scoreBreakdown';
+import { StyledModal } from 'components/Modals/DelegateToAnyone/StyledModal';
 import { ImgWithFallback } from '../ImgWithFallback';
 import { DelegateButton } from '../DelegateButton';
 import { UserInfoButton } from '../UserInfoButton';
@@ -53,7 +53,7 @@ interface IDelegateCardProps {
 export const DelegateCard: FC<IDelegateCardProps> = props => {
   const { data } = props;
   const { daoInfo, theme, daoData } = useDAO();
-  const { selectProfile, period } = useDelegates();
+  const { selectProfile, period, setSelectedProfileData } = useDelegates();
   const { onCopy } = useClipboard(data?.address || '');
   const [scoreType, setScoreType] =
     useState<IBreakdownProps['type']>('karmaScore');
@@ -88,7 +88,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       icon: BsChat,
       value: data?.delegatorCount ? formatNumber(data.delegatorCount) : '-',
       id: 'delegatorCount',
-      tooltipText: 'Total of delegators for this delegate',
+      // tooltipText: 'Total of delegators for this delegate',
     },
     {
       title: 'Delegated Tokens',
@@ -191,7 +191,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           ? `${formatNumberPercentage(data?.votingWeight)}`
           : '-',
         id: 'votingWeight',
-        tooltipText: `Based on ${data?.delegatorCount || 0} delegators`,
+        tooltipText: `Based on ${formatNumber(
+          data?.delegatorCount || 0
+        )} delegators`,
       });
 
     const order = [
@@ -659,7 +661,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           w="full"
         >
           {isLoaded ? (
-            <Flex flexDir="row" justifyContent="space-between" w="full">
+            <Flex flexDir="row" justifyContent="space-between" w="full" gap="3">
               <Flex flexDir="row" gap="3">
                 {canDelegate &&
                   (data?.status === 'withdrawn' ? (
@@ -671,14 +673,19 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                       <Flex>
                         <DelegateButton
                           delegated={data.address}
-                          px={['4', '8']}
                           disabled
                           isDisabled
                         />
                       </Flex>
                     </Tooltip>
                   ) : (
-                    <DelegateButton delegated={data.address} />
+                    <DelegateButton
+                      delegated={data.address}
+                      px={['4', '8']}
+                      beforeOnClick={() => {
+                        setSelectedProfileData(data);
+                      }}
+                    />
                   ))}
                 <UserInfoButton onOpen={selectProfile} profile={data} />
               </Flex>

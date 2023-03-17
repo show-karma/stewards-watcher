@@ -90,14 +90,14 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
     realName: profileSelected?.realName || '',
   };
 
-  const [newInterests, setNewInterests] = useState({
+  const initialCustomFields: ICustomFields = {
     label: '',
     value: [],
-  } as ICustomFields);
-  const [newStatement, setNewStatement] = useState<ICustomFields>({
-    label: '',
-    value: [],
-  } as ICustomFields);
+  };
+
+  const [newInterests, setNewInterests] = useState(initialCustomFields);
+  const [newStatement, setNewStatement] =
+    useState<ICustomFields>(initialCustomFields);
 
   const queryStatement = async () => {
     if (!profile.address) return;
@@ -140,6 +140,11 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
       setNewInterests(fetchedInterests);
       setNewStatement(fetchedStatement);
     } catch (error) {
+      setInterests(initialCustomFields);
+      setStatement(initialCustomFields);
+      setNewInterests(initialCustomFields);
+      setNewStatement(initialCustomFields);
+
       console.log(error);
     } finally {
       setIsLoadingStatement(false);
@@ -176,7 +181,7 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
   };
 
   useMemo(() => {
-    queryStatement();
+    if (profileSelected) queryStatement();
   }, [profileSelected]);
 
   const hasDelegatePitch = async (): Promise<ICustomFields[] | undefined> => {

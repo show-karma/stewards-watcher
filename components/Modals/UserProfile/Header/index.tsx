@@ -7,12 +7,15 @@ import {
   Text,
   Tooltip,
   useClipboard,
+  useDisclosure,
+  ButtonProps,
 } from '@chakra-ui/react';
 import {
   ImgWithFallback,
   DelegateButton,
   ForumIcon,
   TwitterIcon,
+  DelegateModal,
 } from 'components';
 import { useDAO, useDelegates, useEditStatement, useWallet } from 'contexts';
 import { useAuth } from 'contexts/auth';
@@ -25,13 +28,54 @@ import { useAccount } from 'wagmi';
 import { MediaIcon } from './MediaIcon';
 import { NavigatorRow } from './NavigatorRow';
 
-const DelegateCases: FC<{ status?: string; fullAddress: string }> = ({
-  status,
-  fullAddress,
+interface IOpenDelegateButton extends ButtonProps {
+  openModal?: () => void;
+  isLoading?: boolean;
+}
+
+const OpenDelegateButton: FC<IOpenDelegateButton> = ({
+  openModal,
+  isLoading,
+  ...rest
 }) => {
   const { theme } = useDAO();
+  return (
+    <Button
+      bgColor={theme.branding}
+      px={['4', '6']}
+      py={['3', '6']}
+      h="10"
+      fontSize={['md']}
+      fontWeight="medium"
+      onClick={openModal}
+      _hover={{
+        backgroundColor: convertHexToRGBA(theme.branding, 0.8),
+      }}
+      _focus={{}}
+      _active={{}}
+      disabled={isLoading}
+      color={theme.buttonText}
+      {...rest}
+    >
+      Select as Delegate
+    </Button>
+  );
+};
+
+const DelegateCases: FC<{
+  status?: string;
+  openModal: () => void;
+  delegateAddress?: string;
+}> = ({ status, openModal, delegateAddress }) => {
+  const { theme } = useDAO();
+
   const { address } = useAccount();
-  if (fullAddress.toLowerCase() === address?.toLowerCase()) return null;
+  if (
+    delegateAddress &&
+    delegateAddress.toLowerCase() === address?.toLowerCase()
+  )
+    return null;
+
   if (status === 'withdrawn')
     return (
       <Tooltip
@@ -40,16 +84,11 @@ const DelegateCases: FC<{ status?: string; fullAddress: string }> = ({
         color={theme.collapse.text}
       >
         <Flex>
-          <DelegateButton
-            delegated={fullAddress}
-            text="Select as Delegate"
-            isDisabled
-            disabled
-          />
+          <OpenDelegateButton isDisabled disabled />
         </Flex>
       </Tooltip>
     );
-  return <DelegateButton delegated={fullAddress} text="Select as Delegate" />;
+  return <OpenDelegateButton openModal={openModal} />;
 };
 
 interface IUserSection {
@@ -62,7 +101,7 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
 
   const truncatedAddress = truncateAddress(fullAddress);
   const { isConnected, openConnectModal } = useWallet();
-  const { theme, daoData } = useDAO();
+  const { theme, daoData, daoInfo } = useDAO();
   const { profileSelected } = useDelegates();
   const { isEditing, setIsEditing, saveEdit, isEditSaving } =
     useEditStatement();
@@ -71,6 +110,9 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
   const { toast } = useToasty();
   const [isConnecting, setConnecting] = useState(false);
   const { onCopy } = useClipboard(fullAddress || '');
+
+  const { isOpen: isOpenDelegateModal, onToggle: toggleDelegateModal } =
+    useDisclosure();
 
   const isSamePerson =
     isConnected &&
@@ -168,14 +210,16 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
                 {realName || ensName || truncatedAddress}
               </Text>
               <Flex flexDir="row" gap="4" ml="4">
-                <MediaIcon
-                  profile={profile}
-                  media="twitter"
-                  changeTab={changeTab}
-                  isSamePerson={isSamePerson}
-                >
-                  <TwitterIcon boxSize="6" color={theme.modal.header.title} />
-                </MediaIcon>
+                {daoInfo.config.SHOULD_NOT_SHOW !== 'handles' && (
+                  <MediaIcon
+                    profile={profile}
+                    media="twitter"
+                    changeTab={changeTab}
+                    isSamePerson={isSamePerson}
+                  >
+                    <TwitterIcon boxSize="6" color={theme.modal.header.title} />
+                  </MediaIcon>
+                )}
                 {daoData?.forumTopicURL && (
                   <MediaIcon
                     profile={profile}
@@ -301,8 +345,9 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
               </Button>
             ) : (
               <DelegateCases
-                fullAddress={fullAddress}
+                openModal={toggleDelegateModal}
                 status={profileSelected?.status}
+                delegateAddress={profileSelected?.address}
               />
             )}
           </Flex>
@@ -315,10 +360,18 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
         justify="center"
       >
         <DelegateCases
-          fullAddress={fullAddress}
+          openModal={toggleDelegateModal}
           status={profileSelected?.status}
+          delegateAddress={profileSelected?.address}
         />
       </Flex>
+      {profileSelected && (
+        <DelegateModal
+          delegateData={profileSelected}
+          open={isOpenDelegateModal}
+          handleModal={toggleDelegateModal}
+        />
+      )}
     </Flex>
   );
 };
@@ -330,18 +383,20 @@ interface IHeader {
 }
 
 export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
-  const { theme } = useDAO();
+  const { theme, daoInfo } = useDAO();
   const { address: fullAddress } = profile;
   const { isConnected } = useWallet();
   const { address } = useAccount();
+  const { profileSelected } = useDelegates();
 
   const isSamePerson =
     isConnected && address?.toLowerCase() === fullAddress?.toLowerCase();
 
   useMemo(() => {
     if (
-      (activeTab === 'handles' || activeTab === 'withdraw') &&
-      !isSamePerson
+      ((activeTab === 'handles' || activeTab === 'withdraw') &&
+        !isSamePerson) ||
+      (activeTab === 'handles' && daoInfo.config.SHOULD_NOT_SHOW === 'handles')
     ) {
       changeTab('statement');
     }

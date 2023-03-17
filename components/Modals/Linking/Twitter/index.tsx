@@ -1,8 +1,9 @@
 import { ModalContent, ModalOverlay, Modal, Box } from '@chakra-ui/react';
-import { useDAO } from 'contexts';
+import { useDAO, useDelegates } from 'contexts';
 import { AxiosClient } from 'helpers';
 import { useToasty } from 'hooks';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { lessThanDays } from 'utils';
 import { useAccount } from 'wagmi';
 import { ESteps } from './ESteps';
 import { Step1 } from './Step1';
@@ -13,15 +14,21 @@ import { StepVerified } from './StepVerified';
 interface IModal {
   open: boolean;
   handleModal: () => void;
+  onClose: () => void;
 }
 
-export const TwitterModal: React.FC<IModal> = ({ open, handleModal }) => {
+export const TwitterModal: React.FC<IModal> = ({
+  open,
+  handleModal,
+  onClose,
+}) => {
   const [step, setStep] = useState(ESteps.INPUT);
   const [signature, setSignature] = useState('');
   const [username, setUsername] = useState('');
   const { toast, updateState } = useToasty();
   const { address: publicAddress } = useAccount();
-  const { daoData } = useDAO();
+  const { daoData, daoInfo } = useDAO();
+  const { profileSelected } = useDelegates();
   const daoName = daoData?.name || '';
   const logoUrl = daoData?.socialLinks.logoUrl || '';
   const request = AxiosClient();
@@ -124,6 +131,18 @@ export const TwitterModal: React.FC<IModal> = ({ open, handleModal }) => {
       />
     );
   };
+
+  const notShowCondition =
+    daoInfo.config.SHOULD_NOT_SHOW === 'handles' ||
+    (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
+      !!profileSelected?.userCreatedAt &&
+      lessThanDays(profileSelected?.userCreatedAt, 1));
+
+  useEffect(() => {
+    if (notShowCondition) {
+      onClose();
+    }
+  }, [open]);
 
   return (
     <Modal

@@ -1,11 +1,12 @@
-import { Flex, Text, Icon, Button } from '@chakra-ui/react';
+import { Flex, Text, Icon, Button, Tooltip } from '@chakra-ui/react';
 import { DiscordIcon, ForumIcon, TwitterIcon } from 'components';
 import { useDAO, useDelegates, useHandles } from 'contexts';
 import { FC } from 'react';
+import { lessThanDays } from 'utils';
 import { DiscourseModal, TwitterModal } from '../Linking';
 
 export const Handles: FC = () => {
-  const { theme, daoData } = useDAO();
+  const { theme, daoData, daoInfo } = useDAO();
   const {
     twitterIsOpen,
     twitterOnOpen,
@@ -13,13 +14,22 @@ export const Handles: FC = () => {
     forumIsOpen,
     forumOnToggle,
     forumOnOpen,
+    twitterOnClose,
+    forumOnClose,
   } = useHandles();
   const { profileSelected } = useDelegates();
+
+  const notShowCondition =
+    daoInfo.config.SHOULD_NOT_SHOW === 'handles' ||
+    (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
+      !!profileSelected?.userCreatedAt &&
+      lessThanDays(profileSelected?.userCreatedAt, 1));
 
   const socialMedias = [
     {
       icon: TwitterIcon,
       name: 'Twitter',
+      disabledCondition: notShowCondition,
       action: () => {
         twitterOnOpen();
       },
@@ -30,7 +40,8 @@ export const Handles: FC = () => {
     {
       icon: ForumIcon,
       name: 'Forum',
-      disabledCondition: !daoData?.forumTopicURL,
+      disabledCondition: notShowCondition,
+      hideCondition: !daoData?.forumTopicURL,
       action: () => {
         forumOnOpen();
       },
@@ -40,7 +51,7 @@ export const Handles: FC = () => {
       icon: DiscordIcon,
       name: 'Discord',
       action: () => null,
-      disabledCondition: !profileSelected?.discordHandle,
+      hideCondition: !profileSelected?.discordHandle,
       handle: profileSelected?.discordHandle
         ? `@${profileSelected?.discordHandle}`
         : undefined,
@@ -73,7 +84,7 @@ export const Handles: FC = () => {
         <Flex flexDir="column" gap="4" py="6">
           {socialMedias.map(
             (media, index) =>
-              !media.disabledCondition && (
+              !media.hideCondition && (
                 <Flex
                   flexDir="row"
                   key={+index}
@@ -97,38 +108,59 @@ export const Handles: FC = () => {
                       {media.handle}
                     </Text>
                   ) : (
-                    <Button
-                      onClick={media.action}
-                      _disabled={{
-                        opacity: 0.4,
-                        cursor: 'not-allowed',
-                      }}
-                      bgColor={theme.modal.buttons.navBg}
-                      color={theme.modal.buttons.navText}
-                      borderColor={theme.modal.buttons.navText}
-                      borderWidth="1px"
-                      borderStyle="solid"
-                      _hover={{
-                        opacity: 0.7,
-                      }}
-                      _active={{}}
-                      _focus={{}}
-                      _focusVisible={{}}
-                      _focusWithin={{}}
-                      isDisabled={media.disabledCondition}
-                      disabled={media.disabledCondition}
+                    <Tooltip
+                      label={
+                        media.disabledCondition
+                          ? 'We are validating your address. Please check back in 24 hrs to verify your handle.'
+                          : ''
+                      }
+                      placement="top"
+                      hasArrow
                     >
-                      Link your {media.name} handle
-                    </Button>
+                      <Button
+                        onClick={() => {
+                          if (media.disabledCondition) return;
+                          media.action();
+                        }}
+                        bgColor={theme.modal.buttons.navBg}
+                        color={theme.modal.buttons.navText}
+                        borderColor={theme.modal.buttons.navText}
+                        borderWidth="1px"
+                        borderStyle="solid"
+                        _hover={{
+                          opacity: 0.7,
+                        }}
+                        _disabled={{
+                          opacity: 0.4,
+                          cursor: 'not-allowed',
+                        }}
+                        _active={{}}
+                        _focus={{}}
+                        _focusVisible={{}}
+                        _focusWithin={{}}
+                        isDisabled={media.disabledCondition}
+                        disabled={media.disabledCondition}
+                      >
+                        Link your {media.name} handle
+                      </Button>
+                    </Tooltip>
                   )}
                 </Flex>
               )
           )}
         </Flex>
       </Flex>
-      <TwitterModal open={twitterIsOpen} handleModal={twitterOnToggle} />
+      <TwitterModal
+        open={twitterIsOpen}
+        handleModal={twitterOnToggle}
+        onClose={twitterOnClose}
+      />
       {daoData?.forumTopicURL && (
-        <DiscourseModal open={forumIsOpen} handleModal={forumOnToggle} />
+        <DiscourseModal
+          open={forumIsOpen}
+          handleModal={forumOnToggle}
+          onClose={forumOnClose}
+        />
       )}
     </>
   );
