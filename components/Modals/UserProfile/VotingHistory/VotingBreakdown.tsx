@@ -1,4 +1,4 @@
-import { Flex, Spinner, Text } from '@chakra-ui/react';
+import { Flex, Spinner, Text, useBreakpointValue } from '@chakra-ui/react';
 import { useDAO, useDelegates, useVotes } from 'contexts';
 import { FC, useEffect, useState } from 'react';
 import { Doughnut } from 'react-chartjs-2';
@@ -41,6 +41,15 @@ const ChartComponent: FC<IDoughnutComponentProps> = ({
   doughnutLabelsLine,
 }) => {
   const { theme } = useDAO();
+  const doughnutWidth = useBreakpointValue(
+    { base: '250px', lg: '350px' },
+    { ssr: false }
+  );
+  const doughnutHeight = useBreakpointValue(
+    { base: '300px', lg: '250px' },
+    { ssr: false }
+  );
+
   if (isLoading) {
     return (
       <Flex
@@ -129,13 +138,18 @@ const ChartComponent: FC<IDoughnutComponentProps> = ({
   }
 
   return (
-    <Flex w="full" px="4" py="2" height="300px" width="400px" zIndex="3">
+    <Flex
+      p="2"
+      height={{ base: 'full', lg: '250px' }}
+      width={{ base: 'full', lg: '350px' }}
+      zIndex="3"
+    >
       <Doughnut
         options={options}
         data={data}
         plugins={[doughnutLabelsLine]}
-        height="300px"
-        width="400px"
+        height={doughnutHeight}
+        width={doughnutWidth}
       />
     </Flex>
   );
@@ -176,7 +190,7 @@ export const VotingBreakdown: FC = () => {
     cutout: '70%',
     animation: { duration: isLoading || hasError ? 0 : 1000 },
     layout: {
-      padding: 70,
+      padding: 50,
     },
     plugins: {
       legend: {
@@ -328,8 +342,10 @@ export const VotingBreakdown: FC = () => {
         bg={`${theme.modal.votingHistory.proposal.bg}40`}
         borderBottomRadius="md"
         px="1.5"
-        py="1"
+        py="1.5"
         position="relative"
+        alignItems="center"
+        justifyContent="center"
       >
         <ChartComponent
           data={data}
@@ -350,6 +366,7 @@ export const VotingBreakdown: FC = () => {
           fontWeight="600"
           fontSize="sm"
           textAlign="center"
+          p="2"
         >
           <Text>Total Votes</Text>
           {voteBreakdown && (

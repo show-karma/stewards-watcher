@@ -327,38 +327,6 @@ export const DelegatedVotesChanges: FC = () => {
         >
           Delegated Votes
         </Text>
-        {/* <Menu placement="bottom-end">
-          <MenuButton
-            as={Button}
-            rightIcon={<HiChevronDown />}
-            bg="transparent"
-            py="0"
-            gap="0"
-            _hover={{}}
-            _active={{}}
-          >
-            {selectedInterval.label}
-          </MenuButton>
-          <MenuList
-            bg={`${theme.modal.votingHistory.proposal.bg}`}
-            width="max-content"
-            maxW="max-content"
-            minW="max-content"
-          >
-            {menuOptions.map((option, index) => (
-              <MenuItem
-                key={+index}
-                onClick={() => handleIntervalChange(option)}
-                bg={`${theme.modal.votingHistory.proposal.bg}40`}
-                _hover={{
-                  opacity: 0.8,
-                }}
-              >
-                {option.label}
-              </MenuItem>
-            ))}
-          </MenuList>
-        </Menu> */}
       </Flex>
       <Flex
         bg={`${theme.modal.votingHistory.proposal.bg}40`}
