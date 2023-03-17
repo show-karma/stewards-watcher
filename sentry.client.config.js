@@ -4,8 +4,8 @@
 
 import * as Sentry from '@sentry/nextjs';
 
-Sentry.init({
-  enabled: process.env.NODE_ENV === 'production',
-  dsn: 'https://34603b8b014c4e08a952edd25f6acf37@o1174022.ingest.sentry.io/4504255615205376',
-  tracesSampleRate: 1.0,
-});
+// Sentry.init({
+//   enabled: process.env.NODE_ENV === 'production',
+//   dsn: 'https://34603b8b014c4e08a952edd25f6acf37@o1174022.ingest.sentry.io/4504255615205376',
+//   tracesSampleRate: 1.0,
+// });
