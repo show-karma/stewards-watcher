@@ -45,7 +45,8 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isDaoAdmin, setIsDaoAdmin] = useState(false);
   const [authToken, setToken] = useState<string | null>(null);
-  const { openConnectModal, connectOnClose } = useWallet();
+  const { openConnectModal, delegateLoginOnClose } = useWallet();
+  const { searchProfileModal } = useDelegates();
 
   const { disconnect: disconnectWallet } = useDisconnect();
 
@@ -150,7 +151,8 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
       if (!signedMessage) return false;
       const token = await getAccountToken(address, signedMessage);
       if (token) saveToken(token);
-      connectOnClose();
+      delegateLoginOnClose();
+      searchProfileModal(address, 'statement');
       return true;
     } catch (error) {
       console.log(error);

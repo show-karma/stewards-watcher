@@ -63,18 +63,17 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
     ? delegatesInterests
     : presetInterests;
 
-  const [statement, setStatement] = useState<ICustomFields>({
+  const defaultCustomFields: ICustomFields = {
     label: '',
     value: [],
-  } as ICustomFields);
-  const [languages, setLanguages] = useState<ICustomFields>({
-    label: '',
-    value: [],
-  } as ICustomFields);
-  const [interests, setInterests] = useState<ICustomFields>({
-    label: '',
-    value: [],
-  } as ICustomFields);
+  };
+
+  const [statement, setStatement] =
+    useState<ICustomFields>(defaultCustomFields);
+  const [languages, setLanguages] =
+    useState<ICustomFields>(defaultCustomFields);
+  const [interests, setInterests] =
+    useState<ICustomFields>(defaultCustomFields);
 
   const [isLoadingStatement, setIsLoadingStatement] = useState(false);
 
@@ -90,14 +89,9 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
     realName: profileSelected?.realName || '',
   };
 
-  const initialCustomFields: ICustomFields = {
-    label: '',
-    value: [],
-  };
-
-  const [newInterests, setNewInterests] = useState(initialCustomFields);
+  const [newInterests, setNewInterests] = useState(defaultCustomFields);
   const [newStatement, setNewStatement] =
-    useState<ICustomFields>(initialCustomFields);
+    useState<ICustomFields>(defaultCustomFields);
 
   const queryStatement = async () => {
     if (!profile.address) return;
@@ -140,10 +134,10 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
       setNewInterests(fetchedInterests);
       setNewStatement(fetchedStatement);
     } catch (error) {
-      setInterests(initialCustomFields);
-      setStatement(initialCustomFields);
-      setNewInterests(initialCustomFields);
-      setNewStatement(initialCustomFields);
+      setInterests(defaultCustomFields);
+      setStatement(defaultCustomFields);
+      setNewInterests(defaultCustomFields);
+      setNewStatement(defaultCustomFields);
 
       console.log(error);
     } finally {
