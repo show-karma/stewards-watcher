@@ -17,8 +17,15 @@ interface IWalletProps {
   connectOnClose: () => void;
   connectIsOpen: boolean;
   connectOnToggle: () => void;
+  connectOnOpen: () => void;
   delegateIsOpen: boolean;
   delegateOnToggle: () => void;
+  delegateOnClose: () => void;
+  delegateOnOpen: () => void;
+  delegateLoginIsOpen: boolean;
+  delegateLoginOnToggle: () => void;
+  delegateLoginOnClose: () => void;
+  delegateLoginOnOpen: () => void;
   address: string | undefined;
 }
 
@@ -37,12 +44,23 @@ export const WalletProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const {
     onClose: connectOnClose,
+    onOpen: connectOnOpen,
     isOpen: connectIsOpen,
     onToggle: connectOnToggle,
   } = useDisclosure();
 
-  const { onToggle: delegateOnToggle, isOpen: delegateIsOpen } =
-    useDisclosure();
+  const {
+    onToggle: delegateOnToggle,
+    isOpen: delegateIsOpen,
+    onClose: delegateOnClose,
+    onOpen: delegateOnOpen,
+  } = useDisclosure();
+  const {
+    onToggle: delegateLoginOnToggle,
+    isOpen: delegateLoginIsOpen,
+    onClose: delegateLoginOnClose,
+    onOpen: delegateLoginOnOpen,
+  } = useDisclosure();
 
   const providerValue = useMemo(
     () => ({
@@ -53,9 +71,16 @@ export const WalletProvider: React.FC<ProviderProps> = ({ children }) => {
       connectOnClose,
       connectIsOpen,
       connectOnToggle,
+      address,
+      connectOnOpen,
       delegateIsOpen,
       delegateOnToggle,
-      address,
+      delegateOnClose,
+      delegateOnOpen,
+      delegateLoginIsOpen,
+      delegateLoginOnToggle,
+      delegateLoginOnClose,
+      delegateLoginOnOpen,
     }),
     [
       isConnected,
@@ -68,6 +93,13 @@ export const WalletProvider: React.FC<ProviderProps> = ({ children }) => {
       delegateIsOpen,
       delegateOnToggle,
       address,
+      connectOnOpen,
+      delegateOnClose,
+      delegateOnOpen,
+      delegateLoginIsOpen,
+      delegateLoginOnToggle,
+      delegateLoginOnClose,
+      delegateLoginOnOpen,
     ]
   );
 

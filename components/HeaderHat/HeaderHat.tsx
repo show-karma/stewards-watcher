@@ -14,7 +14,7 @@ import {
   UserProfile,
 } from 'components';
 import { DelegateVotesModal } from 'components/Modals/DelegateToAnyone';
-import { useDAO, useDelegates } from 'contexts';
+import { useDAO, useDelegates, useWallet } from 'contexts';
 import { useAuth } from 'contexts/auth';
 import { FC } from 'react';
 import { IoMenu } from 'react-icons/io5';
@@ -51,11 +51,8 @@ export const HeaderHat = () => {
   const { isOpen, onToggle } = useDisclosure();
   const { isOpenProfile, onCloseProfile, profileSelected, selectedTab } =
     useDelegates();
-  const {
-    onClose: onCloseDelegateLogin,
-    isOpen: isOpenDelegateLogin,
-    onOpen: onOpenDelegateLogin,
-  } = useDisclosure();
+  const { delegateLoginIsOpen, delegateLoginOnClose, delegateLoginOnOpen } =
+    useWallet();
 
   const {
     isOpen: isBurgerMenuOpen,
@@ -152,7 +149,7 @@ export const HeaderHat = () => {
                     Delegate to Anyone
                   </StyledButton>
                 )}
-                <DelegateLoginButton onOpen={onOpenDelegateLogin} />
+                <DelegateLoginButton onOpen={delegateLoginOnOpen} />
                 <ThemeButton />
               </Flex>
             </Flex>
@@ -172,15 +169,15 @@ export const HeaderHat = () => {
                 Delegate to Anyone
               </StyledButton>
             )}
-            <DelegateLoginButton onOpen={onOpenDelegateLogin} />
+            <DelegateLoginButton onOpen={delegateLoginOnOpen} />
             <ThemeButton />
           </Flex>
         </HeaderBurgerMenu>
         <DelegateVotesModal isOpen={isOpen} onClose={onToggle} />
       </Flex>
       <DelegateLoginModal
-        isOpen={isOpenDelegateLogin}
-        onClose={onCloseDelegateLogin}
+        isOpen={delegateLoginIsOpen}
+        onClose={delegateLoginOnClose}
       />
       {profileSelected && (
         <UserProfile
