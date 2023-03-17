@@ -93,18 +93,23 @@ export const MediaIcon: FC<IMediaIcon> = ({
     if (onOpens[media]) onOpens[media]();
   };
 
+  const disabledCondition =
+    chosenMedia?.disabledCondition ||
+    daoInfo.config.SHOULD_NOT_SHOW === 'handles';
+
+  const labelTooltip = () => {
+    if (disabledCondition) return '';
+    if (isConnected) return `Update your ${media} handle now`;
+    return `Login to update your ${media} handle`;
+  };
+
   return (
-    <Tooltip
-      label={
-        isConnected
-          ? `Update your ${media} handle now`
-          : `Login to update your ${media} handle`
-      }
-      placement="top"
-      hasArrow
-    >
+    <Tooltip label={labelTooltip()} placement="top" hasArrow>
       <Button
-        onClick={() => handleClick()}
+        onClick={() => {
+          if (disabledCondition) return;
+          handleClick();
+        }}
         px="0"
         py="0"
         display="flex"
@@ -122,7 +127,7 @@ export const MediaIcon: FC<IMediaIcon> = ({
         w="max-content"
         minW="max-content"
         cursor={isSamePerson ? 'pointer' : 'default'}
-        isDisabled={chosenMedia?.disabledCondition}
+        isDisabled={disabledCondition}
       >
         {children}
       </Button>

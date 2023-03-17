@@ -5,7 +5,6 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  useColorModeValue,
 } from '@chakra-ui/react';
 import { DownChevron } from 'components/Icons';
 import { useAuth, useDAO, useDelegates } from 'contexts';
