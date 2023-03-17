@@ -1,4 +1,13 @@
-import { Flex, Spinner, Text, useBreakpointValue } from '@chakra-ui/react';
+import {
+  Box,
+  Divider,
+  Flex,
+  Grid,
+  Spinner,
+  Text,
+  useBreakpointValue,
+  useMediaQuery,
+} from '@chakra-ui/react';
 import { useDAO, useDelegates, useVotes } from 'contexts';
 import { FC, useEffect, useState } from 'react';
 import { Doughnut } from 'react-chartjs-2';
@@ -10,9 +19,7 @@ import {
   ChartData,
   ArcElement,
 } from 'chart.js';
-import axios from 'axios';
 import { formatNumber, formatNumberPercentage } from 'utils';
-import dayjs from 'dayjs';
 import { InfoIcon } from 'components/Icons';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -22,15 +29,6 @@ interface IDoughnutComponentProps {
   options: ChartOptions<'doughnut'>;
   data: ChartData<'doughnut'>;
   hasError: boolean;
-  doughnutLabelsLine: {
-    id: string;
-    beforeDraw(chart: {
-      data: any;
-      getDatasetMeta?: any;
-      ctx?: any;
-      chartArea?: any;
-    }): void;
-  };
 }
 
 const ChartComponent: FC<IDoughnutComponentProps> = ({
@@ -38,17 +36,8 @@ const ChartComponent: FC<IDoughnutComponentProps> = ({
   isLoading,
   options,
   hasError,
-  doughnutLabelsLine,
 }) => {
   const { theme } = useDAO();
-  const doughnutWidth = useBreakpointValue(
-    { base: '250px', lg: '350px' },
-    { ssr: false }
-  );
-  const doughnutHeight = useBreakpointValue(
-    { base: '300px', lg: '250px' },
-    { ssr: false }
-  );
 
   if (isLoading) {
     return (
@@ -137,22 +126,7 @@ const ChartComponent: FC<IDoughnutComponentProps> = ({
     );
   }
 
-  return (
-    <Flex
-      p="2"
-      height={{ base: 'full', lg: '250px' }}
-      width={{ base: 'full', lg: '350px' }}
-      zIndex="3"
-    >
-      <Doughnut
-        options={options}
-        data={data}
-        plugins={[doughnutLabelsLine]}
-        height={doughnutHeight}
-        width={doughnutWidth}
-      />
-    </Flex>
-  );
+  return <Doughnut options={options} data={data} />;
 };
 
 const defaultLabels = ['Yes', 'No', 'Abstain', 'Multiple', 'Other'];
@@ -171,7 +145,7 @@ export const VotingBreakdown: FC = () => {
     isVoteBreakdownError: hasError,
   } = useVotes();
 
-  const data: ChartData<'doughnut'> = {
+  const dataConfig: ChartData<'doughnut'> = {
     labels,
     datasets: [
       {
@@ -184,99 +158,49 @@ export const VotingBreakdown: FC = () => {
     ],
   };
 
+  // ssr-friendly media query with fallback
+  const [isMobile] = useMediaQuery('(max-width: 990px)', {
+    ssr: false,
+    fallback: false, // return false on the server, and re-evaluate on the client side
+  });
+
   const options: ChartOptions<'doughnut'> = {
     maintainAspectRatio: false,
+    responsive: true,
     interaction: {},
     cutout: '70%',
     animation: { duration: isLoading || hasError ? 0 : 1000 },
     layout: {
-      padding: 50,
+      padding: isMobile ? 10 : 0,
     },
+
     plugins: {
+      tooltip: {
+        mode: 'nearest',
+        callbacks: {
+          label(tooltipItem) {
+            console.log(tooltipItem);
+            const percentage = (
+              (tooltipItem.parsed /
+                tooltipItem.dataset.data.reduce(
+                  (actual, previous) => actual + previous
+                )) *
+              100
+            ).toFixed(2);
+            return `${formatNumberPercentage(percentage)}, ${
+              tooltipItem.parsed
+            } votes`;
+          },
+        },
+      },
       legend: {
-        position: 'bottom' as const,
+        position: 'left' as const,
         display: false,
       },
       title: {
         display: false,
         text: '',
       },
-    },
-  };
-
-  const doughnutLabelsLine = {
-    id: 'doughnutLabelsLine',
-    beforeDraw(chart: {
-      data: any;
-      getDatasetMeta?: any;
-      ctx?: any;
-      chartArea?: any;
-    }) {
-      const {
-        ctx,
-        data: currentData,
-        chartArea: { width, height, top, left },
-      } = chart;
-      ctx.save();
-      const halfWidth = width / 2 + left;
-      const halfHeight = height / 2 + top;
-      chart.data.datasets.forEach(
-        // eslint-disable-next-line id-length
-        (currentDataset: { data: any[]; backgroundColor: any }, i: any) => {
-          const totalPercentage = currentDataset.data.reduce(
-            (itemA: any, itemB: any) => itemA + itemB,
-            0
-          );
-          chart
-            .getDatasetMeta(i)
-            .data.forEach((datapoint: any, index: number) => {
-              const { x: xAxis, y: yAxis } = chart
-                .getDatasetMeta(0)
-                .data[index].tooltipPosition();
-              ctx.font = 'bold 12px sans-serif';
-              ctx.fillStyle = currentData.datasets[0].borderColor[index];
-              ctx.textAlign = 'center';
-              ctx.textBaseline = 'middle';
-
-              if (datapoint >= 3) {
-                ctx.fillText(
-                  `${currentDataset.data[index]}%(${currentDataset.data[index]})`,
-                  xAxis,
-                  yAxis
-                );
-              } else {
-                const xLine = xAxis >= halfWidth ? xAxis + 15 : xAxis - 15;
-                const yLine = yAxis >= halfHeight ? yAxis + 25 : yAxis - 25;
-                const extraLine = xAxis >= halfWidth ? 15 : -15;
-
-                ctx.strokeStyle = currentData.datasets[0].borderColor[index];
-                ctx.beginPath();
-                ctx.moveTo(xAxis, yAxis);
-                ctx.lineTo(xLine, yLine);
-                ctx.lineTo(xLine + extraLine, yLine);
-                ctx.stroke();
-                const percentageCalculated =
-                  (currentDataset.data[index] / totalPercentage) * 100;
-                const percent = `${formatNumberPercentage(
-                  percentageCalculated
-                )}`;
-                const label = chart.data.labels[index];
-                const votes = `(${formatNumber(
-                  currentDataset.data[index]
-                )} votes)`;
-                const textAlignPos = xAxis >= halfWidth ? 'left' : 'right';
-                ctx.font = '600 14px Poppins';
-                ctx.color = currentDataset.backgroundColor;
-                ctx.textBaseline = 'bottom';
-                ctx.fillStyle = currentDataset.backgroundColor;
-                ctx.textAlign = textAlignPos;
-                ctx.fillText(percent, xLine + extraLine, yLine + 10);
-                ctx.fillText(label, xLine + extraLine, yLine - 3);
-                ctx.fillText(votes, xLine + extraLine, yLine + 24);
-              }
-            });
-        }
-      );
     },
   };
 
@@ -341,37 +265,73 @@ export const VotingBreakdown: FC = () => {
       <Flex
         bg={`${theme.modal.votingHistory.proposal.bg}40`}
         borderBottomRadius="md"
-        px="1.5"
-        py="1.5"
-        position="relative"
-        alignItems="center"
-        justifyContent="center"
+        flexDir="column"
       >
-        <ChartComponent
-          data={data}
-          options={options}
-          isLoading={isLoading}
-          hasError={hasError}
-          doughnutLabelsLine={doughnutLabelsLine}
-        />
         <Flex
-          position="absolute"
+          position="relative"
           alignItems="center"
           justifyContent="center"
-          zIndex="0"
-          width="full"
-          height="full"
-          flexDir="column"
-          fontFamily="Poppins"
-          fontWeight="600"
-          fontSize="sm"
-          textAlign="center"
-          p="2"
+          w="full"
+          px="1.5"
+          py="1.5"
         >
-          <Text>Total Votes</Text>
-          {voteBreakdown && (
-            <Text>{formatNumber(voteBreakdown.totalVotes)}</Text>
-          )}
+          <ChartComponent
+            data={dataConfig}
+            options={options}
+            isLoading={isLoading}
+            hasError={hasError}
+          />
+          <Flex
+            position="absolute"
+            alignItems="center"
+            justifyContent="center"
+            zIndex="0"
+            width="full"
+            height="full"
+            flexDir="column"
+            fontFamily="Poppins"
+            textAlign="center"
+            mt={{ base: '12px' }}
+          >
+            <Text fontWeight="600" fontSize="sm">
+              Total Votes
+            </Text>
+            {voteBreakdown && (
+              <Text fontWeight="700" fontSize="18px">
+                {formatNumber(voteBreakdown.totalVotes)}
+              </Text>
+            )}
+          </Flex>
+        </Flex>
+        <Divider h="1px" />
+        <Flex
+          flexDir="row"
+          flexWrap="wrap"
+          align="center"
+          justify="flex-start"
+          pt="4"
+          pb="3"
+        >
+          {dataset.map((data, index) => (
+            <Flex
+              width="50%"
+              align="center"
+              justify="center"
+              gap="2"
+              justifyContent="flex-start"
+              pl="10"
+              key={+index}
+            >
+              <Box
+                borderRadius="full"
+                boxSize="9px"
+                backgroundColor={backgroundColor[index]}
+              />
+              <Text fontSize="sm" w="max-content">
+                {labels[index]}, {data} {data > 1 ? 'votes' : 'vote'}
+              </Text>
+            </Flex>
+          ))}
         </Flex>
       </Flex>
     </Flex>

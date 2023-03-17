@@ -158,7 +158,7 @@ const ChartComponent: FC<IChartComponentProps> = ({
     );
   }
 
-  return <Line options={options} data={data} width="400px" height="200px" />;
+  return <Line options={options} data={data} />;
 };
 
 export const DelegatedVotesChanges: FC = () => {
@@ -305,11 +305,6 @@ export const DelegatedVotesChanges: FC = () => {
     fetchData();
   }, []);
 
-  // const handleIntervalChange = (option: { label: string; value: number }) => {
-  //   setInterval(option);
-  //   setupDataset(data, option.value);
-  // };
-
   return (
     <Flex borderRadius="md" flexDir="column" w="full">
       <Flex
@@ -333,6 +328,7 @@ export const DelegatedVotesChanges: FC = () => {
         borderBottomRadius="md"
         px="1.5"
         py="1"
+        w="full"
       >
         <ChartComponent
           data={data}

@@ -106,7 +106,7 @@ export const VotingHistory: FC<IVotingHistory> = ({ profile }) => {
         flexDir="column"
         align="center"
         gap="5"
-        maxW={{ base: 'full', sm: '400px' }}
+        maxW={{ base: '330px', sm: '400px' }}
         w="full"
       >
         <VotingBreakdown />
