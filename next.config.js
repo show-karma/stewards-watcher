@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-const { withSentryConfig } = require('@sentry/nextjs');
+// const { withSentryConfig } = require('@sentry/nextjs');
 
 const nextConfig = {
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
@@ -21,12 +21,13 @@ const nextConfig = {
   },
 };
 
-const withSentryNextConfig = withSentryConfig?.(nextConfig, {
-  silent: true,
-  dryRun: process.env.VERCEL_ENV !== 'production',
-  hideSourceMaps: true,
-});
+// const withSentryNextConfig = withSentryConfig?.(nextConfig, {
+//   silent: true,
+//   dryRun: process.env.VERCEL_ENV !== 'production',
+//   hideSourceMaps: true,
+// });
 
-const config = withSentryNextConfig ?? nextConfig;
+// const config = withSentryNextConfig ?? nextConfig;
+const config = nextConfig;
 
 module.exports = config;
