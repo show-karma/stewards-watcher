@@ -71,6 +71,7 @@ export const VotesProvider: React.FC<ProviderProps> = ({
     enabled: !!profile.address,
     cacheTime: 0,
     retry: 2,
+    refetchOnWindowFocus: false,
   });
 
   const limit = 6;

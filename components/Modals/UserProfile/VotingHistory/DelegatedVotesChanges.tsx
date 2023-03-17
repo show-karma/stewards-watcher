@@ -200,6 +200,7 @@ export const DelegatedVotesChanges: FC = () => {
 
   const options: ChartOptions<'line'> = {
     responsive: true,
+    animation: { duration: isLoading || hasError ? 0 : 1000 },
     elements: {
       point: {
         radius: 5,

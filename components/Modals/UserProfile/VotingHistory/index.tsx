@@ -9,6 +9,7 @@ import { DelegatedVotesChanges } from './DelegatedVotesChanges';
 import { Navigation } from './Navigation';
 import { ProposalVote } from './ProposalVote';
 import { SearchProposalInput } from './SearchProposalInput';
+import { VotingBreakdown } from './VotingBreakdown';
 
 interface IVotingHistory {
   profile: IProfile;
@@ -108,6 +109,7 @@ export const VotingHistory: FC<IVotingHistory> = ({ profile }) => {
         maxW={{ base: 'full', sm: '400px' }}
         w="full"
       >
+        <VotingBreakdown />
         <DelegatedVotesChanges />
         {/* <ContrarionIndexComponent /> */}
       </Flex>
