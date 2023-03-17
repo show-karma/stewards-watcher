@@ -63,18 +63,17 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
     ? delegatesInterests
     : presetInterests;
 
-  const [statement, setStatement] = useState<ICustomFields>({
+  const defaultCustomFields: ICustomFields = {
     label: '',
     value: [],
-  } as ICustomFields);
-  const [languages, setLanguages] = useState<ICustomFields>({
-    label: '',
-    value: [],
-  } as ICustomFields);
-  const [interests, setInterests] = useState<ICustomFields>({
-    label: '',
-    value: [],
-  } as ICustomFields);
+  };
+
+  const [statement, setStatement] =
+    useState<ICustomFields>(defaultCustomFields);
+  const [languages, setLanguages] =
+    useState<ICustomFields>(defaultCustomFields);
+  const [interests, setInterests] =
+    useState<ICustomFields>(defaultCustomFields);
 
   const [isLoadingStatement, setIsLoadingStatement] = useState(false);
 
@@ -140,6 +139,10 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
       setNewInterests(fetchedInterests);
       setNewStatement(fetchedStatement);
     } catch (error) {
+      setInterests(defaultCustomFields);
+      setStatement(defaultCustomFields);
+      setNewInterests(defaultCustomFields);
+      setNewStatement(defaultCustomFields);
       console.log(error);
     } finally {
       setIsLoadingStatement(false);
