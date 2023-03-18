@@ -110,7 +110,7 @@ const MediaIcon: FC<IMediaIcon> = ({
     daoInfo.config.SHOULD_NOT_SHOW === 'handles' ||
     (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
       !!profileSelected?.userCreatedAt &&
-      lessThanDays(profileSelected?.userCreatedAt, 1));
+      lessThanDays(profileSelected?.userCreatedAt, 14));
 
   const medias: IMediasObj = {
     twitter: {
@@ -175,7 +175,7 @@ const MediaIcon: FC<IMediaIcon> = ({
 
   const labelTooltip = () => {
     if (disabledCondition)
-      return 'We are validating your address. Please check back in 24 hrs to verify your handle.';
+      return 'We are validating your address. Please check back in few days to verify your handle.';
     if (isConnected) return `Update your ${media} handle now`;
     return `Login to update your ${media} handle`;
   };
