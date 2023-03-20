@@ -71,7 +71,15 @@ const ChartComponent: FC<IDoughnutComponentProps> = ({
             position="absolute"
           />
         </Flex>
-        <Doughnut options={options} data={data} />
+        <Doughnut
+          options={{
+            ...options,
+            responsive: false,
+          }}
+          data={data}
+          width={150}
+          height={150}
+        />
       </Flex>
     );
   }
@@ -127,7 +135,7 @@ const ChartComponent: FC<IDoughnutComponentProps> = ({
   }
 
   return (
-    <Flex zIndex="1">
+    <Flex zIndex="1" py="6">
       <Doughnut options={options} data={data} />
     </Flex>
   );
@@ -277,7 +285,6 @@ export const VotingBreakdown: FC = () => {
           justifyContent="center"
           w="full"
           px="1.5"
-          py="6"
         >
           <ChartComponent
             data={dataConfig}
@@ -307,36 +314,41 @@ export const VotingBreakdown: FC = () => {
             )}
           </Flex>
         </Flex>
-        <Divider h="1px" />
-        <Flex
-          flexDir="row"
-          flexWrap="wrap"
-          align="center"
-          justify="flex-start"
-          pt="4"
-          pb="3"
-        >
-          {dataset.map((data, index) => (
+        {!hasError && !isLoading && (
+          <>
+            <Divider h="1px" />
             <Flex
-              width="50%"
+              flexDir="row"
+              flexWrap="wrap"
               align="center"
-              justify="center"
-              gap="2"
-              justifyContent="flex-start"
-              pl="10"
-              key={+index}
+              justify="flex-start"
+              pt="4"
+              pb="3"
             >
-              <Box
-                borderRadius="full"
-                boxSize="9px"
-                backgroundColor={backgroundColor[index]}
-              />
-              <Text fontSize="sm" w="max-content">
-                {labels[index]}, {data} {data > 1 ? 'votes' : 'vote'}
-              </Text>
+              {dataset.map((data, index) => (
+                <Flex
+                  width="50%"
+                  align="center"
+                  justify="center"
+                  gap="2"
+                  justifyContent="flex-start"
+                  pl="10"
+                  key={+index}
+                >
+                  <Box
+                    borderRadius="full"
+                    boxSize="9px"
+                    backgroundColor={backgroundColor[index]}
+                  />
+                  <Text fontSize="sm" w="max-content">
+                    <Text as="b">{labels[index]}</Text>, {data}{' '}
+                    {data > 1 ? 'votes' : 'vote'}
+                  </Text>
+                </Flex>
+              ))}
             </Flex>
-          ))}
-        </Flex>
+          </>
+        )}
       </Flex>
     </Flex>
   );
