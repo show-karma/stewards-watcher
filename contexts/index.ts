@@ -2,7 +2,7 @@ export * from './auth';
 export * from './ColorHandler';
 export * from './dao';
 export * from './delegates';
-export * from './editStatement';
+export * from './editProfile';
 export * from './governanceVotes';
 export * from './handles';
 export * from './scoreBreakdown';

@@ -1,5 +1,5 @@
 import { Flex, Text } from '@chakra-ui/react';
-import { useDAO, useEditStatement } from 'contexts';
+import { useDAO, useEditProfile } from 'contexts';
 import { FC, ReactNode } from 'react';
 import { ICustomFields } from 'types';
 import { EditableSectionItem } from './EditableSectionItem';
@@ -20,7 +20,7 @@ interface ISidebar {
 
 export const Sidebar: FC<ISidebar> = ({ interests, isEditMode }) => {
   const { isEditing, defaultInterests, editInterests, newInterests } =
-    useEditStatement();
+    useEditProfile();
   const interestsValueArray = Array.isArray(interests.value)
     ? (interests.value as string[])
     : interests.value.split(',');

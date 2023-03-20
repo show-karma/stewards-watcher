@@ -6,7 +6,7 @@ import {
   ModalOverlay,
 } from '@chakra-ui/react';
 import {
-  EditStatementProvider,
+  EditProfileProvider,
   useDAO,
   useWallet,
   VotesProvider,
@@ -112,7 +112,7 @@ export const UserProfile: FC<IUserProfileProps> = props => {
   };
 
   return (
-    <EditStatementProvider>
+    <EditProfileProvider>
       <Modal isOpen={isOpen} onClose={onCloseModal} trapFocus={false}>
         <ModalOverlay
           background="linear-gradient(359.86deg, rgba(20, 21, 24, 0.85) 41.37%, rgba(33, 35, 40, 0) 101.24%)"
@@ -143,6 +143,6 @@ export const UserProfile: FC<IUserProfileProps> = props => {
           </ModalBody>
         </ModalContent>
       </Modal>
-    </EditStatementProvider>
+    </EditProfileProvider>
   );
 };

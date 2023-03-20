@@ -10,7 +10,7 @@ import { useDelegates } from './delegates';
 import { useDAO } from './dao';
 import { useAuth } from './auth';
 
-interface IEditStatementProps {
+interface IEditProfileProps {
   isEditing: boolean;
   setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
   value: string;
@@ -27,9 +27,13 @@ interface IEditStatementProps {
   editInterests: (selectedInterest: string) => void;
   defaultInterests: string[];
   editStatementText: (text: string) => void;
+  editName: (text: string) => void;
+  editProfilePicture: (url: string) => void;
+  newName: string;
+  newProfilePicture: string;
 }
 
-export const EditStatementContext = createContext({} as IEditStatementProps);
+export const EditProfileContext = createContext({} as IEditProfileProps);
 
 interface ProviderProps {
   children: React.ReactNode;
@@ -44,16 +48,20 @@ const presetInterests = [
   'Legal',
 ];
 
-export const EditStatementProvider: React.FC<ProviderProps> = ({
-  children,
-}) => {
+export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
   const isMounted = useIsMounted();
   const { isConnected } = useAccount();
   const [isEditing, setIsEditing] = useState(false);
   const [isEditSaving, setEditSaving] = useState(false);
   const [value, setValue] = useState('');
+  const [newName, setNewName] = useState('');
+  const [newProfilePicture, setNewProfilePicture] = useState('');
   const { toast } = useToasty();
-  const { profileSelected, interests: delegatesInterests } = useDelegates();
+  const {
+    profileSelected,
+    interests: delegatesInterests,
+    refreshProfileModal,
+  } = useDelegates();
   const { daoInfo } = useDAO();
   const { address } = useAccount();
   const { authToken, isAuthenticated, isDaoAdmin } = useAuth();
@@ -180,6 +188,10 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
 
   useMemo(() => {
     queryStatement();
+    if (profileSelected) {
+      setNewName(profileSelected.realName || profileSelected.ensName || '');
+      setNewProfilePicture(profileSelected.profilePicture || '');
+    }
   }, [profileSelected]);
 
   const hasDelegatePitch = async (): Promise<ICustomFields[] | undefined> => {
@@ -237,6 +249,16 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
         );
       }
       await queryStatement();
+
+      if (!profileSelected) return;
+      await authorizedAPI.put(
+        `${KARMA_API.base_url}/user/${profileSelected.address}`,
+        {
+          name: newName ?? undefined,
+          profilePicture: newProfilePicture ?? undefined,
+        }
+      );
+      refreshProfileModal('statement');
       toast({
         description: 'Your profile has been saved',
         status: 'success',
@@ -264,7 +286,7 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
     ) {
       setIsEditing(true);
     }
-  }, [address, profileSelected]);
+  }, [address]);
 
   const editStatementText = (text: string) => {
     if (newStatement.value) {
@@ -278,6 +300,14 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
       displayAs: 'headline',
       value: text || [],
     });
+  };
+
+  const editName = (text: string) => {
+    setNewName(text);
+  };
+
+  const editProfilePicture = (url: string) => {
+    setNewProfilePicture(url);
   };
 
   const providerValue = useMemo(
@@ -298,6 +328,10 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
       newStatement,
       newInterests,
       editStatementText,
+      newName,
+      editName,
+      newProfilePicture,
+      editProfilePicture,
     }),
     [
       isEditing,
@@ -315,14 +349,18 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
       newStatement,
       newInterests,
       editStatementText,
+      newName,
+      editName,
+      newProfilePicture,
+      editProfilePicture,
     ]
   );
 
   return isMounted ? (
-    <EditStatementContext.Provider value={providerValue}>
+    <EditProfileContext.Provider value={providerValue}>
       {children}
-    </EditStatementContext.Provider>
+    </EditProfileContext.Provider>
   ) : null;
 };
 
-export const useEditStatement = () => useContext(EditStatementContext);
+export const useEditProfile = () => useContext(EditProfileContext);

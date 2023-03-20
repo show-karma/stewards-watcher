@@ -1,6 +1,6 @@
 import { Flex, Skeleton, SkeletonText, Text } from '@chakra-ui/react';
 import { FC, useMemo } from 'react';
-import { useDAO, useDelegates, useEditStatement } from 'contexts';
+import { useDAO, useDelegates, useEditProfile } from 'contexts';
 import { useAccount } from 'wagmi';
 import { ICustomFields } from 'types';
 import dynamic from 'next/dynamic';
@@ -84,7 +84,7 @@ const StatementCases: FC<IStatementCases> = ({
 export const Statement: FC = () => {
   const { theme } = useDAO();
   const { isEditing, statement, interests, isLoadingStatement } =
-    useEditStatement();
+    useEditProfile();
 
   return (
     <Flex flexDir="column" gap="1">
