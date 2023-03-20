@@ -128,17 +128,17 @@ const PopoverImage: FC<{ src?: string }> = ({ src }) => {
 };
 
 export const PictureEditable: FC<{ src: string }> = () => {
-  const { theme } = useDAO();
   const { profileSelected } = useDelegates();
   const { isEditing, editName, newName } = useEditProfile();
-  const [url, setUrl] = useState<string>('');
+  const { theme, daoInfo } = useDAO();
+  const { config } = daoInfo;
 
-  useEffect(() => {
-    if (profileSelected) setUrl(profileSelected?.profilePicture || '');
-  }, [profileSelected]);
+  const picture =
+    profileSelected?.profilePicture ||
+    `${config.IMAGE_PREFIX_URL}${profileSelected?.address}`;
 
   return isEditing ? (
-    <PopoverImage src={profileSelected?.profilePicture} />
+    <PopoverImage src={picture} />
   ) : (
     <Flex
       w={{ base: '5.5rem', lg: '8.125rem' }}
@@ -156,7 +156,7 @@ export const PictureEditable: FC<{ src: string }> = () => {
         borderStyle="solid"
         borderColor={theme.modal.header.border}
         objectFit="cover"
-        src={url}
+        src={picture}
       />
     </Flex>
   );
