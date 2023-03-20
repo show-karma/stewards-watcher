@@ -249,7 +249,19 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
         );
       }
       await queryStatement();
+    } catch (error: any) {
+      console.error(error.response.data);
+    }
 
+    try {
+      const authorizedAPI = axios.create({
+        timeout: 30000,
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: authToken ? `Bearer ${authToken}` : '',
+        },
+      });
       if (!profileSelected) return;
       await authorizedAPI.put(
         `${KARMA_API.base_url}/user/${profileSelected.address}`,
@@ -264,8 +276,6 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
         status: 'success',
       });
     } catch (error: any) {
-      console.error(error.response.data);
-
       toast({
         description: 'We could not save your profile. Please try again.',
         status: 'error',
