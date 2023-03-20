@@ -126,7 +126,11 @@ const ChartComponent: FC<IDoughnutComponentProps> = ({
     );
   }
 
-  return <Doughnut options={options} data={data} />;
+  return (
+    <Flex zIndex="1">
+      <Doughnut options={options} data={data} />
+    </Flex>
+  );
 };
 
 const defaultLabels = ['Yes', 'No', 'Abstain', 'Multiple', 'Other'];
@@ -176,10 +180,10 @@ export const VotingBreakdown: FC = () => {
 
     plugins: {
       tooltip: {
+        enabled: true,
         mode: 'nearest',
         callbacks: {
           label(tooltipItem) {
-            console.log(tooltipItem);
             const percentage = (
               (tooltipItem.parsed /
                 tooltipItem.dataset.data.reduce(
@@ -273,7 +277,7 @@ export const VotingBreakdown: FC = () => {
           justifyContent="center"
           w="full"
           px="1.5"
-          py="1.5"
+          py="6"
         >
           <ChartComponent
             data={dataConfig}
