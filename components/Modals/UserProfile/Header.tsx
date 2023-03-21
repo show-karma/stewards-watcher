@@ -341,7 +341,7 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
     <Flex
       px={{ base: '1.25rem', lg: '2.5rem' }}
       w="full"
-      mt={{ base: '-1.25rem', lg: '-3.5rem' }}
+      mt={{ base: '-1.25rem', lg: '-2.5rem' }}
       flexDir="column"
       gap={{ base: '2rem', lg: '0' }}
     >
