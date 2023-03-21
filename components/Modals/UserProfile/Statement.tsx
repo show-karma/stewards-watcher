@@ -1,6 +1,6 @@
 import { Flex, Skeleton, SkeletonText, Text } from '@chakra-ui/react';
 import { FC, useMemo } from 'react';
-import { useDAO, useDelegates, useEditStatement } from 'contexts';
+import { useDAO, useDelegates, useEditProfile } from 'contexts';
 import { useAccount } from 'wagmi';
 import { ICustomFields } from 'types';
 import dynamic from 'next/dynamic';
@@ -23,7 +23,12 @@ const TextSection: FC<ITextSection> = ({ statement }) => {
     return html;
   };
   return (
-    <Flex maxW="30rem" gap="4" flexDir="column" flex="1">
+    <Flex
+      maxW={{ base: 'full', lg: '30rem' }}
+      gap="4"
+      flexDir="column"
+      flex="1"
+    >
       {statement && statement.value && (
         <Flex
           color={theme.modal.statement.text}
@@ -35,7 +40,7 @@ const TextSection: FC<ITextSection> = ({ statement }) => {
           flexDir="column"
           wordBreak="break-word"
           listStyleType="none"
-          maxW="30rem"
+          maxW={{ base: 'full', lg: '30rem' }}
           sx={{
             ol: {
               marginLeft: '32px',
@@ -43,6 +48,9 @@ const TextSection: FC<ITextSection> = ({ statement }) => {
             // eslint-disable-next-line id-length
             a: {
               color: 'blue.400',
+            },
+            li: {
+              marginLeft: '24px',
             },
             pre: {
               maxWidth: '30rem',
@@ -71,9 +79,6 @@ const StatementCases: FC<IStatementCases> = ({
   isLoading,
   statement,
 }) => {
-  const { profileSelected } = useDelegates();
-  const { address, isConnected } = useAccount();
-
   if (isLoading)
     return <SkeletonText w="full" mt="4" noOfLines={4} spacing="4" />;
   if (isEditing) return <EditStatement />;
@@ -84,7 +89,7 @@ const StatementCases: FC<IStatementCases> = ({
 export const Statement: FC = () => {
   const { theme } = useDAO();
   const { isEditing, statement, interests, isLoadingStatement } =
-    useEditStatement();
+    useEditProfile();
 
   return (
     <Flex flexDir="column" gap="1">
@@ -96,14 +101,14 @@ export const Statement: FC = () => {
           mb={{ base: '5', lg: '5' }}
         >
           <Text
-            fontSize="2xl"
+            fontSize={{ base: 'xl', lg: '2xl' }}
             fontWeight="medium"
             color={theme.modal.statement.sidebar.section}
           >
             Statement
           </Text>
           <Text
-            fontSize="lg"
+            fontSize={{ base: 'md', lg: 'lg' }}
             fontWeight="normal"
             color={theme.modal.statement.sidebar.item.border}
           >

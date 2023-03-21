@@ -1,5 +1,5 @@
 import { Flex, Text } from '@chakra-ui/react';
-import { useDAO, useEditStatement } from 'contexts';
+import { useDAO, useEditProfile } from 'contexts';
 import { FC } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -10,7 +10,7 @@ const modules = {
 
 export const EditStatement: FC = () => {
   const { theme } = useDAO();
-  const { newStatement, editStatementText } = useEditStatement();
+  const { newStatement, editStatementText } = useEditProfile();
   const newStatementValue = newStatement.value as string;
 
   const editorStyle = {
@@ -63,7 +63,15 @@ export const EditStatement: FC = () => {
   };
 
   return (
-    <Flex maxW="30rem" gap="4" flexDir="column" flex="1" sx={editorStyle}>
+    <Flex
+      maxW={{ base: '18rem', sm: 'full', lg: '30rem' }}
+      minW={{ base: 'full', sm: '18rem', lg: '30rem' }}
+      w="full"
+      gap="4"
+      flexDir="column"
+      flex="1"
+      sx={editorStyle}
+    >
       <ReactQuill
         theme="snow"
         value={newStatementValue}

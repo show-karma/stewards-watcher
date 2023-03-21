@@ -13,16 +13,14 @@ import {
 } from '@chakra-ui/react';
 import {
   ImgWithFallback,
-  DelegateButton,
   ForumIcon,
   TwitterIcon,
-  DiscordIcon,
   DelegateModal,
 } from 'components';
 import {
   useDAO,
   useDelegates,
-  useEditStatement,
+  useEditProfile,
   useHandles,
   useWallet,
 } from 'contexts';
@@ -37,6 +35,7 @@ import {
   truncateAddress,
 } from 'utils';
 import { useAccount } from 'wagmi';
+import { NameEditable, PictureEditable } from './EditProfile';
 
 interface INavButton extends ButtonProps {
   children: ReactNode;
@@ -286,9 +285,9 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
   const truncatedAddress = truncateAddress(fullAddress);
   const { isConnected, openConnectModal } = useWallet();
   const { theme, daoData, daoInfo } = useDAO();
+  const { config } = daoInfo;
   const { profileSelected } = useDelegates();
-  const { isEditing, setIsEditing, saveEdit, isEditSaving } =
-    useEditStatement();
+  const { isEditing, setIsEditing, saveEdit, isEditSaving } = useEditProfile();
   const { address } = useAccount();
   const { authenticate, isAuthenticated, isDaoAdmin } = useAuth();
   const { toast } = useToasty();
@@ -342,23 +341,19 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
     <Flex
       px={{ base: '1.25rem', lg: '2.5rem' }}
       w="full"
-      mt={{ base: '-1.25rem', lg: '-3.5rem' }}
+      mt={{ base: '-1.25rem', lg: '-2.5rem' }}
       flexDir="column"
       gap={{ base: '2rem', lg: '0' }}
     >
       <Flex w="full" gap={{ base: '1rem', lg: '1.375rem' }}>
-        <ImgWithFallback
-          w={{ base: '5.5rem', lg: '8.125rem' }}
-          h={{ base: '5.5rem', lg: '8.125rem' }}
-          borderRadius="full"
-          borderWidth="2px"
-          borderStyle="solid"
-          borderColor={theme.modal.header.border}
-          objectFit="cover"
-          src={profile.avatar}
-          fallback={profile.address}
+        <PictureEditable
+          src={
+            profileSelected?.profilePicture ||
+            `${config.IMAGE_PREFIX_URL}${profileSelected?.address}` ||
+            ''
+          }
         />
-        <Flex justifyContent="space-between" w="full" align="flex-end">
+        <Flex justifyContent="space-between" w="full" align="flex-end" gap="4">
           <Flex flexDirection="column" gap="0.5" w="full">
             <Flex
               flexDir="row"
@@ -366,17 +361,7 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
               align="center"
               width={{ base: '200px', sm: '300px', md: '600px', lg: '340px' }}
             >
-              <Text
-                fontFamily="body"
-                fontWeight="bold"
-                fontSize={{ base: 'md', lg: '2xl' }}
-                color={theme.modal.header.title}
-                whiteSpace="nowrap"
-                overflow="hidden"
-                textOverflow="ellipsis"
-              >
-                {realName || ensName || truncatedAddress}
-              </Text>
+              <NameEditable name={realName || ensName} />
               <Flex flexDir="row" gap="4" ml="4">
                 {daoInfo.config.SHOULD_NOT_SHOW !== 'handles' && (
                   <MediaIcon
@@ -417,7 +402,7 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
           </Flex>
           <Flex
             display={{ base: 'none', lg: 'flex' }}
-            w="max-content"
+            w={{ base: 'none', lg: 'max-content' }}
             align="center"
           >
             {!isEditing &&
@@ -474,12 +459,54 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
         w="full"
         align="center"
         justify="center"
+        flexDir={{ base: 'column', lg: 'row' }}
+        gap="4"
       >
-        <DelegateCases
-          openModal={toggleDelegateModal}
-          status={profileSelected?.status}
-          delegateAddress={profileSelected?.address}
-        />
+        {!isEditing &&
+          (profile.address.toLowerCase() === address?.toLowerCase() ||
+            isDaoAdmin) && (
+            <Button
+              fontWeight="normal"
+              bgColor="transparent"
+              color={theme.modal.header.title}
+              _hover={{}}
+              _active={{}}
+              _focus={{}}
+              _focusVisible={{}}
+              _focusWithin={{}}
+              onClick={() => handleAuth()}
+            >
+              Edit profile
+            </Button>
+          )}
+        {isEditing ? (
+          <Button
+            background={theme.branding}
+            px={['4', '6']}
+            py={['3', '6']}
+            h="10"
+            fontSize={['md']}
+            fontWeight="medium"
+            onClick={saveEdit}
+            _hover={{
+              backgroundColor: convertHexToRGBA(theme.branding, 0.8),
+            }}
+            _focus={{}}
+            _active={{}}
+            color={theme.buttonText}
+          >
+            <Flex gap="2" align="center">
+              {isEditSaving && <Spinner />}
+              Save profile
+            </Flex>
+          </Button>
+        ) : (
+          <DelegateCases
+            openModal={toggleDelegateModal}
+            status={profileSelected?.status}
+            delegateAddress={profileSelected?.address}
+          />
+        )}
       </Flex>
       {profileSelected && (
         <DelegateModal
