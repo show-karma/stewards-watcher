@@ -266,8 +266,8 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       await authorizedAPI.put(
         `${KARMA_API.base_url}/user/${profileSelected.address}`,
         {
-          name: newName ?? undefined,
-          profilePicture: newProfilePicture ?? undefined,
+          name: newName || undefined,
+          profilePicture: newProfilePicture || undefined,
         }
       );
       refreshProfileModal('statement');
