@@ -90,7 +90,6 @@ export const Statement: FC = () => {
   const { isEditing, statement, interests, isLoadingStatement } =
     useEditStatement();
 
-  console.log(statement);
   return (
     <Flex
       flexDir="column"
