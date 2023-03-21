@@ -24,7 +24,7 @@ const PopoverImage: FC<{ src?: string }> = ({ src }) => {
   const { theme } = useDAO();
   const { editProfilePicture, newProfilePicture } = useEditProfile();
 
-  const savePreview = (text: string) => {
+  const savePreview = (text: string | null) => {
     editProfilePicture(text);
   };
 
@@ -92,33 +92,31 @@ const PopoverImage: FC<{ src?: string }> = ({ src }) => {
                 _placeholder={{
                   color: `${theme.filters.title}90`,
                 }}
-                value={newProfilePicture}
+                value={newProfilePicture || ''}
                 onChange={event => savePreview(event.target.value)}
               />
-              {newProfilePicture && (
-                <IconButton
-                  aria-label="Cancel image preview button"
-                  icon={<Icon as={GiCancel} />}
-                  backgroundColor="gray.900"
-                  borderRadius="xl"
-                  onClick={() => savePreview('')}
-                  _hover={{
-                    opacity: 0.8,
-                  }}
-                  _active={{
-                    opacity: 0.8,
-                  }}
-                  _focus={{
-                    opacity: 0.8,
-                  }}
-                  _focusVisible={{
-                    opacity: 0.8,
-                  }}
-                  _focusWithin={{
-                    opacity: 0.8,
-                  }}
-                />
-              )}
+              <IconButton
+                aria-label="Cancel image preview button"
+                icon={<Icon as={GiCancel} />}
+                backgroundColor="gray.900"
+                borderRadius="xl"
+                onClick={() => savePreview(null)}
+                _hover={{
+                  opacity: 0.8,
+                }}
+                _active={{
+                  opacity: 0.8,
+                }}
+                _focus={{
+                  opacity: 0.8,
+                }}
+                _focusVisible={{
+                  opacity: 0.8,
+                }}
+                _focusWithin={{
+                  opacity: 0.8,
+                }}
+              />
             </Flex>
           </PopoverBody>
         </PopoverContent>
@@ -129,13 +127,16 @@ const PopoverImage: FC<{ src?: string }> = ({ src }) => {
 
 export const PictureEditable: FC<{ src: string }> = () => {
   const { profileSelected } = useDelegates();
-  const { isEditing, editName, newName } = useEditProfile();
+  const { isEditing } = useEditProfile();
+  const { newProfilePicture } = useEditProfile();
   const { theme, daoInfo } = useDAO();
   const { config } = daoInfo;
 
   const picture =
-    profileSelected?.profilePicture ||
-    `${config.IMAGE_PREFIX_URL}${profileSelected?.address}`;
+    newProfilePicture === null
+      ? `${config.IMAGE_PREFIX_URL}${profileSelected?.address}`
+      : profileSelected?.profilePicture ||
+        `${config.IMAGE_PREFIX_URL}${profileSelected?.address}`;
 
   return isEditing ? (
     <PopoverImage src={picture} />

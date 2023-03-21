@@ -28,9 +28,9 @@ interface IEditProfileProps {
   defaultInterests: string[];
   editStatementText: (text: string) => void;
   editName: (text: string) => void;
-  editProfilePicture: (url: string) => void;
-  newName: string;
-  newProfilePicture: string;
+  editProfilePicture: (url: string | null) => void;
+  newName: string | null;
+  newProfilePicture: string | null;
 }
 
 export const EditProfileContext = createContext({} as IEditProfileProps);
@@ -54,8 +54,10 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isEditSaving, setEditSaving] = useState(false);
   const [value, setValue] = useState('');
-  const [newName, setNewName] = useState('');
-  const [newProfilePicture, setNewProfilePicture] = useState('');
+  const [newName, setNewName] = useState<string | null>(null);
+  const [newProfilePicture, setNewProfilePicture] = useState<string | null>(
+    null
+  );
   const { toast } = useToasty();
   const {
     profileSelected,
@@ -190,7 +192,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     queryStatement();
     if (profileSelected) {
       setNewName(profileSelected.realName || profileSelected.ensName || '');
-      setNewProfilePicture(profileSelected.profilePicture || '');
+      setNewProfilePicture('');
     }
   }, [profileSelected]);
 
@@ -205,84 +207,124 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     }
   };
 
+  console.log('newName', newName);
+  console.log('newProfilePicture', newProfilePicture);
+
   const saveEdit = async () => {
     setIsEditing(true);
     setEditSaving(true);
     const fetchedDelegatePitch = await hasDelegatePitch();
-    try {
-      const authorizedAPI = axios.create({
-        timeout: 30000,
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: authToken ? `Bearer ${authToken}` : '',
-        },
-      });
-      if (fetchedDelegatePitch) {
-        await authorizedAPI.put(
-          `${KARMA_API.base_url}/forum-user/${daoInfo.config.DAO_KARMA_ID}/delegate-pitch/${profileSelected?.address}`,
-          {
-            customFields: [newInterests, newStatement],
-            forum: '0',
-            threadId: 0,
-            postId: 0,
-            discourseHandle: '0',
-          }
-        );
-      } else {
-        await authorizedAPI.post(
-          `${KARMA_API.base_url}/forum-user/${daoInfo.config.DAO_KARMA_ID}/delegate-pitch/${profileSelected?.address}`,
-          {
-            customFields: [
-              {
-                label: 'Interests',
-                value: newInterests.value,
-                displayAs: 'interests',
-              },
-              newStatement,
-            ],
-            forum: '0',
-            threadId: 0,
-            postId: 0,
-            discourseHandle: '0',
-          }
-        );
+    let hasError = false;
+    let actualError = '';
+    if (
+      newInterests.value !== interests.value ||
+      newStatement.value !== statement.value
+    ) {
+      try {
+        const authorizedAPI = axios.create({
+          timeout: 30000,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: authToken ? `Bearer ${authToken}` : '',
+          },
+        });
+        if (fetchedDelegatePitch) {
+          await authorizedAPI.put(
+            `${KARMA_API.base_url}/forum-user/${daoInfo.config.DAO_KARMA_ID}/delegate-pitch/${profileSelected?.address}`,
+            {
+              customFields: [newInterests, newStatement],
+              forum: '0',
+              threadId: 0,
+              postId: 0,
+              discourseHandle: '0',
+            }
+          );
+        } else {
+          await authorizedAPI.post(
+            `${KARMA_API.base_url}/forum-user/${daoInfo.config.DAO_KARMA_ID}/delegate-pitch/${profileSelected?.address}`,
+            {
+              customFields: [
+                {
+                  label: 'Interests',
+                  value: newInterests.value,
+                  displayAs: 'interests',
+                },
+                newStatement,
+              ],
+              forum: '0',
+              threadId: 0,
+              postId: 0,
+              discourseHandle: '0',
+            }
+          );
+        }
+        await queryStatement();
+      } catch (error: any) {
+        hasError = true;
+        actualError = error.response.data.error.message;
       }
-      await queryStatement();
-    } catch (error: any) {
-      console.error(error.response.data);
     }
 
-    try {
-      const authorizedAPI = axios.create({
-        timeout: 30000,
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: authToken ? `Bearer ${authToken}` : '',
-        },
+    if (
+      profileSelected?.address !== newName ||
+      profileSelected?.profilePicture !== newProfilePicture
+    ) {
+      try {
+        const authorizedAPI = axios.create({
+          timeout: 30000,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: authToken ? `Bearer ${authToken}` : '',
+          },
+        });
+        if (!profileSelected) return;
+
+        const handleField = (
+          constant: string | null,
+          originalConstant?: string
+        ) => {
+          if (constant === null) return null;
+          if (constant === originalConstant) return undefined;
+          if (constant) return constant;
+          return undefined;
+        };
+
+        await authorizedAPI.put(
+          `${KARMA_API.base_url}/user/${config.DAO_KARMA_ID}/${profileSelected.address}`,
+          {
+            name: handleField(
+              newName,
+              profileSelected.realName || profileSelected.ensName || ''
+            ),
+            profilePicture: handleField(
+              newProfilePicture,
+              profileSelected?.profilePicture
+            ),
+          }
+        );
+        refreshProfileModal('statement');
+      } catch (error: any) {
+        hasError = true;
+        actualError = error.response.data.error.message;
+      } finally {
+        setEditSaving(false);
+        setIsEditing(false);
+      }
+    }
+
+    if (hasError) {
+      toast({
+        title: 'We could not save your profile. Please try again.',
+        description: actualError,
+        status: 'error',
       });
-      if (!profileSelected) return;
-      await authorizedAPI.put(
-        `${KARMA_API.base_url}/user/${profileSelected.address}`,
-        {
-          name: newName || undefined,
-          profilePicture: newProfilePicture || undefined,
-        }
-      );
-      refreshProfileModal('statement');
+    } else {
       toast({
         description: 'Your profile has been saved',
         status: 'success',
       });
-    } catch (error: any) {
-      toast({
-        description: 'We could not save your profile. Please try again.',
-        status: 'error',
-      });
-    } finally {
-      setEditSaving(false);
-      setIsEditing(false);
     }
   };
 
@@ -313,10 +355,14 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
   };
 
   const editName = (text: string) => {
+    if (text === '') {
+      setNewName(null);
+      return;
+    }
     setNewName(text);
   };
 
-  const editProfilePicture = (url: string) => {
+  const editProfilePicture = (url: string | null) => {
     setNewProfilePicture(url);
   };
 

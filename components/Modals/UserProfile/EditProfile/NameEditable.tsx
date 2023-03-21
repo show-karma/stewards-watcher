@@ -30,7 +30,7 @@ export const NameEditable: FC<INameEditableProps> = ({ name }) => {
       _placeholder={{
         color: `${theme.modal.header.title}80`,
       }}
-      value={newName}
+      value={newName || ''}
       onChange={event => editName(event.target.value)}
       borderBottomWidth="1px"
       borderBottomStyle="solid"
