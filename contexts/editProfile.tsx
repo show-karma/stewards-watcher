@@ -207,9 +207,6 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     }
   };
 
-  console.log('newName', newName);
-  console.log('newProfilePicture', newProfilePicture);
-
   const saveEdit = async () => {
     setIsEditing(true);
     setEditSaving(true);
