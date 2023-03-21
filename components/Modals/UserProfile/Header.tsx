@@ -353,7 +353,7 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
             ''
           }
         />
-        <Flex justifyContent="space-between" w="full" align="flex-end">
+        <Flex justifyContent="space-between" w="full" align="flex-end" gap="4">
           <Flex flexDirection="column" gap="0.5" w="full">
             <Flex
               flexDir="row"
@@ -402,7 +402,7 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
           </Flex>
           <Flex
             display={{ base: 'none', lg: 'flex' }}
-            w="max-content"
+            w={{ base: 'none', lg: 'max-content' }}
             align="center"
           >
             {!isEditing &&
@@ -459,12 +459,54 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
         w="full"
         align="center"
         justify="center"
+        flexDir={{ base: 'column', lg: 'row' }}
+        gap="4"
       >
-        <DelegateCases
-          openModal={toggleDelegateModal}
-          status={profileSelected?.status}
-          delegateAddress={profileSelected?.address}
-        />
+        {!isEditing &&
+          (profile.address.toLowerCase() === address?.toLowerCase() ||
+            isDaoAdmin) && (
+            <Button
+              fontWeight="normal"
+              bgColor="transparent"
+              color={theme.modal.header.title}
+              _hover={{}}
+              _active={{}}
+              _focus={{}}
+              _focusVisible={{}}
+              _focusWithin={{}}
+              onClick={() => handleAuth()}
+            >
+              Edit profile
+            </Button>
+          )}
+        {isEditing ? (
+          <Button
+            background={theme.branding}
+            px={['4', '6']}
+            py={['3', '6']}
+            h="10"
+            fontSize={['md']}
+            fontWeight="medium"
+            onClick={saveEdit}
+            _hover={{
+              backgroundColor: convertHexToRGBA(theme.branding, 0.8),
+            }}
+            _focus={{}}
+            _active={{}}
+            color={theme.buttonText}
+          >
+            <Flex gap="2" align="center">
+              {isEditSaving && <Spinner />}
+              Save profile
+            </Flex>
+          </Button>
+        ) : (
+          <DelegateCases
+            openModal={toggleDelegateModal}
+            status={profileSelected?.status}
+            delegateAddress={profileSelected?.address}
+          />
+        )}
       </Flex>
       {profileSelected && (
         <DelegateModal

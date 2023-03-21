@@ -30,12 +30,12 @@ const PopoverImage: FC<{ src?: string }> = ({ src }) => {
 
   return (
     <Flex
-      w={{ base: '5.5rem', lg: '8.125rem' }}
-      h={{ base: '5.5rem', lg: '8.125rem' }}
-      minW={{ base: '5.5rem', lg: '8.125rem' }}
-      minH={{ base: '5.5rem', lg: '8.125rem' }}
-      maxW={{ base: '5.5rem', lg: '8.125rem' }}
-      maxH={{ base: '5.5rem', lg: '8.125rem' }}
+      w={{ base: '5rem', md: '5.5rem', lg: '8.125rem' }}
+      h={{ base: '5rem', md: '5.5rem', lg: '8.125rem' }}
+      minW={{ base: '5rem', md: '5.5rem', lg: '8.125rem' }}
+      minH={{ base: '5rem', md: '5.5rem', lg: '8.125rem' }}
+      maxW={{ base: '5rem', md: '5.5rem', lg: '8.125rem' }}
+      maxH={{ base: '5rem', md: '5.5rem', lg: '8.125rem' }}
       display="flex"
       position="relative"
       transition="all 0.2s ease-in-out"

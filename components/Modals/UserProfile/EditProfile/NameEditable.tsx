@@ -16,7 +16,7 @@ export const NameEditable: FC<INameEditableProps> = ({ name }) => {
       w="full"
       fontFamily="body"
       fontWeight="500"
-      fontSize={{ base: 'md', lg: '2xl' }}
+      fontSize={{ base: 'lg', lg: '2xl' }}
       color={`${theme.modal.header.title}CF`}
       whiteSpace="nowrap"
       overflow="hidden"
@@ -42,7 +42,7 @@ export const NameEditable: FC<INameEditableProps> = ({ name }) => {
     <Text
       fontFamily="body"
       fontWeight="bold"
-      fontSize={{ base: 'md', lg: '2xl' }}
+      fontSize={{ base: 'lg', lg: '2xl' }}
       color={theme.modal.header.title}
       whiteSpace="nowrap"
       overflow="hidden"

@@ -63,7 +63,15 @@ export const EditStatement: FC = () => {
   };
 
   return (
-    <Flex maxW="30rem" gap="4" flexDir="column" flex="1" sx={editorStyle}>
+    <Flex
+      maxW={{ base: '18rem', sm: 'full', lg: '30rem' }}
+      minW={{ base: 'full', sm: '18rem', lg: '30rem' }}
+      w="full"
+      gap="4"
+      flexDir="column"
+      flex="1"
+      sx={editorStyle}
+    >
       <ReactQuill
         theme="snow"
         value={newStatementValue}
