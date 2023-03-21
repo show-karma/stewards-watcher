@@ -192,7 +192,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     queryStatement();
     if (profileSelected) {
       setNewName(profileSelected.realName || profileSelected.ensName || '');
-      setNewProfilePicture('');
+      setNewProfilePicture(profileSelected.profilePicture || '');
     }
   }, [profileSelected]);
 
