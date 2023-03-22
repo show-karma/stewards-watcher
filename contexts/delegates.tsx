@@ -577,6 +577,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           workstreams: item.workstreams,
           gitcoinHealthScore: fetchedPeriod?.gitcoinHealthScore || 0,
           userCreatedAt: item.userCreatedAt,
+          status: item.status,
         });
       });
     } catch (error) {

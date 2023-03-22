@@ -22,7 +22,7 @@ export interface IDelegate {
   aboutMe?: string;
   realName?: string;
   profilePicture?: string;
-  status?: string;
+  status: string;
   userCreatedAt?: string;
   delegatePitch?: {
     threadId: number;
