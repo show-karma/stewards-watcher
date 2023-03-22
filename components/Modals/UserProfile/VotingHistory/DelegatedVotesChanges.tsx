@@ -21,7 +21,10 @@ import axios from 'axios';
 import { formatNumber } from 'utils';
 import dayjs from 'dayjs';
 import { InfoIcon } from 'components/Icons';
+import utc from 'dayjs/plugin/utc';
 import 'chartjs-adapter-moment';
+
+dayjs.extend(utc);
 
 ChartJS.register(
   CategoryScale,
@@ -227,7 +230,7 @@ export const DelegatedVotesChanges: FC = () => {
           color: theme.modal.votingHistory.proposal.divider,
         },
         time: {
-          parser: 'MMM YY',
+          parser: 'MM-DD-YY',
           unit: 'day',
           displayFormats: {
             day: 'MMM, YY',
@@ -265,13 +268,10 @@ export const DelegatedVotesChanges: FC = () => {
       setDataset([]);
       return;
     }
-    // const getTimestamp = new Date().getTime() / 1000;
-
-    // const getDays = fetchedData.filter(
-    //   item => item.timestamp >= getTimestamp - 2592000 * interval
-    // );
     const formatDays = fetchedData.map(item =>
-      dayjs(item.timestamp * 1000).format('MMM YY')
+      dayjs(item.timestamp * 1000)
+        .utc()
+        .format('MM-DD-YY')
     );
     setLabels(formatDays);
     const formatBalances = fetchedData.map(item => {
