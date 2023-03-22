@@ -268,17 +268,27 @@ export const DelegatedVotesChanges: FC = () => {
       setDataset([]);
       return;
     }
-    const formatDays = fetchedData.map(item =>
-      dayjs(item.timestamp * 1000)
-        .utc()
-        .format('MM-DD-YY')
+    const orderedData = fetchedData.sort(
+      (itemA, itemB) => itemA.timestamp - itemB.timestamp
     );
-    setLabels(formatDays);
-    const formatBalances = fetchedData.map(item => {
-      const formattedNumber = Math.floor(item.balance / 10 ** 18);
-      return formattedNumber;
+    const formattedDays: string[] = [];
+    orderedData.forEach(item => {
+      formattedDays.push(
+        dayjs(item.timestamp * 1000)
+          .utc()
+          .format('MM-DD-YY')
+      );
     });
-    setDataset(formatBalances);
+
+    setLabels(formattedDays);
+
+    const orderedBalances: number[] = [];
+    orderedData.forEach(item => {
+      const formattedNumber = Math.floor(item.balance / 10 ** 18);
+      orderedBalances.push(formattedNumber);
+    });
+
+    setDataset(orderedBalances);
   };
 
   const fetchData = async () => {
