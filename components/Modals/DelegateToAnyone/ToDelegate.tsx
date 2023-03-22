@@ -126,6 +126,7 @@ export const ToDelegate: FC<IToDelegateProps> = ({
               offChain: 0,
             },
             discordScore: 0,
+            status: 'active',
           });
         }}
       />
