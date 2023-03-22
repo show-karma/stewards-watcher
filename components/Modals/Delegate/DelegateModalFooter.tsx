@@ -1,5 +1,6 @@
 import { Box, FlexProps, Text, Icon } from '@chakra-ui/react';
 import { SubmitEmailInput } from 'components/Inputs/SubmitEmailInput';
+import { useDAO } from 'contexts';
 import { useToasty } from 'hooks';
 import { BsExclamationCircleFill } from 'react-icons/bs';
 import { saveLeadEmail } from 'utils/sendLeadEmail';
@@ -10,6 +11,11 @@ export const DelegateModalFooter: React.FC<{
   publicAddress?: string;
 }> = ({ flexProps, delegateAddress, publicAddress }) => {
   const { toast } = useToasty();
+  const {
+    daoInfo: {
+      config: { DAO_KARMA_ID },
+    },
+  } = useDAO();
 
   const submit = async (email: string) => {
     if (!publicAddress) return;
@@ -19,6 +25,7 @@ export const DelegateModalFooter: React.FC<{
       interest: {
         activator: delegateAddress ? 'delegator' : 'rss',
         target: delegateAddress || 'feed',
+        daoName: DAO_KARMA_ID,
       },
     });
 

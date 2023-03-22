@@ -6,6 +6,7 @@ interface IPostEmailLead {
   interest: {
     activator: 'delegator' | 'rss';
     target?: string;
+    daoName: string;
   };
 }
 
