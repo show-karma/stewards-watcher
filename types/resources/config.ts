@@ -27,6 +27,7 @@ export interface IDAOConfig {
   DAO_FORUM_TYPE?: IForumType;
   DAO_FORUM_URL?: string;
   DAO_GTAG?: string;
+  HEADER_MARGIN?: boolean;
   DAO_DEFAULT_SETTINGS?: {
     FAQ?: boolean;
     TIMEPERIOD?: IFilterPeriod;
