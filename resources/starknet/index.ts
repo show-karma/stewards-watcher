@@ -31,10 +31,7 @@ const config: IDAOConfig = {
     'onChainVotesPct',
     'healthScore',
     'discordScore',
-    'offChainVotesPct',
-    'forumScore',
     'karmaScore',
-    'delegatorCount',
   ],
 };
 
