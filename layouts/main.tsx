@@ -8,7 +8,7 @@ interface IMainLayout extends FlexProps {
 }
 
 export const MainLayout: React.FC<IMainLayout> = ({ children, ...rest }) => {
-  const { theme } = useDAO();
+  const { theme, daoInfo } = useDAO();
 
   useEffect(() => {
     hotjar.initialize(3358140, 6);
@@ -23,6 +23,8 @@ export const MainLayout: React.FC<IMainLayout> = ({ children, ...rest }) => {
       align="center"
       px={{ base: 0, lg: '8' }}
       zIndex="1"
+      mt={daoInfo.config.HEADER_MARGIN ? '6' : '0'}
+      borderTopRadius={daoInfo.config.HEADER_MARGIN ? 'xl' : 'none'}
       {...rest}
     >
       {children}

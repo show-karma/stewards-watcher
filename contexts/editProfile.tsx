@@ -3,14 +3,14 @@ import React, { useContext, createContext, useMemo, useState } from 'react';
 import { useIsMounted } from 'hooks/useIsMounted';
 import { useToasty } from 'hooks';
 import { ICustomFields, IProfile } from 'types';
-import { api, AxiosClient, KARMA_API } from 'helpers';
+import { api, KARMA_API } from 'helpers';
 import { useAccount } from 'wagmi';
 import axios from 'axios';
 import { useDelegates } from './delegates';
 import { useDAO } from './dao';
 import { useAuth } from './auth';
 
-interface IEditStatementProps {
+interface IEditProfileProps {
   isEditing: boolean;
   setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
   value: string;
@@ -27,9 +27,13 @@ interface IEditStatementProps {
   editInterests: (selectedInterest: string) => void;
   defaultInterests: string[];
   editStatementText: (text: string) => void;
+  editName: (text: string) => void;
+  editProfilePicture: (url: string | null) => void;
+  newName: string | null;
+  newProfilePicture: string | null;
 }
 
-export const EditStatementContext = createContext({} as IEditStatementProps);
+export const EditProfileContext = createContext({} as IEditProfileProps);
 
 interface ProviderProps {
   children: React.ReactNode;
@@ -44,16 +48,22 @@ const presetInterests = [
   'Legal',
 ];
 
-export const EditStatementProvider: React.FC<ProviderProps> = ({
-  children,
-}) => {
+export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
   const isMounted = useIsMounted();
   const { isConnected } = useAccount();
   const [isEditing, setIsEditing] = useState(false);
   const [isEditSaving, setEditSaving] = useState(false);
   const [value, setValue] = useState('');
+  const [newName, setNewName] = useState<string | null>(null);
+  const [newProfilePicture, setNewProfilePicture] = useState<string | null>(
+    null
+  );
   const { toast } = useToasty();
-  const { profileSelected, interests: delegatesInterests } = useDelegates();
+  const {
+    profileSelected,
+    interests: delegatesInterests,
+    refreshProfileModal,
+  } = useDelegates();
   const { daoInfo } = useDAO();
   const { address } = useAccount();
   const { authToken, isAuthenticated, isDaoAdmin } = useAuth();
@@ -175,7 +185,11 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
   };
 
   useMemo(() => {
-    if (profileSelected) queryStatement();
+    if (profileSelected) {
+      queryStatement();
+      setNewName(profileSelected.realName || profileSelected.ensName || '');
+      setNewProfilePicture(profileSelected.profilePicture || '');
+    }
   }, [profileSelected]);
 
   const hasDelegatePitch = async (): Promise<ICustomFields[] | undefined> => {
@@ -193,60 +207,117 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
     setIsEditing(true);
     setEditSaving(true);
     const fetchedDelegatePitch = await hasDelegatePitch();
-    try {
-      const authorizedAPI = axios.create({
-        timeout: 30000,
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: authToken ? `Bearer ${authToken}` : '',
-        },
-      });
-      if (fetchedDelegatePitch) {
-        await authorizedAPI.put(
-          `${KARMA_API.base_url}/forum-user/${daoInfo.config.DAO_KARMA_ID}/delegate-pitch/${profileSelected?.address}`,
-          {
-            customFields: [newInterests, newStatement],
-            forum: '0',
-            threadId: 0,
-            postId: 0,
-            discourseHandle: '0',
-          }
-        );
-      } else {
-        await authorizedAPI.post(
-          `${KARMA_API.base_url}/forum-user/${daoInfo.config.DAO_KARMA_ID}/delegate-pitch/${profileSelected?.address}`,
-          {
-            customFields: [
-              {
-                label: 'Interests',
-                value: newInterests.value,
-                displayAs: 'interests',
-              },
-              newStatement,
-            ],
-            forum: '0',
-            threadId: 0,
-            postId: 0,
-            discourseHandle: '0',
-          }
-        );
+    let hasError = false;
+    let actualError = '';
+    if (
+      newInterests.value !== interests.value ||
+      newStatement.value !== statement.value
+    ) {
+      try {
+        const authorizedAPI = axios.create({
+          timeout: 30000,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: authToken ? `Bearer ${authToken}` : '',
+          },
+        });
+        if (fetchedDelegatePitch) {
+          await authorizedAPI.put(
+            `${KARMA_API.base_url}/forum-user/${daoInfo.config.DAO_KARMA_ID}/delegate-pitch/${profileSelected?.address}`,
+            {
+              customFields: [newInterests, newStatement],
+              forum: '0',
+              threadId: 0,
+              postId: 0,
+              discourseHandle: '0',
+            }
+          );
+        } else {
+          await authorizedAPI.post(
+            `${KARMA_API.base_url}/forum-user/${daoInfo.config.DAO_KARMA_ID}/delegate-pitch/${profileSelected?.address}`,
+            {
+              customFields: [
+                {
+                  label: 'Interests',
+                  value: newInterests.value,
+                  displayAs: 'interests',
+                },
+                newStatement,
+              ],
+              forum: '0',
+              threadId: 0,
+              postId: 0,
+              discourseHandle: '0',
+            }
+          );
+        }
+        await queryStatement();
+      } catch (error: any) {
+        hasError = true;
+        actualError = error.response.data.error.message;
       }
-      await queryStatement();
+    }
+
+    if (
+      profileSelected?.address !== newName ||
+      profileSelected?.profilePicture !== newProfilePicture
+    ) {
+      try {
+        const authorizedAPI = axios.create({
+          timeout: 30000,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: authToken ? `Bearer ${authToken}` : '',
+          },
+        });
+        if (!profileSelected) return;
+
+        const handleField = (
+          constant: string | null,
+          originalConstant?: string
+        ) => {
+          if (constant === null) return null;
+          if (constant === originalConstant) return undefined;
+          if (constant) return constant;
+          return undefined;
+        };
+
+        await authorizedAPI.put(
+          `${KARMA_API.base_url}/user/${config.DAO_KARMA_ID}/${profileSelected.address}`,
+          {
+            name: handleField(
+              newName,
+              profileSelected.realName || profileSelected.ensName || ''
+            ),
+            profilePicture: handleField(
+              newProfilePicture,
+              profileSelected?.profilePicture
+            ),
+          }
+        );
+        refreshProfileModal('statement');
+      } catch (error: any) {
+        hasError = true;
+        actualError = error.response.data.error.message;
+      } finally {
+        setEditSaving(false);
+        setIsEditing(false);
+      }
+    }
+
+    if (hasError) {
+      toast({
+        title: 'We could not save your profile. Please try again.',
+        description: actualError,
+        status: 'error',
+      });
+    } else {
       toast({
         description: 'Your profile has been saved',
         status: 'success',
       });
-    } catch (error: any) {
-      console.error(error.response.data);
-
-      toast({
-        description: 'We could not save your profile. Please try again.',
-        status: 'error',
-      });
-    } finally {
-      setEditSaving(false);
-      setIsEditing(false);
     }
   };
 
@@ -260,7 +331,7 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
     ) {
       setIsEditing(true);
     }
-  }, [address, profileSelected]);
+  }, [address]);
 
   const editStatementText = (text: string) => {
     if (newStatement.value) {
@@ -274,6 +345,18 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
       displayAs: 'headline',
       value: text || [],
     });
+  };
+
+  const editName = (text: string) => {
+    if (text === '') {
+      setNewName(null);
+      return;
+    }
+    setNewName(text);
+  };
+
+  const editProfilePicture = (url: string | null) => {
+    setNewProfilePicture(url);
   };
 
   const providerValue = useMemo(
@@ -294,6 +377,10 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
       newStatement,
       newInterests,
       editStatementText,
+      newName,
+      editName,
+      newProfilePicture,
+      editProfilePicture,
     }),
     [
       isEditing,
@@ -311,14 +398,18 @@ export const EditStatementProvider: React.FC<ProviderProps> = ({
       newStatement,
       newInterests,
       editStatementText,
+      newName,
+      editName,
+      newProfilePicture,
+      editProfilePicture,
     ]
   );
 
   return isMounted ? (
-    <EditStatementContext.Provider value={providerValue}>
+    <EditProfileContext.Provider value={providerValue}>
       {children}
-    </EditStatementContext.Provider>
+    </EditProfileContext.Provider>
   ) : null;
 };
 
-export const useEditStatement = () => useContext(EditStatementContext);
+export const useEditProfile = () => useContext(EditProfileContext);

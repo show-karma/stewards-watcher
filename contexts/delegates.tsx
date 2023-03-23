@@ -72,6 +72,7 @@ interface IDelegateProps {
     paramToSetup: 'sortby' | 'order' | 'period' | 'statuses',
     paramValue: string
   ) => void;
+  refreshProfileModal: (tab?: IActiveTab) => Promise<void>;
 }
 
 export const DelegatesContext = createContext({} as IDelegateProps);
@@ -454,6 +455,57 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     }
   };
 
+  const refreshProfileModal = async (tab?: IActiveTab) => {
+    try {
+      const axiosClient = await api.get(`/dao/find-delegate`, {
+        params: {
+          dao: config.DAO_KARMA_ID,
+          user: profileSelected?.address,
+        },
+      });
+      const { data } = axiosClient.data;
+      const { delegate: fetchedDelegate } = data;
+
+      const fetchedPeriod = (fetchedDelegate as IDelegateFromAPI).stats.find(
+        fetchedStat => fetchedStat.period === period
+      );
+      const userFound: IDelegate = {
+        address: fetchedDelegate.publicAddress,
+        ensName: fetchedDelegate.ensName,
+        delegatorCount: fetchedDelegate.delegatorCount || 0,
+        forumActivity: fetchedPeriod?.forumActivityScore || 0,
+        discordScore: fetchedPeriod?.discordScore || 0,
+        delegateSince:
+          fetchedDelegate.joinDateAt || fetchedDelegate.firstTokenDelegatedAt,
+        voteParticipation: {
+          onChain: fetchedPeriod?.onChainVotesPct || 0,
+          offChain: fetchedPeriod?.offChainVotesPct || 0,
+        },
+        votingWeight: fetchedDelegate.voteWeight,
+        delegatedVotes:
+          fetchedDelegate.delegatedVotes ||
+          fetchedDelegate.snapshotDelegatedVotes,
+        gitcoinHealthScore: fetchedPeriod?.gitcoinHealthScore || 0,
+        twitterHandle: fetchedDelegate.twitterHandle,
+        discourseHandle: fetchedDelegate.discourseHandle,
+        discordHandle: fetchedDelegate.discordHandle,
+        updatedAt: fetchedPeriod?.updatedAt,
+        karmaScore: fetchedPeriod?.karmaScore || 0,
+        delegatePitch: fetchedDelegate.delegatePitch,
+        aboutMe: fetchedDelegate.aboutMe,
+        realName: fetchedDelegate.realName,
+        profilePicture: fetchedDelegate.profilePicture,
+        workstreams: fetchedDelegate.workstreams,
+        status: fetchedDelegate.status,
+        userCreatedAt: fetchedDelegate.userCreatedAt,
+      };
+
+      setProfileSelected(userFound);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const fetchNextDelegates = async () => {
     if (isSearchDirty) {
       findDelegate();
@@ -526,6 +578,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           workstreams: item.workstreams,
           gitcoinHealthScore: fetchedPeriod?.gitcoinHealthScore || 0,
           userCreatedAt: item.userCreatedAt,
+          status: item.status,
         });
       });
     } catch (error) {
@@ -789,6 +842,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       statusesOptions,
       setSelectedProfileData,
       setupFilteringUrl,
+      refreshProfileModal,
     }),
     [
       profileSelected,
@@ -815,6 +869,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       statusesOptions,
       setSelectedProfileData,
       setupFilteringUrl,
+      refreshProfileModal,
     ]
   );
 

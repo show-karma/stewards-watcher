@@ -63,63 +63,88 @@ export const DelegateLoginModal: FC<IDelegateLogin> = ({ isOpen, onClose }) => {
         maxH="max-content"
         borderRadius="20px"
         bgColor={theme.loginModal.background}
+        mt={{ base: '4', lg: '5%' }}
       >
         <ModalHeader
           display="flex"
           flexDir="row"
           w="full"
-          gap="4"
-          px="10"
-          py="8"
+          px={{ base: '4', lg: '10' }}
+          pt={{ base: '8', lg: '8' }}
+          pb={{ base: '0', lg: '8' }}
         >
-          <Img
-            w="auto"
-            maxW="36"
-            h="10"
-            objectFit="contain"
-            color="white"
-            fill="white"
-            src={theme.logo || config.DAO_LOGO}
-          />
-          <Flex gap="3" w="full" align="center">
-            <Text
-              fontWeight="normal"
-              fontSize="16px"
-              w="max-content"
-              color={theme.loginModal.text}
-            >
-              Powered By
-            </Text>
-            <Img src={variantImg} h="8" w="80px" objectFit="contain" />
+          <Flex
+            flexDir="row"
+            flexWrap="wrap"
+            w="full"
+            gap={{ base: '1', lg: '4' }}
+          >
+            <Img
+              w="auto"
+              maxW="36"
+              h="10"
+              objectFit="contain"
+              color="white"
+              fill="white"
+              src={theme.logo || config.DAO_LOGO}
+            />
+            <Flex gap="3" w="full" align="center">
+              <Text
+                fontWeight="normal"
+                fontSize={{ base: '13px', lg: '16px' }}
+                w="max-content"
+                color={theme.loginModal.text}
+              >
+                Powered By
+              </Text>
+              <Img
+                src={variantImg}
+                h={{ base: '6', lg: '8' }}
+                w={{ base: '80px', lg: '80px' }}
+                objectFit="contain"
+              />
+            </Flex>
           </Flex>
         </ModalHeader>
         <ModalCloseButton color="black" boxSize="8" />
-        <ModalBody px="6">
-          <Flex flexDir="column" mt="6" px="4">
+        <ModalBody px={{ base: '3', lg: '6' }}>
+          <Flex
+            flexDir="column"
+            mt={{ base: '0', lg: '6' }}
+            px={{ base: '1', lg: '4' }}
+          >
             <Text
               fontWeight="medium"
-              fontSize="28px"
-              pr="25"
+              fontSize={{ base: '2xl', lg: '28px' }}
+              pr={{ base: '0', lg: '25' }}
               color={theme.loginModal.text}
             >
               Welcome to the Delegate Dashboard
             </Text>
             <Text
               fontWeight="normal"
-              fontSize="18px"
+              fontSize={{ base: 'md', lg: '18px' }}
               color={theme.loginModal.text}
               mt="6px"
               mb="8"
             >
               If you are a contributor, login with your wallet to:
             </Text>
-            <Grid templateColumns="repeat(2, 1fr)" gap="4" mb="8">
+            <Grid
+              templateColumns="repeat(2, 1fr)"
+              gap="4"
+              mb={{ base: '4', lg: '8' }}
+            >
               {points.map(point => (
                 <Flex key={point.text} flex="1" gap="4">
-                  <Img src={point.icon} boxSize="6" color="#898A8D" />
+                  <Img
+                    src={point.icon}
+                    boxSize={{ base: '5', lg: '6' }}
+                    color="#898A8D"
+                  />
                   <Text
                     fontWeight="500"
-                    fontSize="17px"
+                    fontSize={{ base: 'sm', lg: '17px' }}
                     color={theme.loginModal.text}
                     maxW="284px"
                   >
@@ -132,10 +157,10 @@ export const DelegateLoginModal: FC<IDelegateLogin> = ({ isOpen, onClose }) => {
           <Flex
             bgColor={theme.loginModal.footer.bg}
             mb="-8px"
-            mx="-24px"
+            mx={{ base: '-12px', lg: '-24px' }}
             borderRadius="0 0 20px 20px"
-            px="10"
-            py="8"
+            py={{ base: '4', lg: '8' }}
+            px={{ base: '4', lg: '10' }}
             flexDir="column"
             gap="4"
           >

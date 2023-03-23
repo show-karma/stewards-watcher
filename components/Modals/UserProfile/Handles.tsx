@@ -23,7 +23,7 @@ export const Handles: FC = () => {
     daoInfo.config.SHOULD_NOT_SHOW === 'handles' ||
     (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
       !!profileSelected?.userCreatedAt &&
-      lessThanDays(profileSelected?.userCreatedAt, 1));
+      lessThanDays(profileSelected?.userCreatedAt, 14));
 
   const socialMedias = [
     {
@@ -115,7 +115,7 @@ export const Handles: FC = () => {
                     <Tooltip
                       label={
                         media.disabledCondition
-                          ? 'We are validating your address. Please check back in 24 hrs to verify your handle.'
+                          ? 'We are validating your address. Please check back in few days to verify your handle.'
                           : ''
                       }
                       placement="top"

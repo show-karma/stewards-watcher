@@ -1,7 +1,6 @@
 import { Flex, Skeleton, SkeletonText, Text } from '@chakra-ui/react';
-import { FC, useMemo } from 'react';
-import { useDAO, useDelegates, useEditStatement } from 'contexts';
-import { useAccount } from 'wagmi';
+import { FC } from 'react';
+import { useDAO, useEditProfile } from 'contexts';
 import { ICustomFields } from 'types';
 import dynamic from 'next/dynamic';
 import parse from 'html-react-parser';
@@ -24,7 +23,7 @@ const TextSection: FC<ITextSection> = ({ statement }) => {
   };
   return (
     <Flex
-      maxW="588px"
+      maxW={{ base: 'full', lg: '30rem' }}
       gap="4"
       flexDir="column"
       flex="1"
@@ -42,7 +41,7 @@ const TextSection: FC<ITextSection> = ({ statement }) => {
           flexDir="column"
           wordBreak="break-word"
           listStyleType="none"
-          maxW="30rem"
+          maxW={{ base: 'full', lg: '30rem' }}
           sx={{
             ol: {
               marginLeft: '32px',
@@ -50,6 +49,9 @@ const TextSection: FC<ITextSection> = ({ statement }) => {
             // eslint-disable-next-line id-length
             a: {
               color: 'blue.400',
+            },
+            li: {
+              marginLeft: '24px',
             },
             pre: {
               maxWidth: '30rem',
@@ -88,7 +90,7 @@ const StatementCases: FC<IStatementCases> = ({
 export const Statement: FC = () => {
   const { theme } = useDAO();
   const { isEditing, statement, interests, isLoadingStatement } =
-    useEditStatement();
+    useEditProfile();
 
   return (
     <Flex
@@ -104,14 +106,14 @@ export const Statement: FC = () => {
       {isEditing && (
         <Flex flexDir="column" gap="1.5" mb={{ base: '5', lg: '5' }}>
           <Text
-            fontSize="2xl"
+            fontSize={{ base: 'xl', lg: '2xl' }}
             fontWeight="medium"
             color={theme.modal.statement.sidebar.section}
           >
             Statement
           </Text>
           <Text
-            fontSize="lg"
+            fontSize={{ base: 'md', lg: 'lg' }}
             fontWeight="normal"
             color={theme.modal.statement.sidebar.item.border}
           >

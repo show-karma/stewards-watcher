@@ -14,7 +14,7 @@ import {
   ForumIcon,
   TwitterIcon,
 } from 'components';
-import { useDAO, useDelegates, useEditStatement, useWallet } from 'contexts';
+import { useDAO, useDelegates, useEditProfile, useWallet } from 'contexts';
 import { useAuth } from 'contexts/auth';
 import { useToasty } from 'hooks';
 import { FC, useMemo, useState } from 'react';
@@ -64,8 +64,7 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
   const { isConnected, openConnectModal } = useWallet();
   const { theme, daoData, daoInfo } = useDAO();
   const { profileSelected } = useDelegates();
-  const { isEditing, setIsEditing, saveEdit, isEditSaving } =
-    useEditStatement();
+  const { isEditing, setIsEditing, saveEdit, isEditSaving } = useEditProfile();
   const { address } = useAccount();
   const { authenticate, isAuthenticated, isDaoAdmin } = useAuth();
   const { toast } = useToasty();
