@@ -330,7 +330,8 @@ export const DelegatedVotesChanges: FC = () => {
           fontWeight="semibold"
           fontSize="md"
         >
-          Delegated Votes
+          Delegated Votes -
+          {` ${formatNumber(profileSelected?.delegatedVotes || 0)}`}
         </Text>
       </Flex>
       <Flex
