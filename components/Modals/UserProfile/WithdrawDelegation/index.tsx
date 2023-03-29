@@ -7,14 +7,22 @@ export const WithdrawDelegation: FC = () => {
   const { theme } = useDAO();
   const { profileSelected } = useDelegates();
   return (
-    <Flex flexDir="column" minH={{ base: '500px' }}>
+    <Flex
+      flexDir="column"
+      minH={{ base: '400px' }}
+      boxShadow={`0px 0px 18px 5px ${theme.modal.votingHistory.headline}0D`}
+      px="4"
+      mb="10"
+      borderRightRadius="lg"
+      borderBottomRadius="lg"
+      py="4"
+    >
       {profileSelected?.status === 'withdrawn' ? (
         <>
           <Text
             fontSize="2xl"
             fontWeight="semibold"
             color={theme.modal.header.title}
-            mt="6"
           >
             You have withdrawn your nomination
           </Text>

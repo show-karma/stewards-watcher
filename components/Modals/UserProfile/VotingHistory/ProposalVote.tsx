@@ -6,7 +6,13 @@ import {
   SkeletonCircle,
   Text,
 } from '@chakra-ui/react';
-import { CheckIcon, EmptyCircleIcon, XMarkIcon } from 'components/Icons';
+import {
+  AbstainIcon,
+  AgainstIcon,
+  DidNotVoteIcon,
+  EmptyCircleIcon,
+  ForIcon,
+} from 'components/Icons';
 import { useDAO } from 'contexts';
 import { useVoteReason } from 'hooks';
 import { FC } from 'react';
@@ -16,87 +22,41 @@ import { ExpandableReason } from './ExpandableReason';
 import { ExpandableTitle } from './ExpandableTitle';
 
 const iconStyle = {
-  width: '1.75rem',
-  height: '1.75rem',
+  width: '1rem',
+  height: '1rem',
 };
 
 const CheckDecision = (choice: string) => {
   const { theme } = useDAO();
   if (/not vote/gi.test(choice)) {
-    return (
-      <Icon
-        as={EmptyCircleIcon}
-        color={theme.modal.votingHistory.proposal.icons.notVoted}
-        {...iconStyle}
-      />
-    );
+    return <Icon as={DidNotVoteIcon} color="#FFF7AE" {...iconStyle} />;
   }
   // eslint-disable-next-line react/destructuring-assignment
   const choiceLowerCase = choice.toLocaleLowerCase();
   if (choiceLowerCase.substring(0, 2) === 'no' || /agai+nst/gi.test(choice)) {
-    return (
-      <Icon
-        as={XMarkIcon}
-        color={theme.modal.votingHistory.proposal.icons.against}
-        {...iconStyle}
-      />
-    );
+    return <Icon as={AgainstIcon} color="#CA4444" {...iconStyle} />;
   }
   if (/abstain/gi.test(choice))
-    return (
-      <Icon
-        as={EmptyCircleIcon}
-        color={theme.modal.votingHistory.proposal.icons.abstain}
-        {...iconStyle}
-      />
-    );
+    return <Icon as={AbstainIcon} color="#DFDFDF" {...iconStyle} />;
 
-  return (
-    <Icon
-      as={CheckIcon}
-      color={theme.modal.votingHistory.proposal.icons.for}
-      {...iconStyle}
-    />
-  );
+  return <Icon as={ForIcon} color="#02E2AC" {...iconStyle} />;
 };
 
 const VoteIcon: FC<{ vote: IChainRow }> = ({ vote }) => {
   const { theme } = useDAO();
   if (typeof vote === 'undefined')
-    return (
-      <Icon
-        as={EmptyCircleIcon}
-        color={theme.modal.votingHistory.proposal.icons.notVoted}
-        {...iconStyle}
-      />
-    );
+    return <Icon as={DidNotVoteIcon} color="#FFF7AE" {...iconStyle} />;
   if (vote.voteMethod !== 'On-chain' && typeof vote.choice === 'string')
     return CheckDecision(vote.choice);
   if (vote.solution)
-    return (
-      <Icon
-        as={CheckIcon}
-        color={theme.modal.votingHistory.proposal.icons.for}
-        {...iconStyle}
-      />
-    );
+    return <Icon as={ForIcon} color="#02E2AC" {...iconStyle} />;
   switch (vote.choice) {
     case 0:
-      return (
-        <Icon
-          as={XMarkIcon}
-          color={theme.modal.votingHistory.proposal.icons.against}
-          {...iconStyle}
-        />
-      );
+      return <Icon as={AgainstIcon} color="#CA4444" {...iconStyle} />;
     case 1:
-      return (
-        <Icon
-          as={CheckIcon}
-          color={theme.modal.votingHistory.proposal.icons.for}
-          {...iconStyle}
-        />
-      );
+      return <Icon as={ForIcon} color="#02E2AC" {...iconStyle} />;
+    case 'DID NOT VOTE':
+      return <Icon as={DidNotVoteIcon} color="#FFF7AE" {...iconStyle} />;
     default:
       return (
         <Icon
@@ -112,12 +72,16 @@ interface IProposalVote {
   vote: IChainRow;
   isLoading?: boolean;
   profile: IProfile;
+  isLast?: boolean;
+  index: number;
 }
 
 export const ProposalVote: FC<IProposalVote> = ({
   vote,
   isLoading,
   profile,
+  isLast,
+  index,
 }) => {
   const { theme } = useDAO();
   const { getVoteReason } = useVoteReason({ address: profile.address });
@@ -138,9 +102,17 @@ export const ProposalVote: FC<IProposalVote> = ({
 
   const voteReason = vote.voteId && getVoteReason(vote.voteId);
 
+  const isPair = (index + 1) % 2 === 0;
+
   return (
-    <Flex flexDir="column" w="full">
-      <Flex flexDir="row" w="full">
+    <Flex
+      flexDir="column"
+      w="full"
+      bg={isPair ? `${theme.modal.background}40` : `${theme.modal.background}`}
+      pt="5"
+      pb={isLast ? '4' : '0'}
+    >
+      <Flex flexDir="row" w="full" align="center" px="4" gap="2">
         <Flex flexDir="column" w="full">
           {isLoaded ? (
             <ExpandableTitle text={vote.proposal} />
@@ -182,10 +154,12 @@ export const ProposalVote: FC<IProposalVote> = ({
         </Flex>
         <Flex
           h="max-content"
-          w="max-content"
+          maxW={{ base: 'fit-content', sm: '25%' }}
+          w={{ base: 'fit-content', sm: 'full' }}
           align="center"
           justify="center"
           gap="2"
+          flexDir="column"
         >
           {isLoaded && vote ? (
             <VoteIcon vote={vote} />
@@ -194,11 +168,14 @@ export const ProposalVote: FC<IProposalVote> = ({
           )}
           {isLoaded ? (
             <Text
-              w="max-content"
+              w="fit-content"
               h="max-content"
               fontWeight="bold"
-              fontSize="md"
+              fontSize="sm"
               color={theme.modal.votingHistory.proposal.result}
+              maxH="70px"
+              overflow="hidden"
+              textAlign="center"
             >
               {showChoice()}
             </Text>
@@ -207,11 +184,14 @@ export const ProposalVote: FC<IProposalVote> = ({
           )}
         </Flex>
       </Flex>
-      <Divider
-        bgColor={theme.modal.votingHistory.proposal.divider}
-        my="3"
-        h="1px"
-      />
+      {!isLast && (
+        <Divider
+          bgColor={`${theme.modal.votingHistory.reason.divider}0D`}
+          mt="4"
+          h="1px"
+        />
+      )}
+
       {voteReason && (
         <Flex flexDir="column" mt="1" mb="4">
           <ExpandableReason text={voteReason} />

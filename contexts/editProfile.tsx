@@ -3,7 +3,7 @@ import React, { useContext, createContext, useMemo, useState } from 'react';
 import { useIsMounted } from 'hooks/useIsMounted';
 import { useToasty } from 'hooks';
 import { ICustomFields, IProfile } from 'types';
-import { api, AxiosClient, KARMA_API } from 'helpers';
+import { api, KARMA_API } from 'helpers';
 import { useAccount } from 'wagmi';
 import axios from 'axios';
 import { useDelegates } from './delegates';
@@ -99,14 +99,9 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     realName: profileSelected?.realName || '',
   };
 
-  const [newInterests, setNewInterests] = useState({
-    label: '',
-    value: [],
-  } as ICustomFields);
-  const [newStatement, setNewStatement] = useState<ICustomFields>({
-    label: '',
-    value: [],
-  } as ICustomFields);
+  const [newInterests, setNewInterests] = useState(defaultCustomFields);
+  const [newStatement, setNewStatement] =
+    useState<ICustomFields>(defaultCustomFields);
 
   const queryStatement = async () => {
     if (!profile.address) return;
@@ -153,6 +148,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       setStatement(defaultCustomFields);
       setNewInterests(defaultCustomFields);
       setNewStatement(defaultCustomFields);
+
       console.log(error);
     } finally {
       setIsLoadingStatement(false);
@@ -189,8 +185,8 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
   };
 
   useMemo(() => {
-    queryStatement();
     if (profileSelected) {
+      queryStatement();
       setNewName(profileSelected.realName || profileSelected.ensName || '');
       setNewProfilePicture(profileSelected.profilePicture || '');
     }

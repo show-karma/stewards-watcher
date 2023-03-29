@@ -8,7 +8,7 @@ export const NoStatement: FC = () => {
   const { isAuthenticated, authenticate } = useAuth();
 
   return (
-    <Flex flexDir="column" w="full">
+    <Flex flexDir="column" w="full" pt="4">
       <Text
         color={theme.modal.statement.headline}
         fontWeight="medium"
