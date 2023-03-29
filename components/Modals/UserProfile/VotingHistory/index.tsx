@@ -111,7 +111,7 @@ export const VotingHistory: FC<IVotingHistory> = ({ profile }) => {
       >
         <VotingBreakdown />
         <DelegatedVotesChanges />
-        {/* <ContrarionIndexComponent /> */}
+        <ContrarionIndexComponent />
       </Flex>
     </Flex>
   );
