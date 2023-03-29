@@ -2,9 +2,6 @@ import { DAOProvider } from 'contexts/dao';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
 import { FAQContainer } from 'containers';
-import fs from 'fs';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
 
 const supportedDAOs: Record<string, string> = {
   aave: 'aave',

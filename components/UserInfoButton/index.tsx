@@ -60,7 +60,7 @@ export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen, profile }) => {
       justifyContent="center"
     >
       <HistoryIcon boxSize="17px" />
-      <Text h="max-content">Vote History</Text>
+      <Text h="max-content">Vote Stats</Text>
     </Button>
   );
 };

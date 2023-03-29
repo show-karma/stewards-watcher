@@ -42,12 +42,17 @@ const NavigationButton: FC<INavigationButton> = ({
       w="36px"
       h="36px"
       minW="max-content"
-      borderRadius="full"
+      borderRadius="5px"
       _hover={{}}
       _active={{}}
       _focus={{}}
       _focusWithin={{}}
       _focusVisible={{}}
+      boxShadow={
+        isSelected
+          ? `0px 0px 13px -3px ${votingHistory.navigation.buttons.selectedText}40`
+          : 'none'
+      }
       onClick={onClick}
     >
       {children}
@@ -118,11 +123,15 @@ export const Navigation: FC = () => {
           >
             1
           </NavigationButton>
-          <Text
-            color={theme.modal.votingHistory.navigation.buttons.unSelectedText}
-          >
-            ...
-          </Text>
+          {activePage !== 2 && (
+            <Text
+              color={
+                theme.modal.votingHistory.navigation.buttons.unSelectedText
+              }
+            >
+              ...
+            </Text>
+          )}
         </>
       )}
       {pagesToDisplay.map((page, index) => (
