@@ -271,7 +271,7 @@ export const VotingBreakdown: FC = () => {
           fontWeight="semibold"
           fontSize="md"
         >
-          Voting Breakdown
+          Snapshot Voting Breakdown
         </Text>
       </Flex>
       <Flex
