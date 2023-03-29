@@ -22,6 +22,7 @@ import { IoCopy } from 'react-icons/io5';
 import { IActiveTab, IProfile } from 'types';
 import { convertHexToRGBA, truncateAddress } from 'utils';
 import { useAccount } from 'wagmi';
+import { NameEditable, PictureEditable } from '../EditProfile';
 import { MediaIcon } from './MediaIcon';
 import { NavigatorRow } from './NavigatorRow';
 
@@ -70,6 +71,7 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
   const { toast } = useToasty();
   const [isConnecting, setConnecting] = useState(false);
   const { onCopy } = useClipboard(fullAddress || '');
+  const { config } = daoInfo;
 
   const isSamePerson =
     isConnected &&
@@ -136,16 +138,12 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
       pt="5"
     >
       <Flex w="full" gap={{ base: '1rem', lg: '1.375rem' }}>
-        <ImgWithFallback
-          w={{ base: '5.5rem', lg: '8.125rem' }}
-          h={{ base: '5.5rem', lg: '8.125rem' }}
-          borderRadius="full"
-          borderWidth="5px"
-          borderStyle="solid"
-          borderColor={theme.modal.background}
-          objectFit="cover"
-          src={profile.avatar}
-          fallback={profile.address}
+        <PictureEditable
+          src={
+            profileSelected?.profilePicture ||
+            `${config.IMAGE_PREFIX_URL}${profileSelected?.address}` ||
+            ''
+          }
         />
         <Flex justifyContent="space-between" w="full" align="flex-end">
           <Flex flexDirection="column" gap="0.5" w="full">
@@ -155,17 +153,7 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
               align="center"
               width={{ base: '200px', sm: '300px', md: '600px', lg: '340px' }}
             >
-              <Text
-                fontFamily="body"
-                fontWeight="bold"
-                fontSize={{ base: 'md', lg: '2xl' }}
-                color={theme.modal.header.title}
-                whiteSpace="nowrap"
-                overflow="hidden"
-                textOverflow="ellipsis"
-              >
-                {realName || ensName || truncatedAddress}
-              </Text>
+              <NameEditable name={realName || ensName} />
               <Flex flexDir="row" gap="4" ml="4">
                 {daoInfo.config.SHOULD_NOT_SHOW !== 'handles' && (
                   <MediaIcon
