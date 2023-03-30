@@ -244,7 +244,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         onChainId,
         snapshotIds,
       });
-      setLastUpdate(fetchedDelegates[0].stats[0].updatedAt);
+      if (fetchedDelegates.length)
+        setLastUpdate(fetchedDelegates[0].stats[0].updatedAt);
 
       const delegatesList = fetchedDelegates.map((item: IDelegateFromAPI) => {
         const fetchedPeriod = item.stats.find(

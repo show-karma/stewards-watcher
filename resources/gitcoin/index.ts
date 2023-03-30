@@ -181,6 +181,40 @@ const dark: IDAOTheme = {
       },
     },
   },
+  tokenHolders: {
+    border: '#321E5E',
+    bg: '#291555',
+    list: {
+      text: {
+        primary: '#FFFFFF',
+        secondary: '#ADB8C0',
+      },
+      bg: {
+        primary: '#251250',
+        secondary: '#321E5E',
+      },
+    },
+    delegations: {
+      text: {
+        primary: '#FFFFFF',
+        secondary: '#ADB8C0',
+        placeholder: {
+          main: '#ADB8C0',
+          comma: '#ADB8C0',
+        },
+      },
+      chart: {
+        point: '#B999FF',
+        datasetColor: '#02E2ACBF',
+      },
+      bg: {
+        primary: '#321E5E',
+        secondary: '#291555',
+        tertiary: '#200D4ABF',
+        quaternary: '#200D4A',
+      },
+    },
+  },
 };
 
 const light: IDAOTheme = {
@@ -330,6 +364,40 @@ const light: IDAOTheme = {
           unSelectedBg: 'transparent',
           unSelectedText: '#ADB8C0',
         },
+      },
+    },
+  },
+  tokenHolders: {
+    border: '#21232833',
+    bg: 'transparent',
+    list: {
+      text: {
+        primary: '#212328',
+        secondary: '#21232880',
+      },
+      bg: {
+        primary: '#FFFFFF',
+        secondary: '#ededef',
+      },
+    },
+    delegations: {
+      text: {
+        primary: '#212328',
+        secondary: '#292E41',
+        placeholder: {
+          main: '#ADB8C0',
+          comma: '#ADB8C0',
+        },
+      },
+      chart: {
+        point: '#000000',
+        datasetColor: '#02E2AC40',
+      },
+      bg: {
+        primary: '#FFFFFF',
+        secondary: '#EBEDEF',
+        tertiary: '#dadada',
+        quaternary: '#292E4180',
       },
     },
   },

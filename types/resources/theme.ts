@@ -164,4 +164,39 @@ export interface IDAOTheme {
       text: string;
     };
   };
+  tokenHolders: {
+    border: string;
+    bg: string;
+    list: {
+      text: {
+        primary: string;
+        secondary: string;
+      };
+      bg: {
+        primary: string;
+        secondary: string;
+      };
+    };
+
+    delegations: {
+      text: {
+        primary: string;
+        secondary: string;
+        placeholder: {
+          main: string;
+          comma: string;
+        };
+      };
+      chart: {
+        point: string;
+        datasetColor: string;
+      };
+      bg: {
+        primary: string;
+        secondary: string;
+        tertiary: string;
+        quaternary: string;
+      };
+    };
+  };
 }

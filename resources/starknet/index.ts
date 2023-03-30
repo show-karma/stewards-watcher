@@ -190,6 +190,40 @@ const dark: IDAOTheme = {
       },
     },
   },
+  tokenHolders: {
+    border: '#FFFFFF4D',
+    bg: 'transparent',
+    list: {
+      text: {
+        primary: '#FFFFFF',
+        secondary: '#FFFFFF4D',
+      },
+      bg: {
+        primary: '#1C1C3B',
+        secondary: '#1C1C3B80',
+      },
+    },
+    delegations: {
+      text: {
+        primary: '#FFFFFF',
+        secondary: '#ADB8C0',
+        placeholder: {
+          main: '#ADB8C0',
+          comma: '#ADB8C0',
+        },
+      },
+      chart: {
+        point: '#B999FF',
+        datasetColor: '#35364D',
+      },
+      bg: {
+        primary: '#1C1C3B',
+        secondary: '#747b87',
+        tertiary: '#FFFFFF20',
+        quaternary: '#1C1C3B80',
+      },
+    },
+  },
 };
 
 const light: IDAOTheme = {
@@ -342,6 +376,40 @@ const light: IDAOTheme = {
           unSelectedBg: 'transparent',
           unSelectedText: '#ADB8C0',
         },
+      },
+    },
+  },
+  tokenHolders: {
+    border: '#21232833',
+    bg: 'transparent',
+    list: {
+      text: {
+        primary: '#212328',
+        secondary: '#2123284D',
+      },
+      bg: {
+        primary: '#FFFFFF',
+        secondary: '#ededef',
+      },
+    },
+    delegations: {
+      text: {
+        primary: '#212328',
+        secondary: '#292E41',
+        placeholder: {
+          main: '#21232830',
+          comma: '#ADB8C0',
+        },
+      },
+      chart: {
+        point: '#292E41',
+        datasetColor: '#1C1C3B40',
+      },
+      bg: {
+        primary: '#FFFFFF',
+        secondary: '#ededef',
+        tertiary: '#dadada',
+        quaternary: '#292E4180',
       },
     },
   },

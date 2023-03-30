@@ -4,11 +4,11 @@ import {
   Flex,
   Icon,
   Img,
-  Link,
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
 import {
+  ChakraLink,
   DelegateLoginButton,
   DelegateLoginModal,
   UserProfile,
@@ -94,7 +94,7 @@ export const HeaderHat = () => {
               align={['flex-start', 'flex-start']}
               gap="1"
             >
-              <Link href="/">
+              <ChakraLink href="/">
                 <Img
                   w="auto"
                   maxW="36"
@@ -102,7 +102,7 @@ export const HeaderHat = () => {
                   objectFit="contain"
                   src={config.DAO_LOGO}
                 />
-              </Link>
+              </ChakraLink>
               <Madeby />
             </Flex>
             <Flex
@@ -138,10 +138,13 @@ export const HeaderHat = () => {
                 gap="4"
               >
                 {daoInfo.config.DAO_DEFAULT_SETTINGS?.FAQ && (
-                  <Link href="/faq" _hover={{}}>
+                  <ChakraLink href="/faq" _hover={{}}>
                     <StyledButton>FAQ</StyledButton>
-                  </Link>
+                  </ChakraLink>
                 )}
+                <ChakraLink href="/token-holders" _hover={{}}>
+                  <StyledButton>Token holders</StyledButton>
+                </ChakraLink>
                 {daoInfo.config.DAO_RESOURCES &&
                   daoInfo.config.DAO_RESOURCES.length > 0 && <ResourcesMenu />}
                 {daoInfo.config.DAO_DELEGATE_MODE !== 'hidden' && (
@@ -158,10 +161,13 @@ export const HeaderHat = () => {
         <HeaderBurgerMenu isOpen={isBurgerMenuOpen} onClose={closeBurgerMenu}>
           <Flex flexDir="column" gap="4">
             {daoInfo.config.DAO_DEFAULT_SETTINGS?.FAQ && (
-              <Link href="/faq" _hover={{}}>
-                <StyledButton>FAQ</StyledButton>
-              </Link>
+              <ChakraLink href="/faq" _hover={{}} w="full">
+                <StyledButton w="full">FAQ</StyledButton>
+              </ChakraLink>
             )}
+            <ChakraLink href="/token-holders" _hover={{}} w="full">
+              <StyledButton w="full">Token holders</StyledButton>
+            </ChakraLink>
             {daoInfo.config.DAO_RESOURCES &&
               daoInfo.config.DAO_RESOURCES.length > 0 && <ResourcesMenu />}
             {daoInfo.config.DAO_DELEGATE_MODE !== 'hidden' && (

@@ -5,22 +5,7 @@ import { FAQContainer } from 'containers';
 import fs from 'fs';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-
-const supportedDAOs: Record<string, string> = {
-  aave: 'aave',
-  op: 'op',
-  optimism: 'optimism',
-  pooltogether: 'pooltogether',
-  yamfinance: 'yamfinance',
-  ssvnetwork: 'ssvnetwork',
-  dydx: 'dydx',
-  dimo: 'dimo',
-  gitcoin: 'gitcoin',
-  element: 'element',
-  starknet: 'starknet',
-  developerdao: 'developerdao',
-  apecoin: 'apecoin',
-};
+import { daosDictionary } from 'helpers';
 
 interface PathProps extends ParsedUrlQuery {
   site: string;
@@ -46,7 +31,7 @@ export const getStaticProps: GetStaticProps<FAQProps, PathProps> = async ({
 
   const { site } = params;
 
-  const dao = supportedDAOs[site];
+  const dao = daosDictionary[site];
 
   if (!dao) {
     return {
