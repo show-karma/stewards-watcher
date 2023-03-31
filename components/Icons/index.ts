@@ -18,4 +18,5 @@ export * from './ProposalsIcon';
 export * from './RightCircleArrowIcon';
 export * from './TwitterIcon';
 export * from './VotesIcon';
+
 export * from './XMarkIcon';
