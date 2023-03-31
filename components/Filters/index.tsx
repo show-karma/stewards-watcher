@@ -7,7 +7,7 @@ export const Filters = () => {
   const { theme } = useDAO();
   return (
     <Flex
-      bgColor={theme.card.background}
+      bg={theme.card.background}
       boxShadow={theme.card.shadow}
       borderRadius="xl"
       w="full"

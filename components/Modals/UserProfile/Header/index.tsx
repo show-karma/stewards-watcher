@@ -37,7 +37,7 @@ const DelegateCases: FC<{ status?: string; fullAddress: string }> = ({
     return (
       <Tooltip
         label="This delegate has indicated that they are no longer accepting delegations."
-        bgColor={theme.collapse.bg || theme.card.background}
+        bg={theme.collapse.bg || theme.card.background}
         color={theme.collapse.text}
       >
         <Flex>

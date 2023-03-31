@@ -25,7 +25,7 @@ export const LeftCircleArrowIcon = (props: IconProps) => {
           opacity="0.5"
           transform="rotate(-180 6 6)"
           d="M2.45 6.25981C2.25 6.14434 2.25 5.85566 2.45 5.74019L7.55 2.79571C7.75 2.68024 8 2.82457 8 3.05551L8 8.94449C8 9.17543 7.75 9.31976 7.55 9.20429L2.45 6.25981Z"
-          fill={theme.card.background}
+          fill={theme.card.common}
         />
       </svg>
     </Icon>

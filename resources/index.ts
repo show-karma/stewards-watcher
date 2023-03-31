@@ -12,6 +12,7 @@ import elementFinance from './element-finance';
 import starknet from './starknet';
 import developer from './developer';
 import apecoin from './apecoin';
+import safe from './safe';
 
 interface ISupportedDAOs {
   [key: string]: IDAOInfo;
@@ -23,6 +24,12 @@ export const supportedDAOs: ISupportedDAOs = {
     light: gitcoin.light,
     dark: gitcoin.dark,
     ABI: gitcoin.ABI,
+  },
+  safe: {
+    config: safe.config,
+    light: safe.light,
+    dark: safe.dark,
+    ABI: null,
   },
   dimo: {
     config: dimo.config,

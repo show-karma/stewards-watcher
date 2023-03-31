@@ -266,7 +266,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           delegatePitch: item.delegatePitch,
           gitcoinHealthScore: fetchedPeriod?.gitcoinHealthScore || 0,
           votingWeight: item.voteWeight,
-          delegatedVotes: +item.delegatedVotes || item.snapshotDelegatedVotes,
+          delegatedVotes:
+            +item.delegatedVotes || +(item?.snapshotDelegatedVotes || 0),
           twitterHandle: item.twitterHandle,
           discourseHandle: item.discourseHandle,
           discordHandle: item.discordHandle,
