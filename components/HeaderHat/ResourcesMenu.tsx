@@ -30,7 +30,7 @@ export const ResourcesMenu: FC = () => {
       >
         Resources
       </MenuButton>
-      <MenuList w="max-content" minW="max-content" bgColor={theme.headerBg}>
+      <MenuList w="max-content" minW="max-content" bg={theme.headerBg}>
         {DAO_RESOURCES.map((resource, index) => (
           <ChakraLink
             href={resource.url}

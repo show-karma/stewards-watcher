@@ -80,7 +80,7 @@ export const StatPopover: FC<IStatPopoverProps> = ({
           <MotionPopoverContent
             marginLeft="-8px"
             w="max-content"
-            bgColor={theme.card.background}
+            bg={theme.card.background}
             border="none"
             borderRadius="5px"
             initial={{ opacity: 0 }}
@@ -91,7 +91,7 @@ export const StatPopover: FC<IStatPopoverProps> = ({
             <PopoverBody
               px="0"
               py="0"
-              bgColor={theme.card.statBg}
+              bg={theme.card.statBg}
               border="1px"
               borderStyle="solid"
               borderColor={theme.card.divider}
