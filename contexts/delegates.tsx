@@ -244,6 +244,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
         onChainId,
         snapshotIds,
       });
+
       if (fetchedDelegates.length)
         setLastUpdate(fetchedDelegates[0].stats[0].updatedAt);
 
@@ -266,7 +267,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
           delegatePitch: item.delegatePitch,
           gitcoinHealthScore: fetchedPeriod?.gitcoinHealthScore || 0,
           votingWeight: item.voteWeight,
-          delegatedVotes: +item.delegatedVotes || item.snapshotDelegatedVotes,
+          delegatedVotes:
+            +item.delegatedVotes || +(item?.snapshotDelegatedVotes || 0),
           twitterHandle: item.twitterHandle,
           discourseHandle: item.discourseHandle,
           discordHandle: item.discordHandle,
@@ -543,11 +545,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       });
       const { data } = axiosClient.data;
       const { delegates: fetchedDelegates } = data;
-
       if (fetchedDelegates.length) {
         setLastUpdate(fetchedDelegates[0].stats[0].updatedAt);
       }
-
       fetchedDelegates.forEach((item: IDelegateFromAPI) => {
         const fetchedPeriod = item.stats.find(
           fetchedStat => fetchedStat.period === period

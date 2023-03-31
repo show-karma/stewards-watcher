@@ -90,6 +90,13 @@ export interface IDAOTheme {
     votingHistory: {
       headline: string;
       divider: string;
+      modules?: {
+        chart: {
+          point: string;
+          openGradient: string;
+          endGradient: string;
+        };
+      };
       proposal: {
         title: string;
         type: string;
@@ -97,6 +104,7 @@ export interface IDAOTheme {
         result: string;
         verticalDivider: string;
         divider: string;
+        bg: string;
         icons: {
           for: string;
           against: string;

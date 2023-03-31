@@ -310,12 +310,12 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
 
   const getDataStatusColor = (status: string) => {
     if (status === 'inactive' || status === 'withdrawn') return '#F4EB0F';
-    return 'green.500';
+    return '#30E320';
   };
 
   return (
     <Flex
-      bgColor={theme.card.background}
+      bg={theme.card.background}
       flexDir="column"
       borderRadius="16"
       flex="1"
@@ -474,7 +474,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                               label={interest}
                               key={+index}
                               color={theme.card.interests.text}
-                              bgColor={theme.headerBg}
+                              bg={theme.headerBg}
                               hasArrow
                               placement="top"
                               boxShadow="2xl"
@@ -667,7 +667,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   (data?.status === 'withdrawn' ? (
                     <Tooltip
                       label="This delegate has indicated that they are no longer accepting delegations."
-                      bgColor={theme.collapse.bg || theme.card.background}
+                      bg={theme.collapse.bg || theme.card.background}
                       color={theme.collapse.text}
                     >
                       <Flex>

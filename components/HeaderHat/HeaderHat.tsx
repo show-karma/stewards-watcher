@@ -63,7 +63,7 @@ export const HeaderHat = () => {
   return (
     <Flex flexDir="column" w="full">
       <Flex
-        bgColor={theme.headerBg}
+        bg={theme.headerBg}
         py="3"
         w="full"
         align="center"
@@ -148,7 +148,7 @@ export const HeaderHat = () => {
                 {daoInfo.config.DAO_RESOURCES &&
                   daoInfo.config.DAO_RESOURCES.length > 0 && <ResourcesMenu />}
                 {daoInfo.config.DAO_DELEGATE_MODE !== 'hidden' && (
-                  <StyledButton onClick={onToggle} px="2">
+                  <StyledButton onClick={onToggle} px="0">
                     Delegate to Anyone
                   </StyledButton>
                 )}

@@ -43,6 +43,10 @@ export const ScoreStat: FC<{ stat: ICardStat }> = ({ stat }) => {
         boxShadow="0px 0px 6px rgba(0, 0, 0, 0.2)"
         borderRadius="5px"
         mt="-2"
+        transition="0.2s ease-in-out"
+        _hover={{
+          boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.4)',
+        }}
       >
         <Text
           color={theme.card.text.primary}

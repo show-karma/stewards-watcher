@@ -124,7 +124,7 @@ const dark: IDAOTheme = {
     buttons: {
       selectBg: '#183AC5',
       selectText: '#FFFFFF',
-      navBg: 'transparent',
+      navBg: '#181e2b',
       navText: '#FFFFFF',
       navUnselectedText: '#ADB8C0',
       navBorder: '#FFFFFF',
@@ -153,12 +153,20 @@ const dark: IDAOTheme = {
         result: '#FFFFFF',
         verticalDivider: 'rgba(173, 184, 192, 0.5)',
         divider: 'rgba(173, 184, 192, 0.2)',
+        bg: '#181e2b',
         icons: {
           for: 'green.300',
           against: 'red.500',
           abstain: 'gray.300',
           notVoted: 'gray.300',
           multiple: 'green.300',
+        },
+      },
+      modules: {
+        chart: {
+          point: '#181e2b',
+          openGradient: '#090B10',
+          endGradient: '#181e2b',
         },
       },
       reason: {
@@ -276,14 +284,6 @@ const light: IDAOTheme = {
       twitter: '#ADB8C0',
       divider: 'rgba(173, 184, 192, 0.2)',
     },
-    buttons: {
-      selectBg: '#183AC5',
-      selectText: '#FFFFFF',
-      navBg: 'transparent',
-      navText: '#FFFFFF',
-      navUnselectedText: '#ADB8C0',
-      navBorder: '#FFFFFF',
-    },
     delegateTo: {
       bg: '#FFFFFF',
       userBg: '#FFFFFF',
@@ -315,6 +315,14 @@ const light: IDAOTheme = {
         },
       },
     },
+    buttons: {
+      selectBg: '#183AC5',
+      selectText: '#FFFFFF',
+      navBg: '#181e2b',
+      navText: '#FFFFFF',
+      navUnselectedText: '#ADB8C0',
+      navBorder: '#FFFFFF',
+    },
     statement: {
       headline: '#FFFFFF',
       text: '#ADB8C0',
@@ -339,12 +347,20 @@ const light: IDAOTheme = {
         result: '#FFFFFF',
         verticalDivider: 'rgba(173, 184, 192, 0.5)',
         divider: 'rgba(173, 184, 192, 0.2)',
+        bg: '#181e2b',
         icons: {
-          for: '#FFFFFF',
-          against: '#FFFFFF',
-          abstain: '#FFFFFF',
-          notVoted: '#FFFFFF',
-          multiple: '#FFFFFF',
+          for: 'green.300',
+          against: 'red.500',
+          abstain: 'gray.300',
+          notVoted: 'gray.300',
+          multiple: 'green.300',
+        },
+      },
+      modules: {
+        chart: {
+          point: '#181e2b',
+          openGradient: '#090B10',
+          endGradient: '#181e2b',
         },
       },
       reason: {

@@ -285,7 +285,6 @@ export const DelegationHistory: FC<ISinceDelegationProps> = ({
           weight: 'semibold',
         },
         bodyColor: '#000',
-        displayColors: false,
       },
       title: {
         display: false,

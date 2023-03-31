@@ -18,7 +18,7 @@ export const ResourcesMenu: FC = () => {
         rightIcon={<HiChevronDown />}
         color={theme.hat.text.primary}
         bgColor="transparent"
-        px="6"
+        px="0"
         py="6"
         fontWeight="semibold"
         _active={{}}
@@ -27,11 +27,10 @@ export const ResourcesMenu: FC = () => {
           color: theme.hat.text.secondary,
         }}
         minH="52px"
-        mr="12"
       >
         Resources
       </MenuButton>
-      <MenuList w="max-content" minW="max-content" bgColor={theme.headerBg}>
+      <MenuList w="max-content" minW="max-content" bg={theme.headerBg}>
         {DAO_RESOURCES.map((resource, index) => (
           <ChakraLink
             href={resource.url}

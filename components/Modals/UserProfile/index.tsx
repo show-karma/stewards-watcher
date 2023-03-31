@@ -19,9 +19,9 @@ import { useAccount } from 'wagmi';
 import { Statement } from './Statement';
 import { AboutMe } from './AboutMe';
 import { VotingHistory } from './VotingHistory';
-import { Header } from './Header';
 import { Handles } from './Handles';
 import { WithdrawDelegation } from './WithdrawDelegation';
+import { Header } from './Header';
 
 interface ITab {
   activeTab: IActiveTab;
@@ -119,12 +119,10 @@ export const UserProfile: FC<IUserProfileProps> = props => {
           backdropFilter="blur(4px)"
         />
         <ModalContent
-          w={{ base: 'max-content', lg: '920' }}
-          maxW={{ base: 'max-content', lg: '920' }}
+          w={{ base: 'max-content', lg: 'full' }}
+          maxW={{ base: 'max-content', lg: '1100px' }}
           borderRadius="12px"
-          borderWidth="1px"
-          borderStyle="solid"
-          borderColor={theme.modal.header.border}
+          border="none"
           bgColor={theme.modal.background}
           mx="1rem"
         >
@@ -134,7 +132,7 @@ export const UserProfile: FC<IUserProfileProps> = props => {
             profile={profile}
           />
           <ModalCloseButton />
-          <ModalBody px={{ base: '1.25rem', lg: '2.5rem' }}>
+          <ModalBody px={{ base: '1.25rem', lg: '2.5rem' }} py="0">
             <Tab
               activeTab={activeTab}
               profile={profile}

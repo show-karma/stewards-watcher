@@ -144,7 +144,7 @@ export const BodyTitle: FC = () => {
           textAlign="start"
           flexDir="row"
           px="4"
-          bgColor={theme.collapse.bg || theme.card.background}
+          bg={theme.collapse.bg || theme.card.background}
         >
           <Flex
             flexDir="column"

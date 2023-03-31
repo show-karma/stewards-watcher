@@ -86,7 +86,7 @@ const dark: IDAOTheme = {
     },
   },
   modal: {
-    background: '#131f3a',
+    background: '#321E5E',
     header: {
       border: '#ADB8C0',
       title: '#FFFFFF',
@@ -97,7 +97,7 @@ const dark: IDAOTheme = {
     buttons: {
       selectBg: '#02E2AC',
       selectText: '#FFFFFF',
-      navBg: 'transparent',
+      navBg: '#291555',
       navText: '#FFFFFF',
       navUnselectedText: '#ADB8C0',
       navBorder: '#FFFFFF',
@@ -150,6 +150,13 @@ const dark: IDAOTheme = {
     votingHistory: {
       headline: '#FFFFFF',
       divider: '#E6E6E6',
+      modules: {
+        chart: {
+          point: '#B999FF',
+          openGradient: '#8E6ADC',
+          endGradient: '#291555',
+        },
+      },
       proposal: {
         title: '#FFFFFF',
         type: '#ADB8C0',
@@ -157,6 +164,7 @@ const dark: IDAOTheme = {
         result: '#FFFFFF',
         verticalDivider: 'rgba(173, 184, 192, 0.5)',
         divider: 'rgba(173, 184, 192, 0.2)',
+        bg: '#291555',
         icons: {
           for: 'green.300',
           against: 'red.500',
@@ -171,12 +179,12 @@ const dark: IDAOTheme = {
         divider: 'rgba(173, 184, 192, 0.2)',
       },
       navigation: {
-        color: '#ADB8C0',
+        color: '#FFFFFF',
         buttons: {
-          selectedBg: '#ADB8C0',
-          selectedText: '#222429',
+          selectedBg: '#291555',
+          selectedText: '#FFFFFF',
           unSelectedBg: 'transparent',
-          unSelectedText: '#ADB8C0',
+          unSelectedText: '#FFFFFF',
         },
       },
     },
@@ -283,7 +291,7 @@ const light: IDAOTheme = {
     buttons: {
       selectBg: '#02E2AC',
       selectText: '#FFFFFF',
-      navBg: 'transparent',
+      navBg: '#111214',
       navText: '#FFFFFF',
       navUnselectedText: '#ADB8C0',
       navBorder: '#FFFFFF',
@@ -336,6 +344,13 @@ const light: IDAOTheme = {
     votingHistory: {
       headline: '#FFFFFF',
       divider: '#E6E6E6',
+      modules: {
+        chart: {
+          point: '#B999FF',
+          openGradient: '#8E6ADC',
+          endGradient: '#291555',
+        },
+      },
       proposal: {
         title: '#FFFFFF',
         type: '#ADB8C0',
@@ -343,6 +358,7 @@ const light: IDAOTheme = {
         result: '#FFFFFF',
         verticalDivider: 'rgba(173, 184, 192, 0.5)',
         divider: 'rgba(173, 184, 192, 0.2)',
+        bg: '#291555',
         icons: {
           for: 'green.300',
           against: 'red.500',
