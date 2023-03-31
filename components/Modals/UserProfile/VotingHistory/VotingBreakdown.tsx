@@ -118,7 +118,7 @@ const ChartComponent: FC<IDoughnutComponentProps> = ({
               fontSize="14px"
               maxW="270px"
             >
-              There is no delegation activity for this contributor yet.
+              There is no voting activity for this contributor yet.
             </Text>
           </Flex>
           <Flex
