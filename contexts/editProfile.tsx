@@ -64,6 +64,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     profileSelected,
     interests: delegatesInterests,
     refreshProfileModal,
+    fetchDelegates,
   } = useDelegates();
   const { daoInfo } = useDAO();
   const { address } = useAccount();
@@ -342,7 +343,10 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
             twitterHandle: newHandle,
           }
         )
-        .then(() => refreshProfileModal('handles'));
+        .then(() => {
+          refreshProfileModal('handles');
+          fetchDelegates(0);
+        });
       toast({
         description: 'Twitter handle has been saved',
         status: 'success',
