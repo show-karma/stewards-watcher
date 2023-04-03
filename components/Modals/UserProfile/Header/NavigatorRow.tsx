@@ -1,5 +1,5 @@
 import { Divider, Flex } from '@chakra-ui/react';
-import { useDAO } from 'contexts';
+import { useAuth, useDAO } from 'contexts';
 import { FC } from 'react';
 import { IActiveTab, IProfile } from 'types';
 import { NavButton } from './NavButton';
@@ -18,7 +18,9 @@ export const NavigatorRow: FC<INavigatorRow> = ({
   changeTab,
 }) => {
   const { theme, daoInfo } = useDAO();
+  const { isDaoAdmin } = useAuth();
   const isActiveTab = (section: IActiveTab) => activeTab === section;
+
   return (
     <Flex
       px={{ base: '1.25rem', lg: '2.5rem' }}
@@ -58,25 +60,27 @@ export const NavigatorRow: FC<INavigatorRow> = ({
           Voting History
         </NavButton>
 
-        {isSamePerson ? (
-          <>
-            <NavButton
-              isActive={isActiveTab('withdraw')}
-              onClick={() => changeTab('withdraw')}
-              w="max-content"
-            >
-              Withdraw
-            </NavButton>
-            {daoInfo.config.SHOULD_NOT_SHOW !== 'handles' && (
-              <NavButton
-                isActive={isActiveTab('handles')}
-                onClick={() => changeTab('handles')}
-                w="max-content"
-              >
-                Handles
-              </NavButton>
-            )}
-          </>
+        {isSamePerson && (
+          <NavButton
+            isActive={isActiveTab('withdraw')}
+            onClick={() => changeTab('withdraw')}
+            borderTopRightRadius={isSamePerson || isDaoAdmin ? '0' : '5px'}
+            w="max-content"
+          >
+            Withdraw
+          </NavButton>
+        )}
+
+        {(isSamePerson || isDaoAdmin) &&
+        daoInfo.config.SHOULD_NOT_SHOW !== 'handles' ? (
+          <NavButton
+            isActive={isActiveTab('handles')}
+            onClick={() => changeTab('handles')}
+            borderTopRightRadius={isSamePerson || isDaoAdmin ? '0' : '5px'}
+            w="max-content"
+          >
+            Handles
+          </NavButton>
         ) : (
           <Flex
             borderBottomWidth="1px"

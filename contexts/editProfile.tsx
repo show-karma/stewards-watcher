@@ -31,6 +31,7 @@ interface IEditProfileProps {
   editProfilePicture: (url: string | null) => void;
   newName: string | null;
   newProfilePicture: string | null;
+  changeTwitterHandle: (newHandle: string) => Promise<void>;
 }
 
 export const EditProfileContext = createContext({} as IEditProfileProps);
@@ -63,6 +64,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     profileSelected,
     interests: delegatesInterests,
     refreshProfileModal,
+    fetchDelegates,
   } = useDelegates();
   const { daoInfo } = useDAO();
   const { address } = useAccount();
@@ -321,6 +323,46 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     }
   };
 
+  const changeTwitterHandle = async (newHandle: string) => {
+    setIsEditing(true);
+    setEditSaving(true);
+
+    try {
+      const authorizedAPI = axios.create({
+        timeout: 30000,
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: authToken ? `Bearer ${authToken}` : '',
+        },
+      });
+      await authorizedAPI
+        .put(
+          `${KARMA_API.base_url}/user/${daoInfo.config.DAO_KARMA_ID}/twitter/${profileSelected?.address}`,
+          {
+            twitterHandle: newHandle,
+          }
+        )
+        .then(() => {
+          refreshProfileModal('handles');
+          fetchDelegates(0);
+        });
+      toast({
+        description: 'Twitter handle has been saved',
+        status: 'success',
+      });
+    } catch (error: any) {
+      if (error.response?.data?.error?.message)
+        toast({
+          status: 'error',
+          description: error.response.data.error.message,
+        });
+    } finally {
+      setIsEditing(false);
+      setEditSaving(false);
+    }
+  };
+
   useMemo(() => {
     setIsEditing(false);
     if (
@@ -381,6 +423,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       editName,
       newProfilePicture,
       editProfilePicture,
+      changeTwitterHandle,
     }),
     [
       isEditing,
@@ -402,6 +445,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       editName,
       newProfilePicture,
       editProfilePicture,
+      changeTwitterHandle,
     ]
   );
 
