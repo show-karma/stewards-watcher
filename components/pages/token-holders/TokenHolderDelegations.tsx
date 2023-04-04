@@ -49,6 +49,28 @@ export const TokenHolderDelegation: FC = () => {
     }
   }, [inputValue]);
 
+  const renderItems = () => {
+    if (!tokenholders)
+      return (
+        <Flex align="center" w="full" justify="center" my="8">
+          <Text
+            fontStyle="normal"
+            fontWeight="normal"
+            fontSize={{ base: '16px', xl: '20px' }}
+            color={theme.tokenHolders.delegations.text.primary}
+          >
+            No addresses found.
+          </Text>
+        </Flex>
+      );
+    if (tokenholders.length === 0) return undefined;
+    return tokenholders.map((holderData, index) => {
+      const { length } = Object.keys(holderData.delegatingHistories);
+      if (!length) return null;
+      return <DelegatesAccordion holderData={holderData} key={+index} />;
+    });
+  };
+
   return (
     <Flex w="full" flexDir="column">
       <Flex
@@ -232,6 +254,7 @@ export const TokenHolderDelegation: FC = () => {
         borderStyle="solid"
         borderTop="none"
         borderBottom="none"
+        minH="200px"
       >
         {isFetching ? (
           <Flex w="full" align="center" justify="center" minH="40">
@@ -241,12 +264,7 @@ export const TokenHolderDelegation: FC = () => {
             />
           </Flex>
         ) : (
-          tokenholders &&
-          tokenholders.map((holderData, index) => {
-            const { length } = Object.keys(holderData.delegatingHistories);
-            if (!length) return null;
-            return <DelegatesAccordion holderData={holderData} key={+index} />;
-          })
+          renderItems()
         )}
       </Flex>
     </Flex>

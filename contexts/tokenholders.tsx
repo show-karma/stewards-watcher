@@ -23,7 +23,7 @@ interface ITokenHoldersProps {
   errorSelectedAddresses: unknown;
   selectedAddresses: string[];
   changeAddresses: (addresses: string) => void;
-  selectedAddressesData: IDelegationHistoryAPI[];
+  selectedAddressesData?: IDelegationHistoryAPI[];
   changeSelectedAddress: (addresses: string[]) => void;
 }
 
@@ -38,7 +38,7 @@ export const TokenHoldersProvider: FC<IProviderProps> = ({ children }) => {
 
   const [selectedAddresses, setSelectedAddresses] = useState<string[]>([]);
   const [selectedAddressesData, setSelectedAddressesData] = useState<
-    IDelegationHistoryAPI[]
+    IDelegationHistoryAPI[] | undefined
   >([]);
   const router = useRouter();
 
@@ -55,6 +55,7 @@ export const TokenHoldersProvider: FC<IProviderProps> = ({ children }) => {
       ),
     enabled: !!daoInfo.config.DAO_KARMA_ID,
     refetchOnWindowFocus: false,
+    retry: false,
   });
 
   const {
@@ -77,21 +78,27 @@ export const TokenHoldersProvider: FC<IProviderProps> = ({ children }) => {
     },
     enabled: !!daoInfo.config.DAO_KARMA_ID && !!selectedAddresses.length,
     refetchOnWindowFocus: false,
+    retry: false,
   });
 
   const setupSelectedAddresses = () => {
     if (!fetchedSelectedAddresses) {
+      if (selectedAddresses.length > 0) {
+        setSelectedAddressesData(undefined);
+        return;
+      }
       setSelectedAddressesData([]);
       return;
     }
+
     const { tokenholders }: { tokenholders: IDelegationHistoryAPI[] } =
       fetchedSelectedAddresses.data.data;
-    setSelectedAddressesData(tokenholders);
+    setSelectedAddressesData(tokenholders || undefined);
   };
 
   useMemo(() => {
     setupSelectedAddresses();
-  }, [fetchedSelectedAddresses]);
+  }, [fetchedSelectedAddresses, selectedAddresses]);
 
   const getTopHolders = () => {
     if (!fetchedTopHolders) return undefined;
