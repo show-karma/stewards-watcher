@@ -19,6 +19,7 @@ export const NavigatorRow: FC<INavigatorRow> = ({
 }) => {
   const { theme, daoInfo } = useDAO();
   const isActiveTab = (section: IActiveTab) => activeTab === section;
+
   return (
     <Flex
       px={{ base: '1.25rem', lg: '2.5rem' }}
