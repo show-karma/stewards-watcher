@@ -31,7 +31,10 @@ interface IEditProfileProps {
   editProfilePicture: (url: string | null) => void;
   newName: string | null;
   newProfilePicture: string | null;
-  changeTwitterHandle: (newHandle: string) => Promise<void>;
+  changeHandle: (
+    newHandle: string,
+    media: 'twitter' | 'forum'
+  ) => Promise<void>;
 }
 
 export const EditProfileContext = createContext({} as IEditProfileProps);
@@ -323,7 +326,10 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     }
   };
 
-  const changeTwitterHandle = async (newHandle: string) => {
+  const changeHandle = async (
+    newHandle: string,
+    media: 'twitter' | 'forum'
+  ) => {
     setIsEditing(true);
     setEditSaving(true);
 
@@ -338,9 +344,9 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       });
       await authorizedAPI
         .put(
-          `${KARMA_API.base_url}/user/${daoInfo.config.DAO_KARMA_ID}/twitter/${profileSelected?.address}`,
+          `${KARMA_API.base_url}/user/${daoInfo.config.DAO_KARMA_ID}/handles/${profileSelected?.address}`,
           {
-            twitterHandle: newHandle,
+            [`${media}Handle`]: newHandle,
           }
         )
         .then(() => {
@@ -348,7 +354,9 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
           fetchDelegates(0);
         });
       toast({
-        description: 'Twitter handle has been saved',
+        description: `${
+          media.charAt(0).toUpperCase() + media.slice(1)
+        } has been saved`,
         status: 'success',
       });
     } catch (error: any) {
@@ -423,7 +431,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       editName,
       newProfilePicture,
       editProfilePicture,
-      changeTwitterHandle,
+      changeHandle,
     }),
     [
       isEditing,
@@ -445,7 +453,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       editName,
       newProfilePicture,
       editProfilePicture,
-      changeTwitterHandle,
+      changeHandle,
     ]
   );
 

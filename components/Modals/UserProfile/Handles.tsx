@@ -39,7 +39,7 @@ const HandleCases: FC<IHandleCasesProps> = ({
 }) => {
   const { theme, daoData, daoInfo } = useDAO();
   const { isDaoAdmin } = useAuth();
-  const { isEditing, changeTwitterHandle, isEditSaving } = useEditProfile();
+  const { isEditing, isEditSaving, changeHandle } = useEditProfile();
 
   const schema = yup
     .object({
@@ -64,9 +64,8 @@ const HandleCases: FC<IHandleCasesProps> = ({
   const onSubmit = (data: { handle: string }) => {
     const cleanNewHandle = data.handle.replace(/[|;$%@"<>()+,.]/g, '');
     if (!cleanNewHandle) return;
-    if (mediaName === 'Twitter') {
-      changeTwitterHandle(cleanNewHandle);
-    }
+    const media = mediaName.toLowerCase() as 'twitter' | 'forum';
+    changeHandle(cleanNewHandle, media);
   };
 
   if (isDaoAdmin && isEditing && canAdminEdit)
@@ -196,7 +195,7 @@ export const Handles: FC = () => {
         forumOnOpen();
       },
       handle: profileSelected?.discourseHandle,
-      canAdminEdit: false,
+      canAdminEdit: true,
     },
     {
       icon: DiscordIcon,

@@ -55,7 +55,7 @@ export const NavigatorRow: FC<INavigatorRow> = ({
         <NavButton
           isActive={isActiveTab('votinghistory')}
           onClick={() => changeTab('votinghistory')}
-          borderTopRightRadius={isSamePerson ? '0' : '5px'}
+          borderTopRightRadius={isSamePerson || isDaoAdmin ? '0' : '5px'}
         >
           Voting History
         </NavButton>
@@ -64,7 +64,7 @@ export const NavigatorRow: FC<INavigatorRow> = ({
           <NavButton
             isActive={isActiveTab('withdraw')}
             onClick={() => changeTab('withdraw')}
-            borderTopRightRadius={isSamePerson || isDaoAdmin ? '0' : '5px'}
+            borderTopRightRadius={isSamePerson ? '0' : '5px'}
             w="max-content"
           >
             Withdraw
@@ -76,7 +76,7 @@ export const NavigatorRow: FC<INavigatorRow> = ({
           <NavButton
             isActive={isActiveTab('handles')}
             onClick={() => changeTab('handles')}
-            borderTopRightRadius={isSamePerson || isDaoAdmin ? '0' : '5px'}
+            borderTopRightRadius={isSamePerson ? '0' : '5px'}
             w="max-content"
           >
             Handles
