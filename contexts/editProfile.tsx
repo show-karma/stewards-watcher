@@ -330,9 +330,6 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     newHandle: string,
     media: 'twitter' | 'forum'
   ) => {
-    setIsEditing(true);
-    setEditSaving(true);
-
     try {
       const authorizedAPI = axios.create({
         timeout: 30000,
@@ -365,9 +362,6 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
           status: 'error',
           description: error.response.data.error.message,
         });
-    } finally {
-      setIsEditing(false);
-      setEditSaving(false);
     }
   };
 
