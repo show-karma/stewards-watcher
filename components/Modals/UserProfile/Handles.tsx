@@ -39,7 +39,8 @@ const HandleCases: FC<IHandleCasesProps> = ({
 }) => {
   const { theme, daoData, daoInfo } = useDAO();
   const { isDaoAdmin } = useAuth();
-  const { isEditing, isEditSaving, changeHandle } = useEditProfile();
+  const { isEditing, changeHandle } = useEditProfile();
+  const [isLoading, setIsLoading] = useState(false);
 
   const schema = yup
     .object({
@@ -64,8 +65,9 @@ const HandleCases: FC<IHandleCasesProps> = ({
   const onSubmit = (data: { handle: string }) => {
     const cleanNewHandle = data.handle.replace(/[|;$%@"<>()+,.]/g, '');
     if (!cleanNewHandle) return;
+    setIsLoading(true);
     const media = mediaName.toLowerCase() as 'twitter' | 'forum';
-    changeHandle(cleanNewHandle, media);
+    changeHandle(cleanNewHandle, media).finally(() => setIsLoading(false));
   };
 
   if (isDaoAdmin && isEditing && canAdminEdit)
@@ -86,9 +88,9 @@ const HandleCases: FC<IHandleCasesProps> = ({
               />
               <Button
                 type="submit"
-                isLoading={isSubmitting || isEditSaving}
-                isDisabled={!!errors.handle || isEditSaving}
-                disabled={!!errors.handle || isEditSaving}
+                isLoading={isSubmitting || isLoading}
+                isDisabled={!!errors.handle || isLoading}
+                disabled={!!errors.handle || isLoading}
               >
                 Save
               </Button>
