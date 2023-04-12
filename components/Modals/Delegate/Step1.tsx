@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDAO } from 'contexts';
-import { Button, Flex, Text } from '@chakra-ui/react';
+import { Flex, Text } from '@chakra-ui/react';
 import { IDelegate } from 'types';
 import { ImgWithFallback } from 'components/ImgWithFallback';
 import makeBlockie from 'ethereum-blockies-base64';

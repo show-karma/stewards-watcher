@@ -1,4 +1,4 @@
-import { Divider, Flex, Text, Tooltip } from '@chakra-ui/react';
+import { Flex, Text, Tooltip } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
 import { FC } from 'react';
 import { ICardStat } from 'types';

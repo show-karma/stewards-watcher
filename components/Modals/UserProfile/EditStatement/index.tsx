@@ -1,4 +1,4 @@
-import { Flex, Text } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 import { useDAO, useEditProfile } from 'contexts';
 import { FC } from 'react';
 import ReactQuill from 'react-quill';

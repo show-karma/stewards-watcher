@@ -5,14 +5,9 @@ import {
   ModalContent,
   ModalOverlay,
 } from '@chakra-ui/react';
-import {
-  EditProfileProvider,
-  useDAO,
-  useWallet,
-  VotesProvider,
-} from 'contexts';
+import { EditProfileProvider, useDAO, VotesProvider } from 'contexts';
 import { useRouter } from 'next/router';
-import { FC, useMemo, useRef, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { IActiveTab, IProfile } from 'types';
 import { useMixpanel } from 'hooks';
 import { useAccount } from 'wagmi';
@@ -26,9 +21,8 @@ import { Header } from './Header';
 interface ITab {
   activeTab: IActiveTab;
   profile: IProfile;
-  isSamePerson: boolean;
 }
-const Tab: FC<ITab> = ({ activeTab, profile, isSamePerson }) => {
+const Tab: FC<ITab> = ({ activeTab, profile }) => {
   if (activeTab === 'aboutme') {
     return <AboutMe profile={profile} />;
   }
@@ -62,9 +56,6 @@ export const UserProfile: FC<IUserProfileProps> = props => {
   const { address } = useAccount();
   const { mixpanel } = useMixpanel();
   const [activeTab, setActiveTab] = useState<IActiveTab>(selectedTab);
-
-  const isSamePerson =
-    profile?.address?.toLowerCase() === address?.toLowerCase();
 
   useMemo(() => {
     setActiveTab(selectedTab);
@@ -133,11 +124,7 @@ export const UserProfile: FC<IUserProfileProps> = props => {
           />
           <ModalCloseButton />
           <ModalBody px={{ base: '1.25rem', lg: '2.5rem' }} py="0">
-            <Tab
-              activeTab={activeTab}
-              profile={profile}
-              isSamePerson={isSamePerson}
-            />
+            <Tab activeTab={activeTab} profile={profile} />
           </ModalBody>
         </ModalContent>
       </Modal>

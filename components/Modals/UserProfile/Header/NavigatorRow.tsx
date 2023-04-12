@@ -1,4 +1,4 @@
-import { Divider, Flex } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 import { useAuth, useDAO } from 'contexts';
 import { FC } from 'react';
 import { IActiveTab, IProfile } from 'types';

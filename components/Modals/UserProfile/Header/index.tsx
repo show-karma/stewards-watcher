@@ -8,12 +8,7 @@ import {
   Tooltip,
   useClipboard,
 } from '@chakra-ui/react';
-import {
-  ImgWithFallback,
-  DelegateButton,
-  ForumIcon,
-  TwitterIcon,
-} from 'components';
+import { DelegateButton, ForumIcon, TwitterIcon } from 'components';
 import { useDAO, useDelegates, useEditProfile, useWallet } from 'contexts';
 import { useAuth } from 'contexts/auth';
 import { useToasty } from 'hooks';

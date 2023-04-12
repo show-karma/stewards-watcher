@@ -37,7 +37,7 @@ const HandleCases: FC<IHandleCasesProps> = ({
   mediaName,
   canAdminEdit,
 }) => {
-  const { theme, daoData, daoInfo } = useDAO();
+  const { theme } = useDAO();
   const { isDaoAdmin } = useAuth();
   const { isEditing, changeHandle } = useEditProfile();
   const [isLoading, setIsLoading] = useState(false);
