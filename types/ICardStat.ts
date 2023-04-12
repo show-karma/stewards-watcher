@@ -8,4 +8,5 @@ export interface ICardStat {
   value: string;
   id: IStats;
   tooltipText?: string;
+  statAction?: () => void;
 }

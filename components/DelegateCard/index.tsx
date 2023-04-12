@@ -14,7 +14,7 @@ import {
   Box,
   Tooltip,
 } from '@chakra-ui/react';
-import { FC, useState, useMemo, useCallback } from 'react';
+import { FC, useState, useMemo } from 'react';
 import { BsChat } from 'react-icons/bs';
 import { IoCopy, IoPersonOutline } from 'react-icons/io5';
 import { IoIosCheckboxOutline } from 'react-icons/io';
@@ -45,6 +45,51 @@ import { ExpandableCardText } from './ExpandableCardText';
 import { DelegateStat } from './DelegateStat';
 import { ScoreStat } from './ScoreStat';
 import { StatPopover } from './StatPopover';
+
+interface IStatCasesProps {
+  statItem: ICardStat;
+  canShowBreakdown: boolean;
+  daoName: string;
+  delegateAddress: string;
+}
+
+const StatCases: FC<IStatCasesProps> = ({
+  statItem,
+  canShowBreakdown,
+  daoName,
+  delegateAddress,
+}) => {
+  if (statItem.id === 'delegatorCount')
+    return (
+      <Link
+        background="transparent"
+        href={`https://karmahq.xyz/dao/${daoName}/delegators/${delegateAddress}`}
+        _hover={{}}
+        h="max-content"
+        isExternal
+        cursor="pointer"
+      >
+        <DelegateStat stat={statItem} />
+      </Link>
+    );
+  if (
+    (statItem.id === 'forumScore' && canShowBreakdown) ||
+    (statItem.id !== 'forumScore' && statItem.statAction)
+  )
+    return (
+      <Box
+        role="button"
+        background="transparent"
+        onClick={() => statItem.statAction?.()}
+        _hover={{}}
+        h="max-content"
+      >
+        <DelegateStat stat={statItem} />
+      </Box>
+    );
+
+  return <DelegateStat stat={statItem} />;
+};
 
 interface IDelegateCardProps {
   data?: IDelegate;
@@ -124,6 +169,10 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       value: data?.forumActivity ? formatNumber(data.forumActivity) : '-',
       id: 'forumScore',
       tooltipText: 'Score based on their contribution in the forum',
+      statAction: () => {
+        setScoreType('forumScore');
+        openScoreBreakdown();
+      },
     },
     {
       title: 'Discord Score',
@@ -608,34 +657,20 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                             borderRadius={statBorderRadius(index)}
                             maxW="full"
                           >
-                            {statItem.id === 'forumScore' &&
-                            data?.discourseHandle &&
-                            daoData?.socialLinks.forum &&
-                            config.DAO_FORUM_TYPE ? (
-                              <Box
-                                role="button"
-                                background="transparent"
-                                onClick={() => {
-                                  setScoreType('forumScore');
-                                  openScoreBreakdown();
-                                }}
-                                _hover={{}}
-                                h="max-content"
-                              >
-                                <DelegateStat stat={statItem} />
-                              </Box>
-                            ) : (
-                              <DelegateStat stat={statItem} />
-                            )}
+                            <StatCases
+                              statItem={statItem}
+                              canShowBreakdown={
+                                !!data?.discourseHandle &&
+                                !!daoData?.socialLinks.forum &&
+                                !!config.DAO_FORUM_TYPE
+                              }
+                              daoName={config.DAO_KARMA_ID}
+                              delegateAddress={data.address}
+                            />
                           </Flex>
                         ))}
                         {restRowStats.length > 0 && (
-                          <StatPopover
-                            stats={restRowStats}
-                            data={data}
-                            openScoreBreakdown={openScoreBreakdown}
-                            setScoreType={setScoreType}
-                          />
+                          <StatPopover stats={restRowStats} data={data} />
                         )}
                       </Flex>
                     </Flex>
