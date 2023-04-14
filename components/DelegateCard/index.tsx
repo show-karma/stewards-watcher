@@ -59,19 +59,19 @@ const StatCases: FC<IStatCasesProps> = ({
   daoName,
   delegateAddress,
 }) => {
-  if (statItem.id === 'delegatorCount')
-    return (
-      <Link
-        background="transparent"
-        href={`https://karmahq.xyz/dao/${daoName}/delegators/${delegateAddress}`}
-        _hover={{}}
-        h="max-content"
-        isExternal
-        cursor="pointer"
-      >
-        <DelegateStat stat={statItem} />
-      </Link>
-    );
+  // if (statItem.id === 'delegatorCount')
+  //   return (
+  //     <Link
+  //       background="transparent"
+  //       href={`https://karmahq.xyz/dao/${daoName}/delegators/${delegateAddress}`}
+  //       _hover={{}}
+  //       h="max-content"
+  //       isExternal
+  //       cursor="pointer"
+  //     >
+  //       <DelegateStat stat={statItem} />
+  //     </Link>
+  //   );
   if (
     (statItem.id === 'forumScore' && canShowBreakdown) ||
     (statItem.id !== 'forumScore' && statItem.statAction)
