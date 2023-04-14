@@ -34,11 +34,21 @@ const config: IDAOConfig = {
       DEFAULT_STATUSES: ['active', 'recognized'],
     },
     ORDERSTAT: 'karmaScore',
+    SORT_ORDER: [
+      'delegatedVotes',
+      'offChainVotesPct',
+      'onChainVotesPct',
+      'delegatorCount',
+      'forumScore',
+      'karmaScore',
+      'discordScore',
+      'votingWeight',
+    ],
   },
   DAO_EXT_VOTES_PROVIDER: {
     onChain: onChainDyDxVotesProvider,
   },
-  EXCLUDED_CARD_FIELDS: ['votingWeight', 'healthScore'],
+  EXCLUDED_CARD_FIELDS: ['healthScore'],
 };
 
 const dark: IDAOTheme = {

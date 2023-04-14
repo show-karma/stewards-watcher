@@ -230,8 +230,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       filtereds.find(
         item => item.id === 'offChainVotesPct' || item.id === 'onChainVotesPct'
       ) &&
-      !config.EXCLUDED_CARD_FIELDS.includes('delegatedVotes') &&
-      config.DAO_KARMA_ID !== 'dydx'
+      !config.EXCLUDED_CARD_FIELDS.includes('delegatedVotes')
     )
       filtereds.push({
         title: 'Voting Weight',
@@ -256,7 +255,16 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       'discordScore',
     ];
 
-    filtereds.sort((one, two) => order.indexOf(one.id) - order.indexOf(two.id));
+    if (config.DAO_DEFAULT_SETTINGS?.SORT_ORDER) {
+      const customOrder = config.DAO_DEFAULT_SETTINGS?.SORT_ORDER;
+      filtereds.sort(
+        (one, two) => customOrder.indexOf(one.id) - customOrder.indexOf(two.id)
+      );
+    } else {
+      filtereds.sort(
+        (one, two) => order.indexOf(one.id) - order.indexOf(two.id)
+      );
+    }
 
     if (router.query.site === 'op') {
       const randomId = Math.floor(Math.random() * 3);

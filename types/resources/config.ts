@@ -37,6 +37,7 @@ export interface IDAOConfig {
     STATUS_FILTER?: {
       DEFAULT_STATUSES?: IStatusOptions[];
     };
+    SORT_ORDER?: string[];
   };
   DAO_RESOURCES?: {
     title: string;
