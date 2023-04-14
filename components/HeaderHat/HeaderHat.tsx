@@ -15,7 +15,6 @@ import {
 } from 'components';
 import { DelegateVotesModal } from 'components/Modals/DelegateToAnyone';
 import { useDAO, useDelegates, useWallet } from 'contexts';
-import { useAuth } from 'contexts/auth';
 import { FC } from 'react';
 import { IoMenu } from 'react-icons/io5';
 import { HeaderBurgerMenu } from './HeaderBurgerMenu';

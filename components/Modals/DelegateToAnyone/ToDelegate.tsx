@@ -6,7 +6,6 @@ import { FC, useMemo } from 'react';
 
 interface IToDelegateProps {
   address: string;
-  success: boolean;
   setAddress: React.Dispatch<React.SetStateAction<string>>;
   setSuccess: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -15,10 +14,8 @@ export const ToDelegate: FC<IToDelegateProps> = ({
   address,
   setAddress,
   setSuccess,
-  success,
 }) => {
   const { theme } = useDAO();
-
   const { setSelectedProfileData } = useDelegates();
   const { delegateTo: modalTheme } = theme.modal;
 

@@ -27,7 +27,6 @@ const iconStyle = {
 };
 
 const CheckDecision = (choice: string) => {
-  const { theme } = useDAO();
   if (/not vote/gi.test(choice)) {
     return <Icon as={DidNotVoteIcon} color="#FFF7AE" {...iconStyle} />;
   }

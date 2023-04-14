@@ -1,12 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { IDelegate } from 'types';
 import { useDAO, useGovernanceVotes } from 'contexts';
-import {
-  useAccount,
-  useContractRead,
-  useContractWrite,
-  usePrepareContractWrite,
-} from 'wagmi';
+
 import { Modal, ModalContent, ModalOverlay } from '@chakra-ui/react';
 import { ESteps } from './ESteps';
 import { Step1 } from './Step1';

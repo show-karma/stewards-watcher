@@ -1,5 +1,5 @@
-import { Button, ButtonProps, Flex, Spinner, Tooltip } from '@chakra-ui/react';
-import { useDAO, useWallet, useGovernanceVotes } from 'contexts';
+import { Button, ButtonProps, Flex } from '@chakra-ui/react';
+import { useDAO, useWallet } from 'contexts';
 import { useDelegation, useMixpanel } from 'hooks';
 import { convertHexToRGBA } from 'utils';
 import { FC, useEffect, useState } from 'react';
@@ -9,7 +9,6 @@ interface IDelegateButton extends ButtonProps {
   delegated: string;
   text?: string;
   successEmitter?: () => void;
-  tooltipText?: string;
   beforeOnClick?: () => void;
 }
 
@@ -17,8 +16,6 @@ export const DelegateButton: FC<IDelegateButton> = ({
   delegated,
   text = 'Delegate',
   successEmitter,
-  tooltipText,
-
   beforeOnClick,
   ...props
 }) => {
@@ -28,7 +25,6 @@ export const DelegateButton: FC<IDelegateButton> = ({
   const { daoInfo, theme } = useDAO();
   const { config } = daoInfo;
   const { mixpanel } = useMixpanel();
-  const { votes } = useGovernanceVotes();
   const { delegateOnToggle, delegateIsOpen } = useWallet();
 
   const [writeAfterAction, setWriteAfterAction] = useState(false);

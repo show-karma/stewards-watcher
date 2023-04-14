@@ -1,7 +1,6 @@
 /* eslint-disable id-length */
 import { Icon, IconProps } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
-import { IoMdArrowDropleftCircle } from 'react-icons/io';
 
 export const LeftCircleArrowIcon = (props: IconProps) => {
   const { theme } = useDAO();

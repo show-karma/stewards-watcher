@@ -3,7 +3,6 @@ import {
   FlexProps,
   Img,
   Link,
-  Skeleton,
   Text,
   useBreakpointValue,
   useColorModeValue,
@@ -11,7 +10,7 @@ import {
 import { useDAO } from 'contexts';
 import { FC } from 'react';
 
-export const Madeby: FC<FlexProps> = props => {
+export const Madeby: FC<FlexProps> = () => {
   const { theme } = useDAO();
   const variantImg = useBreakpointValue({
     base: useColorModeValue(

@@ -7,7 +7,7 @@ import { WorkstreamFilter } from './WorkstreamFilter';
 
 export const OrderByFilters = () => {
   const { interests, workstreams } = useDelegates();
-  const { theme, daoInfo } = useDAO();
+  const { theme } = useDAO();
 
   return (
     <Flex align="end" flexDir={['row']} flexWrap="wrap">

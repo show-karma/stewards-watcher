@@ -1,8 +1,6 @@
 import {
-  Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerOverlay,
 } from '@chakra-ui/react';

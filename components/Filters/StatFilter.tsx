@@ -1,7 +1,6 @@
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { DownChevron } from 'components/Icons';
 import { useDAO, useDelegates } from 'contexts';
-import { IoChevronDownOutline } from 'react-icons/io5';
 import { IStatOptions } from 'types';
 
 export const StatFilter = () => {

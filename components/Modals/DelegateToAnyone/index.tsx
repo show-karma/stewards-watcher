@@ -82,7 +82,6 @@ export const DelegateVotesModal: React.FC<IDelegateVotesModal> = ({
               address={address}
               setAddress={setAddress}
               setSuccess={setSuccess}
-              success={success}
             />
           )}
         </ModalBody>

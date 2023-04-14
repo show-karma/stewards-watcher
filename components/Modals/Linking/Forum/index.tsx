@@ -1,4 +1,4 @@
-import { ModalContent, ModalOverlay, Modal, Box } from '@chakra-ui/react';
+import { ModalContent, ModalOverlay, Modal } from '@chakra-ui/react';
 import { useDAO, useDelegates } from 'contexts';
 import { AxiosClient } from 'helpers';
 import { useToasty } from 'hooks';
