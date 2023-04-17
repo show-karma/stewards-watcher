@@ -21,7 +21,7 @@ interface IStatPopoverCasesProps {
   stats: ICardStat[];
   stat: ICardStat;
   shouldOpenScoreBreakdown?: boolean;
-  key: number;
+  index: number;
   daoName: string;
   delegateAddress?: string;
 }
@@ -30,49 +30,11 @@ const StatPopoverCases: FC<IStatPopoverCasesProps> = ({
   stat,
   shouldOpenScoreBreakdown,
   stats,
-  key,
+  index,
   daoName,
   delegateAddress,
 }) => {
   const { theme } = useDAO();
-
-  // if (stat.id === 'delegatorCount' && delegateAddress)
-  //   return (
-  //     <Link
-  //       flexDir="column"
-  //       cursor="pointer"
-  //       background="transparent"
-  //       href={`https://karmahq.xyz/dao/${daoName}/delegators/${delegateAddress}`}
-  //       _hover={{}}
-  //       h="max-content"
-  //       isExternal
-  //     >
-  //       <Flex px="3" py="1.5" gap="2" flexDirection="row" align="center">
-  //         <Text
-  //           minW="6"
-  //           fontFamily="heading"
-  //           fontStyle="normal"
-  //           fontWeight="700"
-  //           fontSize="14px"
-  //           color={theme.card.text.primary}
-  //         >
-  //           {stat.value}
-  //         </Text>
-  //         <Text
-  //           fontFamily="heading"
-  //           fontStyle="normal"
-  //           fontWeight="400"
-  //           fontSize="12px"
-  //           color={theme.card.text.primary}
-  //         >
-  //           {stat.title}
-  //         </Text>
-  //       </Flex>
-  //       {stats.length !== key + 1 && stats.length > 1 && (
-  //         <Divider bgColor={theme.card.border} h="1px" />
-  //       )}
-  //     </Link>
-  //   );
 
   return (
     <Flex
@@ -103,7 +65,7 @@ const StatPopoverCases: FC<IStatPopoverCasesProps> = ({
           {stat.title}
         </Text>
       </Flex>
-      {stats.length !== key + 1 && stats.length > 1 && (
+      {stats.length !== index + 1 && stats.length > 1 && (
         <Divider bgColor={theme.card.border} h="1px" />
       )}
     </Flex>
@@ -189,6 +151,7 @@ export const StatPopover: FC<IStatPopoverProps> = ({ stats, data }) => {
                 <StatPopoverCases
                   stat={stat}
                   key={+index}
+                  index={index}
                   stats={stats}
                   shouldOpenScoreBreakdown={
                     stat.id === 'forumScore' && shouldOpenScoreBreakdown

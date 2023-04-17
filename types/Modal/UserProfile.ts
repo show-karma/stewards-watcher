@@ -15,4 +15,5 @@ export type IProfile = {
   forumHandle?: string;
   discordHandle?: string;
   status?: string;
+  userCreatedAt?: string;
 };
