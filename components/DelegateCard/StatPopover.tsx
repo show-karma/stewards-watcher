@@ -14,6 +14,7 @@ import {
 import { LeftCircleArrowIcon } from 'components/Icons';
 import { useDAO } from 'contexts';
 import { AnimatePresence, motion } from 'framer-motion';
+import { DELEGATOR_TRACKER_DAOS } from 'helpers';
 import { FC } from 'react';
 import { ICardStat, IDelegate } from 'types';
 
@@ -35,6 +36,50 @@ const StatPopoverCases: FC<IStatPopoverCasesProps> = ({
   delegateAddress,
 }) => {
   const { theme } = useDAO();
+
+  const daoSupportsDelegatorPage = DELEGATOR_TRACKER_DAOS.find(
+    dao => dao === daoName
+  );
+
+  if (stat.id === 'delegatorCount' && daoSupportsDelegatorPage) {
+    return (
+      <Link
+        background="transparent"
+        href={`https://karmahq.xyz/dao/${daoName}/delegators/${delegateAddress}`}
+        _hover={{}}
+        h="max-content"
+        isExternal
+        cursor="pointer"
+      >
+        <Flex flexDir="column">
+          <Flex px="3" py="1.5" gap="2" flexDirection="row" align="center">
+            <Text
+              minW="6"
+              fontFamily="heading"
+              fontStyle="normal"
+              fontWeight="700"
+              fontSize="14px"
+              color={theme.card.text.primary}
+            >
+              {stat.value}
+            </Text>
+            <Text
+              fontFamily="heading"
+              fontStyle="normal"
+              fontWeight="400"
+              fontSize="12px"
+              color={theme.card.text.primary}
+            >
+              {stat.title}
+            </Text>
+          </Flex>
+          {stats.length !== index + 1 && stats.length > 1 && (
+            <Divider bgColor={theme.card.border} h="1px" />
+          )}
+        </Flex>
+      </Link>
+    );
+  }
 
   return (
     <Flex

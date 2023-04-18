@@ -36,6 +36,7 @@ import {
   IBreakdownProps,
   ScoreBreakdownProvider,
 } from 'contexts/scoreBreakdown';
+import { DELEGATOR_TRACKER_DAOS } from 'helpers';
 import { StyledModal } from 'components/Modals/DelegateToAnyone/StyledModal';
 import { ImgWithFallback } from '../ImgWithFallback';
 import { DelegateButton } from '../DelegateButton';
@@ -59,19 +60,22 @@ const StatCases: FC<IStatCasesProps> = ({
   daoName,
   delegateAddress,
 }) => {
-  // if (statItem.id === 'delegatorCount')
-  //   return (
-  //     <Link
-  //       background="transparent"
-  //       href={`https://karmahq.xyz/dao/${daoName}/delegators/${delegateAddress}`}
-  //       _hover={{}}
-  //       h="max-content"
-  //       isExternal
-  //       cursor="pointer"
-  //     >
-  //       <DelegateStat stat={statItem} />
-  //     </Link>
-  //   );
+  const daoSupportsDelegatorPage = DELEGATOR_TRACKER_DAOS.find(
+    dao => dao === daoName
+  );
+  if (statItem.id === 'delegatorCount' && daoSupportsDelegatorPage)
+    return (
+      <Link
+        background="transparent"
+        href={`https://karmahq.xyz/dao/${daoName}/delegators/${delegateAddress}`}
+        _hover={{}}
+        h="max-content"
+        isExternal
+        cursor="pointer"
+      >
+        <DelegateStat stat={statItem} />
+      </Link>
+    );
   if (
     (statItem.id === 'forumScore' && canShowBreakdown) ||
     (statItem.id !== 'forumScore' && statItem.statAction)
