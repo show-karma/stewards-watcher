@@ -39,10 +39,10 @@ const config: IDAOConfig = {
       'offChainVotesPct',
       'onChainVotesPct',
       'delegatorCount',
+      'votingWeight',
       'forumScore',
       'karmaScore',
       'discordScore',
-      'votingWeight',
     ],
   },
   DAO_EXT_VOTES_PROVIDER: {

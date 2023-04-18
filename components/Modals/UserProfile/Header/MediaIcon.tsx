@@ -2,7 +2,7 @@ import { Button, Link, Tooltip } from '@chakra-ui/react';
 import { useDAO, useHandles, useWallet } from 'contexts';
 import { FC, ReactNode } from 'react';
 import { IActiveTab, IProfile } from 'types';
-import { getUserForumUrl } from 'utils';
+import { getUserForumUrl, lessThanDays } from 'utils';
 
 type IMedias = 'twitter' | 'forum' | 'discord';
 
@@ -95,7 +95,11 @@ export const MediaIcon: FC<IMediaIcon> = ({
 
   const disabledCondition =
     chosenMedia?.disabledCondition ||
-    daoInfo.config.SHOULD_NOT_SHOW === 'handles';
+    daoInfo.config.SHOULD_NOT_SHOW === 'handles' ||
+    !profile?.userCreatedAt ||
+    (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
+      !!profile?.userCreatedAt &&
+      lessThanDays(profile?.userCreatedAt, 100));
 
   const labelTooltip = () => {
     if (disabledCondition) return '';

@@ -192,6 +192,7 @@ export const HeaderHat = () => {
             aboutMe: profileSelected.aboutMe,
             realName: profileSelected.realName,
             forumHandle: profileSelected.discourseHandle,
+            userCreatedAt: profileSelected.userCreatedAt,
           }}
           selectedTab={selectedTab}
         />
