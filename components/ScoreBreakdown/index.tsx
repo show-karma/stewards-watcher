@@ -14,6 +14,7 @@ import { useScoreBreakdown } from 'contexts/scoreBreakdown';
 import { ScoreCalculator } from 'karma-score';
 import { useMemo } from 'react';
 import { BsFillInfoCircleFill } from 'react-icons/bs';
+import { formatNumber } from 'utils';
 import { InputTree } from './InputTree';
 
 export const ScoreBreakdown: React.FC = () => {
@@ -163,7 +164,7 @@ export const ScoreBreakdown: React.FC = () => {
                   w="4ch"
                   style={{ wordWrap: 'initial' }}
                 >
-                  {roundedResult}
+                  {formatNumber(roundedResult)}
                 </Text>
               </SkeletonText>
             </Td>
