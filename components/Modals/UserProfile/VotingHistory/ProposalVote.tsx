@@ -32,7 +32,12 @@ const CheckDecision = (choice: string) => {
   }
   // eslint-disable-next-line react/destructuring-assignment
   const choiceLowerCase = choice.toLocaleLowerCase();
-  if (choiceLowerCase.substring(0, 2) === 'no' || /agai+nst/gi.test(choice)) {
+  if (
+    choiceLowerCase.substring(0, 2) === 'no' ||
+    /agai+nst/gi.test(choice) ||
+    choiceLowerCase.substring(0, 3) === 'nay' ||
+    choiceLowerCase.substring(0, 3) === 'nae'
+  ) {
     return <Icon as={AgainstIcon} color="#CA4444" {...iconStyle} />;
   }
   if (/abstain/gi.test(choice))
