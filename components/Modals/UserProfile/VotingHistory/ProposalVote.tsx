@@ -27,13 +27,17 @@ const iconStyle = {
 };
 
 const CheckDecision = (choice: string) => {
-  const { theme } = useDAO();
   if (/not vote/gi.test(choice)) {
     return <Icon as={DidNotVoteIcon} color="#FFF7AE" {...iconStyle} />;
   }
   // eslint-disable-next-line react/destructuring-assignment
   const choiceLowerCase = choice.toLocaleLowerCase();
-  if (choiceLowerCase.substring(0, 2) === 'no' || /agai+nst/gi.test(choice)) {
+  if (
+    choiceLowerCase.substring(0, 2) === 'no' ||
+    /agai+nst/gi.test(choice) ||
+    choiceLowerCase.substring(0, 3) === 'nay' ||
+    choiceLowerCase.substring(0, 3) === 'nae'
+  ) {
     return <Icon as={AgainstIcon} color="#CA4444" {...iconStyle} />;
   }
   if (/abstain/gi.test(choice))

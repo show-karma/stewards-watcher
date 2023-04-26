@@ -1,6 +1,6 @@
-import { Flex, Text, useMediaQuery } from '@chakra-ui/react';
+import { Flex, Text } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
-import { FC, useRef } from 'react';
+import { FC } from 'react';
 import { removeHtmlTagWithRegex } from 'utils';
 
 interface IExpandableText {

@@ -24,6 +24,7 @@ import {
 } from 'types';
 import { useMixpanel, useToasty } from 'hooks';
 import { api } from 'helpers';
+import { useAccount } from 'wagmi';
 import { useDAO } from './dao';
 
 interface IDelegateProps {
@@ -391,6 +392,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       });
   };
 
+  const { isConnected, address: publicAddress } = useAccount();
+
   const searchProfileModal = async (
     userToSearch: string,
     defaultTab?: IActiveTab
@@ -449,11 +452,42 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       if (userFound.aboutMe) tabs.push('aboutme');
       const checkTab = tabs.includes(getTab[1] as IActiveTab);
       const shouldOpenTab = defaultTab || (getTab[1] as IActiveTab);
+
       selectProfile(userFound, checkTab ? shouldOpenTab : undefined);
-    } catch (error) {
-      toast({
-        title: `We couldn't find the contributor page`,
-      });
+    } catch (error: any) {
+      const newUser =
+        userToSearch.toLowerCase() === publicAddress?.toLowerCase();
+      if (error?.response?.data.error.error === 'Not Found' && newUser) {
+        const userWithoutDelegate: IDelegate = {
+          address: publicAddress,
+          forumActivity: 0,
+          karmaScore: 0,
+          discordScore: 0,
+          voteParticipation: {
+            onChain: 0,
+            offChain: 0,
+          },
+          status: 'active',
+        };
+        const getTab = asPath.split('#');
+        const tabs: IActiveTab[] = [
+          'votinghistory',
+          'statement',
+          'handles',
+          'withdraw',
+        ];
+        const checkTab = tabs.includes(getTab[1] as IActiveTab);
+        const shouldOpenTab = defaultTab || (getTab[1] as IActiveTab);
+
+        selectProfile(
+          userWithoutDelegate,
+          checkTab ? shouldOpenTab : undefined
+        );
+      } else {
+        toast({
+          title: `We couldn't find the contributor page`,
+        });
+      }
     }
   };
 

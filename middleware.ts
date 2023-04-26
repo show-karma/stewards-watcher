@@ -21,7 +21,7 @@ const devUrl = 'dapp.karmahq.xyz';
 const DAO_CUSTOM_DOMAIN: Record<string, string> = {
   [devUrl]: 'gitcoin',
   'daostewards.xyz': 'gitcoin',
-  'stewards.gitcoin.co': 'gitcoin',
+  'delegate.gitcoin.co': 'gitcoin',
   'delegate.starknet.io': 'starknet',
 };
 

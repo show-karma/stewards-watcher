@@ -1,13 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import {
-  Button,
-  Flex,
-  IconButton,
-  Img,
-  Text,
-  Icon,
-  useClipboard,
-} from '@chakra-ui/react';
+import { Button, Flex, Img, Text, Icon, useClipboard } from '@chakra-ui/react';
 import { ImgWithFallback } from 'components';
 import { useDAO } from 'contexts';
 import { IoCopy } from 'react-icons/io5';

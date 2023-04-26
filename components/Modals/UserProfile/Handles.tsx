@@ -1,9 +1,159 @@
-import { Flex, Text, Icon, Button, Tooltip } from '@chakra-ui/react';
+import {
+  Flex,
+  Text,
+  Icon,
+  Button,
+  Tooltip,
+  Input,
+  FormControl,
+} from '@chakra-ui/react';
 import { DiscordIcon, ForumIcon, TwitterIcon } from 'components';
-import { useDAO, useDelegates, useHandles } from 'contexts';
-import { FC } from 'react';
+import {
+  useAuth,
+  useDAO,
+  useDelegates,
+  useEditProfile,
+  useHandles,
+} from 'contexts';
+import { FC, useState } from 'react';
 import { lessThanDays } from 'utils';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import { DiscourseModal, TwitterModal } from '../Linking';
+
+interface IHandleCasesProps {
+  currentHandle?: string;
+  disabledCondition?: boolean;
+  action: () => void;
+  mediaName: string;
+  canAdminEdit?: boolean;
+}
+
+const HandleCases: FC<IHandleCasesProps> = ({
+  currentHandle,
+  disabledCondition,
+  action,
+  mediaName,
+  canAdminEdit,
+}) => {
+  const { theme } = useDAO();
+  const { isDaoAdmin } = useAuth();
+  const { isEditing, changeHandle } = useEditProfile();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const schema = yup
+    .object({
+      handle: yup.string().required('Handle is required'),
+    })
+    .required();
+  type FormData = yup.InferType<typeof schema>;
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<FormData>({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      handle: currentHandle || '',
+    },
+    reValidateMode: 'onChange',
+    mode: 'onChange',
+  });
+
+  const onSubmit = (data: { handle: string }) => {
+    const cleanNewHandle = data.handle.replace(/[|;$%@"<>()+,.]/g, '');
+    if (!cleanNewHandle) return;
+    setIsLoading(true);
+    const media = mediaName.toLowerCase() as 'twitter' | 'forum';
+    changeHandle(cleanNewHandle, media).finally(() => setIsLoading(false));
+  };
+
+  if (isDaoAdmin && isEditing && canAdminEdit)
+    return (
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <FormControl isInvalid={!!errors.handle}>
+          <Flex flexDir="column" gap="1">
+            <Flex flexDir="row" gap="4">
+              <Input
+                px="4"
+                py="2"
+                borderWidth="1px"
+                borderColor={theme.modal.statement.sidebar.item}
+                minW="60"
+                maxW="60"
+                w="max-content"
+                {...register('handle')}
+              />
+              <Button
+                type="submit"
+                isLoading={isSubmitting || isLoading}
+                isDisabled={!!errors.handle || isLoading}
+                disabled={!!errors.handle || isLoading}
+              >
+                Save
+              </Button>
+            </Flex>
+            <Text color="red.200">{errors.handle?.message}</Text>
+          </Flex>
+        </FormControl>
+      </form>
+    );
+
+  if (!currentHandle)
+    return (
+      <Tooltip
+        label={
+          disabledCondition
+            ? 'We are validating your address. Please check back in few days to verify your handle.'
+            : ''
+        }
+        placement="top"
+        hasArrow
+      >
+        <Button
+          onClick={() => {
+            if (disabledCondition) return;
+            action();
+          }}
+          bgColor={theme.modal.buttons.navBg}
+          color={theme.modal.buttons.navText}
+          borderColor={theme.modal.buttons.navText}
+          borderWidth="1px"
+          borderStyle="solid"
+          _hover={{
+            opacity: 0.7,
+          }}
+          _disabled={{
+            opacity: 0.4,
+            cursor: 'not-allowed',
+          }}
+          _active={{}}
+          _focus={{}}
+          _focusVisible={{}}
+          _focusWithin={{}}
+          isDisabled={disabledCondition}
+          disabled={disabledCondition}
+        >
+          Link your {mediaName} handle
+        </Button>
+      </Tooltip>
+    );
+
+  return (
+    <Text
+      px="4"
+      py="2"
+      borderWidth="1px"
+      borderColor={theme.modal.statement.sidebar.item}
+      minW="60"
+      w="max-content"
+    >
+      {currentHandle}
+    </Text>
+  );
+};
 
 export const Handles: FC = () => {
   const { theme, daoData, daoInfo } = useDAO();
@@ -21,9 +171,10 @@ export const Handles: FC = () => {
 
   const notShowCondition =
     daoInfo.config.SHOULD_NOT_SHOW === 'handles' ||
+    !profileSelected?.userCreatedAt ||
     (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
       !!profileSelected?.userCreatedAt &&
-      lessThanDays(profileSelected?.userCreatedAt, 14));
+      lessThanDays(profileSelected?.userCreatedAt, 100));
 
   const socialMedias = [
     {
@@ -36,6 +187,7 @@ export const Handles: FC = () => {
       handle: profileSelected?.twitterHandle
         ? `@${profileSelected?.twitterHandle}`
         : undefined,
+      canAdminEdit: true,
     },
     {
       icon: ForumIcon,
@@ -46,6 +198,7 @@ export const Handles: FC = () => {
         forumOnOpen();
       },
       handle: profileSelected?.discourseHandle,
+      canAdminEdit: true,
     },
     {
       icon: DiscordIcon,
@@ -55,6 +208,7 @@ export const Handles: FC = () => {
       handle: profileSelected?.discordHandle
         ? `@${profileSelected?.discordHandle}`
         : undefined,
+      canAdminEdit: false,
     },
   ];
 
@@ -92,63 +246,23 @@ export const Handles: FC = () => {
                 <Flex
                   flexDir="row"
                   key={+index}
-                  gap="3"
-                  align="center"
+                  gap="2"
+                  align="flex-start"
                   color={theme.modal.statement.sidebar.section}
                 >
-                  <Icon boxSize="6" as={media.icon} />
-                  <Text fontSize="lg" fontWeight="medium" w="20" mr="6">
-                    {media.name}
-                  </Text>
-                  {media.handle ? (
-                    <Text
-                      px="4"
-                      py="2"
-                      borderWidth="1px"
-                      borderColor={theme.modal.statement.sidebar.item}
-                      minW="60"
-                      w="max-content"
-                    >
-                      {media.handle}
+                  <Flex flexDir="row" gap="3" align="center" mt="2">
+                    <Icon boxSize="6" as={media.icon} />
+                    <Text fontSize="lg" fontWeight="medium" w="20" mr="6">
+                      {media.name}
                     </Text>
-                  ) : (
-                    <Tooltip
-                      label={
-                        media.disabledCondition
-                          ? 'We are validating your address. Please check back in few days to verify your handle.'
-                          : ''
-                      }
-                      placement="top"
-                      hasArrow
-                    >
-                      <Button
-                        onClick={() => {
-                          if (media.disabledCondition) return;
-                          media.action();
-                        }}
-                        bgColor={theme.modal.buttons.navBg}
-                        color={theme.modal.buttons.navText}
-                        borderColor={theme.modal.buttons.navText}
-                        borderWidth="1px"
-                        borderStyle="solid"
-                        _hover={{
-                          opacity: 0.7,
-                        }}
-                        _disabled={{
-                          opacity: 0.4,
-                          cursor: 'not-allowed',
-                        }}
-                        _active={{}}
-                        _focus={{}}
-                        _focusVisible={{}}
-                        _focusWithin={{}}
-                        isDisabled={media.disabledCondition}
-                        disabled={media.disabledCondition}
-                      >
-                        Link your {media.name} handle
-                      </Button>
-                    </Tooltip>
-                  )}
+                  </Flex>
+                  <HandleCases
+                    currentHandle={media.handle}
+                    action={media.action}
+                    disabledCondition={media.disabledCondition}
+                    mediaName={media.name}
+                    canAdminEdit={media.canAdminEdit}
+                  />
                 </Flex>
               )
           )}

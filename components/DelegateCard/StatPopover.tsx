@@ -2,6 +2,7 @@ import {
   Divider,
   Flex,
   IconButton,
+  Link,
   Popover,
   PopoverBody,
   PopoverContent,
@@ -13,32 +14,126 @@ import {
 import { LeftCircleArrowIcon } from 'components/Icons';
 import { useDAO } from 'contexts';
 import { AnimatePresence, motion } from 'framer-motion';
-import { FC, SetStateAction } from 'react';
+import { DELEGATOR_TRACKER_DAOS } from 'helpers';
+import { FC } from 'react';
 import { ICardStat, IDelegate } from 'types';
+
+interface IStatPopoverCasesProps {
+  stats: ICardStat[];
+  stat: ICardStat;
+  shouldOpenScoreBreakdown?: boolean;
+  index: number;
+  daoName: string;
+  delegateAddress?: string;
+}
+
+const StatPopoverCases: FC<IStatPopoverCasesProps> = ({
+  stat,
+  shouldOpenScoreBreakdown,
+  stats,
+  index,
+  daoName,
+  delegateAddress,
+}) => {
+  const { theme } = useDAO();
+
+  const daoSupportsDelegatorPage = DELEGATOR_TRACKER_DAOS.find(
+    dao => dao === daoName
+  );
+
+  if (stat.id === 'delegatorCount' && daoSupportsDelegatorPage) {
+    return (
+      <Link
+        background="transparent"
+        href={`https://karmahq.xyz/dao/${daoName}/delegators/${delegateAddress}`}
+        _hover={{}}
+        h="max-content"
+        isExternal
+        cursor="pointer"
+      >
+        <Flex flexDir="column">
+          <Flex px="3" py="1.5" gap="2" flexDirection="row" align="center">
+            <Text
+              minW="6"
+              fontFamily="heading"
+              fontStyle="normal"
+              fontWeight="700"
+              fontSize="14px"
+              color={theme.card.text.primary}
+            >
+              {stat.value}
+            </Text>
+            <Text
+              fontFamily="heading"
+              fontStyle="normal"
+              fontWeight="400"
+              fontSize="12px"
+              color={theme.card.text.primary}
+            >
+              {stat.title}
+            </Text>
+          </Flex>
+          {stats.length !== index + 1 && stats.length > 1 && (
+            <Divider bgColor={theme.card.border} h="1px" />
+          )}
+        </Flex>
+      </Link>
+    );
+  }
+
+  return (
+    <Flex
+      flexDir="column"
+      onClick={() => {
+        if (shouldOpenScoreBreakdown) stat.statAction?.();
+      }}
+      cursor={shouldOpenScoreBreakdown ? 'pointer' : 'default'}
+    >
+      <Flex px="3" py="1.5" gap="2" flexDirection="row" align="center">
+        <Text
+          minW="6"
+          fontFamily="heading"
+          fontStyle="normal"
+          fontWeight="700"
+          fontSize="14px"
+          color={theme.card.text.primary}
+        >
+          {stat.value}
+        </Text>
+        <Text
+          fontFamily="heading"
+          fontStyle="normal"
+          fontWeight="400"
+          fontSize="12px"
+          color={theme.card.text.primary}
+        >
+          {stat.title}
+        </Text>
+      </Flex>
+      {stats.length !== index + 1 && stats.length > 1 && (
+        <Divider bgColor={theme.card.border} h="1px" />
+      )}
+    </Flex>
+  );
+};
 
 interface IStatPopoverProps {
   stats: ICardStat[];
-  openScoreBreakdown: () => void;
-  setScoreType: (
-    value: SetStateAction<
-      'forumScore' | 'gitcoinHealthScore' | 'karmaScore' | undefined
-    >
-  ) => void;
   data?: IDelegate;
 }
 
-export const StatPopover: FC<IStatPopoverProps> = ({
-  stats,
-  openScoreBreakdown,
-  setScoreType,
-  data,
-}) => {
+export const StatPopover: FC<IStatPopoverProps> = ({ stats, data }) => {
   const { isOpen, onToggle, onClose } = useDisclosure();
   const { theme, daoData, daoInfo } = useDAO();
   const { config } = daoInfo;
 
   const MotionIconButton = motion(IconButton);
   const MotionPopoverContent = motion(PopoverContent);
+
+  const shouldOpenScoreBreakdown =
+    !!data?.discourseHandle &&
+    !!daoData?.socialLinks.forum &&
+    !!config.DAO_FORUM_TYPE;
 
   return (
     <Popover isOpen={isOpen} onClose={onClose} placement="right">
@@ -97,57 +192,19 @@ export const StatPopover: FC<IStatPopoverProps> = ({
               borderColor={theme.card.divider}
               borderRadius="5px"
             >
-              {stats.map((stat, index) => {
-                const shouldOpenScoreBreakdown =
-                  stat.id === 'forumScore' &&
-                  data?.discourseHandle &&
-                  daoData?.socialLinks.forum &&
-                  config.DAO_FORUM_TYPE;
-                return (
-                  <Flex
-                    key={+index}
-                    flexDir="column"
-                    onClick={() => {
-                      if (shouldOpenScoreBreakdown) {
-                        setScoreType('forumScore');
-                        openScoreBreakdown();
-                      }
-                    }}
-                    cursor={shouldOpenScoreBreakdown ? 'pointer' : 'default'}
-                  >
-                    <Flex
-                      px="3"
-                      py="1.5"
-                      gap="2"
-                      flexDirection="row"
-                      align="center"
-                    >
-                      <Text
-                        minW="6"
-                        fontFamily="heading"
-                        fontStyle="normal"
-                        fontWeight="700"
-                        fontSize="14px"
-                        color={theme.card.text.primary}
-                      >
-                        {stat.value}
-                      </Text>
-                      <Text
-                        fontFamily="heading"
-                        fontStyle="normal"
-                        fontWeight="400"
-                        fontSize="12px"
-                        color={theme.card.text.primary}
-                      >
-                        {stat.title}
-                      </Text>
-                    </Flex>
-                    {stats.length !== index + 1 && stats.length > 1 && (
-                      <Divider bgColor={theme.card.border} h="1px" />
-                    )}
-                  </Flex>
-                );
-              })}
+              {stats.map((stat, index) => (
+                <StatPopoverCases
+                  stat={stat}
+                  key={+index}
+                  index={index}
+                  stats={stats}
+                  shouldOpenScoreBreakdown={
+                    stat.id === 'forumScore' && shouldOpenScoreBreakdown
+                  }
+                  daoName={config.DAO_KARMA_ID}
+                  delegateAddress={data?.address}
+                />
+              ))}
             </PopoverBody>
           </MotionPopoverContent>
         )}

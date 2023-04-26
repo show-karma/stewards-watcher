@@ -65,19 +65,14 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
     isLoading,
     fetchNextDelegates,
     hasMore,
-    isOpenProfile,
-    onCloseProfile,
+
     profileSelected,
-    selectedTab,
     searchProfileModal,
     interestFilter,
     delegates,
   } = useDelegates();
-  const { daoInfo } = useDAO();
-  const { config } = daoInfo;
 
-  const { connectOnClose, connectIsOpen, delegateIsOpen, delegateOnToggle } =
-    useWallet();
+  const { delegateIsOpen, delegateOnToggle } = useWallet();
 
   const searchProfileSelected = async (userToSearch: string) => {
     await searchProfileModal(userToSearch);

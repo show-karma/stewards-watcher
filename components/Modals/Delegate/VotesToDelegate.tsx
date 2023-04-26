@@ -3,6 +3,7 @@ import { ImgWithFallback } from 'components';
 import { Flex, Text, Icon, Skeleton } from '@chakra-ui/react';
 import { IoAlertCircleOutline } from 'react-icons/io5';
 import { useGovernanceVotes } from 'contexts';
+import { formatNumber } from 'utils';
 
 interface IVotesToDelegate {
   logoUrl?: string;
@@ -36,7 +37,7 @@ export const VotesToDelegate: React.FC<IVotesToDelegate> = ({
             fontWeight="500"
             fontSize="1.15em"
             color="#000000"
-          >{`${votes} ${symbol}`}</Text>
+          >{`${formatNumber(votes)} ${symbol}`}</Text>
         )}
         <ImgWithFallback
           fallback={daoName}

@@ -2,13 +2,11 @@ import {
   Box,
   Divider,
   Flex,
-  Grid,
   Spinner,
   Text,
-  useBreakpointValue,
   useMediaQuery,
 } from '@chakra-ui/react';
-import { useDAO, useDelegates, useVotes } from 'contexts';
+import { useDAO, useVotes } from 'contexts';
 import { FC, useEffect, useState } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import {

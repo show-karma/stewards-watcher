@@ -1,6 +1,7 @@
 import { Input, Td, Tr } from '@chakra-ui/react';
 import { ScoreBreakdownCalcItem } from 'karma-score';
 import { useState } from 'react';
+import { formatNumber } from 'utils';
 
 export const InputDisplay: React.FC<{
   item: ScoreBreakdownCalcItem;
@@ -12,7 +13,7 @@ export const InputDisplay: React.FC<{
   return (
     <Tr fontSize={14}>
       <Td px={{ base: '3', md: '6' }}>{item.label}</Td>
-      <Td px={{ base: '2', md: '6' }}>{item.value}</Td>
+      <Td px={{ base: '2', md: '6' }}>{formatNumber(item.value || 0)}</Td>
       <Td px={{ base: '3', md: '6' }}>
         <Input
           type="number"

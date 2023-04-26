@@ -8,12 +8,7 @@ import {
   Tooltip,
   useClipboard,
 } from '@chakra-ui/react';
-import {
-  ImgWithFallback,
-  DelegateButton,
-  ForumIcon,
-  TwitterIcon,
-} from 'components';
+import { DelegateButton, ForumIcon, TwitterIcon } from 'components';
 import { useDAO, useDelegates, useEditProfile, useWallet } from 'contexts';
 import { useAuth } from 'contexts/auth';
 import { useToasty } from 'hooks';
@@ -92,7 +87,6 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
       setConnecting(true);
       return;
     }
-    changeTab('statement');
     setConnecting(false);
     if (address?.toLowerCase() !== fullAddress?.toLowerCase() && !isDaoAdmin) {
       toast({
@@ -323,15 +317,18 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
   const { address: fullAddress } = profile;
   const { isConnected } = useWallet();
   const { address } = useAccount();
+  const { isDaoAdmin } = useAuth();
 
   const isSamePerson =
     isConnected && address?.toLowerCase() === fullAddress?.toLowerCase();
 
   useMemo(() => {
     if (
-      ((activeTab === 'handles' || activeTab === 'withdraw') &&
+      !isDaoAdmin &&
+      (((activeTab === 'handles' || activeTab === 'withdraw') &&
         !isSamePerson) ||
-      (activeTab === 'handles' && daoInfo.config.SHOULD_NOT_SHOW === 'handles')
+        (activeTab === 'handles' &&
+          daoInfo.config.SHOULD_NOT_SHOW === 'handles'))
     ) {
       changeTab('statement');
     }

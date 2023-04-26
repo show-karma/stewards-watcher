@@ -31,6 +31,10 @@ interface IEditProfileProps {
   editProfilePicture: (url: string | null) => void;
   newName: string | null;
   newProfilePicture: string | null;
+  changeHandle: (
+    newHandle: string,
+    media: 'twitter' | 'forum'
+  ) => Promise<void>;
 }
 
 export const EditProfileContext = createContext({} as IEditProfileProps);
@@ -63,6 +67,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     profileSelected,
     interests: delegatesInterests,
     refreshProfileModal,
+    fetchDelegates,
   } = useDelegates();
   const { daoInfo } = useDAO();
   const { address } = useAccount();
@@ -321,6 +326,45 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     }
   };
 
+  const changeHandle = async (
+    newHandle: string,
+    media: 'twitter' | 'forum'
+  ) => {
+    try {
+      const authorizedAPI = axios.create({
+        timeout: 30000,
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: authToken ? `Bearer ${authToken}` : '',
+        },
+      });
+      await authorizedAPI
+        .put(
+          `${KARMA_API.base_url}/user/${daoInfo.config.DAO_KARMA_ID}/handles/${profileSelected?.address}`,
+          {
+            [`${media}Handle`]: newHandle,
+          }
+        )
+        .then(() => {
+          refreshProfileModal('handles');
+          fetchDelegates(0);
+        });
+      toast({
+        description: `${
+          media.charAt(0).toUpperCase() + media.slice(1)
+        } has been saved`,
+        status: 'success',
+      });
+    } catch (error: any) {
+      if (error.response?.data?.error?.message)
+        toast({
+          status: 'error',
+          description: error.response.data.error.message,
+        });
+    }
+  };
+
   useMemo(() => {
     setIsEditing(false);
     if (
@@ -381,6 +425,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       editName,
       newProfilePicture,
       editProfilePicture,
+      changeHandle,
     }),
     [
       isEditing,
@@ -402,6 +447,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       editName,
       newProfilePicture,
       editProfilePicture,
+      changeHandle,
     ]
   );
 

@@ -7,16 +7,13 @@ import {
   PopoverContent,
   PopoverArrow,
   PopoverCloseButton,
-  PopoverHeader,
   PopoverBody,
   Text,
   Input,
-  Button,
   Img,
 } from '@chakra-ui/react';
-import { ImgWithFallback } from 'components/ImgWithFallback';
 import { useDAO, useDelegates, useEditProfile } from 'contexts';
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import { AiFillEdit } from 'react-icons/ai';
 import { GiCancel } from 'react-icons/gi';
 

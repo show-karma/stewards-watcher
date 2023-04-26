@@ -1,4 +1,4 @@
-import { ModalContent, ModalOverlay, Modal, Box } from '@chakra-ui/react';
+import { ModalContent, ModalOverlay, Modal } from '@chakra-ui/react';
 import { useDAO, useDelegates } from 'contexts';
 import { AxiosClient } from 'helpers';
 import { useToasty } from 'hooks';
@@ -137,9 +137,10 @@ export const DiscourseModal: React.FC<IModal> = ({
 
   const notShowCondition =
     daoInfo.config.SHOULD_NOT_SHOW === 'handles' ||
+    !profileSelected?.userCreatedAt ||
     (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
       !!profileSelected?.userCreatedAt &&
-      lessThanDays(profileSelected?.userCreatedAt, 14));
+      lessThanDays(profileSelected?.userCreatedAt, 100));
 
   useEffect(() => {
     if (notShowCondition) {
