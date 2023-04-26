@@ -4,6 +4,7 @@ import { IDelegation } from 'types';
 import snapshotContract from 'resources/contracts/snapshot.json';
 import { getIdBySnapshotId } from 'utils';
 import { useToasty } from './useToasty';
+import { useMixpanel } from './useMixpanel';
 
 export const useDelegation = (args: IDelegation) => {
   const { delegatee, onSuccessFunction } = args;
@@ -37,6 +38,8 @@ export const useDelegation = (args: IDelegation) => {
     return 'delegate';
   };
 
+  const { mixpanel } = useMixpanel();
+
   const { config } = usePrepareContractWrite({
     address: getAddressOrName(),
     abi: getABI(),
@@ -47,7 +50,9 @@ export const useDelegation = (args: IDelegation) => {
   const { data, isLoading, isSuccess, write } = useContractWrite({
     ...config,
     onSuccess() {
-      console.log('success');
+      mixpanel.reportEvent({
+        event: 'delegateapp.tokenDelegated',
+      });
       onSuccessFunction?.();
       toast({
         title: 'Success',
