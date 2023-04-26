@@ -27,7 +27,7 @@ const ContrarionBox: FC<IContrarionBoxProps> = ({ contrarionIndex }) => {
           fontWeight="semibold"
           fontSize="md"
         >
-          Contrarion Index:
+          Contrarian Index:
         </Text>
         <Text
           color={theme.modal.votingHistory.proposal.title}
@@ -49,7 +49,7 @@ const ContrarionBox: FC<IContrarionBoxProps> = ({ contrarionIndex }) => {
           fontSize="14px"
           color={`${theme.modal.votingHistory.proposal.title}80`}
         >
-          Contrarion index represents the percentage of votes cast against the
+          Contrarian index represents the percentage of votes cast against the
           majority.
         </Text>
       </Flex>
@@ -118,7 +118,7 @@ export const ContrarionIndexComponent: FC = () => {
               fontSize="14px"
               maxW="270px"
             >
-              There is no contrarion index for this contributor yet.
+              There is no contrarian index for this contributor yet.
             </Text>
           </Flex>
         </Flex>
