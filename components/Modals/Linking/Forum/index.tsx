@@ -140,7 +140,7 @@ export const DiscourseModal: React.FC<IModal> = ({
     !profileSelected?.userCreatedAt ||
     (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
       !!profileSelected?.userCreatedAt &&
-      lessThanDays(profileSelected?.userCreatedAt, 101));
+      lessThanDays(profileSelected?.userCreatedAt, 100));
 
   useEffect(() => {
     if (notShowCondition) {
