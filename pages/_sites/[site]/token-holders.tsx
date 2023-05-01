@@ -13,7 +13,7 @@ interface IndexProps {
 }
 
 export const getStaticPaths: GetStaticPaths<PathProps> = async () => {
-  const paths = [{ params: { site: 'siteIndex' } }];
+  const paths = [{ params: { site: 'gitcoin' } }];
 
   return {
     paths,

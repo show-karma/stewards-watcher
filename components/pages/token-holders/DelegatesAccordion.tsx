@@ -1,7 +1,7 @@
 import { Accordion, Flex } from '@chakra-ui/react';
-import { useDAO, useTokenHolders } from 'contexts';
-import { useMemo, useState, FC } from 'react';
-import { IDelegatingHistories, IDelegationHistoryAPI } from 'types';
+import { useTokenHolders } from 'contexts';
+import { useMemo, FC } from 'react';
+import { IDelegationHistoryAPI } from 'types';
 import { DelegationCard } from './DelegationCard';
 
 interface IDelegatesAccordionProps {
@@ -11,7 +11,6 @@ interface IDelegatesAccordionProps {
 export const DelegatesAccordion: FC<IDelegatesAccordionProps> = ({
   holderData,
 }) => {
-  const { theme } = useDAO();
   const { selectedAddressesData } = useTokenHolders();
 
   const dataArray = holderData.delegatingHistories;
@@ -19,12 +18,7 @@ export const DelegatesAccordion: FC<IDelegatesAccordionProps> = ({
   const lastDelegation = dataArray[0];
   return useMemo(
     () => (
-      <Flex
-        w="full"
-        pl={{ base: '2', lg: '9' }}
-        pr={{ base: '2', lg: '5' }}
-        pt="7"
-      >
+      <Flex w="full" pt="7">
         <Accordion w="full" allowMultiple defaultIndex={[0]}>
           <DelegationCard
             userDelegatedTo={{

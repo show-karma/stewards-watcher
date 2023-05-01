@@ -4,15 +4,20 @@ import {
   AccordionItem,
   AccordionPanel,
   Flex,
+  Icon,
+  IconButton,
   Text,
 } from '@chakra-ui/react';
+import { DownChevron, UpChevronIcon } from 'components/Icons';
 import { ImgWithFallback } from 'components/ImgWithFallback';
-import { useDAO } from 'contexts';
+import { useDAO, VotesProvider } from 'contexts';
+import { motion } from 'framer-motion';
+import moment from 'moment';
 import { FC } from 'react';
 import { IDelegatingHistories } from 'types';
 import { formatNumber, truncateAddress } from 'utils';
-import { DelegationHistory } from './DelegationHistory';
-import { SinceDelegation } from './SinceDelegation';
+import { PerformanceStats } from './PerformanceStats';
+import { VotingHistory } from './VotingHistory';
 
 interface IDelegationCardProps {
   userDelegating: {
@@ -38,148 +43,285 @@ export const DelegationCard: FC<IDelegationCardProps> = ({
 }) => {
   const { theme } = useDAO();
 
+  const sinceDate = moment
+    .unix(selectedDelegation.timestamp)
+    .format('MMM DD, YYYY');
+
+  const MotionIcon = motion(IconButton);
+
   return (
-    <AccordionItem
-      borderWidth="1px"
-      borderRadius="md"
-      borderBottomRadius="0"
-      borderColor={`${theme.tokenHolders.delegations.text.primary}0D`}
-      _hover={{}}
-      mb="8"
-    >
-      <AccordionButton
-        w="full"
-        bg={theme.tokenHolders.delegations.bg.primary}
-        borderRadius="md"
-        borderBottomRadius="0"
-        _hover={{
-          opacity: '0.8',
-        }}
-        color={theme.tokenHolders.delegations.text.primary}
-      >
-        <Flex
-          flex="1"
-          textAlign="left"
-          w="full"
-          flexDir="row"
-          gap="2"
-          align="center"
-          flexWrap="wrap"
-        >
-          <ImgWithFallback
-            fallback={userDelegating.address}
-            src={userDelegating.picture}
-            boxSize={{ base: '20px', lg: '26px' }}
-            borderRadius="full"
-          />
-          <Text
-            fontWeight="bold"
-            fontSize={{ base: 'sm', lg: 'md' }}
-            color={`${theme.tokenHolders.delegations.text.primary}80`}
-            maxW="200px"
-            w="max-content"
-            textOverflow="ellipsis"
-            whiteSpace="nowrap"
-            overflow="hidden"
-          >
-            {userDelegating.name || truncateAddress(userDelegating.address)}
-          </Text>
-          <Text
-            color={theme.tokenHolders.delegations.text.primary}
-            fontWeight="normal"
-            fontSize={{ base: 'sm', lg: 'md' }}
-          >
-            has currently delegated
-          </Text>
-          {userDelegating.amountDelegated && (
-            <Text
-              bg={theme.tokenHolders.delegations.bg.tertiary}
-              color={theme.tokenHolders.delegations.text.primary}
-              fontWeight="bold"
-              fontSize="2xl"
-              py="1"
-              px="3"
-              borderRadius="md"
-              minH="43px"
-              maxW="210px"
-              w="max-content"
-              textOverflow="ellipsis"
-              whiteSpace="nowrap"
-              overflow="hidden"
-            >
-              {formatNumber(userDelegating.amountDelegated)} tokens
-            </Text>
-          )}
-          <Text
-            color={theme.tokenHolders.delegations.text.primary}
-            fontWeight="normal"
-            fontSize={{ base: 'sm', lg: 'md' }}
-          >
-            to delegate:
-          </Text>
+    <AccordionItem borderRadius="md" borderBottomRadius="md" _hover={{}} mb="8">
+      {({ isExpanded }) => (
+        <>
           <Flex
-            flexDir="row"
-            align="center"
-            gap="2"
-            bg={theme.tokenHolders.delegations.bg.tertiary}
-            py="1"
-            px="2"
-            borderRadius="md"
-            minH="43px"
+            bg={theme.tokenHolders.delegations.bg.primary}
+            px="6"
+            py="4"
+            borderTopRadius="md"
+            borderBottomRadius={isExpanded ? '0' : 'md'}
+            flexDir={{ base: 'column', md: 'row' }}
+            gap="4"
           >
-            <ImgWithFallback
-              fallback={userDelegatedTo.address}
-              src={userDelegatedTo.picture}
-              boxSize={{ base: '20px', lg: '26px' }}
-              borderRadius="full"
-            />
-            <Text
+            <Flex
+              w="full"
+              borderRadius="md"
+              borderBottomRadius="0"
               color={theme.tokenHolders.delegations.text.primary}
-              fontWeight="semibold"
-              fontSize={{ base: 'sm', lg: 'lg' }}
-              maxW="170px"
-              w="max-content"
-              textOverflow="ellipsis"
-              whiteSpace="nowrap"
-              overflow="hidden"
             >
-              {userDelegatedTo.name || truncateAddress(userDelegatedTo.address)}
-            </Text>
+              <Flex
+                flex="1"
+                textAlign="left"
+                w="full"
+                gap={{ base: '2', lg: '6' }}
+                align="center"
+                flexWrap="wrap"
+              >
+                <Flex
+                  flexDir="row"
+                  align="center"
+                  gap="2"
+                  bg={theme.tokenHolders.delegations.card.header.pillBg}
+                  py="2"
+                  px="2"
+                  borderRadius="40px"
+                >
+                  <ImgWithFallback
+                    fallback={userDelegating.address}
+                    src={userDelegating.picture}
+                    boxSize={{ base: '20px', lg: '26px' }}
+                    borderRadius="full"
+                  />
+                  <Text
+                    color={theme.tokenHolders.delegations.card.header.pillText}
+                    fontSize={{ base: 'sm' }}
+                    fontWeight="normal"
+                    maxW="200px"
+                    w="max-content"
+                    textOverflow="ellipsis"
+                    whiteSpace="nowrap"
+                    overflow="hidden"
+                  >
+                    {userDelegating.name ||
+                      truncateAddress(userDelegating.address)}
+                  </Text>
+                </Flex>
+                <Text
+                  color={theme.tokenHolders.delegations.card.header.text}
+                  fontWeight="normal"
+                  fontSize={{ base: 'sm', lg: 'md' }}
+                >
+                  has delegated
+                </Text>
+                {userDelegating.amountDelegated && (
+                  <Text
+                    color={theme.tokenHolders.delegations.card.header.pillText}
+                    fontSize={{ base: 'sm' }}
+                    fontWeight="700"
+                    py="1"
+                    px="3"
+                    borderRadius="md"
+                    maxW="210px"
+                    w="max-content"
+                    textOverflow="ellipsis"
+                    whiteSpace="nowrap"
+                    overflow="hidden"
+                  >
+                    {formatNumber(100000)} tokens
+                  </Text>
+                )}
+                <Text
+                  color={theme.tokenHolders.delegations.card.header.text}
+                  fontWeight="normal"
+                  fontSize={{ base: 'sm', lg: 'md' }}
+                >
+                  to
+                </Text>
+                <Flex
+                  flexDir="row"
+                  align="center"
+                  gap="2"
+                  bg={theme.tokenHolders.delegations.card.header.pillBg}
+                  py="2"
+                  px="2"
+                  borderRadius="40px"
+                >
+                  <ImgWithFallback
+                    fallback={userDelegatedTo.address}
+                    src={userDelegatedTo.picture}
+                    boxSize={{ base: '20px', lg: '26px' }}
+                    borderRadius="full"
+                  />
+                  <Text
+                    color={theme.tokenHolders.delegations.card.header.pillText}
+                    fontSize={{ base: 'sm' }}
+                    fontWeight="normal"
+                    maxW="170px"
+                    w="max-content"
+                    textOverflow="ellipsis"
+                    whiteSpace="nowrap"
+                    overflow="hidden"
+                  >
+                    {userDelegatedTo.name ||
+                      truncateAddress(userDelegatedTo.address)}
+                  </Text>
+                </Flex>
+                <Text
+                  color={theme.tokenHolders.delegations.card.header.text}
+                  fontWeight="normal"
+                  fontSize={{ base: 'sm', lg: 'md' }}
+                >
+                  since
+                </Text>
+                <Text
+                  color={theme.tokenHolders.delegations.card.header.text}
+                  fontWeight="700"
+                  fontSize={{ base: 'sm', lg: 'md' }}
+                >
+                  {sinceDate}
+                </Text>
+              </Flex>
+            </Flex>
+            <AccordionButton
+              w={{ base: 'full', sm: 'max-content' }}
+              minW="max-content"
+              color={theme.tokenHolders.delegations.accordion.button.text}
+              borderColor={theme.tokenHolders.delegations.accordion.button.text}
+              borderWidth="1px"
+              borderStyle="solid"
+              fontWeight="600"
+              fontSize="14px"
+              px="4"
+              py="3"
+              borderRadius="4px"
+              gap="10px"
+              justifyContent="space-between"
+              _hover={{
+                opacity: '0.8',
+              }}
+            >
+              View delegate activity
+              <MotionIcon
+                aria-label="View delegate activity showing"
+                icon={<UpChevronIcon width="18px" h="12px" />}
+                minWidth="max-content"
+                minHeight="max-content"
+                background="transparent"
+                _hover={{}}
+                _active={{}}
+                _focus={{}}
+                _focusWithin={{}}
+                _focusVisible={{}}
+                initial={{ rotate: !isExpanded ? 0 : 180 }}
+                animate={{ rotate: !isExpanded ? 180 : 0 }}
+                transition={{ duration: 0.3 }}
+                h="max-content"
+              />
+            </AccordionButton>
           </Flex>
-        </Flex>
-        <AccordionIcon boxSize="8" />
-      </AccordionButton>
-      <AccordionPanel
-        bg={`${theme.tokenHolders.delegations.text.primary}05`}
-        pb={4}
-      >
-        <Flex
-          gap="6"
-          flexDir="row"
-          justify="space-between"
-          pt="6"
-          pb="20"
-          pr={{ base: '4', lg: '8' }}
-          pl={{ base: '2', lg: '4' }}
-          align="center"
-          w="full"
-          flexWrap={{ base: 'wrap', xl: 'nowrap' }}
-        >
-          <DelegationHistory
-            delegateHistory={data}
-            selectedDelegation={selectedDelegation}
-          />
-          <SinceDelegation
-            userDelegatedTo={{
-              name: userDelegatedTo.name,
-              address: userDelegatedTo.address,
-              picture: userDelegatedTo.picture,
-            }}
-            selectedDelegation={selectedDelegation}
-            delegations={data}
-          />
-        </Flex>
-      </AccordionPanel>
+          <AccordionPanel
+            bg={theme.tokenHolders.delegations.bg.primary}
+            pb={4}
+            px="0"
+            pt="0"
+            borderBottomRadius="md"
+          >
+            <Flex
+              px="6"
+              py="3"
+              bgColor={theme.tokenHolders.delegations.card.legend.bg}
+              gap="2"
+              align="center"
+              flexWrap="wrap"
+            >
+              <Text
+                color={theme.tokenHolders.delegations.card.legend.text}
+                fontWeight="700"
+                fontSize="11px"
+              >
+                PERFORMANCE SUMMARY FOR
+              </Text>
+              <Flex
+                gap="1"
+                bgColor={theme.tokenHolders.delegations.card.legend.pillBg}
+                pl="1"
+                pr="2"
+                py="1"
+                borderRadius="full"
+                align="center"
+              >
+                <ImgWithFallback
+                  fallback={userDelegatedTo.address}
+                  src={userDelegatedTo.picture}
+                  boxSize={{ base: '20px', lg: '26px' }}
+                  borderRadius="full"
+                />
+                <Text
+                  color={theme.tokenHolders.delegations.card.legend.pillText}
+                  fontWeight="700"
+                  fontSize={{ base: '14px', lg: '16px' }}
+                >
+                  {userDelegatedTo.name ||
+                    truncateAddress(userDelegatedTo.address)}
+                </Text>
+              </Flex>
+              <Text
+                color={theme.tokenHolders.delegations.card.legend.text}
+                fontWeight="700"
+                fontSize="11px"
+              >
+                SINCE
+              </Text>
+
+              <Text
+                bgColor={theme.tokenHolders.delegations.card.legend.pillBg}
+                px="2"
+                py="1"
+                borderRadius="full"
+                color={theme.tokenHolders.delegations.card.legend.pillText}
+                fontWeight="700"
+                fontSize={{ base: '14px', lg: '16px' }}
+              >
+                {sinceDate}
+              </Text>
+            </Flex>
+            <VotesProvider
+              profile={{
+                address: userDelegatedTo.address,
+              }}
+            >
+              <Flex
+                gap="6"
+                flexDir="row"
+                justify="space-between"
+                pt="6"
+                pb="20"
+                pr={{ base: '4', lg: '8' }}
+                pl={{ base: '2', lg: '4' }}
+                align="flex-start"
+                w="full"
+                flexWrap={{ base: 'wrap', xl: 'nowrap' }}
+              >
+                <PerformanceStats
+                  userDelegatedTo={{
+                    name: userDelegatedTo.name,
+                    address: userDelegatedTo.address,
+                    picture: userDelegatedTo.picture,
+                  }}
+                  selectedDelegation={selectedDelegation}
+                  delegations={data}
+                />
+                <VotingHistory
+                  address={userDelegatedTo.address}
+                  timeframe={{
+                    from: selectedDelegation.timestamp,
+                    to: moment(new Date()).unix(),
+                  }}
+                />
+              </Flex>
+            </VotesProvider>
+          </AccordionPanel>
+        </>
+      )}
     </AccordionItem>
   );
 };

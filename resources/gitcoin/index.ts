@@ -198,28 +198,109 @@ const dark: IDAOTheme = {
         secondary: '#ADB8C0',
       },
       bg: {
-        primary: '#251250',
+        primary: '#FFFFFF',
         secondary: '#321E5E',
       },
     },
     delegations: {
+      accordion: {
+        button: {
+          border: '#000000',
+          text: '#000000',
+          icon: '#000000',
+        },
+      },
       text: {
         primary: '#FFFFFF',
         secondary: '#ADB8C0',
-        placeholder: {
-          main: '#ADB8C0',
-          comma: '#ADB8C0',
+
+        input: {
+          placeholder: '#88939F',
+          text: '#080A0E',
+        },
+        button: '#FFFFFF',
+      },
+      border: {
+        input: '#88939F',
+      },
+      input: {
+        pillText: '#000000CC',
+        pillBg: '#88939F33',
+      },
+      card: {
+        header: {
+          text: '#000000CC',
+          pillText: '#000000CC',
+          pillBg: '#88939F33',
+        },
+        legend: {
+          text: '#4F5D6C',
+          bg: '#F5F5F5',
+          pillText: '#000000CC',
+          pillBg: '#88939F33',
+        },
+        columns: {
+          text: '#321E5E',
+          icon: {
+            bg: '#F0EBFA',
+            text: '#321E5E',
+          },
+          stats: {
+            primary: '#4A269B',
+            secondary: '#4F5D6C',
+            leftBorder: '#321E5E',
+            border: '#DBDFE3',
+          },
+          voting: {
+            total: '#080A0E',
+            totalNumber: '#88939F',
+            proposals: {
+              title: '#080A0E',
+              hyperlink: '#4A269B',
+              description: '#4F5D6C',
+              sort: {
+                bg: '#FFFFFF',
+                border: '#88939F',
+                text: '#88939F',
+                label: '#4F5D6C',
+              },
+              vote: {
+                iconBg: '#E1F7EA',
+                text: '#4F5D6C',
+                for: '#00BD62',
+                against: '#E10000',
+                abstain: '#4F5D6C',
+                notVoted: 'yellow.500',
+                multiple: 'green.300',
+                divider: '#88939F1A',
+                reason: {
+                  title: '#080A0E',
+                  text: '#080A0E',
+                },
+              },
+              navigation: {
+                color: '#291555',
+                buttons: {
+                  selectedBg: '#291555',
+                  selectedText: '#FFFFFF',
+                  unSelectedBg: 'transparent',
+                  unSelectedText: '#291555',
+                },
+              },
+            },
+            input: {
+              placeholder: '#88939F',
+              icon: '#4F5D6C',
+              border: '#88939F',
+              text: '#000000',
+            },
+          },
         },
       },
-      chart: {
-        point: '#B999FF',
-        datasetColor: '#02E2ACBF',
-      },
       bg: {
-        primary: '#321E5E',
+        primary: '#FFFFFF',
         secondary: '#291555',
-        tertiary: '#200D4ABF',
-        quaternary: '#200D4A',
+        tertiary: '#24114F',
       },
     },
   },
@@ -384,36 +465,117 @@ const light: IDAOTheme = {
     },
   },
   tokenHolders: {
-    border: '#21232833',
-    bg: 'transparent',
+    border: '#321E5E',
+    bg: '#F2F4F9',
     list: {
       text: {
-        primary: '#212328',
-        secondary: '#21232880',
+        primary: '#FFFFFF',
+        secondary: '#ADB8C0',
       },
       bg: {
         primary: '#FFFFFF',
-        secondary: '#ededef',
+        secondary: '#321E5E',
       },
     },
     delegations: {
-      text: {
-        primary: '#212328',
-        secondary: '#292E41',
-        placeholder: {
-          main: '#ADB8C0',
-          comma: '#ADB8C0',
+      accordion: {
+        button: {
+          border: '#000000',
+          text: '#000000',
+          icon: '#000000',
         },
       },
-      chart: {
-        point: '#000000',
-        datasetColor: '#02E2AC40',
+      text: {
+        primary: '#000000',
+        secondary: '#88939F',
+
+        input: {
+          placeholder: '#88939F',
+          text: '#080A0E',
+        },
+        button: '#FFFFFF',
+      },
+      border: {
+        input: '#88939F',
+      },
+      input: {
+        pillText: '#000000CC',
+        pillBg: '#88939F33',
+      },
+      card: {
+        header: {
+          text: '#000000CC',
+          pillText: '#000000CC',
+          pillBg: '#88939F33',
+        },
+        legend: {
+          text: '#4F5D6C',
+          bg: '#F5F5F5',
+          pillText: '#000000CC',
+          pillBg: '#88939F33',
+        },
+        columns: {
+          text: '#321E5E',
+          icon: {
+            bg: '#F0EBFA',
+            text: '#321E5E',
+          },
+          stats: {
+            primary: '#4A269B',
+            secondary: '#4F5D6C',
+            leftBorder: '#321E5E',
+            border: '#DBDFE3',
+          },
+          voting: {
+            total: '#080A0E',
+            totalNumber: '#88939F',
+            proposals: {
+              title: '#080A0E',
+              hyperlink: '#4A269B',
+              description: '#4F5D6C',
+              sort: {
+                bg: '#FFFFFF',
+                border: '#88939F',
+                text: '#88939F',
+                label: '#4F5D6C',
+              },
+              vote: {
+                iconBg: '#E1F7EA',
+                text: '#4F5D6C',
+                for: '#00BD62',
+                against: '#E10000',
+                abstain: '#4F5D6C',
+                notVoted: 'yellow.500',
+                multiple: 'green.300',
+                divider: '#88939F1A',
+                reason: {
+                  title: '#080A0E',
+                  text: '#080A0E',
+                },
+              },
+              navigation: {
+                color: '#291555',
+                buttons: {
+                  selectedBg: '#291555',
+                  selectedText: '#FFFFFF',
+                  unSelectedBg: 'transparent',
+                  unSelectedText: '#291555',
+                },
+              },
+            },
+            input: {
+              placeholder: '#88939F',
+              icon: '#4F5D6C',
+              border: '#88939F',
+              text: '#000000',
+            },
+          },
+        },
       },
       bg: {
         primary: '#FFFFFF',
-        secondary: '#EBEDEF',
-        tertiary: '#dadada',
-        quaternary: '#292E4180',
+        secondary: '#291555',
+        tertiary: '#24114F',
       },
     },
   },

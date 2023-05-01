@@ -4,6 +4,7 @@ import {
   FilledNoIcon,
   InfoIcon,
   ProposalsIcon,
+  StatsIcon,
   VotesIcon,
 } from 'components/Icons';
 import { ImgWithFallback } from 'components/ImgWithFallback';
@@ -12,7 +13,7 @@ import { useOffChainVotes, useOnChainVotes } from 'hooks';
 import moment from 'moment';
 import { FC, useMemo, useState } from 'react';
 import { IChainRow, IDelegatingHistories } from 'types';
-import { formatNumberPercentage, truncateAddress } from 'utils';
+import { formatNumber, formatNumberPercentage, truncateAddress } from 'utils';
 
 interface ISinceDelegationProps {
   userDelegatedTo: {
@@ -28,9 +29,10 @@ interface IDelegationStats {
   icon: (props: IconProps) => JSX.Element;
   value: string;
   description: string;
+  showTotal?: boolean;
 }
 
-export const SinceDelegation: FC<ISinceDelegationProps> = ({
+export const PerformanceStats: FC<ISinceDelegationProps> = ({
   userDelegatedTo,
   selectedDelegation,
   delegations,
@@ -76,32 +78,29 @@ export const SinceDelegation: FC<ISinceDelegationProps> = ({
   }, [dataOffChainVotes, dataOnChainVotes]);
 
   const [delegationStats, setDelegationStats] = useState({
-    proposalsCreated: '0',
-    votesOnProposal: { total: '0', pct: '0' },
+    votedProposals: '0',
+    totalProposals: '0',
     passRate: '0',
-    againstRate: '0',
+    votedNo: '0',
   });
 
   const cardStats: IDelegationStats[] = [
     {
       icon: ProposalsIcon,
-      value: delegationStats.proposalsCreated,
-      description: 'Proposals created',
+      value: delegationStats.votedProposals,
+      description: 'Voted proposals',
+      showTotal: true,
     },
     {
-      icon: VotesIcon,
-      value: delegationStats.votesOnProposal.total,
-      description: `Votes on proposals (${delegationStats.votesOnProposal.pct})`,
-    },
-    {
-      icon: FilledCheckIcon,
+      icon: ProposalsIcon,
       value: delegationStats.passRate,
       description: `Pass rate on voted proposals`,
     },
     {
-      icon: FilledNoIcon,
-      value: delegationStats.againstRate,
-      description: `of proposals voted on against`,
+      icon: ProposalsIcon,
+      value: delegationStats.votedNo,
+      description: `Voted no`,
+      showTotal: true,
     },
   ];
 
@@ -159,19 +158,12 @@ export const SinceDelegation: FC<ISinceDelegationProps> = ({
     const votesCounterResult = votesCounter(votesSince);
 
     setDelegationStats({
-      proposalsCreated: votesSince.length.toString(),
-      votesOnProposal: {
-        total: votesCounterResult.total.toString(),
-        pct: formatNumberPercentage(
-          (votesCounterResult.total / votesSince.length) * 100
-        ),
-      },
+      totalProposals: formatNumber(votesSince.length.toString()),
+      votedProposals: formatNumber(votesCounterResult.total.toString()),
       passRate: formatNumberPercentage(
         (votesCounterResult.voteFor / votesCounterResult.total) * 100
       ),
-      againstRate: formatNumberPercentage(
-        (votesCounterResult.voteAgainst / votesCounterResult.total) * 100
-      ),
+      votedNo: formatNumber(votesCounterResult.voteAgainst.toString()),
     });
     return votesSince;
   };
@@ -187,120 +179,110 @@ export const SinceDelegation: FC<ISinceDelegationProps> = ({
       minW={{ base: 'full', lg: 'max-content' }}
       maxW={{ base: '100%', lg: '50%' }}
       h="full"
-      minH="360px"
-      maxH="360px"
       bg={theme.tokenHolders.delegations.bg.primary}
       borderRadius="md"
       borderBottomRadius="none"
     >
       <Flex
-        bg={theme.tokenHolders.delegations.bg.secondary}
         align="center"
         py="5"
         px="4"
         borderRadius="md"
         borderBottomRadius="none"
-        gap="1"
+        gap="3"
         flexWrap="wrap"
       >
-        <InfoIcon
-          boxSize="16px"
+        <StatsIcon
+          boxSize="32px"
           borderRadius="full"
-          mr="1"
-          color={theme.tokenHolders.delegations.text.primary}
+          color={theme.tokenHolders.delegations.card.columns.icon.text}
         />
         <Text
-          fontSize="14px"
-          color={`${theme.tokenHolders.delegations.text.primary}BF`}
-          fontWeight="light"
+          fontSize="11px"
+          color={theme.tokenHolders.delegations.card.columns.text}
+          fontWeight="700"
         >
-          Since their delegation,{' '}
-        </Text>
-        <Flex gap="1" align="center">
-          <ImgWithFallback
-            boxSize="16px"
-            fallback={userDelegatedTo.address}
-            src={userDelegatedTo.picture}
-            borderRadius="full"
-          />
-          <Text
-            fontSize="md"
-            color={theme.tokenHolders.delegations.text.primary}
-            fontWeight="semibold"
-          >
-            {userDelegatedTo.name || truncateAddress(userDelegatedTo.address)}
-          </Text>
-        </Flex>
-        <Text
-          fontSize="14px"
-          color={`${theme.tokenHolders.delegations.text.primary}BF`}
-          fontWeight="light"
-          as="span"
-        >
-          has
+          PERFORMANCE STATS
         </Text>
       </Flex>
       <Grid
         bg={theme.tokenHolders.delegations.bg.primary}
         columnGap="4"
-        rowGap="2"
+        rowGap="4"
         px={{ base: '3', xl: '6' }}
         py="3"
-        gridTemplateColumns="repeat(2, 1fr)"
+        gridTemplateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }}
+        maxWidth="452"
       >
         {cardStats.map((stat, index) => (
           <Flex
             key={+index}
             flexDir="column"
             flex="48%"
-            textAlign="center"
             align="center"
             py="4"
             px={{ base: '1', md: '2.5' }}
-            borderRadius="lg"
+            borderRadius="4px"
             borderWidth="1px"
-            borderColor={theme.tokenHolders.border}
+            borderColor={
+              theme.tokenHolders.delegations.card.columns.stats.border
+            }
             borderStyle="solid"
-            bg={`${theme.tokenHolders.delegations.bg.quaternary}40`}
+            borderLeftColor={
+              theme.tokenHolders.delegations.card.columns.stats.leftBorder
+            }
+            borderLeftWidth="5px"
+            bg="transparent"
             position="relative"
-            minWidth={{ base: '80px', sm: '100px', xl: '184px' }}
+            minWidth={{ base: '80px', sm: '100px', xl: '218px' }}
+            maxWidth="100%"
             minHeight={{ base: '100px' }}
             zIndex="0"
+            textAlign="left"
           >
-            <Icon
-              as={stat.icon}
-              color={`${theme.tokenHolders.delegations.text.primary}20`}
-              position="absolute"
-              top="5%"
-              width="95%"
-              height="95%"
-              zIndex="0"
-            />
-            <Flex w="full" h="full" flexDir="column" align="center" zIndex="1">
+            <Flex
+              w="full"
+              h="full"
+              flexDir="row"
+              align="center"
+              zIndex="1"
+              gap="2"
+            >
               <Icon
                 as={stat.icon}
-                color={`${theme.tokenHolders.delegations.text.primary}80`}
-                mb="2.5"
-                boxSize="32px"
+                color={
+                  theme.tokenHolders.delegations.card.columns.stats.leftBorder
+                }
+                m="4"
+                boxSize="16px"
               />
-              <Skeleton isLoaded={!isLoading} minW="10" minH="5">
-                <Text
-                  fontWeight="semibold"
-                  fontSize="xl"
-                  color={theme.tokenHolders.delegations.text.primary}
-                >
-                  {stat.value}
-                </Text>
-              </Skeleton>
-              <Skeleton isLoaded={!isLoading} minW="10" minH="5">
-                <Text
-                  fontWeight="semibold"
-                  fontSize="12px"
-                  color={theme.tokenHolders.delegations.text.primary}
-                >
-                  {stat.description}
-                </Text>
-              </Skeleton>
+              <Flex flexDir="column" align="flex-start">
+                <Skeleton isLoaded={!isLoading} minW="5" minH="5">
+                  <Text
+                    fontWeight="800"
+                    fontSize="20px"
+                    color={
+                      theme.tokenHolders.delegations.card.columns.stats.primary
+                    }
+                  >
+                    {`${stat.value}${
+                      stat.showTotal ? `/${delegationStats.totalProposals}` : ''
+                    }`}
+                  </Text>
+                </Skeleton>
+                <Skeleton isLoaded={!isLoading} minW="10" minH="5">
+                  <Text
+                    fontWeight="400"
+                    fontSize="14px"
+                    color={
+                      theme.tokenHolders.delegations.card.columns.stats
+                        .secondary
+                    }
+                  >
+                    {stat.description}
+                  </Text>
+                </Skeleton>
+              </Flex>
             </Flex>
           </Flex>
         ))}

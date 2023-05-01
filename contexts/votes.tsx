@@ -5,6 +5,7 @@ import debounce from 'lodash.debounce';
 import moment from 'moment';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { checkDecision } from 'utils';
 import { useDelegates } from './delegates';
 import { useDAO } from './dao';
 
@@ -22,6 +23,9 @@ interface IVotesProps {
   isVoteBreakdownLoading: boolean;
   isVoteBreakdownError: boolean;
   voteBreakdown: IVoteBreakdown;
+  setupTimeframe: (from: number, to: number) => void;
+  changeSort: (newSort: 'Date' | 'Choice') => void;
+  sortby: 'Date' | 'Choice';
 }
 
 export const VotesContext = createContext({} as IVotesProps);
@@ -52,7 +56,12 @@ export const VotesProvider: React.FC<ProviderProps> = ({
   const [onChainVotes, setOnChainVotes] = useState<IChainRow[] | undefined>(
     undefined
   );
+  const [timeframe, setTimeframe] = useState({
+    from: moment().subtract(40, 'year').unix(),
+    to: moment().unix(),
+  });
   const [isLoading, setIsLoading] = useState(true);
+  const [sortby, setSortBy] = useState<'Date' | 'Choice'>('Date');
   const [offset, setOffset] = useState(0);
   const {
     isLoading: isVoteBreakdownLoading,
@@ -76,17 +85,68 @@ export const VotesProvider: React.FC<ProviderProps> = ({
 
   const limit = 6;
 
+  const setupTimeframe = (from: number, to: number) => {
+    setTimeframe({ from, to });
+  };
+
+  const changeSort = (newSort: 'Date' | 'Choice') => setSortBy(newSort);
+
   const changeOffset = (newOffset: number) => setOffset(newOffset);
 
-  const allVotes = useMemo(
-    () =>
-      (offChainVotes || [])
-        .concat(onChainVotes || [])
+  console.log(sortby);
+
+  const allVotes = useMemo(() => {
+    const filteredOffChainVotes = offChainVotes?.filter(vote =>
+      moment(vote.executed).isBetween(
+        moment.unix(timeframe.from),
+        moment.unix(timeframe.to)
+      )
+    );
+    const filteredOnChainVotes = onChainVotes?.filter(vote =>
+      moment(vote.executed).isBetween(
+        moment.unix(timeframe.from),
+        moment.unix(timeframe.to)
+      )
+    );
+
+    if (sortby === 'Choice') {
+      const concatenatedVotes = (filteredOffChainVotes || []).concat(
+        filteredOnChainVotes || []
+      );
+
+      const forVotes = concatenatedVotes
+        .filter(vote => checkDecision(vote) === 'FOR')
         .sort((voteA, voteB) =>
           moment(voteA.executed).isBefore(voteB.executed) ? 1 : -1
-        ) || [],
-    [onChainVotes, offChainVotes]
-  );
+        );
+      const againstVotes = concatenatedVotes
+        .filter(vote => checkDecision(vote) === 'AGAINST')
+        .sort((voteA, voteB) =>
+          moment(voteA.executed).isBefore(voteB.executed) ? 1 : -1
+        );
+      const abstainVotes = concatenatedVotes
+        .filter(vote => checkDecision(vote) === 'ABSTAIN')
+        .sort((voteA, voteB) =>
+          moment(voteA.executed).isBefore(voteB.executed) ? 1 : -1
+        );
+
+      const notVotedVotes = concatenatedVotes
+        .filter(vote => checkDecision(vote) === 'NOTVOTED')
+        .sort((voteA, voteB) =>
+          moment(voteA.executed).isBefore(voteB.executed) ? 1 : -1
+        );
+
+      return forVotes.concat(againstVotes, abstainVotes, notVotedVotes);
+    }
+
+    return (
+      (filteredOffChainVotes || [])
+        .concat(filteredOnChainVotes || [])
+        .sort((voteA, voteB) =>
+          moment(voteA.executed).isBefore(voteB.executed) ? 1 : -1
+        ) || []
+    );
+  }, [onChainVotes, offChainVotes, timeframe.from, timeframe.to, sortby]);
 
   const showingVotes = allVotes.slice(offset * limit, offset * limit + limit);
 
@@ -136,6 +196,9 @@ export const VotesProvider: React.FC<ProviderProps> = ({
       isVoteBreakdownLoading,
       isVoteBreakdownError,
       voteBreakdown,
+      setupTimeframe,
+      changeSort,
+      sortby,
     }),
     [
       offChainVotes,
@@ -149,6 +212,9 @@ export const VotesProvider: React.FC<ProviderProps> = ({
       isVoteBreakdownLoading,
       isVoteBreakdownError,
       voteBreakdown,
+      setupTimeframe,
+      changeSort,
+      sortby,
     ]
   );
 
