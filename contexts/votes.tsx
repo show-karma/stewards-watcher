@@ -93,8 +93,6 @@ export const VotesProvider: React.FC<ProviderProps> = ({
 
   const changeOffset = (newOffset: number) => setOffset(newOffset);
 
-  console.log(sortby);
-
   const allVotes = useMemo(() => {
     const filteredOffChainVotes = offChainVotes?.filter(vote =>
       moment(vote.executed).isBetween(
