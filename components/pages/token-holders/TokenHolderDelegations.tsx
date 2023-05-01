@@ -1,9 +1,9 @@
 import { Button, Flex, Input, Spinner, Text } from '@chakra-ui/react';
-import { CloseIcon, SearchUserIcon, XMarkIcon } from 'components/Icons';
+import { CloseIcon, SearchUserIcon } from 'components/Icons';
 import { useDAO, useTokenHolders } from 'contexts';
-import { FC, useEffect, useMemo, useRef, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { truncateAddress } from 'utils';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { DelegatesAccordion } from './DelegatesAccordion';
@@ -23,6 +23,7 @@ export const TokenHolderDelegation: FC = () => {
   } = useTokenHolders();
 
   const [addresses, setAddresses] = useState<string[]>(selectedAddresses);
+
   const schema = yup.object({
     addressInput: yup
       .string()
