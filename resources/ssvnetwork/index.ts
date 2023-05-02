@@ -24,6 +24,7 @@ const config: IDAOConfig = {
   DAO_GTAG: 'G-67LDHT697P',
   DAO_DEFAULT_SETTINGS: {
     SORT: 'score',
+    FAQ: true,
   },
   EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'healthScore', 'discordScore'],
 };

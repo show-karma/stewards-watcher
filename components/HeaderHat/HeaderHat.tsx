@@ -28,7 +28,7 @@ const StyledButton: FC<ButtonProps> = ({ children, ...rest }) => {
     <Button
       color={theme.hat.text.primary}
       bgColor="transparent"
-      px="6"
+      px="4"
       py="6"
       fontWeight="semibold"
       _active={{}}
@@ -141,10 +141,13 @@ export const HeaderHat = () => {
                     <StyledButton>FAQ</StyledButton>
                   </Link>
                 )}
+                <Link href="/guide" _hover={{}}>
+                  <StyledButton>Guide</StyledButton>
+                </Link>
                 {daoInfo.config.DAO_RESOURCES &&
                   daoInfo.config.DAO_RESOURCES.length > 0 && <ResourcesMenu />}
                 {daoInfo.config.DAO_DELEGATE_MODE !== 'hidden' && (
-                  <StyledButton onClick={onToggle} px="0">
+                  <StyledButton onClick={onToggle}>
                     Delegate to Anyone
                   </StyledButton>
                 )}
