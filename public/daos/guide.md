@@ -1,5 +1,5 @@
-# Summary
-Karma is a user-friendly platform designed to enhance delegation-based activities in a DAO for delegates, tokenholders, and community members by providing features such as delegate onboarding, pitching, social handle verification, and advanced sorting options. Additionally, Karma implements a custom, DAO-controlled scoring system to quantify delegate activities, fostering transparency and informed decision-making.
+# About
+This delegate dashboard is a user-friendly platform designed to enhance delegation-based activities in a DAO for delegates, tokenholders, and community members by providing features such as delegate onboarding, pitching, social handle verification, and advanced sorting options. Additionally, there is a custom, DAO-controlled scoring system to quantify delegate activities, fostering transparency and informed decision-making.
 
 ## For Delegates
 
