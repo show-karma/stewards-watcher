@@ -23,6 +23,7 @@ const DAO_CUSTOM_DOMAIN: Record<string, string> = {
   'daostewards.xyz': 'gitcoin',
   'delegate.gitcoin.co': 'gitcoin',
   'delegate.starknet.io': 'starknet',
+  'delegate.ssv.network': 'ssvnetwork',
 };
 
 export default function middleware(req: NextRequest) {
