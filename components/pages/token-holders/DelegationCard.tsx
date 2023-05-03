@@ -126,7 +126,7 @@ export const DelegationCard: FC<IDelegationCardProps> = ({
                     whiteSpace="nowrap"
                     overflow="hidden"
                   >
-                    {formatNumber(100000)} tokens
+                    {formatNumber(userDelegating.amountDelegated)} tokens
                   </Text>
                 )}
                 <Text
