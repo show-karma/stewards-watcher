@@ -234,7 +234,11 @@ export const TokenHolderDelegation: FC = () => {
                       py="4"
                       outline="none"
                       boxShadow="none"
-                      placeholder="0x5e3…09ee,0g4e3…04de,0x5e3…09ee"
+                      placeholder={
+                        addresses.length
+                          ? undefined
+                          : '0x5e3…09ee,0g4e3…04de,0x5e3…09ee'
+                      }
                       maxW="full"
                       minW="100px"
                       _placeholder={{
