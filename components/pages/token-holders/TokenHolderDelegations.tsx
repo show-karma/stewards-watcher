@@ -9,7 +9,6 @@ import * as yup from 'yup';
 import { DelegatesAccordion } from './DelegatesAccordion';
 
 const addressRegex = /^0x[a-fA-F0-9]{40}$/;
-const ensNameRegex = /^\S+\.eth$/;
 
 export const TokenHolderDelegation: FC = () => {
   const { theme } = useDAO();
@@ -37,7 +36,7 @@ export const TokenHolderDelegation: FC = () => {
         'Please enter a valid address or ENS name',
         value => {
           if (!value && addresses.length !== 0) return true;
-          if (value && (addressRegex.test(value) || ensNameRegex.test(value)))
+          if (value && (addressRegex.test(value) || value.includes('.eth')))
             return true;
           return false;
         }
@@ -68,7 +67,10 @@ export const TokenHolderDelegation: FC = () => {
 
   const inputValue = watch('addressInput');
 
-  const clearInput = () => reset({ addressInput: '' });
+  const clearInput = () => {
+    reset({ addressInput: '' });
+    trigger();
+  };
 
   const sendAddresses = (addrs = addresses) => {
     changeAddresses(addrs.join(','));
@@ -258,7 +260,8 @@ export const TokenHolderDelegation: FC = () => {
                           addresses.length > 0
                         )
                           removeAddress(addresses[addresses.length - 1]);
-                        if (event.key === ',') checkAndAddAddress(inputValue);
+                        if (event.key === ',' || event.keyCode === 188)
+                          checkAndAddAddress(inputValue);
                       }}
                     />
                   </Flex>

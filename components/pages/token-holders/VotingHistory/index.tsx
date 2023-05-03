@@ -67,7 +67,7 @@ export const VotingHistory: FC<IVotingHistory> = ({ address, timeframe }) => {
             theme.tokenHolders.delegations.card.columns.voting.proposals.title
           }
         >
-          {`Contributor hasn't voted on any proposals yet`}
+          No proposals found.
         </Text>
       );
     return showingVotes.map((vote, index) => (

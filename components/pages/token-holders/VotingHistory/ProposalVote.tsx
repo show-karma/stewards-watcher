@@ -17,7 +17,7 @@ import { useDAO } from 'contexts';
 import { useVoteReason } from 'hooks';
 import { FC } from 'react';
 import { IChainRow, IDAOTheme } from 'types';
-import { formatDate } from 'utils';
+import { checkDecision, formatDate } from 'utils';
 import { ExpandableReason } from './ExpandableReason';
 import { ExpandableTitle } from './ExpandableTitle';
 
@@ -240,6 +240,13 @@ export const ProposalVote: FC<IProposalVote> = ({
     showChoice().split(' ').length === 1 ||
     showChoice().split(' ')[1].length === 0;
 
+  const voteBg: { [key: string]: string } = {
+    ABSTAIN: '#F5F5F5',
+    FOR: '#E1F6EA',
+    AGAINST: '#FFF3F3',
+    NOTVOTED: '#F5F5F5',
+  };
+
   return (
     <Flex
       flexDir="column"
@@ -308,10 +315,7 @@ export const ProposalVote: FC<IProposalVote> = ({
           >
             {isLoaded && vote ? (
               <Flex
-                background={
-                  theme.tokenHolders.delegations.card.columns.voting.proposals
-                    .vote.iconBg
-                }
+                background={voteBg[checkDecision(vote)]}
                 paddingX="3"
                 paddingY="2"
                 borderRadius="20px"
@@ -356,10 +360,7 @@ export const ProposalVote: FC<IProposalVote> = ({
           >
             {isLoaded && vote ? (
               <Flex
-                background={
-                  theme.tokenHolders.delegations.card.columns.voting.proposals
-                    .vote.iconBg
-                }
+                background={voteBg[checkDecision(vote)]}
                 paddingX="3"
                 paddingY="2"
                 borderRadius="20px"

@@ -263,7 +263,7 @@ const dark: IDAOTheme = {
                 for: '#00BD62',
                 against: '#E10000',
                 abstain: '#4F5D6C',
-                notVoted: 'yellow.500',
+                notVoted: '#4F5D6C',
                 multiple: 'green.300',
                 divider: '#88939F1A',
                 reason: {
@@ -538,7 +538,7 @@ const light: IDAOTheme = {
                 for: '#00BD62',
                 against: '#E10000',
                 abstain: '#4F5D6C',
-                notVoted: 'yellow.500',
+                notVoted: '#4F5D6C',
                 multiple: 'green.300',
                 divider: '#88939F1A',
                 reason: {
