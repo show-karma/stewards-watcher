@@ -62,7 +62,11 @@ export const VotingHistory: FC<IVotingHistory> = ({ address, timeframe }) => {
   const renderVotes = () => {
     if (!showingVotes.length)
       return (
-        <Text color={theme.modal.votingHistory.proposal.title}>
+        <Text
+          color={
+            theme.tokenHolders.delegations.card.columns.voting.proposals.title
+          }
+        >
           {`Contributor hasn't voted on any proposals yet`}
         </Text>
       );

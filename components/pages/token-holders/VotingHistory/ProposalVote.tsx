@@ -329,6 +329,13 @@ export const ProposalVote: FC<IProposalVote> = ({
                   maxH="70px"
                   overflow="hidden"
                   textAlign="center"
+                  sx={{
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                    maxWidth: '110px',
+                  }}
                 >
                   {showChoice()}
                 </Text>
@@ -375,6 +382,13 @@ export const ProposalVote: FC<IProposalVote> = ({
                 maxH="70px"
                 overflow="hidden"
                 textAlign="center"
+                sx={{
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden',
+                  maxWidth: '120px',
+                }}
               >
                 {showChoice()}
               </Text>

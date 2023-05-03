@@ -13,7 +13,7 @@ import { useOffChainVotes, useOnChainVotes } from 'hooks';
 import moment from 'moment';
 import { FC, useMemo, useState } from 'react';
 import { IChainRow, IDelegatingHistories } from 'types';
-import { formatNumber, formatNumberPercentage, truncateAddress } from 'utils';
+import { formatNumber, formatNumberPercentage } from 'utils';
 
 interface ISinceDelegationProps {
   userDelegatedTo: {

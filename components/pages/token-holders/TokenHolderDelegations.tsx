@@ -154,7 +154,7 @@ export const TokenHolderDelegation: FC = () => {
             <Text
               fontStyle="normal"
               fontWeight="normal"
-              fontSize={{ base: '12px' }}
+              fontSize={{ base: '14px' }}
               color={theme.tokenHolders.delegations.text.secondary}
               textAlign="left"
             >
