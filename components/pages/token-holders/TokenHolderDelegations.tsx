@@ -114,8 +114,6 @@ export const TokenHolderDelegation: FC = () => {
     }
   };
 
-  console.log(tokenholders);
-
   const renderItems = () => {
     if (!tokenholders)
       return (
