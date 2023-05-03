@@ -9,6 +9,7 @@ import * as yup from 'yup';
 import { DelegatesAccordion } from './DelegatesAccordion';
 
 const addressRegex = /^0x[a-fA-F0-9]{40}$/;
+const ensNameRegex = /^\S+\.eth$/;
 
 export const TokenHolderDelegation: FC = () => {
   const { theme } = useDAO();
@@ -36,7 +37,7 @@ export const TokenHolderDelegation: FC = () => {
         'Please enter a valid address or ENS name',
         value => {
           if (!value && addresses.length !== 0) return true;
-          if (value && (addressRegex.test(value) || value.includes('.eth')))
+          if (value && (addressRegex.test(value) || ensNameRegex.test(value)))
             return true;
           return false;
         }
@@ -140,7 +141,14 @@ export const TokenHolderDelegation: FC = () => {
 
   return (
     <Flex w="full" flexDir="column" px={{ base: '4', xl: '0' }}>
-      <Flex w="full" flexDir="column" align="flex-start" h="max-content" py="7">
+      <Flex
+        w="full"
+        flexDir="column"
+        align="flex-start"
+        h="max-content"
+        pt="7"
+        pb="3"
+      >
         <Flex flexDir="row" gap="3">
           <SearchUserIcon w="8" h="8" />
           <Flex flexDir="column" gap="2">
@@ -333,7 +341,7 @@ export const TokenHolderDelegation: FC = () => {
           </Flex>
         </form>
       </Flex>
-      <Flex flexDir="column" w="full" minH="200px">
+      <Flex flexDir="column" w="full" minH="200px" gap="4">
         {isFetching ? (
           <Flex w="full" align="center" justify="center" minH="40">
             <Spinner

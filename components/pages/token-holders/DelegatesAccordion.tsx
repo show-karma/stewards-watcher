@@ -18,7 +18,7 @@ export const DelegatesAccordion: FC<IDelegatesAccordionProps> = ({
   const lastDelegation = dataArray[0];
   return useMemo(
     () => (
-      <Flex w="full" pt="7">
+      <Flex w="full">
         <Accordion w="full" allowMultiple defaultIndex={[0]}>
           <DelegationCard
             userDelegatedTo={{

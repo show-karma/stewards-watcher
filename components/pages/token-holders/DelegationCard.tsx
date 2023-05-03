@@ -50,7 +50,7 @@ export const DelegationCard: FC<IDelegationCardProps> = ({
   const MotionIcon = motion(IconButton);
 
   return (
-    <AccordionItem borderRadius="md" borderBottomRadius="md" _hover={{}} mb="8">
+    <AccordionItem borderRadius="md" borderBottomRadius="md" _hover={{}}>
       {({ isExpanded }) => (
         <>
           <Flex

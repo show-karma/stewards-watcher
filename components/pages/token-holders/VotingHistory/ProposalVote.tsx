@@ -325,7 +325,7 @@ export const ProposalVote: FC<IProposalVote> = ({
               >
                 <VoteIcon vote={vote} />
                 <Text
-                  w="fit-content"
+                  w="max-content"
                   h="max-content"
                   fontWeight="700"
                   fontSize={{ base: 'xs', md: 'sm' }}
@@ -338,10 +338,13 @@ export const ProposalVote: FC<IProposalVote> = ({
                     WebkitLineClamp: 2,
                     WebkitBoxOrient: 'vertical',
                     overflow: 'hidden',
-                    maxWidth: '110px',
+                    maxWidth: '120px',
                   }}
                 >
-                  {showChoice()}
+                  {showChoice() === 'DID NOT VOTE'
+                    ? showChoice().charAt(0).toUpperCase() +
+                      showChoice().slice(1).toLowerCase()
+                    : showChoice()}
                 </Text>
               </Flex>
             ) : (
