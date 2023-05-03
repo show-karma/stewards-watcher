@@ -1,11 +1,10 @@
 import { Flex, Grid, Icon, IconProps, Skeleton, Text } from '@chakra-ui/react';
 import {
-  FilledCheckIcon,
-  FilledNoIcon,
-  InfoIcon,
+  PassRateIcon,
   ProposalsIcon,
   StatsIcon,
-  VotesIcon,
+  VotedNoIcon,
+  VotedProposalsIcon,
 } from 'components/Icons';
 import { ImgWithFallback } from 'components/ImgWithFallback';
 import { useDAO, useDelegates } from 'contexts';
@@ -86,18 +85,18 @@ export const PerformanceStats: FC<ISinceDelegationProps> = ({
 
   const cardStats: IDelegationStats[] = [
     {
-      icon: ProposalsIcon,
+      icon: VotedProposalsIcon,
       value: delegationStats.votedProposals,
       description: 'Voted proposals',
       showTotal: true,
     },
     {
-      icon: ProposalsIcon,
+      icon: PassRateIcon,
       value: delegationStats.passRate,
       description: `Pass rate on voted proposals`,
     },
     {
-      icon: ProposalsIcon,
+      icon: VotedNoIcon,
       value: delegationStats.votedNo,
       description: `Voted no`,
       showTotal: true,
@@ -253,8 +252,8 @@ export const PerformanceStats: FC<ISinceDelegationProps> = ({
                 color={
                   theme.tokenHolders.delegations.card.columns.stats.leftBorder
                 }
-                m="4"
-                boxSize="16px"
+                m="2"
+                boxSize="24px"
               />
               <Flex flexDir="column" align="flex-start">
                 <Skeleton isLoaded={!isLoading} minW="5" minH="5">

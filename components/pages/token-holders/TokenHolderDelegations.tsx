@@ -68,9 +68,9 @@ export const TokenHolderDelegation: FC = () => {
 
   const inputValue = watch('addressInput');
 
-  const clearInput = () => {
+  const clearInput = async () => {
     reset({ addressInput: '' });
-    trigger();
+    await trigger('addressInput');
   };
 
   const sendAddresses = (addrs = addresses) => {
@@ -84,11 +84,10 @@ export const TokenHolderDelegation: FC = () => {
         const newArray = [...prev, addr];
         if (shouldSubmit) {
           sendAddresses(newArray);
-          clearInput();
         }
+        clearInput();
         return [...prev, addr];
       });
-      clearInput();
     }
   };
 
@@ -96,7 +95,12 @@ export const TokenHolderDelegation: FC = () => {
     if (!addr) return;
     const isValidated = await trigger('addressInput');
     if (!isValidated) return;
+    clearInput();
     addAddress(addr);
+  };
+
+  const checkTrigger = async () => {
+    await trigger('addressInput');
   };
 
   useEffect(() => {
@@ -105,13 +109,17 @@ export const TokenHolderDelegation: FC = () => {
     }
   }, [inputValue]);
 
+  useEffect(() => {
+    if (addresses.length) checkTrigger();
+  }, [addresses]);
+
   const removeAddress = (addr: string) => {
     setAddresses(prev => prev.filter(address => address !== addr));
   };
 
   const onSubmit = () => {
     if (inputValue) {
-      addAddress(inputValue, true);
+      checkAndAddAddress(inputValue);
     } else {
       sendAddresses();
     }
@@ -139,6 +147,20 @@ export const TokenHolderDelegation: FC = () => {
     });
   };
 
+  const handleMultiplePaste = (text: string) => {
+    const removedSpaces = text.replace(/\s/g, '');
+    const splitText = removedSpaces.split(',');
+    const filteredText = splitText.filter(item => item !== '');
+    filteredText.forEach(addr => {
+      setAddresses(prev => {
+        const newArray = [...prev, addr];
+        sendAddresses(newArray);
+        clearInput();
+        return [...prev, addr];
+      });
+    });
+  };
+
   return (
     <Flex w="full" flexDir="column" px={{ base: '4', xl: '0' }}>
       <Flex
@@ -150,7 +172,11 @@ export const TokenHolderDelegation: FC = () => {
         pb="3"
       >
         <Flex flexDir="row" gap="3">
-          <SearchUserIcon w="8" h="8" />
+          <SearchUserIcon
+            w="8"
+            h="8"
+            color={theme.tokenHolders.delegations.bg.tertiary}
+          />
           <Flex flexDir="column" gap="2">
             <Text
               fontStyle="normal"
@@ -265,6 +291,9 @@ export const TokenHolderDelegation: FC = () => {
                         boxShadow: 'none',
                       }}
                       {...register('addressInput')}
+                      onPaste={event =>
+                        handleMultiplePaste(event.clipboardData.getData('Text'))
+                      }
                       onKeyDown={event => {
                         if (
                           event.key === 'Backspace' &&
