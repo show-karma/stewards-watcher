@@ -164,6 +164,7 @@ export const TokenHolderDelegation: FC = () => {
             w="8"
             h="8"
             color={theme.tokenHolders.delegations.bg.tertiary}
+            display={{ base: 'none', sm: 'flex' }}
           />
           <Flex flexDir="column" gap="2">
             <Text
@@ -193,7 +194,7 @@ export const TokenHolderDelegation: FC = () => {
           <Flex
             bg={theme.tokenHolders.delegations.bg.primary}
             py="6"
-            px="8"
+            px={{ base: '4', sm: '8' }}
             borderRadius="md"
             mt="6"
             mb="7"

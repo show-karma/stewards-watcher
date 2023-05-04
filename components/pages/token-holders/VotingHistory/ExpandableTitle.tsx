@@ -31,7 +31,7 @@ export const ExpandableTitle: FC<IExpandableText> = props => {
       ) : (
         <Flex flexDir="column" w="full">
           <Text
-            maxW={{ base: '200', md: '340' }}
+            maxW={{ base: '150', sm: '340' }}
             fontWeight="400"
             fontSize="14px"
             textAlign="left"
