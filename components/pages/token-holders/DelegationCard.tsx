@@ -8,9 +8,9 @@ import {
   IconButton,
   Text,
 } from '@chakra-ui/react';
-import { DownChevron, UpChevronIcon } from 'components/Icons';
+import { UpChevronIcon } from 'components/Icons';
 import { ImgWithFallback } from 'components/ImgWithFallback';
-import { useDAO, VotesProvider } from 'contexts';
+import { useDAO } from 'contexts';
 import { motion } from 'framer-motion';
 import moment from 'moment';
 import { FC } from 'react';
@@ -46,8 +46,6 @@ export const DelegationCard: FC<IDelegationCardProps> = ({
   const sinceDate = moment
     .unix(selectedDelegation.timestamp)
     .format('MMM DD, YYYY');
-
-  const MotionIcon = motion(IconButton);
 
   return (
     <AccordionItem borderRadius="md" borderBottomRadius="md" _hover={{}}>
@@ -112,7 +110,7 @@ export const DelegationCard: FC<IDelegationCardProps> = ({
                 >
                   has delegated
                 </Text>
-                {userDelegating.amountDelegated && (
+                {userDelegating.amountDelegated ? (
                   <Text
                     color={theme.tokenHolders.delegations.card.header.pillText}
                     fontSize={{ base: 'sm' }}
@@ -128,7 +126,7 @@ export const DelegationCard: FC<IDelegationCardProps> = ({
                   >
                     {formatNumber(userDelegating.amountDelegated)} tokens
                   </Text>
-                )}
+                ) : null}
                 <Text
                   color={theme.tokenHolders.delegations.card.header.text}
                   fontWeight="normal"
@@ -199,23 +197,16 @@ export const DelegationCard: FC<IDelegationCardProps> = ({
                 opacity: '0.8',
               }}
             >
-              View delegate activity
-              <MotionIcon
-                aria-label="View delegate activity showing"
-                icon={<UpChevronIcon width="18px" h="12px" />}
-                minWidth="max-content"
-                minHeight="max-content"
-                background="transparent"
-                _hover={{}}
-                _active={{}}
-                _focus={{}}
-                _focusWithin={{}}
-                _focusVisible={{}}
-                initial={{ rotate: !isExpanded ? 0 : 180 }}
-                animate={{ rotate: !isExpanded ? 180 : 0 }}
-                transition={{ duration: 0.3 }}
-                h="max-content"
-              />
+              <Flex
+                align="center"
+                h="full"
+                w="full"
+                gap="10px"
+                justifyContent="space-between"
+              >
+                View delegate activity
+                <AccordionIcon width="24px" h="24px" />
+              </Flex>
             </AccordionButton>
           </Flex>
           <AccordionPanel
@@ -284,41 +275,30 @@ export const DelegationCard: FC<IDelegationCardProps> = ({
                 {sinceDate}
               </Text>
             </Flex>
-            <VotesProvider
-              profile={{
-                address: userDelegatedTo.address,
-              }}
+
+            <Flex
+              gap="6"
+              flexDir="row"
+              justify="space-between"
+              pt="6"
+              pb="20"
+              pr={{ base: '4', lg: '8' }}
+              pl={{ base: '2', lg: '4' }}
+              align="flex-start"
+              w="full"
+              flexWrap={{ base: 'wrap', xl: 'nowrap' }}
             >
-              <Flex
-                gap="6"
-                flexDir="row"
-                justify="space-between"
-                pt="6"
-                pb="20"
-                pr={{ base: '4', lg: '8' }}
-                pl={{ base: '2', lg: '4' }}
-                align="flex-start"
-                w="full"
-                flexWrap={{ base: 'wrap', xl: 'nowrap' }}
-              >
-                <PerformanceStats
-                  userDelegatedTo={{
-                    name: userDelegatedTo.name,
-                    address: userDelegatedTo.address,
-                    picture: userDelegatedTo.picture,
-                  }}
-                  selectedDelegation={selectedDelegation}
-                  delegations={data}
-                />
-                <VotingHistory
-                  address={userDelegatedTo.address}
-                  timeframe={{
-                    from: selectedDelegation.timestamp,
-                    to: moment(new Date()).unix(),
-                  }}
-                />
-              </Flex>
-            </VotesProvider>
+              <PerformanceStats
+                userDelegatedTo={{
+                  name: userDelegatedTo.name,
+                  address: userDelegatedTo.address,
+                  picture: userDelegatedTo.picture,
+                }}
+                selectedDelegation={selectedDelegation}
+                delegations={data}
+              />
+              <VotingHistory address={userDelegatedTo.address} />
+            </Flex>
           </AccordionPanel>
         </>
       )}

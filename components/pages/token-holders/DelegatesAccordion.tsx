@@ -1,5 +1,6 @@
 import { Accordion, Flex } from '@chakra-ui/react';
-import { useTokenHolders } from 'contexts';
+import { useTokenHolders, VotesProvider } from 'contexts';
+import moment from 'moment';
 import { useMemo, FC } from 'react';
 import { IDelegationHistoryAPI } from 'types';
 import { DelegationCard } from './DelegationCard';
@@ -18,23 +19,33 @@ export const DelegatesAccordion: FC<IDelegatesAccordionProps> = ({
   const lastDelegation = dataArray[0];
   return useMemo(
     () => (
-      <Flex w="full">
-        <Accordion w="full" allowMultiple defaultIndex={[0]}>
-          <DelegationCard
-            userDelegatedTo={{
-              address: lastDelegation.toDelegate,
-            }}
-            userDelegating={{
-              address: holderData.publicAddress,
-              name: holderData.ensName,
-              picture: holderData.profilePicture || '',
-              // amountDelegated: addressData.amountDelegated,
-            }}
-            data={dataArray}
-            selectedDelegation={lastDelegation}
-          />
-        </Accordion>
-      </Flex>
+      <VotesProvider
+        profile={{
+          address: lastDelegation.toDelegate,
+        }}
+        defaultTimeframe={{
+          from: lastDelegation.timestamp,
+          to: moment(new Date()).unix(),
+        }}
+      >
+        <Flex w="full">
+          <Accordion w="full" allowMultiple defaultIndex={[0]}>
+            <DelegationCard
+              userDelegatedTo={{
+                address: lastDelegation.toDelegate,
+              }}
+              userDelegating={{
+                address: holderData.publicAddress,
+                name: holderData.ensName,
+                picture: holderData.profilePicture || '',
+                amountDelegated: holderData.totalDelegatedVotes,
+              }}
+              data={dataArray}
+              selectedDelegation={lastDelegation}
+            />
+          </Accordion>
+        </Flex>
+      </VotesProvider>
     ),
     [selectedAddressesData]
   );

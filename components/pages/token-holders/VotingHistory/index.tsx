@@ -19,27 +19,18 @@ import { SearchProposalInput } from './SearchProposalInput';
 
 interface IVotingHistory {
   address: string;
-  timeframe: {
-    from: number;
-    to: number;
-  };
 }
 
-export const VotingHistory: FC<IVotingHistory> = ({ address, timeframe }) => {
+export const VotingHistory: FC<IVotingHistory> = ({ address }) => {
   const { theme } = useDAO();
   const {
     isLoading: voteLoading,
     showingVotes,
     allVotes,
-    setupTimeframe,
     sortby,
     changeSort,
   } = useVotes();
   const [isLoading, setIsLoading] = useState(true);
-
-  useMemo(() => {
-    setupTimeframe(timeframe.from, timeframe.to);
-  }, [timeframe]);
 
   const loadArray = Array.from({ length: 6 });
 

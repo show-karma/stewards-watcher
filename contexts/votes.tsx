@@ -23,7 +23,6 @@ interface IVotesProps {
   isVoteBreakdownLoading: boolean;
   isVoteBreakdownError: boolean;
   voteBreakdown: IVoteBreakdown;
-  setupTimeframe: (from: number, to: number) => void;
   changeSort: (newSort: 'Date' | 'Choice') => void;
   sortby: 'Date' | 'Choice';
 }
@@ -33,11 +32,16 @@ export const VotesContext = createContext({} as IVotesProps);
 interface ProviderProps {
   children: React.ReactNode;
   profile: IProfile;
+  defaultTimeframe?: {
+    from: number;
+    to: number;
+  };
 }
 
 export const VotesProvider: React.FC<ProviderProps> = ({
   children,
   profile,
+  defaultTimeframe,
 }) => {
   const { daoInfo } = useDAO();
   const { voteInfos } = useDelegates();
@@ -56,10 +60,11 @@ export const VotesProvider: React.FC<ProviderProps> = ({
   const [onChainVotes, setOnChainVotes] = useState<IChainRow[] | undefined>(
     undefined
   );
-  const [timeframe, setTimeframe] = useState({
+
+  const timeframe = defaultTimeframe || {
     from: moment().subtract(40, 'year').unix(),
     to: moment().unix(),
-  });
+  };
   const [isLoading, setIsLoading] = useState(true);
   const [sortby, setSortBy] = useState<'Date' | 'Choice'>('Date');
   const [offset, setOffset] = useState(0);
@@ -84,10 +89,6 @@ export const VotesProvider: React.FC<ProviderProps> = ({
   });
 
   const limit = 6;
-
-  const setupTimeframe = (from: number, to: number) => {
-    setTimeframe({ from, to });
-  };
 
   const changeSort = (newSort: 'Date' | 'Choice') => setSortBy(newSort);
 
@@ -194,7 +195,6 @@ export const VotesProvider: React.FC<ProviderProps> = ({
       isVoteBreakdownLoading,
       isVoteBreakdownError,
       voteBreakdown,
-      setupTimeframe,
       changeSort,
       sortby,
     }),
@@ -210,7 +210,6 @@ export const VotesProvider: React.FC<ProviderProps> = ({
       isVoteBreakdownLoading,
       isVoteBreakdownError,
       voteBreakdown,
-      setupTimeframe,
       changeSort,
       sortby,
     ]

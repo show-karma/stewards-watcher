@@ -11,7 +11,6 @@ export interface IDelegatingHistories {
   toDelegate: string;
   delegator: string;
   timestamp: number;
-  amount?: number;
 }
 
 export interface IDelegationHistoryAPI {
@@ -20,4 +19,5 @@ export interface IDelegationHistoryAPI {
   daoName: string;
   delegatingHistories: IDelegatingHistories[];
   profilePicture?: string;
+  totalDelegatedVotes?: number;
 }
