@@ -53,7 +53,6 @@ export const VotesProvider: React.FC<ProviderProps> = ({
     voteInfos.onChainId,
     profile.address
   );
-
   const [offChainVotes, setOffChainVotes] = useState<IChainRow[] | undefined>(
     undefined
   );
