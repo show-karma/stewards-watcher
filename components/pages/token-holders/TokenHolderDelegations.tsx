@@ -116,6 +116,10 @@ export const TokenHolderDelegation: FC = () => {
   };
 
   const onSubmit = () => {
+    if (!inputValue && addresses.length) {
+      sendAddresses(addresses);
+      return;
+    }
     handleMultiple();
   };
 
