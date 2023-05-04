@@ -1,15 +1,7 @@
-import {
-  Flex,
-  Icon,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  InputRightElement,
-} from '@chakra-ui/react';
+import { Flex, Input, InputGroup, InputRightElement } from '@chakra-ui/react';
 import { SearchIcon } from 'components/Icons';
 import { useDAO, useVotes } from 'contexts';
 import { FC } from 'react';
-import { BiSearch } from 'react-icons/bi';
 
 export const SearchProposalInput: FC = () => {
   const { searchProposal } = useVotes();

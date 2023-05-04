@@ -1,7 +1,7 @@
 import { Button, Flex, Input, Spinner, Text } from '@chakra-ui/react';
 import { CloseIcon, SearchUserIcon } from 'components/Icons';
 import { useDAO, useTokenHolders } from 'contexts';
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useState } from 'react';
 import { truncateAddress } from 'utils';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -24,21 +24,48 @@ export const TokenHolderDelegation: FC = () => {
 
   const [addresses, setAddresses] = useState<string[]>(selectedAddresses);
 
+  const splitAddressesText = (text: string) => {
+    const removedSpaces = text.replace(/\s/g, '');
+    const splitTexts = removedSpaces.split(',');
+    const filteredTexts = splitTexts.filter(item => item !== '');
+    return filteredTexts;
+  };
+
   const schema = yup.object({
     addressInput: yup
       .string()
       .test('already-exists', 'Address already added.', value => {
         if (!value) return true;
-        if (addresses.includes(value)) return false;
+        // if (addresses.includes(value)) return false;
+        const addrs = splitAddressesText(value);
+        if (addrs.length === 0) return false;
+        const isInvalid = addrs.find(addr => {
+          const alreadyExists = addresses.includes(addr);
+          return alreadyExists;
+        });
+        if (isInvalid) return false;
+        const duplicate = addrs.find((item, index) => {
+          const firstIndex = addrs.indexOf(item);
+          return firstIndex !== index;
+        });
+        if (duplicate) return false;
         return true;
       })
       .test(
         'is-valid-address',
-        'Please enter a valid address or ENS name',
+        'Please enter a valid address or ENS name.',
         value => {
           if (!value && addresses.length !== 0) return true;
-          if (value && (addressRegex.test(value) || ensNameRegex.test(value)))
-            return true;
+          if (value) {
+            const addrs = splitAddressesText(value);
+            if (addrs.length === 0) return false;
+            const isValid = addrs.every(addr => {
+              if (addressRegex.test(addr) || ensNameRegex.test(addr))
+                return true;
+              return false;
+            });
+            return isValid;
+          }
           return false;
         }
       ),
@@ -50,8 +77,8 @@ export const TokenHolderDelegation: FC = () => {
     register,
     reset,
     watch,
+    clearErrors,
     formState: { errors },
-    trigger,
   } = useForm<FormData>({
     resolver: yupResolver(schema),
     reValidateMode: 'onChange',
@@ -59,70 +86,37 @@ export const TokenHolderDelegation: FC = () => {
     criteriaMode: 'all',
   });
 
-  useMemo(() => {
-    if (addresses !== selectedAddresses) setAddresses(selectedAddresses);
-  }, [selectedAddresses]);
-
   const disableButtonCondition =
     isFetching && isLoading && !!errors.addressInput;
 
-  const inputValue = watch('addressInput');
-
-  const clearInput = async () => {
-    reset({ addressInput: '' });
-    await trigger('addressInput');
-  };
-
-  const sendAddresses = (addrs = addresses) => {
+  const sendAddresses = (addrs: string[]) => {
     changeAddresses(addrs.join(','));
   };
 
-  const addAddress = (addr = inputValue, shouldSubmit = false) => {
-    if (!addr || !!errors.addressInput) return;
-    if (!addresses.includes(addr)) {
-      setAddresses(prev => {
-        const newArray = [...prev, addr];
-        if (shouldSubmit) {
-          sendAddresses(newArray);
-        }
-        clearInput();
-        return [...prev, addr];
-      });
-    }
+  const inputValue = watch('addressInput');
+
+  const clearInput = () => {
+    reset({ addressInput: '' });
+    clearErrors('addressInput');
   };
-
-  const checkAndAddAddress = async (addr = inputValue) => {
-    if (!addr) return;
-    const isValidated = await trigger('addressInput');
-    if (!isValidated) return;
-    clearInput();
-    addAddress(addr);
-  };
-
-  const checkTrigger = async () => {
-    await trigger('addressInput');
-  };
-
-  useEffect(() => {
-    if (inputValue === ',') {
-      clearInput();
-    }
-  }, [inputValue]);
-
-  useEffect(() => {
-    if (addresses.length) checkTrigger();
-  }, [addresses]);
 
   const removeAddress = (addr: string) => {
     setAddresses(prev => prev.filter(address => address !== addr));
   };
 
+  const handleMultiple = (text = inputValue) => {
+    if (!text) return;
+    const filteredTexts = splitAddressesText(text);
+    setAddresses(previous => {
+      const newAddresses = [...previous, ...filteredTexts];
+      sendAddresses(newAddresses);
+      return newAddresses;
+    });
+    clearInput();
+  };
+
   const onSubmit = () => {
-    if (inputValue) {
-      checkAndAddAddress(inputValue);
-    } else {
-      sendAddresses();
-    }
+    handleMultiple();
   };
 
   const renderItems = () => {
@@ -144,20 +138,6 @@ export const TokenHolderDelegation: FC = () => {
       const { length } = Object.keys(holderData.delegatingHistories);
       if (!length) return null;
       return <DelegatesAccordion holderData={holderData} key={+index} />;
-    });
-  };
-
-  const handleMultiplePaste = (text: string) => {
-    const removedSpaces = text.replace(/\s/g, '');
-    const splitText = removedSpaces.split(',');
-    const filteredText = splitText.filter(item => item !== '');
-    filteredText.forEach(addr => {
-      setAddresses(prev => {
-        const newArray = [...prev, addr];
-        sendAddresses(newArray);
-        clearInput();
-        return [...prev, addr];
-      });
     });
   };
 
@@ -291,9 +271,6 @@ export const TokenHolderDelegation: FC = () => {
                         boxShadow: 'none',
                       }}
                       {...register('addressInput')}
-                      onPaste={event =>
-                        handleMultiplePaste(event.clipboardData.getData('Text'))
-                      }
                       onKeyDown={event => {
                         if (
                           event.key === 'Backspace' &&
@@ -301,8 +278,6 @@ export const TokenHolderDelegation: FC = () => {
                           addresses.length > 0
                         )
                           removeAddress(addresses[addresses.length - 1]);
-                        if (event.key === ',' || event.keyCode === 188)
-                          checkAndAddAddress(inputValue);
                       }}
                     />
                   </Flex>
