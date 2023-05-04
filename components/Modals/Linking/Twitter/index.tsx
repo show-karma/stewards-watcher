@@ -2,14 +2,18 @@ import { ModalContent, ModalOverlay, Modal } from '@chakra-ui/react';
 import { useDAO, useDelegates } from 'contexts';
 import { AxiosClient } from 'helpers';
 import { useToasty } from 'hooks';
+import dynamic from 'next/dynamic';
 import React, { useEffect, useState } from 'react';
 import { lessThanDays } from 'utils';
 import { useAccount } from 'wagmi';
 import { ESteps } from './ESteps';
-import { Step1 } from './Step1';
-import { Step2 } from './Step2';
-import { Step3 } from './Step3';
-import { StepVerified } from './StepVerified';
+
+const Step1 = dynamic(() => import('./Step1').then(module => module.Step1));
+const Step2 = dynamic(() => import('./Step2').then(module => module.Step2));
+const Step3 = dynamic(() => import('./Step3').then(module => module.Step3));
+const StepVerified = dynamic(() =>
+  import('./StepVerified').then(module => module.StepVerified)
+);
 
 interface IModal {
   open: boolean;

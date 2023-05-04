@@ -1,22 +1,32 @@
 import {
   DelegatesProvider,
   GovernanceVotesProvider,
-  HandlesProvider,
   useDAO,
   WalletProvider,
 } from 'contexts';
 import { MainLayout } from 'layouts';
 import Head from 'next/head';
 import React from 'react';
-import {
-  RainbowWrapper,
-  DelegatesList,
-  HeaderHat,
-  BodyTitle,
-} from 'components';
 import { Flex } from '@chakra-ui/react';
 import Script from 'next/script';
-import { AuthProvider } from 'contexts/auth';
+import dynamic from 'next/dynamic';
+import { BodyTitle, HeaderHat } from 'components';
+
+const RainbowWrapper = dynamic(() =>
+  import('components').then(module => module.RainbowWrapper)
+);
+
+const DelegatesList = dynamic(() =>
+  import('components').then(module => module.DelegatesList)
+);
+
+const AuthProvider = dynamic(() =>
+  import('contexts/auth').then(module => module.AuthProvider)
+);
+
+const HandlesProvider = dynamic(() =>
+  import('contexts/handles').then(module => module.HandlesProvider)
+);
 
 interface IDAOContainer {
   user?: string;

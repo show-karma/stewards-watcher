@@ -1,7 +1,6 @@
 import { DAOProvider } from 'contexts/dao';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
-import { FAQContainer } from 'containers';
 import { GuideContainer } from 'containers/guide';
 
 const supportedDAOs: Record<string, string> = {

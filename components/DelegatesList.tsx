@@ -1,11 +1,45 @@
 /* eslint-disable no-nested-ternary */
-import { Flex, Grid, Spinner, Text } from '@chakra-ui/react';
-import { useDAO, useDelegates, useWallet } from 'contexts';
-import { FC, useMemo } from 'react';
-import InfiniteScroll from 'react-infinite-scroller';
+import { Flex, Grid, Spinner, Text, useDisclosure } from '@chakra-ui/react';
+import {
+  IBreakdownProps,
+  ScoreBreakdownProvider,
+  useDelegates,
+  useWallet,
+} from 'contexts';
+import dynamic from 'next/dynamic';
+import { FC, useMemo, useState } from 'react';
 import { IDelegate } from 'types';
-import { DelegateCard } from './DelegateCard';
-import { DelegateModal } from './Modals';
+
+const InfiniteScroll = dynamic(
+  () => import('react-infinite-scroller').then(module => module.default),
+  { ssr: false }
+);
+
+const StyledModal = dynamic(
+  () =>
+    import('components/Modals/DelegateToAnyone/StyledModal').then(
+      module => module.StyledModal
+    ),
+  { ssr: false }
+);
+
+const ScoreBreakdown = dynamic(
+  () => import('components').then(module => module.ScoreBreakdown),
+  { ssr: false }
+);
+
+const DelegateModal = dynamic(
+  () => import('components').then(module => module.DelegateModal),
+  { ssr: false }
+);
+
+const DelegateCard = dynamic(() =>
+  import('components').then(module => module.DelegateCard)
+);
+
+const EmptyStates = dynamic(() =>
+  import('components').then(module => module.EmptyState)
+);
 
 const loadingArray = Array(3).fill(undefined);
 
@@ -13,26 +47,17 @@ interface IDelegatesList {
   pathUser?: string;
 }
 
-const EmptyStates = () => {
-  const { theme } = useDAO();
-  const { isSearchDirty, isFiltering } = useDelegates();
-
-  const isSearchingOrFiltering = isSearchDirty || isFiltering;
-
-  return (
-    <Text as="p" color={theme.title} w="full" align="center">
-      {isSearchingOrFiltering
-        ? `We couldn't find any contributors matching that criteria`
-        : `We couldn't find any contributor info`}
-    </Text>
-  );
-};
 interface IDelegatesCasesProps {
   delegates: IDelegate[];
   isLoading: boolean;
+  onModalOpen: (data: IBreakdownProps) => void;
 }
 
-const DelegatesCases: FC<IDelegatesCasesProps> = ({ delegates, isLoading }) => {
+const DelegatesCases: FC<IDelegatesCasesProps> = ({
+  delegates,
+  isLoading,
+  onModalOpen,
+}) => {
   if (isLoading) {
     if (delegates.length <= 0) {
       return (
@@ -46,7 +71,11 @@ const DelegatesCases: FC<IDelegatesCasesProps> = ({ delegates, isLoading }) => {
     return (
       <>
         {delegates.map(item => (
-          <DelegateCard key={`${JSON.stringify(item)}`} data={item} />
+          <DelegateCard
+            key={`${JSON.stringify(item)}`}
+            data={item}
+            onModalOpen={onModalOpen}
+          />
         ))}
       </>
     );
@@ -54,7 +83,11 @@ const DelegatesCases: FC<IDelegatesCasesProps> = ({ delegates, isLoading }) => {
   return (
     <>
       {delegates.map(item => (
-        <DelegateCard key={`${JSON.stringify(item)}`} data={item} />
+        <DelegateCard
+          key={`${JSON.stringify(item)}`}
+          data={item}
+          onModalOpen={onModalOpen}
+        />
       ))}
     </>
   );
@@ -72,6 +105,20 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
     delegates,
   } = useDelegates();
 
+  const [selectedBreakdownUser, setSelectedBreakdownUser] =
+    useState<IBreakdownProps | null>(null);
+  const { onOpen, isOpen, onClose: closeModal } = useDisclosure();
+
+  const onModalOpen = (data: IBreakdownProps) => {
+    setSelectedBreakdownUser(data);
+    onOpen();
+  };
+
+  const onClose = () => {
+    closeModal();
+    setSelectedBreakdownUser(null);
+  };
+
   const { delegateIsOpen, delegateOnToggle } = useWallet();
 
   const searchProfileSelected = async (userToSearch: string) => {
@@ -83,73 +130,108 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
   }, [pathUser]);
 
   return (
-    <Flex
-      flexDir="column"
-      align="center"
-      w="full"
-      maxW={{ base: '400px', md: '820px', lg: '944px', xl: '1360px' }}
-    >
-      {!!interestFilter.length && (
-        <Flex textAlign="start" w={{ base: 'full' }} fontSize={12} mb={4}>
-          <Text as="span">
-            <Text as="b">Delegate Interests: </Text>
-            {interestFilter.join(', ')}
-          </Text>
-        </Flex>
-      )}
-      {!!profileSelected &&
-        !!Object.values(profileSelected).length &&
-        delegateIsOpen && (
-          <DelegateModal
-            delegateData={profileSelected}
-            open={delegateIsOpen}
-            handleModal={delegateOnToggle}
-          />
-        )}
-      <InfiniteScroll
-        pageStart={0}
-        loadMore={() => {
-          if (delegates.length && !isLoading && delegates.length >= 10)
-            fetchNextDelegates();
-        }}
-        hasMore={hasMore}
-        loader={
-          // eslint-disable-next-line react/jsx-no-useless-fragment
-          <div key="spinner">
-            {isLoading && delegates.length > 0 && (
-              <Flex
-                width="full"
-                py="16"
-                align="center"
-                justify="center"
-                key="loading-spinner"
-              >
-                <Spinner w="20" h="20" />
-              </Flex>
-            )}
-          </div>
-        }
-        style={{ width: '100%' }}
+    <>
+      <Flex
+        flexDir="column"
+        align="center"
+        w="full"
+        maxW={{ base: '400px', md: '820px', lg: '944px', xl: '1360px' }}
       >
-        <Grid
-          rowGap={{ base: '6', md: '4' }}
-          columnGap={{ base: '4', md: '4' }}
-          w="full"
-          templateColumns={{
-            base: 'repeat(1, 1fr)',
-            sm: 'repeat(1, 1fr)',
-            md: 'repeat(2, auto)',
-            xl: 'repeat(3, 1fr)',
+        {!!interestFilter.length && (
+          <Flex textAlign="start" w={{ base: 'full' }} fontSize={12} mb={4}>
+            <Text as="span">
+              <Text as="b">Delegate Interests: </Text>
+              {interestFilter.join(', ')}
+            </Text>
+          </Flex>
+        )}
+        {!!profileSelected &&
+          !!Object.values(profileSelected).length &&
+          delegateIsOpen && (
+            <DelegateModal
+              delegateData={profileSelected}
+              open={delegateIsOpen}
+              handleModal={delegateOnToggle}
+            />
+          )}
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={() => {
+            if (delegates.length && !isLoading && delegates.length >= 10)
+              fetchNextDelegates();
           }}
-          alignItems="center"
-          justifyContent="space-between"
-          mb="8"
-          px={{ base: '4', lg: '0' }}
+          hasMore={hasMore}
+          loader={
+            // eslint-disable-next-line react/jsx-no-useless-fragment
+            <div key="spinner">
+              {isLoading && delegates.length > 0 && (
+                <Flex
+                  width="full"
+                  py="16"
+                  align="center"
+                  justify="center"
+                  key="loading-spinner"
+                >
+                  <Spinner w="20" h="20" />
+                </Flex>
+              )}
+            </div>
+          }
+          style={{ width: '100%' }}
         >
-          <DelegatesCases delegates={delegates} isLoading={isLoading} />
-        </Grid>
-      </InfiniteScroll>
-      {!isLoading && !delegates.length && <EmptyStates />}
-    </Flex>
+          <Grid
+            rowGap={{ base: '6', md: '4' }}
+            columnGap={{ base: '4', md: '4' }}
+            w="full"
+            templateColumns={{
+              base: 'repeat(1, 1fr)',
+              sm: 'repeat(1, 1fr)',
+              md: 'repeat(2, auto)',
+              xl: 'repeat(3, 1fr)',
+            }}
+            alignItems="center"
+            justifyContent="space-between"
+            mb="8"
+            px={{ base: '4', lg: '0' }}
+          >
+            <DelegatesCases
+              delegates={delegates}
+              isLoading={isLoading}
+              onModalOpen={onModalOpen}
+            />
+          </Grid>
+        </InfiniteScroll>
+        {!isLoading && !delegates.length && <EmptyStates />}
+      </Flex>
+
+      {selectedBreakdownUser && !!selectedBreakdownUser.address && (
+        <StyledModal
+          isOpen={isOpen}
+          title="Score Breakdown"
+          description={
+            <>
+              <Text>
+                Below is a breakdown of the user’s activities and actions in the
+                DAO.
+              </Text>
+              <Text>
+                The total score is calculated through a formula and represents
+                their total contributions to the DAO.
+              </Text>
+            </>
+          }
+          headerLogo
+          onClose={onClose}
+        >
+          <ScoreBreakdownProvider
+            address={selectedBreakdownUser.address}
+            period={selectedBreakdownUser.period}
+            type={selectedBreakdownUser.type}
+          >
+            <ScoreBreakdown />
+          </ScoreBreakdownProvider>
+        </StyledModal>
+      )}
+    </>
   );
 };
