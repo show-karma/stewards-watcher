@@ -6,6 +6,7 @@ import { truncateAddress } from 'utils';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { ChakraLink } from 'components/ChakraLink';
 import { DelegatesAccordion } from './DelegatesAccordion';
 
 const addressRegex = /^0x[a-fA-F0-9]{40}$/;
@@ -127,6 +128,13 @@ export const TokenHolderDelegation: FC = () => {
     handleMultiple();
   };
 
+  const getAddressesToAText = () => {
+    const addrs = selectedAddresses.map(addr =>
+      addressRegex.test(addr) ? truncateAddress(addr) : addr
+    );
+    return addrs.join(', ');
+  };
+
   const renderItems = () => {
     if (!tokenholders)
       return (
@@ -137,7 +145,11 @@ export const TokenHolderDelegation: FC = () => {
             fontSize={{ base: '16px', xl: '20px' }}
             color={theme.tokenHolders.delegations.text.primary}
           >
-            No addresses found.
+            {getAddressesToAText()} has not delegated any tokens. <br /> Find a
+            suitable candidate and delegate your tokens{' '}
+            <ChakraLink href="/" isExternal textDecor="underline">
+              here.
+            </ChakraLink>
           </Text>
         </Flex>
       );
