@@ -23,7 +23,7 @@ export const DelegatesAccordion: FC<IDelegatesAccordionProps> = ({
         profile={{
           address: lastDelegation.toDelegate,
         }}
-        defaultTimeframe={{
+        selectedTimeframe={{
           from: lastDelegation.timestamp,
           to: moment(new Date()).unix(),
         }}

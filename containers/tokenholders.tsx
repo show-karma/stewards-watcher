@@ -19,6 +19,7 @@ import {
 import { Flex } from '@chakra-ui/react';
 import Script from 'next/script';
 import { AuthProvider } from 'contexts/auth';
+import { useRouter } from 'next/router';
 
 interface IDAOContainer {
   user?: string;
@@ -27,6 +28,14 @@ interface IDAOContainer {
 export const TokenHoldersContainer: React.FC<IDAOContainer> = ({ user }) => {
   const { daoInfo, theme } = useDAO();
   const { config } = daoInfo;
+  const router = useRouter();
+
+  const title = `Check Your DAO Delegate's Performance`;
+  const description =
+    'Find out how well your delegate has performed since you delegated your tokens.';
+  const imageBig = `${config.METATAGS.URL}/meta/token-holders/delegate-activity-tracker-big.png`;
+  const image = `${config.METATAGS.URL}/meta/token-holders/delegate-activity-tracker.png`;
+  const url = `${config.METATAGS.URL}${router.asPath}`;
 
   return (
     <RainbowWrapper>
@@ -37,36 +46,25 @@ export const TokenHoldersContainer: React.FC<IDAOContainer> = ({ user }) => {
               <HandlesProvider>
                 <TokenHoldersProvider>
                   <Head>
-                    <title>{config.METATAGS.TITLE}</title>
-                    <meta
-                      name="description"
-                      content={config.METATAGS.DESCRIPTION}
-                    />
+                    <title>{title}</title>
+                    <meta name="description" content={description} />
 
                     <meta property="og:type" content="website" />
-                    <meta
-                      property="og:url"
-                      content={config.METATAGS.URL}
-                      key="ogurl"
-                    />
+                    <meta property="og:url" content={url} key="ogurl" />
                     <meta
                       property="og:image"
-                      content={config.METATAGS.IMAGE}
+                      content={imageBig}
                       key="ogimage"
                     />
                     <meta
                       property="og:site_name"
-                      content={`Karma - ${config.DAO} delegate dashboard`}
+                      content={title}
                       key="ogsitename"
                     />
-                    <meta
-                      property="og:title"
-                      content={`Active delegates of ${config.DAO}`}
-                      key="ogtitle"
-                    />
+                    <meta property="og:title" content={title} key="ogtitle" />
                     <meta
                       property="og:description"
-                      content={config.METATAGS.DESCRIPTION}
+                      content={description}
                       key="ogdesc"
                     />
                     <link rel="icon" href={config.METATAGS.FAVICON} />
@@ -75,22 +73,13 @@ export const TokenHoldersContainer: React.FC<IDAOContainer> = ({ user }) => {
                       property="twitter:card"
                       content="summary_large_image"
                     />
-                    <meta
-                      property="twitter:url"
-                      content={config.METATAGS.URL}
-                    />
-                    <meta
-                      property="twitter:title"
-                      content={config.METATAGS.DESCRIPTION}
-                    />
+                    <meta property="twitter:url" content={url} />
+                    <meta property="twitter:title" content={description} />
                     <meta
                       property="twitter:description"
-                      content={config.METATAGS.DESCRIPTION}
+                      content={description}
                     />
-                    <meta
-                      property="twitter:image"
-                      content={config.METATAGS.IMAGE}
-                    />
+                    <meta property="twitter:image" content={image} />
                   </Head>
                   <Script
                     async

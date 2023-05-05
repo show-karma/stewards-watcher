@@ -32,7 +32,7 @@ export const VotesContext = createContext({} as IVotesProps);
 interface ProviderProps {
   children: React.ReactNode;
   profile: IProfile;
-  defaultTimeframe?: {
+  selectedTimeframe?: {
     from: number;
     to: number;
   };
@@ -41,7 +41,7 @@ interface ProviderProps {
 export const VotesProvider: React.FC<ProviderProps> = ({
   children,
   profile,
-  defaultTimeframe,
+  selectedTimeframe,
 }) => {
   const { daoInfo } = useDAO();
   const { voteInfos } = useDelegates();
@@ -60,7 +60,7 @@ export const VotesProvider: React.FC<ProviderProps> = ({
     undefined
   );
 
-  const timeframe = defaultTimeframe || {
+  const timeframe = selectedTimeframe || {
     from: moment().subtract(40, 'year').unix(),
     to: moment().unix(),
   };

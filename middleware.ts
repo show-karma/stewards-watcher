@@ -23,6 +23,7 @@ const DAO_CUSTOM_DOMAIN: Record<string, string> = {
   'daostewards.xyz': 'gitcoin',
   'delegate.gitcoin.co': 'gitcoin',
   'delegate.starknet.io': 'starknet',
+  'delegate.ssv.network': 'ssvnetwork',
 };
 
 export default function middleware(req: NextRequest) {
@@ -38,6 +39,7 @@ export default function middleware(req: NextRequest) {
     dao = daoName ? getDAOName(daoName) : DAO_CUSTOM_DOMAIN[devUrl];
   }
 
-  url.pathname = `/_sites/${dao}${currentPathname}`;
+  // url.pathname = `/_sites/${dao}${currentPathname}`;
+  url.pathname = `/_sites/optimism${currentPathname}`;
   return NextResponse.rewrite(url);
 }
