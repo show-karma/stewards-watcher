@@ -91,8 +91,19 @@ export const TokenHoldersProvider: FC<IProviderProps> = ({ children }) => {
       return;
     }
 
+    if (!fetchedSelectedAddresses.data.data) {
+      setSelectedAddressesData(undefined);
+      return;
+    }
     const { tokenholders }: { tokenholders: IDelegationHistoryAPI[] } =
       fetchedSelectedAddresses.data.data;
+    const someHasData = tokenholders.some(
+      data => data.delegatingHistories.length > 0
+    );
+    if (!someHasData) {
+      setSelectedAddressesData(undefined);
+      return;
+    }
     setSelectedAddressesData(tokenholders || undefined);
   };
 
