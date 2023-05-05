@@ -39,7 +39,6 @@ export default function middleware(req: NextRequest) {
     dao = daoName ? getDAOName(daoName) : DAO_CUSTOM_DOMAIN[devUrl];
   }
 
-  // url.pathname = `/_sites/${dao}${currentPathname}`;
-  url.pathname = `/_sites/optimism${currentPathname}`;
+  url.pathname = `/_sites/${dao}${currentPathname}`;
   return NextResponse.rewrite(url);
 }
