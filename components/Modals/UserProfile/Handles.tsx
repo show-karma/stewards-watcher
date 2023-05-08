@@ -20,7 +20,15 @@ import { lessThanDays } from 'utils';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { DiscourseModal, TwitterModal } from '../Linking';
+import dynamic from 'next/dynamic';
+
+const TwitterModal = dynamic(() =>
+  import('../Linking/Twitter').then(module => module.TwitterModal)
+);
+
+const DiscourseModal = dynamic(() =>
+  import('../Linking/Forum').then(module => module.DiscourseModal)
+);
 
 interface IHandleCasesProps {
   currentHandle?: string;
