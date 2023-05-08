@@ -175,7 +175,8 @@ export const TokenHolderDelegation: FC = () => {
           <SearchUserIcon
             w="8"
             h="8"
-            color={theme.tokenHolders.delegations.bg.tertiary}
+            color={theme.tokenHolders.delegations.text.primary}
+            iconBg={theme.tokenHolders.delegations.bg.primary}
             display={{ base: 'none', sm: 'flex' }}
           />
           <Flex flexDir="column" gap="2">
@@ -213,7 +214,11 @@ export const TokenHolderDelegation: FC = () => {
             flexDir={{ base: 'column', lg: 'row' }}
           >
             <Flex flexDir="column" w="full">
-              <Text fontWeight="700" fontSize="14px" color="#080A0E">
+              <Text
+                fontWeight="700"
+                fontSize="14px"
+                color={theme.tokenHolders.delegations.text.input.text}
+              >
                 Enter one or multiple token holder addresses
               </Text>
               <Flex w="full" position="relative" flexDirection="column">

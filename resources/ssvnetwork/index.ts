@@ -77,7 +77,7 @@ const dark: IDAOTheme = {
     text: '#FFFFFF',
     footer: { bg: 'rgba(102, 102, 102, 0.15)', text: '#FFFFFF' },
     button: {
-      bg: '#C80925',
+      bg: '#448BF2',
       text: '#FFFFFF',
     },
   },
@@ -102,7 +102,7 @@ const dark: IDAOTheme = {
         text: '#212328',
         dirtyBorder: '#212328',
         border: '#E6E6E6',
-        error: '#C80925',
+        error: '#448BF2',
         bg: '#FFFFFF',
       },
       button: {
@@ -111,7 +111,7 @@ const dark: IDAOTheme = {
           text: 'rgba(89, 90, 94, 0.5)',
         },
         normal: {
-          bg: '#C80925',
+          bg: '#448BF2',
           text: '#FFFFFF',
         },
         alternative: {
@@ -122,7 +122,7 @@ const dark: IDAOTheme = {
       },
     },
     buttons: {
-      selectBg: '#C80925',
+      selectBg: '#448BF2',
       selectText: '#FFFFFF',
       navBg: '#34383f',
       navText: '#FFFFFF',
@@ -201,18 +201,17 @@ const dark: IDAOTheme = {
     delegations: {
       accordion: {
         button: {
-          border: '#000000',
-          text: '#000000',
-          icon: '#000000',
+          border: '#FFFFFF',
+          text: '#FFFFFF',
+          icon: '#FFFFFF',
         },
       },
       text: {
         primary: '#FFFFFF',
         secondary: '#ADB8C0',
-
         input: {
           placeholder: '#88939F',
-          text: '#080A0E',
+          text: '#FFFFFF',
         },
         button: '#FFFFFF',
       },
@@ -220,45 +219,45 @@ const dark: IDAOTheme = {
         input: '#88939F',
       },
       input: {
-        pillText: '#000000CC',
+        pillText: '#FFFFFFCC',
         pillBg: '#88939F33',
       },
       card: {
         header: {
-          text: '#000000CC',
-          pillText: '#000000CC',
+          text: '#FFFFFFCC',
+          pillText: '#FFFFFFCC',
           pillBg: '#88939F33',
         },
         legend: {
-          text: '#4F5D6C',
-          bg: '#F5F5F5',
-          pillText: '#000000CC',
-          pillBg: '#88939F33',
+          text: '#F5F5F5',
+          bg: '#2C2E32',
+          pillText: '#F5F5F5',
+          pillBg: '#1C1D20',
         },
         columns: {
-          text: '#34383f',
+          text: '#F5F5F5',
           icon: {
             bg: '#F0EBFA',
             text: '#34383f',
           },
           stats: {
-            primary: '#212328',
-            secondary: '#4F5D6C',
-            leftBorder: '#34383f',
+            primary: '#F5F5F5',
+            secondary: '#ADB8C0',
+            leftBorder: '#448BF2',
             border: '#DBDFE3',
           },
           voting: {
-            total: '#080A0E',
+            total: '#ADB8C0',
             totalNumber: '#88939F',
             proposals: {
-              title: '#080A0E',
-              hyperlink: '#4A269B',
-              description: '#4F5D6C',
+              title: '#F5F5F5',
+              hyperlink: '#b3a1dd',
+              description: '#ADB8C0',
               sort: {
-                bg: '#FFFFFF',
-                border: '#88939F',
-                text: '#88939F',
-                label: '#4F5D6C',
+                bg: '#1C1D20',
+                border: '#FFFFFF',
+                text: '#F5F5F5',
+                label: '#ADB8C0',
               },
               vote: {
                 iconBg: '#E1F7EA',
@@ -270,17 +269,17 @@ const dark: IDAOTheme = {
                 multiple: 'green.300',
                 divider: '#88939F1A',
                 reason: {
-                  title: '#080A0E',
-                  text: '#080A0E',
+                  title: '#FFFFFF',
+                  text: '#FFFFFF',
                 },
               },
               navigation: {
-                color: '#222429',
+                color: '#FFFFFF',
                 buttons: {
-                  selectedBg: '#222429',
-                  selectedText: '#FFFFFF',
+                  selectedBg: '#FFFFFF',
+                  selectedText: '#080A0E',
                   unSelectedBg: 'transparent',
-                  unSelectedText: '#222429',
+                  unSelectedText: '#FFFFFF',
                 },
               },
             },
@@ -288,15 +287,15 @@ const dark: IDAOTheme = {
               placeholder: '#88939F',
               icon: '#4F5D6C',
               border: '#88939F',
-              text: '#000000',
+              text: '#FFFFFF',
             },
           },
         },
       },
       bg: {
-        primary: '#FFFFFF',
-        secondary: '#222429',
-        tertiary: '#222429',
+        primary: '#222429',
+        secondary: '#1B2030',
+        tertiary: '#448BF2',
       },
     },
   },
@@ -352,7 +351,7 @@ const light: IDAOTheme = {
     text: '#212328',
     footer: { bg: '#EBEDEF', text: '#212328' },
     button: {
-      bg: '#C80925',
+      bg: '#448BF2',
       text: '#FFFFFF',
     },
   },
@@ -366,7 +365,7 @@ const light: IDAOTheme = {
       divider: 'rgba(173, 184, 192, 0.2)',
     },
     buttons: {
-      selectBg: '#C80925',
+      selectBg: '#448BF2',
       selectText: '#FFFFFF',
       navBg: '#34383f',
       navText: '#FFFFFF',
@@ -385,7 +384,7 @@ const light: IDAOTheme = {
         text: '#212328',
         dirtyBorder: '#212328',
         border: '#E6E6E6',
-        error: '#C80925',
+        error: '#448BF2',
         bg: '#FFFFFF',
       },
       button: {
@@ -394,7 +393,7 @@ const light: IDAOTheme = {
           text: 'rgba(89, 90, 94, 0.5)',
         },
         normal: {
-          bg: '#C80925',
+          bg: '#448BF2',
           text: '#FFFFFF',
         },
         alternative: {
