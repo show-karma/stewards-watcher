@@ -10,13 +10,29 @@ import { useRouter } from 'next/router';
 import { FC, useMemo, useState } from 'react';
 import { IActiveTab, IProfile } from 'types';
 import { useMixpanel } from 'hooks';
-import { useAccount } from 'wagmi';
-import { Statement } from './Statement';
-import { AboutMe } from './AboutMe';
-import { VotingHistory } from './VotingHistory';
-import { Handles } from './Handles';
-import { WithdrawDelegation } from './WithdrawDelegation';
+import dynamic from 'next/dynamic';
 import { Header } from './Header';
+import { VotingHistory } from './VotingHistory';
+
+const WithdrawDelegation = dynamic(() =>
+  import('components/Modals/UserProfile/WithdrawDelegation').then(
+    module => module.WithdrawDelegation
+  )
+);
+
+const AboutMe = dynamic(() =>
+  import('components/Modals/UserProfile/AboutMe').then(module => module.AboutMe)
+);
+
+const Statement = dynamic(() =>
+  import('components/Modals/UserProfile/Statement').then(
+    module => module.Statement
+  )
+);
+
+const Handles = dynamic(() =>
+  import('components/Modals/UserProfile/Handles').then(module => module.Handles)
+);
 
 interface ITab {
   activeTab: IActiveTab;
@@ -53,7 +69,6 @@ export const UserProfile: FC<IUserProfileProps> = props => {
   const { isOpen, onClose, profile, selectedTab } = props;
   const router = useRouter();
   const { theme } = useDAO();
-  const { address } = useAccount();
   const { mixpanel } = useMixpanel();
   const [activeTab, setActiveTab] = useState<IActiveTab>(selectedTab);
 

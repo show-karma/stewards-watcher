@@ -9,7 +9,6 @@ import {
   SkeletonText,
   Text,
   useClipboard,
-  useDisclosure,
   Icon,
   Box,
   Tooltip,
@@ -31,21 +30,29 @@ import {
 } from 'utils';
 import { useRouter } from 'next/router';
 import { useToasty } from 'hooks';
-import { ScoreBreakdown } from 'components/ScoreBreakdown';
-import {
-  IBreakdownProps,
-  ScoreBreakdownProvider,
-} from 'contexts/scoreBreakdown';
+import { IBreakdownProps } from 'contexts/scoreBreakdown';
 import { DELEGATOR_TRACKER_DAOS } from 'helpers';
-import { StyledModal } from 'components/Modals/DelegateToAnyone/StyledModal';
+import dynamic from 'next/dynamic';
 import { ImgWithFallback } from '../ImgWithFallback';
 import { DelegateButton } from '../DelegateButton';
-import { UserInfoButton } from '../UserInfoButton';
 import { ForumIcon, TwitterIcon } from '../Icons';
 import { ExpandableCardText } from './ExpandableCardText';
-import { DelegateStat } from './DelegateStat';
-import { ScoreStat } from './ScoreStat';
-import { StatPopover } from './StatPopover';
+
+const DelegateStat = dynamic(() =>
+  import('./DelegateStat').then(module => module.DelegateStat)
+);
+
+const ScoreStat = dynamic(() =>
+  import('./ScoreStat').then(module => module.ScoreStat)
+);
+
+const StatPopover = dynamic(() =>
+  import('./StatPopover').then(module => module.StatPopover)
+);
+
+const UserInfoButton = dynamic(() =>
+  import('components/UserInfoButton').then(module => module.UserInfoButton)
+);
 
 interface IStatCasesProps {
   statItem: ICardStat;
@@ -97,6 +104,7 @@ const StatCases: FC<IStatCasesProps> = ({
 
 interface IDelegateCardProps {
   data?: IDelegate;
+  onModalOpen?: (user: IBreakdownProps) => void;
 }
 
 export const DelegateCard: FC<IDelegateCardProps> = props => {
@@ -104,18 +112,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   const { daoInfo, theme, daoData } = useDAO();
   const { selectProfile, period, setSelectedProfileData } = useDelegates();
   const { onCopy } = useClipboard(data?.address || '');
-  const [scoreType, setScoreType] =
-    useState<IBreakdownProps['type']>('karmaScore');
-
-  const karmaScoreType = useMemo((): IBreakdownProps['type'] => {
-    if (scoreType === 'forumScore') return scoreType;
-
-    return daoInfo.config.DAO_KARMA_ID === 'gitcoin'
-      ? 'gitcoinHealthScore'
-      : 'karmaScore';
-  }, [data, scoreType]);
-
-  const { onOpen, onClose, isOpen } = useDisclosure();
 
   const { config } = daoInfo;
   const isLoaded = !!data;
@@ -127,8 +123,24 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     return '-';
   };
 
-  const openScoreBreakdown = () => {
-    onOpen();
+  const karmaScoreType = (
+    scoreType: IBreakdownProps['type']
+  ): IBreakdownProps['type'] => {
+    if (scoreType === 'forumScore') return scoreType;
+
+    return daoInfo.config.DAO_KARMA_ID === 'gitcoin'
+      ? 'gitcoinHealthScore'
+      : 'karmaScore';
+  };
+
+  const openScoreBreakdown = (scoreType: IBreakdownProps['type']) => {
+    const { onModalOpen } = props;
+    if (data)
+      onModalOpen?.({
+        address: data.address,
+        period,
+        type: karmaScoreType(scoreType),
+      });
   };
 
   const allStats: ICardStat[] = [
@@ -174,8 +186,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       id: 'forumScore',
       tooltipText: 'Score based on their contribution in the forum',
       statAction: () => {
-        setScoreType('forumScore');
-        openScoreBreakdown();
+        openScoreBreakdown('forumScore');
       },
     },
     {
@@ -596,8 +607,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                     right="0"
                     top="0"
                     onClick={() => {
-                      setScoreType('karmaScore');
-                      openScoreBreakdown();
+                      openScoreBreakdown('karmaScore');
                     }}
                   >
                     <ScoreStat stat={score} />
@@ -799,34 +809,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           )}
         </Flex>
       </Flex>
-      <StyledModal
-        isOpen={isOpen}
-        title="Score Breakdown"
-        description={
-          <>
-            <Text>
-              Below is a breakdown of the user’s activities and actions in the
-              DAO.
-            </Text>
-            <Text>
-              The total score is calculated through a formula and represents
-              their total contributions to the DAO.
-            </Text>
-          </>
-        }
-        headerLogo
-        onClose={onClose}
-      >
-        {data?.address ? (
-          <ScoreBreakdownProvider
-            address={data.address}
-            period={period}
-            type={karmaScoreType}
-          >
-            <ScoreBreakdown />
-          </ScoreBreakdownProvider>
-        ) : null}
-      </StyledModal>
     </Flex>
   );
 };
