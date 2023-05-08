@@ -1,4 +1,4 @@
-import { Button, Flex, Input, Spinner, Text } from '@chakra-ui/react';
+import { Button, Divider, Flex, Input, Spinner, Text } from '@chakra-ui/react';
 import { CloseIcon, SearchUserIcon } from 'components/Icons';
 import { useDAO, useTokenHolders } from 'contexts';
 import { FC, useMemo, useState } from 'react';
@@ -171,33 +171,174 @@ export const TokenHolderDelegation: FC = () => {
         pt="7"
         pb="3"
       >
-        <Flex flexDir="row" gap="3">
-          <SearchUserIcon
-            w="8"
-            h="8"
-            color={theme.tokenHolders.delegations.text.primary}
-            iconBg={theme.tokenHolders.delegations.bg.primary}
-            display={{ base: 'none', sm: 'flex' }}
-          />
-          <Flex flexDir="column" gap="2">
-            <Text
-              fontStyle="normal"
-              fontWeight="600"
-              fontSize={{ base: '20px', xl: '24px' }}
-              color={theme.tokenHolders.delegations.text.primary}
-              lineHeight="1.25"
-            >
-              Delegate Activity Tracker
-            </Text>
-            <Text
-              fontStyle="normal"
-              fontWeight="normal"
-              fontSize={{ base: '14px' }}
-              color={theme.tokenHolders.delegations.text.secondary}
-              textAlign="left"
-            >
-              {`As a token holder, easily find out who you've delegated your tokens to by entering one or more ETH addresses. Plus, find out your delegate's performance since your delegation.`}
-            </Text>
+        <Flex flexDir="row" gap="3" w="full">
+          <Flex flexDir="row" gap="16" w="full">
+            <Flex flexDir="row" gap="40px">
+              <Text
+                fontStyle="normal"
+                fontWeight="600"
+                fontSize={{ base: '20px', xl: '24px' }}
+                color={theme.tokenHolders.delegations.text.primary}
+                lineHeight="1.25"
+                maxW="max-content"
+                minW="max-content"
+                w="max-content"
+              >
+                Delegate <br />
+                Activity Tracker
+              </Text>
+              <Divider
+                orientation="vertical"
+                bg={theme.tokenHolders.delegations.text.primary}
+              />
+            </Flex>
+            <Flex flexDirection="column" gap="8" w="full">
+              <Flex position="relative" w="full">
+                <Flex
+                  w="full"
+                  h="1px"
+                  maxW="680px"
+                  background={`repeating-linear-gradient(
+                    to right,
+                    transparent,
+                    transparent 5px,
+                    ${theme.branding} 5px,
+                    ${theme.branding} 10px
+                  );`}
+                  top="9%"
+                  left="11%"
+                  position="absolute"
+                  zIndex="5"
+                />
+                <Flex flexDir="row" w="full" justify="space-between">
+                  <Flex zIndex="3" align="center" flexDir="column" gap="2">
+                    <Flex
+                      borderRadius="full"
+                      boxSize="24px"
+                      zIndex="4"
+                      bg={theme.tokenHolders.delegations.bg.primary}
+                      position="relative"
+                    >
+                      <Flex
+                        zIndex="3"
+                        borderRadius="full"
+                        boxSize="8px"
+                        bg={theme.branding}
+                        position="absolute"
+                        top="50%"
+                        left="38%"
+                        transform="translate(0, -50%)"
+                        marginRight="-50%"
+                      />
+                    </Flex>
+                    <Flex flexDir="column" gap="8px" maxW="200px">
+                      <Text
+                        fontWeight="700"
+                        fontSize="16px"
+                        color={theme.branding}
+                      >
+                        Tokenholder
+                      </Text>
+                      <Text
+                        fontWeight="400"
+                        fontSize="18px"
+                        color={theme.tokenHolders.delegations.text.primary}
+                        h="max-content"
+                        w="max-content"
+                        maxW="200px"
+                        lineHeight="22px"
+                      >
+                        Enter one or more of your token holder addresses.
+                      </Text>
+                    </Flex>
+                  </Flex>
+                  <Flex zIndex="3" align="center" flexDir="column" gap="2">
+                    <Flex
+                      borderRadius="full"
+                      boxSize="24px"
+                      zIndex="4"
+                      bg={theme.tokenHolders.delegations.bg.primary}
+                      position="relative"
+                    >
+                      <Flex
+                        zIndex="3"
+                        borderRadius="full"
+                        boxSize="8px"
+                        bg={theme.branding}
+                        position="absolute"
+                        top="50%"
+                        left="38%"
+                        transform="translate(0, -50%)"
+                        marginRight="-50%"
+                      />
+                    </Flex>
+                    <Flex flexDir="column" gap="8px" maxW="200px">
+                      <Text
+                        fontWeight="700"
+                        fontSize="16px"
+                        color={theme.branding}
+                      >
+                        Delegate Info
+                      </Text>
+                      <Text
+                        fontWeight="400"
+                        fontSize="18px"
+                        color={theme.tokenHolders.delegations.text.primary}
+                        h="max-content"
+                        w="max-content"
+                        maxW="200px"
+                        lineHeight="22px"
+                      >
+                        See who you have delegated your tokens to.
+                      </Text>
+                    </Flex>
+                  </Flex>
+                  <Flex zIndex="3" align="center" flexDir="column" gap="2">
+                    <Flex
+                      borderRadius="full"
+                      boxSize="24px"
+                      zIndex="4"
+                      bg={theme.tokenHolders.delegations.bg.primary}
+                      position="relative"
+                    >
+                      <Flex
+                        zIndex="3"
+                        borderRadius="full"
+                        boxSize="8px"
+                        bg={theme.branding}
+                        position="absolute"
+                        top="50%"
+                        left="38%"
+                        transform="translate(0, -50%)"
+                        marginRight="-50%"
+                      />
+                    </Flex>
+                    <Flex flexDir="column" gap="8px" maxW="200px">
+                      <Text
+                        fontWeight="700"
+                        fontSize="16px"
+                        color={theme.branding}
+                      >
+                        Get Insights
+                      </Text>
+                      <Text
+                        fontWeight="400"
+                        fontSize="18px"
+                        color={theme.tokenHolders.delegations.text.primary}
+                        h="max-content"
+                        w="max-content"
+                        maxW="240px"
+                        lineHeight="22px"
+                      >
+                        Find out how your delegate has performed since you
+                        delegated.
+                      </Text>
+                    </Flex>
+                  </Flex>
+                </Flex>
+              </Flex>
+              {/* <Flex></Flex> */}
+            </Flex>
           </Flex>
         </Flex>
         <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
