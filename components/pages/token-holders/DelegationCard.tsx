@@ -4,18 +4,16 @@ import {
   AccordionItem,
   AccordionPanel,
   Flex,
-  Icon,
-  IconButton,
+  Skeleton,
   Text,
 } from '@chakra-ui/react';
-import { UpChevronIcon } from 'components/Icons';
+import { ChakraLink } from 'components/ChakraLink';
 import { ImgWithFallback } from 'components/ImgWithFallback';
 import { useDAO } from 'contexts';
-import { motion } from 'framer-motion';
 import moment from 'moment';
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { IDelegatingHistories } from 'types';
-import { formatNumber, truncateAddress } from 'utils';
+import { addressToENSName, formatNumber, truncateAddress } from 'utils';
 import { PerformanceStats } from './PerformanceStats';
 import { VotingHistory } from './VotingHistory';
 
@@ -41,11 +39,38 @@ export const DelegationCard: FC<IDelegationCardProps> = ({
   data,
   selectedDelegation,
 }) => {
-  const { theme } = useDAO();
+  const { theme, daoInfo } = useDAO();
 
   const sinceDate = moment
     .unix(selectedDelegation.timestamp)
     .format('MMM DD, YYYY');
+
+  const [delegatedUserEnsName, setDelegatedUserEnsName] = useState(
+    truncateAddress(userDelegatedTo.address)
+  );
+  const [isLoadingEnsName, setIsLoadingEnsName] = useState(true);
+
+  const checkENSName = async () => {
+    try {
+      setIsLoadingEnsName(true);
+      const name = await addressToENSName(userDelegatedTo.address);
+      if (name) {
+        if (name.toLowerCase() === userDelegatedTo.address.toLowerCase()) {
+          setDelegatedUserEnsName(truncateAddress(userDelegatedTo.address));
+          return;
+        }
+        setDelegatedUserEnsName(name);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoadingEnsName(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!userDelegatedTo.name) checkENSName();
+  }, [userDelegatedTo.address]);
 
   return (
     <AccordionItem borderRadius="md" borderBottomRadius="md" _hover={{}}>
@@ -70,7 +95,7 @@ export const DelegationCard: FC<IDelegationCardProps> = ({
                 flex="1"
                 textAlign="left"
                 w="full"
-                gap={{ base: '2', lg: '6' }}
+                gap={{ base: '2', lg: '2' }}
                 align="center"
                 flexWrap="wrap"
               >
@@ -115,8 +140,7 @@ export const DelegationCard: FC<IDelegationCardProps> = ({
                     color={theme.tokenHolders.delegations.card.header.pillText}
                     fontSize={{ base: 'sm' }}
                     fontWeight="700"
-                    py="1"
-                    px="3"
+                    p="1"
                     borderRadius="md"
                     maxW="210px"
                     w="max-content"
@@ -149,19 +173,25 @@ export const DelegationCard: FC<IDelegationCardProps> = ({
                     boxSize={{ base: '20px', lg: '26px' }}
                     borderRadius="full"
                   />
-                  <Text
-                    color={theme.tokenHolders.delegations.card.header.pillText}
-                    fontSize={{ base: 'sm' }}
-                    fontWeight="normal"
-                    maxW="170px"
-                    w="max-content"
-                    textOverflow="ellipsis"
-                    whiteSpace="nowrap"
-                    overflow="hidden"
-                  >
-                    {userDelegatedTo.name ||
-                      truncateAddress(userDelegatedTo.address)}
-                  </Text>
+                  <Skeleton isLoaded={!isLoadingEnsName}>
+                    <ChakraLink
+                      color={
+                        theme.tokenHolders.delegations.card.header.pillText
+                      }
+                      fontSize={{ base: 'sm' }}
+                      fontWeight="normal"
+                      maxW="170px"
+                      w="max-content"
+                      textOverflow="ellipsis"
+                      whiteSpace="nowrap"
+                      overflow="hidden"
+                      textDecoration="underline"
+                      isExternal
+                      href={`https://karmahq.xyz/dao/${daoInfo.config.DAO_KARMA_ID}/delegators/${userDelegatedTo.address}`}
+                    >
+                      {userDelegatedTo.name || delegatedUserEnsName}
+                    </ChakraLink>
+                  </Skeleton>
                 </Flex>
                 <Text
                   color={theme.tokenHolders.delegations.card.header.text}
@@ -246,14 +276,15 @@ export const DelegationCard: FC<IDelegationCardProps> = ({
                   boxSize={{ base: '20px', lg: '26px' }}
                   borderRadius="full"
                 />
-                <Text
-                  color={theme.tokenHolders.delegations.card.legend.pillText}
-                  fontWeight="700"
-                  fontSize={{ base: '14px', lg: '16px' }}
-                >
-                  {userDelegatedTo.name ||
-                    truncateAddress(userDelegatedTo.address)}
-                </Text>
+                <Skeleton isLoaded={!isLoadingEnsName}>
+                  <Text
+                    color={theme.tokenHolders.delegations.card.legend.pillText}
+                    fontWeight="700"
+                    fontSize={{ base: '14px', lg: '16px' }}
+                  >
+                    {userDelegatedTo.name || delegatedUserEnsName}
+                  </Text>
+                </Skeleton>
               </Flex>
               <Text
                 color={theme.tokenHolders.delegations.card.legend.text}

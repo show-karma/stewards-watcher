@@ -1,12 +1,10 @@
 import { Flex, Grid, Icon, IconProps, Skeleton, Text } from '@chakra-ui/react';
 import {
   PassRateIcon,
-  ProposalsIcon,
   StatsIcon,
   VotedNoIcon,
   VotedProposalsIcon,
 } from 'components/Icons';
-import { ImgWithFallback } from 'components/ImgWithFallback';
 import { useDAO, useDelegates } from 'contexts';
 import { useOffChainVotes, useOnChainVotes } from 'hooks';
 import moment from 'moment';
@@ -81,19 +79,25 @@ export const PerformanceStats: FC<ISinceDelegationProps> = ({
     totalProposals: '0',
     passRate: '0',
     votedNo: '0',
+    votingPct: '0',
   });
 
   const cardStats: IDelegationStats[] = [
     {
       icon: VotedProposalsIcon,
-      value: delegationStats.votedProposals,
-      description: 'Voted proposals',
-      showTotal: true,
+      value: delegationStats.votingPct,
+      description: 'Voting Percentage',
     },
     {
       icon: PassRateIcon,
       value: delegationStats.passRate,
       description: `Pass rate on voted proposals`,
+    },
+    {
+      icon: VotedProposalsIcon,
+      value: delegationStats.votedProposals,
+      description: 'Voted proposals',
+      showTotal: true,
     },
     {
       icon: VotedNoIcon,
@@ -161,6 +165,9 @@ export const PerformanceStats: FC<ISinceDelegationProps> = ({
       votedProposals: formatNumber(votesCounterResult.total.toString()),
       passRate: formatNumberPercentage(
         (votesCounterResult.voteFor / votesCounterResult.total) * 100
+      ),
+      votingPct: formatNumberPercentage(
+        (votesCounterResult.total / votesSince.length) * 100
       ),
       votedNo: formatNumber(votesCounterResult.voteAgainst.toString()),
     });

@@ -195,10 +195,7 @@ export const TokenHolderDelegation: FC = () => {
               color={theme.tokenHolders.delegations.text.secondary}
               textAlign="left"
             >
-              {`Get real-time token balance data of delegators across multiple DAOs by
-          simply selecting a DAO and entering a delegate address. Click "Show
-          Delegators" to see a table with the Delegator Address and Token
-          Balance.`}
+              {`As a token holder, easily find out who you've delegated your tokens to by entering one or more ETH addresses. Plus, find out your delegate's performance since your delegation.`}
             </Text>
           </Flex>
         </Flex>
@@ -270,9 +267,7 @@ export const TokenHolderDelegation: FC = () => {
                       outline="none"
                       boxShadow="none"
                       placeholder={
-                        addresses.length
-                          ? undefined
-                          : '0x5e3…09ee,0g4e3…04de,0x5e3…09ee'
+                        addresses.length ? undefined : '0x5e3..09ee, nick.eth'
                       }
                       maxW="full"
                       minW="100px"
@@ -315,7 +310,7 @@ export const TokenHolderDelegation: FC = () => {
                   fontSize="14px"
                   color={theme.tokenHolders.delegations.text.input.placeholder}
                 >
-                  When entering multiple addresses use a comma to separate them
+                  When entering multiple addresses, use a comma to separate them
                 </Text>
               )}
             </Flex>
@@ -361,7 +356,7 @@ export const TokenHolderDelegation: FC = () => {
               isDisabled={disableButtonCondition}
               type="submit"
             >
-              Submit
+              Look Up
             </Button>
           </Flex>
         </form>

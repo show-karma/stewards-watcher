@@ -1,3 +1,4 @@
+export * from './addressToENSName';
 export * from './checkDecision';
 export * from './checkExpirationStatus';
 export * from './commonAddresses';
