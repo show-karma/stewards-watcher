@@ -1,5 +1,6 @@
 import { Flex, FlexProps } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
+import { useRouter } from 'next/router';
 import React, { ReactNode, useEffect } from 'react';
 import { hotjar } from 'react-hotjar';
 
@@ -14,6 +15,12 @@ export const MainLayout: React.FC<IMainLayout> = ({ children, ...rest }) => {
     hotjar.initialize(3358140, 6);
   }, []);
 
+  const router = useRouter();
+
+  const isHome =
+    router.pathname === '/_sites/[site]' ||
+    router.pathname.includes('/_sites/[site]/profile');
+
   return (
     <Flex
       flexDir="column"
@@ -23,8 +30,8 @@ export const MainLayout: React.FC<IMainLayout> = ({ children, ...rest }) => {
       align="center"
       px={{ base: 0, lg: '8' }}
       zIndex="1"
-      mt={daoInfo.config.HEADER_MARGIN ? '6' : '0'}
-      borderTopRadius={daoInfo.config.HEADER_MARGIN ? 'xl' : 'none'}
+      mt={daoInfo.config.HEADER_MARGIN && isHome ? '6' : '0'}
+      borderTopRadius={daoInfo.config.HEADER_MARGIN && isHome ? 'xl' : 'none'}
       {...rest}
     >
       {children}

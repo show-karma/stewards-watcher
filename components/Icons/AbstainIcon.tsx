@@ -15,7 +15,7 @@ export const AbstainIcon = (props: IconProps) => (
         cy="11.263"
         r="9.34306"
         stroke="currentColor"
-        stroke-width="1.86861"
+        strokeWidth="1.86861"
       />
     </svg>
   </Icon>
