@@ -122,7 +122,7 @@ export const TokenHoldersProvider: FC<IProviderProps> = ({ children }) => {
     router
       .push(
         {
-          pathname: `/token-holders/`,
+          pathname: `/delegate-lookup/`,
           query: {
             addresses: addresses.join(','),
           },
