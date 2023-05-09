@@ -5,6 +5,7 @@ import {
   Skeleton,
   SkeletonCircle,
   Text,
+  useColorMode,
 } from '@chakra-ui/react';
 import {
   AbstainIcon,
@@ -26,61 +27,17 @@ const iconStyle = {
   height: '16px',
 };
 
-const CheckDecision = (choice: string) => {
-  const { theme } = useDAO();
-  if (/not vote/gi.test(choice)) {
-    return (
-      <Icon
-        as={DidNotVoteIcon}
-        color={
-          theme.tokenHolders.delegations.card.columns.voting.proposals.vote
-            .notVoted
-        }
-        {...iconStyle}
-      />
-    );
-  }
-  // eslint-disable-next-line react/destructuring-assignment
-  const choiceLowerCase = choice.toLocaleLowerCase();
-  if (
-    choiceLowerCase.substring(0, 2) === 'no' ||
-    /agai+nst/gi.test(choice) ||
-    choiceLowerCase.substring(0, 3) === 'nay' ||
-    choiceLowerCase.substring(0, 3) === 'nae'
-  ) {
-    return (
-      <Icon
-        as={VoteAgainstIcon}
-        color={
-          theme.tokenHolders.delegations.card.columns.voting.proposals.vote
-            .against
-        }
-        {...iconStyle}
-      />
-    );
-  }
-  if (/abstain/gi.test(choice))
-    return (
-      <Icon
-        as={AbstainIcon}
-        color={
-          theme.tokenHolders.delegations.card.columns.voting.proposals.vote
-            .abstain
-        }
-        {...iconStyle}
-      />
-    );
-
-  return (
-    <Icon
-      as={VoteForIcon}
-      color={
-        theme.tokenHolders.delegations.card.columns.voting.proposals.vote.for
-      }
-      {...iconStyle}
-    />
-  );
+const voteBg: { [key: string]: string } = {
+  ABSTAIN: '#FFF2E2',
+  FOR: '#E1F6EA',
+  AGAINST: '#FFF3F3',
+  NOTVOTED: '#F5F5F5',
 };
+// color={
+//   colorMode === 'dark'
+//     ? voteBg[checkDecision(vote)]
+//     : colorDecision(vote, theme)
+// }
 
 const colorDecision = (vote: IChainRow, theme: IDAOTheme) => {
   if (typeof vote === 'undefined')
@@ -128,16 +85,90 @@ const colorDecision = (vote: IChainRow, theme: IDAOTheme) => {
         .abstain;
   }
 };
+
+const CheckDecision = (choice: string) => {
+  const { theme } = useDAO();
+  const { colorMode } = useColorMode();
+
+  if (/not vote/gi.test(choice)) {
+    return (
+      <Icon
+        as={DidNotVoteIcon}
+        color={
+          colorMode === 'dark'
+            ? voteBg.notVoted
+            : theme.tokenHolders.delegations.card.columns.voting.proposals.vote
+                .notVoted
+        }
+        {...iconStyle}
+      />
+    );
+  }
+  // eslint-disable-next-line react/destructuring-assignment
+  const choiceLowerCase = choice.toLocaleLowerCase();
+  if (
+    choiceLowerCase.substring(0, 2) === 'no' ||
+    /agai+nst/gi.test(choice) ||
+    choiceLowerCase.substring(0, 3) === 'nay' ||
+    choiceLowerCase.substring(0, 3) === 'nae'
+  ) {
+    return (
+      <Icon
+        as={VoteAgainstIcon}
+        color={
+          colorMode === 'dark'
+            ? voteBg.against
+            : theme.tokenHolders.delegations.card.columns.voting.proposals.vote
+                .against
+        }
+        {...iconStyle}
+      />
+    );
+  }
+  if (/abstain/gi.test(choice))
+    return (
+      <Icon
+        as={AbstainIcon}
+        color={
+          colorMode === 'dark'
+            ? voteBg.abstain
+            : theme.tokenHolders.delegations.card.columns.voting.proposals.vote
+                .abstain
+        }
+        {...iconStyle}
+      />
+    );
+
+  return (
+    <Icon
+      as={VoteForIcon}
+      color={
+        colorMode === 'dark'
+          ? voteBg.for
+          : theme.tokenHolders.delegations.card.columns.voting.proposals.vote
+              .for
+      }
+      {...iconStyle}
+    />
+  );
+};
+
 const VoteIcon: FC<{ vote: IChainRow }> = ({ vote }) => {
   const { theme } = useDAO();
+  const { colorMode } = useColorMode();
   if (typeof vote === 'undefined')
     return (
       <Icon
         as={DidNotVoteIcon}
         color={
-          theme.tokenHolders.delegations.card.columns.voting.proposals.vote
-            .notVoted
+          colorMode === 'dark'
+            ? voteBg[checkDecision(vote)]
+            : colorDecision(vote, theme)
         }
+        // color={
+        //   theme.tokenHolders.delegations.card.columns.voting.proposals.vote
+        //     .notVoted
+        // }
         {...iconStyle}
       />
     );
@@ -147,8 +178,13 @@ const VoteIcon: FC<{ vote: IChainRow }> = ({ vote }) => {
     return (
       <Icon
         as={VoteForIcon}
+        // color={
+        //   theme.tokenHolders.delegations.card.columns.voting.proposals.vote.for
+        // }
         color={
-          theme.tokenHolders.delegations.card.columns.voting.proposals.vote.for
+          colorMode === 'dark'
+            ? voteBg[checkDecision(vote)]
+            : colorDecision(vote, theme)
         }
         {...iconStyle}
       />
@@ -158,9 +194,14 @@ const VoteIcon: FC<{ vote: IChainRow }> = ({ vote }) => {
       return (
         <Icon
           as={VoteAgainstIcon}
+          // color={
+          //   theme.tokenHolders.delegations.card.columns.voting.proposals.vote
+          //     .against
+          // }
           color={
-            theme.tokenHolders.delegations.card.columns.voting.proposals.vote
-              .against
+            colorMode === 'dark'
+              ? voteBg[checkDecision(vote)]
+              : colorDecision(vote, theme)
           }
           {...iconStyle}
         />
@@ -169,9 +210,14 @@ const VoteIcon: FC<{ vote: IChainRow }> = ({ vote }) => {
       return (
         <Icon
           as={VoteForIcon}
+          // color={
+          //   theme.tokenHolders.delegations.card.columns.voting.proposals.vote
+          //     .for
+          // }
           color={
-            theme.tokenHolders.delegations.card.columns.voting.proposals.vote
-              .for
+            colorMode === 'dark'
+              ? voteBg[checkDecision(vote)]
+              : colorDecision(vote, theme)
           }
           {...iconStyle}
         />
@@ -180,9 +226,14 @@ const VoteIcon: FC<{ vote: IChainRow }> = ({ vote }) => {
       return (
         <Icon
           as={DidNotVoteIcon}
+          // color={
+          //   theme.tokenHolders.delegations.card.columns.voting.proposals.vote
+          //     .notVoted
+          // }
           color={
-            theme.tokenHolders.delegations.card.columns.voting.proposals.vote
-              .notVoted
+            colorMode === 'dark'
+              ? voteBg[checkDecision(vote)]
+              : colorDecision(vote, theme)
           }
           {...iconStyle}
         />
@@ -218,6 +269,7 @@ export const ProposalVote: FC<IProposalVote> = ({
 }) => {
   const { theme } = useDAO();
   const { getVoteReason } = useVoteReason({ address });
+  const { colorMode } = useColorMode();
 
   const showChoice = () => {
     if (vote && typeof vote.choice === 'string') return vote.choice;
@@ -239,13 +291,6 @@ export const ProposalVote: FC<IProposalVote> = ({
     showChoice() === 'DID NOT VOTE' ||
     showChoice().split(' ').length === 1 ||
     showChoice().split(' ')[1].length === 0;
-
-  const voteBg: { [key: string]: string } = {
-    ABSTAIN: '#F5F5F5',
-    FOR: '#E1F6EA',
-    AGAINST: '#FFF3F3',
-    NOTVOTED: '#F5F5F5',
-  };
 
   return (
     <Flex
@@ -315,7 +360,11 @@ export const ProposalVote: FC<IProposalVote> = ({
           >
             {isLoaded && vote ? (
               <Flex
-                background={voteBg[checkDecision(vote)]}
+                background={
+                  colorMode === 'dark'
+                    ? colorDecision(vote, theme)
+                    : voteBg[checkDecision(vote)]
+                }
                 paddingX="3"
                 paddingY="2"
                 borderRadius="20px"
@@ -329,7 +378,11 @@ export const ProposalVote: FC<IProposalVote> = ({
                   h="max-content"
                   fontWeight="700"
                   fontSize={{ base: 'xs', md: 'sm' }}
-                  color={colorDecision(vote, theme)}
+                  color={
+                    colorMode === 'dark'
+                      ? voteBg[checkDecision(vote)]
+                      : colorDecision(vote, theme)
+                  }
                   maxH="70px"
                   overflow="hidden"
                   textAlign="center"
@@ -363,7 +416,11 @@ export const ProposalVote: FC<IProposalVote> = ({
           >
             {isLoaded && vote ? (
               <Flex
-                background={voteBg[checkDecision(vote)]}
+                background={
+                  colorMode === 'dark'
+                    ? colorDecision(vote, theme)
+                    : voteBg[checkDecision(vote)]
+                }
                 paddingX="3"
                 paddingY="2"
                 borderRadius="20px"

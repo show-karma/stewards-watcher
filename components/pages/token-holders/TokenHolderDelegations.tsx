@@ -171,173 +171,234 @@ export const TokenHolderDelegation: FC = () => {
         pt="7"
         pb="3"
       >
-        <Flex flexDir="row" gap="3" w="full">
-          <Flex flexDir="row" gap="16" w="full">
-            <Flex flexDir="row" gap="40px">
-              <Text
-                fontStyle="normal"
-                fontWeight="600"
-                fontSize={{ base: '20px', xl: '24px' }}
-                color={theme.tokenHolders.delegations.text.primary}
-                lineHeight="1.25"
-                maxW="max-content"
-                minW="max-content"
-                w="max-content"
-              >
-                Delegate <br />
-                Activity Tracker
-              </Text>
-              <Divider
-                orientation="vertical"
-                bg={theme.tokenHolders.delegations.text.primary}
+        <Flex
+          flexDir={{ base: 'column', lg: 'row' }}
+          gap={{ base: '4', lg: '16' }}
+          w="full"
+          align="center"
+        >
+          <Flex
+            flexDir={{ base: 'column', lg: 'row' }}
+            gap={{ base: '20px', lg: '40px' }}
+          >
+            <Text
+              fontStyle="normal"
+              fontWeight="600"
+              fontSize={{ base: '24px' }}
+              color={theme.tokenHolders.delegations.text.primary}
+              lineHeight="1.25"
+              maxW="max-content"
+              minW="max-content"
+              w="max-content"
+              textAlign={{ base: 'center', lg: 'left' }}
+            >
+              Delegate <Text as="br" />
+              Activity Tracker
+            </Text>
+            <Divider
+              display={{ base: 'none', lg: 'unset' }}
+              h="100px"
+              orientation="vertical"
+              bg={theme.tokenHolders.delegations.text.primary}
+            />
+          </Flex>
+          <Flex w="full" align="center" justify="center">
+            <Flex
+              position="relative"
+              w={{ base: 'max-content' }}
+              align="center"
+            >
+              <Flex
+                h={{ base: '660px', lg: '1px' }}
+                w={{ base: '1px', lg: '660px' }}
+                maxW={{
+                  base: '1px',
+                  lg: 'calc(100% - 180px)',
+                  xl: 'calc(100% - 200px)',
+                }}
+                maxH={{
+                  base: 'calc(100% - 70px)',
+                  lg: '1px',
+                }}
+                background={{
+                  base: `repeating-linear-gradient(
+                  to bottom,
+                  transparent,
+                  transparent 5px,
+                  ${theme.branding} 5px,
+                  ${theme.branding} 10px
+                )`,
+                  lg: `repeating-linear-gradient(
+                to right,
+                transparent,
+                transparent 5px,
+                ${theme.branding} 5px,
+                ${theme.branding} 10px
+              )`,
+                }}
+                top={{ base: '8px', lg: '9%' }}
+                left={{ base: '12px', lg: '90px', xl: '100px' }}
+                position="absolute"
+                zIndex="5"
               />
-            </Flex>
-            <Flex flexDirection="column" gap="8" w="full">
-              <Flex position="relative" w="full">
+              <Flex
+                flexDir={{ base: 'column', lg: 'row' }}
+                w="full"
+                justify="center"
+                gap={{ base: '10px', lg: '60px', xl: '120px' }}
+              >
                 <Flex
-                  w="full"
-                  h="1px"
-                  maxW="680px"
-                  background={`repeating-linear-gradient(
-                    to right,
-                    transparent,
-                    transparent 5px,
-                    ${theme.branding} 5px,
-                    ${theme.branding} 10px
-                  );`}
-                  top="9%"
-                  left="11%"
-                  position="absolute"
-                  zIndex="5"
-                />
-                <Flex flexDir="row" w="full" justify="space-between">
-                  <Flex zIndex="3" align="center" flexDir="column" gap="2">
+                  zIndex="3"
+                  align={{ base: 'flex-start', lg: 'center' }}
+                  flexDir={{ base: 'row', lg: 'column' }}
+                  gap="2"
+                >
+                  <Flex
+                    borderRadius="full"
+                    boxSize="24px"
+                    zIndex="4"
+                    bg={theme.tokenHolders.delegations.bg.primary}
+                    position="relative"
+                  >
                     <Flex
+                      zIndex="3"
                       borderRadius="full"
-                      boxSize="24px"
-                      zIndex="4"
-                      bg={theme.tokenHolders.delegations.bg.primary}
-                      position="relative"
-                    >
-                      <Flex
-                        zIndex="3"
-                        borderRadius="full"
-                        boxSize="8px"
-                        bg={theme.branding}
-                        position="absolute"
-                        top="50%"
-                        left="38%"
-                        transform="translate(0, -50%)"
-                        marginRight="-50%"
-                      />
-                    </Flex>
-                    <Flex flexDir="column" gap="8px" maxW="200px">
-                      <Text
-                        fontWeight="700"
-                        fontSize="16px"
-                        color={theme.branding}
-                      >
-                        Tokenholder
-                      </Text>
-                      <Text
-                        fontWeight="400"
-                        fontSize="18px"
-                        color={theme.tokenHolders.delegations.text.primary}
-                        h="max-content"
-                        w="max-content"
-                        maxW="200px"
-                        lineHeight="22px"
-                      >
-                        Enter one or more of your token holder addresses.
-                      </Text>
-                    </Flex>
+                      boxSize="8px"
+                      bg={theme.branding}
+                      position="absolute"
+                      top="50%"
+                      left="38%"
+                      transform="translate(0, -50%)"
+                      marginRight="-50%"
+                    />
                   </Flex>
-                  <Flex zIndex="3" align="center" flexDir="column" gap="2">
-                    <Flex
-                      borderRadius="full"
-                      boxSize="24px"
-                      zIndex="4"
-                      bg={theme.tokenHolders.delegations.bg.primary}
-                      position="relative"
+                  <Flex
+                    flexDir="column"
+                    gap="8px"
+                    maxW={{ base: '260px', lg: '180px', xl: '200px' }}
+                  >
+                    <Text
+                      fontWeight="700"
+                      fontSize={{ base: '14px', xl: '16px' }}
+                      color={theme.branding}
                     >
-                      <Flex
-                        zIndex="3"
-                        borderRadius="full"
-                        boxSize="8px"
-                        bg={theme.branding}
-                        position="absolute"
-                        top="50%"
-                        left="38%"
-                        transform="translate(0, -50%)"
-                        marginRight="-50%"
-                      />
-                    </Flex>
-                    <Flex flexDir="column" gap="8px" maxW="200px">
-                      <Text
-                        fontWeight="700"
-                        fontSize="16px"
-                        color={theme.branding}
-                      >
-                        Delegate Info
-                      </Text>
-                      <Text
-                        fontWeight="400"
-                        fontSize="18px"
-                        color={theme.tokenHolders.delegations.text.primary}
-                        h="max-content"
-                        w="max-content"
-                        maxW="200px"
-                        lineHeight="22px"
-                      >
-                        See who you have delegated your tokens to.
-                      </Text>
-                    </Flex>
+                      TOKENHOLDER
+                    </Text>
+                    <Text
+                      fontWeight="400"
+                      fontSize={{ base: '14px', xl: '18px' }}
+                      color={theme.tokenHolders.delegations.text.primary}
+                      h="max-content"
+                      w="max-content"
+                      maxW={{ base: '260px', lg: '180px', xl: '200px' }}
+                      lineHeight="22px"
+                    >
+                      Enter one or more of your token holder addresses.
+                    </Text>
                   </Flex>
-                  <Flex zIndex="3" align="center" flexDir="column" gap="2">
+                </Flex>
+                <Flex
+                  zIndex="3"
+                  align={{ base: 'flex-start', lg: 'center' }}
+                  flexDir={{ base: 'row', lg: 'column' }}
+                  gap="2"
+                >
+                  <Flex
+                    borderRadius="full"
+                    boxSize="24px"
+                    zIndex="4"
+                    bg={theme.tokenHolders.delegations.bg.primary}
+                    position="relative"
+                  >
                     <Flex
+                      zIndex="3"
                       borderRadius="full"
-                      boxSize="24px"
-                      zIndex="4"
-                      bg={theme.tokenHolders.delegations.bg.primary}
-                      position="relative"
+                      boxSize="8px"
+                      bg={theme.branding}
+                      position="absolute"
+                      top="50%"
+                      left="38%"
+                      transform="translate(0, -50%)"
+                      marginRight="-50%"
+                    />
+                  </Flex>
+                  <Flex
+                    flexDir="column"
+                    gap="8px"
+                    maxW={{ base: '260px', lg: '180px', xl: '200px' }}
+                  >
+                    <Text
+                      fontWeight="700"
+                      fontSize={{ base: '14px', xl: '16px' }}
+                      color={theme.branding}
                     >
-                      <Flex
-                        zIndex="3"
-                        borderRadius="full"
-                        boxSize="8px"
-                        bg={theme.branding}
-                        position="absolute"
-                        top="50%"
-                        left="38%"
-                        transform="translate(0, -50%)"
-                        marginRight="-50%"
-                      />
-                    </Flex>
-                    <Flex flexDir="column" gap="8px" maxW="200px">
-                      <Text
-                        fontWeight="700"
-                        fontSize="16px"
-                        color={theme.branding}
-                      >
-                        Get Insights
-                      </Text>
-                      <Text
-                        fontWeight="400"
-                        fontSize="18px"
-                        color={theme.tokenHolders.delegations.text.primary}
-                        h="max-content"
-                        w="max-content"
-                        maxW="240px"
-                        lineHeight="22px"
-                      >
-                        Find out how your delegate has performed since you
-                        delegated.
-                      </Text>
-                    </Flex>
+                      DELEGATE INFO
+                    </Text>
+                    <Text
+                      fontWeight="400"
+                      fontSize={{ base: '14px', xl: '18px' }}
+                      color={theme.tokenHolders.delegations.text.primary}
+                      h="max-content"
+                      w="max-content"
+                      maxW={{ base: '260px', lg: '180px', xl: '200px' }}
+                      lineHeight="22px"
+                    >
+                      See who you have delegated your tokens to.
+                    </Text>
+                  </Flex>
+                </Flex>
+                <Flex
+                  zIndex="3"
+                  align={{ base: 'flex-start', lg: 'center' }}
+                  flexDir={{ base: 'row', lg: 'column' }}
+                  gap="2"
+                >
+                  <Flex
+                    borderRadius="full"
+                    boxSize="24px"
+                    zIndex="4"
+                    bg={theme.tokenHolders.delegations.bg.primary}
+                    position="relative"
+                  >
+                    <Flex
+                      zIndex="3"
+                      borderRadius="full"
+                      boxSize="8px"
+                      bg={theme.branding}
+                      position="absolute"
+                      top="50%"
+                      left="38%"
+                      transform="translate(0, -50%)"
+                      marginRight="-50%"
+                    />
+                  </Flex>
+                  <Flex
+                    flexDir="column"
+                    gap="8px"
+                    maxW={{ base: '260px', lg: '180px', xl: '200px' }}
+                  >
+                    <Text
+                      fontWeight="700"
+                      fontSize={{ base: '14px', xl: '16px' }}
+                      color={theme.branding}
+                    >
+                      GET INSIGHTS
+                    </Text>
+                    <Text
+                      fontWeight="400"
+                      fontSize={{ base: '14px', xl: '18px' }}
+                      color={theme.tokenHolders.delegations.text.primary}
+                      h="max-content"
+                      w="max-content"
+                      maxW={{ base: '260px', lg: '180px', xl: '240px' }}
+                      lineHeight="22px"
+                    >
+                      Find out how your delegate has performed since you
+                      delegated.
+                    </Text>
                   </Flex>
                 </Flex>
               </Flex>
-              {/* <Flex></Flex> */}
             </Flex>
           </Flex>
         </Flex>
