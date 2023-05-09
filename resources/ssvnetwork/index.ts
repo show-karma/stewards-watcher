@@ -188,6 +188,7 @@ const dark: IDAOTheme = {
   tokenHolders: {
     border: '#34383f',
     bg: '#1C1D20',
+    stepsColor: '#448BF2',
     list: {
       text: {
         primary: '#FFFFFF',
@@ -462,6 +463,7 @@ const light: IDAOTheme = {
   tokenHolders: {
     border: '#34383f',
     bg: '#F2F4F9',
+    stepsColor: '#34383f',
     list: {
       text: {
         primary: '#FFFFFF',

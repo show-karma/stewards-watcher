@@ -225,15 +225,15 @@ export const TokenHolderDelegation: FC = () => {
                   to bottom,
                   transparent,
                   transparent 5px,
-                  ${theme.branding} 5px,
-                  ${theme.branding} 10px
+                  ${theme.tokenHolders.stepsColor} 5px,
+                  ${theme.tokenHolders.stepsColor} 10px
                 )`,
                   lg: `repeating-linear-gradient(
                 to right,
                 transparent,
                 transparent 5px,
-                ${theme.branding} 5px,
-                ${theme.branding} 10px
+                ${theme.tokenHolders.stepsColor} 5px,
+                ${theme.tokenHolders.stepsColor} 10px
               )`,
                 }}
                 top={{ base: '8px', lg: '9%' }}
@@ -264,7 +264,7 @@ export const TokenHolderDelegation: FC = () => {
                       zIndex="3"
                       borderRadius="full"
                       boxSize="8px"
-                      bg={theme.branding}
+                      bg={theme.tokenHolders.stepsColor}
                       position="absolute"
                       top="50%"
                       left="38%"
@@ -280,7 +280,7 @@ export const TokenHolderDelegation: FC = () => {
                     <Text
                       fontWeight="700"
                       fontSize={{ base: '14px', xl: '16px' }}
-                      color={theme.branding}
+                      color={theme.tokenHolders.stepsColor}
                     >
                       TOKENHOLDER
                     </Text>
@@ -314,7 +314,7 @@ export const TokenHolderDelegation: FC = () => {
                       zIndex="3"
                       borderRadius="full"
                       boxSize="8px"
-                      bg={theme.branding}
+                      bg={theme.tokenHolders.stepsColor}
                       position="absolute"
                       top="50%"
                       left="38%"
@@ -330,7 +330,7 @@ export const TokenHolderDelegation: FC = () => {
                     <Text
                       fontWeight="700"
                       fontSize={{ base: '14px', xl: '16px' }}
-                      color={theme.branding}
+                      color={theme.tokenHolders.stepsColor}
                     >
                       DELEGATE INFO
                     </Text>
@@ -364,7 +364,7 @@ export const TokenHolderDelegation: FC = () => {
                       zIndex="3"
                       borderRadius="full"
                       boxSize="8px"
-                      bg={theme.branding}
+                      bg={theme.tokenHolders.stepsColor}
                       position="absolute"
                       top="50%"
                       left="38%"
@@ -380,7 +380,7 @@ export const TokenHolderDelegation: FC = () => {
                     <Text
                       fontWeight="700"
                       fontSize={{ base: '14px', xl: '16px' }}
-                      color={theme.branding}
+                      color={theme.tokenHolders.stepsColor}
                     >
                       GET INSIGHTS
                     </Text>

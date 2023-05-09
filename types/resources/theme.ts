@@ -175,6 +175,7 @@ export interface IDAOTheme {
   tokenHolders: {
     border: string;
     bg: string;
+    stepsColor: string;
     list: {
       text: {
         primary: string;
