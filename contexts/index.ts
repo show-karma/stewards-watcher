@@ -6,5 +6,6 @@ export * from './editProfile';
 export * from './governanceVotes';
 export * from './handles';
 export * from './scoreBreakdown';
+export * from './tokenholders';
 export * from './votes';
 export * from './wallet';

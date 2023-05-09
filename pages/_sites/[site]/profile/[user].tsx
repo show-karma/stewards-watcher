@@ -1,8 +1,8 @@
 import { DAOContainer } from 'containers';
 import { DAOProvider } from 'contexts';
+import { daosDictionary } from 'helpers';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { ParsedUrlQuery } from 'querystring';
-import { supportedDAOs } from 'resources';
 
 interface PathProps extends ParsedUrlQuery {
   site: string;
@@ -14,7 +14,7 @@ interface IndexProps {
 }
 
 export const getStaticPaths: GetStaticPaths<PathProps> = async () => {
-  const paths = [{ params: { site: 'site123', user: 'user' } }];
+  const paths = [{ params: { site: 'siteUser', user: 'user' } }];
 
   return {
     paths,
@@ -29,7 +29,7 @@ export const getStaticProps: GetStaticProps<IndexProps, PathProps> = async ({
 
   const { site, user } = params;
 
-  const dao = supportedDAOs[site];
+  const dao = daosDictionary[site];
 
   if (!dao) {
     return {

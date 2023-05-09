@@ -4,11 +4,11 @@ import {
   Flex,
   Icon,
   Img,
-  Link,
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
 import {
+  ChakraLink,
   DelegateLoginButton,
   DelegateLoginModal,
   UserProfile,
@@ -93,7 +93,7 @@ export const HeaderHat = () => {
               align={['flex-start', 'flex-start']}
               gap="1"
             >
-              <Link href="/">
+              <ChakraLink href="/">
                 <Img
                   w="auto"
                   maxW="36"
@@ -101,7 +101,7 @@ export const HeaderHat = () => {
                   objectFit="contain"
                   src={config.DAO_LOGO}
                 />
-              </Link>
+              </ChakraLink>
               <Madeby />
             </Flex>
             <Flex
@@ -136,21 +136,26 @@ export const HeaderHat = () => {
                 display={{ base: 'none', lg: 'flex' }}
                 gap="4"
               >
-                {daoInfo.config.DAO_DEFAULT_SETTINGS?.FAQ && (
-                  <Link href="/faq" _hover={{}}>
-                    <StyledButton>FAQ</StyledButton>
-                  </Link>
-                )}
-                <Link href="/guide" _hover={{}}>
-                  <StyledButton>Guide</StyledButton>
-                </Link>
-                {daoInfo.config.DAO_RESOURCES &&
-                  daoInfo.config.DAO_RESOURCES.length > 0 && <ResourcesMenu />}
+                {daoInfo.config.ENABLE_DELEGATE_TRACKER ? (
+                  <ChakraLink href="/token-holders" _hover={{}}>
+                    <StyledButton>Delegate Look Up</StyledButton>
+                  </ChakraLink>
+                ) : null}
                 {daoInfo.config.DAO_DELEGATE_MODE !== 'hidden' && (
                   <StyledButton onClick={onToggle}>
-                    Delegate to Anyone
+                    Delegate Tokens
                   </StyledButton>
                 )}
+                <ChakraLink href="/guide" _hover={{}}>
+                  <StyledButton>Guide</StyledButton>
+                </ChakraLink>
+                {daoInfo.config.DAO_DEFAULT_SETTINGS?.FAQ && (
+                  <ChakraLink href="/faq" _hover={{}}>
+                    <StyledButton>FAQ</StyledButton>
+                  </ChakraLink>
+                )}
+                {daoInfo.config.DAO_RESOURCES &&
+                  daoInfo.config.DAO_RESOURCES.length > 0 && <ResourcesMenu />}
                 <DelegateLoginButton onOpen={delegateLoginOnOpen} />
                 <ThemeButton />
               </Flex>
@@ -159,18 +164,26 @@ export const HeaderHat = () => {
         </Flex>
         <HeaderBurgerMenu isOpen={isBurgerMenuOpen} onClose={closeBurgerMenu}>
           <Flex flexDir="column" gap="4">
+            {daoInfo.config.ENABLE_DELEGATE_TRACKER ? (
+              <ChakraLink href="/token-holders" _hover={{}}>
+                <StyledButton>Delegate Look Up</StyledButton>
+              </ChakraLink>
+            ) : null}
+            {daoInfo.config.DAO_DELEGATE_MODE !== 'hidden' && (
+              <StyledButton onClick={onToggle} px="2">
+                Delegate Tokens
+              </StyledButton>
+            )}
+            <ChakraLink href="/guide" _hover={{}}>
+              <StyledButton>Guide</StyledButton>
+            </ChakraLink>
             {daoInfo.config.DAO_DEFAULT_SETTINGS?.FAQ && (
-              <Link href="/faq" _hover={{}}>
-                <StyledButton>FAQ</StyledButton>
-              </Link>
+              <ChakraLink href="/faq" _hover={{}} w="full">
+                <StyledButton w="full">FAQ</StyledButton>
+              </ChakraLink>
             )}
             {daoInfo.config.DAO_RESOURCES &&
               daoInfo.config.DAO_RESOURCES.length > 0 && <ResourcesMenu />}
-            {daoInfo.config.DAO_DELEGATE_MODE !== 'hidden' && (
-              <StyledButton onClick={onToggle} px="2">
-                Delegate to Anyone
-              </StyledButton>
-            )}
             <DelegateLoginButton onOpen={delegateLoginOnOpen} />
             <ThemeButton />
           </Flex>

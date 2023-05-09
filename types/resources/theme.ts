@@ -172,4 +172,113 @@ export interface IDAOTheme {
       text: string;
     };
   };
+  tokenHolders: {
+    border: string;
+    bg: string;
+    stepsColor: string;
+    list: {
+      text: {
+        primary: string;
+        secondary: string;
+      };
+      bg: {
+        primary: string;
+        secondary: string;
+      };
+    };
+    delegations: {
+      accordion: {
+        button: {
+          border: string;
+          text: string;
+          icon: string;
+        };
+      };
+      border: {
+        input: '#88939F';
+      };
+      input: {
+        pillText: string;
+        pillBg: string;
+      };
+      text: {
+        primary: string;
+        secondary: string;
+        button: string;
+        input: { placeholder: string; text: string };
+      };
+      card: {
+        header: {
+          text: string;
+          pillText: string;
+          pillBg: string;
+        };
+        legend: {
+          text: string;
+          bg: string;
+          pillText: string;
+          pillBg: string;
+        };
+        columns: {
+          text: string;
+          icon: {
+            bg: string;
+            text: string;
+          };
+          stats: {
+            primary: string;
+            secondary: string;
+            border: string;
+            leftBorder: string;
+          };
+          voting: {
+            total: string;
+            totalNumber: string;
+            proposals: {
+              title: string;
+              hyperlink: string;
+              description: string;
+              sort: {
+                label: string;
+                bg: string;
+                border: string;
+                text: string;
+              };
+              vote: {
+                iconBg: string;
+                text: string;
+                for: string;
+                against: string;
+                abstain: string;
+                notVoted: string;
+                multiple: string;
+                divider: string;
+                reason: { title: string; text: string };
+              };
+              navigation: {
+                color: string;
+                buttons: {
+                  selectedBg: string;
+                  selectedText: string;
+                  unSelectedBg: string;
+                  unSelectedText: string;
+                };
+              };
+            };
+            input: {
+              placeholder: string;
+              icon: string;
+              border: string;
+              text: string;
+            };
+          };
+        };
+      };
+      bg: {
+        primary: string;
+        secondary: string;
+        tertiary: string;
+      };
+    };
+  };
 }

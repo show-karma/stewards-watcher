@@ -32,6 +32,7 @@ const config: IDAOConfig = {
     },
   },
   EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'discordScore'],
+  ENABLE_DELEGATE_TRACKER: true,
 };
 
 const dark: IDAOTheme = {
@@ -186,6 +187,121 @@ const dark: IDAOTheme = {
           unSelectedBg: 'transparent',
           unSelectedText: '#FFFFFF',
         },
+      },
+    },
+  },
+  tokenHolders: {
+    border: '#34383f',
+    bg: '#291555',
+    stepsColor: '#02E2AC',
+    list: {
+      text: {
+        primary: '#FFFFFF',
+        secondary: '#ADB8C0',
+      },
+      bg: {
+        primary: '#FFFFFF',
+        secondary: '#34383f',
+      },
+    },
+    delegations: {
+      accordion: {
+        button: {
+          border: '#FFFFFF',
+          text: '#FFFFFF',
+          icon: '#FFFFFF',
+        },
+      },
+      text: {
+        primary: '#FFFFFF',
+        secondary: '#ADB8C0',
+        input: {
+          placeholder: '#88939F',
+          text: '#FFFFFF',
+        },
+        button: '#0E0333',
+      },
+      border: {
+        input: '#88939F',
+      },
+      input: {
+        pillText: '#FFFFFFCC',
+        pillBg: '#88939F33',
+      },
+      card: {
+        header: {
+          text: '#FFFFFFCC',
+          pillText: '#FFFFFFCC',
+          pillBg: '#88939F33',
+        },
+        legend: {
+          text: '#F5F5F5',
+          bg: '#3A295F',
+          pillText: '#F5F5F5',
+          pillBg: '#291555',
+        },
+        columns: {
+          text: '#F5F5F5',
+          icon: {
+            bg: '#F0EBFA',
+            text: '#34383f',
+          },
+          stats: {
+            primary: '#F5F5F5',
+            secondary: '#ADB8C0',
+            leftBorder: '#02E2AC',
+            border: '#DBDFE3',
+          },
+          voting: {
+            total: '#ADB8C0',
+            totalNumber: '#88939F',
+            proposals: {
+              title: '#F5F5F5',
+              hyperlink: '#b3a1dd',
+              description: '#ADB8C0',
+              sort: {
+                bg: '#291555',
+                border: '#FFFFFF',
+                text: '#F5F5F5',
+                label: '#ADB8C0',
+              },
+              vote: {
+                iconBg: '#E1F7EA',
+                text: '#F5F5F5',
+                for: '#00BD62',
+                against: '#E10000',
+                abstain: '#E37423',
+                notVoted: '#4F5D6C',
+                multiple: 'green.300',
+                divider: '#88939F1A',
+                reason: {
+                  title: '#FFFFFF',
+                  text: '#FFFFFF',
+                },
+              },
+              navigation: {
+                color: '#FFFFFF',
+                buttons: {
+                  selectedBg: '#FFFFFF',
+                  selectedText: '#080A0E',
+                  unSelectedBg: 'transparent',
+                  unSelectedText: '#FFFFFF',
+                },
+              },
+            },
+            input: {
+              placeholder: '#88939F',
+              icon: '#4F5D6C',
+              border: '#88939F',
+              text: '#FFFFFF',
+            },
+          },
+        },
+      },
+      bg: {
+        primary: '#321E5E',
+        secondary: '#1B2030',
+        tertiary: '#02E2AC',
       },
     },
   },
@@ -346,6 +462,122 @@ const light: IDAOTheme = {
           unSelectedBg: 'transparent',
           unSelectedText: '#ADB8C0',
         },
+      },
+    },
+  },
+  tokenHolders: {
+    border: '#321E5E',
+    bg: '#F2F4F9',
+    stepsColor: '#321E5E',
+    list: {
+      text: {
+        primary: '#FFFFFF',
+        secondary: '#ADB8C0',
+      },
+      bg: {
+        primary: '#FFFFFF',
+        secondary: '#321E5E',
+      },
+    },
+    delegations: {
+      accordion: {
+        button: {
+          border: '#000000',
+          text: '#000000',
+          icon: '#000000',
+        },
+      },
+      text: {
+        primary: '#000000',
+        secondary: '#88939F',
+
+        input: {
+          placeholder: '#88939F',
+          text: '#080A0E',
+        },
+        button: '#FFFFFF',
+      },
+      border: {
+        input: '#88939F',
+      },
+      input: {
+        pillText: '#000000CC',
+        pillBg: '#88939F33',
+      },
+      card: {
+        header: {
+          text: '#000000CC',
+          pillText: '#000000CC',
+          pillBg: '#88939F33',
+        },
+        legend: {
+          text: '#4F5D6C',
+          bg: '#F5F5F5',
+          pillText: '#000000CC',
+          pillBg: '#88939F33',
+        },
+        columns: {
+          text: '#321E5E',
+          icon: {
+            bg: '#F0EBFA',
+            text: '#321E5E',
+          },
+          stats: {
+            primary: '#4A269B',
+            secondary: '#4F5D6C',
+            leftBorder: '#321E5E',
+            border: '#DBDFE3',
+          },
+          voting: {
+            total: '#080A0E',
+            totalNumber: '#88939F',
+            proposals: {
+              title: '#080A0E',
+              hyperlink: '#4A269B',
+              description: '#4F5D6C',
+              sort: {
+                bg: '#FFFFFF',
+                border: '#88939F',
+                text: '#88939F',
+                label: '#4F5D6C',
+              },
+              vote: {
+                iconBg: '#E1F7EA',
+                text: '#4F5D6C',
+                for: '#00BD62',
+                against: '#E10000',
+                abstain: '#E37423',
+                notVoted: '#4F5D6C',
+                multiple: 'green.300',
+                divider: '#88939F1A',
+                reason: {
+                  title: '#080A0E',
+                  text: '#080A0E',
+                },
+              },
+              navigation: {
+                color: '#291555',
+                buttons: {
+                  selectedBg: '#291555',
+                  selectedText: '#FFFFFF',
+                  unSelectedBg: 'transparent',
+                  unSelectedText: '#291555',
+                },
+              },
+            },
+            input: {
+              placeholder: '#88939F',
+              icon: '#4F5D6C',
+              border: '#88939F',
+              text: '#000000',
+            },
+          },
+        },
+      },
+      bg: {
+        primary: '#FFFFFF',
+        secondary: '#291555',
+        tertiary: '#24114F',
       },
     },
   },

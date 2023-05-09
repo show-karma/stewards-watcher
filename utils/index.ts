@@ -1,3 +1,5 @@
+export * from './addressToENSName';
+export * from './checkDecision';
 export * from './checkExpirationStatus';
 export * from './commonAddresses';
 export * from './convertHexToRGBA';
@@ -13,4 +15,6 @@ export * from './lessThanDays';
 export * from './onChainDyDxVotesProvider';
 export * from './removeHtmlTagWithRegex';
 export * from './removeLinkPrefix';
+export * from './sendLeadEmail';
 export * from './truncateAddress';
+export * from './validateEmail';
