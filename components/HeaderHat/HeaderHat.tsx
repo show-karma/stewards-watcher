@@ -137,7 +137,7 @@ export const HeaderHat = () => {
                 gap="4"
               >
                 {daoInfo.config.ENABLE_DELEGATE_TRACKER ? (
-                  <ChakraLink href="/token-holders" _hover={{}}>
+                  <ChakraLink href="/delegate-lookup" _hover={{}}>
                     <StyledButton>Delegate Look Up</StyledButton>
                   </ChakraLink>
                 ) : null}
@@ -165,7 +165,7 @@ export const HeaderHat = () => {
         <HeaderBurgerMenu isOpen={isBurgerMenuOpen} onClose={closeBurgerMenu}>
           <Flex flexDir="column" gap="4">
             {daoInfo.config.ENABLE_DELEGATE_TRACKER ? (
-              <ChakraLink href="/token-holders" _hover={{}}>
+              <ChakraLink href="/delegate-lookup" _hover={{}}>
                 <StyledButton>Delegate Look Up</StyledButton>
               </ChakraLink>
             ) : null}

@@ -33,8 +33,8 @@ export const TokenHoldersContainer: React.FC<IDAOContainer> = ({ user }) => {
   const title = `Check Your DAO Delegate's Performance`;
   const description =
     'Find out how well your delegate has performed since you delegated your tokens.';
-  const imageBig = `${config.METATAGS.URL}/meta/token-holders/delegate-activity-tracker-big.png`;
-  const image = `${config.METATAGS.URL}/meta/token-holders/delegate-activity-tracker.png`;
+  const imageBig = `${config.METATAGS.URL}/meta/delegate-lookup/delegate-activity-tracker-big.png`;
+  const image = `${config.METATAGS.URL}/meta/delegate-lookup/delegate-activity-tracker.png`;
   const url = `${config.METATAGS.URL}${router.asPath}`;
 
   return (

@@ -293,7 +293,7 @@ export const TokenHolderDelegation: FC = () => {
                       maxW={{ base: '260px', lg: '180px', xl: '200px' }}
                       lineHeight="22px"
                     >
-                      Enter one or more of your token holder addresses.
+                      Enter one or more token holder addresses.
                     </Text>
                   </Flex>
                 </Flex>
@@ -421,7 +421,7 @@ export const TokenHolderDelegation: FC = () => {
                 fontSize="14px"
                 color={theme.tokenHolders.delegations.text.input.text}
               >
-                Enter one or multiple token holder addresses
+                Enter one or more token holder addresses
               </Text>
               <Flex w="full" position="relative" flexDirection="column">
                 <Flex
