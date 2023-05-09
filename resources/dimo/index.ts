@@ -31,6 +31,7 @@ const config: IDAOConfig = {
     'forumScore',
     'discordScore',
   ],
+  ENABLE_DELEGATE_TRACKER: true,
 };
 
 const dark: IDAOTheme = {

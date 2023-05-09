@@ -27,6 +27,7 @@ const config: IDAOConfig = {
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
   EXCLUDED_CARD_FIELDS: [],
+  ENABLE_DELEGATE_TRACKER: true,
 };
 
 const dark: IDAOTheme = {

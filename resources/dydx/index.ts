@@ -49,6 +49,7 @@ const config: IDAOConfig = {
     onChain: onChainDyDxVotesProvider,
   },
   EXCLUDED_CARD_FIELDS: ['healthScore'],
+  ENABLE_DELEGATE_TRACKER: true,
 };
 
 const dark: IDAOTheme = {

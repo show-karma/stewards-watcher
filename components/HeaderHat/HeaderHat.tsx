@@ -136,9 +136,11 @@ export const HeaderHat = () => {
                 display={{ base: 'none', lg: 'flex' }}
                 gap="4"
               >
-                <ChakraLink href="/token-holders" _hover={{}}>
-                  <StyledButton>Delegate Look Up</StyledButton>
-                </ChakraLink>
+                {daoInfo.config.ENABLE_DELEGATE_TRACKER ? (
+                  <ChakraLink href="/token-holders" _hover={{}}>
+                    <StyledButton>Delegate Look Up</StyledButton>
+                  </ChakraLink>
+                ) : null}
                 {daoInfo.config.DAO_DELEGATE_MODE !== 'hidden' && (
                   <StyledButton onClick={onToggle}>
                     Delegate Tokens
@@ -162,9 +164,11 @@ export const HeaderHat = () => {
         </Flex>
         <HeaderBurgerMenu isOpen={isBurgerMenuOpen} onClose={closeBurgerMenu}>
           <Flex flexDir="column" gap="4">
-            <ChakraLink href="/token-holders" _hover={{}}>
-              <StyledButton>Delegate Look Up</StyledButton>
-            </ChakraLink>
+            {daoInfo.config.ENABLE_DELEGATE_TRACKER ? (
+              <ChakraLink href="/token-holders" _hover={{}}>
+                <StyledButton>Delegate Look Up</StyledButton>
+              </ChakraLink>
+            ) : null}
             {daoInfo.config.DAO_DELEGATE_MODE !== 'hidden' && (
               <StyledButton onClick={onToggle} px="2">
                 Delegate Tokens

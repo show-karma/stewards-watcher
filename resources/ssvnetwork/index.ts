@@ -27,6 +27,7 @@ const config: IDAOConfig = {
     FAQ: true,
   },
   EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'healthScore', 'discordScore'],
+  ENABLE_DELEGATE_TRACKER: true,
 };
 
 const dark: IDAOTheme = {

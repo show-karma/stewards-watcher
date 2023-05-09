@@ -36,6 +36,7 @@ const config: IDAOConfig = {
       DEFAULT_STATUSES: ['recognized'],
     },
   },
+  ENABLE_DELEGATE_TRACKER: true,
 };
 
 const dark: IDAOTheme = {

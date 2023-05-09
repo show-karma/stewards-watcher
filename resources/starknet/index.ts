@@ -34,6 +34,7 @@ const config: IDAOConfig = {
     'karmaScore',
     'delegatorCount',
   ],
+  ENABLE_DELEGATE_TRACKER: true,
 };
 
 const dark: IDAOTheme = {

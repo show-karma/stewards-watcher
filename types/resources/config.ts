@@ -46,6 +46,7 @@ export interface IDAOConfig {
   SHOULD_NOT_SHOW?: 'statement' | 'stats' | 'handles';
   SORT_OPTIONS?: IStats[];
   EXCLUDED_CARD_FIELDS: IStats[];
+  ENABLE_DELEGATE_TRACKER?: boolean;
   /**
    * Defines a custom function to parse the votes with an external proposal provider.
    *

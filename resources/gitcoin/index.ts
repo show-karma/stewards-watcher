@@ -32,6 +32,7 @@ const config: IDAOConfig = {
     },
   },
   EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'discordScore'],
+  ENABLE_DELEGATE_TRACKER: true,
 };
 
 const dark: IDAOTheme = {

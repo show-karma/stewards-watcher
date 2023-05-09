@@ -38,6 +38,7 @@ const config: IDAOConfig = {
     'healthScore',
     'discordScore',
   ],
+  ENABLE_DELEGATE_TRACKER: true,
 };
 
 const dark: IDAOTheme = {

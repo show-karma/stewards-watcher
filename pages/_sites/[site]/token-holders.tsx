@@ -3,6 +3,7 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
 import { TokenHoldersContainer } from 'containers';
 import { daosDictionary } from 'helpers';
+import { supportedDAOs } from 'resources';
 
 interface PathProps extends ParsedUrlQuery {
   site: string;
@@ -28,9 +29,16 @@ export const getStaticProps: GetStaticProps<IndexProps, PathProps> = async ({
 
   const { site } = params;
 
-  const dao = daosDictionary[site];
+  const hasDAO = daosDictionary[site];
+  if (!hasDAO) {
+    return {
+      notFound: true,
+    };
+  }
 
-  if (!dao) {
+  const daoHasEnabled = supportedDAOs[site].config.ENABLE_DELEGATE_TRACKER;
+
+  if (!daoHasEnabled) {
     return {
       notFound: true,
     };
