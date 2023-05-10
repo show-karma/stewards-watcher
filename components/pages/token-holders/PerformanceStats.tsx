@@ -110,6 +110,7 @@ export const PerformanceStats: FC<ISinceDelegationProps> = ({
   const votesCounter = (votes: IChainRow[]) => {
     let voteFor = 0;
     let voteAgainst = 0;
+    let voteAbstain = 0;
 
     votes.forEach(vote => {
       if (typeof vote === 'undefined') {
@@ -124,7 +125,10 @@ export const PerformanceStats: FC<ISinceDelegationProps> = ({
           voteAgainst += 1;
           return;
         }
-        if (/abstain/gi.test(vote.choice)) return;
+        if (/abstain/gi.test(vote.choice)) {
+          voteAbstain += 1;
+          return;
+        }
         voteFor += 1;
         return;
       }
@@ -137,9 +141,10 @@ export const PerformanceStats: FC<ISinceDelegationProps> = ({
       }
     });
     return {
-      total: voteFor + voteAgainst,
+      total: voteFor + voteAgainst + voteAbstain,
       voteFor,
       voteAgainst,
+      voteAbstain,
     };
   };
 
