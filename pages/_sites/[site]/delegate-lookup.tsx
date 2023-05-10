@@ -4,6 +4,7 @@ import type { ParsedUrlQuery } from 'querystring';
 import { TokenHoldersContainer } from 'containers';
 import { daosDictionary } from 'helpers';
 import { supportedDAOs } from 'resources';
+import Head from 'next/head';
 
 interface PathProps extends ParsedUrlQuery {
   site: string;

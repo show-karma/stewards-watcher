@@ -33,11 +33,6 @@ const voteBg: { [key: string]: string } = {
   AGAINST: '#FFF3F3',
   NOTVOTED: '#F5F5F5',
 };
-// color={
-//   colorMode === 'dark'
-//     ? voteBg[checkDecision(vote)]
-//     : colorDecision(vote, theme)
-// }
 
 const colorDecision = (vote: IChainRow, theme: IDAOTheme) => {
   if (typeof vote === 'undefined')
