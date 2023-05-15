@@ -160,10 +160,6 @@ const VoteIcon: FC<{ vote: IChainRow }> = ({ vote }) => {
             ? voteBg[checkDecision(vote)]
             : colorDecision(vote, theme)
         }
-        // color={
-        //   theme.tokenHolders.delegations.card.columns.voting.proposals.vote
-        //     .notVoted
-        // }
         {...iconStyle}
       />
     );
@@ -173,9 +169,6 @@ const VoteIcon: FC<{ vote: IChainRow }> = ({ vote }) => {
     return (
       <Icon
         as={VoteForIcon}
-        // color={
-        //   theme.tokenHolders.delegations.card.columns.voting.proposals.vote.for
-        // }
         color={
           colorMode === 'dark'
             ? voteBg[checkDecision(vote)]
@@ -189,10 +182,6 @@ const VoteIcon: FC<{ vote: IChainRow }> = ({ vote }) => {
       return (
         <Icon
           as={VoteAgainstIcon}
-          // color={
-          //   theme.tokenHolders.delegations.card.columns.voting.proposals.vote
-          //     .against
-          // }
           color={
             colorMode === 'dark'
               ? voteBg[checkDecision(vote)]
@@ -205,10 +194,6 @@ const VoteIcon: FC<{ vote: IChainRow }> = ({ vote }) => {
       return (
         <Icon
           as={VoteForIcon}
-          // color={
-          //   theme.tokenHolders.delegations.card.columns.voting.proposals.vote
-          //     .for
-          // }
           color={
             colorMode === 'dark'
               ? voteBg[checkDecision(vote)]
@@ -221,10 +206,6 @@ const VoteIcon: FC<{ vote: IChainRow }> = ({ vote }) => {
       return (
         <Icon
           as={DidNotVoteIcon}
-          // color={
-          //   theme.tokenHolders.delegations.card.columns.voting.proposals.vote
-          //     .notVoted
-          // }
           color={
             colorMode === 'dark'
               ? voteBg[checkDecision(vote)]
@@ -238,8 +219,9 @@ const VoteIcon: FC<{ vote: IChainRow }> = ({ vote }) => {
         <Icon
           as={EmptyCircleIcon}
           color={
-            theme.tokenHolders.delegations.card.columns.voting.proposals.vote
-              .abstain
+            colorMode === 'dark'
+              ? voteBg[checkDecision(vote)]
+              : colorDecision(vote, theme)
           }
           {...iconStyle}
         />
