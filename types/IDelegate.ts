@@ -17,6 +17,7 @@ export interface IDelegate {
   };
   twitterHandle?: string;
   discordHandle?: string;
+  discordUsername?: string;
   discourseHandle?: string;
   updatedAt?: string;
   aboutMe?: string;
