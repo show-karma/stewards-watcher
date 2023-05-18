@@ -1,5 +1,6 @@
 import { IDAOConfig, IDAOTheme } from 'types';
 import { mainnet } from 'wagmi/chains';
+import TOKENABI from './TOKENABI.json';
 
 const config: IDAOConfig = {
   DAO: 'SSV Network',
@@ -20,6 +21,7 @@ const config: IDAOConfig = {
   DAO_CHAIN: mainnet,
   DAO_DELEGATE_CONTRACT: undefined,
   DAO_DELEGATE_MODE: 'snapshot',
+  DAO_TOKEN_CONTRACT: '0x9D65fF81a3c488d585bBfb0Bfe3c7707c7917f54',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
   DAO_DEFAULT_SETTINGS: {
@@ -579,6 +581,6 @@ const light: IDAOTheme = {
   },
 };
 
-const dao = { dark, light, config };
+const dao = { dark, light, config, TOKENABI };
 
 export default dao;
