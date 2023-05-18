@@ -30,6 +30,7 @@ export const supportedDAOs: ISupportedDAOs = {
     light: safe.light,
     dark: safe.dark,
     ABI: null,
+    TOKENABI: safe.TOKENABI,
   },
   dimo: {
     config: dimo.config,
@@ -78,12 +79,14 @@ export const supportedDAOs: ISupportedDAOs = {
     dark: ssvnetwork.dark,
     light: ssvnetwork.light,
     ABI: null,
+    TOKENABI: ssvnetwork.TOKENABI,
   },
   apecoin: {
     config: apecoin.config,
     dark: apecoin.dark,
     light: apecoin.light,
     ABI: null,
+    TOKENABI: apecoin.TOKENABI,
   },
   element: {
     config: elementFinance.config,
@@ -96,6 +99,7 @@ export const supportedDAOs: ISupportedDAOs = {
     dark: starknet.dark,
     light: starknet.light,
     ABI: null,
+    TOKENABI: starknet.TOKENABI,
   },
   developerdao: {
     config: developer.config,

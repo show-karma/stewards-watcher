@@ -1,5 +1,6 @@
 import { IDAOConfig, IDAOTheme } from 'types';
 import { mainnet } from 'wagmi/chains';
+import TOKENABI from './TOKENABI.json';
 
 const config: IDAOConfig = {
   DAO: 'Safe',
@@ -23,6 +24,7 @@ const config: IDAOConfig = {
     ORDERSTAT: 'karmaScore',
   },
   DAO_DELEGATE_CONTRACT: undefined,
+  DAO_TOKEN_CONTRACT: '0x5afe3855358e112b5647b952709e6165e1c1eeee',
   DAO_DELEGATE_MODE: 'snapshot',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
@@ -579,6 +581,6 @@ const light: IDAOTheme = {
   },
 };
 
-const dao = { dark, light, config };
+const dao = { dark, light, config, TOKENABI };
 
 export default dao;

@@ -1,5 +1,6 @@
 import { IDAOConfig, IDAOTheme } from 'types';
 import { mainnet } from 'wagmi/chains';
+import TOKENABI from './TOKENABI.json';
 
 const config: IDAOConfig = {
   DAO: 'Starknet',
@@ -24,6 +25,7 @@ const config: IDAOConfig = {
   DAO_CHAIN: mainnet,
   DAO_DELEGATE_CONTRACT: undefined,
   DAO_DELEGATE_MODE: 'snapshot',
+  DAO_TOKEN_CONTRACT: '0xCa14007Eff0dB1f8135f4C25B34De49AB0d42766',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
   HEADER_MARGIN: true,
@@ -593,6 +595,6 @@ const light: IDAOTheme = {
   },
 };
 
-const dao = { dark, light, config };
+const dao = { dark, light, config, TOKENABI };
 
 export default dao;
