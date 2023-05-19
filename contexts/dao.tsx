@@ -16,7 +16,7 @@ export const DAOContext = createContext({} as IDAOProps);
 interface ProviderProps {
   selectedDAO: string;
   children: React.ReactNode;
-  shouldFetchInfo: boolean;
+  shouldFetchInfo?: boolean;
 }
 
 export const DAOProvider: React.FC<ProviderProps> = ({

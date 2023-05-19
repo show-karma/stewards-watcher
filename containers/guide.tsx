@@ -20,7 +20,7 @@ export const GuideContainer: React.FC = () => {
 
   return (
     <RainbowWrapper>
-      <DelegatesProvider>
+      <DelegatesProvider ignoreAutoFetch>
         <WalletProvider>
           <GovernanceVotesProvider>
             <AuthProvider>

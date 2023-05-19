@@ -19,7 +19,7 @@ export const FAQContainer: React.FC = () => {
 
   return (
     <RainbowWrapper>
-      <DelegatesProvider>
+      <DelegatesProvider ignoreAutoFetch>
         <WalletProvider>
           <GovernanceVotesProvider>
             <AuthProvider>

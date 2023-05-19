@@ -46,7 +46,7 @@ interface IFAQ {
 }
 
 const FAQ = ({ dao }: IFAQ) => (
-  <DAOProvider selectedDAO={dao}>
+  <DAOProvider selectedDAO={dao} shouldFetchInfo={false}>
     <FAQContainer />
   </DAOProvider>
 );
