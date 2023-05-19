@@ -20,7 +20,12 @@ const config: IDAOConfig = {
     URL: `https://gitcoin.karmahq.xyz`,
   },
   DAO_CHAIN: mainnet,
-  DAO_TOKEN_CONTRACT: '0xde30da39c46104798bb5aa3fe8b9e0e1f348163f',
+  DAO_TOKEN_CONTRACT: [
+    {
+      contractAddress: '0xde30da39c46104798bb5aa3fe8b9e0e1f348163f',
+      method: 'balanceOf',
+    },
+  ],
   DAO_DELEGATE_CONTRACT: '0xde30da39c46104798bb5aa3fe8b9e0e1f348163f',
   DAO_DELEGATE_MODE: 'custom',
   DAO_FORUM_TYPE: 'discourse',

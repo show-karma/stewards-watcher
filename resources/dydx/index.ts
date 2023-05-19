@@ -20,7 +20,12 @@ const config: IDAOConfig = {
     URL: `https://dydx.karmahq.xyz`,
   },
   DAO_CHAIN: mainnet,
-  DAO_TOKEN_CONTRACT: '0x92D6C1e31e14520e676a687F0a93788B716BEff5',
+  DAO_TOKEN_CONTRACT: [
+    {
+      contractAddress: '0x92D6C1e31e14520e676a687F0a93788B716BEff5',
+      method: 'balanceOf',
+    },
+  ],
   DAO_DELEGATE_CONTRACT: '0x92D6C1e31e14520e676a687F0a93788B716BEff5',
   DAO_DELEGATE_MODE: 'custom',
   DAO_DELEGATE_ACTION: () =>

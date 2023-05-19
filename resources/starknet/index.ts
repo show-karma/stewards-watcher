@@ -27,7 +27,12 @@ const config: IDAOConfig = {
   DAO_DELEGATE_FUNCTION: 'setDelegate',
   DAO_DELEGATE_FUNCTION_ARGS: [getIdBySnapshotId('starknet.eth')],
   DAO_DELEGATE_MODE: 'snapshot',
-  DAO_TOKEN_CONTRACT: '0xCa14007Eff0dB1f8135f4C25B34De49AB0d42766',
+  DAO_TOKEN_CONTRACT: [
+    {
+      contractAddress: '0xCa14007Eff0dB1f8135f4C25B34De49AB0d42766',
+      method: 'balanceOf',
+    },
+  ],
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
   HEADER_MARGIN: true,

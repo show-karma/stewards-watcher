@@ -22,7 +22,12 @@ export interface IDAOConfig {
   };
   DAO_CHAIN: Chain;
   DAO_DELEGATE_CONTRACT?: `0x${string}`;
-  DAO_TOKEN_CONTRACT?: `0x${string}`;
+  DAO_TOKEN_CONTRACT?: {
+    contractAddress: `0x${string}`;
+    method: string;
+    ABI?: any;
+  }[];
+
   DAO_DELEGATE_MODE: 'custom' | 'snapshot' | 'hidden';
   DAO_DELEGATE_ACTION?: () => void;
   DAO_FORUM_TYPE?: IForumType;

@@ -20,7 +20,12 @@ const config: IDAOConfig = {
     URL: `https://optimism.karmahq.xyz`,
   },
   DAO_CHAIN: optimism,
-  DAO_TOKEN_CONTRACT: '0x4200000000000000000000000000000000000042',
+  DAO_TOKEN_CONTRACT: [
+    {
+      contractAddress: '0x4200000000000000000000000000000000000042',
+      method: 'balanceOf',
+    },
+  ],
   DAO_DELEGATE_CONTRACT: '0x4200000000000000000000000000000000000042',
   DAO_DELEGATE_MODE: 'custom',
   DAO_FORUM_TYPE: 'discourse',
