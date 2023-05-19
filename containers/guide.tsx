@@ -74,7 +74,7 @@ export const GuideContainer: React.FC = () => {
                 gtag('config', '${config.DAO_GTAG}');`}
       </Script>
       <RainbowWrapper>
-        <DelegatesProvider>
+        <DelegatesProvider ignoreAutoFetch>
           <WalletProvider>
             <GovernanceVotesProvider>
               <AuthProvider>
