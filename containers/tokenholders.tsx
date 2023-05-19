@@ -39,7 +39,7 @@ export const TokenHoldersContainer: React.FC<IDAOContainer> = ({ user }) => {
 
   return (
     <RainbowWrapper>
-      <DelegatesProvider>
+      <DelegatesProvider ignoreAutoFetch>
         <WalletProvider>
           <AuthProvider>
             <GovernanceVotesProvider>

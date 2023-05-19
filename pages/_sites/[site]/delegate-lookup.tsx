@@ -54,7 +54,7 @@ interface IIndex {
 }
 
 const Index = ({ dao }: IIndex) => (
-  <DAOProvider selectedDAO={dao}>
+  <DAOProvider selectedDAO={dao} shouldFetchInfo={false}>
     <TokenHoldersContainer />
   </DAOProvider>
 );

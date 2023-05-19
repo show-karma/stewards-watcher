@@ -16,11 +16,13 @@ export const DAOContext = createContext({} as IDAOProps);
 interface ProviderProps {
   selectedDAO: string;
   children: React.ReactNode;
+  shouldFetchInfo: boolean;
 }
 
 export const DAOProvider: React.FC<ProviderProps> = ({
   children,
   selectedDAO,
+  shouldFetchInfo = true,
 }) => {
   const [daoInfo, setDAOInfo] = useState<IDAOInfo>({} as IDAOInfo);
   const [daoData, setDAOData] = useState<IDAOData>();
@@ -34,13 +36,14 @@ export const DAOProvider: React.FC<ProviderProps> = ({
 
   const setupDaoInfo = async () => {
     const { config } = daoInfo;
+    console.log('here');
     await api
       .get(`/dao/delegates?name=${config.DAO_KARMA_ID}&pageSize=10&offset=0`)
       .then(res => setDAOData(res.data.data));
   };
 
   useMemo(() => {
-    if (daoInfo?.config?.DAO_KARMA_ID) setupDaoInfo();
+    if (shouldFetchInfo && daoInfo?.config?.DAO_KARMA_ID) setupDaoInfo();
   }, [daoInfo]);
 
   useMemo(() => {
