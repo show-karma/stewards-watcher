@@ -5,9 +5,9 @@ import React, {
   useState,
   useEffect,
 } from 'react';
-import numbro from 'numbro';
 import { useContractRead } from 'wagmi';
 import { formatEther } from 'utils';
+import { BigNumber } from 'ethers';
 import { useDAO } from './dao';
 import { useWallet } from './wallet';
 
@@ -64,6 +64,11 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
 
   const getVotes = async () => {
     if (!voteAmount) {
+      setVotes('0');
+      return;
+    }
+    const amountBN = BigNumber.from(voteAmount).toString();
+    if (amountBN === '0') {
       setVotes('0');
       return;
     }
