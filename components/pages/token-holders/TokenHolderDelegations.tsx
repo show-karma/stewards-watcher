@@ -213,8 +213,8 @@ export const TokenHolderDelegation: FC = () => {
                 w={{ base: '1px', lg: '660px' }}
                 maxW={{
                   base: '1px',
-                  lg: 'calc(100% - 180px)',
-                  xl: 'calc(100% - 200px)',
+                  lg: 'calc(100% - 200px)',
+                  xl: 'calc(100% - 224px)',
                 }}
                 maxH={{
                   base: 'calc(100% - 70px)',
@@ -236,8 +236,8 @@ export const TokenHolderDelegation: FC = () => {
                 ${theme.tokenHolders.stepsColor} 10px
               )`,
                 }}
-                top={{ base: '8px', lg: '9%' }}
-                left={{ base: '12px', lg: '90px', xl: '100px' }}
+                top={{ base: '8px', lg: '10%' }}
+                left={{ base: '12px', lg: '55px', xl: '70px' }}
                 position="absolute"
                 zIndex="5"
               />
@@ -255,10 +255,11 @@ export const TokenHolderDelegation: FC = () => {
                 >
                   <Flex
                     borderRadius="full"
-                    boxSize="24px"
+                    boxSize="25px"
                     zIndex="4"
                     bg={theme.tokenHolders.delegations.bg.primary}
                     position="relative"
+                    ml={{ base: '0', lg: '-70px' }}
                   >
                     <Flex
                       zIndex="3"
@@ -267,7 +268,7 @@ export const TokenHolderDelegation: FC = () => {
                       bg={theme.tokenHolders.stepsColor}
                       position="absolute"
                       top="50%"
-                      left="38%"
+                      left="37%"
                       transform="translate(0, -50%)"
                       marginRight="-50%"
                     />
@@ -305,10 +306,11 @@ export const TokenHolderDelegation: FC = () => {
                 >
                   <Flex
                     borderRadius="full"
-                    boxSize="24px"
+                    boxSize="25px"
                     zIndex="4"
                     bg={theme.tokenHolders.delegations.bg.primary}
                     position="relative"
+                    ml={{ base: '0', lg: '-70px' }}
                   >
                     <Flex
                       zIndex="3"
@@ -317,7 +319,7 @@ export const TokenHolderDelegation: FC = () => {
                       bg={theme.tokenHolders.stepsColor}
                       position="absolute"
                       top="50%"
-                      left="38%"
+                      left="37%"
                       transform="translate(0, -50%)"
                       marginRight="-50%"
                     />
@@ -355,10 +357,11 @@ export const TokenHolderDelegation: FC = () => {
                 >
                   <Flex
                     borderRadius="full"
-                    boxSize="24px"
+                    boxSize="25px"
                     zIndex="4"
                     bg={theme.tokenHolders.delegations.bg.primary}
                     position="relative"
+                    ml={{ base: '0', lg: '-100px' }}
                   >
                     <Flex
                       zIndex="3"
@@ -367,7 +370,7 @@ export const TokenHolderDelegation: FC = () => {
                       bg={theme.tokenHolders.stepsColor}
                       position="absolute"
                       top="50%"
-                      left="38%"
+                      left="37%"
                       transform="translate(0, -50%)"
                       marginRight="-50%"
                     />

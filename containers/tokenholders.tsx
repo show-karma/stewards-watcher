@@ -38,82 +38,70 @@ export const TokenHoldersContainer: React.FC<IDAOContainer> = ({ user }) => {
   const url = `${config.METATAGS.URL}${router.asPath}`;
 
   return (
-    <RainbowWrapper>
-      <DelegatesProvider ignoreAutoFetch>
-        <WalletProvider>
-          <AuthProvider>
-            <GovernanceVotesProvider>
-              <HandlesProvider>
-                <TokenHoldersProvider>
-                  <Head>
-                    <title>{title}</title>
-                    <meta name="description" content={description} />
+    <>
+      <Head>
+        <title>{title}</title>
+        <meta name="description" content={description} />
 
-                    <meta property="og:type" content="website" />
-                    <meta property="og:url" content={url} key="ogurl" />
-                    <meta
-                      property="og:image"
-                      content={imageBig}
-                      key="ogimage"
-                    />
-                    <meta
-                      property="og:site_name"
-                      content={title}
-                      key="ogsitename"
-                    />
-                    <meta property="og:title" content={title} key="ogtitle" />
-                    <meta
-                      property="og:description"
-                      content={description}
-                      key="ogdesc"
-                    />
-                    <link rel="icon" href={config.METATAGS.FAVICON} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={url} key="ogurl" />
+        <meta property="og:image" content={imageBig} key="ogimage" />
+        <meta property="og:site_name" content={title} key="ogsitename" />
+        <meta property="og:title" content={title} key="ogtitle" />
+        <meta property="og:description" content={description} key="ogdesc" />
+        <link rel="icon" href={config.METATAGS.FAVICON} />
 
-                    <meta
-                      property="twitter:card"
-                      content="summary_large_image"
-                    />
-                    <meta property="twitter:url" content={url} />
-                    <meta property="twitter:title" content={description} />
-                    <meta
-                      property="twitter:description"
-                      content={description}
-                    />
-                    <meta property="twitter:image" content={image} />
-                  </Head>
-                  <Script
-                    async
-                    src={`https://www.googletagmanager.com/gtag/js?id=${config.DAO_GTAG}`}
-                    onLoad={() => console.log('GTAG code setup')}
-                  />
-                  <Script
-                    id="google-analytics"
-                    strategy="afterInteractive"
-                    onLoad={() => console.log('Google-Analytics code setup')}
-                  >
-                    {`window.dataLayer = window.dataLayer || [];
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={url} />
+        <meta property="twitter:title" content={description} />
+        <meta property="twitter:description" content={description} />
+        <meta property="twitter:image" content={image} />
+      </Head>
+      <Script
+        async
+        src={`https://www.googletagmanager.com/gtag/js?id=${config.DAO_GTAG}`}
+        onLoad={() => console.log('GTAG code setup')}
+      />
+      <Script
+        id="google-analytics"
+        strategy="afterInteractive"
+        onLoad={() => console.log('Google-Analytics code setup')}
+      >
+        {`window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
   
                 gtag('config', '${config.DAO_GTAG}');`}
-                  </Script>
-                  <Flex
-                    w="full"
-                    flexDir="column"
-                    align="center"
-                    background={theme.secondBg || theme.bodyBg}
-                  >
-                    <HeaderHat />
-                    <MainLayout px="0" w="full" bgColor={theme.tokenHolders.bg}>
-                      <TokenHolders />
-                    </MainLayout>
-                  </Flex>
-                </TokenHoldersProvider>
-              </HandlesProvider>
-            </GovernanceVotesProvider>
-          </AuthProvider>
-        </WalletProvider>
-      </DelegatesProvider>
-    </RainbowWrapper>
+      </Script>
+      <RainbowWrapper>
+        <DelegatesProvider ignoreAutoFetch>
+          <WalletProvider>
+            <AuthProvider>
+              <GovernanceVotesProvider>
+                <HandlesProvider>
+                  <TokenHoldersProvider>
+                    <Flex
+                      w="full"
+                      flexDir="column"
+                      align="center"
+                      background={theme.secondBg || theme.bodyBg}
+                    >
+                      <HeaderHat />
+                      <MainLayout
+                        px="0"
+                        w="full"
+                        bgColor={theme.tokenHolders.bg}
+                      >
+                        <TokenHolders />
+                      </MainLayout>
+                    </Flex>
+                  </TokenHoldersProvider>
+                </HandlesProvider>
+              </GovernanceVotesProvider>
+            </AuthProvider>
+          </WalletProvider>
+        </DelegatesProvider>
+      </RainbowWrapper>
+    </>
   );
 };

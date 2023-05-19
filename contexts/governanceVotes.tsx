@@ -38,8 +38,9 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
 
   const [delegatedBefore, setDelegatedBefore] = useState('');
   const { data: voteAmount, isFetching: isLoadingVotes } = useContractRead({
-    address: daoInfo.config.DAO_DELEGATE_CONTRACT,
-    abi: daoInfo.ABI,
+    address:
+      daoInfo.config.DAO_TOKEN_CONTRACT || daoInfo.config.DAO_DELEGATE_CONTRACT,
+    abi: daoInfo.config.DAO_TOKEN_CONTRACT ? daoInfo.TOKENABI : daoInfo.ABI,
     functionName: 'balanceOf',
     args: [walletAddress],
     chainId: daoInfo.config.DAO_CHAIN.id,
@@ -67,13 +68,7 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
       return;
     }
     const fromWeiAmount = formatEther(voteAmount.toString());
-    const formattedAmount = numbro(fromWeiAmount).format({
-      thousandSeparated: true,
-      mantissa: 2,
-      trimMantissa: true,
-      average: true,
-    });
-    setVotes(formattedAmount.toString());
+    setVotes(fromWeiAmount);
   };
 
   useEffect(() => {

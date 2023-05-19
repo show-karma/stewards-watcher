@@ -212,9 +212,9 @@ export const Handles: FC = () => {
       icon: DiscordIcon,
       name: 'Discord',
       action: () => null,
-      hideCondition: !profileSelected?.discordHandle,
-      handle: profileSelected?.discordHandle
-        ? `@${profileSelected?.discordHandle}`
+      hideCondition: !profileSelected?.discordUsername,
+      handle: profileSelected?.discordUsername
+        ? `@${profileSelected?.discordUsername}`
         : undefined,
       canAdminEdit: false,
     },
