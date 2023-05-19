@@ -36,7 +36,6 @@ export const DAOProvider: React.FC<ProviderProps> = ({
 
   const setupDaoInfo = async () => {
     const { config } = daoInfo;
-    console.log('here');
     await api
       .get(`/dao/delegates?name=${config.DAO_KARMA_ID}&pageSize=10&offset=0`)
       .then(res => setDAOData(res.data.data));
