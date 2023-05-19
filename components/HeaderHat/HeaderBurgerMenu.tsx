@@ -22,7 +22,7 @@ export const HeaderBurgerMenu: FC<IHeaderBurgerMenuProps> = ({
   return (
     <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
       <DrawerOverlay />
-      <DrawerContent bg={theme.headerBg}>
+      <DrawerContent bg={theme.headerBg} bgSize="cover">
         <DrawerBody>{children}</DrawerBody>
       </DrawerContent>
     </Drawer>
