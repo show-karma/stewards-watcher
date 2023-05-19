@@ -74,7 +74,7 @@ export const TokenHoldersContainer: React.FC<IDAOContainer> = ({ user }) => {
                 gtag('config', '${config.DAO_GTAG}');`}
       </Script>
       <RainbowWrapper>
-        <DelegatesProvider>
+        <DelegatesProvider ignoreAutoFetch>
           <WalletProvider>
             <AuthProvider>
               <GovernanceVotesProvider>

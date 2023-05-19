@@ -80,6 +80,7 @@ export const DelegatesContext = createContext({} as IDelegateProps);
 
 interface ProviderProps {
   children: React.ReactNode;
+  ignoreAutoFetch?: boolean;
 }
 
 const statDefaultOptions: IStatOptions[] = [
@@ -99,7 +100,10 @@ const defaultStatuses: IStatusOptions[] = [
   'recognized',
 ];
 
-export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
+export const DelegatesProvider: React.FC<ProviderProps> = ({
+  children,
+  ignoreAutoFetch,
+}) => {
   const { daoInfo } = useDAO();
   const { config } = daoInfo;
 
@@ -171,6 +175,20 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   const isSearchDirty = userToFind !== '';
   const isFiltering = interests.length > 0;
 
+  const fetchDaoIds = async () => {
+    try {
+      const {
+        data: { data },
+      } = await api.get<{ data: { snapshotIds: string[]; onChainId: string } }>(
+        `/dao/${config.DAO_KARMA_ID}`
+      );
+
+      setVoteInfos({ ...data });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const fetchInterests = async () => {
     try {
       const { data } = await api.get(`/dao/interests/${config.DAO_KARMA_ID}`);
@@ -234,17 +252,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
       });
 
       const { data } = axiosClient.data;
-      const {
-        delegates: fetchedDelegates,
-        onChainId,
-        snapshotIds,
-        count,
-      } = data;
-
-      setVoteInfos({
-        onChainId,
-        snapshotIds,
-      });
+      const { delegates: fetchedDelegates, count } = data;
 
       if (fetchedDelegates.length)
         setLastUpdate(fetchedDelegates[0].stats[0].updatedAt);
@@ -630,8 +638,11 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
   };
 
   useEffect(() => {
-    fetchInterests();
-    fetchWorkstreams();
+    if (!ignoreAutoFetch) {
+      fetchInterests();
+      fetchWorkstreams();
+    }
+    fetchDaoIds();
   }, []);
 
   // Fetch vote infos
@@ -803,9 +814,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({ children }) => {
     setOffset(0);
     if (userToFind) {
       findDelegate();
-    } else {
-      fetchDelegates(0);
-    }
+    } else if (!ignoreAutoFetch) fetchDelegates(0);
   }, [
     stat,
     order,
