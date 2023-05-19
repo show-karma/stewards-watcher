@@ -1,6 +1,6 @@
 import { IDAOConfig, IDAOTheme } from 'types';
+import { getIdBySnapshotId } from 'utils';
 import { mainnet } from 'wagmi/chains';
-import TOKENABI from './TOKENABI.json';
 
 const config: IDAOConfig = {
   DAO: 'Apecoin',
@@ -23,8 +23,10 @@ const config: IDAOConfig = {
     TIMEPERIOD: '180d',
     ORDERSTAT: 'karmaScore',
   },
-  DAO_DELEGATE_CONTRACT: undefined,
   DAO_TOKEN_CONTRACT: '0x4d224452801aced8b2f0aebe155379bb5d594381',
+  DAO_DELEGATE_CONTRACT: '0x469788fe6e9e9681c6ebf3bf78e7fd26fc015446',
+  DAO_DELEGATE_FUNCTION: 'setDelegate',
+  DAO_DELEGATE_FUNCTION_ARGS: [getIdBySnapshotId('apecoin.eth')],
   DAO_DELEGATE_MODE: 'snapshot',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
@@ -580,6 +582,6 @@ const light: IDAOTheme = {
   },
 };
 
-const dao = { dark, light, config, TOKENABI };
+const dao = { dark, light, config };
 
 export default dao;

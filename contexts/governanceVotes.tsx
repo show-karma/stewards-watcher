@@ -38,9 +38,8 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
 
   const [delegatedBefore, setDelegatedBefore] = useState('');
   const { data: voteAmount, isFetching: isLoadingVotes } = useContractRead({
-    address:
-      daoInfo.config.DAO_TOKEN_CONTRACT || daoInfo.config.DAO_DELEGATE_CONTRACT,
-    abi: daoInfo.config.DAO_TOKEN_CONTRACT ? daoInfo.TOKENABI : daoInfo.ABI,
+    address: daoInfo.config.DAO_TOKEN_CONTRACT,
+    abi: daoInfo.TOKEN_ABI,
     functionName: 'balanceOf',
     args: [walletAddress],
     chainId: daoInfo.config.DAO_CHAIN.id,
@@ -48,7 +47,7 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
 
   const { data: delegated } = useContractRead({
     address: daoInfo.config.DAO_DELEGATE_CONTRACT,
-    abi: daoInfo.ABI,
+    abi: daoInfo.DELEGATE_ABI,
     functionName: 'delegates',
     args: [walletAddress],
     chainId: daoInfo.config.DAO_CHAIN.id,
@@ -56,8 +55,8 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
   });
 
   const { data: fetchedSymbol } = useContractRead({
-    address: daoInfo.config.DAO_DELEGATE_CONTRACT,
-    abi: daoInfo.ABI,
+    address: daoInfo.config.DAO_TOKEN_CONTRACT,
+    abi: daoInfo.TOKEN_ABI,
     functionName: 'symbol',
     chainId: daoInfo.config.DAO_CHAIN.id,
   });

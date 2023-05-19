@@ -18,6 +18,7 @@ const config: IDAOConfig = {
     URL: `https://developerdao.karmahq.xyz`,
   },
   DAO_CHAIN: mainnet,
+  DAO_TOKEN_CONTRACT: undefined,
   DAO_DELEGATE_CONTRACT: undefined,
   DAO_DELEGATE_MODE: 'hidden',
   DAO_FORUM_TYPE: 'discourse',

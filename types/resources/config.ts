@@ -27,6 +27,8 @@ export interface IDAOConfig {
   DAO_DELEGATE_ACTION?: () => void;
   DAO_FORUM_TYPE?: IForumType;
   DAO_FORUM_URL?: string;
+  DAO_DELEGATE_FUNCTION_ARGS?: string[];
+  DAO_DELEGATE_FUNCTION?: string;
   DAO_GTAG?: string;
   HEADER_MARGIN?: boolean;
   DAO_DEFAULT_SETTINGS?: {
