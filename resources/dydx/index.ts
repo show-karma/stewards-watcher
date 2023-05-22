@@ -26,7 +26,7 @@ const config: IDAOConfig = {
     typeof window !== 'undefined' &&
     window.open('https://dydx.vote/delegate', '_blank'),
   DAO_FORUM_TYPE: 'discourse',
-  DAO_FORUM_URL: 'https://dydx.forum/',
+  DAO_FORUM_URL: 'https://dydx.forum',
   DAO_GTAG: 'G-67LDHT697P',
   DAO_DEFAULT_SETTINGS: {
     FAQ: true,
