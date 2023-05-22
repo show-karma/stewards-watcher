@@ -23,7 +23,6 @@ const config: IDAOConfig = {
   DAO_DELEGATE_FUNCTION: 'setDelegate',
   DAO_DELEGATE_FUNCTION_ARGS: [getIdBySnapshotId('mainnet.ssvnetwork.eth')],
   DAO_TOKEN_CONTRACT: '0x9D65fF81a3c488d585bBfb0Bfe3c7707c7917f54',
-  DAO_DELEGATE_MODE: 'snapshot',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
   DAO_DEFAULT_SETTINGS: {
