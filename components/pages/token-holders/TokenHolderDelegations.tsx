@@ -91,14 +91,14 @@ export const TokenHolderDelegation: FC = () => {
     criteriaMode: 'all',
   });
 
-  const disableButtonCondition =
-    isFetching && isLoading && !!errors.addressInput;
-
   const sendAddresses = (addrs: string[]) => {
     changeAddresses(addrs.join(','));
   };
 
   const inputValue = watch('addressInput');
+
+  const disableButtonCondition =
+    isFetching || !!errors.addressInput || (!inputValue && !addresses.length);
 
   const clearInput = () => {
     reset({ addressInput: '' });
