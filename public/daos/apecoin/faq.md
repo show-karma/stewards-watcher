@@ -1,8 +1,8 @@
-# SSV Network Delegate Dashboard
+# Apecoin Delegate Dashboard
 
 ---
 
-The SSV Network delegate dashboard shows the DAO contributors and their activity on Snapshot, Forum and Discord. Find answers to frequently asked questions below.
+The Apecoin delegate dashboard shows the DAO contributors and their activity on Snapshot, Forum and Discord. Find answers to frequently asked questions below.
 
 **1. I can not find my profile in the dashboard.**
 
@@ -10,7 +10,7 @@ If you can't find your profile, click the Login button in the menu and login wit
 
 **2. How is my score calculated?**
 
-We worked with the SSV Network team and came up with weights for each metric. You can click on your score to see all the metrics, weights and the formula used to get the score.
+We worked with the Apecoin Governance team and came up with weights for each metric. You can click on your score to see all the metrics, weights and the formula used to get the score.
 
 **3. My forum score is blank**
 
@@ -18,7 +18,7 @@ Please login to the dashboard and go to social handles. Click on the forum butto
 
 **4. My Discord score is blank**
 
-You have to link your Discord handle to your wallet address for us to index your Discord activity. To link your handle, join SSV Network Discord server and go to the [general channel](https://discord.com/channels/723834989506068561/1075275453880877107). Type the command /karma and select linkwallet and enter your wallet address. You can see a quick demo [here](https://youtu.be/UXDmZ8bN4Sg).
+You have to link your Discord handle to your wallet address for us to index your Discord activity. To link your handle, join Apecoin Discord server and go to the [general channel](https://discord.com/channels/723834989506068561/1075275453880877107). Type the command /karma and select linkwallet and enter your wallet address. You can see a quick demo [here](https://youtu.be/UXDmZ8bN4Sg).
 
 **5. I have more questions, how can I contact you?**
 
