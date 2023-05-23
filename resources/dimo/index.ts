@@ -20,8 +20,13 @@ const config: IDAOConfig = {
     URL: `https://dimo.karmahq.xyz`,
   },
   DAO_CHAIN: polygon,
+  DAO_TOKEN_CONTRACT: [
+    {
+      contractAddress: '0xE261D618a959aFfFd53168Cd07D12E37B26761db',
+      method: 'balanceOf',
+    },
+  ],
   DAO_DELEGATE_CONTRACT: '0xE261D618a959aFfFd53168Cd07D12E37B26761db',
-  DAO_DELEGATE_MODE: 'custom',
   DAO_FORUM_TYPE: undefined,
   DAO_GTAG: 'G-67LDHT697P',
   EXCLUDED_CARD_FIELDS: [

@@ -6,6 +6,6 @@ export interface IDAOInfo {
   light: IDAOTheme;
   dark: IDAOTheme;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ABI: any;
-  TOKENABI?: any;
+  DELEGATE_ABI?: any;
+  TOKEN_ABI: any;
 }

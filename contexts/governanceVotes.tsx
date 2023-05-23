@@ -5,7 +5,7 @@ import React, {
   useState,
   useEffect,
 } from 'react';
-import { useContractRead } from 'wagmi';
+import { useContractRead, useContractReads } from 'wagmi';
 import { formatEther } from 'utils';
 import { BigNumber } from 'ethers';
 import { useDAO } from './dao';
@@ -37,18 +37,21 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
   const [symbol, setSymbol] = useState('');
 
   const [delegatedBefore, setDelegatedBefore] = useState('');
-  const { data: voteAmount, isFetching: isLoadingVotes } = useContractRead({
-    address:
-      daoInfo.config.DAO_TOKEN_CONTRACT || daoInfo.config.DAO_DELEGATE_CONTRACT,
-    abi: daoInfo.config.DAO_TOKEN_CONTRACT ? daoInfo.TOKENABI : daoInfo.ABI,
-    functionName: 'balanceOf',
-    args: [walletAddress],
-    chainId: daoInfo.config.DAO_CHAIN.id,
+  const { data: voteAmounts, isFetching: isLoadingVotes } = useContractReads({
+    contracts: daoInfo.config.DAO_TOKEN_CONTRACT
+      ? daoInfo.config.DAO_TOKEN_CONTRACT.map(contract => ({
+          address: contract.contractAddress,
+          abi: contract.ABI || daoInfo.TOKEN_ABI,
+          functionName: contract.method,
+          args: [walletAddress],
+          chainId: daoInfo.config.DAO_CHAIN.id,
+        }))
+      : undefined,
   });
 
   const { data: delegated } = useContractRead({
     address: daoInfo.config.DAO_DELEGATE_CONTRACT,
-    abi: daoInfo.ABI,
+    abi: daoInfo.DELEGATE_ABI,
     functionName: 'delegates',
     args: [walletAddress],
     chainId: daoInfo.config.DAO_CHAIN.id,
@@ -56,29 +59,38 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
   });
 
   const { data: fetchedSymbol } = useContractRead({
-    address: daoInfo.config.DAO_DELEGATE_CONTRACT,
-    abi: daoInfo.ABI,
+    address: daoInfo.config.DAO_TOKEN_CONTRACT?.[0].contractAddress,
+    abi: daoInfo.TOKEN_ABI,
     functionName: 'symbol',
     chainId: daoInfo.config.DAO_CHAIN.id,
   });
 
   const getVotes = async () => {
-    if (!voteAmount) {
+    if (!voteAmounts || !voteAmounts?.length) {
       setVotes('0');
       return;
     }
-    const amountBN = BigNumber.from(voteAmount).toString();
-    if (amountBN === '0') {
+    console.log(voteAmounts);
+    const amountsBN = voteAmounts.map(amount =>
+      BigNumber.from(amount).toString()
+    );
+    const onlyZeros = amountsBN.every(amount => amount === '0');
+    if (onlyZeros) {
       setVotes('0');
       return;
     }
-    const fromWeiAmount = formatEther(voteAmount.toString());
+    const sumBNs = amountsBN.reduce(
+      (acc, amount) => acc.add(BigNumber.from(amount)),
+      BigNumber.from('0')
+    );
+
+    const fromWeiAmount = formatEther(sumBNs.toString());
     setVotes(fromWeiAmount);
   };
 
   useEffect(() => {
     getVotes();
-  }, [walletAddress, voteAmount, isConnected]);
+  }, [walletAddress, voteAmounts, isConnected]);
 
   const getDelegated = async () => {
     if (!delegated) {
