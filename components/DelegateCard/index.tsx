@@ -540,7 +540,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                               label={interest}
                               key={+index}
                               color={theme.card.interests.text}
-                              bg={theme.headerBg}
+                              bg={theme.background}
                               hasArrow
                               placement="top"
                               boxShadow="2xl"

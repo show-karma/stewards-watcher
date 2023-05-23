@@ -3,55 +3,55 @@ import { getIdBySnapshotId } from 'utils';
 import { mainnet } from 'wagmi/chains';
 
 const config: IDAOConfig = {
-  DAO: 'Apecoin',
-  DAO_DESCRIPTION: `The Delegates of Apecoin DAO play a vital role in driving the Apecoin ecosystem forward through their work in governance and workstreams.`,
+  DAO: 'Rocket Pool',
+  DAO_DESCRIPTION: `The Delegates of Rocket Pool play a vital role in driving the Rocket Pool ecosystem forward through their work in governance and workstreams.`,
   DAO_SUBDESCRIPTION: `This site helps token holders choose delegates and boost transparency by displaying delegate contribution to indicate their involvement in the DAO.`,
-  DAO_URL: 'https://apecoin.com',
-  GOVERNANCE_FORUM: 'https://forum.apecoin.com',
-  DAO_KARMA_ID: 'apecoin',
+  DAO_URL: 'https://rocketpool.net',
+  GOVERNANCE_FORUM: 'https://dao.rocketpool.net',
+  DAO_KARMA_ID: 'rocketpool',
   IMAGE_PREFIX_URL: 'https://cdn.stamp.fyi/avatar/eth:',
-  DAO_LOGO: '/daos/apecoin/logo.svg',
+  DAO_LOGO: '/daos/rocketpool/logo.webp',
   METATAGS: {
-    TITLE: `Delegates of Apecoin DAO`,
-    DESCRIPTION: `Find all the active delegates in Apecoin DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
-    IMAGE: '/daos/apecoin/meta.png',
-    FAVICON: '/daos/apecoin/favicon.png',
-    URL: `https://apecoin.karmahq.xyz`,
+    TITLE: `Delegates of Rocket Pool`,
+    DESCRIPTION: `Find all the active delegates in Rocket Pool along with governance stats across on-chain/off-chain voting, forum and discord.`,
+    IMAGE: '/daos/rocketpool/meta.png',
+    FAVICON: '/daos/rocketpool/favicon.ico',
+    URL: `https://rocketpool.karmahq.xyz`,
   },
   DAO_CHAIN: mainnet,
   DAO_DEFAULT_SETTINGS: {
-    TIMEPERIOD: '180d',
+    TIMEPERIOD: 'lifetime',
     ORDERSTAT: 'karmaScore',
-    FAQ: true,
   },
   DAO_TOKEN_CONTRACT: [
     {
-      contractAddress: '0x4d224452801aced8b2f0aebe155379bb5d594381',
+      contractAddress: '0xD33526068D116cE69F19A9ee46F0bd304F21A51f',
       method: 'balanceOf',
     },
   ],
   DAO_DELEGATE_CONTRACT: '0x469788fe6e9e9681c6ebf3bf78e7fd26fc015446',
   DAO_DELEGATE_FUNCTION: 'setDelegate',
-  DAO_DELEGATE_FUNCTION_ARGS: [getIdBySnapshotId('apecoin.eth')],
+  DAO_DELEGATE_FUNCTION_ARGS: [getIdBySnapshotId('rocketpool-dao.eth')],
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
-  EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'healthScore', 'discordScore'],
+  EXCLUDED_CARD_FIELDS: [],
+  ENABLE_DELEGATE_TRACKER: true,
 };
 
 const dark: IDAOTheme = {
-  background: '#000001',
-  bodyBg: '#000001',
+  logo: '/daos/rocketpool/logo.webp',
+  background: '#1F2937',
+  bodyBg: '#1F2937',
   title: '#FFFFFF',
   subtitle: '#a0aec0',
   text: '#FFFFFF',
-  branding: '#183AC5',
+  branding: 'linear-gradient(to right, rgb(239, 68, 68), rgb(234, 179, 8))',
   buttonText: '#FFFFFF',
   buttonTextSec: '#FFFFFF',
-  headerBg: '#090B10',
+  headerBg: `url('/daos/rocketpool/bg.png')`,
   gradientBall: '#ADB8C0',
-  themeIcon: '#ADB8C0',
+  themeIcon: '#0F172A',
   collapse: { text: '#FFFFFF', subtext: '#ADB8C0' },
-  secondBg: '#173ac5',
   hat: {
     text: {
       primary: '#FFFFFF',
@@ -65,13 +65,13 @@ const dark: IDAOTheme = {
     border: '#ADB8C033',
     title: 'white',
     bg: 'transparent',
-    listBg: '#000001',
+    listBg: '#1F2937',
     listText: 'white',
     activeBg: 'rgba(102, 102, 102, 0.15)',
   },
   card: {
     icon: '#ADB8C0',
-    background: '#090B10',
+    background: '#0f172a',
     statBg: 'rgba(102, 102, 102, 0.15)',
     divider: 'rgba(173, 184, 192, 0.2)',
     text: { primary: '#FFFFFF', secondary: '#ADB8C0' },
@@ -82,16 +82,16 @@ const dark: IDAOTheme = {
     socialMedia: '#FFFFFF',
   },
   loginModal: {
-    background: '#000001',
+    background: '#1F2937',
     text: '#FFFFFF',
     footer: { bg: '#090B10', text: '#FFFFFF' },
     button: {
-      bg: '#183AC5',
+      bg: 'rgb(234, 179, 8)',
       text: '#FFFFFF',
     },
   },
   modal: {
-    background: '#090B10',
+    background: '#1F2937',
     header: {
       border: '#ADB8C0',
       title: '#FFFFFF',
@@ -120,7 +120,7 @@ const dark: IDAOTheme = {
           text: 'rgba(89, 90, 94, 0.5)',
         },
         normal: {
-          bg: '#183AC5',
+          bg: 'rgb(234, 179, 8)',
           text: '#FFFFFF',
         },
         alternative: {
@@ -133,7 +133,7 @@ const dark: IDAOTheme = {
     buttons: {
       selectBg: '#183AC5',
       selectText: '#FFFFFF',
-      navBg: '#181e2b',
+      navBg: '#1F2937',
       navText: '#FFFFFF',
       navUnselectedText: '#ADB8C0',
       navBorder: '#FFFFFF',
@@ -196,8 +196,8 @@ const dark: IDAOTheme = {
   },
   tokenHolders: {
     border: '#34383f',
-    bg: '#000001',
-    stepsColor: '#183AC5',
+    bg: '#1F2937',
+    stepsColor: 'rgb(234, 179, 8)',
     list: {
       text: {
         primary: '#FFFFFF',
@@ -223,7 +223,7 @@ const dark: IDAOTheme = {
           placeholder: '#88939F',
           text: '#FFFFFF',
         },
-        button: '#FFFFFF',
+        button: '#1F2937',
       },
       border: {
         input: '#88939F',
@@ -240,9 +240,9 @@ const dark: IDAOTheme = {
         },
         legend: {
           text: '#F5F5F5',
-          bg: '#17181D',
+          bg: '#2C2E32',
           pillText: '#F5F5F5',
-          pillBg: '#1B2030',
+          pillBg: '#1C1D20',
         },
         columns: {
           text: '#F5F5F5',
@@ -253,7 +253,8 @@ const dark: IDAOTheme = {
           stats: {
             primary: '#F5F5F5',
             secondary: '#ADB8C0',
-            leftBorder: '#183AC5',
+            leftBorder:
+              'linear-gradient(to right, rgb(239, 68, 68), rgb(234, 179, 8))',
             border: '#DBDFE3',
           },
           voting: {
@@ -264,7 +265,7 @@ const dark: IDAOTheme = {
               hyperlink: '#b3a1dd',
               description: '#ADB8C0',
               sort: {
-                bg: '#000001',
+                bg: '#1F2937',
                 border: '#FFFFFF',
                 text: '#F5F5F5',
                 label: '#ADB8C0',
@@ -303,34 +304,35 @@ const dark: IDAOTheme = {
         },
       },
       bg: {
-        primary: '#090B10',
+        primary: '#0f172a',
         secondary: '#1B2030',
-        tertiary: '#183AC5',
+        tertiary:
+          'linear-gradient(to right, rgb(239, 68, 68), rgb(234, 179, 8))',
       },
     },
   },
 };
 
 const light: IDAOTheme = {
-  logo: '/daos/apecoin/logo_black.svg',
+  logo: '/daos/rocketpool/logo.webp',
   background: '#F2F4F9',
   bodyBg: '#F2F4F9',
   title: '#090B10',
   subtitle: '#666666',
   text: '#090B10',
-  branding: '#183AC5',
+  branding: 'linear-gradient(to right, rgb(239, 68, 68), rgb(234, 179, 8))',
   buttonText: '#FFFFFF',
   buttonTextSec: '#090B10',
-  headerBg: '#212328',
+  headerBg: `url('/daos/rocketpool/bg.png')`,
   gradientBall: '#ADB8C0',
-  themeIcon: '#ADB8C0',
+  themeIcon: '#FFFFFF',
   collapse: { bg: '#FFFFFF', subtext: '#212328', text: '#212328' },
   hat: {
     text: {
       primary: '#FFFFFF',
       secondary: '#ADB8C0',
-      madeBy: '#ADB8C0',
-      lastUpdated: '#666666',
+      madeBy: '#FFFFFF',
+      lastUpdated: '#ADB8C0',
     },
   },
   filters: {
@@ -366,7 +368,7 @@ const light: IDAOTheme = {
     },
   },
   modal: {
-    background: '#090B10',
+    background: '#1F2937',
     header: {
       border: '#ADB8C0',
       title: '#FFFFFF',
@@ -408,7 +410,7 @@ const light: IDAOTheme = {
     buttons: {
       selectBg: '#183AC5',
       selectText: '#FFFFFF',
-      navBg: '#181e2b',
+      navBg: '#1F2937',
       navText: '#FFFFFF',
       navUnselectedText: '#ADB8C0',
       navBorder: '#FFFFFF',
@@ -472,7 +474,7 @@ const light: IDAOTheme = {
   tokenHolders: {
     border: '#34383f',
     bg: '#F2F4F9',
-    stepsColor: '#212328',
+    stepsColor: '#34383f',
     list: {
       text: {
         primary: '#FFFFFF',

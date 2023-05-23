@@ -13,4 +13,5 @@ export const daosDictionary: Record<string, string> = {
   developerdao: 'developerdao',
   apecoin: 'apecoin',
   safe: 'safe',
+  rocketpool: 'rocketpool',
 };

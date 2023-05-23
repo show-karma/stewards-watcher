@@ -13,6 +13,7 @@ import starknet from './starknet';
 import developer from './developer';
 import apecoin from './apecoin';
 import safe from './safe';
+import rocketpool from './rocketpool';
 import snapshotABI from './contracts/snapshotABI.json';
 import ERC20ABI from './contracts/ERC20_ABI.json';
 
@@ -115,6 +116,13 @@ export const supportedDAOs: ISupportedDAOs = {
     config: developer.config,
     dark: developer.dark,
     light: developer.light,
+    TOKEN_ABI: ERC20ABI,
+  },
+  rocketpool: {
+    config: rocketpool.config,
+    dark: rocketpool.dark,
+    light: rocketpool.light,
+    DELEGATE_ABI: snapshotABI,
     TOKEN_ABI: ERC20ABI,
   },
 };
