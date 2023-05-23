@@ -231,12 +231,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     };
   };
 
-  // const interests = getInterests();
-  const interests = {
-    label: 'Interests',
-    value: 'Supermaconha, 123123, azeitona'.split(','),
-    displayAs: 'interests',
-  };
+  const interests = getInterests();
 
   useMemo(() => {
     if (!config) return;
