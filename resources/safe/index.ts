@@ -23,11 +23,15 @@ const config: IDAOConfig = {
     TIMEPERIOD: 'lifetime',
     ORDERSTAT: 'karmaScore',
   },
-  DAO_TOKEN_CONTRACT: '0x5afe3855358e112b5647b952709e6165e1c1eeee',
+  DAO_TOKEN_CONTRACT: [
+    {
+      contractAddress: '0x5afe3855358e112b5647b952709e6165e1c1eeee',
+      method: 'balanceOf',
+    },
+  ],
   DAO_DELEGATE_CONTRACT: '0x469788fe6e9e9681c6ebf3bf78e7fd26fc015446',
   DAO_DELEGATE_FUNCTION: 'setDelegate',
   DAO_DELEGATE_FUNCTION_ARGS: [getIdBySnapshotId('safe.eth')],
-  DAO_DELEGATE_MODE: 'snapshot',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
   EXCLUDED_CARD_FIELDS: [],

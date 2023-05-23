@@ -142,11 +142,11 @@ export const HeaderHat = () => {
                     <StyledButton>Delegate Look Up</StyledButton>
                   </ChakraLink>
                 ) : null}
-                {daoInfo.config.DAO_DELEGATE_MODE !== 'hidden' && (
+                {daoInfo.config.DAO_DELEGATE_CONTRACT ? (
                   <StyledButton onClick={onToggle}>
                     Delegate Tokens
                   </StyledButton>
-                )}
+                ) : null}
                 <ChakraLink href="/guide" _hover={{}}>
                   <StyledButton>Guide</StyledButton>
                 </ChakraLink>
@@ -170,11 +170,11 @@ export const HeaderHat = () => {
                 <StyledButton>Delegate Look Up</StyledButton>
               </ChakraLink>
             ) : null}
-            {daoInfo.config.DAO_DELEGATE_MODE !== 'hidden' && (
+            {daoInfo.config.DAO_DELEGATE_CONTRACT ? (
               <StyledButton onClick={onToggle} px="2">
                 Delegate Tokens
               </StyledButton>
-            )}
+            ) : null}
             <ChakraLink href="/guide" _hover={{}}>
               <StyledButton>Guide</StyledButton>
             </ChakraLink>

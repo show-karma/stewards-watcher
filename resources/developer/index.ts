@@ -20,7 +20,6 @@ const config: IDAOConfig = {
   DAO_CHAIN: mainnet,
   DAO_TOKEN_CONTRACT: undefined,
   DAO_DELEGATE_CONTRACT: undefined,
-  DAO_DELEGATE_MODE: 'hidden',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
   SHOULD_NOT_SHOW: 'statement',
