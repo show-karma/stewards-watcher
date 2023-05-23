@@ -23,11 +23,15 @@ const config: IDAOConfig = {
     TIMEPERIOD: 'lifetime',
     ORDERSTAT: 'karmaScore',
   },
-  DAO_TOKEN_CONTRACT: '0xD33526068D116cE69F19A9ee46F0bd304F21A51f',
+  DAO_TOKEN_CONTRACT: [
+    {
+      contractAddress: '0xD33526068D116cE69F19A9ee46F0bd304F21A51f',
+      method: 'balanceOf',
+    },
+  ],
   DAO_DELEGATE_CONTRACT: '0x469788fe6e9e9681c6ebf3bf78e7fd26fc015446',
   DAO_DELEGATE_FUNCTION: 'setDelegate',
   DAO_DELEGATE_FUNCTION_ARGS: [getIdBySnapshotId('rocketpool-dao.eth')],
-  DAO_DELEGATE_MODE: 'snapshot',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
   EXCLUDED_CARD_FIELDS: [],
