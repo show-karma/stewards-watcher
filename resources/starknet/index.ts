@@ -26,7 +26,6 @@ const config: IDAOConfig = {
   DAO_DELEGATE_CONTRACT: '0x469788fe6e9e9681c6ebf3bf78e7fd26fc015446',
   DAO_DELEGATE_FUNCTION: 'setDelegate',
   DAO_DELEGATE_FUNCTION_ARGS: [getIdBySnapshotId('starknet.eth')],
-  DAO_DELEGATE_MODE: 'snapshot',
   DAO_TOKEN_CONTRACT: [
     {
       contractAddress: '0xCa14007Eff0dB1f8135f4C25B34De49AB0d42766',

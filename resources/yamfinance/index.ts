@@ -27,7 +27,6 @@ const config: IDAOConfig = {
     },
   ],
   DAO_DELEGATE_CONTRACT: '0x0AaCfbeC6a24756c20D41914F2caba817C0d8521',
-  DAO_DELEGATE_MODE: 'custom',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
   EXCLUDED_CARD_FIELDS: ['healthScore', 'karmaScore', 'discordScore'],

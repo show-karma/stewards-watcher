@@ -27,8 +27,6 @@ export interface IDAOConfig {
     method: string;
     ABI?: any;
   }[];
-
-  DAO_DELEGATE_MODE: 'custom' | 'snapshot' | 'hidden';
   DAO_DELEGATE_ACTION?: () => void;
   DAO_FORUM_TYPE?: IForumType;
   DAO_FORUM_URL?: string;

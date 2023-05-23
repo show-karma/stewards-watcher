@@ -34,7 +34,6 @@ const config: IDAOConfig = {
       ABI: TokenVestingABI,
     },
   ],
-  DAO_DELEGATE_MODE: 'snapshot',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
   DAO_DEFAULT_SETTINGS: {
