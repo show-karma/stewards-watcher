@@ -22,6 +22,7 @@ const config: IDAOConfig = {
   DAO_DEFAULT_SETTINGS: {
     TIMEPERIOD: '180d',
     ORDERSTAT: 'karmaScore',
+    FAQ: true
   },
   DAO_TOKEN_CONTRACT: '0x4d224452801aced8b2f0aebe155379bb5d594381',
   DAO_DELEGATE_CONTRACT: '0x469788fe6e9e9681c6ebf3bf78e7fd26fc015446',
