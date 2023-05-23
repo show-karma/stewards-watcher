@@ -1,6 +1,6 @@
 import { IDAOConfig, IDAOTheme } from 'types';
+import { getIdBySnapshotId } from 'utils';
 import { mainnet } from 'wagmi/chains';
-import TOKENABI from './TOKENABI.json';
 
 const config: IDAOConfig = {
   DAO: 'SSV Network',
@@ -19,8 +19,9 @@ const config: IDAOConfig = {
     URL: `https://ssvnetwork.karmahq.xyz`,
   },
   DAO_CHAIN: mainnet,
-  DAO_DELEGATE_CONTRACT: undefined,
-  DAO_DELEGATE_MODE: 'snapshot',
+  DAO_DELEGATE_CONTRACT: '0x469788fe6e9e9681c6ebf3bf78e7fd26fc015446',
+  DAO_DELEGATE_FUNCTION: 'setDelegate',
+  DAO_DELEGATE_FUNCTION_ARGS: [getIdBySnapshotId('mainnet.ssvnetwork.eth')],
   DAO_TOKEN_CONTRACT: '0x9D65fF81a3c488d585bBfb0Bfe3c7707c7917f54',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
@@ -581,6 +582,6 @@ const light: IDAOTheme = {
   },
 };
 
-const dao = { dark, light, config, TOKENABI };
+const dao = { dark, light, config };
 
 export default dao;

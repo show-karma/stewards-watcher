@@ -48,7 +48,7 @@ export const DelegateButton: FC<IDelegateButton> = ({
     });
     beforeOnClick?.();
 
-    if (config.DAO_DELEGATE_MODE === 'custom' && config.DAO_DELEGATE_ACTION) {
+    if (config.DAO_DELEGATE_ACTION) {
       return config.DAO_DELEGATE_ACTION();
     }
 
@@ -67,7 +67,7 @@ export const DelegateButton: FC<IDelegateButton> = ({
     return write?.();
   };
 
-  return config.DAO_DELEGATE_MODE !== 'hidden' ? (
+  return config.DAO_DELEGATE_CONTRACT ? (
     <Button
       background={theme.branding}
       px={{ base: '3', sm: '4', md: '6' }}

@@ -20,8 +20,8 @@ const config: IDAOConfig = {
     URL: `https://dydx.karmahq.xyz`,
   },
   DAO_CHAIN: mainnet,
+  DAO_TOKEN_CONTRACT: '0x92D6C1e31e14520e676a687F0a93788B716BEff5',
   DAO_DELEGATE_CONTRACT: '0x92D6C1e31e14520e676a687F0a93788B716BEff5',
-  DAO_DELEGATE_MODE: 'custom',
   DAO_DELEGATE_ACTION: () =>
     typeof window !== 'undefined' &&
     window.open('https://dydx.vote/delegate', '_blank'),
