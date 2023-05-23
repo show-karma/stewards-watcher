@@ -22,7 +22,12 @@ const config: IDAOConfig = {
     FAQ: false,
   },
   DAO_CHAIN: mainnet,
-  DAO_TOKEN_CONTRACT: '0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9',
+  DAO_TOKEN_CONTRACT: [
+    {
+      contractAddress: '0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9',
+      method: 'balanceOf',
+    },
+  ],
   DAO_DELEGATE_CONTRACT: '0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',

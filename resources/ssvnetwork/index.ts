@@ -1,6 +1,7 @@
 import { IDAOConfig, IDAOTheme } from 'types';
 import { getIdBySnapshotId } from 'utils';
 import { mainnet } from 'wagmi/chains';
+import TokenVestingABI from './TokenVestingABI.json';
 
 const config: IDAOConfig = {
   DAO: 'SSV Network',
@@ -22,7 +23,17 @@ const config: IDAOConfig = {
   DAO_DELEGATE_CONTRACT: '0x469788fe6e9e9681c6ebf3bf78e7fd26fc015446',
   DAO_DELEGATE_FUNCTION: 'setDelegate',
   DAO_DELEGATE_FUNCTION_ARGS: [getIdBySnapshotId('mainnet.ssvnetwork.eth')],
-  DAO_TOKEN_CONTRACT: '0x9D65fF81a3c488d585bBfb0Bfe3c7707c7917f54',
+  DAO_TOKEN_CONTRACT: [
+    {
+      contractAddress: '0x9D65fF81a3c488d585bBfb0Bfe3c7707c7917f54',
+      method: 'balanceOf',
+    },
+    {
+      contractAddress: '0xB8471180C79A0a69C7790A1CCf62e91b3c3559Bf',
+      method: 'totalVestingBalanceOf',
+      ABI: TokenVestingABI,
+    },
+  ],
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
   DAO_DEFAULT_SETTINGS: {

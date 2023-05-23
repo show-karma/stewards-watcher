@@ -20,7 +20,12 @@ const config: IDAOConfig = {
     URL: `https://pooltogether.karmahq.xyz`,
   },
   DAO_CHAIN: mainnet,
-  DAO_TOKEN_CONTRACT: '0x0cec1a9154ff802e7934fc916ed7ca50bde6844e',
+  DAO_TOKEN_CONTRACT: [
+    {
+      contractAddress: '0x0cec1a9154ff802e7934fc916ed7ca50bde6844e',
+      method: 'balanceOf',
+    },
+  ],
   DAO_DELEGATE_CONTRACT: '0x0cec1a9154ff802e7934fc916ed7ca50bde6844e',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
