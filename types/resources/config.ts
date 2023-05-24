@@ -49,6 +49,7 @@ export interface IDAOConfig {
     title: string;
     url: string;
   }[];
+  TOS_URL?: string;
   SHOULD_NOT_SHOW?: 'statement' | 'stats' | 'handles';
   SORT_OPTIONS?: IStats[];
   EXCLUDED_CARD_FIELDS: IStats[];

@@ -1,4 +1,4 @@
-import { Flex } from '@chakra-ui/react';
+import { Checkbox, Flex, Link } from '@chakra-ui/react';
 import { useDAO, useEditProfile } from 'contexts';
 import { FC } from 'react';
 import ReactQuill from 'react-quill';
@@ -9,8 +9,13 @@ const modules = {
 };
 
 export const EditStatement: FC = () => {
-  const { theme } = useDAO();
-  const { newStatement, editStatementText } = useEditProfile();
+  const { theme, daoInfo } = useDAO();
+  const {
+    newStatement,
+    editStatementText,
+    acceptedTerms,
+    changeAcceptedTerms,
+  } = useEditProfile();
   const newStatementValue = newStatement.value as string;
 
   const editorStyle = {
@@ -63,21 +68,38 @@ export const EditStatement: FC = () => {
   };
 
   return (
-    <Flex
-      maxW={{ base: '18rem', sm: 'full', lg: '30rem' }}
-      minW={{ base: 'full', sm: '18rem', lg: '30rem' }}
-      w="full"
-      gap="4"
-      flexDir="column"
-      flex="1"
-      sx={editorStyle}
-    >
-      <ReactQuill
-        theme="snow"
-        value={newStatementValue}
-        onChange={editStatementText}
-        modules={modules}
-      />
+    <Flex flexDir="column" gap="1">
+      <Flex
+        maxW={{ base: '18rem', sm: 'full', lg: '30rem' }}
+        minW={{ base: 'full', sm: '18rem', lg: '30rem' }}
+        w="full"
+        gap="4"
+        flexDir="column"
+        flex="1"
+        sx={editorStyle}
+        h="full"
+        minH={{ base: 'full', sm: '18rem', lg: '16rem' }}
+        maxH={{ base: 'full', sm: '18rem', lg: '16rem' }}
+      >
+        <ReactQuill
+          theme="snow"
+          value={newStatementValue}
+          onChange={editStatementText}
+          modules={modules}
+        />
+      </Flex>
+      {daoInfo.config.TOS_URL ? (
+        <Checkbox
+          checked={acceptedTerms}
+          onChange={event => changeAcceptedTerms(event.target.checked)}
+        >
+          I accept{' '}
+          <Link href={daoInfo.config.TOS_URL} isExternal textDecor="underline">
+            Terms and Conditions
+          </Link>
+          .
+        </Checkbox>
+      ) : null}
     </Flex>
   );
 };

@@ -8,3 +8,10 @@ export const KARMA_LINKS = {
   mirror: 'https://mirror.xyz/showkarma.eth',
   linkedin: 'https://www.linkedin.com/company/karmaxyz/',
 };
+
+export const API_ROUTES = {
+  DELEGATE: {
+    TERMS_OF_SERVICE: (daoName: string) =>
+      `${KARMA_API.base_url}/delegate/${daoName}/terms-of-service`,
+  },
+};

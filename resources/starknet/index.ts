@@ -43,6 +43,7 @@ const config: IDAOConfig = {
     'delegatorCount',
   ],
   ENABLE_DELEGATE_TRACKER: true,
+  TOS_URL: 'https://starkware.co/starknet/dao-terms-of-service',
 };
 
 const dark: IDAOTheme = {

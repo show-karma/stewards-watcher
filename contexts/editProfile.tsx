@@ -3,7 +3,7 @@ import React, { useContext, createContext, useMemo, useState } from 'react';
 import { useIsMounted } from 'hooks/useIsMounted';
 import { useToasty } from 'hooks';
 import { ICustomFields, IProfile } from 'types';
-import { api, KARMA_API } from 'helpers';
+import { api, API_ROUTES, KARMA_API } from 'helpers';
 import { useAccount } from 'wagmi';
 import axios from 'axios';
 import { useDelegates } from './delegates';
@@ -35,6 +35,8 @@ interface IEditProfileProps {
     newHandle: string,
     media: 'twitter' | 'forum'
   ) => Promise<void>;
+  acceptedTerms: boolean;
+  changeAcceptedTerms: (choice: boolean) => void;
 }
 
 export const EditProfileContext = createContext({} as IEditProfileProps);
@@ -62,6 +64,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
   const [newProfilePicture, setNewProfilePicture] = useState<string | null>(
     null
   );
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const { toast } = useToasty();
   const {
     profileSelected,
@@ -187,6 +190,25 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       label: 'Interests',
       displayAs: 'interests',
     });
+  };
+
+  const changeAcceptedTerms = async (choice: boolean) => {
+    try {
+      const authorizedAPI = axios.create({
+        timeout: 30000,
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: authToken ? `Bearer ${authToken}` : '',
+        },
+      });
+      await authorizedAPI.put(
+        API_ROUTES.DELEGATE.TERMS_OF_SERVICE(daoInfo.config.DAO_KARMA_ID)
+      );
+      setAcceptedTerms(choice);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useMemo(() => {
@@ -426,6 +448,8 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       newProfilePicture,
       editProfilePicture,
       changeHandle,
+      changeAcceptedTerms,
+      acceptedTerms,
     }),
     [
       isEditing,
@@ -448,6 +472,8 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       newProfilePicture,
       editProfilePicture,
       changeHandle,
+      changeAcceptedTerms,
+      acceptedTerms,
     ]
   );
 

@@ -3,6 +3,7 @@ import { useDAO, useDelegates } from 'contexts';
 import { DelegateStatusFilter } from './DelegateStatusFilter';
 import { InterestsFilter } from './InterestsFilter';
 import { PeriodFilter } from './PeriodFilter';
+import { TermsFilter } from './TermsFilter';
 import { WorkstreamFilter } from './WorkstreamFilter';
 
 export const OrderByFilters = () => {
@@ -20,6 +21,7 @@ export const OrderByFilters = () => {
           {workstreams.length > 0 && <WorkstreamFilter />}
           <DelegateStatusFilter />
           <PeriodFilter />
+          <TermsFilter />
         </Flex>
       </Flex>
     </Flex>

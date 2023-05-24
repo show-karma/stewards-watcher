@@ -74,6 +74,8 @@ interface IDelegateProps {
     paramValue: string
   ) => void;
   refreshProfileModal: (tab?: IActiveTab) => Promise<void>;
+  handleAcceptedTermsOnly: (value: boolean) => void;
+  acceptedTermsOnly: boolean;
 }
 
 export const DelegatesContext = createContext({} as IDelegateProps);
@@ -116,6 +118,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
   const [hasMore, setHasMore] = useState(false);
   const [hasInitiated, setInitiated] = useState(false);
+  const [acceptedTermsOnly, setAcceptedTermsOnly] = useState(false);
 
   const prepareStatOptions = () => {
     const sortedDefaultOptions = statDefaultOptions.sort(element =>
@@ -228,6 +231,10 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     return undefined;
   };
 
+  const handleAcceptedTermsOnly = (value: boolean) => {
+    setAcceptedTermsOnly(value);
+  };
+
   const fetchDelegates = async (_offset = offset) => {
     setLoading(true);
     try {
@@ -242,6 +249,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           field: stat,
           period,
           pageSize: 10,
+          tos: daoInfo.config.TOS_URL ? acceptedTermsOnly : undefined,
           workstreamId: getWorkstreams(),
           statuses: statuses.length
             ? statuses.join(',')
@@ -581,6 +589,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           field: stat,
           period,
           pageSize: 10,
+          tos: daoInfo.config.TOS_URL ? acceptedTermsOnly : undefined,
           workstreamId: getWorkstreams(),
           statuses: statuses.length
             ? statuses.join(',')
@@ -784,6 +793,10 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     // const queryPeriod = query?.period;
     const queryStatuses = queryString?.match(/(?<=statuses=)[^&]*/i)?.[0];
     // const queryStatuses = query?.statuses;
+    const queryTOS = queryString?.match(/(?<=tos=)[^&]*/i)?.[0];
+    if (queryTOS) {
+      setAcceptedTermsOnly(queryTOS === 'true');
+    }
     if (querySortby) {
       const isStatValid = statOptions.find(item => item.id === querySortby);
       if (isStatValid) setStat(querySortby as IStatsID);
@@ -816,6 +829,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       findDelegate();
     } else if (!ignoreAutoFetch) fetchDelegates(0);
   }, [
+    acceptedTermsOnly,
     stat,
     order,
     period,
@@ -891,6 +905,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       setSelectedProfileData,
       setupFilteringUrl,
       refreshProfileModal,
+      acceptedTermsOnly,
+      handleAcceptedTermsOnly,
     }),
     [
       profileSelected,
@@ -918,6 +934,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       setSelectedProfileData,
       setupFilteringUrl,
       refreshProfileModal,
+      acceptedTermsOnly,
+      handleAcceptedTermsOnly,
     ]
   );
 
