@@ -26,6 +26,7 @@ import { useMixpanel, useToasty } from 'hooks';
 import { api } from 'helpers';
 import { useAccount } from 'wagmi';
 import { useDAO } from './dao';
+import { useWallet } from './wallet';
 
 interface IDelegateProps {
   delegates: IDelegate[];
@@ -55,7 +56,8 @@ interface IDelegateProps {
   selectedTab: IActiveTab;
   searchProfileModal: (
     userToSearch: string,
-    defaultTab?: IActiveTab | undefined
+    defaultTab?: IActiveTab,
+    shouldOpenModal?: boolean
   ) => Promise<void>;
   interests: string[];
   interestFilter: string[];
@@ -402,11 +404,12 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       });
   };
 
-  const { isConnected, address: publicAddress } = useAccount();
+  const { address: publicAddress } = useAccount();
 
   const searchProfileModal = async (
     userToSearch: string,
-    defaultTab?: IActiveTab
+    defaultTab?: IActiveTab,
+    shouldOpenModal = false
   ) => {
     try {
       const axiosClient = await api.get(`/dao/find-delegate`, {
@@ -466,11 +469,12 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
 
       selectProfile(userFound, checkTab ? shouldOpenTab : undefined);
     } catch (error: any) {
-      const newUser =
-        userToSearch.toLowerCase() === publicAddress?.toLowerCase();
-      if (error?.response?.data.error.error === 'Not Found' && newUser) {
+      if (
+        error?.response?.data.error.error === 'Not Found' &&
+        shouldOpenModal
+      ) {
         const userWithoutDelegate: IDelegate = {
-          address: publicAddress,
+          address: userToSearch,
           forumActivity: 0,
           karmaScore: 0,
           discordScore: 0,
