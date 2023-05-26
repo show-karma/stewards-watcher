@@ -90,7 +90,7 @@ export const EditStatement: FC = () => {
       </Flex>
       {daoInfo.config.TOS_URL ? (
         <Checkbox
-          checked={acceptedTerms}
+          defaultChecked={acceptedTerms}
           onChange={event => changeAcceptedTerms(event.target.checked)}
         >
           I accept{' '}

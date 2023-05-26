@@ -70,7 +70,7 @@ interface IDelegateProps {
   selectWorkstream: (index: number) => void;
   setSelectedProfileData: (selected: IDelegate) => void;
   setupFilteringUrl: (
-    paramToSetup: 'sortby' | 'order' | 'period' | 'statuses',
+    paramToSetup: 'sortby' | 'order' | 'period' | 'statuses' | 'tos',
     paramValue: string
   ) => void;
   refreshProfileModal: (tab?: IActiveTab) => Promise<void>;
@@ -459,6 +459,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         workstreams: fetchedDelegate.workstreams,
         status: fetchedDelegate.status,
         userCreatedAt: fetchedDelegate.userCreatedAt,
+        acceptedTOS: fetchedDelegate.acceptedTOS,
       };
 
       const getTab = asPath.split('#');
@@ -689,7 +690,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
   }, [delegates]);
 
   const setupFilteringUrl = (
-    paramToSetup: 'sortby' | 'order' | 'period' | 'statuses',
+    paramToSetup: 'sortby' | 'order' | 'period' | 'statuses' | 'tos',
     paramValue: string
   ) => {
     const queries = router.query;
@@ -700,6 +701,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       order: paramValue,
       period: paramValue,
       statuses: paramValue,
+      tos: paramValue,
     };
     const query = {
       ...queries,
@@ -786,13 +788,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       return;
     }
     const querySortby = queryString?.match(/(?<=sortby=)[^&]*/i)?.[0];
-    // const querySortby = query?.sortby as string;
     const queryOrder = queryString?.match(/(?<=order=)[^&]*/i)?.[0];
-    // const queryOrder = query?.order;
     const queryPeriod = queryString?.match(/(?<=period=)[^&]*/i)?.[0];
-    // const queryPeriod = query?.period;
     const queryStatuses = queryString?.match(/(?<=statuses=)[^&]*/i)?.[0];
-    // const queryStatuses = query?.statuses;
     const queryTOS = queryString?.match(/(?<=tos=)[^&]*/i)?.[0];
     if (queryTOS) {
       setAcceptedTermsOnly(queryTOS === 'true');

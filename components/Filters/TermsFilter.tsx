@@ -1,17 +1,14 @@
-import { Checkbox, Flex } from '@chakra-ui/react';
+import { Flex, Switch } from '@chakra-ui/react';
 import { useDAO, useDelegates } from 'contexts';
 
 export const TermsFilter = () => {
   const { theme } = useDAO();
-  const { acceptedTermsOnly, handleAcceptedTermsOnly } = useDelegates();
+  const { acceptedTermsOnly, handleAcceptedTermsOnly, setupFilteringUrl } =
+    useDelegates();
   return (
     <Flex
-      bgColor={theme.filters.bg}
-      borderWidth="1px"
-      borderColor={theme.filters.border}
-      borderStyle="solid"
+      bgColor="transparent"
       boxShadow={theme.filters.shadow}
-      color={theme.filters.title}
       gap="1"
       fontFamily="heading"
       fontWeight="normal"
@@ -20,23 +17,34 @@ export const TermsFilter = () => {
       minW="min-content"
       w={{ base: 'full', md: 'max-content' }}
       maxW="full"
-      _hover={{
-        bg: theme.filters.activeBg,
-      }}
-      _active={{
-        bg: theme.filters.activeBg,
-      }}
       px="4"
       borderRadius="4px"
       _focus={{}}
       _focusWithin={{}}
+      align="center"
+      justify="center"
     >
-      <Checkbox
-        checked={acceptedTermsOnly}
-        onChange={event => handleAcceptedTermsOnly(event.target.checked)}
+      <Switch
+        color={theme.filters.title}
+        colorScheme="green"
+        defaultChecked={acceptedTermsOnly}
+        onChange={event => {
+          handleAcceptedTermsOnly(event.target.checked);
+          setupFilteringUrl('tos', event.target.checked.toString());
+        }}
+        display="flex"
+        alignItems="center"
+        sx={{
+          '.chakra-switch__track': {
+            bg: acceptedTermsOnly ? '#0FAC85' : '#C8C8C8',
+          },
+          '.chakra-switch__label': {
+            opacity: acceptedTermsOnly ? 1 : 0.5,
+          },
+        }}
       >
-        Accepted terms
-      </Checkbox>
+        Has accepted terms
+      </Switch>
     </Flex>
   );
 };

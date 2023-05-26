@@ -1,4 +1,10 @@
-import React, { useContext, createContext, useMemo, useState } from 'react';
+import React, {
+  useContext,
+  createContext,
+  useMemo,
+  useState,
+  useEffect,
+} from 'react';
 
 import { useIsMounted } from 'hooks/useIsMounted';
 import { useToasty } from 'hooks';
@@ -72,6 +78,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     refreshProfileModal,
     fetchDelegates,
   } = useDelegates();
+
   const { daoInfo } = useDAO();
   const { address } = useAccount();
   const { authToken, isAuthenticated, isDaoAdmin } = useAuth();
@@ -192,7 +199,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     });
   };
 
-  const changeAcceptedTerms = async (choice: boolean) => {
+  const sendAcceptedTems = async () => {
     try {
       const authorizedAPI = axios.create({
         timeout: 30000,
@@ -203,13 +210,23 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
         },
       });
       await authorizedAPI.put(
-        API_ROUTES.DELEGATE.TERMS_OF_SERVICE(daoInfo.config.DAO_KARMA_ID)
+        API_ROUTES.DELEGATE.TERMS_OF_SERVICE(daoInfo.config.DAO_KARMA_ID),
+        {
+          acceptedTOS: acceptedTerms,
+        }
       );
-      setAcceptedTerms(choice);
     } catch (error) {
       console.error(error);
     }
   };
+
+  const changeAcceptedTerms = (choice: boolean) => {
+    setAcceptedTerms(choice);
+  };
+
+  useMemo(() => {
+    changeAcceptedTerms(profileSelected?.acceptedTOS ?? false);
+  }, [profileSelected?.acceptedTOS]);
 
   useMemo(() => {
     if (profileSelected) {
@@ -236,6 +253,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     const fetchedDelegatePitch = await hasDelegatePitch();
     let hasError = false;
     let actualError = '';
+
     if (
       newInterests.value !== interests.value ||
       newStatement.value !== statement.value
@@ -260,7 +278,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
               discourseHandle: '0',
             }
           );
-        } else {
+        } else if (newInterests.value || newStatement) {
           await authorizedAPI.post(
             `${KARMA_API.base_url}/forum-user/${daoInfo.config.DAO_KARMA_ID}/delegate-pitch/${profileSelected?.address}`,
             {
@@ -285,6 +303,8 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
         actualError = error.response.data.error.message;
       }
     }
+
+    await sendAcceptedTems();
 
     if (
       profileSelected?.address !== newName ||
