@@ -18,7 +18,8 @@ const LoginMenu = () => {
   const { address } = useAccount();
   const { searchProfileModal } = useDelegates();
 
-  const openProfile = () => address && searchProfileModal(address, 'statement');
+  const openProfile = () =>
+    address && searchProfileModal(address, 'statement', true);
 
   return (
     <Menu isLazy placement="bottom-end">
