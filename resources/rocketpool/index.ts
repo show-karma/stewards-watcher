@@ -34,7 +34,7 @@ const config: IDAOConfig = {
   DAO_DELEGATE_FUNCTION_ARGS: [getIdBySnapshotId('rocketpool-dao.eth')],
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
-  EXCLUDED_CARD_FIELDS: [],
+  EXCLUDED_CARD_FIELDS: ['discordScore', 'onChainVotesPct'],
   ENABLE_DELEGATE_TRACKER: true,
 };
 
