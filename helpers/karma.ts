@@ -13,5 +13,9 @@ export const API_ROUTES = {
   DELEGATE: {
     TERMS_OF_SERVICE: (daoName: string) =>
       `${KARMA_API.base_url}/delegate/${daoName}/terms-of-service`,
+    TERMS_OF_AGREEMENT: (daoName: string) =>
+      `${KARMA_API.base_url}/delegate/${daoName}/terms-of-agreement`,
+    GET_TERMS_OF_SERVICE: (daoName: string, address: string) =>
+      `${KARMA_API.base_url}/delegate/${daoName}/terms-of-agreement/${address}`,
   },
 };

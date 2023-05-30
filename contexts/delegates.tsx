@@ -72,7 +72,7 @@ interface IDelegateProps {
   selectWorkstream: (index: number) => void;
   setSelectedProfileData: (selected: IDelegate) => void;
   setupFilteringUrl: (
-    paramToSetup: 'sortby' | 'order' | 'period' | 'statuses' | 'tos',
+    paramToSetup: 'sortby' | 'order' | 'period' | 'statuses' | 'toa',
     paramValue: string
   ) => void;
   refreshProfileModal: (tab?: IActiveTab) => Promise<void>;
@@ -412,12 +412,11 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       });
   };
 
-  const { address: publicAddress } = useAccount();
+  const { address: publicAddress, isReconnecting } = useAccount();
 
   const searchProfileModal = async (
     userToSearch: string,
-    defaultTab?: IActiveTab,
-    shouldOpenModal = false
+    defaultTab?: IActiveTab
   ) => {
     try {
       const axiosClient = await api.get(`/dao/find-delegate`, {
@@ -473,45 +472,56 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         'withdraw',
       ];
       if (userFound.aboutMe) tabs.push('aboutme');
+      if (daoInfo.config.DEFAULT_TOA) tabs.push('toa');
       const checkTab = tabs.includes(getTab[1] as IActiveTab);
       const shouldOpenTab = defaultTab || (getTab[1] as IActiveTab);
 
       selectProfile(userFound, checkTab ? shouldOpenTab : undefined);
     } catch (error: any) {
-      if (
-        error?.response?.data.error.error === 'Not Found' &&
-        shouldOpenModal
-      ) {
-        const userWithoutDelegate: IDelegate = {
-          address: userToSearch,
-          forumActivity: 0,
-          karmaScore: 0,
-          discordScore: 0,
-          voteParticipation: {
-            onChain: 0,
-            offChain: 0,
-          },
-          status: 'active',
-        };
-        const getTab = asPath.split('#');
-        const tabs: IActiveTab[] = [
-          'votinghistory',
-          'statement',
-          'handles',
-          'withdraw',
-        ];
-        const checkTab = tabs.includes(getTab[1] as IActiveTab);
-        const shouldOpenTab = defaultTab || (getTab[1] as IActiveTab);
+      const checkIfUserNotFound = () => {
+        if (
+          error?.response?.data.error.error === 'Not Found' &&
+          publicAddress?.toLowerCase() === userToSearch.toLowerCase()
+        ) {
+          const userWithoutDelegate: IDelegate = {
+            address: userToSearch,
+            forumActivity: 0,
+            karmaScore: 0,
+            discordScore: 0,
+            voteParticipation: {
+              onChain: 0,
+              offChain: 0,
+            },
+            status: 'active',
+          };
+          const getTab = asPath.split('#');
+          const tabs: IActiveTab[] = [
+            'votinghistory',
+            'statement',
+            'handles',
+            'withdraw',
+          ];
+          const checkTab = tabs.includes(getTab[1] as IActiveTab);
+          const shouldOpenTab = defaultTab || (getTab[1] as IActiveTab);
 
-        selectProfile(
-          userWithoutDelegate,
-          checkTab ? shouldOpenTab : undefined
-        );
-      } else {
-        toast({
-          title: `We couldn't find the contributor page`,
-        });
+          selectProfile(
+            userWithoutDelegate,
+            checkTab ? shouldOpenTab : undefined
+          );
+        } else {
+          toast({
+            title: `We couldn't find the contributor page`,
+          });
+        }
+      };
+
+      if (isReconnecting && !publicAddress) {
+        setTimeout(() => {
+          checkIfUserNotFound();
+        }, 2000);
+        return;
       }
+      checkIfUserNotFound();
     }
   };
 
@@ -694,7 +704,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
   }, [delegates]);
 
   const setupFilteringUrl = (
-    paramToSetup: 'sortby' | 'order' | 'period' | 'statuses' | 'tos',
+    paramToSetup: 'sortby' | 'order' | 'period' | 'statuses' | 'toa',
     paramValue: string
   ) => {
     const queries = router.query;
@@ -705,8 +715,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       order: paramValue,
       period: paramValue,
       statuses: paramValue,
-      tos: paramValue,
+      toa: paramValue,
     };
+
     const query = {
       ...queries,
       [paramToSetup]: filters[paramToSetup],

@@ -30,7 +30,7 @@ export const TermsFilter = () => {
         defaultChecked={acceptedTermsOnly}
         onChange={event => {
           handleAcceptedTermsOnly(event.target.checked);
-          setupFilteringUrl('tos', event.target.checked.toString());
+          setupFilteringUrl('toa', event.target.checked.toString());
         }}
         display="flex"
         alignItems="center"
@@ -43,7 +43,7 @@ export const TermsFilter = () => {
           },
         }}
       >
-        Has accepted terms
+        Offering Terms and Conditions
       </Switch>
     </Flex>
   );

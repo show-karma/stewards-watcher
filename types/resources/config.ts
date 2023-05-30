@@ -51,6 +51,7 @@ export interface IDAOConfig {
   }[];
   TOS_URL?: string;
   SHOULD_NOT_SHOW?: 'statement' | 'stats' | 'handles';
+  DEFAULT_TOA?: string;
   SORT_OPTIONS?: IStats[];
   EXCLUDED_CARD_FIELDS: IStats[];
   ENABLE_DELEGATE_TRACKER?: boolean;

@@ -52,6 +52,16 @@ export const NavigatorRow: FC<INavigatorRow> = ({
         >
           Statement
         </NavButton>
+        {daoInfo.config.DEFAULT_TOA ? (
+          <NavButton
+            isActive={isActiveTab('toa')}
+            onClick={() => changeTab('toa')}
+            borderTopRightRadius={isSamePerson || isDaoAdmin ? '0' : '5px'}
+            minW="max-content"
+          >
+            Terms of Agreement
+          </NavButton>
+        ) : null}
         <NavButton
           isActive={isActiveTab('votinghistory')}
           onClick={() => changeTab('votinghistory')}

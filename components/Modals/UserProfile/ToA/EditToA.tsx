@@ -1,4 +1,4 @@
-import { Checkbox, Flex, Link } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 import { useDAO, useEditProfile } from 'contexts';
 import { FC } from 'react';
 import ReactQuill from 'react-quill';
@@ -8,15 +8,9 @@ const modules = {
   toolbar: [['bold', 'italic', 'underline', 'strike'], ['link'], ['clean']],
 };
 
-export const EditStatement: FC = () => {
-  const { theme, daoInfo } = useDAO();
-  const {
-    newStatement,
-    editStatementText,
-    // acceptedTerms,
-    // changeAcceptedTerms,
-  } = useEditProfile();
-  const newStatementValue = newStatement.value as string;
+export const EditToA: FC = () => {
+  const { theme } = useDAO();
+  const { changeToA, newToA } = useEditProfile();
 
   const editorStyle = {
     '.quill': { minHeight: '200px' },
@@ -83,25 +77,13 @@ export const EditStatement: FC = () => {
       >
         <ReactQuill
           theme="snow"
-          value={newStatementValue}
-          onChange={editStatementText}
+          value={newToA}
+          onChange={changeToA}
           modules={modules}
         />
       </Flex>
-      {/* {daoInfo.config.TOS_URL ? (
-        <Checkbox
-          defaultChecked={acceptedTerms}
-          onChange={event => changeAcceptedTerms(event.target.checked)}
-        >
-          I accept{' '}
-          <Link href={daoInfo.config.TOS_URL} isExternal textDecor="underline">
-            Terms and Conditions
-          </Link>
-          .
-        </Checkbox>
-      ) : null} */}
     </Flex>
   );
 };
 
-export default EditStatement;
+export default EditToA;
