@@ -52,7 +52,7 @@ export const NavigatorRow: FC<INavigatorRow> = ({
         >
           Statement
         </NavButton>
-        {daoInfo.config.DEFAULT_TOA ? (
+        {daoInfo.config.DAO_SUPPORTS_TOA ? (
           <NavButton
             isActive={isActiveTab('toa')}
             onClick={() => changeTab('toa')}

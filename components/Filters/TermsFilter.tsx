@@ -3,7 +3,7 @@ import { useDAO, useDelegates } from 'contexts';
 
 export const TermsFilter = () => {
   const { theme } = useDAO();
-  const { acceptedTermsOnly, handleAcceptedTermsOnly, setupFilteringUrl } =
+  const { delegateOffersToA, handleDelegateOffersToA, setupFilteringUrl } =
     useDelegates();
   return (
     <Flex
@@ -27,19 +27,19 @@ export const TermsFilter = () => {
       <Switch
         color={theme.filters.title}
         colorScheme="green"
-        defaultChecked={acceptedTermsOnly}
+        defaultChecked={delegateOffersToA}
         onChange={event => {
-          handleAcceptedTermsOnly(event.target.checked);
+          handleDelegateOffersToA(event.target.checked);
           setupFilteringUrl('toa', event.target.checked.toString());
         }}
         display="flex"
         alignItems="center"
         sx={{
           '.chakra-switch__track': {
-            bg: acceptedTermsOnly ? '#0FAC85' : '#C8C8C8',
+            bg: delegateOffersToA ? '#0FAC85' : '#C8C8C8',
           },
           '.chakra-switch__label': {
-            opacity: acceptedTermsOnly ? 1 : 0.5,
+            opacity: delegateOffersToA ? 1 : 0.5,
           },
         }}
       >

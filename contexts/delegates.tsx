@@ -78,6 +78,8 @@ interface IDelegateProps {
   refreshProfileModal: (tab?: IActiveTab) => Promise<void>;
   handleAcceptedTermsOnly: (value: boolean) => void;
   acceptedTermsOnly: boolean;
+  handleDelegateOffersToA: (value: boolean) => void;
+  delegateOffersToA: boolean;
 }
 
 export const DelegatesContext = createContext({} as IDelegateProps);
@@ -121,6 +123,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
   const [hasMore, setHasMore] = useState(false);
   const [hasInitiated, setInitiated] = useState(false);
   const [acceptedTermsOnly, setAcceptedTermsOnly] = useState(false);
+  const [delegateOffersToA, setDelegateOffersToA] = useState(false);
 
   const prepareStatOptions = () => {
     const sortedDefaultOptions = statDefaultOptions.sort(element =>
@@ -236,6 +239,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
   const handleAcceptedTermsOnly = (value: boolean) => {
     setAcceptedTermsOnly(value);
   };
+  const handleDelegateOffersToA = (value: boolean) => {
+    setDelegateOffersToA(value);
+  };
 
   const fetchDelegates = async (_offset = offset) => {
     setLoading(true);
@@ -252,6 +258,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           period,
           pageSize: 10,
           tos: daoInfo.config.TOS_URL ? acceptedTermsOnly : undefined,
+          toa: daoInfo.config.DAO_SUPPORTS_TOA ? delegateOffersToA : undefined,
           workstreamId: getWorkstreams(),
           statuses: statuses.length
             ? statuses.join(',')
@@ -472,7 +479,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         'withdraw',
       ];
       if (userFound.aboutMe) tabs.push('aboutme');
-      if (daoInfo.config.DEFAULT_TOA) tabs.push('toa');
+      if (daoInfo.config.DAO_SUPPORTS_TOA) tabs.push('toa');
       const checkTab = tabs.includes(getTab[1] as IActiveTab);
       const shouldOpenTab = defaultTab || (getTab[1] as IActiveTab);
 
@@ -605,6 +612,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           period,
           pageSize: 10,
           tos: daoInfo.config.TOS_URL ? acceptedTermsOnly : undefined,
+          toa: daoInfo.config.DAO_SUPPORTS_TOA ? delegateOffersToA : undefined,
           workstreamId: getWorkstreams(),
           statuses: statuses.length
             ? statuses.join(',')
@@ -851,6 +859,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     interestFilter,
     workstreamsFilter,
     hasInitiated,
+    delegateOffersToA,
   ]);
 
   useEffect(() => {
@@ -920,6 +929,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       refreshProfileModal,
       acceptedTermsOnly,
       handleAcceptedTermsOnly,
+      delegateOffersToA,
+      handleDelegateOffersToA,
     }),
     [
       profileSelected,
@@ -949,6 +960,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       refreshProfileModal,
       acceptedTermsOnly,
       handleAcceptedTermsOnly,
+      delegateOffersToA,
+      handleDelegateOffersToA,
     ]
   );
 
