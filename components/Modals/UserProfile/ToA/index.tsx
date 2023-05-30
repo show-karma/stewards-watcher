@@ -1,4 +1,4 @@
-import { Flex, Skeleton, SkeletonText, Text } from '@chakra-ui/react';
+import { Flex, SkeletonText, Text } from '@chakra-ui/react';
 import { FC } from 'react';
 import { useDAO, useEditProfile } from 'contexts';
 import dynamic from 'next/dynamic';
@@ -81,7 +81,6 @@ const TermsofAgreementCases: FC<ITermsofAgreementCases> = ({
   if (isLoading)
     return <SkeletonText w="full" mt="4" noOfLines={4} spacing="4" />;
   if (isEditing) return <EditToA />;
-  // if (!delegateToA || !delegateToA.length) return <NoStatement />;
   return <TextSection delegateToA={delegateToA} />;
 };
 

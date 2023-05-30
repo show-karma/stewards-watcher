@@ -26,7 +26,6 @@ import { useMixpanel, useToasty } from 'hooks';
 import { api } from 'helpers';
 import { useAccount } from 'wagmi';
 import { useDAO } from './dao';
-import { useWallet } from './wallet';
 
 interface IDelegateProps {
   delegates: IDelegate[];
