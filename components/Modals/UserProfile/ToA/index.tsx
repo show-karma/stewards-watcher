@@ -4,6 +4,7 @@ import { useDAO, useEditProfile } from 'contexts';
 import dynamic from 'next/dynamic';
 import parse from 'html-react-parser';
 import DOMPurify from 'dompurify';
+import { NoToA } from './NoToA';
 
 interface ITextSection {
   delegateToA: any;
@@ -81,11 +82,12 @@ const TermsofAgreementCases: FC<ITermsofAgreementCases> = ({
   if (isLoading)
     return <SkeletonText w="full" mt="4" noOfLines={4} spacing="4" />;
   if (isEditing) return <EditToA />;
+  if (!delegateToA || !delegateToA?.length) return <NoToA />;
   return <TextSection delegateToA={delegateToA} />;
 };
 
 export const ToA: FC = () => {
-  const { theme, daoInfo } = useDAO();
+  const { theme } = useDAO();
   const { isEditing, delegateToA, isLoadingToA } = useEditProfile();
 
   return (
@@ -127,7 +129,7 @@ export const ToA: FC = () => {
         <TermsofAgreementCases
           isEditing={isEditing}
           isLoading={isLoadingToA}
-          delegateToA={delegateToA || daoInfo.config.DEFAULT_TOA}
+          delegateToA={delegateToA}
         />
       </Flex>
     </Flex>
