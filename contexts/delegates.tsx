@@ -418,12 +418,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       });
   };
 
-  const {
-    address: publicAddress,
-    isReconnecting,
-    isConnecting,
-    isConnected,
-  } = useAccount();
+  const { address: publicAddress, isConnected } = useAccount();
 
   const [shouldOpenModal, setShouldOpenModal] = useState(false);
   const [profileSearching, setProfileSearching] = useState<string | undefined>(
@@ -440,6 +435,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       setShouldOpenModal(true);
       return;
     }
+
     if (
       error === 'Not Found' &&
       publicAddress?.toLowerCase() === userToSearch.toLowerCase() &&
@@ -472,14 +468,14 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         title: `We couldn't find the contributor page`,
       });
     }
-    setShouldOpenModal(false);
   };
 
   useEffect(() => {
-    if (publicAddress && profileSearching) {
+    if (publicAddress && profileSearching && shouldOpenModal) {
+      setShouldOpenModal(false);
       checkIfUserNotFound('Not Found', profileSearching);
     }
-  }, [publicAddress, isReconnecting, isConnecting, shouldOpenModal]);
+  }, [publicAddress, isConnected]);
 
   const searchProfileModal = async (
     userToSearch: string,
