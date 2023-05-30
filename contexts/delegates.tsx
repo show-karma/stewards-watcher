@@ -55,8 +55,7 @@ interface IDelegateProps {
   selectedTab: IActiveTab;
   searchProfileModal: (
     userToSearch: string,
-    defaultTab?: IActiveTab,
-    shouldOpenModal?: boolean
+    defaultTab?: IActiveTab
   ) => Promise<void>;
   interests: string[];
   interestFilter: string[];
@@ -420,6 +419,50 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
 
   const { address: publicAddress, isReconnecting } = useAccount();
 
+  const checkIfUserNotFound = (
+    error: string,
+    userToSearch: string,
+    defaultTab?: IActiveTab
+  ) => {
+    if (isReconnecting && !publicAddress) {
+      setTimeout(() => {
+        checkIfUserNotFound(error, userToSearch, defaultTab);
+      }, 2000);
+      return;
+    }
+    if (
+      error === 'Not Found' &&
+      publicAddress?.toLowerCase() === userToSearch.toLowerCase()
+    ) {
+      const userWithoutDelegate: IDelegate = {
+        address: userToSearch,
+        forumActivity: 0,
+        karmaScore: 0,
+        discordScore: 0,
+        voteParticipation: {
+          onChain: 0,
+          offChain: 0,
+        },
+        status: 'active',
+      };
+      const getTab = asPath.split('#');
+      const tabs: IActiveTab[] = [
+        'votinghistory',
+        'statement',
+        'handles',
+        'withdraw',
+      ];
+      const checkTab = tabs.includes(getTab[1] as IActiveTab);
+      const shouldOpenTab = defaultTab || (getTab[1] as IActiveTab);
+
+      selectProfile(userWithoutDelegate, checkTab ? shouldOpenTab : undefined);
+    } else {
+      toast({
+        title: `We couldn't find the contributor page`,
+      });
+    }
+  };
+
   const searchProfileModal = async (
     userToSearch: string,
     defaultTab?: IActiveTab
@@ -484,52 +527,11 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
 
       selectProfile(userFound, checkTab ? shouldOpenTab : undefined);
     } catch (error: any) {
-      const checkIfUserNotFound = () => {
-        if (
-          error?.response?.data.error.error === 'Not Found' &&
-          publicAddress?.toLowerCase() === userToSearch.toLowerCase()
-        ) {
-          const userWithoutDelegate: IDelegate = {
-            address: userToSearch,
-            forumActivity: 0,
-            karmaScore: 0,
-            discordScore: 0,
-            voteParticipation: {
-              onChain: 0,
-              offChain: 0,
-            },
-            status: 'active',
-          };
-          const getTab = asPath.split('#');
-          const tabs: IActiveTab[] = [
-            'votinghistory',
-            'statement',
-            'handles',
-            'withdraw',
-          ];
-          const checkTab = tabs.includes(getTab[1] as IActiveTab);
-          const shouldOpenTab = defaultTab || (getTab[1] as IActiveTab);
-
-          selectProfile(
-            userWithoutDelegate,
-            checkTab ? shouldOpenTab : undefined
-          );
-        } else {
-          toast({
-            title: `We couldn't find the contributor page`,
-          });
-        }
-      };
-
-      if (isReconnecting && !publicAddress) {
-        setInterval(() => {
-          if (publicAddress) {
-            checkIfUserNotFound();
-          }
-        }, 2000);
-        return;
-      }
-      checkIfUserNotFound();
+      checkIfUserNotFound(
+        error?.response?.data.error.error,
+        userToSearch,
+        defaultTab
+      );
     }
   };
 
