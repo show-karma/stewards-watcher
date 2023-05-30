@@ -8,6 +8,7 @@ import React, {
   useState,
   useMemo,
   useEffect,
+  useCallback,
 } from 'react';
 import { useRouter } from 'next/router';
 import {
@@ -417,22 +418,32 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       });
   };
 
-  const { address: publicAddress, isReconnecting } = useAccount();
+  const {
+    address: publicAddress,
+    isReconnecting,
+    isConnecting,
+    isConnected,
+  } = useAccount();
+
+  const [shouldOpenModal, setShouldOpenModal] = useState(false);
+  const [profileSearching, setProfileSearching] = useState<string | undefined>(
+    undefined
+  );
 
   const checkIfUserNotFound = (
     error: string,
     userToSearch: string,
     defaultTab?: IActiveTab
   ) => {
-    if (isReconnecting && !publicAddress) {
-      setTimeout(() => {
-        checkIfUserNotFound(error, userToSearch, defaultTab);
-      }, 2000);
+    if (!publicAddress) {
+      setProfileSearching(userToSearch);
+      setShouldOpenModal(true);
       return;
     }
     if (
       error === 'Not Found' &&
-      publicAddress?.toLowerCase() === userToSearch.toLowerCase()
+      publicAddress?.toLowerCase() === userToSearch.toLowerCase() &&
+      isConnected
     ) {
       const userWithoutDelegate: IDelegate = {
         address: userToSearch,
@@ -461,7 +472,14 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         title: `We couldn't find the contributor page`,
       });
     }
+    setShouldOpenModal(false);
   };
+
+  useEffect(() => {
+    if (publicAddress && profileSearching) {
+      checkIfUserNotFound('Not Found', profileSearching);
+    }
+  }, [publicAddress, isReconnecting, isConnecting, shouldOpenModal]);
 
   const searchProfileModal = async (
     userToSearch: string,
