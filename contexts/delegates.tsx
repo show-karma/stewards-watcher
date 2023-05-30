@@ -522,8 +522,10 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       };
 
       if (isReconnecting && !publicAddress) {
-        setTimeout(() => {
-          checkIfUserNotFound();
+        setInterval(() => {
+          if (publicAddress) {
+            checkIfUserNotFound();
+          }
         }, 2000);
         return;
       }

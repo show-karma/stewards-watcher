@@ -43,7 +43,7 @@ export const TermsFilter = () => {
           },
         }}
       >
-        Offering Terms and Conditions
+        Offer Delegation Agreement
       </Switch>
     </Flex>
   );

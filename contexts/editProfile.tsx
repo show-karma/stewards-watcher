@@ -338,7 +338,6 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
         actualError = error.response.data.error.message;
       }
     }
-    console.log(newToA);
     if (newToA !== delegateToA && profileSelected?.address) {
       try {
         const authorizedAPI = axios.create({

@@ -256,6 +256,8 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
                   _focusVisible={{}}
                   _focusWithin={{}}
                   onClick={() => handleAuth()}
+                  border="1px solid"
+                  borderColor={theme.modal.header.title}
                 >
                   Edit profile
                 </Button>

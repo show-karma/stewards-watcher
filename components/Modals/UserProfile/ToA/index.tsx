@@ -106,14 +106,14 @@ export const ToA: FC = () => {
             fontWeight="medium"
             color={theme.modal.statement.sidebar.section}
           >
-            Terms of Agreement
+            Delegation Agreement
           </Text>
           <Text
             fontSize={{ base: 'md', lg: 'lg' }}
             fontWeight="normal"
             color={theme.modal.statement.sidebar.item.border}
           >
-            Add a terms of agreement for people who delegate to you. This is
+            Add a delegation agreement for people who delegate to you. This is
             optional.
           </Text>
         </Flex>

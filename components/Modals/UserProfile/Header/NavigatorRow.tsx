@@ -59,7 +59,7 @@ export const NavigatorRow: FC<INavigatorRow> = ({
             borderTopRightRadius={isSamePerson || isDaoAdmin ? '0' : '5px'}
             minW="max-content"
           >
-            Terms of Agreement
+            Delegation Agreement
           </NavButton>
         ) : null}
         <NavButton
