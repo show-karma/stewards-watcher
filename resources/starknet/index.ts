@@ -6,7 +6,7 @@ import DEFAULT_TOA from './default_toa';
 const config: IDAOConfig = {
   DAO: 'Starknet',
   DAO_DESCRIPTION: `Starknet delegates play a vital role in decentralizing the upgrade process for Starknet mainnet. Delegates vote to approve protocol upgrades before they go live on mainnet. Read more about delegate responsibilities here.`,
-  DAO_SUBDESCRIPTION: `This site helps token holders choose delegates and boost transparency by displaying delegate contribution to indicate their involvement in the DAO.`,
+  DAO_SUBDESCRIPTION: `This site helps token holders choose delegates and boost transparency by displaying delegate contribution.`,
   DAO_URL: 'https://starkware.co/starknet',
   GOVERNANCE_FORUM: 'https://community.starknet.io/',
   DAO_KARMA_ID: 'starknet',
