@@ -1,4 +1,3 @@
-import { useDisclosure } from '@chakra-ui/react';
 import axios from 'axios';
 import { cookieNames } from 'helpers';
 import jwtDecode from 'jwt-decode';
@@ -57,11 +56,11 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
   const { signMessageAsync, isLoading: isLoadingSign } = useSignMessage();
 
   const disconnect = async () => {
+    cookies.remove(cookieNames.cookieAuth, { path: '/' });
+    cookies.remove(cookieNames.daoAdmin, { path: '/' });
     setToken(null);
     setIsAuthenticated(false);
     disconnectWallet();
-    cookies.remove(cookieNames.cookieAuth);
-    cookies.remove(cookieNames.daoAdmin);
     window.location.reload();
   };
 
@@ -107,7 +106,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const saveToken = (token: string | null) => {
     setToken(token);
-    if (token) cookies.set(cookieNames.cookieAuth, token);
+    if (token) cookies.set(cookieNames.cookieAuth, token, { path: '/' });
     setIsAuthenticated(true);
   };
 
@@ -128,7 +127,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
         ? daosManaged.includes(daoInfo.config.DAO_KARMA_ID)
         : false;
       setIsDaoAdmin(daoAdmin);
-      cookies.set(cookieNames.daoAdmin, daoAdmin ? 1 : 0);
+      cookies.set(cookieNames.daoAdmin, daoAdmin ? 1 : 0, { path: '/' });
 
       return token;
     } catch (error) {
@@ -152,7 +151,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
       const token = await getAccountToken(address, signedMessage);
       if (token) saveToken(token);
       delegateLoginOnClose();
-      searchProfileModal(address, 'statement', true);
+      searchProfileModal(address, 'statement');
       return true;
     } catch (error) {
       console.log(error);
@@ -171,10 +170,14 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const savedToken = cookies.get(cookieNames.cookieAuth);
-      const isValid = isTokenValid(savedToken);
-      const daoAdmin = cookies.get(cookieNames.daoAdmin);
-      setIsDaoAdmin(!!+daoAdmin);
-      if (savedToken && isValid) saveToken(savedToken);
+      if (savedToken) {
+        const isValid = isTokenValid(savedToken);
+        if (isValid) {
+          saveToken(savedToken);
+        }
+        const daoAdmin = cookies.get(cookieNames.daoAdmin);
+        setIsDaoAdmin(!!+daoAdmin);
+      }
     }
   }, []);
 

@@ -70,6 +70,7 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
       setVotes('0');
       return;
     }
+
     const amountsBN = voteAmounts.map(amount => {
       if (amount) return BigNumber.from(amount).toString();
       return '0';

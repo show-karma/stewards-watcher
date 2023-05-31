@@ -31,4 +31,5 @@ export interface IDelegate {
     postId: number;
   };
   workstreams?: { id: number; name: string; description: string }[];
+  acceptedTOS?: boolean;
 }

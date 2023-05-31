@@ -1,6 +1,7 @@
 import { IDAOConfig, IDAOTheme } from 'types';
 import { getIdBySnapshotId } from 'utils';
 import { mainnet } from 'wagmi/chains';
+import DEFAULT_TOA from './default_toa';
 
 const config: IDAOConfig = {
   DAO: 'Starknet',
@@ -43,6 +44,8 @@ const config: IDAOConfig = {
     'delegatorCount',
   ],
   ENABLE_DELEGATE_TRACKER: true,
+  DAO_SUPPORTS_TOA: true,
+  DEFAULT_TOA,
 };
 
 const dark: IDAOTheme = {

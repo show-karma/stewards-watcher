@@ -98,7 +98,6 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
     isLoading,
     fetchNextDelegates,
     hasMore,
-
     profileSelected,
     searchProfileModal,
     interestFilter,

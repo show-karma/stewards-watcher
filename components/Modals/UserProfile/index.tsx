@@ -29,6 +29,9 @@ const Statement = dynamic(() =>
     module => module.Statement
   )
 );
+const ToA = dynamic(() =>
+  import('components/Modals/UserProfile/ToA').then(module => module.ToA)
+);
 
 const Handles = dynamic(() =>
   import('components/Modals/UserProfile/Handles').then(module => module.Handles)
@@ -48,6 +51,9 @@ const Tab: FC<ITab> = ({ activeTab, profile }) => {
         <VotingHistory profile={profile} />
       </VotesProvider>
     );
+  }
+  if (activeTab === 'toa') {
+    return <ToA />;
   }
   if (activeTab === 'handles') {
     return <Handles />;
