@@ -62,4 +62,5 @@ export interface IDelegateFromAPI {
     name: string;
     description: string;
   }[];
+  acceptedTOS?: boolean;
 }

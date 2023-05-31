@@ -8,6 +8,7 @@ import React, {
   useState,
   useMemo,
   useEffect,
+  useCallback,
 } from 'react';
 import { useRouter } from 'next/router';
 import {
@@ -55,7 +56,7 @@ interface IDelegateProps {
   selectedTab: IActiveTab;
   searchProfileModal: (
     userToSearch: string,
-    defaultTab?: IActiveTab | undefined
+    defaultTab?: IActiveTab
   ) => Promise<void>;
   interests: string[];
   interestFilter: string[];
@@ -70,10 +71,14 @@ interface IDelegateProps {
   selectWorkstream: (index: number) => void;
   setSelectedProfileData: (selected: IDelegate) => void;
   setupFilteringUrl: (
-    paramToSetup: 'sortby' | 'order' | 'period' | 'statuses',
+    paramToSetup: 'sortby' | 'order' | 'period' | 'statuses' | 'toa',
     paramValue: string
   ) => void;
   refreshProfileModal: (tab?: IActiveTab) => Promise<void>;
+  handleAcceptedTermsOnly: (value: boolean) => void;
+  acceptedTermsOnly: boolean;
+  handleDelegateOffersToA: (value: boolean) => void;
+  delegateOffersToA: boolean;
 }
 
 export const DelegatesContext = createContext({} as IDelegateProps);
@@ -116,6 +121,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
   const [hasMore, setHasMore] = useState(false);
   const [hasInitiated, setInitiated] = useState(false);
+  const [acceptedTermsOnly, setAcceptedTermsOnly] = useState(false);
+  const [delegateOffersToA, setDelegateOffersToA] = useState(false);
 
   const prepareStatOptions = () => {
     const sortedDefaultOptions = statDefaultOptions.sort(element =>
@@ -228,6 +235,13 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     return undefined;
   };
 
+  const handleAcceptedTermsOnly = (value: boolean) => {
+    setAcceptedTermsOnly(value);
+  };
+  const handleDelegateOffersToA = (value: boolean) => {
+    setDelegateOffersToA(value);
+  };
+
   const fetchDelegates = async (_offset = offset) => {
     setLoading(true);
     try {
@@ -242,6 +256,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           field: stat,
           period,
           pageSize: 10,
+          tos: daoInfo.config.TOS_URL ? acceptedTermsOnly : undefined,
+          toa: daoInfo.config.DAO_SUPPORTS_TOA ? delegateOffersToA : undefined,
           workstreamId: getWorkstreams(),
           statuses: statuses.length
             ? statuses.join(',')
@@ -402,7 +418,64 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       });
   };
 
-  const { isConnected, address: publicAddress } = useAccount();
+  const { address: publicAddress, isConnected } = useAccount();
+
+  const [shouldOpenModal, setShouldOpenModal] = useState(false);
+  const [profileSearching, setProfileSearching] = useState<string | undefined>(
+    undefined
+  );
+
+  const checkIfUserNotFound = (
+    error: string,
+    userToSearch: string,
+    defaultTab?: IActiveTab
+  ) => {
+    if (!publicAddress) {
+      setProfileSearching(userToSearch);
+      setShouldOpenModal(true);
+      return;
+    }
+
+    if (
+      error === 'Not Found' &&
+      publicAddress?.toLowerCase() === userToSearch.toLowerCase() &&
+      isConnected
+    ) {
+      const userWithoutDelegate: IDelegate = {
+        address: userToSearch,
+        forumActivity: 0,
+        karmaScore: 0,
+        discordScore: 0,
+        voteParticipation: {
+          onChain: 0,
+          offChain: 0,
+        },
+        status: 'active',
+      };
+      const getTab = asPath.split('#');
+      const tabs: IActiveTab[] = [
+        'votinghistory',
+        'statement',
+        'handles',
+        'withdraw',
+      ];
+      const checkTab = tabs.includes(getTab[1] as IActiveTab);
+      const shouldOpenTab = defaultTab || (getTab[1] as IActiveTab);
+
+      selectProfile(userWithoutDelegate, checkTab ? shouldOpenTab : undefined);
+    } else {
+      toast({
+        title: `We couldn't find the contributor page`,
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (publicAddress && profileSearching && shouldOpenModal) {
+      setShouldOpenModal(false);
+      checkIfUserNotFound('Not Found', profileSearching);
+    }
+  }, [publicAddress, isConnected]);
 
   const searchProfileModal = async (
     userToSearch: string,
@@ -451,6 +524,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         workstreams: fetchedDelegate.workstreams,
         status: fetchedDelegate.status,
         userCreatedAt: fetchedDelegate.userCreatedAt,
+        acceptedTOS: fetchedDelegate.acceptedTOS,
       };
 
       const getTab = asPath.split('#');
@@ -461,44 +535,17 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         'withdraw',
       ];
       if (userFound.aboutMe) tabs.push('aboutme');
+      if (daoInfo.config.DAO_SUPPORTS_TOA) tabs.push('toa');
       const checkTab = tabs.includes(getTab[1] as IActiveTab);
       const shouldOpenTab = defaultTab || (getTab[1] as IActiveTab);
 
       selectProfile(userFound, checkTab ? shouldOpenTab : undefined);
     } catch (error: any) {
-      const newUser =
-        userToSearch.toLowerCase() === publicAddress?.toLowerCase();
-      if (error?.response?.data.error.error === 'Not Found' && newUser) {
-        const userWithoutDelegate: IDelegate = {
-          address: publicAddress,
-          forumActivity: 0,
-          karmaScore: 0,
-          discordScore: 0,
-          voteParticipation: {
-            onChain: 0,
-            offChain: 0,
-          },
-          status: 'active',
-        };
-        const getTab = asPath.split('#');
-        const tabs: IActiveTab[] = [
-          'votinghistory',
-          'statement',
-          'handles',
-          'withdraw',
-        ];
-        const checkTab = tabs.includes(getTab[1] as IActiveTab);
-        const shouldOpenTab = defaultTab || (getTab[1] as IActiveTab);
-
-        selectProfile(
-          userWithoutDelegate,
-          checkTab ? shouldOpenTab : undefined
-        );
-      } else {
-        toast({
-          title: `We couldn't find the contributor page`,
-        });
-      }
+      checkIfUserNotFound(
+        error?.response?.data.error.error,
+        userToSearch,
+        defaultTab
+      );
     }
   };
 
@@ -581,6 +628,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           field: stat,
           period,
           pageSize: 10,
+          tos: daoInfo.config.TOS_URL ? acceptedTermsOnly : undefined,
+          toa: daoInfo.config.DAO_SUPPORTS_TOA ? delegateOffersToA : undefined,
           workstreamId: getWorkstreams(),
           statuses: statuses.length
             ? statuses.join(',')
@@ -680,7 +729,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
   }, [delegates]);
 
   const setupFilteringUrl = (
-    paramToSetup: 'sortby' | 'order' | 'period' | 'statuses',
+    paramToSetup: 'sortby' | 'order' | 'period' | 'statuses' | 'toa',
     paramValue: string
   ) => {
     const queries = router.query;
@@ -691,7 +740,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       order: paramValue,
       period: paramValue,
       statuses: paramValue,
+      toa: paramValue,
     };
+
     const query = {
       ...queries,
       [paramToSetup]: filters[paramToSetup],
@@ -777,13 +828,13 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       return;
     }
     const querySortby = queryString?.match(/(?<=sortby=)[^&]*/i)?.[0];
-    // const querySortby = query?.sortby as string;
     const queryOrder = queryString?.match(/(?<=order=)[^&]*/i)?.[0];
-    // const queryOrder = query?.order;
     const queryPeriod = queryString?.match(/(?<=period=)[^&]*/i)?.[0];
-    // const queryPeriod = query?.period;
     const queryStatuses = queryString?.match(/(?<=statuses=)[^&]*/i)?.[0];
-    // const queryStatuses = query?.statuses;
+    const queryTOS = queryString?.match(/(?<=tos=)[^&]*/i)?.[0];
+    if (queryTOS) {
+      setAcceptedTermsOnly(queryTOS === 'true');
+    }
     if (querySortby) {
       const isStatValid = statOptions.find(item => item.id === querySortby);
       if (isStatValid) setStat(querySortby as IStatsID);
@@ -816,6 +867,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       findDelegate();
     } else if (!ignoreAutoFetch) fetchDelegates(0);
   }, [
+    acceptedTermsOnly,
     stat,
     order,
     period,
@@ -824,6 +876,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     interestFilter,
     workstreamsFilter,
     hasInitiated,
+    delegateOffersToA,
   ]);
 
   useEffect(() => {
@@ -891,6 +944,10 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       setSelectedProfileData,
       setupFilteringUrl,
       refreshProfileModal,
+      acceptedTermsOnly,
+      handleAcceptedTermsOnly,
+      delegateOffersToA,
+      handleDelegateOffersToA,
     }),
     [
       profileSelected,
@@ -918,6 +975,10 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       setSelectedProfileData,
       setupFilteringUrl,
       refreshProfileModal,
+      acceptedTermsOnly,
+      handleAcceptedTermsOnly,
+      delegateOffersToA,
+      handleDelegateOffersToA,
     ]
   );
 

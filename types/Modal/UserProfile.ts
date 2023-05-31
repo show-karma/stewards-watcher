@@ -3,6 +3,7 @@ export type IActiveTab =
   | 'votinghistory'
   | 'aboutme'
   | 'handles'
+  | 'toa'
   | 'withdraw';
 
 export type IProfile = {

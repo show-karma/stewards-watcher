@@ -35,6 +35,7 @@ export const NavButton: FC<INavButton> = ({ children, isActive, ...props }) => {
       w="max-content"
       minH="52px"
       minW="122px"
+      maxW="max-content"
       {...props}
     >
       {children}

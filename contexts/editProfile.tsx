@@ -1,9 +1,15 @@
-import React, { useContext, createContext, useMemo, useState } from 'react';
+import React, {
+  useContext,
+  createContext,
+  useMemo,
+  useState,
+  useEffect,
+} from 'react';
 
 import { useIsMounted } from 'hooks/useIsMounted';
 import { useToasty } from 'hooks';
 import { ICustomFields, IProfile } from 'types';
-import { api, KARMA_API } from 'helpers';
+import { api, API_ROUTES, KARMA_API } from 'helpers';
 import { useAccount } from 'wagmi';
 import axios from 'axios';
 import { useDelegates } from './delegates';
@@ -35,6 +41,12 @@ interface IEditProfileProps {
     newHandle: string,
     media: 'twitter' | 'forum'
   ) => Promise<void>;
+  acceptedTerms: boolean;
+  changeAcceptedTerms: (choice: boolean) => void;
+  newToA: string;
+  changeToA: (text: string) => void;
+  delegateToA: string;
+  isLoadingToA: boolean;
 }
 
 export const EditProfileContext = createContext({} as IEditProfileProps);
@@ -62,6 +74,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
   const [newProfilePicture, setNewProfilePicture] = useState<string | null>(
     null
   );
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const { toast } = useToasty();
   const {
     profileSelected,
@@ -69,6 +82,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     refreshProfileModal,
     fetchDelegates,
   } = useDelegates();
+
   const { daoInfo } = useDAO();
   const { address } = useAccount();
   const { authToken, isAuthenticated, isDaoAdmin } = useAuth();
@@ -89,8 +103,10 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     useState<ICustomFields>(defaultCustomFields);
   const [interests, setInterests] =
     useState<ICustomFields>(defaultCustomFields);
+  const [delegateToA, setDelegateToA] = useState<string>('');
 
   const [isLoadingStatement, setIsLoadingStatement] = useState(false);
+  const [isLoadingToA, setIsLoadingToA] = useState(false);
 
   const profile: IProfile = {
     address: profileSelected?.address || '',
@@ -104,6 +120,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     realName: profileSelected?.realName || '',
   };
 
+  const [newToA, setNewToA] = useState('');
   const [newInterests, setNewInterests] = useState(defaultCustomFields);
   const [newStatement, setNewStatement] =
     useState<ICustomFields>(defaultCustomFields);
@@ -160,6 +177,33 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     }
   };
 
+  const queryToA = async () => {
+    if (!profile.address) return;
+    setIsLoadingToA(true);
+    try {
+      const { data } = await api.get(
+        API_ROUTES.DELEGATE.GET_TERMS_OF_SERVICE(
+          config.DAO_KARMA_ID,
+          profile.address
+        )
+      );
+      setDelegateToA(data?.data.agreementText);
+      setNewToA(data?.data.agreementText);
+    } catch (error) {
+      const defaultToA = daoInfo.config.DEFAULT_TOA;
+      if (defaultToA) {
+        setNewToA(defaultToA);
+        return;
+      }
+    } finally {
+      setIsLoadingToA(false);
+    }
+  };
+
+  const changeToA = (newText: string) => {
+    setNewToA(newText);
+  };
+
   const editInterests = (selectedInterest: string) => {
     const newInterestsValue = Array.isArray(newInterests.value)
       ? newInterests.value
@@ -189,9 +233,39 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     });
   };
 
+  const sendAcceptedTerms = async () => {
+    try {
+      const authorizedAPI = axios.create({
+        timeout: 30000,
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: authToken ? `Bearer ${authToken}` : '',
+        },
+      });
+      await authorizedAPI.put(
+        API_ROUTES.DELEGATE.TERMS_OF_SERVICE(daoInfo.config.DAO_KARMA_ID),
+        {
+          acceptedTOS: acceptedTerms,
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const changeAcceptedTerms = (choice: boolean) => {
+    setAcceptedTerms(choice);
+  };
+
+  useMemo(() => {
+    changeAcceptedTerms(profileSelected?.acceptedTOS ?? false);
+  }, [profileSelected?.acceptedTOS]);
+
   useMemo(() => {
     if (profileSelected) {
       queryStatement();
+      queryToA();
       setNewName(profileSelected.realName || profileSelected.ensName || '');
       setNewProfilePicture(profileSelected.profilePicture || '');
     }
@@ -214,6 +288,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     const fetchedDelegatePitch = await hasDelegatePitch();
     let hasError = false;
     let actualError = '';
+
     if (
       newInterests.value !== interests.value ||
       newStatement.value !== statement.value
@@ -238,7 +313,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
               discourseHandle: '0',
             }
           );
-        } else {
+        } else if (newInterests.value || newStatement) {
           await authorizedAPI.post(
             `${KARMA_API.base_url}/forum-user/${daoInfo.config.DAO_KARMA_ID}/delegate-pitch/${profileSelected?.address}`,
             {
@@ -263,6 +338,39 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
         actualError = error.response.data.error.message;
       }
     }
+    if (newToA !== delegateToA && profileSelected?.address) {
+      try {
+        const authorizedAPI = axios.create({
+          timeout: 30000,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: authToken ? `Bearer ${authToken}` : '',
+          },
+        });
+        if (delegateToA.length > 0) {
+          await authorizedAPI.put(
+            API_ROUTES.DELEGATE.TERMS_OF_AGREEMENT(daoInfo.config.DAO_KARMA_ID),
+            {
+              agreementText: newToA,
+            }
+          );
+        } else if (newToA.length > 0) {
+          await authorizedAPI.post(
+            API_ROUTES.DELEGATE.TERMS_OF_AGREEMENT(daoInfo.config.DAO_KARMA_ID),
+            {
+              agreementText: newToA,
+            }
+          );
+        }
+        await queryToA();
+      } catch (error: any) {
+        hasError = true;
+        actualError = error.response.data.error.message;
+      }
+    }
+
+    // await sendAcceptedTerms();
 
     if (
       profileSelected?.address !== newName ||
@@ -426,6 +534,12 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       newProfilePicture,
       editProfilePicture,
       changeHandle,
+      changeAcceptedTerms,
+      acceptedTerms,
+      changeToA,
+      newToA,
+      delegateToA,
+      isLoadingToA,
     }),
     [
       isEditing,
@@ -448,6 +562,12 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       newProfilePicture,
       editProfilePicture,
       changeHandle,
+      changeAcceptedTerms,
+      acceptedTerms,
+      changeToA,
+      newToA,
+      delegateToA,
+      isLoadingToA,
     ]
   );
 

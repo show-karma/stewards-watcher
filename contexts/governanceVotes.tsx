@@ -70,10 +70,11 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
       setVotes('0');
       return;
     }
-    console.log(voteAmounts);
-    const amountsBN = voteAmounts.map(amount =>
-      BigNumber.from(amount).toString()
-    );
+
+    const amountsBN = voteAmounts.map(amount => {
+      if (amount) return BigNumber.from(amount).toString();
+      return '0';
+    });
     const onlyZeros = amountsBN.every(amount => amount === '0');
     if (onlyZeros) {
       setVotes('0');
