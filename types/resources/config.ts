@@ -34,6 +34,7 @@ export interface IDAOConfig {
   DAO_DELEGATE_FUNCTION?: string;
   DAO_GTAG?: string;
   HEADER_MARGIN?: boolean;
+  DAO_DISCORD_CHANNEL?: string;
   DAO_DEFAULT_SETTINGS?: {
     FAQ?: boolean;
     TIMEPERIOD?: IFilterPeriod;

@@ -7,7 +7,7 @@ import {
   Input,
   FormControl,
 } from '@chakra-ui/react';
-import { DiscordIcon, ForumIcon, TwitterIcon } from 'components';
+import { DiscordIcon, ForumIcon, TwitterIcon, ChakraLink } from 'components';
 import {
   useAuth,
   useDAO,
@@ -21,6 +21,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import dynamic from 'next/dynamic';
+import { YOUTUBE_LINKS } from 'helpers';
 
 const TwitterModal = dynamic(() =>
   import('../Linking/Twitter').then(module => module.TwitterModal)
@@ -33,9 +34,10 @@ const DiscourseModal = dynamic(() =>
 interface IHandleCasesProps {
   currentHandle?: string;
   disabledCondition?: boolean;
-  action: () => void;
+  action?: () => void;
   mediaName: string;
   canAdminEdit?: boolean;
+  actionType: string;
 }
 
 const HandleCases: FC<IHandleCasesProps> = ({
@@ -44,8 +46,9 @@ const HandleCases: FC<IHandleCasesProps> = ({
   action,
   mediaName,
   canAdminEdit,
+  actionType,
 }) => {
-  const { theme } = useDAO();
+  const { theme, daoInfo } = useDAO();
   const { isDaoAdmin } = useAuth();
   const { isEditing, changeHandle } = useEditProfile();
   const [isLoading, setIsLoading] = useState(false);
@@ -109,45 +112,72 @@ const HandleCases: FC<IHandleCasesProps> = ({
       </form>
     );
 
-  if (!currentHandle)
-    return (
-      <Tooltip
-        label={
-          disabledCondition
-            ? 'We are validating your address. Please check back in few days to verify your handle.'
-            : ''
-        }
-        placement="top"
-        hasArrow
-      >
-        <Button
-          onClick={() => {
-            if (disabledCondition) return;
-            action();
-          }}
-          bgColor={theme.modal.buttons.navBg}
-          color={theme.modal.buttons.navText}
-          borderColor={theme.modal.buttons.navText}
-          borderWidth="1px"
-          borderStyle="solid"
-          _hover={{
-            opacity: 0.7,
-          }}
-          _disabled={{
-            opacity: 0.4,
-            cursor: 'not-allowed',
-          }}
-          _active={{}}
-          _focus={{}}
-          _focusVisible={{}}
-          _focusWithin={{}}
-          isDisabled={disabledCondition}
-          disabled={disabledCondition}
+  if (!currentHandle) {
+    if (actionType === 'button')
+      return (
+        <Tooltip
+          label={
+            disabledCondition
+              ? 'We are validating your address. Please check back in few days to verify your handle.'
+              : ''
+          }
+          placement="top"
+          hasArrow
         >
-          Link your {mediaName} handle
-        </Button>
-      </Tooltip>
-    );
+          <Button
+            onClick={() => {
+              if (disabledCondition) return;
+              action?.();
+            }}
+            bgColor={theme.modal.buttons.navBg}
+            color={theme.modal.buttons.navText}
+            borderColor={theme.modal.buttons.navText}
+            borderWidth="1px"
+            borderStyle="solid"
+            _hover={{
+              opacity: 0.7,
+            }}
+            _disabled={{
+              opacity: 0.4,
+              cursor: 'not-allowed',
+            }}
+            _active={{}}
+            _focus={{}}
+            _focusVisible={{}}
+            _focusWithin={{}}
+            isDisabled={disabledCondition}
+            disabled={disabledCondition}
+          >
+            Link your {mediaName} handle
+          </Button>
+        </Tooltip>
+      );
+    if (actionType === 'text' && mediaName === 'Discord') {
+      return (
+        <Flex align="center" h="100%" mt="2">
+          <Text>
+            To link your Discord, navigate to{' '}
+            <ChakraLink
+              href={daoInfo.config.DAO_DISCORD_CHANNEL}
+              isExternal
+              textDecoration="underline"
+            >
+              this
+            </ChakraLink>{' '}
+            channel and execute the command as shown{' '}
+            <ChakraLink
+              href={YOUTUBE_LINKS.DISCORD_LINKING}
+              isExternal
+              textDecoration="underline"
+            >
+              here
+            </ChakraLink>
+            .
+          </Text>
+        </Flex>
+      );
+    }
+  }
 
   return (
     <Text
@@ -189,6 +219,7 @@ export const Handles: FC = () => {
       icon: TwitterIcon,
       name: 'Twitter',
       disabledCondition: notShowCondition,
+      actionType: 'button',
       action: () => {
         twitterOnOpen();
       },
@@ -200,6 +231,7 @@ export const Handles: FC = () => {
     {
       icon: ForumIcon,
       name: 'Forum',
+      actionType: 'button',
       disabledCondition: notShowCondition,
       hideCondition: !daoData?.forumTopicURL,
       action: () => {
@@ -211,12 +243,13 @@ export const Handles: FC = () => {
     {
       icon: DiscordIcon,
       name: 'Discord',
-      action: () => null,
-      hideCondition: !profileSelected?.discordUsername,
+      action: undefined,
+      actionType: 'text',
+      hideCondition: !daoInfo.config.DAO_DISCORD_CHANNEL,
       handle: profileSelected?.discordUsername
         ? `@${profileSelected?.discordUsername}`
         : undefined,
-      canAdminEdit: false,
+      canAdminEdit: true,
     },
   ];
 
@@ -270,6 +303,7 @@ export const Handles: FC = () => {
                     disabledCondition={media.disabledCondition}
                     mediaName={media.name}
                     canAdminEdit={media.canAdminEdit}
+                    actionType={media.actionType}
                   />
                 </Flex>
               )

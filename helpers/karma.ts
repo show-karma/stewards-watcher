@@ -19,3 +19,7 @@ export const API_ROUTES = {
       `${KARMA_API.base_url}/delegate/${daoName}/terms-of-agreement/${address}`,
   },
 };
+
+export const YOUTUBE_LINKS = {
+  DISCORD_LINKING: 'https://www.youtube.com/watch?v=UXDmZ8bN4Sg',
+};
