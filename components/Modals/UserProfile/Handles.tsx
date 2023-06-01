@@ -172,6 +172,7 @@ const HandleCases: FC<IHandleCasesProps> = ({
             >
               here
             </ChakraLink>
+            .
           </Text>
         </Flex>
       );
