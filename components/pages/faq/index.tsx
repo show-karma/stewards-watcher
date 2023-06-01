@@ -30,13 +30,14 @@ export const FAQPage: FC = () => {
     if (!markdown?.length) return;
     try {
       const md = new MarkdownIt();
-      customElements.define(
-        'faq-markdown',
-        class extends HTMLElement {
-          connectedCallback() {
-            // eslint-disable-next-line react/no-this-in-sfc
-            const shadow = this.attachShadow({ mode: 'open' });
-            shadow.innerHTML = `
+      if (!customElements.get('faq-markdown')) {
+        customElements.define(
+          'faq-markdown',
+          class extends HTMLElement {
+            connectedCallback() {
+              // eslint-disable-next-line react/no-this-in-sfc
+              const shadow = this.attachShadow({ mode: 'open' });
+              shadow.innerHTML = `
             <style>
               pre,code{background:rgba(155,155,155,0.125);font-size:1.2em;border-radius:8px;padding:0 10px}
               pre{padding:10px;font-size:1.2em}
@@ -47,9 +48,11 @@ export const FAQPage: FC = () => {
               table tr:nth-of-type(2n){border-bottom:1px solid;background:rgba(155,155,155,0.225)}
             </style>
             ${addBlankToLinkTag(setCheckboxes(md.render(markdown)))}`;
+            }
           }
-        }
-      );
+        );
+      }
+
       const shadow = document.createElement('faq-markdown');
       ref.current?.appendChild(shadow);
     } catch (err) {
