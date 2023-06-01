@@ -36,6 +36,8 @@ const config: IDAOConfig = {
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
   EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'healthScore', 'discordScore'],
+  DAO_DISCORD_CHANNEL:
+    'https://discord.com/channels/1059304419428139039/1108887899543449781',
 };
 
 const dark: IDAOTheme = {
