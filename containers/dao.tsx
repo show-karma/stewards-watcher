@@ -47,7 +47,7 @@ export const DAOContainer: React.FC<IDAOContainer> = ({ user }) => {
         <meta property="og:url" content={config.METATAGS.URL} key="ogurl" />
         <meta
           property="og:image"
-          content={config.METATAGS.IMAGE}
+          content={config.METATAGS.IMAGE_DISCORD}
           key="ogimage"
         />
         <meta
@@ -74,7 +74,10 @@ export const DAOContainer: React.FC<IDAOContainer> = ({ user }) => {
           property="twitter:description"
           content={config.METATAGS.DESCRIPTION}
         />
-        <meta property="twitter:image" content={config.METATAGS.IMAGE} />
+        <meta
+          property="twitter:image"
+          content={config.METATAGS.IMAGE_TWITTER}
+        />
       </Head>
       <Script
         async

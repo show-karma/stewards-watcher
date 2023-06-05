@@ -13,7 +13,6 @@ const config: IDAOConfig = {
   METATAGS: {
     TITLE: `Delegates of Developer DAO`,
     DESCRIPTION: `Find all the active delegates in Developer DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
-    IMAGE: '/daos/developerdao/meta.png',
     FAVICON: '/daos/developerdao/favicon.png',
     URL: `https://developerdao.karmahq.xyz`,
   },

@@ -13,7 +13,8 @@ const config: IDAOConfig = {
   METATAGS: {
     TITLE: `Delegates of Element Finance DAO`,
     DESCRIPTION: `Find all the active delegates in Element Finance DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
-    IMAGE: '/daos/element-finance/meta.png',
+    IMAGE_DISCORD: '/daos/element-finance/preview-discord.png',
+    IMAGE_TWITTER: '/daos/element-finance/preview-twitter.png',
     FAVICON: '/daos/element-finance/favicon.png',
     URL: `https://elementfinance.karmahq.xyz`,
   },
