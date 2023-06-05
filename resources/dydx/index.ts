@@ -15,7 +15,8 @@ const config: IDAOConfig = {
   METATAGS: {
     TITLE: `Delegates of dYdX DAO`,
     DESCRIPTION: `Find all the active delegates in dYdX DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
-    IMAGE: '/daos/dydx/preview.png',
+    IMAGE_DISCORD: '/daos/dydx/preview-discord.png',
+    IMAGE_TWITTER: '/daos/dydx/preview-twitter.png',
     FAVICON: '/daos/dydx/favicon.png',
     URL: `https://dydx.karmahq.xyz`,
   },

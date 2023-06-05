@@ -14,7 +14,8 @@ const config: IDAOConfig = {
   METATAGS: {
     TITLE: `Delegates of Safe DAO`,
     DESCRIPTION: `Find all the active delegates in Safe DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
-    IMAGE: '/daos/safe/meta.png',
+    IMAGE_DISCORD: '/daos/safe/preview-discord.png',
+    IMAGE_TWITTER: '/daos/safe/preview-twitter.png',
     FAVICON: '/daos/safe/favicon.png',
     URL: `https://safe.karmahq.xyz`,
   },
