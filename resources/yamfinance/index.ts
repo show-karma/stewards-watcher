@@ -15,7 +15,6 @@ const config: IDAOConfig = {
   METATAGS: {
     TITLE: `Delegates of Yam Finance DAO`,
     DESCRIPTION: `Find all the active delegates in Yam Finance DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
-    IMAGE: '/daos/yamfinance/meta.png',
     FAVICON: '/daos/yamfinance/favicon.ico',
     URL: `https://yamfinance.karmahq.xyz`,
   },

@@ -14,7 +14,8 @@ const config: IDAOConfig = {
   METATAGS: {
     TITLE: `Delegates of Aave DAO`,
     DESCRIPTION: `Find all the active delegates in AAVE DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
-    IMAGE: '/daos/aave/preview.png',
+    IMAGE_DISCORD: '/daos/aave/preview-discord.png',
+    IMAGE_TWITTER: '/daos/aave/preview-twitter.png',
     FAVICON: '/daos/aave/favicon.png',
     URL: `https://aave.karmahq.xyz`,
   },

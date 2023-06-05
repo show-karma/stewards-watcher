@@ -33,7 +33,7 @@ export const useDelegation = (args: IDelegation) => {
       onSuccessFunction?.();
       toast({
         title: 'Success',
-        description: 'The delegate was successful!',
+        description: 'You successfully delegated your tokens!',
         status: 'success',
       });
     },

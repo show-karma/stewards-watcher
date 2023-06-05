@@ -15,7 +15,8 @@ const config: IDAOConfig = {
   METATAGS: {
     TITLE: `Delegates of Starknet DAO`,
     DESCRIPTION: `Find all the active delegates in Starknet DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
-    IMAGE: '/daos/starknet/meta.png',
+    IMAGE_DISCORD: '/daos/starknet/preview-discord.png',
+    IMAGE_TWITTER: '/daos/starknet/preview-twitter.png',
     FAVICON: '/daos/starknet/favicon.svg',
     URL: `https://starknet.karmahq.xyz`,
   },

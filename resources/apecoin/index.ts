@@ -14,7 +14,8 @@ const config: IDAOConfig = {
   METATAGS: {
     TITLE: `Delegates of Apecoin DAO`,
     DESCRIPTION: `Find all the active delegates in Apecoin DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
-    IMAGE: '/daos/apecoin/meta.png',
+    IMAGE_DISCORD: '/daos/apecoin/preview-discord.png',
+    IMAGE_TWITTER: '/daos/apecoin/preview-twitter.png',
     FAVICON: '/daos/apecoin/favicon.png',
     URL: `https://apecoin.karmahq.xyz`,
   },

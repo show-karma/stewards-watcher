@@ -27,7 +27,7 @@ export const FAQContainer: React.FC = () => {
         <meta property="og:url" content={config.METATAGS.URL} key="ogurl" />
         <meta
           property="og:image"
-          content={config.METATAGS.IMAGE}
+          content={config.METATAGS.IMAGE_DISCORD}
           key="ogimage"
         />
         <meta
@@ -54,7 +54,10 @@ export const FAQContainer: React.FC = () => {
           property="twitter:description"
           content={config.METATAGS.DESCRIPTION}
         />
-        <meta property="twitter:image" content={config.METATAGS.IMAGE} />
+        <meta
+          property="twitter:image"
+          content={config.METATAGS.IMAGE_TWITTER}
+        />
       </Head>
       <Script
         async

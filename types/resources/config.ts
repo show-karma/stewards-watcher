@@ -16,7 +16,8 @@ export interface IDAOConfig {
   METATAGS: {
     TITLE: string;
     DESCRIPTION: string;
-    IMAGE: string;
+    IMAGE_DISCORD?: string;
+    IMAGE_TWITTER?: string;
     FAVICON: string;
     URL: string;
   };
