@@ -43,6 +43,8 @@ const config: IDAOConfig = {
   },
   EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'healthScore', 'discordScore'],
   ENABLE_DELEGATE_TRACKER: true,
+  DAO_DISCORD_CHANNEL:
+    'https://discord.com/channels/723834989506068561/1075280542808936549',
 };
 
 const dark: IDAOTheme = {
