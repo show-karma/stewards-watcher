@@ -1,11 +1,19 @@
-import { Button, Link, Tooltip } from '@chakra-ui/react';
+import {
+  Button,
+  Link,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
+  Tooltip,
+} from '@chakra-ui/react';
 import { useDAO, useHandles, useWallet } from 'contexts';
 import { FC, ReactNode } from 'react';
 import { IActiveTab, IProfile } from 'types';
 import { getUserForumUrl, lessThanDays } from 'utils';
 
 type IMedias = 'twitter' | 'forum' | 'discord';
-
 interface IMediaIcon {
   profile: IProfile;
   media: IMedias;
@@ -56,12 +64,77 @@ export const MediaIcon: FC<IMediaIcon> = ({
     },
     discord: {
       url: `https://discord.com/users/${profile.discordHandle}`,
-      value: profile.discordHandle,
+      value: profile.discordUsername,
     },
   };
+
   const chosenMedia = medias[media];
 
-  if (chosenMedia.value)
+  const disabledCondition =
+    chosenMedia?.disabledCondition ||
+    daoInfo.config.SHOULD_NOT_SHOW === 'handles' ||
+    !profile?.userCreatedAt ||
+    (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
+      !!profile?.userCreatedAt &&
+      lessThanDays(profile?.userCreatedAt, 100));
+
+  const labelTooltip = () => {
+    if (media === 'discord' && chosenMedia.value) return chosenMedia.value;
+    if (disabledCondition) return '';
+    if (isConnected) return `Update your ${media} handle now`;
+    return `Login to update your ${media} handle`;
+  };
+
+  const handleClick = () => {
+    if (!isSamePerson) return;
+    changeTab('handles');
+    const onOpens: { [key: string]: () => void } = {
+      twitter: twitterOnOpen,
+      forum: forumOnOpen,
+    };
+    if (onOpens[media]) onOpens[media]();
+  };
+
+  if (chosenMedia.value) {
+    if (media === 'discord')
+      return (
+        <Popover>
+          <PopoverTrigger>
+            <Button
+              color={theme.card.socialMedia}
+              _hover={{
+                transform: 'scale(1.25)',
+              }}
+              h="max-content"
+              w="min-content"
+              minW="min-content"
+              maxW="min-content"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              px="0"
+              bg="transparent"
+              _active={{}}
+              _focus={{}}
+              _focusWithin={{}}
+            >
+              {children}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent
+            w="max-content"
+            color={theme.card.interests.text}
+            bg={theme.background}
+          >
+            <PopoverArrow
+              color={theme.card.interests.text}
+              bg={theme.background}
+            />
+            <PopoverBody>{chosenMedia.value}</PopoverBody>
+          </PopoverContent>
+        </Popover>
+      );
+
     return (
       <Link
         href={chosenMedia.url}
@@ -82,30 +155,7 @@ export const MediaIcon: FC<IMediaIcon> = ({
         {children}
       </Link>
     );
-
-  const handleClick = () => {
-    if (!isSamePerson) return;
-    changeTab('handles');
-    const onOpens: { [key: string]: () => void } = {
-      twitter: twitterOnOpen,
-      forum: forumOnOpen,
-    };
-    if (onOpens[media]) onOpens[media]();
-  };
-
-  const disabledCondition =
-    chosenMedia?.disabledCondition ||
-    daoInfo.config.SHOULD_NOT_SHOW === 'handles' ||
-    !profile?.userCreatedAt ||
-    (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
-      !!profile?.userCreatedAt &&
-      lessThanDays(profile?.userCreatedAt, 100));
-
-  const labelTooltip = () => {
-    if (disabledCondition) return '';
-    if (isConnected) return `Update your ${media} handle now`;
-    return `Login to update your ${media} handle`;
-  };
+  }
 
   return (
     <Tooltip label={labelTooltip()} placement="top" hasArrow>

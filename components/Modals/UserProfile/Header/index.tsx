@@ -8,7 +8,12 @@ import {
   Tooltip,
   useClipboard,
 } from '@chakra-ui/react';
-import { DelegateButton, ForumIcon, TwitterIcon } from 'components';
+import {
+  DelegateButton,
+  ForumIcon,
+  TwitterIcon,
+  DiscordIcon,
+} from 'components';
 import { useDAO, useDelegates, useEditProfile, useWallet } from 'contexts';
 import { useAuth } from 'contexts/auth';
 import { useToasty } from 'hooks';
@@ -169,13 +174,14 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
                     <ForumIcon boxSize="6" color={theme.modal.header.title} />
                   </MediaIcon>
                 )}
-                {/* <MediaIcon
+                <MediaIcon
                   profile={profile}
                   media="discord"
                   changeTab={changeTab}
+                  isSamePerson={isSamePerson}
                 >
-                  <DiscordIcon boxSize="6" />
-                </MediaIcon> */}
+                  <DiscordIcon boxSize="6" color={theme.modal.header.title} />
+                </MediaIcon>
               </Flex>
             </Flex>
             <Flex gap="1.5" flexDir="row" align="center">
