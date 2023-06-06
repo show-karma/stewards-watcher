@@ -12,6 +12,12 @@ import {
   Icon,
   Box,
   Tooltip,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverBody,
 } from '@chakra-ui/react';
 import { FC, useState, useMemo } from 'react';
 import { BsChat } from 'react-icons/bs';
@@ -33,6 +39,7 @@ import { useToasty } from 'hooks';
 import { IBreakdownProps } from 'contexts/scoreBreakdown';
 import { DELEGATOR_TRACKER_DAOS } from 'helpers';
 import dynamic from 'next/dynamic';
+import { FaDiscord } from 'react-icons/fa';
 import { ImgWithFallback } from '../ImgWithFallback';
 import { DelegateButton } from '../DelegateButton';
 import { ForumIcon, TwitterIcon } from '../Icons';
@@ -754,7 +761,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                     justifyContent="center"
                     h="max-content"
                   >
-                    <TwitterIcon w="5" h="5" />
+                    <TwitterIcon w="17px" h="17px" />
                   </Link>
                 )}
                 {data?.discourseHandle &&
@@ -776,16 +783,46 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                       alignItems="center"
                       justifyContent="center"
                     >
-                      <ForumIcon w="5" h="5" />
+                      <ForumIcon w="17px" h="17px" />
                     </Link>
                   )}
-                {/* <Link
-                    href={`https://discordapp.com/users/${1234}`}
-                    isExternal
-                    color={theme.card.socialMedia}
-                  >
-                    <Icon as={FaDiscord} w="5" h="5" />
-                  </Link> */}
+                {data.discordUsername && (
+                  <Popover>
+                    <PopoverTrigger>
+                      <Button
+                        color={theme.card.socialMedia}
+                        _hover={{
+                          transform: 'scale(1.25)',
+                        }}
+                        h="max-content"
+                        w="min-content"
+                        minW="min-content"
+                        maxW="min-content"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        px="0"
+                        bg="transparent"
+                        _active={{}}
+                        _focus={{}}
+                        _focusWithin={{}}
+                      >
+                        <Icon as={FaDiscord} w="17px" h="17px" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent
+                      w="max-content"
+                      color={theme.card.interests.text}
+                      bg={theme.background}
+                    >
+                      <PopoverArrow
+                        color={theme.card.interests.text}
+                        bg={theme.background}
+                      />
+                      <PopoverBody>{data.discordUsername}</PopoverBody>
+                    </PopoverContent>
+                  </Popover>
+                )}
               </Flex>
             </Flex>
           ) : (

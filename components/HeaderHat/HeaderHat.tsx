@@ -200,16 +200,12 @@ export const HeaderHat = () => {
           isOpen={isOpenProfile}
           onClose={onCloseProfile}
           profile={{
-            address: profileSelected.address,
+            ...profileSelected,
             avatar:
               profileSelected.profilePicture ||
               `${config.IMAGE_PREFIX_URL}${profileSelected.address}`,
-            ensName: profileSelected.ensName,
             twitter: profileSelected.twitterHandle,
-            aboutMe: profileSelected.aboutMe,
-            realName: profileSelected.realName,
             forumHandle: profileSelected.discourseHandle,
-            userCreatedAt: profileSelected.userCreatedAt,
           }}
           selectedTab={selectedTab}
         />
