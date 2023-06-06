@@ -174,7 +174,6 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
                     <ForumIcon boxSize="6" color={theme.modal.header.title} />
                   </MediaIcon>
                 )}
-
                 <MediaIcon
                   profile={profile}
                   media="discord"

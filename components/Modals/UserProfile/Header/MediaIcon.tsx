@@ -1,4 +1,13 @@
-import { Button, Link, Tooltip } from '@chakra-ui/react';
+import {
+  Button,
+  Link,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
+  Tooltip,
+} from '@chakra-ui/react';
 import { useDAO, useHandles, useWallet } from 'contexts';
 import { FC, ReactNode } from 'react';
 import { IActiveTab, IProfile } from 'types';
@@ -86,34 +95,67 @@ export const MediaIcon: FC<IMediaIcon> = ({
     if (onOpens[media]) onOpens[media]();
   };
 
-  const labelTooltipWithValue = () => {
-    if (media === 'discord') return chosenMedia.value;
-    return undefined;
-  };
+  if (chosenMedia.value) {
+    if (media === 'discord')
+      return (
+        <Popover>
+          <PopoverTrigger>
+            <Button
+              color={theme.card.socialMedia}
+              _hover={{
+                transform: 'scale(1.25)',
+              }}
+              h="max-content"
+              w="min-content"
+              minW="min-content"
+              maxW="min-content"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              px="0"
+              bg="transparent"
+              _active={{}}
+              _focus={{}}
+              _focusWithin={{}}
+            >
+              {children}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent
+            w="max-content"
+            color={theme.card.interests.text}
+            bg={theme.background}
+          >
+            <PopoverArrow
+              color={theme.card.interests.text}
+              bg={theme.background}
+            />
+            <PopoverBody>{chosenMedia.value}</PopoverBody>
+          </PopoverContent>
+        </Popover>
+      );
 
-  if (chosenMedia.value)
     return (
-      <Tooltip label={labelTooltipWithValue()} placement="top" hasArrow>
-        <Link
-          href={chosenMedia.url}
-          isExternal
-          color={theme.card.socialMedia}
-          opacity="1"
-          _hover={{
-            transform: 'scale(1.25)',
-          }}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          boxSize="6"
-          px="0"
-          py="0"
-          minW="max-content"
-        >
-          {children}
-        </Link>
-      </Tooltip>
+      <Link
+        href={chosenMedia.url}
+        isExternal
+        color={theme.card.socialMedia}
+        opacity="1"
+        _hover={{
+          transform: 'scale(1.25)',
+        }}
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        boxSize="6"
+        px="0"
+        py="0"
+        minW="max-content"
+      >
+        {children}
+      </Link>
     );
+  }
 
   return (
     <Tooltip label={labelTooltip()} placement="top" hasArrow>

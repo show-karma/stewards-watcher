@@ -12,6 +12,12 @@ import {
   Icon,
   Box,
   Tooltip,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverBody,
 } from '@chakra-ui/react';
 import { FC, useState, useMemo } from 'react';
 import { BsChat } from 'react-icons/bs';
@@ -780,27 +786,42 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                       <ForumIcon w="17px" h="17px" />
                     </Link>
                   )}
-                {data.discordHandle && (
-                  <Tooltip
-                    label={data.discordUsername}
-                    bg={theme.collapse.bg || theme.card.background}
-                    color={theme.collapse.text}
-                  >
-                    <Link
-                      href={`https://discordapp.com/users/${data.discordHandle}`}
-                      isExternal
-                      color={theme.card.socialMedia}
-                      _hover={{
-                        transform: 'scale(1.25)',
-                      }}
-                      h="max-content"
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
+                {data.discordUsername && (
+                  <Popover>
+                    <PopoverTrigger>
+                      <Button
+                        color={theme.card.socialMedia}
+                        _hover={{
+                          transform: 'scale(1.25)',
+                        }}
+                        h="max-content"
+                        w="min-content"
+                        minW="min-content"
+                        maxW="min-content"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        px="0"
+                        bg="transparent"
+                        _active={{}}
+                        _focus={{}}
+                        _focusWithin={{}}
+                      >
+                        <Icon as={FaDiscord} w="17px" h="17px" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent
+                      w="max-content"
+                      color={theme.card.interests.text}
+                      bg={theme.background}
                     >
-                      <Icon as={FaDiscord} w="17px" h="17px" />
-                    </Link>
-                  </Tooltip>
+                      <PopoverArrow
+                        color={theme.card.interests.text}
+                        bg={theme.background}
+                      />
+                      <PopoverBody>{data.discordUsername}</PopoverBody>
+                    </PopoverContent>
+                  </Popover>
                 )}
               </Flex>
             </Flex>
