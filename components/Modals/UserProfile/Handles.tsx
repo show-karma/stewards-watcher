@@ -245,7 +245,9 @@ export const Handles: FC = () => {
       name: 'Discord',
       action: undefined,
       actionType: 'text',
-      hideCondition: !daoInfo.config.DAO_DISCORD_CHANNEL,
+      hideCondition:
+        !profileSelected?.discordUsername &&
+        !daoInfo.config.DAO_DISCORD_CHANNEL,
       handle: profileSelected?.discordUsername
         ? `@${profileSelected?.discordUsername}`
         : undefined,
