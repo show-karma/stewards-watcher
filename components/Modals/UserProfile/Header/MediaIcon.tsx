@@ -56,32 +56,26 @@ export const MediaIcon: FC<IMediaIcon> = ({
     },
     discord: {
       url: `https://discord.com/users/${profile.discordHandle}`,
-      value: profile.discordHandle,
+      value: profile.discordUsername,
     },
   };
+
   const chosenMedia = medias[media];
 
-  if (chosenMedia.value)
-    return (
-      <Link
-        href={chosenMedia.url}
-        isExternal
-        color={theme.card.socialMedia}
-        opacity="1"
-        _hover={{
-          transform: 'scale(1.25)',
-        }}
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        boxSize="6"
-        px="0"
-        py="0"
-        minW="max-content"
-      >
-        {children}
-      </Link>
-    );
+  const disabledCondition =
+    chosenMedia?.disabledCondition ||
+    daoInfo.config.SHOULD_NOT_SHOW === 'handles' ||
+    !profile?.userCreatedAt ||
+    (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
+      !!profile?.userCreatedAt &&
+      lessThanDays(profile?.userCreatedAt, 100));
+
+  const labelTooltip = () => {
+    if (media === 'discord' && chosenMedia.value) return chosenMedia.value;
+    if (disabledCondition) return '';
+    if (isConnected) return `Update your ${media} handle now`;
+    return `Login to update your ${media} handle`;
+  };
 
   const handleClick = () => {
     if (!isSamePerson) return;
@@ -93,19 +87,34 @@ export const MediaIcon: FC<IMediaIcon> = ({
     if (onOpens[media]) onOpens[media]();
   };
 
-  const disabledCondition =
-    chosenMedia?.disabledCondition ||
-    daoInfo.config.SHOULD_NOT_SHOW === 'handles' ||
-    !profile?.userCreatedAt ||
-    (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
-      !!profile?.userCreatedAt &&
-      lessThanDays(profile?.userCreatedAt, 100));
-
-  const labelTooltip = () => {
-    if (disabledCondition) return '';
-    if (isConnected) return `Update your ${media} handle now`;
-    return `Login to update your ${media} handle`;
+  const labelTooltipWithValue = () => {
+    if (media === 'discord') return chosenMedia.value;
+    return undefined;
   };
+
+  if (chosenMedia.value)
+    return (
+      <Tooltip label={labelTooltipWithValue()} placement="top" hasArrow>
+        <Link
+          href={chosenMedia.url}
+          isExternal
+          color={theme.card.socialMedia}
+          opacity="1"
+          _hover={{
+            transform: 'scale(1.25)',
+          }}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          boxSize="6"
+          px="0"
+          py="0"
+          minW="max-content"
+        >
+          {children}
+        </Link>
+      </Tooltip>
+    );
 
   return (
     <Tooltip label={labelTooltip()} placement="top" hasArrow>

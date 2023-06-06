@@ -33,6 +33,7 @@ import { useToasty } from 'hooks';
 import { IBreakdownProps } from 'contexts/scoreBreakdown';
 import { DELEGATOR_TRACKER_DAOS } from 'helpers';
 import dynamic from 'next/dynamic';
+import { FaDiscord } from 'react-icons/fa';
 import { ImgWithFallback } from '../ImgWithFallback';
 import { DelegateButton } from '../DelegateButton';
 import { ForumIcon, TwitterIcon } from '../Icons';
@@ -754,7 +755,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                     justifyContent="center"
                     h="max-content"
                   >
-                    <TwitterIcon w="5" h="5" />
+                    <TwitterIcon w="17px" h="17px" />
                   </Link>
                 )}
                 {data?.discourseHandle &&
@@ -776,16 +777,31 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                       alignItems="center"
                       justifyContent="center"
                     >
-                      <ForumIcon w="5" h="5" />
+                      <ForumIcon w="17px" h="17px" />
                     </Link>
                   )}
-                {/* <Link
-                    href={`https://discordapp.com/users/${1234}`}
-                    isExternal
-                    color={theme.card.socialMedia}
+                {data.discordHandle && (
+                  <Tooltip
+                    label={data.discordUsername || data.discordHandle}
+                    bg={theme.collapse.bg || theme.card.background}
+                    color={theme.collapse.text}
                   >
-                    <Icon as={FaDiscord} w="5" h="5" />
-                  </Link> */}
+                    <Link
+                      href={`https://discordapp.com/users/${data.discordHandle}`}
+                      isExternal
+                      color={theme.card.socialMedia}
+                      _hover={{
+                        transform: 'scale(1.25)',
+                      }}
+                      h="max-content"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      <Icon as={FaDiscord} w="17px" h="17px" />
+                    </Link>
+                  </Tooltip>
+                )}
               </Flex>
             </Flex>
           ) : (
