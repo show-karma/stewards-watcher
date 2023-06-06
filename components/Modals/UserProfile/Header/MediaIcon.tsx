@@ -5,7 +5,6 @@ import { IActiveTab, IProfile } from 'types';
 import { getUserForumUrl, lessThanDays } from 'utils';
 
 type IMedias = 'twitter' | 'forum' | 'discord';
-
 interface IMediaIcon {
   profile: IProfile;
   media: IMedias;

@@ -782,7 +782,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   )}
                 {data.discordHandle && (
                   <Tooltip
-                    label={data.discordUsername || data.discordHandle}
+                    label={data.discordUsername}
                     bg={theme.collapse.bg || theme.card.background}
                     color={theme.collapse.text}
                   >
