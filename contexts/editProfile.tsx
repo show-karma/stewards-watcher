@@ -47,6 +47,8 @@ interface IEditProfileProps {
   changeToA: (text: string) => void;
   delegateToA: string;
   isLoadingToA: boolean;
+  editTracks: (selectedTrack: number) => void;
+  newTracks: number[];
 }
 
 export const EditProfileContext = createContext({} as IEditProfileProps);
@@ -103,6 +105,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     useState<ICustomFields>(defaultCustomFields);
   const [interests, setInterests] =
     useState<ICustomFields>(defaultCustomFields);
+
   const [delegateToA, setDelegateToA] = useState<string>('');
 
   const [isLoadingStatement, setIsLoadingStatement] = useState(false);
@@ -121,6 +124,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
   };
 
   const [newToA, setNewToA] = useState('');
+  const [newTracks, setNewTracks] = useState<number[]>([]);
   const [newInterests, setNewInterests] = useState(defaultCustomFields);
   const [newStatement, setNewStatement] =
     useState<ICustomFields>(defaultCustomFields);
@@ -204,6 +208,19 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     setNewToA(newText);
   };
 
+  const editTracks = (selectedTrack: number) => {
+    const trackExists = newTracks.includes(selectedTrack);
+
+    if (trackExists) {
+      const filtered = newTracks.filter(
+        (item: number) => item !== selectedTrack
+      );
+      setNewTracks(filtered);
+    } else {
+      setNewTracks(oldArray => [...oldArray, selectedTrack]);
+    }
+  };
+
   const editInterests = (selectedInterest: string) => {
     const newInterestsValue = Array.isArray(newInterests.value)
       ? newInterests.value
@@ -262,12 +279,20 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     changeAcceptedTerms(profileSelected?.acceptedTOS ?? false);
   }, [profileSelected?.acceptedTOS]);
 
+  const setupTracks = () => {
+    if (profileSelected?.tracks && profileSelected?.tracks.length > 0) {
+      const tracksToSetup = profileSelected?.tracks?.map(track => track.id);
+      setNewTracks(tracksToSetup);
+    }
+  };
+
   useMemo(() => {
     if (profileSelected) {
       queryStatement();
       queryToA();
       setNewName(profileSelected.realName || profileSelected.ensName || '');
       setNewProfilePicture(profileSelected.profilePicture || '');
+      setupTracks();
     }
   }, [profileSelected]);
 
@@ -338,6 +363,40 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
         actualError = error.response.data.error.message;
       }
     }
+    const tracksMap = profileSelected?.tracks?.map(
+      (track: { id: number }) => track.id
+    );
+    if (
+      tracksMap !== newTracks &&
+      daoInfo.config.DAO_CATEGORIES_TYPE === 'tracks' &&
+      profileSelected?.address
+    ) {
+      try {
+        const authorizedAPI = axios.create({
+          timeout: 30000,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: authToken ? `Bearer ${authToken}` : '',
+          },
+        });
+
+        await authorizedAPI.post(
+          API_ROUTES.DELEGATE.CHANGE_TRACKS(
+            daoInfo.config.DAO_KARMA_ID,
+            profileSelected?.address
+          ),
+          {
+            tracks: newTracks,
+          }
+        );
+      } catch (error: any) {
+        console.log(error);
+        hasError = true;
+        actualError = error.response.data.error.message;
+      }
+    }
+
     if (newToA !== delegateToA && profileSelected?.address) {
       try {
         const authorizedAPI = axios.create({
@@ -540,6 +599,8 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       newToA,
       delegateToA,
       isLoadingToA,
+      editTracks,
+      newTracks,
     }),
     [
       isEditing,
@@ -568,6 +629,8 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       newToA,
       delegateToA,
       isLoadingToA,
+      editTracks,
+      newTracks,
     ]
   );
 

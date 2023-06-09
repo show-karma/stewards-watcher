@@ -222,16 +222,16 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       let data = [];
 
       if (type === 'workstreams') {
-        data = (await api.get(`/${type}/list?dao=${config.DAO_KARMA_ID}`)).data;
+        data = (await api.get(`/workstream/list?dao=${config.DAO_KARMA_ID}`))
+          .data.data;
       } else if (type === 'tracks') {
-        data = (await api.get(`/dao/moonbeam/${type}`)).data;
-        // data = (await api.get(`${config.DAO_KARMA_ID}/${type}`)).data;
+        data = (await api.get(`/dao/moonbeam/tracks`)).data.data; // this is hardcoded for now, while the boys are working on the API
+        // data = (await api.get(`${config.DAO_KARMA_ID}/${type}`)).data.data;
       }
-      console.log(data);
 
-      const { tracks: dataTracks, workstreams: dataWorkstreams } = data.data;
+      const { tracks: dataTracks, workstreams: dataWorkstreams } = data;
 
-      if (Array.isArray(data.data[type])) {
+      if (Array.isArray(dataTracks || dataWorkstreams)) {
         if (type === 'tracks') {
           setTracks(dataTracks);
         } else if (type === 'workstreams') {
@@ -619,6 +619,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         realName: fetchedDelegate.realName,
         profilePicture: fetchedDelegate.profilePicture,
         workstreams: fetchedDelegate.workstreams,
+        tracks: fetchedDelegate.tracks,
         status: fetchedDelegate.status,
         userCreatedAt: fetchedDelegate.userCreatedAt,
       };
@@ -700,6 +701,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           realName: item.realName,
           profilePicture: item.profilePicture,
           workstreams: item.workstreams,
+          tracks: item.tracks,
           gitcoinHealthScore: fetchedPeriod?.gitcoinHealthScore || 0,
           userCreatedAt: item.userCreatedAt,
           status: item.status,

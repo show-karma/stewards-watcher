@@ -302,13 +302,20 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     setStats(filtereds);
   }, [config, data]);
 
-  const renderCategories = () => {
-    if (
-      !data?.workstreams ||
-      !(data.workstreams.length > 0) ||
-      data.workstreams[0]?.description.toLowerCase() === 'general'
-    )
+  const renderCategory = () => {
+    const workstreamsExist =
+      data?.workstreams &&
+      data.workstreams.length > 0 &&
+      data.workstreams[0]?.description.toLowerCase() !== 'general';
+    const tracksExist = data?.tracks && data.tracks.length > 0;
+
+    if (!workstreamsExist && !tracksExist) {
       return undefined;
+    }
+
+    const type = daoInfo.config.DAO_CATEGORIES_TYPE;
+    const categoryName = data?.[type]?.[0]?.name;
+
     return (
       <Text
         color={theme.card.workstream.text}
@@ -322,7 +329,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           backgroundColor: convertHexToRGBA(theme.title, 0.8),
         }}
       >
-        {data?.workstreams[0]?.name}
+        {categoryName}
       </Text>
     );
   };
@@ -535,7 +542,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   overflowX="hidden"
                   width="max-content"
                 >
-                  {renderCategories()}
+                  {renderCategory()}
                   {!isLoaded ? (
                     <Flex h="21px" />
                   ) : (
