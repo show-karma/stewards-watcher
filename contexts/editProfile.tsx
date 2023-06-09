@@ -391,7 +391,6 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
           }
         );
       } catch (error: any) {
-        console.log(error);
         hasError = true;
         actualError = error.response.data.error.message;
       }

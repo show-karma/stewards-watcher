@@ -65,7 +65,6 @@ async function fetchOnChainProposalVotes(
         address,
       },
     });
-    console.log('votes', votes);
     if (votes && Array.isArray(votes.votes)) {
       const skipIds = votes.votes.map((vote: any) => vote.proposal.id);
       const { data: proposals } = await onChainClient.query({
@@ -78,7 +77,6 @@ async function fetchOnChainProposalVotes(
       return concatOnChainProposals(proposals.proposals, votes.votes);
     }
   } catch (error) {
-    console.log('erroUseOnChainVotes');
     throw error;
   }
   return [];
