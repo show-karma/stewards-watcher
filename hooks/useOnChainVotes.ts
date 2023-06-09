@@ -7,11 +7,6 @@ import moment from 'moment';
 import { IChainRow } from 'types';
 import { VOTING_HISTORY } from 'utils';
 
-const onChainClient = new ApolloClient({
-  uri: 'https://api.thegraph.com/subgraphs/name/show-karma/dao-on-chain-voting',
-  cache: new InMemoryCache(),
-});
-
 /**
  * Concat proposal and votes into a common interface
  * @param proposals
@@ -54,10 +49,15 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
  */
 async function fetchOnChainProposalVotes(
   daoName: string | string[],
-  address: string
+  address: string,
+  clientUrl = 'https://api.thegraph.com/subgraphs/name/show-karma/dao-on-chain-voting'
 ) {
   if (!daoName || !address) return [];
   try {
+    const onChainClient = new ApolloClient({
+      uri: clientUrl,
+      cache: new InMemoryCache(),
+    });
     const { data: votes } = await onChainClient.query({
       query: VOTING_HISTORY.onChainVotesReq,
       variables: {
@@ -65,6 +65,7 @@ async function fetchOnChainProposalVotes(
         address,
       },
     });
+    console.log('votes', votes);
     if (votes && Array.isArray(votes.votes)) {
       const skipIds = votes.votes.map((vote: any) => vote.proposal.id);
       const { data: proposals } = await onChainClient.query({
@@ -77,8 +78,8 @@ async function fetchOnChainProposalVotes(
       return concatOnChainProposals(proposals.proposals, votes.votes);
     }
   } catch (error) {
+    console.log('erroUseOnChainVotes');
     throw error;
-    //
   }
   return [];
 }
@@ -86,15 +87,14 @@ async function fetchOnChainProposalVotes(
 const useOnChainVotes = (daoName: string | string[], address: string) => {
   const {
     daoInfo: {
-      config: { DAO_EXT_VOTES_PROVIDER },
+      config: { DAO_EXT_VOTES_PROVIDER, DAO_ON_CHAIN_URL },
     },
   } = useDAO();
-
   return useQuery(['onChainVotes', daoName, address], async () => {
     if (DAO_EXT_VOTES_PROVIDER?.onChain) {
       return DAO_EXT_VOTES_PROVIDER.onChain(daoName, address);
     }
-    return fetchOnChainProposalVotes(daoName, address);
+    return fetchOnChainProposalVotes(daoName, address, DAO_ON_CHAIN_URL);
   });
 };
 

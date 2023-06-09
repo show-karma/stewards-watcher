@@ -8,7 +8,6 @@ import React, {
   useState,
   useMemo,
   useEffect,
-  useCallback,
 } from 'react';
 import { useRouter } from 'next/router';
 import {
@@ -22,6 +21,7 @@ import {
   IStatusOptions,
   IWorkstream,
   IStatsID,
+  ITracks,
 } from 'types';
 import { useMixpanel, useToasty } from 'hooks';
 import { api } from 'helpers';
@@ -67,8 +67,11 @@ interface IDelegateProps {
   isFiltering: boolean;
   workstreams: IWorkstream[];
   workstreamsFilter: string[];
-  statusesOptions: IStatusOptions[];
   selectWorkstream: (index: number) => void;
+  tracks: ITracks[];
+  tracksFilter: string[];
+  selectTracks: (index: number) => void;
+  statusesOptions: IStatusOptions[];
   setSelectedProfileData: (selected: IDelegate) => void;
   setupFilteringUrl: (
     paramToSetup: 'sortby' | 'order' | 'period' | 'statuses' | 'toa',
@@ -167,6 +170,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
   const [delegateCount, setDelegateCount] = useState(0);
   const [workstreams, setWorkstreams] = useState<IWorkstream[]>([]);
   const [workstreamsFilter, setWorkstreamsFilter] = useState<string[]>([]);
+  const [tracks, setTracks] = useState<ITracks[]>([]);
+  const [tracksFilter, setTracksFilter] = useState<string[]>([]);
 
   const { mixpanel } = useMixpanel();
   const { toast } = useToasty();
@@ -211,13 +216,27 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     }
   };
 
-  const fetchWorkstreams = async () => {
+  const fetchCategoryType = async () => {
     try {
-      const { data } = await api.get(
-        `/workstream/list?dao=${config.DAO_KARMA_ID}`
-      );
-      if (Array.isArray(data.data.workstreams)) {
-        setWorkstreams(data.data.workstreams);
+      const type = daoInfo.config.DAO_CATEGORIES_TYPE;
+      let data = [];
+
+      if (type === 'workstreams') {
+        data = (await api.get(`/${type}/list?dao=${config.DAO_KARMA_ID}`)).data;
+      } else if (type === 'tracks') {
+        data = (await api.get(`/dao/moonbeam/${type}`)).data;
+        // data = (await api.get(`${config.DAO_KARMA_ID}/${type}`)).data;
+      }
+      console.log(data);
+
+      const { tracks: dataTracks, workstreams: dataWorkstreams } = data.data;
+
+      if (Array.isArray(data.data[type])) {
+        if (type === 'tracks') {
+          setTracks(dataTracks);
+        } else if (type === 'workstreams') {
+          setWorkstreams(dataWorkstreams);
+        }
       }
     } catch (error) {
       console.error(error);
@@ -232,6 +251,11 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     if (workstreamsFilter.length === 0 && config.DAO_KARMA_ID === 'gitcoin')
       return '6,4,3,7,1,2,5,12';
     if (workstreamsFilter.length) return workstreamsFilter.join(',');
+    return undefined;
+  };
+
+  const getTracks = () => {
+    if (tracksFilter.length) return tracksFilter.join(',');
     return undefined;
   };
 
@@ -259,6 +283,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           tos: daoInfo.config.TOS_URL ? acceptedTermsOnly : undefined,
           toa: daoInfo.config.DAO_SUPPORTS_TOA ? delegateOffersToA : undefined,
           workstreamId: getWorkstreams(),
+          tracks: getTracks(),
           statuses: statuses.length
             ? statuses.join(',')
             : config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER?.DEFAULT_STATUSES?.join(
@@ -305,6 +330,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           status: item.status,
           profilePicture: item.profilePicture,
           workstreams: item.workstreams,
+          tracks: item.tracks,
           userCreatedAt: item.userCreatedAt,
         };
       });
@@ -375,6 +401,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           realName: item.realName,
           profilePicture: item.profilePicture,
           workstreams: item.workstreams,
+          tracks: item.tracks,
           status: item.status,
           userCreatedAt: item.userCreatedAt,
         };
@@ -522,6 +549,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         realName: fetchedDelegate.realName,
         profilePicture: fetchedDelegate.profilePicture,
         workstreams: fetchedDelegate.workstreams,
+        tracks: fetchedDelegate.tracks,
         status: fetchedDelegate.status,
         userCreatedAt: fetchedDelegate.userCreatedAt,
         acceptedTOS: fetchedDelegate.acceptedTOS,
@@ -689,7 +717,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
   useEffect(() => {
     if (!ignoreAutoFetch) {
       fetchInterests();
-      fetchWorkstreams();
+      fetchCategoryType();
     }
     fetchDaoIds();
   }, []);
@@ -816,6 +844,28 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     setWorkstreamsFilter(items);
   };
 
+  const selectTracks = (index: number) => {
+    if (!tracks[index]) return;
+
+    // search for the index in the tracksFilter array
+    const filterIdx = tracksFilter.findIndex(
+      filter => filter === tracks[index].id.toString()
+    );
+
+    // clone the tracksFilter array
+    const items = [...tracksFilter];
+
+    // if the tracks is already in the tracksFilter array, remove it
+    if (filterIdx >= 0) {
+      items.splice(filterIdx, 1);
+    } else {
+      items.push(tracks[index].id.toString());
+    }
+
+    // set the new tracksFilter array
+    setTracksFilter(items);
+  };
+
   const selectStatus = (items: IStatusOptions[]) => {
     setStatuses(items);
   };
@@ -875,6 +925,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     statuses,
     interestFilter,
     workstreamsFilter,
+    tracksFilter,
     hasInitiated,
     delegateOffersToA,
   ]);
@@ -948,6 +999,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       handleAcceptedTermsOnly,
       delegateOffersToA,
       handleDelegateOffersToA,
+      tracks,
+      tracksFilter,
+      selectTracks,
     }),
     [
       profileSelected,
@@ -979,6 +1033,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       handleAcceptedTermsOnly,
       delegateOffersToA,
       handleDelegateOffersToA,
+      tracks,
+      tracksFilter,
+      selectTracks,
     ]
   );
 

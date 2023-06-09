@@ -54,10 +54,12 @@ export interface IDAOConfig {
   TOS_URL?: string;
   SHOULD_NOT_SHOW?: 'statement' | 'stats' | 'handles';
   DAO_SUPPORTS_TOA?: boolean;
+  DAO_CATEGORIES_TYPE: 'workstreams' | 'tracks';
   DEFAULT_TOA?: string;
   SORT_OPTIONS?: IStats[];
   EXCLUDED_CARD_FIELDS: IStats[];
   ENABLE_DELEGATE_TRACKER?: boolean;
+  DAO_ON_CHAIN_URL?: string;
   /**
    * Defines a custom function to parse the votes with an external proposal provider.
    *

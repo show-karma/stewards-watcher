@@ -14,6 +14,7 @@ import developer from './developer';
 import apecoin from './apecoin';
 import safe from './safe';
 import rocketpool from './rocketpool';
+import moonriver from './moonriver';
 import snapshotABI from './contracts/snapshotABI.json';
 import ERC20ABI from './contracts/ERC20_ABI.json';
 
@@ -123,6 +124,13 @@ export const supportedDAOs: ISupportedDAOs = {
     dark: rocketpool.dark,
     light: rocketpool.light,
     DELEGATE_ABI: snapshotABI,
+    TOKEN_ABI: ERC20ABI,
+  },
+  moonriver: {
+    config: moonriver.config,
+    dark: moonriver.dark,
+    light: moonriver.light,
+    DELEGATE_ABI: pooltogether.ABI,
     TOKEN_ABI: ERC20ABI,
   },
 };

@@ -302,7 +302,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     setStats(filtereds);
   }, [config, data]);
 
-  const renderWorkstream = () => {
+  const renderCategories = () => {
     if (
       !data?.workstreams ||
       !(data.workstreams.length > 0) ||
@@ -535,7 +535,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   overflowX="hidden"
                   width="max-content"
                 >
-                  {renderWorkstream()}
+                  {renderCategories()}
                   {!isLoaded ? (
                     <Flex h="21px" />
                   ) : (

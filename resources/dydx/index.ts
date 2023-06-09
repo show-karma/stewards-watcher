@@ -56,6 +56,7 @@ const config: IDAOConfig = {
   },
   EXCLUDED_CARD_FIELDS: ['healthScore'],
   ENABLE_DELEGATE_TRACKER: true,
+  DAO_CATEGORIES_TYPE: 'workstreams',
 };
 
 const dark: IDAOTheme = {

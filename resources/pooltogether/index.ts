@@ -32,6 +32,7 @@ const config: IDAOConfig = {
   DAO_GTAG: 'G-67LDHT697P',
   EXCLUDED_CARD_FIELDS: ['healthScore', 'karmaScore', 'discordScore'],
   ENABLE_DELEGATE_TRACKER: true,
+  DAO_CATEGORIES_TYPE: 'workstreams',
 };
 
 const dark: IDAOTheme = {

@@ -36,6 +36,7 @@ const config: IDAOConfig = {
     },
   },
   ENABLE_DELEGATE_TRACKER: true,
+  DAO_CATEGORIES_TYPE: 'workstreams',
 };
 
 const dark: IDAOTheme = {

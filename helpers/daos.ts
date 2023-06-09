@@ -14,4 +14,5 @@ export const daosDictionary: Record<string, string> = {
   apecoin: 'apecoin',
   safe: 'safe',
   rocketpool: 'rocketpool',
+  moonriver: 'moonriver',
 };

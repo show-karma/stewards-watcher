@@ -39,6 +39,7 @@ const config: IDAOConfig = {
   EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'healthScore', 'discordScore'],
   DAO_DISCORD_CHANNEL:
     'https://discord.com/channels/1059304419428139039/1108887899543449781',
+  DAO_CATEGORIES_TYPE: 'workstreams',
 };
 
 const dark: IDAOTheme = {

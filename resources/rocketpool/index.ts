@@ -37,6 +37,7 @@ const config: IDAOConfig = {
   DAO_GTAG: 'G-67LDHT697P',
   EXCLUDED_CARD_FIELDS: ['discordScore', 'onChainVotesPct'],
   ENABLE_DELEGATE_TRACKER: true,
+  DAO_CATEGORIES_TYPE: 'workstreams',
 };
 
 const dark: IDAOTheme = {
