@@ -51,7 +51,6 @@ export const DelegateButton: FC<IDelegateButton> = ({
     if (config.DAO_DELEGATE_ACTION) {
       return config.DAO_DELEGATE_ACTION();
     }
-
     if (!isConnected) {
       setWriteAfterAction(true);
       return openConnectModal?.();

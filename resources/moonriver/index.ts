@@ -1,6 +1,8 @@
 import { IDAOConfig, IDAOTheme } from 'types';
+import { moonriverDelegateAction } from 'utils/moonriverDelegateAction';
 import { moonriver } from 'wagmi/chains';
 import ABI from './ABI.json';
+import batchContractAbi from './ABI_BATCH_CONTRACT.json';
 
 const config: IDAOConfig = {
   DAO: 'Moonriver',
@@ -40,6 +42,11 @@ const config: IDAOConfig = {
   ],
   DAO_CATEGORIES_TYPE: 'tracks',
   DAO_ON_CHAIN_URL: 'https://api.thegraph.com/subgraphs/name/arthh/playground',
+  ALLOW_BULK_DELEGATE: true,
+  BULK_DELEGATE_ACTION: moonriverDelegateAction(
+    '0x0000000000000000000000000000000000000808',
+    batchContractAbi
+  ),
 };
 
 const dark: IDAOTheme = {

@@ -117,7 +117,8 @@ interface IDelegateCardProps {
 export const DelegateCard: FC<IDelegateCardProps> = props => {
   const { data } = props;
   const { daoInfo, theme, daoData } = useDAO();
-  const { selectProfile, period, setSelectedProfileData } = useDelegates();
+  const { selectProfile, period, setSelectedProfileData, addToDelegatePool } =
+    useDelegates();
   const { onCopy } = useClipboard(data?.address || '');
 
   const { config } = daoInfo;
@@ -391,6 +392,17 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   const getDataStatusColor = (status: string) => {
     if (status === 'inactive' || status === 'withdrawn') return '#F4EB0F';
     return '#30E320';
+  };
+
+  const handleAddToDelegatePool = (delegate: IDelegate) => {
+    if (!delegate.tracks?.length) {
+      toast({
+        title: 'Error',
+        description: 'This delegate does not belong any track',
+        status: 'error',
+        duration: 3000,
+      });
+    } else addToDelegatePool(delegate);
   };
 
   return (
@@ -748,7 +760,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                       delegated={data.address}
                       px={['4', '8']}
                       beforeOnClick={() => {
-                        setSelectedProfileData(data);
+                        if (config.ALLOW_BULK_DELEGATE) {
+                          handleAddToDelegatePool(data);
+                        } else setSelectedProfileData(data);
                       }}
                     />
                   ))}

@@ -1,4 +1,6 @@
 import { IFilterPeriod, IStatusOptions } from 'types/contexts';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { writeContract } from '@wagmi/core';
 import { Chain } from 'wagmi';
 import { IChainRow } from 'types/IChainRow';
 import { IForumType } from './forum';
@@ -59,6 +61,12 @@ export interface IDAOConfig {
   SORT_OPTIONS?: IStats[];
   EXCLUDED_CARD_FIELDS: IStats[];
   ENABLE_DELEGATE_TRACKER?: boolean;
+  ALLOW_BULK_DELEGATE?: boolean;
+  // TODO: type anys
+  BULK_DELEGATE_ACTION?: (
+    payload: any,
+    write: typeof writeContract
+  ) => Promise<void>;
   DAO_ON_CHAIN_URL?: string;
   /**
    * Defines a custom function to parse the votes with an external proposal provider.

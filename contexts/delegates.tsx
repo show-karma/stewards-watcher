@@ -26,6 +26,8 @@ import {
 import { useMixpanel, useToasty } from 'hooks';
 import { api } from 'helpers';
 import { useAccount } from 'wagmi';
+import { IBulkDelegatePayload } from 'utils/moonriverDelegateAction';
+import { ITrackBadgeProps } from 'components/DelegationPool/TrackBadge';
 import { useDAO } from './dao';
 
 interface IDelegateProps {
@@ -82,6 +84,14 @@ interface IDelegateProps {
   acceptedTermsOnly: boolean;
   handleDelegateOffersToA: (value: boolean) => void;
   delegateOffersToA: boolean;
+  delegatePoolList: IBulkDelegatePayload[];
+  addToDelegatePool: (delegate: IDelegate, amount: string) => void;
+  removeFromDelegatePool: (address: string) => void;
+  addTrackToDelegateInPool: (
+    track: ITrackBadgeProps['track'],
+    address: string
+  ) => void;
+  removeTrackFromDelegateInPool: (trackId: number, address: string) => void;
 }
 
 export const DelegatesContext = createContext({} as IDelegateProps);
@@ -126,6 +136,10 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
   const [hasInitiated, setInitiated] = useState(false);
   const [acceptedTermsOnly, setAcceptedTermsOnly] = useState(false);
   const [delegateOffersToA, setDelegateOffersToA] = useState(false);
+
+  const [delegatePoolList, setDelegatePoolList] = useState<
+    IBulkDelegatePayload[]
+  >([]);
 
   const prepareStatOptions = () => {
     const sortedDefaultOptions = statDefaultOptions.sort(element =>
@@ -912,6 +926,67 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     setInitiated(true);
   };
 
+  const addToDelegatePool = (delegate: IDelegate, amount: string) => {
+    console.log('delegate', delegate);
+    const newDelegates = [...delegatePoolList];
+    const delegateIndex = newDelegates.findIndex(
+      item => item.delegate.address === delegate.address
+    );
+    console.log('delegates', newDelegates);
+    if (!~delegateIndex) {
+      console.log('delegateIndex', delegateIndex);
+      newDelegates.push({ delegate, tracks: [], amount });
+    }
+    setDelegatePoolList(newDelegates);
+  };
+
+  const removeFromDelegatePool = (address: string) => {
+    const newDelegates = [...delegatePoolList];
+    const delegateIndex = newDelegates.findIndex(
+      item => item.delegate.address === address
+    );
+    if (~delegateIndex) {
+      newDelegates.splice(delegateIndex, 1);
+    }
+    setDelegatePoolList(newDelegates);
+  };
+
+  const removeTrackFromDelegateInPool = (trackId: number, address: string) => {
+    const newDelegates = [...delegatePoolList];
+    const delegateIndex = newDelegates.findIndex(
+      item => item.delegate.address === address
+    );
+    if (~delegateIndex) {
+      const newTracks = [...newDelegates[delegateIndex].tracks];
+      const trackIndex = newTracks.findIndex(item => item.id === trackId);
+      if (~trackIndex) {
+        newTracks.splice(trackIndex, 1);
+      }
+      newDelegates[delegateIndex].tracks = newTracks;
+    }
+    setDelegatePoolList(newDelegates);
+  };
+
+  const addTrackToDelegateInPool = (
+    track: ITrackBadgeProps['track'],
+    address: string
+  ) => {
+    const newDelegates = [...delegatePoolList];
+
+    const delegateIndex = newDelegates.findIndex(
+      item => item.delegate.address === address
+    );
+    if (~delegateIndex) {
+      const newTracks = [...newDelegates[delegateIndex].tracks];
+      const trackIndex = newTracks.findIndex(item => item.id === track.id);
+      if (!~trackIndex) {
+        newTracks.push(track);
+      }
+      newDelegates[delegateIndex].tracks = newTracks;
+    }
+    setDelegatePoolList(newDelegates);
+  };
+
   useMemo(() => {
     if (!hasInitiated) return;
     setOffset(0);
@@ -1004,6 +1079,11 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       tracks,
       tracksFilter,
       selectTracks,
+      delegatePoolList,
+      addToDelegatePool,
+      removeFromDelegatePool,
+      addTrackToDelegateInPool,
+      removeTrackFromDelegateInPool,
     }),
     [
       profileSelected,
@@ -1038,6 +1118,11 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       tracks,
       tracksFilter,
       selectTracks,
+      delegatePoolList,
+      addToDelegatePool,
+      removeFromDelegatePool,
+      addTrackToDelegateInPool,
+      removeTrackFromDelegateInPool,
     ]
   );
 
