@@ -1,7 +1,9 @@
 import { IDAOConfig, IDAOTheme } from 'types';
+import { moonriverDelegateAction } from 'utils/moonriverDelegateAction';
 import { moonriverOnChainProvider } from 'utils';
 import { moonriver } from 'wagmi/chains';
 import ABI from './ABI.json';
+import batchContractAbi from './ABI_BATCH_CONTRACT.json';
 
 const config: IDAOConfig = {
   DAO: 'Moonriver',
@@ -26,13 +28,13 @@ const config: IDAOConfig = {
   DAO_CHAIN: moonriver,
   DAO_TOKEN_CONTRACT: [
     {
-      contractAddress: '0x98878B06940aE243284CA214f92Bb71a2b032B8A',
+      contractAddress: '0x0000000000000000000000000000000000000802',
       method: 'balanceOf',
     },
   ],
-  DAO_DELEGATE_CONTRACT: '0x0000000000000000000000000000000000000812',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
+  // DAO_DELEGATE_CONTRACT: '0x0000000000000000000000000000000000000812',
   EXCLUDED_CARD_FIELDS: [
     'healthScore',
     'karmaScore',
@@ -40,6 +42,12 @@ const config: IDAOConfig = {
     'offChainVotesPct',
   ],
   DAO_CATEGORIES_TYPE: 'tracks',
+  ALLOW_BULK_DELEGATE: true,
+  BULK_DELEGATE_ACTION: moonriverDelegateAction(
+    '0x0000000000000000000000000000000000000808', // Batch contract
+    '0x0000000000000000000000000000000000000812', // Delegate contract
+    batchContractAbi
+  ),
   DAO_EXT_VOTES_PROVIDER: {
     onChain: moonriverOnChainProvider,
   },

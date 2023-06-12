@@ -142,7 +142,8 @@ export const HeaderHat = () => {
                     <StyledButton>Delegate Look Up</StyledButton>
                   </ChakraLink>
                 ) : null}
-                {daoInfo.config.DAO_DELEGATE_CONTRACT ? (
+                {daoInfo.config.DAO_DELEGATE_CONTRACT ||
+                daoInfo.config.ALLOW_BULK_DELEGATE ? (
                   <StyledButton onClick={onToggle}>
                     Delegate Tokens
                   </StyledButton>
@@ -170,7 +171,8 @@ export const HeaderHat = () => {
                 <StyledButton>Delegate Look Up</StyledButton>
               </ChakraLink>
             ) : null}
-            {daoInfo.config.DAO_DELEGATE_CONTRACT ? (
+            {daoInfo.config.DAO_DELEGATE_CONTRACT ||
+            daoInfo.config.ALLOW_BULK_DELEGATE ? (
               <StyledButton onClick={onToggle} px="2">
                 Delegate Tokens
               </StyledButton>
