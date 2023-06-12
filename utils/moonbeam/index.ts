@@ -1,1 +1,2 @@
-export * from './onChainProvider';
+export * from './moonbeamwsc';
+export * from './moonriverOnChainProvider';

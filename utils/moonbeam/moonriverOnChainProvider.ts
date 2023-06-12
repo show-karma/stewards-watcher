@@ -5,7 +5,7 @@ import { VOTING_HISTORY } from 'utils/GraphQL';
 import moment from 'moment';
 import { providers } from 'ethers';
 import { RPCS } from 'helpers';
-import { fetchBlockTimestamp } from 'utils/fetchBlockTimestamp';
+import { fetchBlockTimestamp } from 'utils';
 import { MoonbeamWSC } from './moonbeamwsc';
 
 /**
@@ -107,7 +107,7 @@ async function fetchOnChainVotes(daoName: string | string[], address: string) {
   return [];
 }
 
-export async function onChainMoonbeamVotesProvider(
+export async function moonriverOnChainProvider(
   daoName: string | string[],
   address: string
 ): Promise<IChainRow[]> {

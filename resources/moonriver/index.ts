@@ -1,5 +1,5 @@
 import { IDAOConfig, IDAOTheme } from 'types';
-import { onChainMoonbeamVotesProvider } from 'utils';
+import { moonriverOnChainProvider } from 'utils';
 import { moonriver } from 'wagmi/chains';
 import ABI from './ABI.json';
 
@@ -42,7 +42,7 @@ const config: IDAOConfig = {
   DAO_CATEGORIES_TYPE: 'tracks',
   DAO_ON_CHAIN_URL: 'https://api.thegraph.com/subgraphs/name/arthh/playground',
   DAO_EXT_VOTES_PROVIDER: {
-    onChain: onChainMoonbeamVotesProvider,
+    onChain: moonriverOnChainProvider,
   },
 };
 
