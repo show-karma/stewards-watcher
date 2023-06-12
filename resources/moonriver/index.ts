@@ -40,7 +40,6 @@ const config: IDAOConfig = {
     'offChainVotesPct',
   ],
   DAO_CATEGORIES_TYPE: 'tracks',
-  DAO_ON_CHAIN_URL: 'https://api.thegraph.com/subgraphs/name/arthh/playground',
   DAO_EXT_VOTES_PROVIDER: {
     onChain: moonriverOnChainProvider,
   },

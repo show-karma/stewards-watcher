@@ -86,14 +86,14 @@ async function fetchOnChainProposalVotes(
 const useOnChainVotes = (daoName: string | string[], address: string) => {
   const {
     daoInfo: {
-      config: { DAO_EXT_VOTES_PROVIDER, DAO_ON_CHAIN_URL },
+      config: { DAO_EXT_VOTES_PROVIDER },
     },
   } = useDAO();
   return useQuery(['onChainVotes', daoName, address], async () => {
     if (DAO_EXT_VOTES_PROVIDER?.onChain) {
       return DAO_EXT_VOTES_PROVIDER.onChain(daoName, address);
     }
-    return fetchOnChainProposalVotes(daoName, address, DAO_ON_CHAIN_URL);
+    return fetchOnChainProposalVotes(daoName, address);
   });
 };
 
