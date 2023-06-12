@@ -6,6 +6,7 @@ import { publicProvider } from 'wagmi/providers/public';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { useDAO } from 'contexts';
+import { RPCS } from 'helpers';
 
 interface ProviderProps {
   children: React.ReactNode;
@@ -25,7 +26,7 @@ export const RainbowWrapper: React.FC<ProviderProps> = ({ children }) => {
         : publicProvider(),
       jsonRpcProvider({
         rpc: () => ({
-          http: 'https://moonriver.unitedbloc.com',
+          http: RPCS.moonriver,
         }),
       }),
     ]
