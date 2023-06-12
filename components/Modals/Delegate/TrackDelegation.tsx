@@ -182,6 +182,7 @@ export const TrackDelegation: React.FC<StepProps> = ({
             _focus={{ opacity: 0.8 }}
             _focusWithin={{ opacity: 0.8 }}
             _focusVisible={{ opacity: 0.8 }}
+            _disabled={{ opacity: 0.5, cursor: 'not-allowed' }}
             disabled={selectedTracks.length === 0}
             isDisabled={selectedTracks.length === 0}
           >

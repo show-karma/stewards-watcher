@@ -2,6 +2,7 @@ import { Flex, Input, Text } from '@chakra-ui/react';
 import { DelegateButton } from 'components';
 import { useDAO, useDelegates } from 'contexts';
 import { ethers } from 'ethers';
+import { useToasty } from 'hooks';
 import { FC, useMemo } from 'react';
 
 interface IToDelegateProps {
@@ -15,14 +16,15 @@ export const ToDelegate: FC<IToDelegateProps> = ({
   setAddress,
   setSuccess,
 }) => {
-  const { theme } = useDAO();
-  const { setSelectedProfileData } = useDelegates();
+  const { theme, daoInfo } = useDAO();
+  const { setSelectedProfileData, findDelegateByAddress } = useDelegates();
   const { delegateTo: modalTheme } = theme.modal;
 
   const isEthAddress = useMemo(
     () => ethers.utils.isAddress(address),
     [address]
   );
+  const { toast } = useToasty();
 
   const handleChange = (addr: string) => {
     if (address !== addr) setAddress(addr);
@@ -31,6 +33,50 @@ export const ToDelegate: FC<IToDelegateProps> = ({
   const emitSuccess = () => setSuccess(true);
 
   const fullDisabled = !isEthAddress && address.length > 0;
+
+  const setDelegate = async () => {
+    const emptyDelegate = {
+      address,
+      forumActivity: 0,
+      karmaScore: 0,
+      voteParticipation: {
+        onChain: 0,
+        offChain: 0,
+      },
+      discordScore: 0,
+      status: 'active',
+    };
+    try {
+      const hasTracks = daoInfo.config.DAO_CATEGORIES_TYPE === 'tracks';
+      if (hasTracks) {
+        const delegate = await findDelegateByAddress(address);
+        if (!delegate?.tracks?.length) {
+          toast({
+            title: 'Error',
+            description: 'This delegate does not belong any track',
+            status: 'error',
+            duration: 10000,
+          });
+        }
+        setSelectedProfileData(delegate || emptyDelegate);
+        return;
+      }
+
+      setSelectedProfileData(emptyDelegate);
+    } catch {
+      setSelectedProfileData({
+        address,
+        forumActivity: 0,
+        karmaScore: 0,
+        voteParticipation: {
+          onChain: 0,
+          offChain: 0,
+        },
+        discordScore: 0,
+        status: 'active',
+      });
+    }
+  };
 
   return (
     <Flex px="4" flexDir="column" align="center" maxW="368px" pb="6">
@@ -113,19 +159,7 @@ export const ToDelegate: FC<IToDelegateProps> = ({
         borderRadius="4px"
         mt={4}
         successEmitter={emitSuccess}
-        beforeOnClick={() => {
-          setSelectedProfileData({
-            address,
-            forumActivity: 0,
-            karmaScore: 0,
-            voteParticipation: {
-              onChain: 0,
-              offChain: 0,
-            },
-            discordScore: 0,
-            status: 'active',
-          });
-        }}
+        beforeOnClick={() => setDelegate()}
       />
     </Flex>
   );

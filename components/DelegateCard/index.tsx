@@ -402,7 +402,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
         status: 'error',
         duration: 3000,
       });
-    } else setSelectedProfileData(delegate);
+    } else {
+      setSelectedProfileData(delegate);
+    }
   };
 
   return (
@@ -762,8 +764,13 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                       beforeOnClick={() => {
                         if (config.ALLOW_BULK_DELEGATE) {
                           handleAddToDelegatePool(data);
-                        } else setSelectedProfileData(data);
+                        } else {
+                          setSelectedProfileData(data);
+                        }
                       }}
+                      shouldBlockModal={
+                        !(config.ALLOW_BULK_DELEGATE && !!data.tracks?.length)
+                      }
                     />
                   ))}
                 <UserInfoButton onOpen={selectProfile} profile={data} />
