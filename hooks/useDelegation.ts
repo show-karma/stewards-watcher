@@ -10,8 +10,9 @@ export const useDelegation = (args: IDelegation) => {
 
   const getArgs = () => {
     const functionArgs = daoInfo.config.DAO_DELEGATE_FUNCTION_ARGS;
-    if (!functionArgs) return [delegatee];
-    return functionArgs.concat([delegatee]);
+    return [1, delegatee, 0, 100];
+    // if (!functionArgs) return [delegatee];
+    // return functionArgs.concat([delegatee]);
   };
 
   const { mixpanel } = useMixpanel();
