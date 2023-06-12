@@ -1,11 +1,9 @@
 import { Button, Flex, Text } from '@chakra-ui/react';
 import { VotesToDelegate } from 'components/Modals/Delegate/VotesToDelegate';
 import { useDAO, useDelegates, useGovernanceVotes } from 'contexts';
-import React from 'react';
-import { useProvider } from 'wagmi';
+import React, { useMemo } from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { writeContract } from '@wagmi/core';
-// import { IDelegate, ITracks } from 'types';
 import { DelegatePoolList } from './DelegatePoolList';
 import { EmptyDelegatePool } from './EmptyDelegatePool';
 
@@ -13,6 +11,14 @@ export const DelegationPool: React.FC = () => {
   const { theme, daoInfo, daoData } = useDAO();
   const { delegatePoolList, removeFromDelegatePool } = useDelegates();
   const { votes } = useGovernanceVotes();
+
+  const votesToDelegate = useMemo(() => {
+    const totalVotes = delegatePoolList.reduce(
+      (acc, cur) => acc + +cur.amount,
+      0
+    );
+    return totalVotes.toString();
+  }, [delegatePoolList]);
 
   const handleDelegation = () => {
     if (daoInfo.config.BULK_DELEGATE_ACTION)
@@ -68,7 +74,7 @@ export const DelegationPool: React.FC = () => {
                   daoData?.socialLinks?.logoUrl || daoInfo.config.DAO_LOGO
                 }
                 daoName={daoInfo.config.DAO}
-                votes={votes}
+                votes={votesToDelegate}
               />
               <Text>to the following users</Text>
             </Flex>

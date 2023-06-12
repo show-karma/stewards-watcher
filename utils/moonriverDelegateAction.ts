@@ -29,14 +29,16 @@ function digest(payload: IBulkDelegatePayload[]) {
 }
 
 export const moonriverDelegateAction =
-  (batchContractAddr: `0x${string}`, abi: any) =>
+  (
+    batchContractAddr: `0x${string}`,
+    delegateContract: `0x${string}`,
+    batchContractAbi: any[]
+  ) =>
   async (payload: IBulkDelegatePayload[], write: typeof writeContract) => {
     const calldatas = digest(payload);
 
     const args = [
-      new Array(calldatas.length).fill(
-        '0x0000000000000000000000000000000000000812'
-      ),
+      new Array(calldatas.length).fill(delegateContract),
       [],
       calldatas,
       [],
@@ -44,7 +46,7 @@ export const moonriverDelegateAction =
 
     const { hash } = await write({
       address: batchContractAddr,
-      abi,
+      abi: batchContractAbi,
       functionName: 'batchAll',
       args,
       mode: 'recklesslyUnprepared',

@@ -31,7 +31,6 @@ const config: IDAOConfig = {
       method: 'balanceOf',
     },
   ],
-  DAO_DELEGATE_CONTRACT: '0x0000000',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
   EXCLUDED_CARD_FIELDS: [
@@ -44,7 +43,8 @@ const config: IDAOConfig = {
   DAO_ON_CHAIN_URL: 'https://api.thegraph.com/subgraphs/name/arthh/playground',
   ALLOW_BULK_DELEGATE: true,
   BULK_DELEGATE_ACTION: moonriverDelegateAction(
-    '0x0000000000000000000000000000000000000808',
+    '0x0000000000000000000000000000000000000808', // Batch contract
+    '0x0000000000000000000000000000000000000812', // Delegate contract
     batchContractAbi
   ),
 };

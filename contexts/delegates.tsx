@@ -926,16 +926,13 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     setInitiated(true);
   };
 
-  const addToDelegatePool = (delegate: IDelegate, amount: string) => {
-    console.log('delegate', delegate);
+  const addToDelegatePool = (delegate: IDelegate, amount = '0.1') => {
     const newDelegates = [...delegatePoolList];
     const delegateIndex = newDelegates.findIndex(
       item => item.delegate.address === delegate.address
     );
-    console.log('delegates', newDelegates);
     if (!~delegateIndex) {
-      console.log('delegateIndex', delegateIndex);
-      newDelegates.push({ delegate, tracks: [], amount });
+      newDelegates.push({ delegate, tracks: [], amount: '0.1' });
     }
     setDelegatePoolList(newDelegates);
   };
@@ -976,6 +973,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     const delegateIndex = newDelegates.findIndex(
       item => item.delegate.address === address
     );
+
     if (~delegateIndex) {
       const newTracks = [...newDelegates[delegateIndex].tracks];
       const trackIndex = newTracks.findIndex(item => item.id === track.id);
