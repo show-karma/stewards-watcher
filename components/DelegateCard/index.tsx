@@ -316,6 +316,31 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     const type = daoInfo.config.DAO_CATEGORIES_TYPE;
     const categoryName = data?.[type]?.[0]?.name;
 
+    if (type === 'tracks')
+      return (
+        <Flex w="full" overflowX="hidden" gap="1">
+          {data?.tracks?.map((track, index) => (
+            <Text
+              key={+index}
+              color={theme.card.workstream.text}
+              bgColor={theme.card.workstream.bg}
+              px="2"
+              py="1"
+              borderRadius="md"
+              fontSize="10px"
+              fontWeight="medium"
+              _hover={{
+                backgroundColor: convertHexToRGBA(theme.title, 0.8),
+              }}
+              w="max-content"
+              minW="max-content"
+            >
+              {track.name}
+            </Text>
+          ))}
+        </Flex>
+      );
+
     return (
       <Text
         color={theme.card.workstream.text}
@@ -540,7 +565,8 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   flexDir="row"
                   gap="1.5"
                   overflowX="hidden"
-                  width="max-content"
+                  width="100%"
+                  maxW={{ base: '310px', lg: '350px' }}
                 >
                   {renderCategory()}
                   {!isLoaded ? (
