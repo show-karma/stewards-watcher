@@ -990,9 +990,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     const newDelegates = delegatePoolList.map(item => {
       const newTracks = item.tracks.filter(
         track =>
-          !selectedTracks.find(
-            selectedTrack => selectedTrack.name === track.name
-          )
+          !selectedTracks.find(selectedTrack => selectedTrack.id === track.id)
       );
       return { ...item, tracks: newTracks };
     });
