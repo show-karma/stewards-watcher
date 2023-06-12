@@ -1,5 +1,6 @@
 import { IDAOConfig, IDAOTheme } from 'types';
 import { moonriverDelegateAction } from 'utils/moonriverDelegateAction';
+import { moonriverOnChainProvider } from 'utils';
 import { moonriver } from 'wagmi/chains';
 import ABI from './ABI.json';
 import batchContractAbi from './ABI_BATCH_CONTRACT.json';
@@ -41,13 +42,15 @@ const config: IDAOConfig = {
     'offChainVotesPct',
   ],
   DAO_CATEGORIES_TYPE: 'tracks',
-  DAO_ON_CHAIN_URL: 'https://api.thegraph.com/subgraphs/name/arthh/playground',
   ALLOW_BULK_DELEGATE: true,
   BULK_DELEGATE_ACTION: moonriverDelegateAction(
     '0x0000000000000000000000000000000000000808', // Batch contract
     '0x0000000000000000000000000000000000000812', // Delegate contract
     batchContractAbi
   ),
+  DAO_EXT_VOTES_PROVIDER: {
+    onChain: moonriverOnChainProvider,
+  },
 };
 
 const dark: IDAOTheme = {

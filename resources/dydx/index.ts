@@ -1,5 +1,5 @@
 import { IDAOConfig, IDAOTheme } from 'types';
-import { onChainDyDxVotesProvider } from 'utils/onChainDyDxVotesProvider';
+import { onChainDyDxVotesProvider } from 'utils/dydx/onChainDyDxVotesProvider';
 import { mainnet } from 'wagmi/chains';
 import ABI from './ABI.json';
 
