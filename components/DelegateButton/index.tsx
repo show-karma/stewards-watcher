@@ -10,6 +10,7 @@ interface IDelegateButton extends ButtonProps {
   text?: string;
   successEmitter?: () => void;
   beforeOnClick?: () => void;
+  shouldBlockModal?: boolean;
 }
 
 export const DelegateButton: FC<IDelegateButton> = ({
@@ -17,6 +18,7 @@ export const DelegateButton: FC<IDelegateButton> = ({
   text = 'Delegate',
   successEmitter,
   beforeOnClick,
+  shouldBlockModal,
   ...props
 }) => {
   const { openConnectModal, openChainModal, chain, connectIsOpen } =
@@ -61,7 +63,7 @@ export const DelegateButton: FC<IDelegateButton> = ({
       return openChainModal && openChainModal();
     }
 
-    if (!delegateIsOpen) return delegateOnToggle();
+    if (!delegateIsOpen && !shouldBlockModal) return delegateOnToggle();
 
     return write?.();
   };

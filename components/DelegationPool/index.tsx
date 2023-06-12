@@ -126,10 +126,35 @@ export const DelegationPool: React.FC = () => {
         </Flex>
         <Flex alignItems="center">
           <Button
-            disabled={!delegatePoolList.length}
+            disabled={
+              !delegatePoolList.length ||
+              !!delegatePoolList.find(delegate => delegate.tracks.length === 0)
+            }
+            isDisabled={
+              !delegatePoolList.length ||
+              !!delegatePoolList.find(delegate => delegate.tracks.length === 0)
+            }
             background={delegatePoolList.length ? theme.branding : '#CED1D4'}
             color="white"
             onClick={handleDelegation}
+            _hover={{
+              opacity: 0.8,
+            }}
+            _active={{
+              opacity: 0.8,
+            }}
+            _focus={{
+              opacity: 0.8,
+            }}
+            _focusVisible={{
+              opacity: 0.8,
+            }}
+            _focusWithin={{
+              opacity: 0.8,
+            }}
+            _disabled={{
+              opacity: 0.5,
+            }}
           >
             Delegate
           </Button>

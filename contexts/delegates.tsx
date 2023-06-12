@@ -85,13 +85,18 @@ interface IDelegateProps {
   handleDelegateOffersToA: (value: boolean) => void;
   delegateOffersToA: boolean;
   delegatePoolList: IBulkDelegatePayload[];
-  addToDelegatePool: (delegate: IDelegate, amount: string) => void;
+  addToDelegatePool: (
+    delegate: IDelegate,
+    selectedTracks: ITrackBadgeProps['track'][],
+    amount: string
+  ) => void;
   removeFromDelegatePool: (address: string) => void;
   addTrackToDelegateInPool: (
     track: ITrackBadgeProps['track'],
     address: string
   ) => void;
   removeTrackFromDelegateInPool: (trackId: number, address: string) => void;
+  findDelegateByAddress: (userToSearch: string) => Promise<IDelegate | null>;
   clearDelegationPool: () => void;
 }
 
@@ -519,6 +524,59 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     }
   }, [publicAddress, isConnected]);
 
+  const findDelegateByAddress = async (userToSearch: string) => {
+    try {
+      const axiosClient = await api.get(`/dao/find-delegate`, {
+        params: {
+          dao: config.DAO_KARMA_ID,
+          user: userToSearch,
+        },
+      });
+      const { data } = axiosClient.data;
+      const { delegate: fetchedDelegate } = data;
+
+      const fetchedPeriod = (fetchedDelegate as IDelegateFromAPI).stats.find(
+        fetchedStat => fetchedStat.period === period
+      );
+      const userFound: IDelegate = {
+        address: fetchedDelegate.publicAddress,
+        ensName: fetchedDelegate.ensName,
+        delegatorCount: fetchedDelegate.delegatorCount || 0,
+        forumActivity: fetchedPeriod?.forumActivityScore || 0,
+        discordScore: fetchedPeriod?.discordScore || 0,
+        delegateSince:
+          fetchedDelegate.joinDateAt || fetchedDelegate.firstTokenDelegatedAt,
+        voteParticipation: {
+          onChain: fetchedPeriod?.onChainVotesPct || 0,
+          offChain: fetchedPeriod?.offChainVotesPct || 0,
+        },
+        votingWeight: fetchedDelegate.voteWeight,
+        delegatedVotes:
+          fetchedDelegate.delegatedVotes ||
+          fetchedDelegate.snapshotDelegatedVotes,
+        gitcoinHealthScore: fetchedPeriod?.gitcoinHealthScore || 0,
+        twitterHandle: fetchedDelegate.twitterHandle,
+        discourseHandle: fetchedDelegate.discourseHandle,
+        discordHandle: fetchedDelegate.discordHandle,
+        discordUsername: fetchedDelegate.discordUsername,
+        updatedAt: fetchedPeriod?.updatedAt,
+        karmaScore: fetchedPeriod?.karmaScore || 0,
+        delegatePitch: fetchedDelegate.delegatePitch,
+        aboutMe: fetchedDelegate.aboutMe,
+        realName: fetchedDelegate.realName,
+        profilePicture: fetchedDelegate.profilePicture,
+        workstreams: fetchedDelegate.workstreams,
+        tracks: fetchedDelegate.tracks,
+        status: fetchedDelegate.status,
+        userCreatedAt: fetchedDelegate.userCreatedAt,
+        acceptedTOS: fetchedDelegate.acceptedTOS,
+      };
+      return userFound;
+    } catch {
+      return null;
+    }
+  };
+
   const searchProfileModal = async (
     userToSearch: string,
     defaultTab?: IActiveTab
@@ -927,13 +985,32 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     setInitiated(true);
   };
 
-  const addToDelegatePool = (delegate: IDelegate, amount = '0.1') => {
-    const newDelegates = [...delegatePoolList];
+  const arrayWithoutDuplicatesTracks = (
+    selectedTracks: ITrackBadgeProps['track'][]
+  ) => {
+    const newDelegates = delegatePoolList.map(item => {
+      const newTracks = item.tracks.filter(
+        track =>
+          !selectedTracks.find(selectedTrack => selectedTrack.id === track.id)
+      );
+      return { ...item, tracks: newTracks };
+    });
+    return newDelegates;
+  };
+
+  const addToDelegatePool = (
+    delegate: IDelegate,
+    selectedTracks: ITrackBadgeProps['track'][],
+    amount = '0.1'
+  ) => {
+    const newDelegates = arrayWithoutDuplicatesTracks(selectedTracks);
+
     const delegateIndex = newDelegates.findIndex(
       item => item.delegate.address === delegate.address
     );
+
     if (!~delegateIndex) {
-      newDelegates.push({ delegate, tracks: [], amount: '0.1' });
+      newDelegates.push({ delegate, tracks: selectedTracks, amount });
     }
     setDelegatePoolList(newDelegates);
   };
@@ -973,7 +1050,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     track: ITrackBadgeProps['track'],
     address: string
   ) => {
-    const newDelegates = [...delegatePoolList];
+    const newDelegates = arrayWithoutDuplicatesTracks([track]);
 
     const delegateIndex = newDelegates.findIndex(
       item => item.delegate.address === address
@@ -1087,6 +1164,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       removeFromDelegatePool,
       addTrackToDelegateInPool,
       removeTrackFromDelegateInPool,
+      findDelegateByAddress,
       clearDelegationPool,
     }),
     [
@@ -1127,6 +1205,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       removeFromDelegatePool,
       addTrackToDelegateInPool,
       removeTrackFromDelegateInPool,
+      findDelegateByAddress,
       clearDelegationPool,
     ]
   );
