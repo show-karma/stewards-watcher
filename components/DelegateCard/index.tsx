@@ -337,7 +337,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
 
   const shortAddress = data && truncateAddress(data.address);
 
-  const checkIfDelegate = () => !!daoInfo.config.DAO_DELEGATE_CONTRACT;
+  const checkIfDelegate = () =>
+    !!daoInfo.config.DAO_DELEGATE_CONTRACT ||
+    daoInfo.config.ALLOW_BULK_DELEGATE;
 
   const canDelegate = checkIfDelegate();
 

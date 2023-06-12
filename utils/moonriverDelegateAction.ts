@@ -15,13 +15,13 @@ export interface IBulkDelegatePayload {
 
 function digest(payload: IBulkDelegatePayload[]) {
   const abiInterface = new ethers.utils.Interface(ABI);
-  const calldatas = payload.map(item =>
+  const calldatas = payload.flatMap(item =>
     item.tracks.map(track =>
       abiInterface.encodeFunctionData('delegate', [
         track.id,
         item.delegate.address,
         0,
-        item.amount,
+        ethers.utils.parseEther(item.amount),
       ])
     )
   );
@@ -29,21 +29,16 @@ function digest(payload: IBulkDelegatePayload[]) {
 }
 
 export const moonriverDelegateAction =
-  (batchContractAddr: `0x${string}`, abi: any) =>
+  (
+    batchContractAddr: `0x${string}`,
+    delegateContract: `0x${string}`,
+    batchContractAbi: any[]
+  ) =>
   async (payload: IBulkDelegatePayload[], write: typeof writeContract) => {
-    console.log(payload);
-    console.log('delegateContractAddr', batchContractAddr);
-
     const calldatas = digest(payload);
-    console.log('calldatas', calldatas);
-    console.log('provider', write);
-
-    // batchAll(['0x0000000000000000000000000000000000000812, '0x0000000000000000000000000000000000000812'), [], [calldata1, calldata2], [])
 
     const args = [
-      new Array(calldatas.length).fill(
-        '0x0000000000000000000000000000000000000812'
-      ),
+      new Array(calldatas.length).fill(delegateContract),
       [],
       calldatas,
       [],
@@ -51,11 +46,11 @@ export const moonriverDelegateAction =
 
     const { hash } = await write({
       address: batchContractAddr,
-      abi,
+      abi: batchContractAbi,
       functionName: 'batchAll',
       args,
       mode: 'recklesslyUnprepared',
     });
 
-    console.log(hash);
+    return hash;
   };

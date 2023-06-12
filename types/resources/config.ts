@@ -63,10 +63,16 @@ export interface IDAOConfig {
   ENABLE_DELEGATE_TRACKER?: boolean;
   ALLOW_BULK_DELEGATE?: boolean;
   // TODO: type anys
+  /**
+   * Defines a function to bulk delegate
+   * @param payload
+   * @param write
+   * @returns tx hash
+   */
   BULK_DELEGATE_ACTION?: (
     payload: any,
     write: typeof writeContract
-  ) => Promise<void>;
+  ) => Promise<`0x${string}`>;
   DAO_ON_CHAIN_URL?: string;
   /**
    * Defines a custom function to parse the votes with an external proposal provider.

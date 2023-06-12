@@ -1,28 +1,63 @@
-import { Button, Flex, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Text } from '@chakra-ui/react';
 import { VotesToDelegate } from 'components/Modals/Delegate/VotesToDelegate';
 import { useDAO, useDelegates, useGovernanceVotes } from 'contexts';
-import React from 'react';
-import { useProvider } from 'wagmi';
+import React, { useMemo, useState } from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { writeContract } from '@wagmi/core';
-// import { IDelegate, ITracks } from 'types';
+import { writeContract, waitForTransaction } from '@wagmi/core';
+import { useToasty } from 'hooks';
 import { DelegatePoolList } from './DelegatePoolList';
 import { EmptyDelegatePool } from './EmptyDelegatePool';
 
 export const DelegationPool: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const { theme, daoInfo, daoData } = useDAO();
-  const { delegatePoolList, removeFromDelegatePool } = useDelegates();
+  const { delegatePoolList, removeFromDelegatePool, clearDelegationPool } =
+    useDelegates();
   const { votes } = useGovernanceVotes();
 
-  const handleDelegation = () => {
-    if (daoInfo.config.BULK_DELEGATE_ACTION)
-      return daoInfo.config.BULK_DELEGATE_ACTION(
-        delegatePoolList.map(payload => ({
-          ...payload,
-          amount: votes,
-        })),
-        writeContract
-      );
+  const { toast } = useToasty();
+
+  const votesToDelegate = useMemo(() => {
+    const totalVotes = delegatePoolList.reduce(
+      (acc, cur) => acc + +cur.amount,
+      0
+    );
+    return totalVotes.toString();
+  }, [delegatePoolList]);
+
+  const handleDelegation = async () => {
+    if (daoInfo.config.BULK_DELEGATE_ACTION) {
+      try {
+        setIsLoading(true);
+        const hash = await daoInfo.config.BULK_DELEGATE_ACTION(
+          delegatePoolList.map(payload => ({
+            ...payload,
+            amount: votes,
+          })),
+          writeContract
+        );
+
+        await waitForTransaction({
+          hash,
+        });
+
+        clearDelegationPool();
+
+        toast({
+          title: 'Delegation successful',
+          description: `Transaction ${hash} completed.`,
+          status: 'success',
+        });
+      } catch {
+        toast({
+          title: 'Delegation failed',
+          description: `Transaction failed.`,
+          status: 'error',
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    }
     return null;
   };
 
@@ -39,7 +74,20 @@ export const DelegationPool: React.FC = () => {
       py="5"
       px="4"
       mt="1.5rem"
+      position="relative"
     >
+      {isLoading && (
+        <Box
+          position="absolute"
+          top="0"
+          borderRadius="xl"
+          left="0"
+          w="full"
+          h="full"
+          bg="rgba(255,255,255,0.5)"
+          zIndex="1"
+        />
+      )}
       <Flex
         justifyContent="space-between"
         w="full"
@@ -68,7 +116,7 @@ export const DelegationPool: React.FC = () => {
                   daoData?.socialLinks?.logoUrl || daoInfo.config.DAO_LOGO
                 }
                 daoName={daoInfo.config.DAO}
-                votes={votes}
+                votes={votesToDelegate}
               />
               <Text>to the following users</Text>
             </Flex>

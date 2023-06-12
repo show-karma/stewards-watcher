@@ -97,6 +97,7 @@ interface IDelegateProps {
   ) => void;
   removeTrackFromDelegateInPool: (trackId: number, address: string) => void;
   findDelegateByAddress: (userToSearch: string) => Promise<IDelegate | null>;
+  clearDelegationPool: () => void;
 }
 
 export const DelegatesContext = createContext({} as IDelegateProps);
@@ -1000,7 +1001,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
   const addToDelegatePool = (
     delegate: IDelegate,
     selectedTracks: ITrackBadgeProps['track'][],
-    amount: string
+    amount = '0.1'
   ) => {
     const newDelegates = arrayWithoutDuplicatesTracks(selectedTracks);
 
@@ -1012,6 +1013,10 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       newDelegates.push({ delegate, tracks: selectedTracks, amount });
     }
     setDelegatePoolList(newDelegates);
+  };
+
+  const clearDelegationPool = () => {
+    setDelegatePoolList([]);
   };
 
   const removeFromDelegatePool = (address: string) => {
@@ -1050,6 +1055,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     const delegateIndex = newDelegates.findIndex(
       item => item.delegate.address === address
     );
+
     if (~delegateIndex) {
       const newTracks = [...newDelegates[delegateIndex].tracks];
       const trackIndex = newTracks.findIndex(item => item.id === track.id);
@@ -1159,6 +1165,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       addTrackToDelegateInPool,
       removeTrackFromDelegateInPool,
       findDelegateByAddress,
+      clearDelegationPool,
     }),
     [
       profileSelected,
@@ -1199,6 +1206,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       addTrackToDelegateInPool,
       removeTrackFromDelegateInPool,
       findDelegateByAddress,
+      clearDelegationPool,
     ]
   );
 

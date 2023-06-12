@@ -130,7 +130,7 @@ export const supportedDAOs: ISupportedDAOs = {
     config: moonriver.config,
     dark: moonriver.dark,
     light: moonriver.light,
-    DELEGATE_ABI: pooltogether.ABI,
+    DELEGATE_ABI: [],
     TOKEN_ABI: ERC20ABI,
   },
 };
