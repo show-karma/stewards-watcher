@@ -1,4 +1,4 @@
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Flex, FlexProps } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
 import { BsPlus } from 'react-icons/bs';
 
@@ -10,12 +10,15 @@ export interface ITrackBadgeProps {
   selected?: boolean;
   onSelect: (track: ITrackBadgeProps['track']) => void;
   onRemove: (trackId: number) => void;
+  styles?: FlexProps;
 }
+
 export const TrackBadge: React.FC<ITrackBadgeProps> = ({
   track,
   onRemove,
   onSelect,
   selected,
+  styles,
 }) => {
   const { theme } = useDAO();
 
@@ -43,6 +46,7 @@ export const TrackBadge: React.FC<ITrackBadgeProps> = ({
       onClick={selected ? handleRemove : handleSelect}
       color={selected ? '#1DE9B6' : theme.text}
       background={selected ? 'black' : 'transparent'}
+      {...styles}
     >
       <Flex>
         <Flex>{track.name}</Flex>

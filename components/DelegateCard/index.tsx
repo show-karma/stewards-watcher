@@ -402,7 +402,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
         status: 'error',
         duration: 3000,
       });
-    } else addToDelegatePool(delegate);
+    } else setSelectedProfileData(delegate);
   };
 
   return (

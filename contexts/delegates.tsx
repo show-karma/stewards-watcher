@@ -85,7 +85,11 @@ interface IDelegateProps {
   handleDelegateOffersToA: (value: boolean) => void;
   delegateOffersToA: boolean;
   delegatePoolList: IBulkDelegatePayload[];
-  addToDelegatePool: (delegate: IDelegate, amount: string) => void;
+  addToDelegatePool: (
+    delegate: IDelegate,
+    selectedTracks: ITrackBadgeProps['track'][],
+    amount: string
+  ) => void;
   removeFromDelegatePool: (address: string) => void;
   addTrackToDelegateInPool: (
     track: ITrackBadgeProps['track'],
@@ -926,16 +930,17 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     setInitiated(true);
   };
 
-  const addToDelegatePool = (delegate: IDelegate, amount: string) => {
-    console.log('delegate', delegate);
+  const addToDelegatePool = (
+    delegate: IDelegate,
+    selectedTracks: ITrackBadgeProps['track'][],
+    amount: string
+  ) => {
     const newDelegates = [...delegatePoolList];
     const delegateIndex = newDelegates.findIndex(
       item => item.delegate.address === delegate.address
     );
-    console.log('delegates', newDelegates);
     if (!~delegateIndex) {
-      console.log('delegateIndex', delegateIndex);
-      newDelegates.push({ delegate, tracks: [], amount });
+      newDelegates.push({ delegate, tracks: selectedTracks, amount });
     }
     setDelegatePoolList(newDelegates);
   };
