@@ -66,7 +66,7 @@ export const DelegateButton: FC<IDelegateButton> = ({
     return write?.();
   };
 
-  return config.DAO_DELEGATE_CONTRACT ? (
+  return config.DAO_DELEGATE_CONTRACT || config.ALLOW_BULK_DELEGATE ? (
     <Button
       background={theme.branding}
       px={{ base: '3', sm: '4', md: '6' }}

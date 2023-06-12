@@ -92,6 +92,7 @@ interface IDelegateProps {
     address: string
   ) => void;
   removeTrackFromDelegateInPool: (trackId: number, address: string) => void;
+  clearDelegationPool: () => void;
 }
 
 export const DelegatesContext = createContext({} as IDelegateProps);
@@ -937,6 +938,10 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     setDelegatePoolList(newDelegates);
   };
 
+  const clearDelegationPool = () => {
+    setDelegatePoolList([]);
+  };
+
   const removeFromDelegatePool = (address: string) => {
     const newDelegates = [...delegatePoolList];
     const delegateIndex = newDelegates.findIndex(
@@ -1082,6 +1087,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       removeFromDelegatePool,
       addTrackToDelegateInPool,
       removeTrackFromDelegateInPool,
+      clearDelegationPool,
     }),
     [
       profileSelected,
@@ -1121,6 +1127,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       removeFromDelegatePool,
       addTrackToDelegateInPool,
       removeTrackFromDelegateInPool,
+      clearDelegationPool,
     ]
   );
 

@@ -72,7 +72,7 @@ export interface IDAOConfig {
   BULK_DELEGATE_ACTION?: (
     payload: any,
     write: typeof writeContract
-  ) => Promise<string>;
+  ) => Promise<`0x${string}`>;
   DAO_ON_CHAIN_URL?: string;
   /**
    * Defines a custom function to parse the votes with an external proposal provider.

@@ -33,6 +33,7 @@ const config: IDAOConfig = {
   ],
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
+  // DAO_DELEGATE_CONTRACT: '0x0000000000000000000000000000000000000812',
   EXCLUDED_CARD_FIELDS: [
     'healthScore',
     'karmaScore',
