@@ -27,7 +27,7 @@ const config: IDAOConfig = {
   DAO_CHAIN: moonriver,
   DAO_TOKEN_CONTRACT: [
     {
-      contractAddress: '0x98878B06940aE243284CA214f92Bb71a2b032B8A',
+      contractAddress: '0x0000000000000000000000000000000000000802',
       method: 'balanceOf',
     },
   ],
