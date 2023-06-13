@@ -66,7 +66,7 @@ const dark: IDAOTheme = {
   headerBg: '#2D424D',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
-  collapse: { text: '#FFFFFF', subtext: '#ADB8C0' },
+  collapse: { text: '#53cbc9', subtext: '#ADB8C0' },
   hat: {
     text: {
       primary: '#FFFFFF',
@@ -201,12 +201,12 @@ const dark: IDAOTheme = {
     },
   },
   loginModal: {
-    background: '#151515',
+    background: '#2D424D',
     text: '#FFFFFF',
     footer: { bg: '#FFFFFF', text: '#151515' },
     button: {
       bg: '#fcc10e',
-      text: '#FFFFFF',
+      text: '#000000',
     },
   },
   tokenHolders: {
