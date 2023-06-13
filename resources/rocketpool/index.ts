@@ -14,8 +14,10 @@ const config: IDAOConfig = {
   METATAGS: {
     TITLE: `Delegates of Rocket Pool`,
     DESCRIPTION: `Find all the active delegates in Rocket Pool along with governance stats across on-chain/off-chain voting, forum and discord.`,
-    IMAGE_DISCORD: '/daos/rocketpool/preview-discord.png',
-    IMAGE_TWITTER: '/daos/rocketpool/preview-twitter.png',
+    IMAGE_DISCORD:
+      'https://rocketpool.karmahq.xyz/daos/rocketpool/preview-discord.png',
+    IMAGE_TWITTER:
+      'https://rocketpool.karmahq.xyz/daos/rocketpool/preview-twitter.png',
     FAVICON: '/daos/rocketpool/favicon.ico',
     URL: `https://rocketpool.karmahq.xyz`,
   },
