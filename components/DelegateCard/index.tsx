@@ -434,6 +434,14 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     }
   };
 
+  const shouldBlockModal = (tracksLength?: number) => {
+    if (config.ALLOW_BULK_DELEGATE) {
+      if (tracksLength) return false;
+      return true;
+    }
+    return false;
+  };
+
   return (
     <Flex
       bg={theme.card.background}
@@ -796,9 +804,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                           setSelectedProfileData(data);
                         }
                       }}
-                      shouldBlockModal={
-                        !(config.ALLOW_BULK_DELEGATE && !!data.tracks?.length)
-                      }
+                      shouldBlockModal={shouldBlockModal(data.tracks?.length)}
                     />
                   ))}
                 <UserInfoButton onOpen={selectProfile} profile={data} />

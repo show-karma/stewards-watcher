@@ -61,6 +61,9 @@ export interface IDAOConfig {
   SORT_OPTIONS?: IStats[];
   EXCLUDED_CARD_FIELDS: IStats[];
   ENABLE_DELEGATE_TRACKER?: boolean;
+  DELEGATION_ERRORS_DICTIONARY?: {
+    [key: string]: string;
+  };
   ALLOW_BULK_DELEGATE?: boolean;
   // TODO: type anys
   /**

@@ -26,7 +26,7 @@ import {
 import { useMixpanel, useToasty } from 'hooks';
 import { api } from 'helpers';
 import { useAccount } from 'wagmi';
-import { IBulkDelegatePayload } from 'utils/moonriverDelegateAction';
+import { IBulkDelegatePayload } from 'utils/moonbeam/moonriverDelegateAction';
 import { ITrackBadgeProps } from 'components/DelegationPool/TrackBadge';
 import { useDAO } from './dao';
 

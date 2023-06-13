@@ -86,7 +86,7 @@ export const DelegateLoginModal: FC<IDelegateLogin> = ({ isOpen, onClose }) => {
               objectFit="contain"
               color="white"
               fill="white"
-              src={theme.logo || config.DAO_LOGO}
+              src={theme.loginModal.logo || config.DAO_LOGO}
             />
             <Flex gap="3" w="full" align="center">
               <Text

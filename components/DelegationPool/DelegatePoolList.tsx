@@ -2,7 +2,7 @@ import { Flex } from '@chakra-ui/react';
 import { ImgWithFallback } from 'components/ImgWithFallback';
 import { useDAO, useDelegates } from 'contexts';
 import { truncateAddress } from 'utils';
-import { IBulkDelegatePayload } from 'utils/moonriverDelegateAction';
+import { IBulkDelegatePayload } from 'utils/moonbeam/moonriverDelegateAction';
 import { TrackBadge } from './TrackBadge';
 
 interface IDelegatePoolListProps {

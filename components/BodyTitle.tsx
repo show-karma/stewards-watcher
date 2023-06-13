@@ -276,8 +276,8 @@ export const BodyTitle: FC = () => {
           />
         </Flex>
       </Collapse>
-      <Filters />
       {config.ALLOW_BULK_DELEGATE && <DelegationPool />}
+      <Filters />
       <Flex
         flexDir={{ base: 'column', md: 'row' }}
         w="full"

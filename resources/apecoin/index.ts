@@ -316,7 +316,6 @@ const dark: IDAOTheme = {
 };
 
 const light: IDAOTheme = {
-  logo: '/daos/apecoin/logo_black.svg',
   background: '#F2F4F9',
   bodyBg: '#F2F4F9',
   title: '#090B10',
@@ -361,6 +360,7 @@ const light: IDAOTheme = {
     socialMedia: '#595A5E',
   },
   loginModal: {
+    logo: '/daos/apecoin/logo_black.svg',
     text: '#212328',
     background: '#FFFFFF',
     footer: { bg: '#EBEDEF', text: '#292E41' },

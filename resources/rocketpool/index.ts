@@ -361,6 +361,7 @@ const light: IDAOTheme = {
     socialMedia: '#595A5E',
   },
   loginModal: {
+    logo: '/daos/rocketpool/logo.webp',
     text: '#212328',
     background: '#FFFFFF',
     footer: { bg: '#EBEDEF', text: '#292E41' },

@@ -100,7 +100,7 @@ export const HeaderHat = () => {
                   maxW="36"
                   h="10"
                   objectFit="contain"
-                  src={config.DAO_LOGO}
+                  src={theme.logo || config.DAO_LOGO}
                 />
               </ChakraLink>
               <Madeby />

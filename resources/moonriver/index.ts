@@ -1,6 +1,6 @@
 import { IDAOConfig, IDAOTheme } from 'types';
-import { moonriverDelegateAction } from 'utils/moonriverDelegateAction';
-import { moonriverOnChainProvider } from 'utils';
+import { moonriverDelegateAction } from 'utils/moonbeam/moonriverDelegateAction';
+import { moonriverDelegateErrors, moonriverOnChainProvider } from 'utils';
 import { moonriver } from 'wagmi/chains';
 import ABI from './ABI.json';
 import batchContractAbi from './ABI_BATCH_CONTRACT.json';
@@ -13,7 +13,7 @@ const config: IDAOConfig = {
   GOVERNANCE_FORUM: 'https://forum.moonbeam.foundation/',
   DAO_KARMA_ID: 'moonriver',
   IMAGE_PREFIX_URL: 'https://cdn.stamp.fyi/avatar/eth:',
-  DAO_LOGO: '/daos/moonriver/logo.png',
+  DAO_LOGO: '/daos/moonriver/logo_white.png',
   METATAGS: {
     TITLE: `Delegates of Moonriver DAO`,
     DESCRIPTION: `Find all the active delegates in Moonriver DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
@@ -51,18 +51,19 @@ const config: IDAOConfig = {
   DAO_EXT_VOTES_PROVIDER: {
     onChain: moonriverOnChainProvider,
   },
+  DELEGATION_ERRORS_DICTIONARY: moonriverDelegateErrors,
 };
 
 const dark: IDAOTheme = {
-  background: 'linear-gradient(45deg,#0d1126 0%,#301748 100%)',
-  bodyBg: 'linear-gradient(45deg,#0d1126 0%,#301748 100%)',
+  background: '#151515',
+  bodyBg: '#151515',
   title: '#FFFFFF',
   subtitle: '#a0aec0',
   text: '#FFFFFF',
-  branding: '#e1147b',
-  buttonText: '#FFFFFF',
+  branding: '#fcc10e',
+  buttonText: '#000000',
   buttonTextSec: '#FFFFFF',
-  headerBg: '#0D1126',
+  headerBg: '#2D424D',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
   collapse: { text: '#FFFFFF', subtext: '#ADB8C0' },
@@ -79,13 +80,13 @@ const dark: IDAOTheme = {
     border: '#ADB8C033',
     title: 'white',
     bg: 'transparent',
-    listBg: '#1B2030',
+    listBg: '#151515',
     listText: 'white',
     activeBg: 'rgba(102, 102, 102, 0.15)',
   },
   card: {
     icon: '#ADB8C0',
-    background: '#0D1126',
+    background: '#2D424D',
     statBg: 'rgba(102, 102, 102, 0.15)',
     divider: 'rgba(173, 184, 192, 0.2)',
     text: { primary: '#FFFFFF', secondary: '#ADB8C0' },
@@ -96,7 +97,7 @@ const dark: IDAOTheme = {
     socialMedia: '#FFFFFF',
   },
   modal: {
-    background: '#0D1126',
+    background: '#151515',
     header: {
       border: '#ADB8C0',
       title: '#FFFFFF',
@@ -107,8 +108,8 @@ const dark: IDAOTheme = {
     buttons: {
       selectBg: '#6C1E6D',
       selectText: '#FFFFFF',
-      navBg: '#c4136b',
-      navText: '#FFFFFF',
+      navBg: '#fcc10e',
+      navText: '#000000',
       navUnselectedText: '#ADB8C0',
       navBorder: '#FFFFFF',
     },
@@ -136,7 +137,7 @@ const dark: IDAOTheme = {
         result: '#FFFFFF',
         verticalDivider: 'rgba(173, 184, 192, 0.5)',
         divider: 'rgba(173, 184, 192, 0.2)',
-        bg: '#c4136b',
+        bg: '#fcc10e',
         icons: {
           for: 'green.300',
           against: 'red.500',
@@ -148,8 +149,8 @@ const dark: IDAOTheme = {
       modules: {
         chart: {
           point: '#FFFFFF',
-          openGradient: '#c4136b',
-          endGradient: '#0D1126',
+          openGradient: '#fcc10e',
+          endGradient: '#151515',
         },
       },
       reason: {
@@ -161,7 +162,7 @@ const dark: IDAOTheme = {
         color: '#ADB8C0',
         buttons: {
           selectedBg: '#ADB8C0',
-          selectedText: '#0D1126',
+          selectedText: '#151515',
           unSelectedBg: 'transparent',
           unSelectedText: '#ADB8C0',
         },
@@ -200,11 +201,11 @@ const dark: IDAOTheme = {
     },
   },
   loginModal: {
-    background: '#0D1126',
+    background: '#151515',
     text: '#FFFFFF',
-    footer: { bg: '#FFFFFF', text: '#0D1126' },
+    footer: { bg: '#FFFFFF', text: '#151515' },
     button: {
-      bg: '#c4136b',
+      bg: '#fcc10e',
       text: '#FFFFFF',
     },
   },
@@ -278,7 +279,7 @@ const dark: IDAOTheme = {
               hyperlink: '#b3a1dd',
               description: '#ADB8C0',
               sort: {
-                bg: '#0D1126',
+                bg: '#151515',
                 border: '#FFFFFF',
                 text: '#F5F5F5',
                 label: '#ADB8C0',
@@ -317,7 +318,7 @@ const dark: IDAOTheme = {
         },
       },
       bg: {
-        primary: '#0D1126',
+        primary: '#151515',
         secondary: '#1B2030',
         tertiary: 'linear-gradient(248.86deg, #B6509E 10.51%, #2EBAC6 93.41%)',
       },
@@ -326,15 +327,16 @@ const dark: IDAOTheme = {
 };
 
 const light: IDAOTheme = {
+  logo: '/daos/moonriver/logo_orange.png',
   background: '#F2F4F9',
   bodyBg: '#F2F4F9',
-  title: '#0D1126',
+  title: '#151515',
   subtitle: '#666666',
-  text: '#0D1126',
-  branding: '#e1147b',
-  buttonText: '#FFFFFF',
-  buttonTextSec: '#0D1126',
-  headerBg: '#2F1747',
+  text: '#151515',
+  branding: '#fcc10e',
+  buttonText: '#000000',
+  buttonTextSec: '#151515',
+  headerBg: '#151515',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
   collapse: { text: '#676767', subtext: '#2A2C32', bg: '#FFFFFF' },
@@ -370,7 +372,7 @@ const light: IDAOTheme = {
     socialMedia: '#595A5E',
   },
   modal: {
-    background: '#0D1126',
+    background: '#151515',
     header: {
       border: '#ADB8C0',
       title: '#FFFFFF',
@@ -381,7 +383,7 @@ const light: IDAOTheme = {
     buttons: {
       selectBg: '#6C1E6D',
       selectText: '#FFFFFF',
-      navBg: '#c4136b',
+      navBg: '#fcc10e',
       navText: '#FFFFFF',
       navUnselectedText: '#ADB8C0',
       navBorder: '#FFFFFF',
@@ -441,7 +443,7 @@ const light: IDAOTheme = {
         result: '#FFFFFF',
         verticalDivider: 'rgba(173, 184, 192, 0.5)',
         divider: 'rgba(173, 184, 192, 0.2)',
-        bg: '#c4136b',
+        bg: '#fcc10e',
         icons: {
           for: 'green.300',
           against: 'red.500',
@@ -453,8 +455,8 @@ const light: IDAOTheme = {
       modules: {
         chart: {
           point: '#5f6a8e',
-          openGradient: '#c4136b',
-          endGradient: '#0D1126',
+          openGradient: '#fcc10e',
+          endGradient: '#151515',
         },
       },
       reason: {
@@ -466,7 +468,7 @@ const light: IDAOTheme = {
         color: '#ADB8C0',
         buttons: {
           selectedBg: '#ADB8C0',
-          selectedText: '#0D1126',
+          selectedText: '#151515',
           unSelectedBg: 'transparent',
           unSelectedText: '#ADB8C0',
         },
@@ -474,9 +476,10 @@ const light: IDAOTheme = {
     },
   },
   loginModal: {
+    logo: '/daos/moonriver/logo_orange.png',
     text: '#212328',
     background: '#FFFFFF',
-    footer: { bg: '#EBEDEF', text: '#0D1126' },
+    footer: { bg: '#EBEDEF', text: '#151515' },
     button: {
       bg: '#6C1E6D',
       text: '#FFFFFF',
