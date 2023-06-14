@@ -146,8 +146,14 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
 
       const fetchedStatement =
         customFields?.find(
-          (item: { value: string | string[]; label: string }) =>
-            typeof item.value === 'string' && item.label.includes('statement')
+          (item: {
+            value: string | string[];
+            label: string;
+            displayAs?: string;
+          }) =>
+            typeof item.value === 'string' &&
+            (item.label.includes('statement') ||
+              item.displayAs?.includes('headline'))
         ) || emptyField;
 
       if (fetchedInterests.value.length) {
