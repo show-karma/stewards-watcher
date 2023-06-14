@@ -49,6 +49,7 @@ export const DelegationPool: React.FC = () => {
           status: 'success',
         });
       } catch (error: any) {
+        console.log(error);
         if (error.data?.message?.includes('message: ')) {
           // regex to get what is between Some(" and ")
           const regex = /(?<=Some\(")(.*)(?="\))/gm;

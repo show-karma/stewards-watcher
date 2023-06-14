@@ -1,12 +1,22 @@
 import React from 'react';
-
-import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import {
+  injectedWallet,
+  rainbowWallet,
+  walletConnectWallet,
+  coinbaseWallet,
+  metaMaskWallet,
+} from '@rainbow-me/rainbowkit/wallets';
+import {
+  connectorsForWallets,
+  RainbowKitProvider,
+} from '@rainbow-me/rainbowkit';
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { useDAO } from 'contexts';
 import { RPCS } from 'helpers';
+import { talismanWallet } from 'utils';
 
 interface ProviderProps {
   children: React.ReactNode;
@@ -32,10 +42,22 @@ export const RainbowWrapper: React.FC<ProviderProps> = ({ children }) => {
     ]
   );
 
-  const { connectors } = getDefaultWallets({
-    appName: `${config.DAO}'s Delegates Watcher`,
-    chains,
-  });
+  const connectors = connectorsForWallets([
+    {
+      groupName: 'Recommended',
+      wallets: [
+        metaMaskWallet({ chains }),
+        rainbowWallet({ chains }),
+        coinbaseWallet({
+          chains,
+          appName: `${config.DAO}'s Delegates Watcher`,
+        }),
+        walletConnectWallet({ chains }),
+        talismanWallet({ chains }),
+        injectedWallet({ chains }),
+      ],
+    },
+  ]);
 
   const wagmiClient = createClient({
     autoConnect: true,
