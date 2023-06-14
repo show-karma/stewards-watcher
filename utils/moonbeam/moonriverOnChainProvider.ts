@@ -109,7 +109,7 @@ async function getDaoProposals(): Promise<IProposal[]> {
         blockNumber
       );
       return {
-        id: proposal.proposal || proposal.proposalId.toString(),
+        id: proposal.proposal || `Proposal ${proposal.proposalId.toString()}`,
         timestamp: proposalTimestamp,
         trackId: proposal.trackId,
       };
