@@ -310,7 +310,6 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
               forum: '0',
               threadId: 0,
               postId: 0,
-              discourseHandle: '0',
             }
           );
         } else if (newInterests.value || newStatement) {
@@ -328,7 +327,6 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
               forum: '0',
               threadId: 0,
               postId: 0,
-              discourseHandle: '0',
             }
           );
         }
