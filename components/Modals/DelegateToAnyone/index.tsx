@@ -8,7 +8,7 @@ import {
   ModalOverlay,
 } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ToDelegate } from './ToDelegate';
 import { TokensDelegated } from './TokensDelegated';
 
@@ -21,11 +21,17 @@ export const DelegateVotesModal: React.FC<IDelegateVotesModal> = ({
   isOpen = false,
   onClose = () => ({}),
 }) => {
-  const { theme } = useDAO();
+  const { theme, daoInfo } = useDAO();
   const { delegateTo: modalTheme } = theme.modal;
 
   const [address, setAddress] = useState('');
   const [success, setSuccess] = useState(false);
+
+  const handleOnOk = () => {
+    if (daoInfo.config.ALLOW_BULK_DELEGATE) {
+      onClose();
+    }
+  };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -79,6 +85,7 @@ export const DelegateVotesModal: React.FC<IDelegateVotesModal> = ({
             <TokensDelegated address={address} />
           ) : (
             <ToDelegate
+              onOk={handleOnOk}
               address={address}
               setAddress={setAddress}
               setSuccess={setSuccess}
