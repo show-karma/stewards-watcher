@@ -218,13 +218,6 @@ export const UndelegateModal: React.FC = () => {
                           },
                         }}
                       >
-                        <Text mb={2}>
-                          Delegate:{' '}
-                          {
-                            tracksDelegated.find(td => td.trackId === track.id)
-                              ?.toDelegate
-                          }
-                        </Text>
                         <TrackBadge
                           track={{
                             id: track.id,
