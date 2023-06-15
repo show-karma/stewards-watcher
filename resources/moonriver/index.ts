@@ -36,7 +36,6 @@ const config: IDAOConfig = {
       method: 'balanceOf',
     },
   ],
-  ENABLE_DELEGATE_TRACKER: true,
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
   // DAO_DELEGATE_CONTRACT: '0x0000000000000000000000000000000000000812',
@@ -63,7 +62,6 @@ const config: IDAOConfig = {
     onChain: moonriverOnChainProvider,
   },
   DELEGATION_ERRORS_DICTIONARY: moonriverDelegateErrors,
-  ENABLE_DELEGATE_TRACKER: true,
 };
 
 const dark: IDAOTheme = {
