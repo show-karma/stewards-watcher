@@ -64,8 +64,19 @@ export interface IDAOConfig {
   DELEGATION_ERRORS_DICTIONARY?: {
     [key: string]: string;
   };
+  ALLOW_UNDELEGATE?: boolean;
   ALLOW_BULK_DELEGATE?: boolean;
   // TODO: type anys
+  /**
+   * Defines a function to bulk delegate
+   * @param payload
+   * @param write
+   * @returns tx hash
+   */
+  UNDELEGATE_ACTION?: (
+    payload: any,
+    write: typeof writeContract
+  ) => Promise<`0x${string}`>;
   /**
    * Defines a function to bulk delegate
    * @param payload

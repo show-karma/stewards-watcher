@@ -1,9 +1,9 @@
 /* eslint-disable no-useless-catch */
 import { IChainRow, MoonbeamProposal, NumberIsh } from 'types';
-import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { ApolloClient, gql, InMemoryCache } from '@apollo/client';
 import { VOTING_HISTORY } from 'utils/GraphQL';
 import moment from 'moment';
-import { providers } from 'ethers';
+import { ethers, providers } from 'ethers';
 import { RPCS } from 'helpers';
 import { fetchBlockTimestamp } from 'utils';
 import { MoonbeamWSC } from './moonbeamwsc';
@@ -144,6 +144,142 @@ async function fetchOnChainVotes(daoName: string | string[], address: string) {
     return [];
   }
   return [];
+}
+
+interface IDelegatingHistory {
+  id: string;
+  delegator: string;
+  trackId: NumberIsh;
+  amount: string;
+}
+
+interface IUndelegated {
+  id: string;
+  trackId: NumberIsh;
+}
+
+interface IDelegatingHistoryResponse {
+  delegatingHistories: IDelegatingHistory[];
+  undelegateds: IUndelegated[];
+  unlockeds: { trackId: NumberIsh }[];
+}
+
+const delegateHistoryQuery = (address: string, daoName: string) => gql`
+{
+	delegatingHistories(
+    where:{
+      delegator:"${address.toLowerCase()}",
+      daoName:"${daoName}"
+    }
+    orderBy: timestamp
+    orderDirection: asc
+  ) {
+	  id    
+    delegator
+    trackId
+    amount
+	}
+  undelegateds (
+  where:{
+    delegator: "${address.toLowerCase()}",
+  }
+  orderBy: blockTimestamp
+  orderDirection: asc
+  ) {
+    id
+    trackId
+  }
+  unlockeds(
+   where: {caller: "${address.toLowerCase()}"}
+  orderBy: blockTimestamp
+  orderDirection: asc
+  ) {
+    trackId
+  }
+}
+`;
+
+export interface IActiveDelegatedTracks {
+  trackId: NumberIsh;
+  locked: boolean;
+  amount: string;
+  active: boolean;
+}
+
+/**
+ * Fetches the active delegated tracks for a given address
+ *
+ * @param address
+ * @param daoName
+ * @returns array of track ids that is currently delegated
+ */
+export async function moonriverActiveDelegatedTracks(
+  address: string,
+  daoName = 'moonriver'
+): Promise<IActiveDelegatedTracks[]> {
+  const onChainClient = new ApolloClient({
+    uri: providerUrl,
+    cache: new InMemoryCache(),
+  });
+
+  const { data } = await onChainClient.query<IDelegatingHistoryResponse>({
+    query: delegateHistoryQuery(address, daoName),
+  });
+
+  const { delegatingHistories, undelegateds, unlockeds } = data;
+
+  // count trackId for delegatingHistory, undelegeted and unlocked
+
+  const delegationCount = delegatingHistories.reduce(
+    (acc, delegatingHistory) => {
+      const { trackId } = delegatingHistory;
+      if (acc[trackId]) {
+        acc[trackId] += 1;
+      } else {
+        acc[trackId] = 1;
+      }
+      return acc;
+    },
+    {} as Record<NumberIsh, number>
+  );
+
+  const undelegationCount = undelegateds.reduce((acc, undelegated) => {
+    const { trackId } = undelegated;
+    if (acc[trackId]) {
+      acc[trackId] += 1;
+    } else {
+      acc[trackId] = 1;
+    }
+    return acc;
+  }, {} as Record<NumberIsh, number>);
+
+  const unlockedCount = unlockeds.reduce((acc, unlocked) => {
+    const { trackId } = unlocked;
+    if (acc[trackId]) {
+      acc[trackId] += 1;
+    } else {
+      acc[trackId] = 1;
+    }
+    return acc;
+  }, {} as Record<NumberIsh, number>);
+
+  const delegations: IActiveDelegatedTracks[] = delegatingHistories
+    .filter(
+      delegatingHistory =>
+        unlockedCount[delegatingHistory.trackId] < delegatingHistory.trackId ||
+        undelegationCount[delegatingHistory.trackId] <
+          delegationCount[delegatingHistory.trackId]
+    )
+    .map(delegatingHistory => ({
+      trackId: delegatingHistory.trackId,
+      locked: true,
+      amount: ethers.utils.formatEther(delegatingHistory.amount),
+      active:
+        undelegationCount[delegatingHistory.trackId] <
+        delegationCount[delegatingHistory.trackId],
+    }));
+
+  return delegations;
 }
 
 export async function moonriverOnChainProvider(
