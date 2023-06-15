@@ -1,5 +1,5 @@
 /* eslint-disable no-useless-catch */
-import { IChainRow, MoonbeamProposal } from 'types';
+import { IChainRow, MoonbeamProposal, NumberIsh } from 'types';
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { VOTING_HISTORY } from 'utils/GraphQL';
 import moment from 'moment';
@@ -7,6 +7,7 @@ import { providers } from 'ethers';
 import { RPCS } from 'helpers';
 import { fetchBlockTimestamp } from 'utils';
 import { MoonbeamWSC } from './moonbeamwsc';
+import { polkassembly, Post } from './polkassembly';
 
 /**
  * Concat proposal and votes into a common interface
@@ -55,14 +56,51 @@ interface IProposal {
   timestamp: number;
 }
 
-async function getDaoProposals(): Promise<IProposal[]> {
+async function proposalsWithMetadata(): Promise<
+  (MoonbeamProposal & { proposal: string; trackId: NumberIsh })[]
+> {
   const client = await MoonbeamWSC.createClient();
-  const proposals: MoonbeamProposal[] = await client.getProposals();
+
+  const proposals = await client.getProposals();
+  const tracks = client.getTracks(true);
+  const postWithTrackId: (Post & { trackId: NumberIsh })[] = [];
+
+  const promises = tracks.map(async track => {
+    const posts = await polkassembly.fetchOnChainPosts(track.id, 'moonriver');
+    postWithTrackId.push(
+      ...posts.map(post => ({ ...post, trackId: track.id }))
+    );
+  });
+
+  await Promise.all(promises);
+  const result: (MoonbeamProposal & {
+    proposal: string;
+    trackId: NumberIsh;
+  })[] = [];
+
+  postWithTrackId.forEach(post => {
+    const currentProposal = proposals.find(
+      proposal => +proposal.proposalId === +post.post_id
+    );
+
+    if (currentProposal) {
+      result.push({
+        ...currentProposal,
+        proposal: post.title,
+        trackId: post.trackId,
+      });
+    }
+  });
+  return result;
+}
+
+async function getDaoProposals(): Promise<IProposal[]> {
+  const proposals = await proposalsWithMetadata();
 
   const provider = new providers.JsonRpcProvider(RPCS.moonriver);
 
   const proposalsMap = await Promise.all(
-    proposals.map(async (proposal: MoonbeamProposal) => {
+    proposals.map(async proposal => {
       const blockNumber = Object.entries(
         proposal.information
       )[0].flat()[1] as number;
@@ -71,8 +109,9 @@ async function getDaoProposals(): Promise<IProposal[]> {
         blockNumber
       );
       return {
-        id: proposal.proposalId.toString(),
+        id: proposal.proposal || `Proposal ${proposal.proposalId.toString()}`,
         timestamp: proposalTimestamp,
+        trackId: proposal.trackId,
       };
     })
   );
