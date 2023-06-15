@@ -10,7 +10,6 @@ export interface IBulkUndelegatePayload {
 }
 
 function digest(payload: IBulkUndelegatePayload) {
-  console.log(payload);
   const abiInterface = new ethers.utils.Interface(ABI);
   const calldatas = payload.tracks.flatMap(track => {
     const array = [];
@@ -22,10 +21,15 @@ function digest(payload: IBulkUndelegatePayload) {
     // If is locked, unlock
     if (track.locked)
       array.push(
-        abiInterface.encodeFunctionData('unlock', [
-          track.trackId,
-          payload.delegate,
-        ])
+        // Create unlocks to match the difference between undelegate and unlocks
+        ...new Array(track.locked)
+          .fill(0)
+          .map(() =>
+            abiInterface.encodeFunctionData('unlock', [
+              track.trackId,
+              payload.delegate,
+            ])
+          )
       );
 
     return array;

@@ -151,6 +151,7 @@ interface IDelegatingHistory {
   delegator: string;
   trackId: NumberIsh;
   amount: string;
+  toDelegate: string;
 }
 
 interface IUndelegated {
@@ -178,6 +179,7 @@ const delegateHistoryQuery = (address: string, daoName: string) => gql`
     delegator
     trackId
     amount
+    toDelegate
 	}
   undelegateds (
   where:{
@@ -201,9 +203,10 @@ const delegateHistoryQuery = (address: string, daoName: string) => gql`
 
 export interface IActiveDelegatedTracks {
   trackId: NumberIsh;
-  locked: boolean;
+  locked: number;
   amount: string;
   active: boolean;
+  toDelegate: string;
 }
 
 /**
@@ -266,17 +269,21 @@ export async function moonriverActiveDelegatedTracks(
   const delegations: IActiveDelegatedTracks[] = delegatingHistories
     .filter(
       delegatingHistory =>
-        unlockedCount[delegatingHistory.trackId] < delegatingHistory.trackId ||
+        unlockedCount[delegatingHistory.trackId] <
+          delegationCount[delegatingHistory.trackId] ||
         undelegationCount[delegatingHistory.trackId] <
           delegationCount[delegatingHistory.trackId]
     )
     .map(delegatingHistory => ({
       trackId: delegatingHistory.trackId,
-      locked: true,
+      locked:
+        delegationCount[delegatingHistory.trackId] -
+        unlockedCount[delegatingHistory.trackId],
       amount: ethers.utils.formatEther(delegatingHistory.amount),
       active:
         undelegationCount[delegatingHistory.trackId] <
         delegationCount[delegatingHistory.trackId],
+      toDelegate: delegatingHistory.toDelegate,
     }));
 
   return delegations;

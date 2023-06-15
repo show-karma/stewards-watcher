@@ -20,6 +20,7 @@ import { useMixpanel, useToasty } from 'hooks';
 import { writeContract, waitForTransaction } from '@wagmi/core';
 import { IBulkUndelegatePayload } from 'utils/moonbeam/moonriverUndelegateAction';
 import { handleError } from 'utils/handleWriteError';
+import { StyledButton } from 'components/HeaderHat';
 
 export const UndelegateModal: React.FC = () => {
   const { daoInfo, theme } = useDAO();
@@ -95,14 +96,21 @@ export const UndelegateModal: React.FC = () => {
 
   const clearSucessfullUndelegations = () => {
     setTracksDelegated(
-      tracksDelegated.filter(
-        item => !selectedTracks.some(track => track !== item.trackId)
-      )
+      tracksDelegated.filter(item => !selectedTracks.includes(item.trackId))
     );
     setSelectedTracks([]);
   };
 
   const handleSubmit = async () => {
+    if (!selectedTracks.length) {
+      toast({
+        title: 'No tracks selected',
+        description: 'Please select at least one track to undelegate',
+        status: 'warning',
+        duration: 5000,
+      });
+      return;
+    }
     if (config.UNDELEGATE_ACTION && address) {
       const payload: IBulkUndelegatePayload = {
         tracks: tracks
@@ -145,8 +153,8 @@ export const UndelegateModal: React.FC = () => {
   }, [chain, sameNetwork, isConnected]);
 
   useEffect(() => {
-    getActiveDelegations();
-  }, []);
+    if (isOpen) getActiveDelegations();
+  }, [isOpen]);
 
   return (
     <>
@@ -199,7 +207,24 @@ export const UndelegateModal: React.FC = () => {
                       )
                     )
                     .map(track => (
-                      <Flex mt={3} key={track.id} flexDirection="column">
+                      <Flex
+                        mt={3}
+                        pb={5}
+                        key={track.id}
+                        flexDirection="column"
+                        __css={{
+                          ':not(:last-of-type)': {
+                            borderBottom: '1px solid',
+                          },
+                        }}
+                      >
+                        <Text mb={2}>
+                          Delegate:{' '}
+                          {
+                            tracksDelegated.find(td => td.trackId === track.id)
+                              ?.toDelegate
+                          }
+                        </Text>
                         <TrackBadge
                           track={{
                             id: track.id,
@@ -215,18 +240,18 @@ export const UndelegateModal: React.FC = () => {
                             arr => arr === track.id
                           )}
                         />
-                        {/* <Text ml={3}>
-                          Amount locked:{' '}
-                          {
-                            tracksDelegated.find(
-                              item => item.trackId === track.id
-                            )?.amount
-                          }
-                        </Text> */}
                       </Flex>
                     ))}
                   <Box textAlign="center" py={3}>
-                    <Button onClick={handleSubmit}>Submit</Button>
+                    <Button
+                      mt={5}
+                      background={theme.branding}
+                      color={theme.buttonText}
+                      disabled={selectedTracks.length === 0}
+                      onClick={handleSubmit}
+                    >
+                      Submit
+                    </Button>
                   </Box>
                 </>
               ) : (
@@ -238,7 +263,9 @@ export const UndelegateModal: React.FC = () => {
           </Box>
         </ModalContent>
       </Modal>
-      <Button onClick={handleOnClick}>Undelegate</Button>
+      <StyledButton onClick={handleOnClick} background="transparent">
+        Undelegate
+      </StyledButton>
     </>
   );
 };

@@ -14,6 +14,7 @@ import {
   UserProfile,
 } from 'components';
 import { DelegateVotesModal } from 'components/Modals/DelegateToAnyone';
+import { UndelegateModal } from 'components/pages/token-holders/UndelegateModal';
 import { useDAO, useDelegates, useWallet } from 'contexts';
 import { FC } from 'react';
 import { IoMenu } from 'react-icons/io5';
@@ -22,7 +23,7 @@ import { Madeby } from './Madeby';
 import { ResourcesMenu } from './ResourcesMenu';
 import { ThemeButton } from './ThemeButton';
 
-const StyledButton: FC<ButtonProps> = ({ children, ...rest }) => {
+export const StyledButton: FC<ButtonProps> = ({ children, ...rest }) => {
   const { theme } = useDAO();
   return (
     <Button
@@ -148,6 +149,7 @@ export const HeaderHat = () => {
                     Delegate Tokens
                   </StyledButton>
                 ) : null}
+                {daoInfo.config.ALLOW_UNDELEGATE && <UndelegateModal />}
                 <ChakraLink href="/guide" _hover={{}}>
                   <StyledButton>Guide</StyledButton>
                 </ChakraLink>
@@ -177,6 +179,7 @@ export const HeaderHat = () => {
                 Delegate Tokens
               </StyledButton>
             ) : null}
+            {daoInfo.config.ALLOW_UNDELEGATE && <UndelegateModal />}
             <ChakraLink href="/guide" _hover={{}}>
               <StyledButton>Guide</StyledButton>
             </ChakraLink>
