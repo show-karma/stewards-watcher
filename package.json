@@ -17,6 +17,7 @@
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@hookform/resolvers": "^3.0.0",
+    "@polkadot/api": "^10.9.1",
     "@rainbow-me/rainbowkit": "^0.11.0",
     "@sentry/nextjs": "^7.23.0",
     "@tanstack/react-query": "^4.13.0",
@@ -37,6 +38,7 @@
     "jwt-decode": "^3.1.2",
     "karma-score": "git+https://github.com/show-karma/reputation-scores.git#7bfbaae",
     "lodash.debounce": "^4.0.8",
+    "lodash.startcase": "^4.4.0",
     "markdown-it": "^13.0.1",
     "mixpanel-browser": "^2.45.0",
     "moment": "^2.29.4",
@@ -59,6 +61,7 @@
     "@types/human-format": "^1.0.0",
     "@types/lodash": "^4.14.191",
     "@types/lodash.debounce": "^4.0.7",
+    "@types/lodash.startcase": "^4.4.7",
     "@types/mathjax": "^0.0.37",
     "@types/mixpanel-browser": "^2.38.0",
     "@types/node": "18.7.16",
@@ -75,7 +78,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "husky": "^8.0.1",
-    "prettier": "^2.7.1",
+    "prettier": "^2.8.8",
     "typescript": "4.8.3"
   }
 }

@@ -8,7 +8,6 @@ import React, {
   useState,
   useMemo,
   useEffect,
-  useCallback,
 } from 'react';
 import { useRouter } from 'next/router';
 import {
@@ -22,10 +21,13 @@ import {
   IStatusOptions,
   IWorkstream,
   IStatsID,
+  ITracks,
 } from 'types';
 import { useMixpanel, useToasty } from 'hooks';
 import { api } from 'helpers';
 import { useAccount } from 'wagmi';
+import { IBulkDelegatePayload } from 'utils/moonbeam/moonriverDelegateAction';
+import { ITrackBadgeProps } from 'components/DelegationPool/TrackBadge';
 import { useDAO } from './dao';
 
 interface IDelegateProps {
@@ -67,8 +69,11 @@ interface IDelegateProps {
   isFiltering: boolean;
   workstreams: IWorkstream[];
   workstreamsFilter: string[];
-  statusesOptions: IStatusOptions[];
   selectWorkstream: (index: number) => void;
+  tracks: ITracks[];
+  tracksFilter: string[];
+  selectTracks: (index: number) => void;
+  statusesOptions: IStatusOptions[];
   setSelectedProfileData: (selected: IDelegate) => void;
   setupFilteringUrl: (
     paramToSetup: 'sortby' | 'order' | 'period' | 'statuses' | 'toa',
@@ -79,6 +84,20 @@ interface IDelegateProps {
   acceptedTermsOnly: boolean;
   handleDelegateOffersToA: (value: boolean) => void;
   delegateOffersToA: boolean;
+  delegatePoolList: IBulkDelegatePayload[];
+  addToDelegatePool: (
+    delegate: IDelegate,
+    selectedTracks: ITrackBadgeProps['track'][],
+    amount: string
+  ) => void;
+  removeFromDelegatePool: (address: string) => void;
+  addTrackToDelegateInPool: (
+    track: ITrackBadgeProps['track'],
+    address: string
+  ) => void;
+  removeTrackFromDelegateInPool: (trackId: number, address: string) => void;
+  findDelegateByAddress: (userToSearch: string) => Promise<IDelegate | null>;
+  clearDelegationPool: () => void;
 }
 
 export const DelegatesContext = createContext({} as IDelegateProps);
@@ -124,6 +143,10 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
   const [acceptedTermsOnly, setAcceptedTermsOnly] = useState(false);
   const [delegateOffersToA, setDelegateOffersToA] = useState(false);
 
+  const [delegatePoolList, setDelegatePoolList] = useState<
+    IBulkDelegatePayload[]
+  >([]);
+
   const prepareStatOptions = () => {
     const sortedDefaultOptions = statDefaultOptions.sort(element =>
       element.stat === config.DAO_DEFAULT_SETTINGS?.ORDERSTAT ? -1 : 1
@@ -167,6 +190,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
   const [delegateCount, setDelegateCount] = useState(0);
   const [workstreams, setWorkstreams] = useState<IWorkstream[]>([]);
   const [workstreamsFilter, setWorkstreamsFilter] = useState<string[]>([]);
+  const [tracks, setTracks] = useState<ITracks[]>([]);
+  const [tracksFilter, setTracksFilter] = useState<string[]>([]);
 
   const { mixpanel } = useMixpanel();
   const { toast } = useToasty();
@@ -211,13 +236,27 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     }
   };
 
-  const fetchWorkstreams = async () => {
+  const fetchCategoryType = async () => {
     try {
-      const { data } = await api.get(
-        `/workstream/list?dao=${config.DAO_KARMA_ID}`
-      );
-      if (Array.isArray(data.data.workstreams)) {
-        setWorkstreams(data.data.workstreams);
+      const type = daoInfo.config.DAO_CATEGORIES_TYPE;
+      let data = [];
+
+      if (type === 'workstreams') {
+        data = (await api.get(`/workstream/list?dao=${config.DAO_KARMA_ID}`))
+          .data.data;
+      } else if (type === 'tracks') {
+        data = (await api.get(`/dao/moonbeam/tracks`)).data.data; // this is hardcoded for now, while the boys are working on the API
+        // data = (await api.get(`${config.DAO_KARMA_ID}/${type}`)).data.data;
+      }
+
+      const { tracks: dataTracks, workstreams: dataWorkstreams } = data;
+
+      if (Array.isArray(dataTracks || dataWorkstreams)) {
+        if (type === 'tracks') {
+          setTracks(dataTracks);
+        } else if (type === 'workstreams') {
+          setWorkstreams(dataWorkstreams);
+        }
       }
     } catch (error) {
       console.error(error);
@@ -232,6 +271,11 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     if (workstreamsFilter.length === 0 && config.DAO_KARMA_ID === 'gitcoin')
       return '6,4,3,7,1,2,5,12';
     if (workstreamsFilter.length) return workstreamsFilter.join(',');
+    return undefined;
+  };
+
+  const getTracks = () => {
+    if (tracksFilter.length) return tracksFilter.join(',');
     return undefined;
   };
 
@@ -259,6 +303,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           tos: daoInfo.config.TOS_URL ? acceptedTermsOnly : undefined,
           toa: daoInfo.config.DAO_SUPPORTS_TOA ? delegateOffersToA : undefined,
           workstreamId: getWorkstreams(),
+          tracks: getTracks(),
           statuses: statuses.length
             ? statuses.join(',')
             : config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER?.DEFAULT_STATUSES?.join(
@@ -305,6 +350,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           status: item.status,
           profilePicture: item.profilePicture,
           workstreams: item.workstreams,
+          tracks: item.tracks,
           userCreatedAt: item.userCreatedAt,
         };
       });
@@ -375,6 +421,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           realName: item.realName,
           profilePicture: item.profilePicture,
           workstreams: item.workstreams,
+          tracks: item.tracks,
           status: item.status,
           userCreatedAt: item.userCreatedAt,
         };
@@ -477,6 +524,59 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     }
   }, [publicAddress, isConnected]);
 
+  const findDelegateByAddress = async (userToSearch: string) => {
+    try {
+      const axiosClient = await api.get(`/dao/find-delegate`, {
+        params: {
+          dao: config.DAO_KARMA_ID,
+          user: userToSearch,
+        },
+      });
+      const { data } = axiosClient.data;
+      const { delegate: fetchedDelegate } = data;
+
+      const fetchedPeriod = (fetchedDelegate as IDelegateFromAPI).stats.find(
+        fetchedStat => fetchedStat.period === period
+      );
+      const userFound: IDelegate = {
+        address: fetchedDelegate.publicAddress,
+        ensName: fetchedDelegate.ensName,
+        delegatorCount: fetchedDelegate.delegatorCount || 0,
+        forumActivity: fetchedPeriod?.forumActivityScore || 0,
+        discordScore: fetchedPeriod?.discordScore || 0,
+        delegateSince:
+          fetchedDelegate.joinDateAt || fetchedDelegate.firstTokenDelegatedAt,
+        voteParticipation: {
+          onChain: fetchedPeriod?.onChainVotesPct || 0,
+          offChain: fetchedPeriod?.offChainVotesPct || 0,
+        },
+        votingWeight: fetchedDelegate.voteWeight,
+        delegatedVotes:
+          fetchedDelegate.delegatedVotes ||
+          fetchedDelegate.snapshotDelegatedVotes,
+        gitcoinHealthScore: fetchedPeriod?.gitcoinHealthScore || 0,
+        twitterHandle: fetchedDelegate.twitterHandle,
+        discourseHandle: fetchedDelegate.discourseHandle,
+        discordHandle: fetchedDelegate.discordHandle,
+        discordUsername: fetchedDelegate.discordUsername,
+        updatedAt: fetchedPeriod?.updatedAt,
+        karmaScore: fetchedPeriod?.karmaScore || 0,
+        delegatePitch: fetchedDelegate.delegatePitch,
+        aboutMe: fetchedDelegate.aboutMe,
+        realName: fetchedDelegate.realName,
+        profilePicture: fetchedDelegate.profilePicture,
+        workstreams: fetchedDelegate.workstreams,
+        tracks: fetchedDelegate.tracks,
+        status: fetchedDelegate.status,
+        userCreatedAt: fetchedDelegate.userCreatedAt,
+        acceptedTOS: fetchedDelegate.acceptedTOS,
+      };
+      return userFound;
+    } catch {
+      return null;
+    }
+  };
+
   const searchProfileModal = async (
     userToSearch: string,
     defaultTab?: IActiveTab
@@ -522,6 +622,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         realName: fetchedDelegate.realName,
         profilePicture: fetchedDelegate.profilePicture,
         workstreams: fetchedDelegate.workstreams,
+        tracks: fetchedDelegate.tracks,
         status: fetchedDelegate.status,
         userCreatedAt: fetchedDelegate.userCreatedAt,
         acceptedTOS: fetchedDelegate.acceptedTOS,
@@ -591,6 +692,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         realName: fetchedDelegate.realName,
         profilePicture: fetchedDelegate.profilePicture,
         workstreams: fetchedDelegate.workstreams,
+        tracks: fetchedDelegate.tracks,
         status: fetchedDelegate.status,
         userCreatedAt: fetchedDelegate.userCreatedAt,
       };
@@ -672,6 +774,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           realName: item.realName,
           profilePicture: item.profilePicture,
           workstreams: item.workstreams,
+          tracks: item.tracks,
           gitcoinHealthScore: fetchedPeriod?.gitcoinHealthScore || 0,
           userCreatedAt: item.userCreatedAt,
           status: item.status,
@@ -689,7 +792,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
   useEffect(() => {
     if (!ignoreAutoFetch) {
       fetchInterests();
-      fetchWorkstreams();
+      fetchCategoryType();
     }
     fetchDaoIds();
   }, []);
@@ -816,6 +919,28 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     setWorkstreamsFilter(items);
   };
 
+  const selectTracks = (index: number) => {
+    if (!tracks[index]) return;
+
+    // search for the index in the tracksFilter array
+    const filterIdx = tracksFilter.findIndex(
+      filter => filter === tracks[index].id.toString()
+    );
+
+    // clone the tracksFilter array
+    const items = [...tracksFilter];
+
+    // if the tracks is already in the tracksFilter array, remove it
+    if (filterIdx >= 0) {
+      items.splice(filterIdx, 1);
+    } else {
+      items.push(tracks[index].id.toString());
+    }
+
+    // set the new tracksFilter array
+    setTracksFilter(items);
+  };
+
   const selectStatus = (items: IStatusOptions[]) => {
     setStatuses(items);
   };
@@ -860,6 +985,88 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     setInitiated(true);
   };
 
+  const arrayWithoutDuplicatesTracks = (
+    selectedTracks: ITrackBadgeProps['track'][]
+  ) => {
+    const newDelegates = delegatePoolList.map(item => {
+      const newTracks = item.tracks.filter(
+        track =>
+          !selectedTracks.find(selectedTrack => selectedTrack.id === track.id)
+      );
+      return { ...item, tracks: newTracks };
+    });
+    return newDelegates;
+  };
+
+  const addToDelegatePool = (
+    delegate: IDelegate,
+    selectedTracks: ITrackBadgeProps['track'][],
+    amount = '0.1'
+  ) => {
+    const newDelegates = arrayWithoutDuplicatesTracks(selectedTracks);
+
+    const delegateIndex = newDelegates.findIndex(
+      item => item.delegate.address === delegate.address
+    );
+
+    if (!~delegateIndex) {
+      newDelegates.push({ delegate, tracks: selectedTracks, amount });
+    }
+    setDelegatePoolList(newDelegates);
+  };
+
+  const clearDelegationPool = () => {
+    setDelegatePoolList([]);
+  };
+
+  const removeFromDelegatePool = (address: string) => {
+    const newDelegates = [...delegatePoolList];
+    const delegateIndex = newDelegates.findIndex(
+      item => item.delegate.address === address
+    );
+    if (~delegateIndex) {
+      newDelegates.splice(delegateIndex, 1);
+    }
+    setDelegatePoolList(newDelegates);
+  };
+
+  const removeTrackFromDelegateInPool = (trackId: number, address: string) => {
+    const newDelegates = [...delegatePoolList];
+    const delegateIndex = newDelegates.findIndex(
+      item => item.delegate.address === address
+    );
+    if (~delegateIndex) {
+      const newTracks = [...newDelegates[delegateIndex].tracks];
+      const trackIndex = newTracks.findIndex(item => item.id === trackId);
+      if (~trackIndex) {
+        newTracks.splice(trackIndex, 1);
+      }
+      newDelegates[delegateIndex].tracks = newTracks;
+    }
+    setDelegatePoolList(newDelegates);
+  };
+
+  const addTrackToDelegateInPool = (
+    track: ITrackBadgeProps['track'],
+    address: string
+  ) => {
+    const newDelegates = arrayWithoutDuplicatesTracks([track]);
+
+    const delegateIndex = newDelegates.findIndex(
+      item => item.delegate.address === address
+    );
+
+    if (~delegateIndex) {
+      const newTracks = [...newDelegates[delegateIndex].tracks];
+      const trackIndex = newTracks.findIndex(item => item.id === track.id);
+      if (!~trackIndex) {
+        newTracks.push(track);
+      }
+      newDelegates[delegateIndex].tracks = newTracks;
+    }
+    setDelegatePoolList(newDelegates);
+  };
+
   useMemo(() => {
     if (!hasInitiated) return;
     setOffset(0);
@@ -875,6 +1082,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     statuses,
     interestFilter,
     workstreamsFilter,
+    tracksFilter,
     hasInitiated,
     delegateOffersToA,
   ]);
@@ -948,6 +1156,16 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       handleAcceptedTermsOnly,
       delegateOffersToA,
       handleDelegateOffersToA,
+      tracks,
+      tracksFilter,
+      selectTracks,
+      delegatePoolList,
+      addToDelegatePool,
+      removeFromDelegatePool,
+      addTrackToDelegateInPool,
+      removeTrackFromDelegateInPool,
+      findDelegateByAddress,
+      clearDelegationPool,
     }),
     [
       profileSelected,
@@ -979,6 +1197,16 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       handleAcceptedTermsOnly,
       delegateOffersToA,
       handleDelegateOffersToA,
+      tracks,
+      tracksFilter,
+      selectTracks,
+      delegatePoolList,
+      addToDelegatePool,
+      removeFromDelegatePool,
+      addTrackToDelegateInPool,
+      removeTrackFromDelegateInPool,
+      findDelegateByAddress,
+      clearDelegationPool,
     ]
   );
 

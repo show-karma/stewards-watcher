@@ -4,7 +4,9 @@ import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { useDAO } from 'contexts';
+import { RPCS } from 'helpers';
 
 interface ProviderProps {
   children: React.ReactNode;
@@ -23,6 +25,11 @@ export const RainbowWrapper: React.FC<ProviderProps> = ({ children }) => {
             apiKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY,
           })
         : publicProvider(),
+      jsonRpcProvider({
+        rpc: () => ({
+          http: RPCS.moonriver,
+        }),
+      }),
     ]
   );
 

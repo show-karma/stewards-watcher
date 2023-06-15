@@ -117,7 +117,8 @@ interface IDelegateCardProps {
 export const DelegateCard: FC<IDelegateCardProps> = props => {
   const { data } = props;
   const { daoInfo, theme, daoData } = useDAO();
-  const { selectProfile, period, setSelectedProfileData } = useDelegates();
+  const { selectProfile, period, setSelectedProfileData, addToDelegatePool } =
+    useDelegates();
   const { onCopy } = useClipboard(data?.address || '');
 
   const { config } = daoInfo;
@@ -302,13 +303,45 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     setStats(filtereds);
   }, [config, data]);
 
-  const renderWorkstream = () => {
-    if (
-      !data?.workstreams ||
-      !(data.workstreams.length > 0) ||
-      data.workstreams[0]?.description.toLowerCase() === 'general'
-    )
+  const renderCategory = () => {
+    const workstreamsExist =
+      data?.workstreams &&
+      data.workstreams.length > 0 &&
+      data.workstreams[0]?.description.toLowerCase() !== 'general';
+    const tracksExist = data?.tracks && data.tracks.length > 0;
+
+    if (!workstreamsExist && !tracksExist) {
       return undefined;
+    }
+
+    const type = daoInfo.config.DAO_CATEGORIES_TYPE;
+    const categoryName = data?.[type]?.[0]?.name;
+
+    if (type === 'tracks')
+      return (
+        <Flex w="full" overflowX="hidden" gap="1">
+          {data?.tracks?.map((track, index) => (
+            <Text
+              key={+index}
+              color={theme.card.workstream.text}
+              bgColor={theme.card.workstream.bg}
+              px="2"
+              py="1"
+              borderRadius="md"
+              fontSize="10px"
+              fontWeight="medium"
+              _hover={{
+                backgroundColor: convertHexToRGBA(theme.title, 0.8),
+              }}
+              w="max-content"
+              minW="max-content"
+            >
+              {track.name}
+            </Text>
+          ))}
+        </Flex>
+      );
+
     return (
       <Text
         color={theme.card.workstream.text}
@@ -322,14 +355,16 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           backgroundColor: convertHexToRGBA(theme.title, 0.8),
         }}
       >
-        {data?.workstreams[0]?.name}
+        {categoryName}
       </Text>
     );
   };
 
   const shortAddress = data && truncateAddress(data.address);
 
-  const checkIfDelegate = () => !!daoInfo.config.DAO_DELEGATE_CONTRACT;
+  const checkIfDelegate = () =>
+    !!daoInfo.config.DAO_DELEGATE_CONTRACT ||
+    daoInfo.config.ALLOW_BULK_DELEGATE;
 
   const canDelegate = checkIfDelegate();
 
@@ -384,6 +419,27 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   const getDataStatusColor = (status: string) => {
     if (status === 'inactive' || status === 'withdrawn') return '#F4EB0F';
     return '#30E320';
+  };
+
+  const handleAddToDelegatePool = (delegate: IDelegate) => {
+    if (!delegate.tracks?.length) {
+      toast({
+        title: 'Error',
+        description: 'This delegate does not belong any track',
+        status: 'error',
+        duration: 3000,
+      });
+    } else {
+      setSelectedProfileData(delegate);
+    }
+  };
+
+  const shouldBlockModal = (tracksLength?: number) => {
+    if (config.ALLOW_BULK_DELEGATE) {
+      if (tracksLength) return false;
+      return true;
+    }
+    return false;
   };
 
   return (
@@ -533,9 +589,10 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   flexDir="row"
                   gap="1.5"
                   overflowX="hidden"
-                  width="max-content"
+                  width="100%"
+                  maxW={{ base: '310px', lg: '350px' }}
                 >
-                  {renderWorkstream()}
+                  {renderCategory()}
                   {!isLoaded ? (
                     <Flex h="21px" />
                   ) : (
@@ -741,8 +798,13 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                       delegated={data.address}
                       px={['4', '8']}
                       beforeOnClick={() => {
-                        setSelectedProfileData(data);
+                        if (config.ALLOW_BULK_DELEGATE) {
+                          handleAddToDelegatePool(data);
+                        } else {
+                          setSelectedProfileData(data);
+                        }
                       }}
+                      shouldBlockModal={shouldBlockModal(data.tracks?.length)}
                     />
                   ))}
                 <UserInfoButton onOpen={selectProfile} profile={data} />
