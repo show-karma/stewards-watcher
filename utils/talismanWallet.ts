@@ -13,7 +13,7 @@ export const talismanWallet = ({
 }: TalismanWalletOptions): Wallet => ({
   id: 'talisman',
   name: 'Talisman',
-  iconUrl: '/talisman.png',
+  iconUrl: '/wallets/talisman.png',
   iconBackground: '#D5FF5C',
   downloadUrls: {
     browserExtension: 'https://talisman.xyz/download',
@@ -25,7 +25,6 @@ export const talismanWallet = ({
         shimDisconnect,
       },
     });
-    console.log(connector);
 
     return {
       connector: connector as any,

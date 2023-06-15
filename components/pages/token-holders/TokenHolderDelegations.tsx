@@ -73,7 +73,8 @@ export const TokenHolderDelegation: FC = () => {
           }
           return false;
         }
-      ),
+      )
+      .required(),
   });
   type FormData = yup.InferType<typeof schema>;
 

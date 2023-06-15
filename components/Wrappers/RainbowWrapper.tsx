@@ -10,7 +10,7 @@ import {
   connectorsForWallets,
   RainbowKitProvider,
 } from '@rainbow-me/rainbowkit';
-import { configureChains, createClient, WagmiConfig } from 'wagmi';
+import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
@@ -26,7 +26,7 @@ export const RainbowWrapper: React.FC<ProviderProps> = ({ children }) => {
   const { daoInfo } = useDAO();
   const { config } = daoInfo;
 
-  const { chains, provider } = configureChains(
+  const { chains, publicClient, webSocketPublicClient } = configureChains(
     [config.DAO_CHAIN],
     [
       process.env.NEXT_PUBLIC_ALCHEMY_KEY
@@ -34,6 +34,7 @@ export const RainbowWrapper: React.FC<ProviderProps> = ({ children }) => {
             apiKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY,
           })
         : publicProvider(),
+
       jsonRpcProvider({
         rpc: () => ({
           http: RPCS.moonriver,
@@ -46,27 +47,37 @@ export const RainbowWrapper: React.FC<ProviderProps> = ({ children }) => {
     {
       groupName: 'Recommended',
       wallets: [
-        metaMaskWallet({ chains }),
-        rainbowWallet({ chains }),
+        metaMaskWallet({
+          chains,
+          projectId: process.env.NEXT_PUBLIC_PROJECT_ID || '',
+        }),
+        rainbowWallet({
+          chains,
+          projectId: process.env.NEXT_PUBLIC_PROJECT_ID || '',
+        }),
         coinbaseWallet({
           chains,
           appName: `${config.DAO}'s Delegates Watcher`,
         }),
-        walletConnectWallet({ chains }),
+        walletConnectWallet({
+          chains,
+          projectId: process.env.NEXT_PUBLIC_PROJECT_ID || '',
+        }),
         talismanWallet({ chains }),
         injectedWallet({ chains }),
       ],
     },
   ]);
 
-  const wagmiClient = createClient({
+  const wagmiClient = createConfig({
     autoConnect: true,
     connectors,
-    provider,
+    publicClient,
+    webSocketPublicClient,
   });
 
   return (
-    <WagmiConfig client={wagmiClient}>
+    <WagmiConfig config={wagmiClient}>
       <RainbowKitProvider chains={chains}>{children}</RainbowKitProvider>
     </WagmiConfig>
   );

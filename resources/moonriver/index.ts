@@ -44,8 +44,8 @@ const config: IDAOConfig = {
   DAO_CATEGORIES_TYPE: 'tracks',
   ALLOW_BULK_DELEGATE: true,
   BULK_DELEGATE_ACTION: moonriverDelegateAction(
-    '0x0000000000000000000000000000000000000808', // Batch contract
-    '0x0000000000000000000000000000000000000812', // Delegate contract
+    '0x0000000000000000000000000000000000000808', // Batch contract address
+    '0x0000000000000000000000000000000000000812', // Delegate contract address
     batchContractAbi
   ),
   DAO_EXT_VOTES_PROVIDER: {
