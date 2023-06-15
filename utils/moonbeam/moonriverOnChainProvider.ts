@@ -101,13 +101,18 @@ async function getDaoProposals(): Promise<IProposal[]> {
 
   const proposalsMap = await Promise.all(
     proposals.map(async proposal => {
-      const blockNumber = Object.entries(
-        proposal.information
-      )[0].flat()[1] as number;
+      const status = Object.entries(proposal.information)[0] as any;
+      let blockNumber = 0;
+      if (status[1].submitted) {
+        blockNumber = status?.submitted as number;
+      } else {
+        blockNumber = status.flat()[1] as number;
+      }
       const proposalTimestamp = await fetchBlockTimestamp(
         provider,
         blockNumber
       );
+
       return {
         id: proposal.proposal || `Proposal ${proposal.proposalId.toString()}`,
         timestamp: proposalTimestamp,

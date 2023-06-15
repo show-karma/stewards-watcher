@@ -75,9 +75,12 @@ const colorDecision = (vote: IChainRow, theme: IDAOTheme) => {
     case 'DID NOT VOTE':
       return theme.tokenHolders.delegations.card.columns.voting.proposals.vote
         .notVoted;
-    default:
+    case 'ABSTAIN':
       return theme.tokenHolders.delegations.card.columns.voting.proposals.vote
         .abstain;
+    default:
+      return theme.tokenHolders.delegations.card.columns.voting.proposals.vote
+        .notVoted;
   }
 };
 
@@ -214,10 +217,22 @@ const VoteIcon: FC<{ vote: IChainRow }> = ({ vote }) => {
           {...iconStyle}
         />
       );
-    default:
+    case 'ABSTAIN':
       return (
         <Icon
           as={EmptyCircleIcon}
+          color={
+            colorMode === 'dark'
+              ? voteBg[checkDecision(vote)]
+              : colorDecision(vote, theme)
+          }
+          {...iconStyle}
+        />
+      );
+    default:
+      return (
+        <Icon
+          as={DidNotVoteIcon}
           color={
             colorMode === 'dark'
               ? voteBg[checkDecision(vote)]
@@ -255,8 +270,10 @@ export const ProposalVote: FC<IProposalVote> = ({
         return 'Against';
       case 1:
         return 'For';
-      default:
+      case 'ABSTAIN':
         return 'Abstain';
+      default:
+        return 'DID NOT VOTE';
     }
   };
 
