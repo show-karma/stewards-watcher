@@ -1,9 +1,13 @@
 import { IDAOConfig, IDAOTheme } from 'types';
 import { moonriverDelegateAction } from 'utils/moonbeam/moonriverDelegateAction';
 import { moonriverDelegateErrors, moonriverOnChainProvider } from 'utils';
+import { moonriverUndelegateAction } from 'utils/moonbeam/moonriverUndelegateAction';
 import { moonriver } from 'wagmi/chains';
 import ABI from './ABI.json';
 import batchContractAbi from './ABI_BATCH_CONTRACT.json';
+
+const bulkContractAddr = '0x0000000000000000000000000000000000000808';
+const delegateContractAddr = '0x0000000000000000000000000000000000000812';
 
 const config: IDAOConfig = {
   DAO: 'Moonriver',
@@ -32,6 +36,7 @@ const config: IDAOConfig = {
       method: 'balanceOf',
     },
   ],
+  ENABLE_DELEGATE_TRACKER: true,
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
   // DAO_DELEGATE_CONTRACT: '0x0000000000000000000000000000000000000812',
@@ -43,9 +48,15 @@ const config: IDAOConfig = {
   ],
   DAO_CATEGORIES_TYPE: 'tracks',
   ALLOW_BULK_DELEGATE: true,
+  ALLOW_UNDELEGATE: true,
+  UNDELEGATE_ACTION: moonriverUndelegateAction(
+    bulkContractAddr,
+    delegateContractAddr,
+    batchContractAbi
+  ),
   BULK_DELEGATE_ACTION: moonriverDelegateAction(
-    '0x0000000000000000000000000000000000000808', // Batch contract
-    '0x0000000000000000000000000000000000000812', // Delegate contract
+    bulkContractAddr, // Batch contract
+    delegateContractAddr, // Delegate contract
     batchContractAbi
   ),
   DAO_EXT_VOTES_PROVIDER: {

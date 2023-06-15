@@ -792,8 +792,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
   useEffect(() => {
     if (!ignoreAutoFetch) {
       fetchInterests();
-      fetchCategoryType();
     }
+    fetchCategoryType();
     fetchDaoIds();
   }, []);
 

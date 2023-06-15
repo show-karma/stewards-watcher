@@ -14,6 +14,7 @@ interface ProviderProps {
 
 export const RainbowWrapper: React.FC<ProviderProps> = ({ children }) => {
   const { daoInfo } = useDAO();
+
   const { config } = daoInfo;
 
   const { chains, provider } = configureChains(
