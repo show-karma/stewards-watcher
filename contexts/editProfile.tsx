@@ -307,10 +307,6 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
             `${KARMA_API.base_url}/forum-user/${daoInfo.config.DAO_KARMA_ID}/delegate-pitch/${profileSelected?.address}`,
             {
               customFields: [newInterests, newStatement],
-              forum: '0',
-              threadId: 0,
-              postId: 0,
-              discourseHandle: '0',
             }
           );
         } else if (newInterests.value || newStatement) {
@@ -325,10 +321,6 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
                 },
                 newStatement,
               ],
-              forum: '0',
-              threadId: 0,
-              postId: 0,
-              discourseHandle: '0',
             }
           );
         }
