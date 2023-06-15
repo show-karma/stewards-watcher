@@ -134,7 +134,7 @@ const dark: IDAOTheme = {
     buttons: {
       selectBg: '#183AC5',
       selectText: '#FFFFFF',
-      navBg: '#131413',
+      navBg: '#062B1E',
       navText: '#FFFFFF',
       navUnselectedText: '#ADB8C0',
       navBorder: '#FFFFFF',
@@ -409,7 +409,7 @@ const light: IDAOTheme = {
     buttons: {
       selectBg: '#183AC5',
       selectText: '#FFFFFF',
-      navBg: '#131413',
+      navBg: '#062B1E',
       navText: '#FFFFFF',
       navUnselectedText: '#ADB8C0',
       navBorder: '#FFFFFF',
