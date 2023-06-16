@@ -5,6 +5,7 @@ import React, { useMemo, useState } from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { writeContract, waitForTransaction } from '@wagmi/core';
 import { useToasty } from 'hooks';
+import { BaseError, ContractFunctionRevertedError } from 'viem';
 import { DelegatePoolList } from './DelegatePoolList';
 import { EmptyDelegatePool } from './EmptyDelegatePool';
 
@@ -49,11 +50,33 @@ export const DelegationPool: React.FC = () => {
           status: 'success',
         });
       } catch (error: any) {
-        console.log(error);
-        if (error.data?.message?.includes('message: ')) {
+        let errorMessage = '';
+
+        if (error instanceof BaseError) {
+          // Option 1: checking the instance of the error
+          if (error.cause instanceof ContractFunctionRevertedError) {
+            const { cause } = error;
+            errorMessage = cause.message;
+          }
+          // Option 2: using `walk` method from `BaseError`
+          const revertError = error.walk(
+            err => err instanceof ContractFunctionRevertedError
+          ) as ContractFunctionRevertedError;
+          if (revertError) {
+            errorMessage = revertError.message;
+            // regex to get what is between "message":" and "
+            const regex = /(?<="message":")(.*)(?=")/gm;
+            const customMessage = errorMessage.match(regex)?.[0];
+            if (customMessage) {
+              errorMessage = customMessage;
+            }
+          }
+        }
+
+        if (errorMessage?.includes('message: ')) {
           // regex to get what is between Some(" and ")
           const regex = /(?<=Some\(")(.*)(?="\))/gm;
-          const message = error.data.message.match(regex)[0];
+          const message = errorMessage.match(regex)?.[0];
           if (!message) {
             toast({
               title: 'Delegation failed',
@@ -88,6 +111,12 @@ export const DelegationPool: React.FC = () => {
           toast({
             title: 'Error',
             description: 'The transaction was cancelled. Please try again.',
+            status: 'error',
+          });
+        } else if (errorMessage) {
+          toast({
+            title: 'Delegation failed',
+            description: `${errorMessage}`,
             status: 'error',
           });
         } else {
