@@ -11,7 +11,7 @@ export const config = {
      * 5. all root files inside /public (e.g. /favicon.ico)
      * 6. meta
      */
-    '/((?!api|_next|daos|icons|images|meta|wallets|[\\w-]+\\.\\w+).*)',
+    '/((?!api|_next|daos|icons|images|meta|wallets|robots.txt|[\\w-]+\\.\\w+).*)',
   ],
 };
 

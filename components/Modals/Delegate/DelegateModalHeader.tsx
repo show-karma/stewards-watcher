@@ -19,7 +19,7 @@ export const DelegateModalHeader: React.FC<{
         fontStyle="normal"
         fontWeight="700"
         fontSize="20px"
-        color="#000000"
+        color={flexProps?.color || '#000000'}
         width="100%"
       >
         {title}

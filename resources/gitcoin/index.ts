@@ -15,8 +15,10 @@ const config: IDAOConfig = {
   METATAGS: {
     TITLE: `Stewards of Gitcoin DAO`,
     DESCRIPTION: `Find all the active stewards in Gitcoin DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
-    IMAGE_DISCORD: '/daos/gitcoin/preview-discord.png',
-    IMAGE_TWITTER: '/daos/gitcoin/preview-twitter.png',
+    IMAGE_DISCORD:
+      'https://delegate.gitcoin.co/daos/gitcoin/preview-discord.png',
+    IMAGE_TWITTER:
+      'https://delegate.gitcoin.co/daos/gitcoin/preview-twitter.png',
     FAVICON: '/daos/gitcoin/favicon.png',
     URL: `https://gitcoin.karmahq.xyz`,
   },

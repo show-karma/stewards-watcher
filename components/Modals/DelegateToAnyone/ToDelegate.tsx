@@ -9,12 +9,14 @@ interface IToDelegateProps {
   address: string;
   setAddress: React.Dispatch<React.SetStateAction<string>>;
   setSuccess: React.Dispatch<React.SetStateAction<boolean>>;
+  onOk?: () => void;
 }
 
 export const ToDelegate: FC<IToDelegateProps> = ({
   address,
   setAddress,
   setSuccess,
+  onOk,
 }) => {
   const { theme, daoInfo } = useDAO();
   const { setSelectedProfileData, findDelegateByAddress } = useDelegates();
@@ -59,6 +61,7 @@ export const ToDelegate: FC<IToDelegateProps> = ({
           });
         }
         setSelectedProfileData(delegate || emptyDelegate);
+        onOk?.();
         return;
       }
 
