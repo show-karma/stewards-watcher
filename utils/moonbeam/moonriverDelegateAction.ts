@@ -10,8 +10,6 @@ export interface IBulkDelegatePayload {
   amount: string;
   tracks: ITrackBadgeProps['track'][];
 }
-// delegateInterface = new ethers.utils.Interface(delegate_contract_abi)
-// calldata = delegateInterface.encodeFunctionData("delegate", ['<track id'>, '<delegate address>', <conviction id>, amount])
 
 function digest(payload: IBulkDelegatePayload[]) {
   const abiInterface = new ethers.utils.Interface(ABI);
@@ -49,7 +47,6 @@ export const moonriverDelegateAction =
       abi: batchContractAbi,
       functionName: 'batchAll',
       args,
-      mode: 'recklesslyUnprepared',
     });
 
     return hash;

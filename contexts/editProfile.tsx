@@ -1,11 +1,4 @@
-import React, {
-  useContext,
-  createContext,
-  useMemo,
-  useState,
-  useEffect,
-} from 'react';
-
+import React, { useContext, createContext, useMemo, useState } from 'react';
 import { useIsMounted } from 'hooks/useIsMounted';
 import { useToasty } from 'hooks';
 import { ICustomFields, IProfile } from 'types';

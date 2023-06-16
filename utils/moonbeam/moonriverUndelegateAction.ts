@@ -60,7 +60,6 @@ export function moonriverUndelegateAction(
       abi: batchContractAbi,
       functionName: 'batchAll',
       args,
-      mode: 'recklesslyUnprepared',
     });
 
     return hash;

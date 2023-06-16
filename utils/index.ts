@@ -18,5 +18,6 @@ export * from './moonbeam';
 export * from './removeHtmlTagWithRegex';
 export * from './removeLinkPrefix';
 export * from './sendLeadEmail';
+export * from './talismanWallet';
 export * from './truncateAddress';
 export * from './validateEmail';

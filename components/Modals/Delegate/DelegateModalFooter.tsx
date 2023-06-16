@@ -41,7 +41,6 @@ export const DelegateModalFooter: React.FC<{
         color="rgba(0,0,0,0.5)"
         fontSize={12}
         {...flexProps}
-        boxRadius="12px"
         flexDir="column"
         mx="6"
         mb="6"
