@@ -101,7 +101,6 @@ interface IDelegateProps {
 }
 
 export const DelegatesContext = createContext({} as IDelegateProps);
-
 interface ProviderProps {
   children: React.ReactNode;
   ignoreAutoFetch?: boolean;
