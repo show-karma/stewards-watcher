@@ -331,7 +331,7 @@ const dark: IDAOTheme = {
       bg: {
         primary: '#151515',
         secondary: '#1B2030',
-        tertiary: 'linear-gradient(248.86deg, #B6509E 10.51%, #2EBAC6 93.41%)',
+        tertiary: '#fcc10e',
       },
     },
   },
