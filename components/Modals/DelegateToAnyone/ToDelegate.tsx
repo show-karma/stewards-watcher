@@ -52,14 +52,6 @@ export const ToDelegate: FC<IToDelegateProps> = ({
       const hasTracks = daoInfo.config.DAO_CATEGORIES_TYPE === 'tracks';
       if (hasTracks) {
         const delegate = await findDelegateByAddress(address);
-        if (!delegate?.tracks?.length) {
-          toast({
-            title: 'Error',
-            description: 'This delegate does not belong any track',
-            status: 'error',
-            duration: 10000,
-          });
-        }
         setSelectedProfileData(delegate || emptyDelegate);
         onOk?.();
         return;
