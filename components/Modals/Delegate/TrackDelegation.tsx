@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDAO, useDelegates } from 'contexts';
 import { Button, Flex, Text } from '@chakra-ui/react';
 import { IDelegate } from 'types';
@@ -28,13 +28,25 @@ export const TrackDelegation: React.FC<StepProps> = ({
   walletAddress,
 }) => {
   const { daoData } = useDAO();
-  const { addToDelegatePool } = useDelegates();
+  const { addToDelegatePool, tracks: daoTracks } = useDelegates();
 
-  const { tracks } = delegatedUser;
+  const tracks = useMemo(
+    () =>
+      daoTracks.map(track => ({
+        name: track.displayName,
+        id: track.id,
+      })),
+    [daoTracks]
+  );
 
   const [selectedTracks, setSelectedTracks] = useState<
     ITrackBadgeProps['track'][]
   >([]);
+
+  useEffect(() => {
+    if (delegatedUser.tracks?.length && !selectedTracks.length)
+      setSelectedTracks(delegatedUser.tracks);
+  }, [tracks]);
 
   if (!daoData) return null;
 
@@ -49,7 +61,7 @@ export const TrackDelegation: React.FC<StepProps> = ({
     setSelectedTracks(old => [...old, track]);
   };
   const removeTrack = (track: ITrackBadgeProps['track']) => {
-    setSelectedTracks(old => old.filter(tr => tr !== track));
+    setSelectedTracks(old => old.filter(tr => tr.id !== track.id));
   };
 
   const handleAddToDelegatePool = (delegate: IDelegate) => {

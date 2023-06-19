@@ -1,6 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import { ImgWithFallback } from 'components/ImgWithFallback';
 import { useDAO, useDelegates } from 'contexts';
+import { useMemo } from 'react';
 import { truncateAddress } from 'utils';
 import { IBulkDelegatePayload } from 'utils/moonbeam/moonriverDelegateAction';
 import { TrackBadge } from './TrackBadge';
@@ -17,8 +18,20 @@ export const DelegatePoolList: React.FC<IDelegatePoolListProps> = ({
   const { daoInfo } = useDAO();
   const { config } = daoInfo;
 
-  const { addTrackToDelegateInPool, removeTrackFromDelegateInPool } =
-    useDelegates();
+  const {
+    addTrackToDelegateInPool,
+    removeTrackFromDelegateInPool,
+    tracks: daoTracks,
+  } = useDelegates();
+
+  const tracks = useMemo(
+    () =>
+      daoTracks.map(track => ({
+        name: track.displayName,
+        id: track.id,
+      })),
+    [daoTracks]
+  );
 
   return (
     <Flex flexDir="row" flexWrap="wrap" align="center" w="full">
@@ -53,11 +66,11 @@ export const DelegatePoolList: React.FC<IDelegatePoolListProps> = ({
                 payload.delegate.ensName ||
                 truncateAddress(payload.delegate.address)}
             </Flex>
-            {payload.delegate.tracks && payload.delegate.tracks.length > 0 && (
+            {tracks.length > 0 && (
               <>
                 <Flex>for</Flex>
                 <Flex gap={2} flexWrap="wrap">
-                  {payload.delegate.tracks?.map(track => (
+                  {tracks?.map(track => (
                     <TrackBadge
                       track={track}
                       key={track.id}

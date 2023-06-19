@@ -422,24 +422,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   };
 
   const handleAddToDelegatePool = (delegate: IDelegate) => {
-    if (!delegate.tracks?.length) {
-      toast({
-        title: 'Error',
-        description: 'This delegate does not belong any track',
-        status: 'error',
-        duration: 3000,
-      });
-    } else {
-      setSelectedProfileData(delegate);
-    }
-  };
-
-  const shouldBlockModal = (tracksLength?: number) => {
-    if (config.ALLOW_BULK_DELEGATE) {
-      if (tracksLength) return false;
-      return true;
-    }
-    return false;
+    setSelectedProfileData(delegate);
   };
 
   return (
@@ -804,7 +787,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                           setSelectedProfileData(data);
                         }
                       }}
-                      shouldBlockModal={shouldBlockModal(data.tracks?.length)}
                     />
                   ))}
                 <UserInfoButton onOpen={selectProfile} profile={data} />
