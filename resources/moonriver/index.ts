@@ -62,6 +62,7 @@ const config: IDAOConfig = {
     onChain: moonriverOnChainProvider,
   },
   DELEGATION_ERRORS_DICTIONARY: moonriverDelegateErrors,
+  ENABLE_DELEGATE_TRACKER: true,
 };
 
 const dark: IDAOTheme = {
