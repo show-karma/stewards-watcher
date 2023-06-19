@@ -585,7 +585,6 @@ export const TokenHolderDelegation: FC = () => {
           renderItems()
         )}
       </Flex>
-      {daoInfo.config.ALLOW_UNDELEGATE && <UndelegateModal />}
     </Flex>
   );
 };
