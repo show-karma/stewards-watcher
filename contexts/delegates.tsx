@@ -244,8 +244,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         data = (await api.get(`/workstream/list?dao=${config.DAO_KARMA_ID}`))
           .data.data;
       } else if (type === 'tracks') {
-        data = (await api.get(`/dao/moonbeam/tracks`)).data.data; // this is hardcoded for now, while the boys are working on the API
-        // data = (await api.get(`${config.DAO_KARMA_ID}/${type}`)).data.data;
+        data = (await api.get(`${config.DAO_KARMA_ID}/${type}`)).data.data;
       }
 
       const { tracks: dataTracks, workstreams: dataWorkstreams } = data;
