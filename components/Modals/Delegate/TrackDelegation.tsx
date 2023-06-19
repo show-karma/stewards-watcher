@@ -44,7 +44,8 @@ export const TrackDelegation: React.FC<StepProps> = ({
   >([]);
 
   useEffect(() => {
-    if (delegatedUser.tracks?.length) setSelectedTracks(delegatedUser.tracks);
+    if (delegatedUser.tracks?.length && !selectedTracks.length)
+      setSelectedTracks(delegatedUser.tracks);
   }, [tracks]);
 
   if (!daoData) return null;
@@ -60,7 +61,7 @@ export const TrackDelegation: React.FC<StepProps> = ({
     setSelectedTracks(old => [...old, track]);
   };
   const removeTrack = (track: ITrackBadgeProps['track']) => {
-    setSelectedTracks(old => old.filter(tr => tr !== track));
+    setSelectedTracks(old => old.filter(tr => tr.id !== track.id));
   };
 
   const handleAddToDelegatePool = (delegate: IDelegate) => {
