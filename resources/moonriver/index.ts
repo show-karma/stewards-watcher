@@ -63,6 +63,7 @@ const config: IDAOConfig = {
   },
   DELEGATION_ERRORS_DICTIONARY: moonriverDelegateErrors,
   ENABLE_DELEGATE_TRACKER: true,
+  DISABLE_EMAIL_INPUT: true,
 };
 
 const dark: IDAOTheme = {

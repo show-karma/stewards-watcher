@@ -52,7 +52,6 @@ export const DelegationCard: FC<IDelegationCardProps> = ({
       const hasTrack = tracks.find(
         track => track.id === delegationData.trackId
       );
-      console.debug({ delegate, delegationData, data, tracks, hasTrack });
       if (hasTrack) {
         return `Track: ${hasTrack.displayName} `;
       }

@@ -66,6 +66,7 @@ export interface IDAOConfig {
   };
   ALLOW_UNDELEGATE?: boolean;
   ALLOW_BULK_DELEGATE?: boolean;
+  DISABLE_EMAIL_INPUT?: boolean;
   // TODO: type anys
   /**
    * Defines a function to bulk delegate
