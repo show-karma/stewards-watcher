@@ -10,7 +10,7 @@ import {
 import { useDAO } from 'contexts';
 import { FC } from 'react';
 
-export const Madeby: FC<FlexProps> = () => {
+export const MadebyMobile: FC<FlexProps> = () => {
   const { theme } = useDAO();
   const variantImg = useBreakpointValue({
     base: useColorModeValue(
@@ -28,7 +28,7 @@ export const Madeby: FC<FlexProps> = () => {
       h="max-content"
       justify={{ base: 'center', lg: 'flex-start' }}
       py="0"
-      flexWrap="wrap"
+      justifyContent="center"
     >
       <Text
         fontSize={{ base: '9px', lg: 'md' }}
