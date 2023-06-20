@@ -1,11 +1,12 @@
 import {
   Button,
   ButtonProps,
+  Divider,
   Flex,
-  Icon,
   Img,
   useColorModeValue,
   useDisclosure,
+  useMediaQuery,
 } from '@chakra-ui/react';
 import {
   ChakraLink,
@@ -16,8 +17,9 @@ import {
 import { DelegateVotesModal } from 'components/Modals/DelegateToAnyone';
 import { useDAO, useDelegates, useWallet } from 'contexts';
 import { FC } from 'react';
-import { IoMenu } from 'react-icons/io5';
-import { HeaderBurgerMenu } from './HeaderBurgerMenu';
+import { KARMA_WEBSITE } from 'helpers';
+import { NavMenu } from './NavMenu';
+import { HeaderBurgerAccordion } from './HeaderBurgerAccordion';
 import { Madeby } from './Madeby';
 import { ResourcesMenu } from './ResourcesMenu';
 import { ThemeButton } from './ThemeButton';
@@ -28,15 +30,18 @@ const StyledButton: FC<ButtonProps> = ({ children, ...rest }) => {
     <Button
       color={theme.hat.text.primary}
       bgColor="transparent"
-      px="4"
-      py="6"
+      px={{ base: '0', lg: '1', xl: '4' }}
+      py={{ base: '1', lg: '6' }}
       fontWeight="semibold"
       _active={{}}
       _focus={{}}
       _hover={{
         color: theme.hat.text.secondary,
       }}
-      minH="52px"
+      minH={{ base: 'max-content', lg: '52px' }}
+      alignItems="center"
+      justifyContent="flex-start"
+      fontSize={{ base: 'sm', lg: 'md' }}
       {...rest}
     >
       {children}
@@ -53,11 +58,50 @@ export const HeaderHat = () => {
   const { delegateLoginIsOpen, delegateLoginOnClose, delegateLoginOnOpen } =
     useWallet();
 
-  const {
-    isOpen: isBurgerMenuOpen,
-    onClose: closeBurgerMenu,
-    onOpen: openBurgerMenu,
-  } = useDisclosure();
+  const [isMobile] = useMediaQuery('(max-width: 768px)');
+  const [isSmallScreen] = useMediaQuery('(max-width: 1280px)');
+
+  const mountingForTokenholders = (): {
+    title: string;
+    path?: string;
+    action?: () => void;
+  }[] => {
+    const array = [];
+
+    if (daoInfo.config.ENABLE_DELEGATE_TRACKER)
+      array.push({
+        title: 'Delegate Look Up',
+        path: '/delegate-lookup',
+      });
+    if (daoInfo.config.DAO_DELEGATE_CONTRACT)
+      array.push({
+        title: 'Delegate Tokens',
+        action: onToggle,
+      });
+    return array;
+  };
+
+  const mountingForDelegates = () => {
+    const array = [];
+
+    array.push({
+      title: 'Delegator Look Up',
+      path: KARMA_WEBSITE.delegators(daoInfo.config.DAO_KARMA_ID),
+    });
+
+    return array;
+  };
+
+  const mountingResources = () => {
+    const { DAO_RESOURCES } = daoInfo.config;
+    if (!DAO_RESOURCES) return [];
+    const array = DAO_RESOURCES.map(item => ({
+      title: item.title,
+      path: item.url,
+    }));
+
+    return array;
+  };
 
   return (
     <Flex flexDir="column" w="full">
@@ -72,123 +116,118 @@ export const HeaderHat = () => {
         zIndex="2"
         boxShadow={useColorModeValue('0px 4px 10px rgba(0, 0, 0, 0.1)', 'none')}
       >
-        <Flex
-          w={{ base: 'full' }}
-          maxW={{ base: '400px', md: '820px', lg: '944px', xl: '1360px' }}
-          flexDir="row"
-          justify="space-between"
-          gap="4"
-          flexWrap="wrap"
-        >
+        {isMobile ? (
+          <HeaderBurgerAccordion
+            mountingForTokenholders={mountingForTokenholders}
+            mountingForDelegates={mountingForDelegates}
+          >
+            <Flex flexDir="column" gap="1">
+              <NavMenu
+                title="For Tokenholders"
+                childrens={mountingForTokenholders()}
+                accordion
+              />
+              <NavMenu
+                title="For Delegates"
+                childrens={mountingForDelegates()}
+                accordion
+              />
+              <ChakraLink href="/guide" _hover={{}}>
+                <StyledButton>Guide</StyledButton>
+              </ChakraLink>
+              {daoInfo.config.DAO_DEFAULT_SETTINGS?.FAQ && (
+                <ChakraLink href="/faq" _hover={{}} w="full">
+                  <StyledButton w="full">FAQs</StyledButton>
+                </ChakraLink>
+              )}
+              {daoInfo.config.DAO_RESOURCES &&
+                daoInfo.config.DAO_RESOURCES.length > 0 && (
+                  <NavMenu title="Resources" childrens={mountingResources()} />
+                )}
+              <Divider borderColor={theme.filters.title} />
+              <DelegateLoginButton onOpen={delegateLoginOnOpen} />
+              <ThemeButton />
+            </Flex>
+          </HeaderBurgerAccordion>
+        ) : (
           <Flex
+            w={{ base: 'full' }}
+            maxW={{ base: '400px', md: '820px', lg: '944px', xl: '1360px' }}
             flexDir="row"
-            flex={['1', 'none']}
-            align={{ base: 'center' }}
-            gap={{ base: '2', md: '16' }}
-            w="full"
-            justify={{ base: 'space-between' }}
+            justify="space-between"
+            gap={{ base: '1', xl: '4' }}
+            flexWrap="wrap"
           >
             <Flex
-              flexDir="column"
-              flex={['1', 'none']}
-              align={['flex-start', 'flex-start']}
-              gap="1"
-            >
-              <ChakraLink href="/">
-                <Img
-                  w="auto"
-                  maxW="36"
-                  h="10"
-                  objectFit="contain"
-                  src={config.DAO_LOGO}
-                />
-              </ChakraLink>
-              <Madeby />
-            </Flex>
-            <Flex
               flexDir="row"
-              alignItems="center"
-              justify="flex-end"
-              w={{ base: 'max-content', lg: 'full' }}
+              flex={['1', 'none']}
+              align={{ base: 'center' }}
+              gap={{ base: '2', lg: '4', xl: '16' }}
+              w="full"
+              justify={{ base: 'space-between' }}
             >
               <Flex
-                display={{ base: 'flex', lg: 'none' }}
-                w="max-content"
-                align="center"
-                justify="center"
+                flexDir="column"
+                flex={['1', 'none']}
+                align={['flex-start', 'flex-start']}
+                gap="1"
               >
-                <Button
-                  bg="none"
-                  _hover={{}}
-                  _active={{}}
-                  _focus={{}}
-                  _focusWithin={{}}
-                  _focusVisible={{}}
-                  onClick={openBurgerMenu}
-                  color={theme.hat.text.primary}
-                >
-                  <Icon as={IoMenu} boxSize="8" />
-                </Button>
+                <ChakraLink href="/">
+                  <Img
+                    w="auto"
+                    maxW="36"
+                    h="10"
+                    objectFit="contain"
+                    src={config.DAO_LOGO}
+                  />
+                </ChakraLink>
+                <Madeby />
               </Flex>
               <Flex
-                justify="center"
+                flexDir="row"
                 alignItems="center"
-                height="100%"
-                display={{ base: 'none', lg: 'flex' }}
-                gap="4"
+                justify="flex-end"
+                w={{ base: 'max-content', lg: 'full' }}
               >
-                {daoInfo.config.ENABLE_DELEGATE_TRACKER ? (
-                  <ChakraLink href="/delegate-lookup" _hover={{}}>
-                    <StyledButton>Delegate Look Up</StyledButton>
-                  </ChakraLink>
-                ) : null}
-                {daoInfo.config.DAO_DELEGATE_CONTRACT ? (
-                  <StyledButton onClick={onToggle}>
-                    Delegate Tokens
-                  </StyledButton>
-                ) : null}
-                <ChakraLink href="/guide" _hover={{}}>
-                  <StyledButton>Guide</StyledButton>
-                </ChakraLink>
-                {daoInfo.config.DAO_DEFAULT_SETTINGS?.FAQ && (
-                  <ChakraLink href="/faq" _hover={{}}>
-                    <StyledButton>FAQ</StyledButton>
-                  </ChakraLink>
-                )}
-                {daoInfo.config.DAO_RESOURCES &&
-                  daoInfo.config.DAO_RESOURCES.length > 0 && <ResourcesMenu />}
-                <DelegateLoginButton onOpen={delegateLoginOnOpen} />
-                <ThemeButton />
+                <Flex
+                  justify="center"
+                  alignItems="center"
+                  height="100%"
+                  gap="4"
+                >
+                  <NavMenu
+                    title="For Tokenholders"
+                    childrens={mountingForTokenholders()}
+                  />
+                  <NavMenu
+                    title="For Delegates"
+                    childrens={mountingForDelegates()}
+                  />
+
+                  {isSmallScreen ? null : (
+                    <>
+                      <ChakraLink href="/guide" _hover={{}}>
+                        <StyledButton>Guide</StyledButton>
+                      </ChakraLink>
+                      {daoInfo.config.DAO_DEFAULT_SETTINGS?.FAQ && (
+                        <ChakraLink href="/faq" _hover={{}}>
+                          <StyledButton>FAQs</StyledButton>
+                        </ChakraLink>
+                      )}
+                      {daoInfo.config.DAO_RESOURCES &&
+                        daoInfo.config.DAO_RESOURCES.length > 0 && (
+                          <ResourcesMenu />
+                        )}
+                    </>
+                  )}
+                  <DelegateLoginButton onOpen={delegateLoginOnOpen} />
+                  <ThemeButton />
+                </Flex>
               </Flex>
             </Flex>
           </Flex>
-        </Flex>
-        <HeaderBurgerMenu isOpen={isBurgerMenuOpen} onClose={closeBurgerMenu}>
-          <Flex flexDir="column" gap="4">
-            {daoInfo.config.ENABLE_DELEGATE_TRACKER ? (
-              <ChakraLink href="/delegate-lookup" _hover={{}}>
-                <StyledButton>Delegate Look Up</StyledButton>
-              </ChakraLink>
-            ) : null}
-            {daoInfo.config.DAO_DELEGATE_CONTRACT ? (
-              <StyledButton onClick={onToggle} px="2">
-                Delegate Tokens
-              </StyledButton>
-            ) : null}
-            <ChakraLink href="/guide" _hover={{}}>
-              <StyledButton>Guide</StyledButton>
-            </ChakraLink>
-            {daoInfo.config.DAO_DEFAULT_SETTINGS?.FAQ && (
-              <ChakraLink href="/faq" _hover={{}} w="full">
-                <StyledButton w="full">FAQ</StyledButton>
-              </ChakraLink>
-            )}
-            {daoInfo.config.DAO_RESOURCES &&
-              daoInfo.config.DAO_RESOURCES.length > 0 && <ResourcesMenu />}
-            <DelegateLoginButton onOpen={delegateLoginOnOpen} />
-            <ThemeButton />
-          </Flex>
-        </HeaderBurgerMenu>
+        )}
+
         <DelegateVotesModal isOpen={isOpen} onClose={onToggle} />
       </Flex>
       <DelegateLoginModal

@@ -1,12 +1,15 @@
 import {
+  Box,
   Button,
   Divider,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
+  Show,
+  useMediaQuery,
 } from '@chakra-ui/react';
-import { DownChevron } from 'components/Icons';
+import { ArrowRightIcon, DownChevron } from 'components/Icons';
 import { useAuth, useDAO, useDelegates } from 'contexts';
 import { FC } from 'react';
 import { truncateAddress } from 'utils';
@@ -96,23 +99,21 @@ const LoginButton: FC<{ onOpen: () => void }> = ({ onOpen }) => {
   const { theme } = useDAO();
   const { isAuthenticated, disconnect } = useAuth();
   const { isConnected } = useAccount();
+  const [isMobile] = useMediaQuery('(max-width: 990px)');
   return (
     <Button
-      background={theme.branding}
+      background={{ base: 'transparent', lg: theme.branding }}
       color={theme.buttonText}
-      px="5"
-      py="3"
+      px={{ base: '0', lg: '5' }}
+      py={{ base: '0', lg: '3' }}
       fontWeight="semibold"
       _hover={{
-        bgColor: theme.branding,
         opacity: 0.8,
       }}
       _focusVisible={{
-        bgColor: theme.branding,
         opacity: 0.8,
       }}
       _focusWithin={{
-        bgColor: theme.branding,
         opacity: 0.8,
       }}
       _focus={{
@@ -129,8 +130,18 @@ const LoginButton: FC<{ onOpen: () => void }> = ({ onOpen }) => {
         }
         onOpen();
       }}
+      justifyContent={{ base: 'flex-start', lg: 'center' }}
+      display="flex"
+      gap="4"
+      alignItems="center"
+      fontSize={{ base: 'sm', lg: 'md' }}
     >
-      Delegate Login
+      Delegate Sign Up / Login
+      {isMobile ? (
+        <Box display={{ base: 'flex', md: 'none' }}>
+          <ArrowRightIcon boxSize="14px" />
+        </Box>
+      ) : null}
     </Button>
   );
 };

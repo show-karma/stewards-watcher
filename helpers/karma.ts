@@ -2,6 +2,14 @@ export const KARMA_API = {
   base_url: process.env.NEXT_PUBLIC_KARMA_API || '',
 };
 
+export const KARMA_WEBSITE = {
+  home: 'https://karmahq.xyz',
+  delegators: (daoName: string, profile?: string) =>
+    `https://karmahq.xyz/dao/${daoName}/delegators${
+      profile ? `/${profile}` : ''
+    }`,
+};
+
 export const KARMA_LINKS = {
   discord: 'https://discord.com/invite/hnZm3MffqQ',
   twitter: 'https://twitter.com/karmahq_',
