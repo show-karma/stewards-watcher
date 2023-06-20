@@ -41,6 +41,7 @@ const config: IDAOConfig = {
     'discordScore',
   ],
   ENABLE_DELEGATE_TRACKER: true,
+  DAO_CATEGORIES_TYPE: 'workstreams',
 };
 
 const dark: IDAOTheme = {

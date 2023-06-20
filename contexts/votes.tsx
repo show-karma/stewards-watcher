@@ -45,14 +45,17 @@ export const VotesProvider: React.FC<ProviderProps> = ({
 }) => {
   const { daoInfo } = useDAO();
   const { voteInfos } = useDelegates();
+
   const { data: dataOffChainVotes } = useOffChainVotes(
     voteInfos.snapshotIds,
     profile.address
   );
+
   const { data: dataOnChainVotes } = useOnChainVotes(
     voteInfos.onChainId,
     profile.address
   );
+
   const [offChainVotes, setOffChainVotes] = useState<IChainRow[] | undefined>(
     undefined
   );

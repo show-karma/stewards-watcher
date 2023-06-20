@@ -265,7 +265,7 @@ export const VotingBreakdown: FC = () => {
         borderTopRadius="md"
       >
         <Text
-          color={theme.modal.votingHistory.proposal.title}
+          color={theme.modal.buttons.navText}
           fontWeight="semibold"
           fontSize="md"
         >

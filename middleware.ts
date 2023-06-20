@@ -11,7 +11,7 @@ export const config = {
      * 5. all root files inside /public (e.g. /favicon.ico)
      * 6. meta
      */
-    '/((?!api|_next|daos|icons|images|meta|robots.txt|[\\w-]+\\.\\w+).*)',
+    '/((?!api|_next|daos|icons|images|meta|wallets|robots.txt|[\\w-]+\\.\\w+).*)',
   ],
 };
 
@@ -19,7 +19,7 @@ const getDAOName = (host: string) => host.split('.')[0];
 
 const devUrl = 'dapp.karmahq.xyz';
 const DAO_CUSTOM_DOMAIN: Record<string, string> = {
-  [devUrl]: 'starknet',
+  [devUrl]: 'moonriver',
   'daostewards.xyz': 'gitcoin',
   'delegate.gitcoin.co': 'gitcoin',
   'delegate.starknet.io': 'starknet',
