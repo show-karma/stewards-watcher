@@ -9,9 +9,9 @@ import {
 } from '@chakra-ui/react';
 import { ChakraLink } from 'components/ChakraLink';
 import { ImgWithFallback } from 'components/ImgWithFallback';
-import { useDAO } from 'contexts';
+import { useDAO, useDelegates } from 'contexts';
 import moment from 'moment';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { IDelegatingHistories } from 'types';
 import { addressToENSName, formatNumber, truncateAddress } from 'utils';
 import { PerformanceStats } from './PerformanceStats';
@@ -40,6 +40,25 @@ export const DelegationCard: FC<IDelegationCardProps> = ({
   selectedDelegation,
 }) => {
   const { theme, daoInfo } = useDAO();
+
+  const { tracks } = useDelegates();
+
+  const getTrackText = (delegate: IDelegationCardProps['userDelegatedTo']) => {
+    const delegationData = data.find(
+      item => item.toDelegate === delegate.address
+    );
+
+    if (delegationData && typeof delegationData.trackId === 'number') {
+      const hasTrack = tracks.find(
+        track => track.id === delegationData.trackId
+      );
+      if (hasTrack) {
+        return `Track: ${hasTrack.displayName} `;
+      }
+    }
+
+    return '';
+  };
 
   const sinceDate = moment
     .unix(selectedDelegation.timestamp)
@@ -207,6 +226,7 @@ export const DelegationCard: FC<IDelegationCardProps> = ({
                 >
                   {sinceDate}
                 </Text>
+                <Text>{getTrackText(userDelegatedTo)}</Text>
               </Flex>
             </Flex>
             <AccordionButton

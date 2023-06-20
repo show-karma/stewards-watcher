@@ -64,6 +64,7 @@ const config: IDAOConfig = {
   DELEGATION_ERRORS_DICTIONARY: moonriverDelegateErrors,
   EXCLUDED_VOTING_HISTORY_COLUMN: ['contrarionIndex', 'offChainVoteBreakdown'],
   ENABLE_DELEGATE_TRACKER: true,
+  DISABLE_EMAIL_INPUT: true,
   DAO_SUPPORTS_TOS: true,
   TOS_URL: '/',
 };

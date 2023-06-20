@@ -9,6 +9,13 @@ import { fetchBlockTimestamp } from 'utils';
 import { MoonbeamWSC } from './moonbeamwsc';
 import { polkassembly, Post } from './polkassembly';
 
+interface IProposal {
+  id: string;
+  timestamp: number;
+  description: string;
+  trackId: NumberIsh;
+}
+
 /**
  * Concat proposal and votes into a common interface
  * @param proposals
@@ -20,9 +27,12 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
   votes.forEach((vote: any) => {
     const { proposal, timestamp } = vote;
     const proposalString = parseInt(proposal, 16).toString();
+    console.log(proposalString);
     array.push({
       voteMethod: 'On-chain',
-      proposal: proposalString,
+      proposal:
+        proposals.find(item => item.id === proposalString)?.description ||
+        `Proposal ${proposalString.toString()}`,
       choice: vote?.support,
       solution: vote?.solution,
       reason: vote?.reason,
@@ -32,16 +42,17 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
   });
 
   proposals.forEach(proposal => {
-    array.push({
-      voteMethod: 'On-chain',
-      proposal: proposal?.description || proposal?.id,
-      choice: -1,
-      solution: null,
-      executed: moment.unix(proposal.timestamp).format('MMMM D, YYYY'),
-      voteId: proposal?.id,
-    });
+    if (!array.find(item => item.voteId === proposal.id.toString()))
+      array.push({
+        voteMethod: 'On-chain',
+        proposal: proposal.description,
+        choice: -1,
+        solution: null,
+        executed: moment.unix(proposal.timestamp).format('MMMM D, YYYY'),
+        voteId: proposal.id.toString(),
+      });
   });
-
+  console.log(array);
   // removing duplicate items on array that have same proposal id
   const filteredArray = array.filter(
     (item, index, self) =>
@@ -49,11 +60,6 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
   );
 
   return filteredArray;
-}
-
-interface IProposal {
-  id: string;
-  timestamp: number;
 }
 
 async function proposalsWithMetadata(): Promise<
@@ -114,12 +120,15 @@ async function getDaoProposals(): Promise<IProposal[]> {
       );
 
       return {
-        id: proposal.proposal || `Proposal ${proposal.proposalId.toString()}`,
+        id: `${proposal.proposalId}`,
+        description:
+          proposal.proposal || `Proposal ${proposal.proposalId.toString()}`,
         timestamp: proposalTimestamp,
         trackId: proposal.trackId,
       };
     })
   );
+
   return proposalsMap;
 }
 

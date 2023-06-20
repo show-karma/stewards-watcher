@@ -1010,6 +1010,15 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     if (!~delegateIndex) {
       newDelegates.push({ delegate, tracks: selectedTracks, amount });
     }
+
+    // split the amount among the delegates
+    const amountPerDelegate = +amount / newDelegates.length;
+
+    newDelegates.forEach(item => {
+      // eslint-disable-next-line no-param-reassign
+      item.amount = amountPerDelegate.toString();
+    });
+
     setDelegatePoolList(newDelegates);
   };
 

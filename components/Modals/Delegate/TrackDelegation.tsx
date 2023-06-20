@@ -28,7 +28,11 @@ export const TrackDelegation: React.FC<StepProps> = ({
   walletAddress,
 }) => {
   const { daoData } = useDAO();
-  const { addToDelegatePool, tracks: daoTracks } = useDelegates();
+  const {
+    addToDelegatePool,
+    tracks: daoTracks,
+    delegatePoolList,
+  } = useDelegates();
 
   const tracks = useMemo(
     () =>
@@ -37,6 +41,11 @@ export const TrackDelegation: React.FC<StepProps> = ({
         id: track.id,
       })),
     [daoTracks]
+  );
+
+  const getVoteAmount = useMemo(
+    () => ((+votes - 0.1) / (delegatePoolList.length + 1)).toString(),
+    [votes]
   );
 
   const [selectedTracks, setSelectedTracks] = useState<
@@ -65,7 +74,7 @@ export const TrackDelegation: React.FC<StepProps> = ({
   };
 
   const handleAddToDelegatePool = (delegate: IDelegate) => {
-    addToDelegatePool(delegate, selectedTracks, '0.1');
+    addToDelegatePool(delegate, selectedTracks, `${+votes - 0.1}`);
     handleModal();
   };
 
@@ -101,8 +110,11 @@ export const TrackDelegation: React.FC<StepProps> = ({
             You are delegating
           </Text>
           <Flex alignItems="center" justifyContent="space-between" flex="2">
-            {/* Hardcoded until we know if we can choose the amount */}
-            <VotesToDelegate logoUrl={logoUrl} daoName={daoName} votes="0.1" />
+            <VotesToDelegate
+              logoUrl={logoUrl}
+              daoName={daoName}
+              votes={getVoteAmount}
+            />
             <Text fontStyle="normal" fontSize="14px" color="black">
               to
             </Text>
