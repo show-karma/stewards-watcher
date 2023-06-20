@@ -35,6 +35,7 @@ const config: IDAOConfig = {
     'forumScore',
     'discordScore',
   ],
+  EXCLUDED_VOTING_HISTORY_COLUMN: ['onChainVoteBreakdown'],
   ENABLE_DELEGATE_TRACKER: true,
   DAO_CATEGORIES_TYPE: 'workstreams',
 };

@@ -20,11 +20,14 @@ interface IVotesProps {
   limit: number;
   offset: number;
   changeOffset: (newOffset: number) => void;
-  isVoteBreakdownLoading: boolean;
-  isVoteBreakdownError: boolean;
-  voteBreakdown: IVoteBreakdown;
+  isOffChainVoteBreakdownLoading: boolean;
+  isOffChainVoteBreakdownError: boolean;
+  offChainVoteBreakdown: IVoteBreakdown;
   changeSort: (newSort: 'Date' | 'Choice') => void;
   sortby: 'Date' | 'Choice';
+  onChainVoteBreakdown: IVoteBreakdown | undefined;
+  isOnChainVoteBreakdownLoading: boolean;
+  isOnChainVoteBreakdownError: boolean;
 }
 
 export const VotesContext = createContext({} as IVotesProps);
@@ -70,10 +73,20 @@ export const VotesProvider: React.FC<ProviderProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [sortby, setSortBy] = useState<'Date' | 'Choice'>('Date');
   const [offset, setOffset] = useState(0);
+  const limit = 6;
+
+  const [onChainVoteBreakdown, setOnChainVoteBreakdown] = useState<
+    IVoteBreakdown | undefined
+  >(undefined);
+  const [isOnChainVoteBreakdownLoading, setOnChainVoteBreakdownLoading] =
+    useState(true);
+  const [isOnChainVoteBreakdownError, setOnChainVoteBreakdownError] =
+    useState(false);
+
   const {
-    isLoading: isVoteBreakdownLoading,
-    isError: isVoteBreakdownError,
-    data: voteBreakdown,
+    isLoading: isOffChainVoteBreakdownLoading,
+    isError: isOffChainVoteBreakdownError,
+    data: offChainVoteBreakdown,
   } = useQuery({
     queryKey: ['vote-breakdown'],
     queryFn: async () => {
@@ -90,10 +103,7 @@ export const VotesProvider: React.FC<ProviderProps> = ({
     refetchOnWindowFocus: false,
   });
 
-  const limit = 6;
-
   const changeSort = (newSort: 'Date' | 'Choice') => setSortBy(newSort);
-
   const changeOffset = (newOffset: number) => setOffset(newOffset);
 
   const allVotes = useMemo(() => {
@@ -177,6 +187,38 @@ export const VotesProvider: React.FC<ProviderProps> = ({
     setIsLoading(false);
   }, 500);
 
+  const setupOnChainVoteBreakdown = () => {
+    if (!onChainVotes || !onChainVotes.length) {
+      setOnChainVoteBreakdownError(true);
+      setOnChainVoteBreakdown(undefined);
+      setOnChainVoteBreakdownLoading(false);
+      return;
+    }
+    setOnChainVoteBreakdownLoading(true);
+    const breakdown: IVoteBreakdown = {
+      positiveCount: onChainVotes.filter(vote => vote.choice === 1).length,
+      negativeCount: onChainVotes.filter(vote => vote.choice === 0).length,
+      other: 0,
+      multiple: 0,
+      abstainCount: 0,
+      contrarionIndex: 0,
+      totalVotes: 0,
+    };
+    breakdown.totalVotes =
+      breakdown.positiveCount +
+      breakdown.negativeCount +
+      breakdown.other +
+      breakdown.multiple +
+      breakdown.abstainCount;
+    setOnChainVoteBreakdown(breakdown);
+    setOnChainVoteBreakdownLoading(false);
+    setOnChainVoteBreakdownError(false);
+  };
+
+  useMemo(() => {
+    if (onChainVotes) setupOnChainVoteBreakdown();
+  }, [onChainVotes]);
+
   const resetProposal = () => {
     setOffChainVotes(dataOffChainVotes || []);
     setOnChainVotes(dataOnChainVotes || []);
@@ -194,11 +236,14 @@ export const VotesProvider: React.FC<ProviderProps> = ({
       allVotes,
       limit,
       offset,
-      isVoteBreakdownLoading,
-      isVoteBreakdownError,
-      voteBreakdown,
+      isOffChainVoteBreakdownLoading,
+      isOffChainVoteBreakdownError,
+      offChainVoteBreakdown,
       changeSort,
       sortby,
+      onChainVoteBreakdown,
+      isOnChainVoteBreakdownLoading,
+      isOnChainVoteBreakdownError,
     }),
     [
       offChainVotes,
@@ -209,11 +254,14 @@ export const VotesProvider: React.FC<ProviderProps> = ({
       allVotes,
       limit,
       offset,
-      isVoteBreakdownLoading,
-      isVoteBreakdownError,
-      voteBreakdown,
+      isOffChainVoteBreakdownLoading,
+      isOffChainVoteBreakdownError,
+      offChainVoteBreakdown,
       changeSort,
       sortby,
+      onChainVoteBreakdown,
+      isOnChainVoteBreakdownLoading,
+      isOnChainVoteBreakdownError,
     ]
   );
 

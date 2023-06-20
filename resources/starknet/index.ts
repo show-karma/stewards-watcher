@@ -46,6 +46,7 @@ const config: IDAOConfig = {
     'karmaScore',
     'delegatorCount',
   ],
+  EXCLUDED_VOTING_HISTORY_COLUMN: ['onChainVoteBreakdown'],
   ENABLE_DELEGATE_TRACKER: true,
   DAO_SUPPORTS_TOA: true,
   DEFAULT_TOA,
