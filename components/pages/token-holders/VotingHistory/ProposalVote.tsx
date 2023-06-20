@@ -270,10 +270,10 @@ export const ProposalVote: FC<IProposalVote> = ({
         return 'Against';
       case 1:
         return 'For';
-      case 'ABSTAIN':
+      case 'Abstain':
         return 'Abstain';
       default:
-        return 'DID NOT VOTE';
+        return 'Did not vote';
     }
   };
 

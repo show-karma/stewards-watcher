@@ -19,7 +19,7 @@ const config: IDAOConfig = {
       'https://delegate.starknet.io/daos/starknet/preview-discord.png',
     IMAGE_TWITTER:
       'https://delegate.starknet.io/daos/starknet/preview-twitter.png',
-    FAVICON: '/daos/starknet/favicon.svg',
+    FAVICON: '/daos/starknet/favicon.ico',
     URL: `https://starknet.karmahq.xyz`,
   },
   DAO_DEFAULT_SETTINGS: {

@@ -301,6 +301,7 @@ export const VotingBreakdown: FC = () => {
             fontFamily="Poppins"
             textAlign="center"
             mt={{ base: '12px' }}
+            color={theme.modal.votingHistory.proposal.title}
           >
             <Text fontWeight="600" fontSize="sm">
               Total Votes
@@ -332,6 +333,7 @@ export const VotingBreakdown: FC = () => {
                   justifyContent="flex-start"
                   pl="10"
                   key={+index}
+                  color={theme.modal.votingHistory.proposal.title}
                 >
                   <Box
                     borderRadius="full"
