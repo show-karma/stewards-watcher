@@ -39,6 +39,7 @@ const config: IDAOConfig = {
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
   EXCLUDED_CARD_FIELDS: ['onChainVotesPct', 'healthScore', 'discordScore'],
+  EXCLUDED_VOTING_HISTORY_COLUMN: ['onChainVoteBreakdown'],
   DAO_DISCORD_CHANNEL:
     'https://discord.com/channels/1059304419428139039/1108887899543449781',
   DAO_CATEGORIES_TYPE: 'workstreams',

@@ -13,8 +13,8 @@ export const EditStatement: FC = () => {
   const {
     newStatement,
     editStatementText,
-    // acceptedTerms,
-    // changeAcceptedTerms,
+    acceptedTerms,
+    changeAcceptedTerms,
   } = useEditProfile();
   const newStatementValue = newStatement.value as string;
 
@@ -88,18 +88,18 @@ export const EditStatement: FC = () => {
           modules={modules}
         />
       </Flex>
-      {/* {daoInfo.config.TOS_URL ? (
+      {daoInfo.config.TOS_URL ? (
         <Checkbox
           defaultChecked={acceptedTerms}
           onChange={event => changeAcceptedTerms(event.target.checked)}
         >
-          I accept{' '}
+          I accept the{' '}
           <Link href={daoInfo.config.TOS_URL} isExternal textDecor="underline">
-            Terms and Conditions
+            Code of Conduct
           </Link>
           .
         </Checkbox>
-      ) : null} */}
+      ) : null}
     </Flex>
   );
 };
