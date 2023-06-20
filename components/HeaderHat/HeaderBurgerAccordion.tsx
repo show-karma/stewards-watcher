@@ -44,7 +44,7 @@ export const HeaderBurgerAccordion: FC<IHeaderBurgerAccordionProps> = ({
       w={{ base: 'full' }}
       maxW={{ base: '400px', md: '820px', lg: '944px', xl: '1360px' }}
     >
-      <AccordionItem bg={theme.headerBg} border="none" w="full">
+      <AccordionItem border="none" w="full">
         {({ isExpanded }) => (
           <>
             <Flex align="center" justify="space-between" w="full">

@@ -21,7 +21,6 @@ import { KARMA_WEBSITE } from 'helpers';
 import { NavMenu } from './NavMenu';
 import { HeaderBurgerAccordion } from './HeaderBurgerAccordion';
 import { Madeby } from './Madeby';
-import { ResourcesMenu } from './ResourcesMenu';
 import { ThemeButton } from './ThemeButton';
 
 const StyledButton: FC<ButtonProps> = ({ children, ...rest }) => {
@@ -142,7 +141,11 @@ export const HeaderHat = () => {
               )}
               {daoInfo.config.DAO_RESOURCES &&
                 daoInfo.config.DAO_RESOURCES.length > 0 && (
-                  <NavMenu title="Resources" childrens={mountingResources()} />
+                  <NavMenu
+                    title="Resources"
+                    childrens={mountingResources()}
+                    accordion
+                  />
                 )}
               <Divider borderColor={theme.filters.title} />
               <DelegateLoginButton onOpen={delegateLoginOnOpen} />
@@ -216,7 +219,10 @@ export const HeaderHat = () => {
                       )}
                       {daoInfo.config.DAO_RESOURCES &&
                         daoInfo.config.DAO_RESOURCES.length > 0 && (
-                          <ResourcesMenu />
+                          <NavMenu
+                            title="Resources"
+                            childrens={mountingResources()}
+                          />
                         )}
                     </>
                   )}

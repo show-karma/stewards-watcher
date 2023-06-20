@@ -103,7 +103,7 @@ const LoginButton: FC<{ onOpen: () => void }> = ({ onOpen }) => {
   return (
     <Button
       background={{ base: 'transparent', lg: theme.branding }}
-      color={theme.buttonText}
+      color={{ base: theme.hat.text.primary, lg: theme.buttonText }}
       px={{ base: '0', lg: '5' }}
       py={{ base: '0', lg: '3' }}
       fontWeight="semibold"

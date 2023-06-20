@@ -73,7 +73,12 @@ export const NavMenu: FC<INavMenu> = ({ title, childrens, accordion }) => {
                 href={children.path}
                 isExternal
               >
-                <Button {...buttonStyle} {...mobileStyle} paddingX="0">
+                <Button
+                  {...buttonStyle}
+                  {...mobileStyle}
+                  paddingX="0"
+                  color={theme.hat.text.primary}
+                >
                   {children.title}
                 </Button>
               </ChakraLink>
@@ -83,6 +88,7 @@ export const NavMenu: FC<INavMenu> = ({ title, childrens, accordion }) => {
                 {...buttonStyle}
                 {...mobileStyle}
                 paddingX="0"
+                color={theme.hat.text.primary}
               >
                 {children.title}
               </Button>
@@ -104,7 +110,6 @@ export const NavMenu: FC<INavMenu> = ({ title, childrens, accordion }) => {
           />
         }
         bg="transparent"
-        boxShadow={theme.filters.shadow}
         color={theme.hat.text.primary}
         gap="0"
         fontFamily="heading"
