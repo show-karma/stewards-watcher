@@ -63,6 +63,8 @@ const config: IDAOConfig = {
   },
   DELEGATION_ERRORS_DICTIONARY: moonriverDelegateErrors,
   ENABLE_DELEGATE_TRACKER: true,
+  DAO_SUPPORTS_TOS: true,
+  TOS_URL: '/',
 };
 
 const dark: IDAOTheme = {

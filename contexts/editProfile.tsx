@@ -250,24 +250,20 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
   };
 
   const sendAcceptedTerms = async () => {
-    try {
-      const authorizedAPI = axios.create({
-        timeout: 30000,
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: authToken ? `Bearer ${authToken}` : '',
-        },
-      });
-      await authorizedAPI.put(
-        API_ROUTES.DELEGATE.TERMS_OF_SERVICE(daoInfo.config.DAO_KARMA_ID),
-        {
-          acceptedTOS: acceptedTerms,
-        }
-      );
-    } catch (error) {
-      console.error(error);
-    }
+    const authorizedAPI = axios.create({
+      timeout: 30000,
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: authToken ? `Bearer ${authToken}` : '',
+      },
+    });
+    await authorizedAPI.put(
+      API_ROUTES.DELEGATE.TERMS_OF_SERVICE(daoInfo.config.DAO_KARMA_ID),
+      {
+        acceptedTOS: acceptedTerms,
+      }
+    );
   };
 
   const changeAcceptedTerms = (choice: boolean) => {
@@ -288,7 +284,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
   useMemo(() => {
     if (profileSelected) {
       queryStatement();
-      queryToA();
+      if (daoInfo.config.DAO_SUPPORTS_TOA) queryToA();
       setNewName(profileSelected.realName || profileSelected.ensName || '');
       setNewProfilePicture(profileSelected.profilePicture || '');
       setupTracks();
@@ -387,39 +383,52 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       }
     }
 
-    if (newToA !== delegateToA && profileSelected?.address) {
-      try {
-        const authorizedAPI = axios.create({
-          timeout: 30000,
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: authToken ? `Bearer ${authToken}` : '',
-          },
-        });
-        if (delegateToA.length > 0) {
-          await authorizedAPI.put(
-            API_ROUTES.DELEGATE.TERMS_OF_AGREEMENT(daoInfo.config.DAO_KARMA_ID),
-            {
-              agreementText: newToA,
-            }
-          );
-        } else if (newToA.length > 0) {
-          await authorizedAPI.post(
-            API_ROUTES.DELEGATE.TERMS_OF_AGREEMENT(daoInfo.config.DAO_KARMA_ID),
-            {
-              agreementText: newToA,
-            }
-          );
+    if (daoInfo.config.DAO_SUPPORTS_TOA) {
+      if (newToA !== delegateToA && profileSelected?.address) {
+        try {
+          const authorizedAPI = axios.create({
+            timeout: 30000,
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              Authorization: authToken ? `Bearer ${authToken}` : '',
+            },
+          });
+          if (delegateToA.length > 0) {
+            await authorizedAPI.put(
+              API_ROUTES.DELEGATE.TERMS_OF_AGREEMENT(
+                daoInfo.config.DAO_KARMA_ID
+              ),
+              {
+                agreementText: newToA,
+              }
+            );
+          } else if (newToA.length > 0) {
+            await authorizedAPI.post(
+              API_ROUTES.DELEGATE.TERMS_OF_AGREEMENT(
+                daoInfo.config.DAO_KARMA_ID
+              ),
+              {
+                agreementText: newToA,
+              }
+            );
+          }
+          await queryToA();
+        } catch (error: any) {
+          hasError = true;
+          actualError = error.response.data.error.message;
         }
-        await queryToA();
+      }
+    }
+
+    if (daoInfo.config.DAO_SUPPORTS_TOS) {
+      try {
+        await sendAcceptedTerms();
       } catch (error: any) {
         hasError = true;
         actualError = error.response.data.error.message;
       }
     }
-
-    // await sendAcceptedTerms();
 
     if (
       profileSelected?.address !== newName ||

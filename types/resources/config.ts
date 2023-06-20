@@ -56,6 +56,8 @@ export interface IDAOConfig {
   TOS_URL?: string;
   SHOULD_NOT_SHOW?: 'statement' | 'stats' | 'handles';
   DAO_SUPPORTS_TOA?: boolean;
+  DAO_SUPPORTS_TOS?: boolean;
+  DAO_STATUSES?: string[];
   DAO_CATEGORIES_TYPE: 'workstreams' | 'tracks';
   DEFAULT_TOA?: string;
   SORT_OPTIONS?: IStats[];
