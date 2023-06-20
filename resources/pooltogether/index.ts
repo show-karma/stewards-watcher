@@ -33,6 +33,7 @@ const config: IDAOConfig = {
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
   EXCLUDED_CARD_FIELDS: ['healthScore', 'karmaScore', 'discordScore'],
+  EXCLUDED_VOTING_HISTORY_COLUMN: [],
   ENABLE_DELEGATE_TRACKER: true,
   DAO_CATEGORIES_TYPE: 'workstreams',
 };

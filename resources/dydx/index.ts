@@ -51,6 +51,7 @@ const config: IDAOConfig = {
       'discordScore',
     ],
   },
+  EXCLUDED_VOTING_HISTORY_COLUMN: [],
   DAO_EXT_VOTES_PROVIDER: {
     onChain: onChainDyDxVotesProvider,
   },

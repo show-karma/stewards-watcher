@@ -143,16 +143,16 @@ const defaultLabels = ['Yes', 'No', 'Abstain', 'Multiple', 'Other'];
 const defaultData = [1, 4, 2, 8, 6];
 const defaultBgColors = ['#02E2AC', '#CA4444', '#DFDFDF', '#2980b9', '#FFF7AE'];
 
-export const VotingBreakdown: FC = () => {
+export const OnChainVotingBreakdown: FC = () => {
   const { theme } = useDAO();
   const [labels, setLabels] = useState<string[]>(defaultLabels);
   const [dataset, setDataset] = useState<number[]>(defaultData);
   const [backgroundColor, setBackgroundColor] =
     useState<string[]>(defaultBgColors);
   const {
-    voteBreakdown,
-    isVoteBreakdownLoading: isLoading,
-    isVoteBreakdownError: hasError,
+    isOnChainVoteBreakdownLoading: isLoading,
+    onChainVoteBreakdown: voteBreakdown,
+    isOnChainVoteBreakdownError: hasError,
   } = useVotes();
 
   const dataConfig: ChartData<'doughnut'> = {
@@ -269,7 +269,7 @@ export const VotingBreakdown: FC = () => {
           fontWeight="semibold"
           fontSize="md"
         >
-          Snapshot Voting Breakdown
+          On-Chain Voting Breakdown
         </Text>
       </Flex>
       <Flex

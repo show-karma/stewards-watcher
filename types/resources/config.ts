@@ -5,6 +5,7 @@ import { Chain } from 'wagmi';
 import { IChainRow } from 'types/IChainRow';
 import { IForumType } from './forum';
 import { IStats, IStatsID } from './stats';
+import { IVotingHistoryColumn } from './modal';
 
 export interface IDAOConfig {
   DAO: string;
@@ -62,6 +63,7 @@ export interface IDAOConfig {
   DEFAULT_TOA?: string;
   SORT_OPTIONS?: IStats[];
   EXCLUDED_CARD_FIELDS: IStats[];
+  EXCLUDED_VOTING_HISTORY_COLUMN: IVotingHistoryColumn[];
   ENABLE_DELEGATE_TRACKER?: boolean;
   DELEGATION_ERRORS_DICTIONARY?: {
     [key: string]: string;
