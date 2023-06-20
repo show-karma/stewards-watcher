@@ -30,6 +30,7 @@ export const ThemeButton: FC<ButtonProps> = props => {
       gap="2"
       minW="52px"
       minH="52px"
+      fontSize={{ base: 'sm', lg: 'md' }}
       {...props}
     >
       <Text display={{ base: 'unset', md: 'none' }}>Theme</Text>
