@@ -23,7 +23,7 @@ import { HeaderBurgerAccordion } from './HeaderBurgerAccordion';
 import { Madeby } from './Madeby';
 import { ThemeButton } from './ThemeButton';
 
-const StyledButton: FC<ButtonProps> = ({ children, ...rest }) => {
+export const StyledButton: FC<ButtonProps> = ({ children, ...rest }) => {
   const { theme } = useDAO();
   return (
     <Button
