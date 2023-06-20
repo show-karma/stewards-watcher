@@ -110,7 +110,6 @@ export const TrackDelegation: React.FC<StepProps> = ({
             You are delegating
           </Text>
           <Flex alignItems="center" justifyContent="space-between" flex="2">
-            {/* Hardcoded until we know if we can choose the amount */}
             <VotesToDelegate
               logoUrl={logoUrl}
               daoName={daoName}
