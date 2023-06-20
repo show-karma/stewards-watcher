@@ -188,28 +188,42 @@ export const VotesProvider: React.FC<ProviderProps> = ({
   }, 500);
 
   const setupOnChainVoteBreakdown = () => {
-    if (!onChainVotes || !onChainVotes.length) {
+    if (!onChainVotes || onChainVotes.length === 0) {
       setOnChainVoteBreakdownError(true);
       setOnChainVoteBreakdown(undefined);
       setOnChainVoteBreakdownLoading(false);
       return;
     }
+
     setOnChainVoteBreakdownLoading(true);
+
     const breakdown: IVoteBreakdown = {
-      positiveCount: onChainVotes.filter(vote => vote.choice === 1).length,
-      negativeCount: onChainVotes.filter(vote => vote.choice === 0).length,
+      positiveCount: 0,
+      negativeCount: 0,
       other: 0,
       multiple: 0,
       abstainCount: 0,
       contrarionIndex: 0,
       totalVotes: 0,
     };
+
+    onChainVotes.forEach(vote => {
+      if (vote.choice === 1) {
+        breakdown.positiveCount += 1;
+      } else if (vote.choice === 0) {
+        breakdown.negativeCount += 1;
+      } else if (vote.choice !== -1) {
+        breakdown.other += 1;
+      }
+    });
+
     breakdown.totalVotes =
       breakdown.positiveCount +
       breakdown.negativeCount +
       breakdown.other +
       breakdown.multiple +
       breakdown.abstainCount;
+
     setOnChainVoteBreakdown(breakdown);
     setOnChainVoteBreakdownLoading(false);
     setOnChainVoteBreakdownError(false);
