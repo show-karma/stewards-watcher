@@ -19,7 +19,7 @@ const config: IDAOConfig = {
       'https://delegate.starknet.io/daos/starknet/preview-discord.png',
     IMAGE_TWITTER:
       'https://delegate.starknet.io/daos/starknet/preview-twitter.png',
-    FAVICON: '/daos/starknet/favicon.svg',
+    FAVICON: '/daos/starknet/favicon.ico',
     URL: `https://starknet.karmahq.xyz`,
   },
   DAO_DEFAULT_SETTINGS: {
@@ -49,6 +49,7 @@ const config: IDAOConfig = {
   ENABLE_DELEGATE_TRACKER: true,
   DAO_SUPPORTS_TOA: true,
   DEFAULT_TOA,
+  DAO_CATEGORIES_TYPE: 'workstreams',
 };
 
 const dark: IDAOTheme = {
@@ -329,7 +330,6 @@ const dark: IDAOTheme = {
 };
 
 const light: IDAOTheme = {
-  logo: '/daos/starknet/logo_black.svg',
   background: '#F2F4F9',
   bodyBg: '#F2F4F9',
   title: '#222429',
@@ -377,6 +377,7 @@ const light: IDAOTheme = {
     socialMedia: '#595A5E',
   },
   loginModal: {
+    logo: '/daos/starknet/logo_black.svg',
     background: '#FFFFFF',
     text: '#212328',
     footer: { bg: '#EBEDEF', text: '#212328' },

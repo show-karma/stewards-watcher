@@ -86,7 +86,7 @@ export const GuideContainer: React.FC = () => {
                     w="full"
                     flexDir="column"
                     align="center"
-                    bgColor={theme.background}
+                    bg={theme.background}
                   >
                     <HeaderHat />
                     <MainLayout px="0" w="full">

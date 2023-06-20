@@ -16,7 +16,7 @@ interface IVotingHistory {
 }
 
 export const VotingHistory: FC<IVotingHistory> = ({ profile }) => {
-  const { theme } = useDAO();
+  const { theme, daoInfo } = useDAO();
   const { isLoading: voteLoading, showingVotes, allVotes } = useVotes();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -109,7 +109,11 @@ export const VotingHistory: FC<IVotingHistory> = ({ profile }) => {
         maxW={{ base: '330px', sm: '400px' }}
         w="full"
       >
-        <VotingBreakdown />
+        {daoInfo.config.EXCLUDED_CARD_FIELDS.includes(
+          'offChainVotesPct'
+        ) ? undefined : (
+          <VotingBreakdown />
+        )}
         <DelegatedVotesChanges />
         <ContrarionIndexComponent />
       </Flex>

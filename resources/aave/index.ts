@@ -32,6 +32,7 @@ const config: IDAOConfig = {
   DAO_DELEGATE_CONTRACT: '0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9',
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
+  DAO_CATEGORIES_TYPE: 'workstreams',
   EXCLUDED_CARD_FIELDS: ['healthScore', 'karmaScore', 'discordScore'],
 };
 
@@ -309,7 +310,6 @@ const dark: IDAOTheme = {
 };
 
 const light: IDAOTheme = {
-  logo: '/daos/aave/logo_black.svg',
   background: '#F2F4F9',
   bodyBg: '#F2F4F9',
   title: '#292E41',
@@ -458,6 +458,7 @@ const light: IDAOTheme = {
     },
   },
   loginModal: {
+    logo: '/daos/aave/logo_black.svg',
     text: '#212328',
     background: '#FFFFFF',
     footer: { bg: '#EBEDEF', text: '#292E41' },

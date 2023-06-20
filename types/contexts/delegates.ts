@@ -31,3 +31,11 @@ export type IWorkstream = {
   updatedAt: string;
   email: string;
 };
+
+export type ITracks = {
+  id: number;
+  name: string;
+  displayName: string;
+  createdAt: Date;
+  updatedAt: Date;
+};

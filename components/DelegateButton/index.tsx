@@ -10,6 +10,7 @@ interface IDelegateButton extends ButtonProps {
   text?: string;
   successEmitter?: () => void;
   beforeOnClick?: () => void;
+  shouldBlockModal?: boolean;
 }
 
 export const DelegateButton: FC<IDelegateButton> = ({
@@ -17,6 +18,7 @@ export const DelegateButton: FC<IDelegateButton> = ({
   text = 'Delegate',
   successEmitter,
   beforeOnClick,
+  shouldBlockModal,
   ...props
 }) => {
   const { openConnectModal, openChainModal, chain, connectIsOpen } =
@@ -51,7 +53,6 @@ export const DelegateButton: FC<IDelegateButton> = ({
     if (config.DAO_DELEGATE_ACTION) {
       return config.DAO_DELEGATE_ACTION();
     }
-
     if (!isConnected) {
       setWriteAfterAction(true);
       return openConnectModal?.();
@@ -62,12 +63,12 @@ export const DelegateButton: FC<IDelegateButton> = ({
       return openChainModal && openChainModal();
     }
 
-    if (!delegateIsOpen) return delegateOnToggle();
+    if (!delegateIsOpen && !shouldBlockModal) return delegateOnToggle();
 
     return write?.();
   };
 
-  return config.DAO_DELEGATE_CONTRACT ? (
+  return config.DAO_DELEGATE_CONTRACT || config.ALLOW_BULK_DELEGATE ? (
     <Button
       background={theme.branding}
       px={{ base: '3', sm: '4', md: '6' }}
