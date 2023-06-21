@@ -26,9 +26,15 @@ interface INavMenu {
     action?: () => void;
   }[];
   accordion?: boolean;
+  children?: React.ReactNode;
 }
 
-export const NavMenu: FC<INavMenu> = ({ title, childrens, accordion }) => {
+export const NavMenu: FC<INavMenu> = ({
+  title,
+  childrens,
+  accordion,
+  children,
+}) => {
   const { theme } = useDAO();
   const [isMobile] = useMediaQuery('(max-width: 768px)');
 
@@ -63,14 +69,14 @@ export const NavMenu: FC<INavMenu> = ({ title, childrens, accordion }) => {
           </AccordionButton>
         </h2>
         <AccordionPanel py="0" px="0">
-          {childrens.map((children, index) =>
-            children.path ? (
+          {childrens.map((child, index) =>
+            child.path ? (
               <ChakraLink
                 key={+index}
                 _hover={{
                   textDecoration: 'none',
                 }}
-                href={children.path}
+                href={child.path}
                 isExternal
               >
                 <Button
@@ -79,7 +85,7 @@ export const NavMenu: FC<INavMenu> = ({ title, childrens, accordion }) => {
                   paddingX="0"
                   color={theme.hat.text.primary}
                 >
-                  {children.title}
+                  {child.title}
                 </Button>
               </ChakraLink>
             ) : (
@@ -90,10 +96,11 @@ export const NavMenu: FC<INavMenu> = ({ title, childrens, accordion }) => {
                 paddingX="0"
                 color={theme.hat.text.primary}
               >
-                {children.title}
+                {child.title}
               </Button>
             )
           )}
+          {children}
         </AccordionPanel>
       </AccordionItem>
     </Accordion>
@@ -151,24 +158,25 @@ export const NavMenu: FC<INavMenu> = ({ title, childrens, accordion }) => {
           },
         }}
       >
-        {childrens.map((children, index) =>
-          children.path ? (
+        {childrens.map((child, index) =>
+          child.path ? (
             <ChakraLink
               key={+index}
               _hover={{
                 textDecoration: 'none',
               }}
-              href={children.path}
+              href={child.path}
               isExternal
             >
-              <MenuItem {...buttonStyle}>{children.title}</MenuItem>
+              <MenuItem {...buttonStyle}>{child.title}</MenuItem>
             </ChakraLink>
           ) : (
-            <MenuItem key={+index} onClick={children.action} {...buttonStyle}>
-              {children.title}
+            <MenuItem key={+index} onClick={child.action} {...buttonStyle}>
+              {child.title}
             </MenuItem>
           )
         )}
+        {children}
       </MenuList>
     </Menu>
   );

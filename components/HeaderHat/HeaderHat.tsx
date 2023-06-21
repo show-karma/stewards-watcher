@@ -18,6 +18,7 @@ import { DelegateVotesModal } from 'components/Modals/DelegateToAnyone';
 import { useDAO, useDelegates, useWallet } from 'contexts';
 import { FC } from 'react';
 import { KARMA_WEBSITE } from 'helpers';
+import { UndelegateModal } from 'components/pages/token-holders/UndelegateModal';
 import { NavMenu } from './NavMenu';
 import { HeaderBurgerAccordion } from './HeaderBurgerAccordion';
 import { Madeby } from './Madeby';
@@ -72,11 +73,15 @@ export const HeaderHat = () => {
         title: 'Delegate Look Up',
         path: '/delegate-lookup',
       });
-    if (daoInfo.config.DAO_DELEGATE_CONTRACT)
+    if (
+      daoInfo.config.DAO_DELEGATE_CONTRACT ||
+      daoInfo.config.ALLOW_BULK_DELEGATE
+    )
       array.push({
         title: 'Delegate Tokens',
         action: onToggle,
       });
+
     return array;
   };
 
@@ -125,7 +130,9 @@ export const HeaderHat = () => {
                 title="For Tokenholders"
                 childrens={mountingForTokenholders()}
                 accordion
-              />
+              >
+                <UndelegateModal />
+              </NavMenu>
               <NavMenu
                 title="For Delegates"
                 childrens={mountingForDelegates()}
@@ -201,7 +208,9 @@ export const HeaderHat = () => {
                   <NavMenu
                     title="For Tokenholders"
                     childrens={mountingForTokenholders()}
-                  />
+                  >
+                    <UndelegateModal />
+                  </NavMenu>
                   <NavMenu
                     title="For Delegates"
                     childrens={mountingForDelegates()}

@@ -256,9 +256,24 @@ export const UndelegateModal: React.FC = () => {
           </Box>
         </ModalContent>
       </Modal>
-      <StyledButton onClick={handleOnClick} background="transparent">
+      <Button
+        onClick={handleOnClick}
+        background="transparent"
+        _hover={{
+          opacity: '0.6',
+        }}
+        fontWeight="300"
+        px={{ base: '0', md: '3' }}
+        justifyContent={{ base: 'flex-start', lg: 'center' }}
+        fontSize={{ base: 'sm', lg: 'md' }}
+        width={{ base: 'full', lg: 'auto' }}
+        _active={{}}
+        _focus={{}}
+        _focusVisible={{}}
+        _focusWithin={{}}
+      >
         Undelegate
-      </StyledButton>
+      </Button>
     </>
   );
 };
