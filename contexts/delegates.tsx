@@ -693,6 +693,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         tracks: fetchedDelegate.tracks,
         status: fetchedDelegate.status,
         userCreatedAt: fetchedDelegate.userCreatedAt,
+        acceptedTOS: fetchedDelegate.acceptedTOS,
       };
 
       setProfileSelected(userFound);
