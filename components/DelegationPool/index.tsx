@@ -19,7 +19,7 @@ export const DelegationPool: React.FC = () => {
   const { toast } = useToasty();
 
   const votesToDelegate = useMemo(
-    () => delegatePoolList[0]?.amount.toString() || 0,
+    () => delegatePoolList[0]?.amount.toString() || '0',
     [delegatePoolList]
   );
 
