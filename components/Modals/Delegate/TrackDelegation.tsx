@@ -43,11 +43,6 @@ export const TrackDelegation: React.FC<StepProps> = ({
     [daoTracks]
   );
 
-  const getVoteAmount = useMemo(
-    () => ((+votes - 0.1) / (delegatePoolList.length + 1)).toString(),
-    [votes]
-  );
-
   const [selectedTracks, setSelectedTracks] = useState<
     ITrackBadgeProps['track'][]
   >([]);
@@ -113,7 +108,7 @@ export const TrackDelegation: React.FC<StepProps> = ({
             <VotesToDelegate
               logoUrl={logoUrl}
               daoName={daoName}
-              votes={getVoteAmount}
+              votes={votes}
             />
             <Text fontStyle="normal" fontSize="14px" color="black">
               to
