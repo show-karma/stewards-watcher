@@ -80,20 +80,10 @@ export const HeaderBurgerAccordion: FC<IHeaderBurgerAccordionProps> = ({
                 </Flex>
               )}
               <AccordionButton _hover={{}} w="max-content">
-                <Button
-                  bg="none"
-                  _hover={{}}
-                  _active={{}}
-                  _focus={{}}
-                  _focusWithin={{}}
-                  _focusVisible={{}}
-                  color={theme.hat.text.primary}
-                >
-                  <Icon
-                    as={isExpanded ? CloseMenuIcon : BurgerMenuIcon}
-                    boxSize="6"
-                  />
-                </Button>
+                <Icon
+                  as={isExpanded ? CloseMenuIcon : BurgerMenuIcon}
+                  boxSize="6"
+                />
               </AccordionButton>
             </Flex>
             <AccordionPanel width="full" p={0} mt="8" mb="4">
