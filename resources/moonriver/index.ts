@@ -67,6 +67,7 @@ const config: IDAOConfig = {
   DISABLE_EMAIL_INPUT: true,
   DAO_SUPPORTS_TOS: true,
   TOS_URL: '/',
+  HIDE_FOR_DELEGATES: ['delegator-lookup'],
 };
 
 const dark: IDAOTheme = {

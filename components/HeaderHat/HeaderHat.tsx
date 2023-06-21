@@ -65,6 +65,7 @@ export const HeaderHat = () => {
     title: string;
     path?: string;
     action?: () => void;
+    isExternal?: boolean;
   }[] => {
     const array = [];
 
@@ -72,6 +73,7 @@ export const HeaderHat = () => {
       array.push({
         title: 'Delegate Look Up',
         path: '/delegate-lookup',
+        isExternal: false,
       });
     if (
       daoInfo.config.DAO_DELEGATE_CONTRACT ||
@@ -85,12 +87,17 @@ export const HeaderHat = () => {
     return array;
   };
 
-  const mountingForDelegates = () => {
+  const mountingForDelegates = (): {
+    title: string;
+    path: string;
+    isExternal?: boolean;
+  }[] => {
     const array = [];
 
     array.push({
       title: 'Delegator Look Up',
       path: KARMA_WEBSITE.delegators(daoInfo.config.DAO_KARMA_ID),
+      isExternal: true,
     });
 
     return array;
@@ -133,11 +140,13 @@ export const HeaderHat = () => {
               >
                 <UndelegateModal />
               </NavMenu>
-              <NavMenu
-                title="For Delegates"
-                childrens={mountingForDelegates()}
-                accordion
-              />
+              {daoInfo.config.HIDE_FOR_DELEGATES?.length ? undefined : (
+                <NavMenu
+                  title="For Delegates"
+                  childrens={mountingForDelegates()}
+                  accordion
+                />
+              )}
               <ChakraLink href="/guide" _hover={{}}>
                 <StyledButton>Guide</StyledButton>
               </ChakraLink>
@@ -211,10 +220,13 @@ export const HeaderHat = () => {
                   >
                     <UndelegateModal />
                   </NavMenu>
-                  <NavMenu
-                    title="For Delegates"
-                    childrens={mountingForDelegates()}
-                  />
+                  {daoInfo.config.HIDE_FOR_DELEGATES?.length ? undefined : (
+                    <NavMenu
+                      title="For Delegates"
+                      childrens={mountingForDelegates()}
+                      accordion
+                    />
+                  )}
 
                   {isSmallScreen ? null : (
                     <>

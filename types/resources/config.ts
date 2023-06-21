@@ -6,6 +6,7 @@ import { IChainRow } from 'types/IChainRow';
 import { IForumType } from './forum';
 import { IStats, IStatsID } from './stats';
 import { IVotingHistoryColumn } from './modal';
+import { IForDelegates } from './header';
 
 export interface IDAOConfig {
   DAO: string;
@@ -71,6 +72,7 @@ export interface IDAOConfig {
   ALLOW_UNDELEGATE?: boolean;
   ALLOW_BULK_DELEGATE?: boolean;
   DISABLE_EMAIL_INPUT?: boolean;
+  HIDE_FOR_DELEGATES?: IForDelegates[];
   // TODO: type anys
   /**
    * Defines a function to bulk delegate

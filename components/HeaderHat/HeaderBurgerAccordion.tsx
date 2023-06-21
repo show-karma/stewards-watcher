@@ -22,10 +22,12 @@ interface IHeaderBurgerAccordionProps {
     title: string;
     path?: string;
     action?: () => void;
+    isExternal?: boolean;
   }[];
   mountingForDelegates: () => {
     title: string;
     path: string;
+    isExternal?: boolean;
   }[];
 }
 

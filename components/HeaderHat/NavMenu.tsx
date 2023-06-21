@@ -24,6 +24,7 @@ interface INavMenu {
     title: string;
     path?: string;
     action?: () => void;
+    isExternal?: boolean;
   }[];
   accordion?: boolean;
   children?: React.ReactNode;
@@ -77,7 +78,7 @@ export const NavMenu: FC<INavMenu> = ({
                   textDecoration: 'none',
                 }}
                 href={child.path}
-                isExternal
+                isExternal={child.isExternal}
               >
                 <Button
                   {...buttonStyle}
@@ -166,7 +167,7 @@ export const NavMenu: FC<INavMenu> = ({
                 textDecoration: 'none',
               }}
               href={child.path}
-              isExternal
+              isExternal={child.isExternal}
             >
               <MenuItem {...buttonStyle}>{child.title}</MenuItem>
             </ChakraLink>
