@@ -279,7 +279,7 @@ export async function moonriverActiveDelegatedTracks(
     }
     return acc;
   }, {} as Record<NumberIsh, number>);
-  console.log({ delegationCount, undelegationCount, unlockedCount });
+
   const delegations: IActiveDelegatedTracks[] = delegatingHistories
     .filter(
       delegatingHistory =>
