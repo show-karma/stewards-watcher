@@ -19,7 +19,7 @@ function digest(payload: IBulkDelegatePayload[]) {
         track.id,
         item.delegate.address,
         0,
-        ethers.utils.parseEther('0.1'),
+        ethers.utils.parseEther(item.amount),
       ])
     )
   );
@@ -46,6 +46,7 @@ export const moonriverDelegateAction =
       address: batchContractAddr,
       abi: batchContractAbi,
       functionName: 'batchAll',
+      gas: 11250000,
       args,
     });
 
