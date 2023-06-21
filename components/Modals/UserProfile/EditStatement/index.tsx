@@ -92,9 +92,15 @@ export const EditStatement: FC = () => {
         <Checkbox
           defaultChecked={acceptedTerms}
           onChange={event => changeAcceptedTerms(event.target.checked)}
+          color={theme.modal.statement.sidebar.section}
         >
           I accept the{' '}
-          <Link href={daoInfo.config.TOS_URL} isExternal textDecor="underline">
+          <Link
+            href={daoInfo.config.TOS_URL}
+            isExternal
+            textDecor="underline"
+            color={theme.modal.statement.sidebar.section}
+          >
             Code of Conduct
           </Link>
           .
