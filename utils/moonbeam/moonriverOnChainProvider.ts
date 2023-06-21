@@ -175,7 +175,7 @@ interface IUndelegated {
 
 interface IDelegatingHistoryResponse {
   delegatingHistories: IDelegatingHistory[];
-  undelegateds: IUndelegated[];
+  undelegatedHistories: IUndelegated[];
   unlockeds: { trackId: NumberIsh }[];
 }
 
@@ -195,7 +195,7 @@ const delegateHistoryQuery = (address: string, daoName: string) => gql`
     amount
     toDelegate
 	}
-  undelegateds (
+  undelegatedHistories (
   where:{
     delegator: "${address.toLowerCase()}",
   }
@@ -243,7 +243,7 @@ export async function moonriverActiveDelegatedTracks(
     query: delegateHistoryQuery(address, daoName),
   });
 
-  const { delegatingHistories, undelegateds, unlockeds } = data;
+  const { delegatingHistories, undelegatedHistories, unlockeds } = data;
 
   // count trackId for delegatingHistory, undelegeted and unlocked
 
@@ -260,7 +260,7 @@ export async function moonriverActiveDelegatedTracks(
     {} as Record<NumberIsh, number>
   );
 
-  const undelegationCount = undelegateds.reduce((acc, undelegated) => {
+  const undelegationCount = undelegatedHistories.reduce((acc, undelegated) => {
     const { trackId } = undelegated;
     if (acc[trackId]) {
       acc[trackId] += 1;
@@ -279,7 +279,7 @@ export async function moonriverActiveDelegatedTracks(
     }
     return acc;
   }, {} as Record<NumberIsh, number>);
-
+  console.log({ delegationCount, undelegationCount, unlockedCount });
   const delegations: IActiveDelegatedTracks[] = delegatingHistories
     .filter(
       delegatingHistory =>
