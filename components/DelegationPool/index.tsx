@@ -18,13 +18,10 @@ export const DelegationPool: React.FC = () => {
 
   const { toast } = useToasty();
 
-  const votesToDelegate = useMemo(() => {
-    const totalVotes = delegatePoolList.reduce(
-      (acc, cur) => acc + +cur.amount,
-      0
-    );
-    return totalVotes.toString();
-  }, [delegatePoolList]);
+  const votesToDelegate = useMemo(
+    () => delegatePoolList[0]?.amount.toString() || 0,
+    [delegatePoolList]
+  );
 
   const handleDelegation = async () => {
     if (daoInfo.config.BULK_DELEGATE_ACTION) {

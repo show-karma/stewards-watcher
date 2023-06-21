@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDAO, useDelegates } from 'contexts';
-import { Button, Flex, Text } from '@chakra-ui/react';
+import { Button, Flex, Text, Tooltip } from '@chakra-ui/react';
 import { IDelegate } from 'types';
 import { ImgWithFallback } from 'components/ImgWithFallback';
 import makeBlockie from 'ethereum-blockies-base64';
@@ -189,26 +189,28 @@ export const TrackDelegation: React.FC<StepProps> = ({
           </Flex>
         </Flex>
         <Flex w="full" flexDir="row-reverse">
-          <Button
-            bg="#000000"
-            color="#1DE9B6"
-            px="6"
-            py="3"
-            fontWeight="400"
-            onClick={() => {
-              if (delegatedUser) handleAddToDelegatePool(delegatedUser);
-            }}
-            _hover={{ opacity: 0.8 }}
-            _active={{ opacity: 0.8 }}
-            _focus={{ opacity: 0.8 }}
-            _focusWithin={{ opacity: 0.8 }}
-            _focusVisible={{ opacity: 0.8 }}
-            _disabled={{ opacity: 0.5, cursor: 'not-allowed' }}
-            disabled={selectedTracks.length === 0}
-            isDisabled={selectedTracks.length === 0}
-          >
-            Continue
-          </Button>
+          <Tooltip label="You need at least 0.2 votes to delegate">
+            <Button
+              bg="#000000"
+              color="#1DE9B6"
+              px="6"
+              py="3"
+              fontWeight="400"
+              onClick={() => {
+                if (delegatedUser) handleAddToDelegatePool(delegatedUser);
+              }}
+              _hover={{ opacity: 0.8 }}
+              _active={{ opacity: 0.8 }}
+              _focus={{ opacity: 0.8 }}
+              _focusWithin={{ opacity: 0.8 }}
+              _focusVisible={{ opacity: 0.8 }}
+              _disabled={{ opacity: 0.5, cursor: 'not-allowed' }}
+              disabled={selectedTracks.length === 0 || +votes < 0.2}
+              isDisabled={selectedTracks.length === 0 || +votes < 0.2}
+            >
+              Continue
+            </Button>
+          </Tooltip>
         </Flex>
       </DelegateModalBody>
       <DelegateModalFooter
