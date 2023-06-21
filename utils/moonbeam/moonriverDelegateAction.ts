@@ -19,7 +19,7 @@ function digest(payload: IBulkDelegatePayload[]) {
         track.id,
         item.delegate.address,
         0,
-        ethers.utils.parseEther(item.amount),
+        ethers.utils.parseEther((parseFloat(item.amount) - 0.1).toString()),
       ])
     )
   );
