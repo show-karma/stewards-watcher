@@ -46,7 +46,7 @@ export const moonriverDelegateAction =
       address: batchContractAddr,
       abi: batchContractAbi,
       functionName: 'batchAll',
-      gas: 11250000,
+      gas: BigInt(11250000),
       args,
     });
 
