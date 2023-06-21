@@ -93,10 +93,10 @@ export const ToDelegate: FC<IToDelegateProps> = ({
         textAlign="left"
         w="full"
       >
-        Enter the ETH address to delegate your tokens to this individual.
+        Enter the wallet address to delegate your tokens to this individual.
       </Text>
       <Input
-        placeholder="Enter ETH address"
+        placeholder="Enter Wallet address"
         type="text"
         onChange={event => handleChange(event.target.value)}
         width="full"
@@ -143,7 +143,7 @@ export const ToDelegate: FC<IToDelegateProps> = ({
       />
       {!isEthAddress && address !== '' && (
         <Text textAlign="start" w="full" color={modalTheme.input.error}>
-          This is not a valid ETH
+          This is not a valid wallet address
         </Text>
       )}
       <DelegateButton
@@ -155,6 +155,12 @@ export const ToDelegate: FC<IToDelegateProps> = ({
         mt={4}
         successEmitter={emitSuccess}
         beforeOnClick={() => setDelegate()}
+        text={
+          daoInfo.config.DAO_DELEGATE_CONTRACT ||
+          daoInfo.config.ALLOW_BULK_DELEGATE
+            ? 'Continue'
+            : 'Delegate'
+        }
       />
     </Flex>
   );
