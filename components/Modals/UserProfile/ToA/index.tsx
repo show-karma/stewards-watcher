@@ -6,6 +6,11 @@ import parse from 'html-react-parser';
 import DOMPurify from 'dompurify';
 import { NoToA } from './NoToA';
 
+// eslint-disable-next-line import/no-extraneous-dependencies
+const MDPreview = dynamic(() => import('@uiw/react-markdown-preview'), {
+  ssr: false,
+});
+
 interface ITextSection {
   delegateToA: any;
 }
@@ -59,7 +64,13 @@ const TextSection: FC<ITextSection> = ({ delegateToA }) => {
             },
           }}
         >
-          {htmlFrom(delegateToA as string)}
+          <MDPreview
+            source={delegateToA || ''}
+            style={{
+              backgroundColor: 'transparent',
+              color: theme.modal.statement.text,
+            }}
+          />
         </Flex>
       )}
     </Flex>
