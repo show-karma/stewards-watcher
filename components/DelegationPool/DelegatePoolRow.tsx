@@ -99,7 +99,7 @@ export const DelegatePoolRow: FC<IDelegatePoolRowProps> = ({
         py={3}
         position="relative"
         w="full"
-        color={theme.hat.text.primary}
+        color={theme.card.text.primary}
       >
         <Flex gap={3} align="center" flexWrap="wrap">
           <Flex>
@@ -127,15 +127,15 @@ export const DelegatePoolRow: FC<IDelegatePoolRowProps> = ({
               maxW="32"
               h="max-content"
               px="2"
-              color={theme.hat.text.primary}
+              color={theme.card.text.primary}
               bgColor="transparent"
               fontSize="md"
               _placeholder={{
-                color: `${theme.hat.text.primary}80`,
+                color: `${theme.card.text.primary}80`,
               }}
               border="none"
               borderBottom="1px solid"
-              borderBottomColor={theme.hat.text.primary}
+              borderBottomColor={theme.card.text.primary}
               borderRadius="none"
               {...register('amount')}
             />
@@ -180,9 +180,9 @@ export const DelegatePoolRow: FC<IDelegatePoolRowProps> = ({
               selectConviction={selectConviction}
               conviction={conviction}
               menuButtonStyle={{
-                borderColor: theme.hat.text.primary,
+                borderColor: theme.card.text.primary,
                 background: 'none',
-                color: theme.hat.text.primary,
+                color: theme.card.text.primary,
                 maxH: '8',
               }}
             />
