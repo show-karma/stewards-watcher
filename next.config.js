@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 // const { withSentryConfig } = require('@sentry/nextjs');
+const removeImports = require('next-remove-imports')();
 
 const nextConfig = {
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
@@ -30,6 +31,6 @@ const nextConfig = {
 // });
 
 // const config = withSentryNextConfig ?? nextConfig;
-const config = nextConfig;
+const config = removeImports(nextConfig);
 
 module.exports = config;
