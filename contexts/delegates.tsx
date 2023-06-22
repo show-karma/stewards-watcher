@@ -86,6 +86,7 @@ interface IDelegateProps {
   delegateOffersToA: boolean;
   delegatePoolList: IBulkDelegatePayload[];
   addToDelegatePool: (
+    delegator: string,
     delegate: IDelegate,
     selectedTracks: ITrackBadgeProps['track'][],
     amount: string
@@ -998,6 +999,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
   };
 
   const addToDelegatePool = (
+    delegator: string,
     delegate: IDelegate,
     selectedTracks: ITrackBadgeProps['track'][],
     amount = '0.1'
@@ -1009,7 +1011,12 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     );
 
     if (!~delegateIndex) {
-      newDelegates.push({ delegate, tracks: selectedTracks, amount });
+      newDelegates.push({
+        delegator,
+        delegate,
+        tracks: selectedTracks,
+        amount,
+      });
     }
 
     setDelegatePoolList(newDelegates);

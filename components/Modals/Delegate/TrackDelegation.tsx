@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useDAO, useDelegates } from 'contexts';
+import { useDAO, useDelegates, useWallet } from 'contexts';
 import { Button, Flex, Text, Tooltip } from '@chakra-ui/react';
 import { IDelegate } from 'types';
 import { ImgWithFallback } from 'components/ImgWithFallback';
@@ -11,7 +11,6 @@ import {
 import { DelegateModalHeader } from './DelegateModalHeader';
 import { DelegateModalFooter } from './DelegateModalFooter';
 import { DelegateModalBody } from './DelegateModalBody';
-import { ModalDelegateButton } from './ModalDelegateButton';
 import { VotesToDelegate } from './VotesToDelegate';
 
 interface StepProps {
@@ -28,11 +27,8 @@ export const TrackDelegation: React.FC<StepProps> = ({
   walletAddress,
 }) => {
   const { daoData } = useDAO();
-  const {
-    addToDelegatePool,
-    tracks: daoTracks,
-    delegatePoolList,
-  } = useDelegates();
+  const { addToDelegatePool, tracks: daoTracks } = useDelegates();
+  const { address: delegator } = useWallet();
 
   const tracks = useMemo(
     () =>
@@ -69,8 +65,10 @@ export const TrackDelegation: React.FC<StepProps> = ({
   };
 
   const handleAddToDelegatePool = (delegate: IDelegate) => {
-    addToDelegatePool(delegate, selectedTracks, `${+votes - 0.1}`);
-    handleModal();
+    if (delegator) {
+      addToDelegatePool(delegator, delegate, selectedTracks, `${+votes - 0.1}`);
+      handleModal();
+    }
   };
 
   return (

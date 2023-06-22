@@ -300,7 +300,12 @@ export async function moonriverActiveDelegatedTracks(
       toDelegate: delegatingHistory.toDelegate,
     }));
 
-  return delegations;
+  const unique = delegations.reduce((acc, cur) => {
+    if (!acc[cur.trackId]) acc[cur.trackId] = cur;
+    return acc;
+  }, {} as Record<NumberIsh, IActiveDelegatedTracks>);
+
+  return Object.values(unique);
 }
 
 export async function moonriverOnChainProvider(

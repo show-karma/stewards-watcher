@@ -4,8 +4,11 @@ import { ethers } from 'ethers';
 import { IDelegate } from 'types';
 import ABI from 'resources/moonriver/ABI.json';
 import { ITrackBadgeProps } from 'components/DelegationPool/TrackBadge';
+import { moonriverActiveDelegatedTracks } from 'utils';
+import { moonriverDigestUndelegate } from './moonriverUndelegateAction';
 
 export interface IBulkDelegatePayload {
+  delegator: string;
   delegate: IDelegate;
   amount: string;
   tracks: ITrackBadgeProps['track'][];
@@ -33,7 +36,22 @@ export const moonriverDelegateAction =
     batchContractAbi: any[]
   ) =>
   async (payload: IBulkDelegatePayload[], write: typeof writeContract) => {
-    const calldatas = digest(payload);
+    const activeTracks = await moonriverActiveDelegatedTracks(
+      payload[0].delegator,
+      'moonriver'
+    );
+    const trackIds = payload.flatMap(item =>
+      item.tracks.map(track => track.id)
+    );
+
+    // Create undelegaion data for tracks that needs to be undelegated and unlocked before
+    // delegating again
+    const calldatas = moonriverDigestUndelegate({
+      delegate: payload[0].delegate.address,
+      tracks: activeTracks.filter(track => trackIds.includes(+track.trackId)),
+    })
+      // Concat delegation data
+      .concat(digest(payload.filter(item => item.delegator)));
 
     const args = [
       new Array(calldatas.length).fill(delegateContract),
