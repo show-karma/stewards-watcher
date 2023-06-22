@@ -89,7 +89,8 @@ interface IDelegateProps {
     delegator: string,
     delegate: IDelegate,
     selectedTracks: ITrackBadgeProps['track'][],
-    amount: string
+    conviction?: number,
+    amount?: string
   ) => void;
   removeFromDelegatePool: (address: string) => void;
   addTrackToDelegateInPool: (
@@ -99,6 +100,10 @@ interface IDelegateProps {
   removeTrackFromDelegateInPool: (trackId: number, address: string) => void;
   findDelegateByAddress: (userToSearch: string) => Promise<IDelegate | null>;
   clearDelegationPool: () => void;
+  changeConviction: (address: string, conviction: number) => void;
+  changeAmountOfDelegation: (address: string, amount: string) => void;
+  delegationWillHaveError: boolean;
+  setDelegationError: (value: boolean) => void;
 }
 
 export const DelegatesContext = createContext({} as IDelegateProps);
@@ -142,6 +147,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
   const [hasInitiated, setInitiated] = useState(false);
   const [acceptedTermsOnly, setAcceptedTermsOnly] = useState(false);
   const [delegateOffersToA, setDelegateOffersToA] = useState(false);
+
+  const [delegationWillHaveError, setDelegationWillHaveError] = useState(false);
 
   const [delegatePoolList, setDelegatePoolList] = useState<
     IBulkDelegatePayload[]
@@ -1002,6 +1009,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     delegator: string,
     delegate: IDelegate,
     selectedTracks: ITrackBadgeProps['track'][],
+    conviction = 0,
     amount = '0.1'
   ) => {
     const newDelegates = arrayWithoutDuplicatesTracks(selectedTracks);
@@ -1016,6 +1024,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         delegate,
         tracks: selectedTracks,
         amount,
+        conviction,
       });
     }
 
@@ -1074,6 +1083,33 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     setDelegatePoolList(newDelegates);
   };
 
+  const changeConviction = (address: string, conviction: number) => {
+    const newDelegates = [...delegatePoolList];
+    const delegateIndex = newDelegates.findIndex(
+      item => item.delegate.address === address
+    );
+    if (~delegateIndex) {
+      newDelegates[delegateIndex].conviction = conviction;
+    }
+    setDelegatePoolList(newDelegates);
+  };
+
+  const changeAmountOfDelegation = debounce(
+    (address: string, amount: string) => {
+      const newDelegates = [...delegatePoolList];
+      const delegateIndex = newDelegates.findIndex(
+        item => item.delegate.address === address
+      );
+      if (~delegateIndex) {
+        newDelegates[delegateIndex].amount = amount;
+      }
+      setDelegatePoolList(newDelegates);
+    },
+    500
+  );
+
+  console.log(delegatePoolList);
+
   useMemo(() => {
     if (!hasInitiated) return;
     setOffset(0);
@@ -1116,6 +1152,10 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     closeModalProfile();
     setProfileSelected(undefined);
   };
+
+  const setDelegationError = debounce((value: boolean) => {
+    setDelegationWillHaveError(value);
+  }, 300);
 
   const providerValue = useMemo(
     () => ({
@@ -1173,6 +1213,10 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       removeTrackFromDelegateInPool,
       findDelegateByAddress,
       clearDelegationPool,
+      changeConviction,
+      changeAmountOfDelegation,
+      delegationWillHaveError,
+      setDelegationError,
     }),
     [
       profileSelected,
@@ -1214,6 +1258,10 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       removeTrackFromDelegateInPool,
       findDelegateByAddress,
       clearDelegationPool,
+      changeConviction,
+      changeAmountOfDelegation,
+      delegationWillHaveError,
+      setDelegationError,
     ]
   );
 

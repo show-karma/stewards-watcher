@@ -12,26 +12,31 @@ import { EmptyDelegatePool } from './EmptyDelegatePool';
 export const DelegationPool: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { theme, daoInfo, daoData } = useDAO();
-  const { delegatePoolList, removeFromDelegatePool, clearDelegationPool } =
-    useDelegates();
+  const {
+    delegatePoolList,
+    removeFromDelegatePool,
+    clearDelegationPool,
+    delegationWillHaveError,
+  } = useDelegates();
   const { votes } = useGovernanceVotes();
-
   const { toast } = useToasty();
 
-  const votesToDelegate = useMemo(
-    () => delegatePoolList[0]?.amount.toString() || '0',
-    [delegatePoolList]
-  );
+  const votesToDelegate = useMemo(() => {
+    const totalVotes = delegatePoolList.reduce(
+      (acc, cur) => acc + +cur.amount,
+      0
+    );
+    return totalVotes >= +votes
+      ? (+votes - 1).toString()
+      : totalVotes.toString();
+  }, [delegatePoolList]);
 
   const handleDelegation = async () => {
     if (daoInfo.config.BULK_DELEGATE_ACTION) {
       try {
         setIsLoading(true);
         const hash = await daoInfo.config.BULK_DELEGATE_ACTION(
-          delegatePoolList.map(payload => ({
-            ...payload,
-            amount: votes,
-          })),
+          delegatePoolList,
           writeContract
         );
 
@@ -185,6 +190,7 @@ export const DelegationPool: React.FC = () => {
                 }
                 daoName={daoInfo.config.DAO}
                 votes={votesToDelegate}
+                hideNoTokens
               />
               <Text>to the following users</Text>
             </Flex>
@@ -196,11 +202,17 @@ export const DelegationPool: React.FC = () => {
           <Button
             disabled={
               !delegatePoolList.length ||
-              !!delegatePoolList.find(delegate => delegate.tracks.length === 0)
+              !!delegatePoolList.find(
+                delegate => delegate.tracks.length === 0
+              ) ||
+              delegationWillHaveError
             }
             isDisabled={
               !delegatePoolList.length ||
-              !!delegatePoolList.find(delegate => delegate.tracks.length === 0)
+              !!delegatePoolList.find(
+                delegate => delegate.tracks.length === 0
+              ) ||
+              delegationWillHaveError
             }
             background={delegatePoolList.length ? theme.branding : '#CED1D4'}
             color="white"

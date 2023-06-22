@@ -1,6 +1,10 @@
 import { IDAOConfig, IDAOTheme } from 'types';
 import { moonriverDelegateAction } from 'utils/moonbeam/moonriverDelegateAction';
-import { moonriverDelegateErrors, moonriverOnChainProvider } from 'utils';
+import {
+  moonriverConvictionOptions,
+  moonriverDelegateErrors,
+  moonriverOnChainProvider,
+} from 'utils';
 import { moonriverUndelegateAction } from 'utils/moonbeam/moonriverUndelegateAction';
 import { moonriver } from 'wagmi/chains';
 import ABI from './ABI.json';
@@ -68,6 +72,9 @@ const config: IDAOConfig = {
   DAO_SUPPORTS_TOS: true,
   TOS_URL: '/',
   HIDE_FOR_DELEGATES: ['delegator-lookup'],
+  DELEGATION_CUSTOM_AMOUNT: true,
+  DELEGATION_CUSTOM_CONVICTION: true,
+  DELEGATION_CONVICTION_OPTIONS: moonriverConvictionOptions,
 };
 
 const dark: IDAOTheme = {
