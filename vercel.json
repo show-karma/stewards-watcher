@@ -1,8 +1,8 @@
 {
     "rewrites": [
         {
-            "source": "/moonriver",
-            "destination": "/"
+            "source": "https://delegate.moonbeam.network/moonriver",
+            "destination": "https://moonriver.karmahq.xyz"
         }
     ]
 }
