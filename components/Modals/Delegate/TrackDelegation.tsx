@@ -4,7 +4,8 @@ import {
   Button,
   Flex,
   FormControl,
-  Input,
+  NumberInput,
+  NumberInputField,
   Text,
   Tooltip,
 } from '@chakra-ui/react';
@@ -174,19 +175,21 @@ export const TrackDelegation: React.FC<StepProps> = ({
                   borderRadius="5"
                   backgroundColor="rgba(217, 217, 217, 0.5)"
                 >
-                  <Input
-                    placeholder="Enter an amount to delegate"
-                    maxW="32"
-                    h="max-content"
-                    px="2"
-                    color="black"
-                    bgColor="gray.300"
-                    fontSize="sm"
-                    _placeholder={{
-                      color: 'gray.800',
-                    }}
-                    {...register('amount')}
-                  />
+                  <NumberInput>
+                    <NumberInputField
+                      placeholder="Enter an amount to delegate"
+                      maxW="32"
+                      h="max-content"
+                      px="2"
+                      color="black"
+                      bgColor="gray.300"
+                      fontSize="sm"
+                      _placeholder={{
+                        color: 'gray.800',
+                      }}
+                      {...register('amount')}
+                    />
+                  </NumberInput>
                   <Text
                     fontStyle="normal"
                     fontWeight="500"
