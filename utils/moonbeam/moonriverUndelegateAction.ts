@@ -66,3 +66,5 @@ export function moonriverUndelegateAction(
     return hash;
   };
 }
+
+export const moonriverDigestUndelegate = digest;
