@@ -41,6 +41,8 @@ const config: IDAOConfig = {
     'discordScore',
   ],
   ENABLE_DELEGATE_TRACKER: true,
+  EXCLUDED_VOTING_HISTORY_COLUMN: ['onChainVoteBreakdown'],
+  DAO_CATEGORIES_TYPE: 'workstreams',
 };
 
 const dark: IDAOTheme = {

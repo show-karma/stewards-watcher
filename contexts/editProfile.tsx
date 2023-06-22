@@ -1,11 +1,4 @@
-import React, {
-  useContext,
-  createContext,
-  useMemo,
-  useState,
-  useEffect,
-} from 'react';
-
+import React, { useContext, createContext, useMemo, useState } from 'react';
 import { useIsMounted } from 'hooks/useIsMounted';
 import { useToasty } from 'hooks';
 import { ICustomFields, IProfile } from 'types';
@@ -47,6 +40,8 @@ interface IEditProfileProps {
   changeToA: (text: string) => void;
   delegateToA: string;
   isLoadingToA: boolean;
+  editTracks: (selectedTrack: number) => void;
+  newTracks: number[];
 }
 
 export const EditProfileContext = createContext({} as IEditProfileProps);
@@ -103,6 +98,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     useState<ICustomFields>(defaultCustomFields);
   const [interests, setInterests] =
     useState<ICustomFields>(defaultCustomFields);
+
   const [delegateToA, setDelegateToA] = useState<string>('');
 
   const [isLoadingStatement, setIsLoadingStatement] = useState(false);
@@ -121,6 +117,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
   };
 
   const [newToA, setNewToA] = useState('');
+  const [newTracks, setNewTracks] = useState<number[]>([]);
   const [newInterests, setNewInterests] = useState(defaultCustomFields);
   const [newStatement, setNewStatement] =
     useState<ICustomFields>(defaultCustomFields);
@@ -146,8 +143,14 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
 
       const fetchedStatement =
         customFields?.find(
-          (item: { value: string | string[]; label: string }) =>
-            typeof item.value === 'string' && item.label.includes('statement')
+          (item: {
+            value: string | string[];
+            label: string;
+            displayAs?: string;
+          }) =>
+            typeof item.value === 'string' &&
+            (item.label.includes('statement') ||
+              item.displayAs?.includes('headline'))
         ) || emptyField;
 
       if (fetchedInterests.value.length) {
@@ -204,6 +207,19 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     setNewToA(newText);
   };
 
+  const editTracks = (selectedTrack: number) => {
+    const trackExists = newTracks.includes(selectedTrack);
+
+    if (trackExists) {
+      const filtered = newTracks.filter(
+        (item: number) => item !== selectedTrack
+      );
+      setNewTracks(filtered);
+    } else {
+      setNewTracks(oldArray => [...oldArray, selectedTrack]);
+    }
+  };
+
   const editInterests = (selectedInterest: string) => {
     const newInterestsValue = Array.isArray(newInterests.value)
       ? newInterests.value
@@ -234,24 +250,20 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
   };
 
   const sendAcceptedTerms = async () => {
-    try {
-      const authorizedAPI = axios.create({
-        timeout: 30000,
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: authToken ? `Bearer ${authToken}` : '',
-        },
-      });
-      await authorizedAPI.put(
-        API_ROUTES.DELEGATE.TERMS_OF_SERVICE(daoInfo.config.DAO_KARMA_ID),
-        {
-          acceptedTOS: acceptedTerms,
-        }
-      );
-    } catch (error) {
-      console.error(error);
-    }
+    const authorizedAPI = axios.create({
+      timeout: 30000,
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: authToken ? `Bearer ${authToken}` : '',
+      },
+    });
+    await authorizedAPI.put(
+      API_ROUTES.DELEGATE.TERMS_OF_SERVICE(daoInfo.config.DAO_KARMA_ID),
+      {
+        acceptedTOS: acceptedTerms,
+      }
+    );
   };
 
   const changeAcceptedTerms = (choice: boolean) => {
@@ -262,12 +274,20 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     changeAcceptedTerms(profileSelected?.acceptedTOS ?? false);
   }, [profileSelected?.acceptedTOS]);
 
+  const setupTracks = () => {
+    if (profileSelected?.tracks && profileSelected?.tracks.length > 0) {
+      const tracksToSetup = profileSelected?.tracks?.map(track => track.id);
+      setNewTracks(tracksToSetup);
+    }
+  };
+
   useMemo(() => {
     if (profileSelected) {
       queryStatement();
-      queryToA();
+      if (daoInfo.config.DAO_SUPPORTS_TOA) queryToA();
       setNewName(profileSelected.realName || profileSelected.ensName || '');
       setNewProfilePicture(profileSelected.profilePicture || '');
+      setupTracks();
     }
   }, [profileSelected]);
 
@@ -330,7 +350,14 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
         actualError = error.response.data.error.message;
       }
     }
-    if (newToA !== delegateToA && profileSelected?.address) {
+    const tracksMap = profileSelected?.tracks?.map(
+      (track: { id: number }) => track.id
+    );
+    if (
+      tracksMap !== newTracks &&
+      daoInfo.config.DAO_CATEGORIES_TYPE === 'tracks' &&
+      profileSelected?.address
+    ) {
       try {
         const authorizedAPI = axios.create({
           timeout: 30000,
@@ -340,29 +367,68 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
             Authorization: authToken ? `Bearer ${authToken}` : '',
           },
         });
-        if (delegateToA.length > 0) {
-          await authorizedAPI.put(
-            API_ROUTES.DELEGATE.TERMS_OF_AGREEMENT(daoInfo.config.DAO_KARMA_ID),
-            {
-              agreementText: newToA,
-            }
-          );
-        } else if (newToA.length > 0) {
-          await authorizedAPI.post(
-            API_ROUTES.DELEGATE.TERMS_OF_AGREEMENT(daoInfo.config.DAO_KARMA_ID),
-            {
-              agreementText: newToA,
-            }
-          );
-        }
-        await queryToA();
+
+        await authorizedAPI.post(
+          API_ROUTES.DELEGATE.CHANGE_TRACKS(
+            daoInfo.config.DAO_KARMA_ID,
+            profileSelected?.address
+          ),
+          {
+            tracks: newTracks,
+          }
+        );
       } catch (error: any) {
         hasError = true;
         actualError = error.response.data.error.message;
       }
     }
 
-    // await sendAcceptedTerms();
+    if (daoInfo.config.DAO_SUPPORTS_TOA) {
+      if (newToA !== delegateToA && profileSelected?.address) {
+        try {
+          const authorizedAPI = axios.create({
+            timeout: 30000,
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              Authorization: authToken ? `Bearer ${authToken}` : '',
+            },
+          });
+          if (delegateToA.length > 0) {
+            await authorizedAPI.put(
+              API_ROUTES.DELEGATE.TERMS_OF_AGREEMENT(
+                daoInfo.config.DAO_KARMA_ID
+              ),
+              {
+                agreementText: newToA,
+              }
+            );
+          } else if (newToA.length > 0) {
+            await authorizedAPI.post(
+              API_ROUTES.DELEGATE.TERMS_OF_AGREEMENT(
+                daoInfo.config.DAO_KARMA_ID
+              ),
+              {
+                agreementText: newToA,
+              }
+            );
+          }
+          await queryToA();
+        } catch (error: any) {
+          hasError = true;
+          actualError = error.response.data.error.message;
+        }
+      }
+    }
+
+    if (daoInfo.config.DAO_SUPPORTS_TOS) {
+      try {
+        await sendAcceptedTerms();
+      } catch (error: any) {
+        hasError = true;
+        actualError = error.response.data.error.message;
+      }
+    }
 
     if (
       profileSelected?.address !== newName ||
@@ -532,6 +598,8 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       newToA,
       delegateToA,
       isLoadingToA,
+      editTracks,
+      newTracks,
     }),
     [
       isEditing,
@@ -560,6 +628,8 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       newToA,
       delegateToA,
       isLoadingToA,
+      editTracks,
+      newTracks,
     ]
   );
 

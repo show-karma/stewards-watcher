@@ -16,6 +16,7 @@ import { formatNumber, getTimeFromNow } from 'utils';
 import { Filters } from './Filters';
 import { ClearButton } from './Filters/ClearButton';
 import { SortBy } from './Filters/SortBy';
+import { DelegationPool } from './DelegationPool';
 
 const DelegatesCounter: FC<{
   isLoading: boolean;
@@ -275,6 +276,7 @@ export const BodyTitle: FC = () => {
           />
         </Flex>
       </Collapse>
+      {config.ALLOW_BULK_DELEGATE && <DelegationPool />}
       <Filters />
       <Flex
         flexDir={{ base: 'column', md: 'row' }}

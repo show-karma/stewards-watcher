@@ -43,8 +43,8 @@ export const ExpandableCardText: FC<IExpandableText> = props => {
             w="full"
             sx={{
               display: '-webkit-box',
-              '-webkit-box-orient': 'vertical',
-              '-webkit-line-clamp': '2',
+              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: '2',
             }}
             textOverflow="ellipsis"
             overflow="hidden"

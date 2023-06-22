@@ -11,6 +11,7 @@ export interface IDelegatingHistories {
   toDelegate: string;
   delegator: string;
   timestamp: number;
+  trackId: number;
 }
 
 export interface IDelegationHistoryAPI {

@@ -1,8 +1,9 @@
 import { Flex, Text } from '@chakra-ui/react';
-import { useDAO, useEditProfile } from 'contexts';
+import { useDAO, useDelegates, useEditProfile } from 'contexts';
 import { FC, ReactNode } from 'react';
 import { ICustomFields } from 'types';
 import { EditableSectionItem } from './EditableSectionItem';
+import { SectionItem } from './SectionItem';
 
 const SectionHeader: FC<{ children: ReactNode }> = ({ children }) => {
   const { theme } = useDAO();
@@ -19,8 +20,15 @@ interface ISidebar {
 }
 
 export const Sidebar: FC<ISidebar> = ({ interests, isEditMode }) => {
-  const { isEditing, defaultInterests, editInterests, newInterests } =
-    useEditProfile();
+  const {
+    isEditing,
+    defaultInterests,
+    editInterests,
+    newInterests,
+    editTracks,
+    newTracks,
+  } = useEditProfile();
+  const { tracks, profileSelected } = useDelegates();
   const interestsValueArray = Array.isArray(interests.value)
     ? (interests.value as string[])
     : interests.value.split(',');
@@ -28,6 +36,27 @@ export const Sidebar: FC<ISidebar> = ({ interests, isEditMode }) => {
   return (
     <Flex w={{ base: 'full', lg: '16.875rem' }}>
       <Flex flexDir="column" gap="10" w="full">
+        <Flex flexDir="column" gap="5">
+          {profileSelected?.tracks?.length || isEditing ? (
+            <SectionHeader>Tracks</SectionHeader>
+          ) : undefined}
+          <Flex columnGap="1" rowGap="2" flexWrap="wrap">
+            {isEditing
+              ? tracks.map((track, index) => (
+                  <EditableSectionItem
+                    isEditMode={isEditMode}
+                    key={+index}
+                    value={track.id}
+                    label={track.displayName}
+                    isSelected={newTracks.includes(track.id)}
+                    selectItem={editTracks}
+                  />
+                ))
+              : profileSelected?.tracks?.map((track, index) => (
+                  <SectionItem key={+index} label={track.name} />
+                ))}
+          </Flex>
+        </Flex>
         <Flex flexDir="column" gap="5">
           {((interests && interestsValueArray.length > 0) || isEditing) && (
             <SectionHeader>Interests</SectionHeader>

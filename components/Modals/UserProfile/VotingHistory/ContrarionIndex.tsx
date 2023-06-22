@@ -59,8 +59,11 @@ const ContrarionBox: FC<IContrarionBoxProps> = ({ contrarionIndex }) => {
 
 export const ContrarionIndexComponent: FC = () => {
   const { theme } = useDAO();
-  const { isVoteBreakdownError, isVoteBreakdownLoading, voteBreakdown } =
-    useVotes();
+  const {
+    isOffChainVoteBreakdownError: isVoteBreakdownError,
+    isOffChainVoteBreakdownLoading: isVoteBreakdownLoading,
+    offChainVoteBreakdown: voteBreakdown,
+  } = useVotes();
 
   if (isVoteBreakdownLoading) {
     return (
@@ -109,7 +112,7 @@ export const ContrarionIndexComponent: FC = () => {
             align="center"
             justify="center"
             flexDir="column"
-            color={theme.modal.votingHistory.headline}
+            color={theme.modal.buttons.navText}
           >
             <InfoIcon w="10" h="10" />
             <Text

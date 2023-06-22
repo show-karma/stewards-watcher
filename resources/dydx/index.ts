@@ -1,5 +1,5 @@
 import { IDAOConfig, IDAOTheme } from 'types';
-import { onChainDyDxVotesProvider } from 'utils/onChainDyDxVotesProvider';
+import { onChainDyDxVotesProvider } from 'utils/dydx/onChainDyDxVotesProvider';
 import { mainnet } from 'wagmi/chains';
 import ABI from './ABI.json';
 
@@ -51,11 +51,13 @@ const config: IDAOConfig = {
       'discordScore',
     ],
   },
+  EXCLUDED_VOTING_HISTORY_COLUMN: [],
   DAO_EXT_VOTES_PROVIDER: {
     onChain: onChainDyDxVotesProvider,
   },
   EXCLUDED_CARD_FIELDS: ['healthScore'],
   ENABLE_DELEGATE_TRACKER: true,
+  DAO_CATEGORIES_TYPE: 'workstreams',
 };
 
 const dark: IDAOTheme = {
@@ -331,7 +333,6 @@ const dark: IDAOTheme = {
 };
 
 const light: IDAOTheme = {
-  logo: 'daos/dydx/logo_black.svg',
   background: '#F2F4F9',
   bodyBg: '#F2F4F9',
   title: '#232334',
@@ -376,6 +377,7 @@ const light: IDAOTheme = {
     socialMedia: '#595A5E',
   },
   loginModal: {
+    logo: 'daos/dydx/logo_black.svg',
     background: '#FFFFFF',
     text: '#212328',
     footer: { bg: '#EBEDEF', text: '#212328' },

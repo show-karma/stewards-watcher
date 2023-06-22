@@ -46,9 +46,11 @@ const config: IDAOConfig = {
     'karmaScore',
     'delegatorCount',
   ],
+  EXCLUDED_VOTING_HISTORY_COLUMN: ['onChainVoteBreakdown'],
   ENABLE_DELEGATE_TRACKER: true,
   DAO_SUPPORTS_TOA: true,
   DEFAULT_TOA,
+  DAO_CATEGORIES_TYPE: 'workstreams',
 };
 
 const dark: IDAOTheme = {
@@ -329,7 +331,6 @@ const dark: IDAOTheme = {
 };
 
 const light: IDAOTheme = {
-  logo: '/daos/starknet/logo_black.svg',
   background: '#F2F4F9',
   bodyBg: '#F2F4F9',
   title: '#222429',
@@ -377,6 +378,7 @@ const light: IDAOTheme = {
     socialMedia: '#595A5E',
   },
   loginModal: {
+    logo: '/daos/starknet/logo_black.svg',
     background: '#FFFFFF',
     text: '#212328',
     footer: { bg: '#EBEDEF', text: '#212328' },

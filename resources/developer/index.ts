@@ -22,6 +22,7 @@ const config: IDAOConfig = {
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
   SHOULD_NOT_SHOW: 'statement',
+  EXCLUDED_VOTING_HISTORY_COLUMN: ['onChainVoteBreakdown'],
   EXCLUDED_CARD_FIELDS: [
     'delegatorCount',
     'onChainVotesPct',
@@ -36,6 +37,7 @@ const config: IDAOConfig = {
     },
   },
   ENABLE_DELEGATE_TRACKER: true,
+  DAO_CATEGORIES_TYPE: 'workstreams',
 };
 
 const dark: IDAOTheme = {
@@ -360,6 +362,7 @@ const light: IDAOTheme = {
     socialMedia: '#595A5E',
   },
   loginModal: {
+    logo: 'daos/developerdao/logo_black.svg',
     background: '#FFFFFF',
     text: '#212328',
     footer: { bg: '#EBEDEF', text: '#212328' },

@@ -4,10 +4,11 @@ import { DelegateStatusFilter } from './DelegateStatusFilter';
 import { InterestsFilter } from './InterestsFilter';
 import { PeriodFilter } from './PeriodFilter';
 import { TermsFilter } from './TermsFilter';
+import { TracksFilter } from './TracksFilter';
 import { WorkstreamFilter } from './WorkstreamFilter';
 
 export const OrderByFilters = () => {
-  const { interests, workstreams } = useDelegates();
+  const { interests, workstreams, tracks } = useDelegates();
   const { theme, daoInfo } = useDAO();
 
   return (
@@ -18,7 +19,14 @@ export const OrderByFilters = () => {
         </Text>
         <Flex flexDir="row" gap="4" flexWrap="wrap">
           {interests.length > 0 && <InterestsFilter />}
-          {workstreams.length > 0 && <WorkstreamFilter />}
+          {workstreams.length > 0 &&
+          daoInfo.config.DAO_CATEGORIES_TYPE === 'workstreams' ? (
+            <WorkstreamFilter />
+          ) : null}
+          {tracks.length > 0 &&
+          daoInfo.config.DAO_CATEGORIES_TYPE === 'tracks' ? (
+            <TracksFilter />
+          ) : null}
           <DelegateStatusFilter />
           <PeriodFilter />
           {daoInfo.config.DAO_SUPPORTS_TOA ? <TermsFilter /> : null}

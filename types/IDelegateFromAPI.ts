@@ -63,4 +63,8 @@ export interface IDelegateFromAPI {
     description: string;
   }[];
   acceptedTOS?: boolean;
+  tracks?: {
+    id: number;
+    name: string;
+  }[];
 }
