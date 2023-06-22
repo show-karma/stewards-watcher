@@ -1,12 +1,16 @@
 {
     "rewrites": [
         {
-            "source": "/moonriver",
-            "destination": "https://dapp.karmahq.xyz"
+            "source": "/moonriver/:path*",
+            "destination": "https://dapp.karmahq.xyz/:path*"
         },
         {
-            "source": "/moonbeam",
-            "destination": "https://dapp.karmahq.xyz"
+            "source": "/moonbeam/:path*",
+            "destination": "https://dapp.karmahq.xyz/:path*"
+        },
+        {
+            "source": "/google",
+            "destination": "https://google.com"
         }
     ]
 }
