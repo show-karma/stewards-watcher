@@ -27,6 +27,7 @@ export const ResourcesMenu: FC = () => {
           color: theme.hat.text.secondary,
         }}
         minH="52px"
+        fontSize={{ base: 'sm', lg: 'md' }}
       >
         Resources
       </MenuButton>

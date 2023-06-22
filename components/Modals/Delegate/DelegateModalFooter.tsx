@@ -1,4 +1,4 @@
-import { Box, FlexProps, Text, Icon } from '@chakra-ui/react';
+import { Box, FlexProps, Text, Icon, Flex } from '@chakra-ui/react';
 import { SubmitEmailInput } from 'components/Inputs/SubmitEmailInput';
 import { useDAO } from 'contexts';
 import { useToasty } from 'hooks';
@@ -13,7 +13,7 @@ export const DelegateModalFooter: React.FC<{
   const { toast } = useToasty();
   const {
     daoInfo: {
-      config: { DAO_KARMA_ID },
+      config: { DAO_KARMA_ID, DISABLE_EMAIL_INPUT },
     },
   } = useDAO();
 
@@ -35,24 +35,39 @@ export const DelegateModalFooter: React.FC<{
   };
 
   return (
-    <Box color="rgba(0,0,0,0.5)" fontSize={12} {...flexProps}>
-      <Text as="p" display="flex" gap={2} mb={2}>
-        <Icon
-          color="rgba(0,0,0,0.15)"
-          fontSize="18px"
-          as={BsExclamationCircleFill}
-        />{' '}
-        Optional:
-      </Text>
-
-      <Text as="p">
-        Give us your e-mail address and we’ll send you notifications regarding
-        this delegate or other updates. We promise not to spam!
-      </Text>
-      <SubmitEmailInput
-        onSubmit={submit}
-        flexProps={{ maxW: ['100%', '100%', '60%'], mt: 5 }}
-      />
-    </Box>
+    <Flex bgColor="white">
+      {!DISABLE_EMAIL_INPUT && (
+        <Flex
+          bgColor="#EBEDF0"
+          color="rgba(0,0,0,0.5)"
+          fontSize={12}
+          {...flexProps}
+          flexDir="column"
+          mx="6"
+          mb="6"
+          borderRadius="12px"
+          p="5"
+        >
+          <Text
+            as="p"
+            display="flex"
+            fontWeight="700"
+            gap={2}
+            color="#595A5E"
+            mb="1"
+          >
+            Optional
+          </Text>
+          <SubmitEmailInput
+            onSubmit={submit}
+            flexProps={{ maxW: ['100%', '100%', '100%'], mb: '3' }}
+          />
+          <Text as="p">
+            Give us your e-mail address and we’ll send you notifications
+            regarding this delegate or other updates. We promise not to spam!
+          </Text>
+        </Flex>
+      )}
+    </Flex>
   );
 };

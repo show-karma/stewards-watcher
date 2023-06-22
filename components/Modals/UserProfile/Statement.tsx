@@ -8,6 +8,10 @@ import DOMPurify from 'dompurify';
 import { Sidebar } from '../Sidebar';
 import { NoStatement } from './NoStatement';
 
+// eslint-disable-next-line import/no-extraneous-dependencies
+const MDPreview = dynamic(() => import('@uiw/react-markdown-preview'), {
+  ssr: false,
+});
 interface ITextSection {
   statement?: ICustomFields;
 }
@@ -60,7 +64,14 @@ const TextSection: FC<ITextSection> = ({ statement }) => {
             },
           }}
         >
-          {htmlFrom(statement.value as string)}
+          <MDPreview
+            source={(statement.value as string) || ''}
+            style={{
+              backgroundColor: 'transparent',
+              color: theme.modal.statement.text,
+            }}
+          />
+          {/* {htmlFrom(statement.value)} */}
         </Flex>
       )}
     </Flex>

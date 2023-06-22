@@ -1,5 +1,5 @@
 import { Button, Divider, Flex, Input, Spinner, Text } from '@chakra-ui/react';
-import { CloseIcon, SearchUserIcon } from 'components/Icons';
+import { CloseIcon } from 'components/Icons';
 import { useDAO, useTokenHolders } from 'contexts';
 import { FC, useMemo, useState } from 'react';
 import { truncateAddress } from 'utils';
@@ -8,12 +8,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { ChakraLink } from 'components/ChakraLink';
 import { DelegatesAccordion } from './DelegatesAccordion';
+import { UndelegateModal } from './UndelegateModal';
 
 const addressRegex = /^0x[a-fA-F0-9]{40}$/;
 const ensNameRegex = /^\S+\.eth$/;
 
 export const TokenHolderDelegation: FC = () => {
-  const { theme } = useDAO();
+  const { theme, daoInfo } = useDAO();
 
   const {
     changeAddresses,
@@ -73,7 +74,8 @@ export const TokenHolderDelegation: FC = () => {
           }
           return false;
         }
-      ),
+      )
+      .required(),
   });
   type FormData = yup.InferType<typeof schema>;
 

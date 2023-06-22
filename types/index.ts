@@ -9,3 +9,4 @@ export * from './IDelegateFromAPI';
 export * from './IMixpanelEvent';
 export * from './Modal';
 export * from './resources';
+export * from './votes';

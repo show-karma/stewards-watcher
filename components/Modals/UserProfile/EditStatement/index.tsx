@@ -1,71 +1,28 @@
 import { Checkbox, Flex, Link } from '@chakra-ui/react';
 import { useDAO, useEditProfile } from 'contexts';
 import { FC } from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 
-const modules = {
-  toolbar: [['bold', 'italic', 'underline', 'strike'], ['link'], ['clean']],
-};
+// eslint-disable-next-line import/no-extraneous-dependencies
+import '@uiw/react-md-editor/markdown-editor.css';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import '@uiw/react-markdown-preview/markdown.css';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import rehypeSanitize from 'rehype-sanitize';
+
+import dynamic from 'next/dynamic';
+// eslint-disable-next-line import/no-extraneous-dependencies
+const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false });
 
 export const EditStatement: FC = () => {
-  const { theme, daoInfo } = useDAO();
   const {
     newStatement,
     editStatementText,
-    // acceptedTerms,
-    // changeAcceptedTerms,
+    acceptedTerms,
+    changeAcceptedTerms,
   } = useEditProfile();
   const newStatementValue = newStatement.value as string;
 
-  const editorStyle = {
-    '.quill': { minHeight: '200px' },
-    '.ql-toolbar': {
-      bg: theme.modal.background,
-      color: theme.modal.statement.text,
-      border: `1px solid ${theme.modal.statement.sidebar.item.border}`,
-      borderTopRadius: '8px',
-      fontFamily: 'Poppins, sans-serif',
-    },
-    '.ql-snow.ql-toolbar button:hover .ql-stroke ': {
-      stroke: theme.modal.statement.sidebar.item.border,
-    },
-    '.ql-snow.ql-toolbar button.ql-active .ql-stroke': {
-      stroke: theme.modal.statement.sidebar.item.border,
-    },
-    '.ql-snow.ql-toolbar button.ql-active': {
-      color: theme.modal.statement.sidebar.item.border,
-      stroke: theme.modal.statement.sidebar.item.border,
-    },
-    '.ql-formats': {
-      button: {
-        '.ql-stroke': {
-          color: theme.modal.statement.sidebar.section,
-          stroke: theme.modal.statement.sidebar.section,
-        },
-        '.ql-fill': {
-          color: theme.modal.statement.sidebar.section,
-          stroke: theme.modal.statement.sidebar.section,
-          fill: theme.modal.statement.sidebar.section,
-        },
-      },
-    },
-    '.ql-picker-label': {
-      color: theme.modal.statement.text,
-    },
-    '.ql-editor': {
-      color: theme.modal.statement.sidebar.section,
-      fontSize: 'sm',
-    },
-    '.ql-container': {},
-
-    '.ql-active': {
-      color: `${theme.modal.statement.text}`,
-      '.ql-stroke': {
-        stroke: `${theme.modal.statement.text}`,
-      },
-    },
-  };
+  const { daoInfo, theme } = useDAO();
 
   return (
     <Flex flexDir="column" gap="1">
@@ -76,30 +33,38 @@ export const EditStatement: FC = () => {
         gap="4"
         flexDir="column"
         flex="1"
-        sx={editorStyle}
         h="full"
         minH={{ base: 'full', sm: '18rem', lg: '16rem' }}
         maxH={{ base: 'full', sm: '18rem', lg: '16rem' }}
       >
-        <ReactQuill
-          theme="snow"
+        <MDEditor
           value={newStatementValue}
-          onChange={editStatementText}
-          modules={modules}
+          onChange={value => editStatementText(value || '')}
+          height={300}
+          preview="edit"
+          previewOptions={{
+            rehypePlugins: [[rehypeSanitize]],
+          }}
         />
       </Flex>
-      {/* {daoInfo.config.TOS_URL ? (
+      {daoInfo.config.TOS_URL ? (
         <Checkbox
           defaultChecked={acceptedTerms}
           onChange={event => changeAcceptedTerms(event.target.checked)}
+          color={theme.modal.statement.sidebar.section}
         >
-          I accept{' '}
-          <Link href={daoInfo.config.TOS_URL} isExternal textDecor="underline">
-            Terms and Conditions
+          I accept the{' '}
+          <Link
+            href={daoInfo.config.TOS_URL}
+            isExternal
+            textDecor="underline"
+            color={theme.modal.statement.sidebar.section}
+          >
+            Code of Conduct
           </Link>
           .
         </Checkbox>
-      ) : null} */}
+      ) : null}
     </Flex>
   );
 };

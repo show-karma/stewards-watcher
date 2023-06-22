@@ -21,6 +21,7 @@ export const useDelegation = (args: IDelegation) => {
     abi: daoInfo.DELEGATE_ABI,
     functionName: daoInfo.config.DAO_DELEGATE_FUNCTION || 'delegate',
     args: getArgs(),
+    chainId: daoInfo.config.DAO_CHAIN.id,
   });
 
   const { toast } = useToasty();

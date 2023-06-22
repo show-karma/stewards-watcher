@@ -29,7 +29,9 @@ export const checkDecision = (vote: IChainRow) => {
       return 'FOR';
     case 'DID NOT VOTE':
       return 'NOTVOTED';
-    default:
+    case 'ABSTAIN':
       return 'ABSTAIN';
+    default:
+      return 'DID NOT VOTE';
   }
 };

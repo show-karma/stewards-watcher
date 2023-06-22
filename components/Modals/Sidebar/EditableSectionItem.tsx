@@ -6,9 +6,10 @@ import { IconBaseProps, IconType } from 'react-icons';
 interface ISectionItem {
   icon?: IconType | ComponentWithAs<'svg', IconBaseProps>;
   isEditMode: boolean;
-  value: string;
+  value: any;
   isSelected: boolean;
-  selectItem: (item: string) => void;
+  selectItem: (item: any) => void;
+  label?: string;
 }
 
 export const EditableSectionItem: FC<ISectionItem> = ({
@@ -17,6 +18,7 @@ export const EditableSectionItem: FC<ISectionItem> = ({
   value,
   isSelected,
   selectItem,
+  label,
 }) => {
   const { theme } = useDAO();
 
@@ -57,7 +59,7 @@ export const EditableSectionItem: FC<ISectionItem> = ({
         }
         fontWeight="medium"
       >
-        {value}
+        {label || value}
       </Text>
     </Flex>
   );
