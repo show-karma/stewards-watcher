@@ -1108,8 +1108,6 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     500
   );
 
-  console.log(delegatePoolList);
-
   useMemo(() => {
     if (!hasInitiated) return;
     setOffset(0);

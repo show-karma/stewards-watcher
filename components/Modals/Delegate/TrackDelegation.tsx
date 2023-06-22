@@ -59,6 +59,7 @@ export const TrackDelegation: React.FC<StepProps> = ({
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm<FormData>({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -302,7 +303,13 @@ export const TrackDelegation: React.FC<StepProps> = ({
               ) : undefined}
             </Flex>
             <Flex w="full" flexDir="row-reverse">
-              <Tooltip label="You need at least 0.2 votes to delegate">
+              <Tooltip
+                label={
+                  watch('amount') < 0.2
+                    ? 'You need at least 0.2 votes to delegate'
+                    : null
+                }
+              >
                 <Button
                   bg="#000000"
                   color="#1DE9B6"

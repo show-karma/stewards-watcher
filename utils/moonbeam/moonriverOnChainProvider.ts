@@ -27,7 +27,6 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
   votes.forEach((vote: any) => {
     const { proposal, timestamp } = vote;
     const proposalString = parseInt(proposal, 16).toString();
-    console.log(proposalString);
     array.push({
       voteMethod: 'On-chain',
       proposal:
@@ -52,7 +51,6 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
         voteId: proposal.id.toString(),
       });
   });
-  console.log(array);
   // removing duplicate items on array that have same proposal id
   const filteredArray = array.filter(
     (item, index, self) =>
