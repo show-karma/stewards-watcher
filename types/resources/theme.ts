@@ -161,6 +161,7 @@ export interface IDAOTheme {
     };
   };
   loginModal: {
+    logo?: string;
     background: string;
     text: string;
     footer: {

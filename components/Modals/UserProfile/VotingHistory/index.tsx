@@ -9,14 +9,15 @@ import { DelegatedVotesChanges } from './DelegatedVotesChanges';
 import { Navigation } from './Navigation';
 import { ProposalVote } from './ProposalVote';
 import { SearchProposalInput } from './SearchProposalInput';
-import { VotingBreakdown } from './VotingBreakdown';
+import { OffChainVotingBreakdown } from './OffChainVotingBreakdown';
+import { OnChainVotingBreakdown } from './OnChainVotingBreakdown';
 
 interface IVotingHistory {
   profile: IProfile;
 }
 
 export const VotingHistory: FC<IVotingHistory> = ({ profile }) => {
-  const { theme } = useDAO();
+  const { theme, daoInfo } = useDAO();
   const { isLoading: voteLoading, showingVotes, allVotes } = useVotes();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -109,9 +110,26 @@ export const VotingHistory: FC<IVotingHistory> = ({ profile }) => {
         maxW={{ base: '330px', sm: '400px' }}
         w="full"
       >
-        <VotingBreakdown />
-        <DelegatedVotesChanges />
-        <ContrarionIndexComponent />
+        {daoInfo.config.EXCLUDED_VOTING_HISTORY_COLUMN.includes(
+          'onChainVoteBreakdown'
+        ) ? undefined : (
+          <OnChainVotingBreakdown />
+        )}
+        {daoInfo.config.EXCLUDED_VOTING_HISTORY_COLUMN.includes(
+          'offChainVoteBreakdown'
+        ) ? undefined : (
+          <OffChainVotingBreakdown />
+        )}
+        {daoInfo.config.EXCLUDED_VOTING_HISTORY_COLUMN.includes(
+          'votingPowerTimeline'
+        ) ? undefined : (
+          <DelegatedVotesChanges />
+        )}
+        {daoInfo.config.EXCLUDED_VOTING_HISTORY_COLUMN.includes(
+          'contrarionIndex'
+        ) ? undefined : (
+          <ContrarionIndexComponent />
+        )}
       </Flex>
     </Flex>
   );

@@ -1,8 +1,12 @@
 import { IFilterPeriod, IStatusOptions } from 'types/contexts';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { writeContract } from '@wagmi/core';
 import { Chain } from 'wagmi';
 import { IChainRow } from 'types/IChainRow';
 import { IForumType } from './forum';
 import { IStats, IStatsID } from './stats';
+import { IVotingHistoryColumn } from './modal';
+import { IForDelegates } from './header';
 
 export interface IDAOConfig {
   DAO: string;
@@ -54,10 +58,42 @@ export interface IDAOConfig {
   TOS_URL?: string;
   SHOULD_NOT_SHOW?: 'statement' | 'stats' | 'handles';
   DAO_SUPPORTS_TOA?: boolean;
+  DAO_SUPPORTS_TOS?: boolean;
+  DAO_STATUSES?: string[];
+  DAO_CATEGORIES_TYPE: 'workstreams' | 'tracks';
   DEFAULT_TOA?: string;
   SORT_OPTIONS?: IStats[];
   EXCLUDED_CARD_FIELDS: IStats[];
+  EXCLUDED_VOTING_HISTORY_COLUMN: IVotingHistoryColumn[];
   ENABLE_DELEGATE_TRACKER?: boolean;
+  DELEGATION_ERRORS_DICTIONARY?: {
+    [key: string]: string;
+  };
+  ALLOW_UNDELEGATE?: boolean;
+  ALLOW_BULK_DELEGATE?: boolean;
+  DISABLE_EMAIL_INPUT?: boolean;
+  HIDE_FOR_DELEGATES?: IForDelegates[];
+  // TODO: type anys
+  /**
+   * Defines a function to bulk delegate
+   * @param payload
+   * @param write
+   * @returns tx hash
+   */
+  UNDELEGATE_ACTION?: (
+    payload: any,
+    write: typeof writeContract
+  ) => Promise<`0x${string}`>;
+  /**
+   * Defines a function to bulk delegate
+   * @param payload
+   * @param write
+   * @returns tx hash
+   */
+  BULK_DELEGATE_ACTION?: (
+    payload: any,
+    write: typeof writeContract
+  ) => Promise<`0x${string}`>;
   /**
    * Defines a custom function to parse the votes with an external proposal provider.
    *

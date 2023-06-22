@@ -2,27 +2,31 @@ import { Flex, Input, Text } from '@chakra-ui/react';
 import { DelegateButton } from 'components';
 import { useDAO, useDelegates } from 'contexts';
 import { ethers } from 'ethers';
+import { useToasty } from 'hooks';
 import { FC, useMemo } from 'react';
 
 interface IToDelegateProps {
   address: string;
   setAddress: React.Dispatch<React.SetStateAction<string>>;
   setSuccess: React.Dispatch<React.SetStateAction<boolean>>;
+  onOk?: () => void;
 }
 
 export const ToDelegate: FC<IToDelegateProps> = ({
   address,
   setAddress,
   setSuccess,
+  onOk,
 }) => {
-  const { theme } = useDAO();
-  const { setSelectedProfileData } = useDelegates();
+  const { theme, daoInfo } = useDAO();
+  const { setSelectedProfileData, findDelegateByAddress } = useDelegates();
   const { delegateTo: modalTheme } = theme.modal;
 
   const isEthAddress = useMemo(
     () => ethers.utils.isAddress(address),
     [address]
   );
+  const { toast } = useToasty();
 
   const handleChange = (addr: string) => {
     if (address !== addr) setAddress(addr);
@@ -31,6 +35,43 @@ export const ToDelegate: FC<IToDelegateProps> = ({
   const emitSuccess = () => setSuccess(true);
 
   const fullDisabled = !isEthAddress && address.length > 0;
+
+  const setDelegate = async () => {
+    const emptyDelegate = {
+      address,
+      forumActivity: 0,
+      karmaScore: 0,
+      voteParticipation: {
+        onChain: 0,
+        offChain: 0,
+      },
+      discordScore: 0,
+      status: 'active',
+    };
+    try {
+      const hasTracks = daoInfo.config.DAO_CATEGORIES_TYPE === 'tracks';
+      if (hasTracks) {
+        const delegate = await findDelegateByAddress(address);
+        setSelectedProfileData(delegate || emptyDelegate);
+        onOk?.();
+        return;
+      }
+
+      setSelectedProfileData(emptyDelegate);
+    } catch {
+      setSelectedProfileData({
+        address,
+        forumActivity: 0,
+        karmaScore: 0,
+        voteParticipation: {
+          onChain: 0,
+          offChain: 0,
+        },
+        discordScore: 0,
+        status: 'active',
+      });
+    }
+  };
 
   return (
     <Flex px="4" flexDir="column" align="center" maxW="368px" pb="6">
@@ -52,10 +93,10 @@ export const ToDelegate: FC<IToDelegateProps> = ({
         textAlign="left"
         w="full"
       >
-        Enter the ETH address to delegate your tokens to this individual.
+        Enter the wallet address to delegate your tokens to this individual.
       </Text>
       <Input
-        placeholder="Enter ETH address"
+        placeholder="Enter Wallet address"
         type="text"
         onChange={event => handleChange(event.target.value)}
         width="full"
@@ -102,7 +143,7 @@ export const ToDelegate: FC<IToDelegateProps> = ({
       />
       {!isEthAddress && address !== '' && (
         <Text textAlign="start" w="full" color={modalTheme.input.error}>
-          This is not a valid ETH
+          This is not a valid wallet address
         </Text>
       )}
       <DelegateButton
@@ -113,19 +154,13 @@ export const ToDelegate: FC<IToDelegateProps> = ({
         borderRadius="4px"
         mt={4}
         successEmitter={emitSuccess}
-        beforeOnClick={() => {
-          setSelectedProfileData({
-            address,
-            forumActivity: 0,
-            karmaScore: 0,
-            voteParticipation: {
-              onChain: 0,
-              offChain: 0,
-            },
-            discordScore: 0,
-            status: 'active',
-          });
-        }}
+        beforeOnClick={() => setDelegate()}
+        text={
+          daoInfo.config.DAO_DELEGATE_CONTRACT ||
+          daoInfo.config.ALLOW_BULK_DELEGATE
+            ? 'Continue'
+            : 'Delegate'
+        }
       />
     </Flex>
   );

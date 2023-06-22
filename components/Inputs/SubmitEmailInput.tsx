@@ -37,7 +37,7 @@ export const SubmitEmailInput: React.FC<{
       <Input
         type="email"
         onChange={event => handleInput(event.target.value)}
-        backgroundColor="rgba(173, 184, 192, 0.25)"
+        backgroundColor="#FFFFFF"
         height="32px"
         placeholder="Your best e-mail"
         pr={8}
@@ -50,19 +50,21 @@ export const SubmitEmailInput: React.FC<{
         _focusVisible={{
           outline: 'none',
         }}
+        w="full"
+        borderRadius="4px"
         {...inputProps}
       />
       <Button
         type="button"
         onClick={submit}
-        backgroundColor="#606060"
+        backgroundColor="#7E8C9D"
         color="white"
         fontWeight="normal"
         fontSize={12}
         marginLeft={-2}
         px={6}
         height="32px"
-        borderRadius={5}
+        borderRadius={3}
         zIndex={2}
         isDisabled={done}
         __css={{}}

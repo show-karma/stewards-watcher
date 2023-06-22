@@ -43,7 +43,7 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
           address: contract.contractAddress,
           abi: contract.ABI || daoInfo.TOKEN_ABI,
           functionName: contract.method,
-          args: [walletAddress],
+          args: walletAddress ? [walletAddress] : undefined,
           chainId: daoInfo.config.DAO_CHAIN.id,
         }))
       : undefined,
@@ -72,7 +72,8 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
     }
 
     const amountsBN = voteAmounts.map(amount => {
-      if (amount) return BigNumber.from(amount).toString();
+      if (amount && amount.result)
+        return BigNumber.from(amount.result).toString();
       return '0';
     });
     const onlyZeros = amountsBN.every(amount => amount === '0');

@@ -86,24 +86,8 @@ export const DelegateLoginModal: FC<IDelegateLogin> = ({ isOpen, onClose }) => {
               objectFit="contain"
               color="white"
               fill="white"
-              src={theme.logo || config.DAO_LOGO}
+              src={theme.loginModal.logo || config.DAO_LOGO}
             />
-            <Flex gap="3" w="full" align="center">
-              <Text
-                fontWeight="normal"
-                fontSize={{ base: '13px', lg: '16px' }}
-                w="max-content"
-                color={theme.loginModal.text}
-              >
-                Powered By
-              </Text>
-              <Img
-                src={variantImg}
-                h={{ base: '6', lg: '8' }}
-                w={{ base: '80px', lg: '80px' }}
-                objectFit="contain"
-              />
-            </Flex>
           </Flex>
         </ModalHeader>
         <ModalCloseButton color="black" boxSize="8" />

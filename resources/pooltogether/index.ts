@@ -33,7 +33,9 @@ const config: IDAOConfig = {
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
   EXCLUDED_CARD_FIELDS: ['healthScore', 'karmaScore', 'discordScore'],
+  EXCLUDED_VOTING_HISTORY_COLUMN: [],
   ENABLE_DELEGATE_TRACKER: true,
+  DAO_CATEGORIES_TYPE: 'workstreams',
 };
 
 const dark: IDAOTheme = {
@@ -309,7 +311,6 @@ const dark: IDAOTheme = {
 };
 
 const light: IDAOTheme = {
-  logo: '/daos/pooltogether/logo_black.svg',
   background: '#F2F4F9',
   bodyBg: '#F2F4F9',
   title: '#222429',
@@ -354,6 +355,7 @@ const light: IDAOTheme = {
     socialMedia: '#595A5E',
   },
   loginModal: {
+    logo: '/daos/pooltogether/logo_black.svg',
     background: '#FFFFFF',
     text: '#222429',
     footer: { bg: 'rgba(102, 102, 102, 0.15)', text: '#212328' },

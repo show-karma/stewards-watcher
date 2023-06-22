@@ -7,6 +7,7 @@ import { ESteps } from './ESteps';
 import { Step1 } from './Step1';
 import { Step2 } from './Step2';
 import { StepChange } from './StepChange';
+import { TrackDelegation } from './TrackDelegation';
 
 interface IModal {
   open: boolean;
@@ -19,7 +20,7 @@ export const DelegateModal: React.FC<IModal> = ({
   handleModal,
   delegateData,
 }) => {
-  const { daoData } = useDAO();
+  const { daoData, daoInfo } = useDAO();
   const [step, setStep] = useState(ESteps.DELEGATE);
   const { votes, delegatedBefore, walletAddress } = useGovernanceVotes();
 
@@ -32,6 +33,15 @@ export const DelegateModal: React.FC<IModal> = ({
 
   const renderStep = () => {
     if (!daoData) return null;
+    if (daoInfo.config.ALLOW_BULK_DELEGATE)
+      return (
+        <TrackDelegation
+          handleModal={closeModal}
+          votes={votes}
+          delegatedUser={delegateData}
+          walletAddress={walletAddress}
+        />
+      );
     if (step === ESteps.DONE)
       return <Step2 handleModal={closeModal} delegatedUser={delegateData} />;
     if (

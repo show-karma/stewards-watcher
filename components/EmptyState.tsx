@@ -1,4 +1,5 @@
 import { useDAO, useDelegates } from 'contexts';
+
 import { Text } from '@chakra-ui/react';
 
 const EmptyState = () => {
