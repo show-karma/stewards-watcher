@@ -1,7 +1,6 @@
 import { Checkbox, Flex, Link } from '@chakra-ui/react';
 import { useDAO, useEditProfile } from 'contexts';
 import { FC } from 'react';
-// TODO: Remove this when we have no html in the ToA
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 import '@uiw/react-md-editor/markdown-editor.css';
@@ -22,6 +21,8 @@ export const EditStatement: FC = () => {
     changeAcceptedTerms,
   } = useEditProfile();
   const newStatementValue = newStatement.value as string;
+
+  const { daoInfo, theme } = useDAO();
 
   return (
     <Flex flexDir="column" gap="1">
