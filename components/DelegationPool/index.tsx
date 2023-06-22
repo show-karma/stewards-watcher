@@ -18,6 +18,7 @@ export const DelegationPool: React.FC = () => {
     clearDelegationPool,
     delegationWillHaveError,
   } = useDelegates();
+
   const { votes } = useGovernanceVotes();
   const { toast } = useToasty();
 
