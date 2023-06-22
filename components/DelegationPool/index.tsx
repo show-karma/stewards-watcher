@@ -28,7 +28,7 @@ export const DelegationPool: React.FC = () => {
       0
     );
     return totalVotes >= +votes
-      ? (+votes - 1).toString()
+      ? (+votes - 0.1).toString()
       : totalVotes.toString();
   }, [delegatePoolList]);
 
