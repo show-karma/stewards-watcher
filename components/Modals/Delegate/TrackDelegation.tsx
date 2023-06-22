@@ -48,10 +48,13 @@ export const TrackDelegation: React.FC<StepProps> = ({
     .object({
       amount: yup
         .number()
-        .typeError('Amount must be a number')
-        .moreThan(0.1, 'Amount must be greater than 0.1')
-        .max(+votes - 0.1, 'Amount must be less than your available votes')
-        .required('Amount is required'),
+        .typeError('Token amount must be a number.')
+        .moreThan(0.1, 'You must delegate more than 0.1 tokens.')
+        .max(
+          +votes - 0.1,
+          'You do not have the specified number of tokens in your wallet.'
+        )
+        .required('Amount is required.'),
     })
     .required('Amount is required');
   type FormData = yup.InferType<typeof schema>;

@@ -1,7 +1,6 @@
 import { Box, Button, Flex, Text } from '@chakra-ui/react';
-import { VotesToDelegate } from 'components/Modals/Delegate/VotesToDelegate';
-import { useDAO, useDelegates, useGovernanceVotes } from 'contexts';
-import React, { useMemo, useState } from 'react';
+import { useDAO, useDelegates } from 'contexts';
+import React, { useState } from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { writeContract, waitForTransaction } from '@wagmi/core';
 import { useToasty } from 'hooks';
@@ -11,7 +10,7 @@ import { EmptyDelegatePool } from './EmptyDelegatePool';
 
 export const DelegationPool: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const { theme, daoInfo, daoData } = useDAO();
+  const { theme, daoInfo } = useDAO();
   const {
     delegatePoolList,
     removeFromDelegatePool,
@@ -19,18 +18,18 @@ export const DelegationPool: React.FC = () => {
     delegationWillHaveError,
   } = useDelegates();
 
-  const { votes } = useGovernanceVotes();
+  // const { votes } = useGovernanceVotes();
   const { toast } = useToasty();
 
-  const votesToDelegate = useMemo(() => {
-    const totalVotes = delegatePoolList.reduce(
-      (acc, cur) => acc + +cur.amount,
-      0
-    );
-    return totalVotes >= +votes
-      ? (+votes - 0.1).toString()
-      : totalVotes.toString();
-  }, [delegatePoolList]);
+  // const votesToDelegate = useMemo(() => {
+  //   const totalVotes = delegatePoolList.reduce(
+  //     (acc, cur) => acc + +cur.amount,
+  //     0
+  //   );
+  //   return totalVotes >= +votes
+  //     ? (+votes - 0.1).toString()
+  //     : totalVotes.toString();
+  // }, [delegatePoolList]);
 
   const handleDelegation = async () => {
     if (daoInfo.config.BULK_DELEGATE_ACTION) {
@@ -184,16 +183,7 @@ export const DelegationPool: React.FC = () => {
           </Text>
           {delegatePoolList.length ? (
             <Flex alignItems="center" flexWrap="wrap" gap="2">
-              <Text>You are delegating</Text>
-              <VotesToDelegate
-                logoUrl={
-                  daoData?.socialLinks?.logoUrl || daoInfo.config.DAO_LOGO
-                }
-                daoName={daoInfo.config.DAO}
-                votes={votesToDelegate}
-                hideNoTokens
-              />
-              <Text>to the following users</Text>
+              <Text>You are delegating to the following users</Text>
             </Flex>
           ) : (
             <Text color="#7E8C9D">No delegates selected</Text>
