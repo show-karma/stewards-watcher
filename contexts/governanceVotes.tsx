@@ -8,6 +8,7 @@ import React, {
 import { useContractRead, useContractReads } from 'wagmi';
 import { formatEther } from 'utils';
 import { BigNumber } from 'ethers';
+import { Hex } from 'types';
 import { useDAO } from './dao';
 import { useWallet } from './wallet';
 
@@ -87,7 +88,12 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
     );
 
     const fromWeiAmount = formatEther(sumBNs.toString());
-    setVotes(fromWeiAmount);
+
+    if (daoInfo.config.GET_LOCKED_TOKENS_ACTION) {
+      const { GET_LOCKED_TOKENS_ACTION: getLocked } = daoInfo.config;
+      const lockedVotes = await getLocked(walletAddress as Hex);
+      setVotes((+fromWeiAmount + +lockedVotes).toString());
+    } else setVotes(fromWeiAmount);
   };
 
   useEffect(() => {
