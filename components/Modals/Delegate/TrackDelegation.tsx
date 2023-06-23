@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDAO, useDelegates, useWallet } from 'contexts';
 import { Button, Flex, Text, Tooltip } from '@chakra-ui/react';
-import { IDelegate } from 'types';
+import { Hex, IDelegate } from 'types';
 import { ImgWithFallback } from 'components/ImgWithFallback';
 import makeBlockie from 'ethereum-blockies-base64';
 import {
@@ -26,7 +26,12 @@ export const TrackDelegation: React.FC<StepProps> = ({
   delegatedUser,
   walletAddress,
 }) => {
-  const { daoData } = useDAO();
+  const {
+    daoData,
+    daoInfo: {
+      config: { GET_LOCKED_TOKENS_ACTION },
+    },
+  } = useDAO();
   const { addToDelegatePool, tracks: daoTracks } = useDelegates();
   const { address: delegator } = useWallet();
 
@@ -60,6 +65,7 @@ export const TrackDelegation: React.FC<StepProps> = ({
   const selectTrack = (track: ITrackBadgeProps['track']) => {
     setSelectedTracks(old => [...old, track]);
   };
+
   const removeTrack = (track: ITrackBadgeProps['track']) => {
     setSelectedTracks(old => old.filter(tr => tr.id !== track.id));
   };
@@ -106,7 +112,7 @@ export const TrackDelegation: React.FC<StepProps> = ({
             <VotesToDelegate
               logoUrl={logoUrl}
               daoName={daoName}
-              votes={votes}
+              votes={(+votes - 0.1).toString()}
             />
             <Text fontStyle="normal" fontSize="14px" color="black">
               to

@@ -1,6 +1,10 @@
 import { IDAOConfig, IDAOTheme } from 'types';
 import { moonriverDelegateAction } from 'utils/moonbeam/moonriverDelegateAction';
-import { moonriverDelegateErrors, moonriverOnChainProvider } from 'utils';
+import {
+  moonriverDelegateErrors,
+  moonriverGetLockedTokensAction,
+  moonriverOnChainProvider,
+} from 'utils';
 import { moonriverUndelegateAction } from 'utils/moonbeam/moonriverUndelegateAction';
 import { moonriver } from 'wagmi/chains';
 import ABI from './ABI.json';
@@ -58,6 +62,7 @@ const config: IDAOConfig = {
     delegateContractAddr, // Delegate contract
     batchContractAbi
   ),
+  GET_LOCKED_TOKENS_ACTION: moonriverGetLockedTokensAction,
   DAO_EXT_VOTES_PROVIDER: {
     onChain: moonriverOnChainProvider,
   },

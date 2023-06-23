@@ -3,6 +3,7 @@ import { IFilterPeriod, IStatusOptions } from 'types/contexts';
 import { writeContract } from '@wagmi/core';
 import { Chain } from 'wagmi';
 import { IChainRow } from 'types/IChainRow';
+import { Hex } from 'types/votes';
 import { IForumType } from './forum';
 import { IStats, IStatsID } from './stats';
 import { IVotingHistoryColumn } from './modal';
@@ -94,6 +95,7 @@ export interface IDAOConfig {
     payload: any,
     write: typeof writeContract
   ) => Promise<`0x${string}`>;
+  GET_LOCKED_TOKENS_ACTION?: (address: Hex) => Promise<number>;
   /**
    * Defines a custom function to parse the votes with an external proposal provider.
    *
