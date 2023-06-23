@@ -44,7 +44,7 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
           address: contract.contractAddress,
           abi: contract.ABI || daoInfo.TOKEN_ABI,
           functionName: contract.method,
-          args: walletAddress ? [walletAddress] : undefined,
+          args: walletAddress ? [walletAddres] : undefined,
           chainId: daoInfo.config.DAO_CHAIN.id,
         }))
       : undefined,
