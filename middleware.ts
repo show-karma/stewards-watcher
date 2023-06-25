@@ -31,7 +31,7 @@ const DAO_CUSTOM_DOMAIN: Record<string, string> = {
 export default function middleware(req: NextRequest) {
   const url = req.nextUrl;
   const hostname = req.headers.get('host') || 'www.karmahq.xyz';
-  const currentPathname = url.pathname;
+  let currentPathname = url.pathname;
   const rootUrl = hostname.replaceAll(/(www\.)|(:.+)/gi, '');
 
   console.log("url: " + url);
@@ -44,10 +44,12 @@ export default function middleware(req: NextRequest) {
     const daoName = url.searchParams.get('dao');
     dao = daoName ? getDAOName(daoName) : DAO_CUSTOM_DOMAIN[devUrl];
     if (currentPathname == '/starknet') {
-      dao = 'starknet'
+      dao = 'starknet';
+      currentPathname = '/';
     }
   }
 
+  console.log("current patthname: " + currentPathname);
   url.pathname = `/_sites/${dao}${currentPathname}`;
   return NextResponse.rewrite(url);
 }
