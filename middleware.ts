@@ -42,6 +42,9 @@ export default function middleware(req: NextRequest) {
 
   if (rootUrl === devUrl) {
     const daoName = url.searchParams.get('dao');
+    if (currentPathname == '/starknet') {
+      dao = 'starknet'
+    }
     dao = daoName ? getDAOName(daoName) : DAO_CUSTOM_DOMAIN[devUrl];
   }
 
