@@ -33,4 +33,15 @@ const nextConfig = {
 // const config = withSentryNextConfig ?? nextConfig;
 const config = removeImports(nextConfig);
 
+module.exports = {
+  async rewrites() {
+    return [
+      {
+        source: '/about',
+        destination: '/guide',
+      },
+    ]
+  }
+}
+
 module.exports = config;
