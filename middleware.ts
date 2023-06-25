@@ -18,8 +18,10 @@ export const config = {
 const getDAOName = (host: string) => host.split('.')[0];
 
 const devUrl = 'dapp.karmahq.xyz';
+const devSubUrl = 'dapp.karmahq.xyz/starknet';
 const DAO_CUSTOM_DOMAIN: Record<string, string> = {
   [devUrl]: 'moonriver',
+  [devSubUrl]: 'starknet',
   'daostewards.xyz': 'gitcoin',
   'delegate.gitcoin.co': 'gitcoin',
   'delegate.starknet.io': 'starknet',
@@ -32,6 +34,10 @@ export default function middleware(req: NextRequest) {
   const currentPathname = url.pathname;
   const rootUrl = hostname.replaceAll(/(www\.)|(:.+)/gi, '');
 
+  console.log("url: " + url);
+  console.log("hostname: " + hostname);
+  console.log("patthname: " + currentPathname);
+  console.log("rooturl: " + rootUrl);
   let dao = DAO_CUSTOM_DOMAIN[rootUrl] || getDAOName(hostname);
 
   if (rootUrl === devUrl) {
