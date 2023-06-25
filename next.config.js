@@ -35,12 +35,18 @@ const config = removeImports(nextConfig);
 
 module.exports = {
   async rewrites() {
-    return [
-      {
-        source: '/about',
-        destination: '/guide',
-      },
-    ]
+    return {
+      beforeFiles: [
+        // These rewrites are checked after headers/redirects
+        // and before all files including _next/public files which
+        // allows overriding page files
+        {
+          source: '/about',
+          destination: '/guide',
+          has: [{ type: 'query', key: 'overrideMe' }],
+        },
+      ]
+    }
   }
 }
 
