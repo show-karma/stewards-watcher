@@ -9,7 +9,7 @@ import {
   Text,
   Tooltip,
 } from '@chakra-ui/react';
-import { IDelegate } from 'types';
+import { Hex, IDelegate } from 'types';
 import { ImgWithFallback } from 'components/ImgWithFallback';
 import makeBlockie from 'ethereum-blockies-base64';
 import {
@@ -39,6 +39,7 @@ export const TrackDelegation: React.FC<StepProps> = ({
   walletAddress,
 }) => {
   const { daoData, daoInfo } = useDAO();
+  const { GET_LOCKED_TOKENS_ACTION } = daoInfo.config;
   const { addToDelegatePool, tracks: daoTracks } = useDelegates();
   const { address: delegator } = useWallet();
   const { symbol } = useGovernanceVotes();
@@ -103,6 +104,7 @@ export const TrackDelegation: React.FC<StepProps> = ({
   const selectTrack = (track: ITrackBadgeProps['track']) => {
     setSelectedTracks(old => [...old, track]);
   };
+
   const removeTrack = (track: ITrackBadgeProps['track']) => {
     setSelectedTracks(old => old.filter(tr => tr.id !== track.id));
   };

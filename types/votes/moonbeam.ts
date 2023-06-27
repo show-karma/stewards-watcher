@@ -41,6 +41,27 @@ export interface MoonbeamTrack extends MoonbeamTrackRaw {
   id: NumberIsh;
 }
 
+export interface OpenGovLockedBalance {
+  amount: string;
+  id: Hex;
+  reasons: string;
+}
+
+export type OpenGovLockedBalanceResponse = OpenGovLockedBalance[];
+
+export interface OpenGovIdentityResponse {
+  info: {
+    additional: string[];
+    display: { Raw: string };
+    image: { Raw: string };
+    twitter: { Raw: string };
+    legal: string;
+    web: string;
+    riot: string;
+    email: string;
+    pgpFingerprint: boolean;
+  };
+}
 export type MoonbeamTrackRes = [NumberIsh, MoonbeamTrack];
 // export interface MoonbeamProposal {
 //   proposalId: string;

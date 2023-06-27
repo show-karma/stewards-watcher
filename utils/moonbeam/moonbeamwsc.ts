@@ -1,7 +1,15 @@
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { QueryableModuleConsts } from '@polkadot/api/types';
+import { ethers } from 'ethers';
 import startCase from 'lodash.startcase';
-import { MoonbeamProposal, MoonbeamTrack, MoonbeamTrackRes } from 'types';
+import {
+  Hex,
+  MoonbeamProposal,
+  MoonbeamTrack,
+  MoonbeamTrackRes,
+  OpenGovLockedBalance,
+  OpenGovLockedBalanceResponse,
+} from 'types';
 
 /**
  * MoonbeamWSC is a wrapper around the Moonbeam node's API
@@ -60,6 +68,32 @@ export class MoonbeamWSC {
     });
     if (destroy) this.destroy();
     return proposals;
+  }
+
+  /**
+   * Get all locked balances of one address
+   * @param address - The address to get the locked balances of
+   * @returns An array of locked balances and the total amount of locked balances
+   */
+  async getLockedBalanceOf(
+    address: Hex,
+    destroy?: boolean
+  ): Promise<[OpenGovLockedBalance[], number]> {
+    const response = await this.client.query.balances.locks(address);
+    if (destroy) this.destroy();
+
+    const readable =
+      response.toJSON() as unknown as OpenGovLockedBalanceResponse;
+    if (readable) {
+      const locks = [readable].flat().map(lock => ({
+        ...lock,
+        amount: ethers.utils.formatEther(lock.amount),
+      }));
+
+      return [locks, locks.reduce((acc, lock) => acc + Number(lock.amount), 0)];
+    }
+
+    return [[], 0];
   }
 
   /**
