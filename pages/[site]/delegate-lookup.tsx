@@ -1,8 +1,10 @@
 import { DAOProvider } from 'contexts/dao';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
-import { DAOContainer } from 'containers';
+import { TokenHoldersContainer } from 'containers';
 import { daosDictionary } from 'helpers';
+import { supportedDAOs } from 'resources';
+import Head from 'next/head';
 
 interface PathProps extends ParsedUrlQuery {
   site: string;
@@ -13,7 +15,7 @@ interface IndexProps {
 }
 
 export const getStaticPaths: GetStaticPaths<PathProps> = async () => {
-  const paths = [{ params: { site: 'siteIndex' } }];
+  const paths = [{ params: { site: 'gitcoin' } }];
 
   return {
     paths,
@@ -28,8 +30,16 @@ export const getStaticProps: GetStaticProps<IndexProps, PathProps> = async ({
 
   const { site } = params;
 
-  const dao = daosDictionary[site];
-  if (!dao) {
+  const hasDAO = daosDictionary[site];
+  if (!hasDAO) {
+    return {
+      notFound: true,
+    };
+  }
+
+  const daoHasEnabled = supportedDAOs[site].config.ENABLE_DELEGATE_TRACKER;
+
+  if (!daoHasEnabled) {
     return {
       notFound: true,
     };
@@ -45,8 +55,8 @@ interface IIndex {
 }
 
 const Index = ({ dao }: IIndex) => (
-  <DAOProvider selectedDAO={dao}>
-    <DAOContainer />
+  <DAOProvider selectedDAO={dao} shouldFetchInfo={false} withPathname>
+    <TokenHoldersContainer />
   </DAOProvider>
 );
 

@@ -25,6 +25,9 @@ const config: IDAOConfig = {
   DAO_DEFAULT_SETTINGS: {
     ORDERSTAT: 'votingWeight',
     SORT: 'delegatedVotes',
+    STATUS_FILTER: {
+      CUSTOM_STATUS: ['endorsed', 'active', 'inactive', 'withdrawn'],
+    },
   },
   DAO_CHAIN: mainnet,
   DAO_DELEGATE_CONTRACT: '0x469788fe6e9e9681c6ebf3bf78e7fd26fc015446',

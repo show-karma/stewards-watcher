@@ -92,6 +92,13 @@ export const TrackDelegation: React.FC<StepProps> = ({
       setSelectedTracks(delegatedUser.tracks);
   }, [tracks]);
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
   if (!daoData) return null;
 
   const { name: daoName, socialLinks } = daoData;
@@ -131,6 +138,7 @@ export const TrackDelegation: React.FC<StepProps> = ({
 
   const onSubmit = (data: FormData) => {
     if (!delegator) return;
+    setTimeout(() => scrollToTop(), 300);
     handleAddToDelegatePool(delegatedUser, data.amount);
   };
 

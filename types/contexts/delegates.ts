@@ -14,7 +14,7 @@ export interface IVoteInfo {
   onChainId: string;
 }
 
-export type IStatusOptions = 'active' | 'inactive' | 'withdrawn' | 'recognized';
+export type IStatusOptions = string;
 
 export type IWorkstream = {
   id: number;

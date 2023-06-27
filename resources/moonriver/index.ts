@@ -5,6 +5,7 @@ import {
   moonriverDelegateErrors,
   moonriverGetLockedTokensAction,
   moonriverOnChainProvider,
+  moonriverTracksDictionary,
 } from 'utils';
 import { moonriverUndelegateAction } from 'utils/moonbeam/moonriverUndelegateAction';
 import { moonriver } from 'wagmi/chains';
@@ -33,6 +34,9 @@ const config: IDAOConfig = {
   },
   DAO_DEFAULT_SETTINGS: {
     FAQ: false,
+    STATUS_FILTER: {
+      CUSTOM_STATUS: ['community', 'active', 'inactive', 'withdrawn'],
+    },
   },
   DAO_CHAIN: moonriver,
   DAO_TOKEN_CONTRACT: [
@@ -72,11 +76,13 @@ const config: IDAOConfig = {
   ENABLE_DELEGATE_TRACKER: true,
   DISABLE_EMAIL_INPUT: true,
   DAO_SUPPORTS_TOS: true,
-  TOS_URL: '/',
+  TOS_URL:
+    'https://forum.moonbeam.foundation/t/introducing-delegated-voting-enhancing-governance-on-moonriver-and-moonbeam/843',
   HIDE_FOR_DELEGATES: ['delegator-lookup'],
   DELEGATION_CUSTOM_AMOUNT: true,
   DELEGATION_CUSTOM_CONVICTION: true,
   DELEGATION_CONVICTION_OPTIONS: moonriverConvictionOptions,
+  TRACKS_DICTIONARY: moonriverTracksDictionary,
 };
 
 const dark: IDAOTheme = {

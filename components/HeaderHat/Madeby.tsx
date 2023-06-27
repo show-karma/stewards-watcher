@@ -31,7 +31,7 @@ export const Madeby: FC<FlexProps> = () => {
       flexWrap="wrap"
     >
       <Text
-        fontSize={{ base: '9px', lg: 'md' }}
+        fontSize={{ base: 'xs', lg: 'sm' }}
         fontWeight="normal"
         color={theme.hat.text.madeBy}
       >
@@ -40,8 +40,8 @@ export const Madeby: FC<FlexProps> = () => {
 
       <Link href="https://karmahq.xyz" isExternal h="max-content">
         <Img
-          w={{ base: '40px', lg: '80px' }}
-          h={{ base: '12px', lg: '24px' }}
+          w={{ base: '48px', lg: '48px' }}
+          h={{ base: '14px', lg: '14px' }}
           objectFit="contain"
           src={variantImg}
         />
