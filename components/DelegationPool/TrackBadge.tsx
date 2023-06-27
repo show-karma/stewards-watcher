@@ -1,4 +1,4 @@
-import { Box, Flex, FlexProps } from '@chakra-ui/react';
+import { Box, Flex, FlexProps, Text, Tooltip } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
 import { BsPlus } from 'react-icons/bs';
 
@@ -20,7 +20,7 @@ export const TrackBadge: React.FC<ITrackBadgeProps> = ({
   selected,
   styles,
 }) => {
-  const { theme } = useDAO();
+  const { theme, daoInfo } = useDAO();
 
   const handleSelect = () => {
     onSelect(track);
@@ -31,34 +31,51 @@ export const TrackBadge: React.FC<ITrackBadgeProps> = ({
   };
 
   return (
-    <Flex
-      cursor="pointer"
-      userSelect="none"
-      border={`1px solid ${theme.text}`}
-      borderRadius="xl"
-      pl={3}
-      pr={2}
-      w="max-content"
-      h="max-content"
-      align="center"
-      fontSize="sm"
-      key={track.id}
-      onClick={selected ? handleRemove : handleSelect}
-      color={selected ? '#1DE9B6' : theme.text}
-      background={selected ? 'black' : 'transparent'}
-      {...styles}
+    <Tooltip
+      label={
+        daoInfo.config.TRACKS_DICTIONARY &&
+        daoInfo.config.TRACKS_DICTIONARY[track.name]
+          ? daoInfo.config.TRACKS_DICTIONARY[track.name].description
+          : undefined
+      }
+      bg={theme.collapse.bg || theme.card.background}
+      color={theme.collapse.text}
     >
-      <Flex>
-        <Flex>{track.name}</Flex>
-      </Flex>
-      <Box
-        ml={3}
-        transform={selected ? 'rotate(45deg)' : 'rotate(0deg)'}
-        transition="200ms ease-in-out"
-        fontSize={24}
+      <Flex
+        cursor="pointer"
+        userSelect="none"
+        border={`1px solid ${theme.text}`}
+        borderRadius="xl"
+        pl={3}
+        pr={2}
+        w="max-content"
+        h="max-content"
+        align="center"
+        fontSize="sm"
+        key={track.id}
+        onClick={selected ? handleRemove : handleSelect}
+        color={selected ? '#1DE9B6' : theme.text}
+        background={selected ? 'black' : 'transparent'}
+        {...styles}
       >
-        <BsPlus />
-      </Box>
-    </Flex>
+        <Flex flexDir="row" gap="1">
+          <Text>
+            {daoInfo.config.TRACKS_DICTIONARY &&
+            daoInfo.config.TRACKS_DICTIONARY[track.name]
+              ? daoInfo.config.TRACKS_DICTIONARY[track.name].emoji
+              : undefined}
+          </Text>
+          <Text>{track.name}</Text>
+        </Flex>
+        <Box
+          ml={3}
+          transform={selected ? 'rotate(45deg)' : 'rotate(0deg)'}
+          transition="200ms ease-in-out"
+          fontSize={24}
+        >
+          <BsPlus />
+        </Box>
+      </Flex>
+    </Tooltip>
   );
 };
