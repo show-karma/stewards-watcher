@@ -26,7 +26,7 @@ const DAO_CUSTOM_DOMAIN: Record<string, string | string[]> = {
   'delegate.ssv.network': 'ssvnetwork',
   'delegate.moonbeam.network': ['moonriver', 'moonbeam'],
 };
-
+//
 export default function middleware(req: NextRequest) {
   const url = req.nextUrl;
   const hostname = req.headers.get('host') || 'www.karmahq.xyz';
