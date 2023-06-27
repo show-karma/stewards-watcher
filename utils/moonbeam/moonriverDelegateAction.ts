@@ -12,6 +12,7 @@ export interface IBulkDelegatePayload {
   delegate: IDelegate;
   amount: string;
   tracks: ITrackBadgeProps['track'][];
+  conviction: number;
 }
 
 function digest(payload: IBulkDelegatePayload[]) {
@@ -21,7 +22,7 @@ function digest(payload: IBulkDelegatePayload[]) {
       abiInterface.encodeFunctionData('delegate', [
         track.id,
         item.delegate.address,
-        0,
+        item.conviction,
         ethers.utils.parseEther((parseFloat(item.amount) - 0.1).toString()),
       ])
     )
