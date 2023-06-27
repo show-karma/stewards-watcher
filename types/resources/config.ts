@@ -48,7 +48,8 @@ export interface IDAOConfig {
     DISABLE_LOGIN?: boolean;
     SORT?: IStatsID;
     STATUS_FILTER?: {
-      DEFAULT_STATUSES?: IStatusOptions[];
+      CUSTOM_STATUS?: IStatusOptions[];
+      DEFAULT_STATUS_SELECTED?: IStatusOptions[];
     };
     SORT_ORDER?: string[];
   };

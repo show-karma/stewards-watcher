@@ -34,6 +34,9 @@ const config: IDAOConfig = {
   },
   DAO_DEFAULT_SETTINGS: {
     FAQ: false,
+    STATUS_FILTER: {
+      CUSTOM_STATUS: ['community', 'active', 'inactive', 'withdrawn'],
+    },
   },
   DAO_CHAIN: moonriver,
   DAO_TOKEN_CONTRACT: [
