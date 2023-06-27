@@ -133,7 +133,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
   children,
   ignoreAutoFetch,
 }) => {
-  const { daoInfo } = useDAO();
+  const { daoInfo, rootPathname } = useDAO();
   const { config } = daoInfo;
 
   const defaultTimePeriod =
@@ -460,7 +460,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     router
       .push(
         {
-          pathname: `/profile/${profile.ensName || profile.address}`,
+          pathname: `${rootPathname}/profile/${
+            profile.ensName || profile.address
+          }`,
           hash: tab,
         },
         undefined,
@@ -862,7 +864,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
 
     router.push(
       {
-        pathname: '/',
+        pathname: `/${rootPathname}`,
         query,
       },
       undefined,

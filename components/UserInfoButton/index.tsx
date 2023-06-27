@@ -11,7 +11,7 @@ interface IUserInfoProps {
 }
 
 export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen, profile }) => {
-  const { theme } = useDAO();
+  const { theme, rootPathname } = useDAO();
 
   const router = useRouter();
 
@@ -21,7 +21,9 @@ export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen, profile }) => {
     router
       .push(
         {
-          pathname: `/profile/${profile.ensName || profile.address}`,
+          pathname: `${rootPathname}/profile/${
+            profile.ensName || profile.address
+          }`,
           hash,
         },
         undefined,

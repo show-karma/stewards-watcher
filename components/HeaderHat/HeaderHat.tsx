@@ -50,7 +50,7 @@ export const StyledButton: FC<ButtonProps> = ({ children, ...rest }) => {
 };
 
 export const HeaderHat = () => {
-  const { daoInfo, theme } = useDAO();
+  const { daoInfo, theme, rootPathname } = useDAO();
   const { config } = daoInfo;
   const { isOpen, onToggle } = useDisclosure();
   const { isOpenProfile, onCloseProfile, profileSelected, selectedTab } =
@@ -72,7 +72,7 @@ export const HeaderHat = () => {
     if (daoInfo.config.ENABLE_DELEGATE_TRACKER)
       array.push({
         title: 'Delegate Look Up',
-        path: '/delegate-lookup',
+        path: `${rootPathname}/delegate-lookup`,
         isExternal: false,
       });
     if (
@@ -147,11 +147,11 @@ export const HeaderHat = () => {
                   accordion
                 />
               )}
-              <ChakraLink href="/guide" _hover={{}}>
+              <ChakraLink href={`${rootPathname}/guide`} _hover={{}}>
                 <StyledButton>Guide</StyledButton>
               </ChakraLink>
               {daoInfo.config.DAO_DEFAULT_SETTINGS?.FAQ && (
-                <ChakraLink href="/faq" _hover={{}} w="full">
+                <ChakraLink href={`${rootPathname}/faq`} _hover={{}} w="full">
                   <StyledButton w="full">FAQs</StyledButton>
                 </ChakraLink>
               )}
@@ -191,7 +191,7 @@ export const HeaderHat = () => {
                 align={['flex-start', 'flex-start']}
                 gap="1"
               >
-                <ChakraLink href="/">
+                <ChakraLink href={`${rootPathname}/`}>
                   <Img
                     w="auto"
                     maxW="36"
@@ -230,11 +230,11 @@ export const HeaderHat = () => {
 
                   {isSmallScreen ? null : (
                     <>
-                      <ChakraLink href="/guide" _hover={{}}>
+                      <ChakraLink href={`${rootPathname}/guide`} _hover={{}}>
                         <StyledButton>Guide</StyledButton>
                       </ChakraLink>
                       {daoInfo.config.DAO_DEFAULT_SETTINGS?.FAQ && (
-                        <ChakraLink href="/faq" _hover={{}}>
+                        <ChakraLink href={`${rootPathname}/faq`} _hover={{}}>
                           <StyledButton>FAQs</StyledButton>
                         </ChakraLink>
                       )}

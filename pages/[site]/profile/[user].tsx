@@ -1,11 +1,12 @@
-import { DAOProvider } from 'contexts/dao';
-import { GetStaticPaths, GetStaticProps } from 'next';
-import type { ParsedUrlQuery } from 'querystring';
 import { DAOContainer } from 'containers';
+import { DAOProvider } from 'contexts';
 import { daosDictionary } from 'helpers';
+import { GetStaticPaths, GetStaticProps } from 'next';
+import { ParsedUrlQuery } from 'querystring';
 
 interface PathProps extends ParsedUrlQuery {
   site: string;
+  user: string;
 }
 
 interface IndexProps {
@@ -13,7 +14,7 @@ interface IndexProps {
 }
 
 export const getStaticPaths: GetStaticPaths<PathProps> = async () => {
-  const paths = [{ params: { site: 'siteIndex' } }];
+  const paths = [{ params: { site: 'siteUser', user: 'user' } }];
 
   return {
     paths,
@@ -26,9 +27,10 @@ export const getStaticProps: GetStaticProps<IndexProps, PathProps> = async ({
 }) => {
   if (!params) throw new Error('No path parameters found');
 
-  const { site } = params;
+  const { site, user } = params;
 
   const dao = daosDictionary[site];
+
   if (!dao) {
     return {
       notFound: true,
@@ -36,18 +38,19 @@ export const getStaticProps: GetStaticProps<IndexProps, PathProps> = async ({
   }
 
   return {
-    props: { dao: site },
+    props: { dao: site, user },
   };
 };
 
 interface IIndex {
   dao: string;
+  user: string;
 }
 
-const Index = ({ dao }: IIndex) => (
-  <DAOProvider selectedDAO={dao}>
-    <DAOContainer />
+const User = ({ dao, user }: IIndex) => (
+  <DAOProvider selectedDAO={dao} withPathname>
+    <DAOContainer user={user} />
   </DAOProvider>
 );
 
-export default Index;
+export default User;
