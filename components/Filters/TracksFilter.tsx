@@ -78,15 +78,15 @@ export const TracksFilter = () => {
                 bg={theme.collapse.bg || theme.card.background}
                 color={theme.collapse.text}
               >
-                <Flex flexDir="row" align="center" gap="1">
-                  <Text>
+                <Flex flexDir="row" align="center" gap="2">
+                  <Text fontSize="xs">
                     {daoInfo.config.TRACKS_DICTIONARY &&
                     daoInfo.config.TRACKS_DICTIONARY[option.displayName]
                       ? daoInfo.config.TRACKS_DICTIONARY[option.displayName]
                           .emoji
                       : undefined}
                   </Text>
-                  <Text>{option.displayName}</Text>
+                  <Text fontSize="md">{option.displayName}</Text>
                 </Flex>
               </Tooltip>
             </MenuItemOption>

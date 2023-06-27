@@ -31,7 +31,7 @@ export const Madeby: FC<FlexProps> = () => {
       flexWrap="wrap"
     >
       <Text
-        fontSize={{ base: '9px', lg: 'md' }}
+        fontSize={{ base: 'xs', lg: 'sm' }}
         fontWeight="normal"
         color={theme.hat.text.madeBy}
       >

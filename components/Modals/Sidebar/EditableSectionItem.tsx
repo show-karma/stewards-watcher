@@ -20,7 +20,7 @@ export const EditableSectionItem: FC<ISectionItem> = ({
   selectItem,
   label,
 }) => {
-  const { theme } = useDAO();
+  const { theme, daoInfo } = useDAO();
 
   return (
     <Flex
@@ -50,6 +50,14 @@ export const EditableSectionItem: FC<ISectionItem> = ({
       {icon && (
         <Icon as={icon} color={theme.modal.statement.sidebar.item.border} />
       )}
+
+      {daoInfo.config.TRACKS_DICTIONARY &&
+      daoInfo.config.TRACKS_DICTIONARY[label || value] ? (
+        <Text fontSize="xs">
+          {daoInfo.config.TRACKS_DICTIONARY[label || value].emoji}
+        </Text>
+      ) : undefined}
+
       <Text
         fontSize="xs"
         color={
