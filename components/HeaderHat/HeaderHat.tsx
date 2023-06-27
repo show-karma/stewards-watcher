@@ -50,7 +50,7 @@ export const StyledButton: FC<ButtonProps> = ({ children, ...rest }) => {
 };
 
 export const HeaderHat = () => {
-  const { daoInfo, theme } = useDAO();
+  const { daoInfo, theme, rootPathname } = useDAO();
   const { config } = daoInfo;
   const { isOpen, onToggle } = useDisclosure();
   const { isOpenProfile, onCloseProfile, profileSelected, selectedTab } =
@@ -72,7 +72,7 @@ export const HeaderHat = () => {
     if (daoInfo.config.ENABLE_DELEGATE_TRACKER)
       array.push({
         title: 'Delegate Look Up',
-        path: '/delegate-lookup',
+        path: `${rootPathname}/delegate-lookup`,
         isExternal: false,
       });
     if (

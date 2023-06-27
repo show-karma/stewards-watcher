@@ -44,10 +44,10 @@ interface IIndex {
   dao: string;
 }
 
-const Index = ({ dao }: IIndex) => (
-  <DAOProvider selectedDAO={dao}>
+const DynamicIndex = ({ dao }: IIndex) => (
+  <DAOProvider selectedDAO={dao} withPathname>
     <DAOContainer />
   </DAOProvider>
 );
 
-export default Index;
+export default DynamicIndex;

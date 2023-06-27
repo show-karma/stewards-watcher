@@ -18,12 +18,13 @@ export const config = {
 const getDAOName = (host: string) => host.split('.')[0];
 
 const devUrl = 'dapp.karmahq.xyz';
-const DAO_CUSTOM_DOMAIN: Record<string, string> = {
+const DAO_CUSTOM_DOMAIN: Record<string, string | string[]> = {
   [devUrl]: 'moonriver',
   'daostewards.xyz': 'gitcoin',
   'delegate.gitcoin.co': 'gitcoin',
   'delegate.starknet.io': 'starknet',
   'delegate.ssv.network': 'ssvnetwork',
+  mint: ['moonriver', 'moonbeam'],
 };
 
 export default function middleware(req: NextRequest) {
@@ -34,7 +35,13 @@ export default function middleware(req: NextRequest) {
 
   let dao = DAO_CUSTOM_DOMAIN[rootUrl] || getDAOName(hostname);
 
-  if (rootUrl === devUrl) {
+  if (
+    Object.values(DAO_CUSTOM_DOMAIN).flat().includes(url.pathname.split('/')[1])
+  ) {
+    return NextResponse.rewrite(url);
+  }
+
+  if (rootUrl === devUrl && !Array.isArray(dao)) {
     const daoName = url.searchParams.get('dao');
     dao = daoName ? getDAOName(daoName) : DAO_CUSTOM_DOMAIN[devUrl];
   }
