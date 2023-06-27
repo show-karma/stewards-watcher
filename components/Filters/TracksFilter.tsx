@@ -16,8 +16,6 @@ export const TracksFilter = () => {
   const { tracks, tracksFilter, selectTracks } = useDelegates();
   const { theme, daoInfo } = useDAO();
 
-  console.log(tracks);
-
   return (
     <Menu isLazy closeOnSelect={false}>
       <MenuButton
