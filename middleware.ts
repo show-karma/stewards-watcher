@@ -24,7 +24,7 @@ const DAO_CUSTOM_DOMAIN: Record<string, string | string[]> = {
   'delegate.gitcoin.co': 'gitcoin',
   'delegate.starknet.io': 'starknet',
   'delegate.ssv.network': 'ssvnetwork',
-  mint: ['moonriver', 'moonbeam'],
+  'delegate.moonbeam.network': ['moonriver', 'moonbeam'],
 };
 
 export default function middleware(req: NextRequest) {
