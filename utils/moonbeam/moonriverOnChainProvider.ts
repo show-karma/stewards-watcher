@@ -1,5 +1,11 @@
 /* eslint-disable no-useless-catch */
-import { IChainRow, MoonbeamProposal, NumberIsh } from 'types';
+import {
+  Hex,
+  IChainRow,
+  MoonbeamProposal,
+  NumberIsh,
+  OpenGovLockedBalanceResponse,
+} from 'types';
 import { ApolloClient, gql, InMemoryCache } from '@apollo/client';
 import { VOTING_HISTORY } from 'utils/GraphQL';
 import moment from 'moment';
@@ -27,7 +33,6 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
   votes.forEach((vote: any) => {
     const { proposal, timestamp } = vote;
     const proposalString = parseInt(proposal, 16).toString();
-    console.log(proposalString);
     array.push({
       voteMethod: 'On-chain',
       proposal:
@@ -52,7 +57,6 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
         voteId: proposal.id.toString(),
       });
   });
-  console.log(array);
   // removing duplicate items on array that have same proposal id
   const filteredArray = array.filter(
     (item, index, self) =>
@@ -306,6 +310,13 @@ export async function moonriverActiveDelegatedTracks(
   }, {} as Record<NumberIsh, IActiveDelegatedTracks>);
 
   return Object.values(unique);
+}
+
+export async function moonriverGetLockedTokensAction(address: Hex) {
+  const client = await MoonbeamWSC.createClient();
+  const [, total] = await client.getLockedBalanceOf(address, true);
+
+  return total;
 }
 
 export async function moonriverOnChainProvider(

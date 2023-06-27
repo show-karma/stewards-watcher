@@ -9,18 +9,19 @@ interface IVotesToDelegate {
   logoUrl?: string;
   daoName: string;
   votes: string;
+  hideNoTokens?: boolean;
 }
 
 export const VotesToDelegate: React.FC<IVotesToDelegate> = ({
   logoUrl,
   daoName,
   votes,
+  hideNoTokens,
 }) => {
   const { isLoadingVotes, symbol } = useGovernanceVotes();
   return (
     <Flex alignItems="center">
       <Flex
-        display="flex"
         flexDirection="row"
         alignItems="center"
         gap="4px"
@@ -46,7 +47,7 @@ export const VotesToDelegate: React.FC<IVotesToDelegate> = ({
           borderRadius="full"
         />
       </Flex>
-      {(votes === '0' || !votes) && (
+      {(votes === '0' || !votes) && !hideNoTokens ? (
         <Flex
           background="rgba(244, 171, 104, 0.11)"
           borderRadius="4px"
@@ -71,7 +72,7 @@ export const VotesToDelegate: React.FC<IVotesToDelegate> = ({
             No tokens to delegate
           </Text>
         </Flex>
-      )}
+      ) : null}
     </Flex>
   );
 };

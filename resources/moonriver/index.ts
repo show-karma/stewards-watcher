@@ -1,6 +1,11 @@
 import { IDAOConfig, IDAOTheme } from 'types';
 import { moonriverDelegateAction } from 'utils/moonbeam/moonriverDelegateAction';
-import { moonriverDelegateErrors, moonriverOnChainProvider } from 'utils';
+import {
+  moonriverConvictionOptions,
+  moonriverDelegateErrors,
+  moonriverGetLockedTokensAction,
+  moonriverOnChainProvider,
+} from 'utils';
 import { moonriverUndelegateAction } from 'utils/moonbeam/moonriverUndelegateAction';
 import { moonriver } from 'wagmi/chains';
 import ABI from './ABI.json';
@@ -17,7 +22,7 @@ const config: IDAOConfig = {
   GOVERNANCE_FORUM: 'https://forum.moonbeam.foundation/',
   DAO_KARMA_ID: 'moonriver',
   IMAGE_PREFIX_URL: 'https://cdn.stamp.fyi/avatar/eth:',
-  DAO_LOGO: '/daos/moonriver/logo_white.png',
+  DAO_LOGO: '/daos/moonriver/logo_orange.png',
   METATAGS: {
     TITLE: `Delegates of Moonriver DAO`,
     DESCRIPTION: `Find all the active delegates in Moonriver DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
@@ -58,6 +63,7 @@ const config: IDAOConfig = {
     delegateContractAddr, // Delegate contract
     batchContractAbi
   ),
+  GET_LOCKED_TOKENS_ACTION: moonriverGetLockedTokensAction,
   DAO_EXT_VOTES_PROVIDER: {
     onChain: moonriverOnChainProvider,
   },
@@ -68,6 +74,9 @@ const config: IDAOConfig = {
   DAO_SUPPORTS_TOS: true,
   TOS_URL: '/',
   HIDE_FOR_DELEGATES: ['delegator-lookup'],
+  DELEGATION_CUSTOM_AMOUNT: true,
+  DELEGATION_CUSTOM_CONVICTION: true,
+  DELEGATION_CONVICTION_OPTIONS: moonriverConvictionOptions,
 };
 
 const dark: IDAOTheme = {
@@ -343,7 +352,6 @@ const dark: IDAOTheme = {
 };
 
 const light: IDAOTheme = {
-  logo: '/daos/moonriver/logo_orange.png',
   background: '#F2F4F9',
   bodyBg: '#F2F4F9',
   title: '#151515',

@@ -1,6 +1,7 @@
 import { IDAOConfig, IDAOTheme } from 'types';
 import { getIdBySnapshotId } from 'utils';
 import { mainnet } from 'wagmi/chains';
+import STAKE_CONTRACT_ABI from './STAKE_CONTRACT_ABI.json';
 
 const config: IDAOConfig = {
   DAO: 'Apecoin',
@@ -31,6 +32,11 @@ const config: IDAOConfig = {
     {
       contractAddress: '0x4d224452801aced8b2f0aebe155379bb5d594381',
       method: 'balanceOf',
+    },
+    {
+      contractAddress: '0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9',
+      method: 'stakedTotal',
+      ABI: STAKE_CONTRACT_ABI,
     },
   ],
   DAO_DELEGATE_CONTRACT: '0x469788fe6e9e9681c6ebf3bf78e7fd26fc015446',
