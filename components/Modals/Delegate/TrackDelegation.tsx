@@ -309,6 +309,11 @@ export const TrackDelegation: React.FC<StepProps> = ({
                   conviction={conviction}
                 />
               ) : undefined}
+              {conviction === undefined ? (
+                <Text color="red.400" fontStyle="normal" fontSize="md" pb="4">
+                  You must select a conviction.
+                </Text>
+              ) : undefined}
             </Flex>
             <Flex w="full" flexDir="row-reverse">
               <Tooltip
