@@ -313,7 +313,7 @@ export const OnChainVotingBreakdown: FC = () => {
             )}
           </Flex>
         </Flex>
-        {(!hasError && !isLoading) || voteBreakdown?.totalVotes !== 0 ? (
+        {!hasError && !isLoading && voteBreakdown?.totalVotes ? (
           <>
             <Divider h="1px" />
             <Flex
