@@ -75,7 +75,7 @@ export const TokenHolderDelegation: FC = () => {
           return false;
         }
       )
-      .required(),
+      .required('Please enter a valid address or ENS name.'),
   });
   type FormData = yup.InferType<typeof schema>;
 

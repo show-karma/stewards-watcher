@@ -273,7 +273,7 @@ export const ProposalVote: FC<IProposalVote> = ({
       case 'Abstain':
         return 'Abstain';
       default:
-        return 'Did not vote';
+        return 'DID NOT VOTE';
     }
   };
 

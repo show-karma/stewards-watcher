@@ -154,7 +154,7 @@ export const PerformanceStats: FC<ISinceDelegationProps> = ({
       end: moment().unix(),
     };
 
-    const votesSince = allVotes.filter(vote => {
+    const proposalsSince = allVotes.filter(vote => {
       const unixExecuted = moment(vote.executed).unix();
       if (
         unixExecuted >= votesInterval.start &&
@@ -163,20 +163,20 @@ export const PerformanceStats: FC<ISinceDelegationProps> = ({
         return true;
       return false;
     });
-    const votesCounterResult = votesCounter(votesSince);
+    const votesCounterResult = votesCounter(proposalsSince);
 
     setDelegationStats({
-      totalProposals: formatNumber(votesSince.length.toString()),
+      totalProposals: formatNumber(proposalsSince.length.toString()),
       votedProposals: formatNumber(votesCounterResult.total.toString()),
       passRate: formatNumberPercentage(
         (votesCounterResult.voteFor / votesCounterResult.total) * 100
       ),
       votingPct: formatNumberPercentage(
-        (votesCounterResult.total / votesSince.length) * 100
+        (votesCounterResult.total / proposalsSince.length) * 100
       ),
       votedNo: formatNumber(votesCounterResult.voteAgainst.toString()),
     });
-    return votesSince;
+    return proposalsSince;
   };
 
   useMemo(() => {
