@@ -77,6 +77,10 @@ export interface IDAOConfig {
   DELEGATION_CUSTOM_AMOUNT?: boolean;
   DELEGATION_CUSTOM_CONVICTION?: boolean;
   DELEGATION_CONVICTION_OPTIONS?: IConvictionOption[];
+  DELEGATE_REGISTRY_CONTRACT?: {
+    NETWORK: number;
+    ADDRESS: Hex;
+  };
   // TODO: type anys
   /**
    * Defines a function to bulk delegate
