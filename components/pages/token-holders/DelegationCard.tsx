@@ -227,37 +227,39 @@ export const DelegationCard: FC<IDelegationCardProps> = ({
                 >
                   {sinceDate}
                 </Text>
-                <Tooltip
-                  label={
-                    daoInfo.config.TRACKS_DICTIONARY &&
-                    daoInfo.config.TRACKS_DICTIONARY[
-                      getTrackText(userDelegatedTo)
-                    ]
-                      ? daoInfo.config.TRACKS_DICTIONARY[
-                          getTrackText(userDelegatedTo)
-                        ].description
-                      : undefined
-                  }
-                  bg={theme.collapse.bg || theme.card.background}
-                  color={theme.collapse.text}
-                >
-                  <Flex flexDir="row">
-                    <Text>Track:</Text>
-                    <Flex flexDir="row" gap="1">
-                      <Text>
-                        {daoInfo.config.TRACKS_DICTIONARY &&
-                        daoInfo.config.TRACKS_DICTIONARY[
-                          getTrackText(userDelegatedTo)
-                        ]
-                          ? daoInfo.config.TRACKS_DICTIONARY[
-                              getTrackText(userDelegatedTo)
-                            ].emoji
-                          : undefined}
-                      </Text>
-                      <Text>{getTrackText(userDelegatedTo)}</Text>
+                {daoInfo.config.DAO_CATEGORIES_TYPE === 'tracks' ? (
+                  <Tooltip
+                    label={
+                      daoInfo.config.TRACKS_DICTIONARY &&
+                      daoInfo.config.TRACKS_DICTIONARY[
+                        getTrackText(userDelegatedTo)
+                      ]
+                        ? daoInfo.config.TRACKS_DICTIONARY[
+                            getTrackText(userDelegatedTo)
+                          ].description
+                        : undefined
+                    }
+                    bg={theme.collapse.bg || theme.card.background}
+                    color={theme.collapse.text}
+                  >
+                    <Flex flexDir="row">
+                      <Text>Track:</Text>
+                      <Flex flexDir="row" gap="1">
+                        <Text>
+                          {daoInfo.config.TRACKS_DICTIONARY &&
+                          daoInfo.config.TRACKS_DICTIONARY[
+                            getTrackText(userDelegatedTo)
+                          ]
+                            ? daoInfo.config.TRACKS_DICTIONARY[
+                                getTrackText(userDelegatedTo)
+                              ].emoji
+                            : undefined}
+                        </Text>
+                        <Text>{getTrackText(userDelegatedTo)}</Text>
+                      </Flex>
                     </Flex>
-                  </Flex>
-                </Tooltip>
+                  </Tooltip>
+                ) : undefined}
               </Flex>
             </Flex>
             <AccordionButton
