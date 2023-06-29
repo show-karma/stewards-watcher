@@ -96,6 +96,7 @@ export const NavMenu: FC<INavMenu> = ({
                 {...mobileStyle}
                 paddingX="0"
                 color={theme.hat.text.primary}
+                onClick={child.action}
               >
                 {child.title}
               </Button>

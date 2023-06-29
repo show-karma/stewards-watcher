@@ -52,9 +52,14 @@ export const StyledButton: FC<ButtonProps> = ({ children, ...rest }) => {
 export const HeaderHat = () => {
   const { daoInfo, theme, rootPathname } = useDAO();
   const { config } = daoInfo;
-  const { isOpen, onToggle } = useDisclosure();
-  const { isOpenProfile, onCloseProfile, profileSelected, selectedTab } =
-    useDelegates();
+  const {
+    isOpenProfile,
+    onCloseProfile,
+    profileSelected,
+    selectedTab,
+    isOpenVoteToAnyone,
+    onToggleVoteToAnyone,
+  } = useDelegates();
   const { delegateLoginIsOpen, delegateLoginOnClose, delegateLoginOnOpen } =
     useWallet();
 
@@ -81,7 +86,7 @@ export const HeaderHat = () => {
     )
       array.push({
         title: 'Delegate Tokens',
-        action: onToggle,
+        action: onToggleVoteToAnyone,
       });
 
     return array;
@@ -138,7 +143,11 @@ export const HeaderHat = () => {
                 childrens={mountingForTokenholders()}
                 accordion
               >
-                <UndelegateModal />
+                <UndelegateModal
+                  buttonProps={{
+                    color: theme.hat.text.primary,
+                  }}
+                />
               </NavMenu>
               {daoInfo.config.HIDE_FOR_DELEGATES?.length ? undefined : (
                 <NavMenu
@@ -254,9 +263,11 @@ export const HeaderHat = () => {
             </Flex>
           </Flex>
         )}
-
-        <DelegateVotesModal isOpen={isOpen} onClose={onToggle} />
       </Flex>
+      <DelegateVotesModal
+        isOpen={isOpenVoteToAnyone}
+        onClose={onToggleVoteToAnyone}
+      />
       <DelegateLoginModal
         isOpen={delegateLoginIsOpen}
         onClose={delegateLoginOnClose}
