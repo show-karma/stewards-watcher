@@ -193,7 +193,6 @@ const LoginAccordion = () => {
           <Button
             bgColor="transparent"
             _hover={{
-              bg: theme.filters.activeBg,
               opacity: 0.8,
             }}
             w="full"
@@ -208,7 +207,6 @@ const LoginAccordion = () => {
             bgColor="transparent"
             color={theme.hat.text.primary}
             _hover={{
-              bg: theme.filters.activeBg,
               opacity: 0.8,
             }}
             onClick={disconnect}
