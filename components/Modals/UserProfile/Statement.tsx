@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import {
   Box,
   Button,
@@ -6,7 +7,7 @@ import {
   SkeletonText,
   Text,
 } from '@chakra-ui/react';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useDAO, useEditProfile } from 'contexts';
 import { ICustomFields } from 'types';
 import dynamic from 'next/dynamic';
@@ -15,6 +16,7 @@ import parse from 'html-react-parser';
 import DOMPurify from 'dompurify';
 import { Sidebar } from '../Sidebar';
 import { NoStatement } from './NoStatement';
+import { SelectSavingMethod } from './SelectSavingMethod';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 const MDPreview = dynamic(() => import('@uiw/react-markdown-preview'), {
@@ -108,10 +110,18 @@ const StatementCases: FC<IStatementCases> = ({
 
 export const Statement: FC = () => {
   const { theme } = useDAO();
-  const { isEditing, statement, interests, isLoadingStatement } =
+  const { isEditing, statement, interests, isLoadingStatement, isEditSaving } =
     useEditProfile();
 
   const [savingStep, setSavingStep] = useState<0 | 1>(0);
+
+  useEffect(() => {
+    if (!isEditing) setSavingStep(0);
+  }, [isEditing]);
+
+  const handleSubmit = (method: 'on-chain' | 'off-chain') => {
+    console.log(method);
+  };
 
   return (
     <Flex
@@ -146,34 +156,35 @@ export const Statement: FC = () => {
                 tokens to.
               </Text>
             </Flex>
-
-            <Flex
-              justifyContent="center"
-              mb={12}
-              w="full"
-              maxW={['100%', '100%', '50%']}
-              mt={['5', '5', '0']}
-            >
-              <Button
-                background={theme.branding}
-                px={['4', '6']}
-                py={['3', '6']}
-                h="10"
-                fontSize={['md']}
-                fontWeight="medium"
-                onClick={() => setSavingStep(1)}
-                _hover={{
-                  backgroundColor: convertHexToRGBA(theme.branding, 0.8),
-                }}
-                _focus={{}}
-                _active={{}}
-                color={theme.buttonText}
+            {savingStep === 0 && (
+              <Flex
+                justifyContent="center"
+                mb={12}
+                w="full"
+                maxW={['100%', '100%', '50%']}
+                mt={['5', '5', '0']}
               >
-                <Flex gap="2" align="center">
-                  Save profile
-                </Flex>
-              </Button>
-            </Flex>
+                <Button
+                  background={theme.branding}
+                  px={['4', '6']}
+                  py={['3', '6']}
+                  h="10"
+                  fontSize={['md']}
+                  fontWeight="medium"
+                  onClick={() => setSavingStep(1)}
+                  _hover={{
+                    backgroundColor: convertHexToRGBA(theme.branding, 0.8),
+                  }}
+                  _focus={{}}
+                  _active={{}}
+                  color={theme.buttonText}
+                >
+                  <Flex gap="2" align="center">
+                    Save profile
+                  </Flex>
+                </Button>
+              </Flex>
+            )}
           </Flex>
         </Flex>
       )}
@@ -193,6 +204,12 @@ export const Statement: FC = () => {
             <Skeleton w="full" h="10" />
             <Skeleton w="full" h="10" />
           </Flex>
+        ) : savingStep === 1 && isEditing ? (
+          <SelectSavingMethod
+            isLoading={isEditSaving}
+            onCancel={() => setSavingStep(0)}
+            onSubmit={handleSubmit}
+          />
         ) : (
           <Sidebar isEditMode={isEditing} interests={interests} />
         )}

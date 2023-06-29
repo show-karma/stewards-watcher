@@ -12,6 +12,7 @@ import { useAuth } from './auth';
 interface IEditProfileProps {
   isEditing: boolean;
   setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
+  setEditSaving: React.Dispatch<React.SetStateAction<boolean>>;
   value: string;
   setValue: React.Dispatch<React.SetStateAction<string>>;
   isEditSaving: boolean;
@@ -576,6 +577,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       value,
       setValue,
       isEditSaving,
+      setEditSaving,
       saveEdit,
       profile,
       statement,
@@ -607,6 +609,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       value,
       setValue,
       isEditSaving,
+      setEditSaving,
       profile,
       statement,
       languages,

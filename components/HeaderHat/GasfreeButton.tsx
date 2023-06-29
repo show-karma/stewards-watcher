@@ -19,8 +19,14 @@ export const GasfreeButton: React.FC<GasfreeButtonProps> = ({
     daoInfo: { config },
   } = useDAO();
 
-  const { newInterests, newName, newStatement, newProfilePicture } =
-    useEditProfile();
+  const {
+    newInterests,
+    newName,
+    newStatement,
+    newProfilePicture,
+    setEditSaving,
+    setIsEditing,
+  } = useEditProfile();
 
   const { toast } = useToasty();
 
@@ -33,7 +39,7 @@ export const GasfreeButton: React.FC<GasfreeButtonProps> = ({
       interests: newInterests.value as string[],
       status: 'Active',
     }),
-    []
+    [newInterests, newName, newProfilePicture, newStatement]
   );
 
   const sendSponoredTx = async () => {
@@ -51,29 +57,33 @@ export const GasfreeButton: React.FC<GasfreeButtonProps> = ({
       const contract = new DelegateRegistryContract(REGISTRY_CONTRACT);
 
       try {
-        const res = await contract.registerDelegate(address as Hex, {
+        setEditSaving(true);
+        const payload = await contract.registerDelegate(address as Hex, {
           profile,
           tokenAddress: DAO_DELEGATE_CONTRACT,
           tokenChainId: NETWORK,
         });
 
-        if (!res) throw new Error('Something went wrong');
+        if (!payload) throw new Error('Something went wrong');
 
         const { data } = await axios.post<{ txId: string }>(
           '/api/sponsor',
-          res
+          payload
         );
         toast({
           title: 'Transaction sent',
           description: `Transaction sent successfully. TxId: ${data.txId}`,
           status: 'success',
         });
+        setIsEditing(false);
       } catch (err: any) {
         toast({
           title: 'Transaction failed',
           description: err.response?.data || err.message,
           status: 'error',
         });
+      } finally {
+        setEditSaving(false);
       }
     }
   };
