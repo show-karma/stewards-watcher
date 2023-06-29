@@ -219,14 +219,19 @@ export const Handles: FC = () => {
       icon: TwitterIcon,
       name: 'Twitter',
       disabledCondition: notShowCondition,
-      actionType: 'button',
-      action: () => {
-        twitterOnOpen();
-      },
+      // TODO TEMPORARY DISABLED
+      // actionType: 'button',
+      // action: () => {
+      //   twitterOnOpen();
+      // },
       handle: profileSelected?.twitterHandle
         ? `@${profileSelected?.twitterHandle}`
         : undefined,
       canAdminEdit: true,
+      // TODO TEMPORARY DISABLED
+      action: undefined,
+      actionType: 'text',
+      hideCondition: !profileSelected?.twitterHandle,
     },
     {
       icon: ForumIcon,
@@ -312,11 +317,13 @@ export const Handles: FC = () => {
           )}
         </Flex>
       </Flex>
+      {/* 
+      TODO: TEMPORARY FIX
       <TwitterModal
         open={twitterIsOpen}
         handleModal={twitterOnToggle}
         onClose={twitterOnClose}
-      />
+      /> */}
       {daoData?.forumTopicURL && (
         <DiscourseModal
           open={forumIsOpen}

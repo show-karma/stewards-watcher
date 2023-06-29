@@ -70,6 +70,7 @@ export const MediaIcon: FC<IMediaIcon> = ({
 
   const chosenMedia = medias[media];
 
+  // TODO REFACTOR THIS ASAP
   const disabledCondition =
     chosenMedia?.disabledCondition ||
     daoInfo.config.SHOULD_NOT_SHOW === 'handles' ||
@@ -78,9 +79,12 @@ export const MediaIcon: FC<IMediaIcon> = ({
       !!profile?.userCreatedAt &&
       lessThanDays(profile?.userCreatedAt, 100));
 
+  // TODO TEMPORARY HIDE
+  const hideTwitter = media === 'twitter';
+
   const labelTooltip = () => {
     if (media === 'discord' && chosenMedia.value) return chosenMedia.value;
-    if (disabledCondition) return '';
+    if (disabledCondition || hideTwitter) return '';
     if (isConnected) return `Update your ${media} handle now`;
     return `Login to update your ${media} handle`;
   };
@@ -89,7 +93,8 @@ export const MediaIcon: FC<IMediaIcon> = ({
     if (!isSamePerson) return;
     changeTab('handles');
     const onOpens: { [key: string]: () => void } = {
-      twitter: twitterOnOpen,
+      // TODO TEMPORARY DISABLED
+      // twitter: twitterOnOpen,
       forum: forumOnOpen,
     };
     if (onOpens[media]) onOpens[media]();

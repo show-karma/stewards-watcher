@@ -19,6 +19,7 @@ interface IGovernanceVotesProps {
   symbol: string;
   walletAddress?: string;
   getVotes: () => Promise<void>;
+  loadedVotes: boolean;
 }
 
 export const GovernanceVotesContext = createContext(
@@ -36,6 +37,7 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
   const { address: walletAddress, isConnected } = useWallet();
   const [votes, setVotes] = useState('0');
   const [symbol, setSymbol] = useState('');
+  const [loadedVotes, setLoadedVotes] = useState(false);
 
   const [delegatedBefore, setDelegatedBefore] = useState('');
   const { data: voteAmounts, isFetching: isLoadingVotes } = useContractReads({
@@ -67,8 +69,10 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
   });
 
   const getVotes = async () => {
+    setLoadedVotes(false);
     if (!voteAmounts || !voteAmounts?.length) {
       setVotes('0');
+      setLoadedVotes(true);
       return;
     }
 
@@ -80,6 +84,7 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
     const onlyZeros = amountsBN.every(amount => amount === '0');
     if (onlyZeros) {
       setVotes('0');
+      setLoadedVotes(true);
       return;
     }
     const sumBNs = amountsBN.reduce(
@@ -94,6 +99,7 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
       const lockedVotes = await getLocked(walletAddress as Hex);
       setVotes((+fromWeiAmount + +lockedVotes).toString());
     } else setVotes(fromWeiAmount);
+    setLoadedVotes(true);
   };
 
   useEffect(() => {
@@ -133,6 +139,7 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
       isConnected,
       walletAddress,
       getVotes,
+      loadedVotes,
     }),
     [
       votes,
@@ -142,6 +149,7 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
       isConnected,
       walletAddress,
       getVotes,
+      loadedVotes,
     ]
   );
 
