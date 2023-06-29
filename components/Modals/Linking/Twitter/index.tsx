@@ -143,10 +143,14 @@ export const TwitterModal: React.FC<IModal> = ({
       !!profileSelected?.userCreatedAt &&
       lessThanDays(profileSelected?.userCreatedAt, 100));
 
+  // TODO: TEMPORARY HIDE
+  // useEffect(() => {
+  //   if (notShowCondition) {
+  //     onClose();
+  //   }
+  // }, [open]);
   useEffect(() => {
-    if (notShowCondition) {
-      onClose();
-    }
+    onClose();
   }, [open]);
 
   return (
