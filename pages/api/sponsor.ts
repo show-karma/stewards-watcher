@@ -9,7 +9,6 @@ const assertionObj = [
   },
   /\{apiKey\}/,
   {
-    gasLimit: /\d+/,
     retries: /\d+/,
   },
 ];
@@ -23,12 +22,12 @@ function assert(body: any) {
     // and test them using the regexp from the assertion Object
     if (typeof item === 'object') {
       Object.entries(item).forEach(([key, value]) => {
-        if (!body[index][key].toString().match(value))
+        if (!body[index][key]?.toString().match(value))
           throw new Error('Invalid request body');
       });
     }
     // test other items as strings
-    else if (!body[index].toString().match(item))
+    else if (!body[index]?.toString().match(item))
       throw new Error('Invalid request body');
   });
 }
@@ -65,7 +64,7 @@ const handler: NextApiHandler = async (
     const txId = await result.wait();
     res.send({ txId });
   } catch (error: any) {
-    res.statusCode = 500;
+    res.statusCode = 400;
     res.send(error.message);
   }
 };

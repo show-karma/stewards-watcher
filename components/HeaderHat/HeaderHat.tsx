@@ -201,7 +201,15 @@ export const HeaderHat = () => {
                     src={config.DAO_LOGO}
                   />
                 </ChakraLink>
-                <GasfreeButton />
+                <GasfreeButton
+                  profile={{
+                    ipfsMetadata: '',
+                    name: 'Gasfree',
+                    profilePictureUrl: '',
+                    statement: '',
+                    status: 'Active',
+                  }}
+                />
                 <Madeby />
               </Flex>
               <Flex

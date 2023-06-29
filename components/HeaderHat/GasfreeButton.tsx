@@ -1,14 +1,28 @@
 import { Button } from '@chakra-ui/react';
 import axios from 'axios';
 import { useDAO, useWallet } from 'contexts';
+import { useToasty } from 'hooks';
 import { Hex } from 'types';
 import { DelegateRegistryContract } from 'utils/delegate-registry/DelegateRegistry';
 
-export const GasfreeButton: React.FC = () => {
+interface GasfreeButtonProps {
+  profile: {
+    name: string;
+    statement: string;
+    profilePictureUrl: string;
+    status: 'Active' | 'Withdrawn' | 'Pending';
+    ipfsMetadata: string;
+  };
+}
+
+export const GasfreeButton: React.FC<GasfreeButtonProps> = ({ profile }) => {
+  const { name, statement, profilePictureUrl, status, ipfsMetadata } = profile;
   const { address, isConnected, openConnectModal } = useWallet();
   const {
     daoInfo: { config },
   } = useDAO();
+
+  const { toast } = useToasty();
 
   const sendSponoredTx = async () => {
     if (!isConnected || !address) {
@@ -16,8 +30,6 @@ export const GasfreeButton: React.FC = () => {
     }
 
     const { DELEGATE_REGISTRY_CONTRACT, DAO_DELEGATE_CONTRACT } = config;
-
-    console.log({ DELEGATE_REGISTRY_CONTRACT, DAO_DELEGATE_CONTRACT });
 
     if (!(DELEGATE_REGISTRY_CONTRACT && DAO_DELEGATE_CONTRACT)) return;
 
@@ -29,12 +41,11 @@ export const GasfreeButton: React.FC = () => {
       try {
         const res = await contract.registerDelegate(address as Hex, {
           profile: {
-            name: 'Gasfree',
-            statement:
-              '### Gasfree txn\n *No gas fee* with conditions: \n\t1 - Must be in our DB\n\t2 - Must be a delegate\n\t3 - Must sign this fancy message 😎',
-            profilePictureUrl: 'https://www.reddit.com/user/NFT-GasFree/',
-            status: 'Active',
-            ipfsMetadata: '',
+            name,
+            statement,
+            profilePictureUrl,
+            status,
+            ipfsMetadata,
           },
           tokenAddress: DAO_DELEGATE_CONTRACT,
           tokenChainId: NETWORK,
@@ -42,10 +53,21 @@ export const GasfreeButton: React.FC = () => {
 
         if (!res) throw new Error('Something went wrong');
 
-        const txn = await axios.post<{ txnId: string }>('/api/sponsor', res);
-        console.log(txn);
-      } catch (err) {
-        console.log(err);
+        const { data } = await axios.post<{ txId: string }>(
+          '/api/sponsor',
+          res
+        );
+        toast({
+          title: 'Transaction sent',
+          description: `Transaction sent successfully. TxId: ${data.txId}`,
+          status: 'success',
+        });
+      } catch (err: any) {
+        toast({
+          title: 'Transaction failed',
+          description: err.response?.data || err.message,
+          status: 'error',
+        });
       }
     }
   };

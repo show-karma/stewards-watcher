@@ -162,7 +162,6 @@ export class DelegateRegistryContract extends GelatoRelay {
       },
       '{apiKey}',
       {
-        gasLimit: '1000000',
         retries: 3,
       },
     ];
