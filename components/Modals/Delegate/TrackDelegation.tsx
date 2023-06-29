@@ -165,7 +165,7 @@ export const TrackDelegation: React.FC<StepProps> = ({
       return 'You need at least 0.2 tokens to delegate';
     if (selectedTracks.length === 0)
       return 'You need select at least 1 track to delegate';
-    if (conviction) return 'You must select a conviction.';
+    if (conviction === undefined) return 'You must select a conviction.';
     return null;
   };
 
