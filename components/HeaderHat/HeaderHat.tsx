@@ -5,7 +5,6 @@ import {
   Flex,
   Img,
   useColorModeValue,
-  useDisclosure,
   useMediaQuery,
 } from '@chakra-ui/react';
 import {
