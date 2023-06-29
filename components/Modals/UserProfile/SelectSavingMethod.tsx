@@ -107,14 +107,14 @@ export const SelectSavingMethod: React.FC<SelectSavingMethodProps> = ({
           description={onChainText}
           value="on-chain"
           tag="Recommended"
-          onChange={value => setMethod(value)}
+          onChange={value => (isLoading ? null : setMethod(value))}
         />
         <SelectBox
           selected={method === 'off-chain'}
           label="Save locally"
           description={offChainText}
           value="off-chain"
-          onChange={value => setMethod(value)}
+          onChange={value => (isLoading ? null : setMethod(value))}
         />
       </Flex>
       <Flex justifyContent="flex-end" w="full" gap="10">

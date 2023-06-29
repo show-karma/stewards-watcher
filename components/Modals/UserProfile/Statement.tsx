@@ -110,8 +110,14 @@ const StatementCases: FC<IStatementCases> = ({
 
 export const Statement: FC = () => {
   const { theme } = useDAO();
-  const { isEditing, statement, interests, isLoadingStatement, isEditSaving } =
-    useEditProfile();
+  const {
+    isEditing,
+    statement,
+    interests,
+    isLoadingStatement,
+    isEditSaving,
+    saveEdit,
+  } = useEditProfile();
 
   const [savingStep, setSavingStep] = useState<0 | 1>(0);
 
@@ -120,7 +126,9 @@ export const Statement: FC = () => {
   }, [isEditing]);
 
   const handleSubmit = (method: 'on-chain' | 'off-chain') => {
-    console.log(method);
+    if (method !== 'on-chain') {
+      saveEdit();
+    }
   };
 
   return (
