@@ -125,7 +125,7 @@ export const Statement: FC = () => {
     if (!isEditing) setSavingStep(0);
   }, [isEditing]);
 
-  const handleSubmit = (method: 'on-chain' | 'off-chain') => {
+  const handleSubmit = (method: 'on-chain' | 'off-chain' | null) => {
     if (method !== 'on-chain') {
       saveEdit();
     }

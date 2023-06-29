@@ -18,7 +18,7 @@ const onChainText =
 const offChainText =
   'Your information is stored in our system.  Other delegation platforms in the ecosystem will not be able to display the same information.';
 interface SelectSavingMethodProps {
-  onSubmit: (method: 'on-chain' | 'off-chain') => void;
+  onSubmit: (method: 'on-chain' | 'off-chain' | null) => void;
   onCancel: () => void;
   isLoading: boolean;
 }
@@ -96,7 +96,7 @@ export const SelectSavingMethod: React.FC<SelectSavingMethodProps> = ({
   isLoading,
 }) => {
   const { theme } = useDAO();
-  const [method, setMethod] = useState<'on-chain' | 'off-chain'>('on-chain');
+  const [method, setMethod] = useState<'on-chain' | 'off-chain' | null>(null);
 
   return (
     <Flex flexWrap="wrap">
@@ -128,7 +128,7 @@ export const SelectSavingMethod: React.FC<SelectSavingMethodProps> = ({
           h="10"
           fontSize={['md']}
           fontWeight="medium"
-          isDisabled={isLoading}
+          isDisabled={isLoading || method === null}
           onClick={() => onSubmit(method)}
           _hover={{
             backgroundColor: convertHexToRGBA(theme.branding, 0.8),

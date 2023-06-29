@@ -1,4 +1,4 @@
-import { Button, Text } from '@chakra-ui/react';
+import { Text } from '@chakra-ui/react';
 import axios from 'axios';
 import { useDAO, useEditProfile, useWallet } from 'contexts';
 import { useToasty } from 'hooks';
@@ -88,8 +88,12 @@ export const GasfreeButton: React.FC<GasfreeButtonProps> = ({
     }
   };
 
+  const handleOnClick = () => {
+    sendSponoredTx();
+  };
+
   return (
-    <Text as="span" onClick={sendSponoredTx}>
+    <Text as="span" onClick={handleOnClick}>
       {title}
     </Text>
   );
