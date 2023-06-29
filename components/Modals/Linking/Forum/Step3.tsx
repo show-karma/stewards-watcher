@@ -113,7 +113,7 @@ export const Step3: React.FC<IModal> = ({
         color="#687785"
         marginBottom="32px"
       >
-        Copy the text below and post on the governance forum. Once you post,
+        Copy the signature text below and reply to the governance forum thread by clicking the "Open Forum" button. Once you post,
         come back and click “Verify” to complete the linking.
       </Flex>
       <Flex
