@@ -199,12 +199,14 @@ const LoginAccordion = () => {
             w="full"
             minW="160px"
             onClick={openProfile}
+            color={theme.hat.text.primary}
           >
             My profile
           </Button>
           <Divider orientation="horizontal" my="2" />
           <Button
             bgColor="transparent"
+            color={theme.hat.text.primary}
             _hover={{
               bg: theme.filters.activeBg,
               opacity: 0.8,
