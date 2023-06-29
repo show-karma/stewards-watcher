@@ -104,6 +104,8 @@ interface IDelegateProps {
   changeAmountOfDelegation: (address: string, amount: string) => void;
   delegationWillHaveError: boolean;
   setDelegationError: (value: boolean) => void;
+  isOpenVoteToAnyone: boolean;
+  onToggleVoteToAnyone: () => void;
 }
 
 export const DelegatesContext = createContext({} as IDelegateProps);
@@ -212,6 +214,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     onOpen: onOpenProfile,
     onClose: closeModalProfile,
   } = useDisclosure();
+
+  const { isOpen: isOpenVoteToAnyone, onToggle: onToggleVoteToAnyone } =
+    useDisclosure();
 
   const isSearchDirty = userToFind !== '';
   const isFiltering = interests.length > 0;
@@ -483,8 +488,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
   );
 
   const checkIfUserNotFound = (
-    error: string,
     userToSearch: string,
+    error?: string,
     defaultTab?: IActiveTab
   ) => {
     if (!publicAddress) {
@@ -530,7 +535,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
   useEffect(() => {
     if (publicAddress && profileSearching && shouldOpenModal) {
       setShouldOpenModal(false);
-      checkIfUserNotFound('Not Found', profileSearching);
+      checkIfUserNotFound(profileSearching, 'Not Found');
     }
   }, [publicAddress, isConnected]);
 
@@ -652,11 +657,13 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
 
       selectProfile(userFound, checkTab ? shouldOpenTab : undefined);
     } catch (error: any) {
-      checkIfUserNotFound(
-        error?.response?.data.error.error,
-        userToSearch,
-        defaultTab
-      );
+      if (error?.response?.data && error?.response?.data.error) {
+        checkIfUserNotFound(
+          userToSearch,
+          error?.response?.data.error.error,
+          defaultTab
+        );
+      }
     }
   };
 
@@ -1219,6 +1226,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       changeAmountOfDelegation,
       delegationWillHaveError,
       setDelegationError,
+      isOpenVoteToAnyone,
+      onToggleVoteToAnyone,
     }),
     [
       profileSelected,
@@ -1264,6 +1273,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       changeAmountOfDelegation,
       delegationWillHaveError,
       setDelegationError,
+      isOpenVoteToAnyone,
+      onToggleVoteToAnyone,
     ]
   );
 

@@ -5,6 +5,7 @@ import { useDAO, useDelegates, useWallet } from 'contexts';
 import {
   Box,
   Button,
+  ButtonProps,
   Flex,
   Modal,
   ModalContent,
@@ -22,7 +23,13 @@ import { IBulkUndelegatePayload } from 'utils/moonbeam/moonriverUndelegateAction
 import { handleError } from 'utils/handleWriteError';
 import { StyledButton } from 'components/HeaderHat';
 
-export const UndelegateModal: React.FC = () => {
+interface IUndelegateModalProps {
+  buttonProps?: ButtonProps;
+}
+
+export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
+  buttonProps,
+}) => {
   const { daoInfo, theme } = useDAO();
   const { config } = daoInfo;
 
@@ -271,6 +278,7 @@ export const UndelegateModal: React.FC = () => {
         _focus={{}}
         _focusVisible={{}}
         _focusWithin={{}}
+        {...buttonProps}
       >
         Undelegate
       </Button>

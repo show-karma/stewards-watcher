@@ -1,4 +1,9 @@
 import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
   Box,
   Button,
   Divider,
@@ -146,16 +151,87 @@ const LoginButton: FC<{ onOpen: () => void }> = ({ onOpen }) => {
   );
 };
 
+const LoginAccordion = () => {
+  const { theme } = useDAO();
+  const { disconnect } = useAuth();
+  const { address } = useAccount();
+  const { searchProfileModal } = useDelegates();
+
+  const openProfile = () => address && searchProfileModal(address, 'statement');
+  return (
+    <Accordion allowToggle>
+      <AccordionItem>
+        <AccordionButton
+          background={theme.secondaryButton?.bg || theme.branding}
+          color={theme.secondaryButton?.text || theme.buttonText}
+          px="5"
+          py="3"
+          fontWeight="semibold"
+          minH={{ base: '52px', lg: 'max-content' }}
+          _hover={{
+            opacity: 0.8,
+          }}
+          _focusVisible={{
+            opacity: 0.8,
+          }}
+          _focusWithin={{
+            opacity: 0.8,
+          }}
+          _focus={{
+            opacity: 0.8,
+          }}
+          _active={{
+            opacity: 0.8,
+          }}
+        >
+          <Box as="span" flex="1" textAlign="left">
+            {truncateAddress(address || '')}
+          </Box>
+          <AccordionIcon />
+        </AccordionButton>
+        <AccordionPanel pb={4}>
+          <Button
+            bgColor="transparent"
+            _hover={{
+              bg: theme.filters.activeBg,
+              opacity: 0.8,
+            }}
+            w="full"
+            minW="160px"
+            onClick={openProfile}
+          >
+            My profile
+          </Button>
+          <Divider orientation="horizontal" my="2" />
+          <Button
+            bgColor="transparent"
+            _hover={{
+              bg: theme.filters.activeBg,
+              opacity: 0.8,
+            }}
+            onClick={disconnect}
+            w="full"
+            minW="160px"
+          >
+            Logout
+          </Button>
+        </AccordionPanel>
+      </AccordionItem>
+    </Accordion>
+  );
+};
+
 export const DelegateLoginButton: FC<{ onOpen: () => void }> = ({ onOpen }) => {
   const { isAuthenticated } = useAuth();
   const { isConnected } = useAccount();
   const { daoInfo } = useDAO();
+  const [isMobile] = useMediaQuery('(max-width: 768px)');
 
   if (daoInfo.config.DAO_DEFAULT_SETTINGS?.DISABLE_LOGIN) return null;
 
-  return isAuthenticated && isConnected ? (
-    <LoginMenu />
-  ) : (
-    <LoginButton onOpen={onOpen} />
-  );
+  if (!isAuthenticated && !isConnected) return <LoginButton onOpen={onOpen} />;
+
+  if (isMobile) return <LoginAccordion />;
+
+  return <LoginMenu />;
 };
