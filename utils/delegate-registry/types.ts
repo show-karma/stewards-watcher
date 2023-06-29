@@ -4,6 +4,7 @@ export type DelegateProfile = {
   status: 'Active' | 'Withdrawn' | 'Pending'; // status of the delegate
   ipfsMetadata: string; // IPFS hash of delegate's metadata
   statement: string; // Delegate's statement for this DAO
+  interests: string[]; // Delegate's interests
 };
 
 export type Delegate = {

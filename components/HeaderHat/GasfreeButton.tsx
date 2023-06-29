@@ -1,28 +1,40 @@
-import { Button } from '@chakra-ui/react';
+import { Button, Text } from '@chakra-ui/react';
 import axios from 'axios';
-import { useDAO, useWallet } from 'contexts';
+import { useDAO, useEditProfile, useWallet } from 'contexts';
 import { useToasty } from 'hooks';
+import { useMemo } from 'react';
 import { Hex } from 'types';
 import { DelegateRegistryContract } from 'utils/delegate-registry/DelegateRegistry';
+import { DelegateProfile } from 'utils/delegate-registry/types';
 
 interface GasfreeButtonProps {
-  profile: {
-    name: string;
-    statement: string;
-    profilePictureUrl: string;
-    status: 'Active' | 'Withdrawn' | 'Pending';
-    ipfsMetadata: string;
-  };
+  title?: string;
 }
 
-export const GasfreeButton: React.FC<GasfreeButtonProps> = ({ profile }) => {
-  const { name, statement, profilePictureUrl, status, ipfsMetadata } = profile;
+export const GasfreeButton: React.FC<GasfreeButtonProps> = ({
+  title = 'Save',
+}) => {
   const { address, isConnected, openConnectModal } = useWallet();
   const {
     daoInfo: { config },
   } = useDAO();
 
+  const { newInterests, newName, newStatement, newProfilePicture } =
+    useEditProfile();
+
   const { toast } = useToasty();
+
+  const profile: DelegateProfile = useMemo(
+    () => ({
+      ipfsMetadata: '',
+      name: newName || '',
+      profilePictureUrl: newProfilePicture || '',
+      statement: newStatement.value as string,
+      interests: newInterests.value as string[],
+      status: 'Active',
+    }),
+    []
+  );
 
   const sendSponoredTx = async () => {
     if (!isConnected || !address) {
@@ -40,13 +52,7 @@ export const GasfreeButton: React.FC<GasfreeButtonProps> = ({ profile }) => {
 
       try {
         const res = await contract.registerDelegate(address as Hex, {
-          profile: {
-            name,
-            statement,
-            profilePictureUrl,
-            status,
-            ipfsMetadata,
-          },
+          profile,
           tokenAddress: DAO_DELEGATE_CONTRACT,
           tokenChainId: NETWORK,
         });
@@ -72,5 +78,9 @@ export const GasfreeButton: React.FC<GasfreeButtonProps> = ({ profile }) => {
     }
   };
 
-  return <Button onClick={sendSponoredTx}>Gasfree Txn</Button>;
+  return (
+    <Text as="span" onClick={sendSponoredTx}>
+      {title}
+    </Text>
+  );
 };

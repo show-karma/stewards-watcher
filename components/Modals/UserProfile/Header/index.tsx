@@ -14,6 +14,7 @@ import {
   TwitterIcon,
   DiscordIcon,
 } from 'components';
+import { GasfreeButton } from 'components/HeaderHat/GasfreeButton';
 import { useDAO, useDelegates, useEditProfile, useWallet } from 'contexts';
 import { useAuth } from 'contexts/auth';
 import { useToasty } from 'hooks';
@@ -21,6 +22,10 @@ import { FC, useMemo, useState } from 'react';
 import { IoCopy } from 'react-icons/io5';
 import { IActiveTab, IProfile } from 'types';
 import { convertHexToRGBA, truncateAddress } from 'utils';
+import {
+  DelegateProfile,
+  DelegateWithProfile,
+} from 'utils/delegate-registry/types';
 import { useAccount } from 'wagmi';
 import { NameEditable, PictureEditable } from '../EditProfile';
 import { MediaIcon } from './MediaIcon';
@@ -65,13 +70,15 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
   const { isConnected, openConnectModal } = useWallet();
   const { theme, daoData, daoInfo } = useDAO();
   const { profileSelected } = useDelegates();
-  const { isEditing, setIsEditing, saveEdit, isEditSaving } = useEditProfile();
+  const { isEditing, setIsEditing } = useEditProfile();
   const { address } = useAccount();
   const { authenticate, isAuthenticated, isDaoAdmin } = useAuth();
   const { toast } = useToasty();
-  const [isConnecting, setConnecting] = useState(false);
+
   const { onCopy } = useClipboard(fullAddress || '');
   const { config } = daoInfo;
+
+  const [isConnecting, setConnecting] = useState(false);
 
   const isSamePerson =
     isConnected &&
@@ -268,34 +275,6 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
                   Edit profile
                 </Button>
               )}
-
-            {isEditing ? (
-              <Button
-                background={theme.branding}
-                px={['4', '6']}
-                py={['3', '6']}
-                h="10"
-                fontSize={['md']}
-                fontWeight="medium"
-                onClick={saveEdit}
-                _hover={{
-                  backgroundColor: convertHexToRGBA(theme.branding, 0.8),
-                }}
-                _focus={{}}
-                _active={{}}
-                color={theme.buttonText}
-              >
-                <Flex gap="2" align="center">
-                  {isEditSaving && <Spinner />}
-                  Save profile
-                </Flex>
-              </Button>
-            ) : (
-              <DelegateCases
-                fullAddress={fullAddress}
-                status={profileSelected?.status}
-              />
-            )}
           </Flex>
         </Flex>
       </Flex>

@@ -23,7 +23,6 @@ import { NavMenu } from './NavMenu';
 import { HeaderBurgerAccordion } from './HeaderBurgerAccordion';
 import { Madeby } from './Madeby';
 import { ThemeButton } from './ThemeButton';
-import { GasfreeButton } from './GasfreeButton';
 
 export const StyledButton: FC<ButtonProps> = ({ children, ...rest }) => {
   const { theme } = useDAO();
@@ -201,15 +200,6 @@ export const HeaderHat = () => {
                     src={config.DAO_LOGO}
                   />
                 </ChakraLink>
-                <GasfreeButton
-                  profile={{
-                    ipfsMetadata: '',
-                    name: 'Gasfree',
-                    profilePictureUrl: '',
-                    statement: '',
-                    status: 'Active',
-                  }}
-                />
                 <Madeby />
               </Flex>
               <Flex

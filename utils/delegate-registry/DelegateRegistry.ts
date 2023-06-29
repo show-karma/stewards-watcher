@@ -78,6 +78,7 @@ export class DelegateRegistryContract extends GelatoRelay {
       const loop = async () => {
         while (1) {
           const status = await this.getTaskStatus(taskId);
+          // print status :D so we can debug this for now
           console.log(status);
           if (!status) {
             reject(new Error('Transaction goes wrong.'));

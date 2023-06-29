@@ -1,8 +1,16 @@
-import { Flex, Skeleton, SkeletonText, Text } from '@chakra-ui/react';
-import { FC } from 'react';
+import {
+  Box,
+  Button,
+  Flex,
+  Skeleton,
+  SkeletonText,
+  Text,
+} from '@chakra-ui/react';
+import { FC, useState } from 'react';
 import { useDAO, useEditProfile } from 'contexts';
 import { ICustomFields } from 'types';
 import dynamic from 'next/dynamic';
+import { convertHexToRGBA } from 'utils';
 import parse from 'html-react-parser';
 import DOMPurify from 'dompurify';
 import { Sidebar } from '../Sidebar';
@@ -103,6 +111,8 @@ export const Statement: FC = () => {
   const { isEditing, statement, interests, isLoadingStatement } =
     useEditProfile();
 
+  const [savingStep, setSavingStep] = useState<0 | 1>(0);
+
   return (
     <Flex
       flexDir="column"
@@ -123,15 +133,48 @@ export const Statement: FC = () => {
           >
             Statement
           </Text>
-          <Text
-            fontSize={{ base: 'md', lg: 'lg' }}
-            fontWeight="normal"
-            color={theme.modal.statement.sidebar.item.border}
-          >
-            Add a statement explaining your intention for becoming a delegate
-            and your skillset. This will help token holders determine if you are
-            the right candidate to delegate their tokens to.
-          </Text>
+          <Flex w="full" flexWrap="wrap">
+            <Flex maxW={['100%', '100%', '50%']} gap="10">
+              <Text
+                fontSize={{ base: 'md', lg: 'lg' }}
+                fontWeight="normal"
+                color={theme.modal.statement.sidebar.item.border}
+              >
+                Add a statement explaining your intention for becoming a
+                delegate and your skillset. This will help token holders
+                determine if you are the right candidate to delegate their
+                tokens to.
+              </Text>
+            </Flex>
+
+            <Flex
+              justifyContent="center"
+              mb={12}
+              w="full"
+              maxW={['100%', '100%', '50%']}
+              mt={['5', '5', '0']}
+            >
+              <Button
+                background={theme.branding}
+                px={['4', '6']}
+                py={['3', '6']}
+                h="10"
+                fontSize={['md']}
+                fontWeight="medium"
+                onClick={() => setSavingStep(1)}
+                _hover={{
+                  backgroundColor: convertHexToRGBA(theme.branding, 0.8),
+                }}
+                _focus={{}}
+                _active={{}}
+                color={theme.buttonText}
+              >
+                <Flex gap="2" align="center">
+                  Save profile
+                </Flex>
+              </Button>
+            </Flex>
+          </Flex>
         </Flex>
       )}
       <Flex
