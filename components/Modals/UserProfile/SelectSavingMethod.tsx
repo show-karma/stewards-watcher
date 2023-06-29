@@ -95,20 +95,22 @@ export const SelectSavingMethod: React.FC<SelectSavingMethodProps> = ({
   onCancel,
   isLoading,
 }) => {
-  const { theme } = useDAO();
+  const { theme, daoInfo } = useDAO();
   const [method, setMethod] = useState<'on-chain' | 'off-chain' | null>(null);
 
   return (
     <Flex flexWrap="wrap">
       <Flex justifyContent="flex-start" w="full" direction="column">
-        <SelectBox
-          selected={method === 'on-chain'}
-          label="Save to onchain registry"
-          description={onChainText}
-          value="on-chain"
-          tag="Recommended"
-          onChange={value => (isLoading ? null : setMethod(value))}
-        />
+        {!!daoInfo.config.DELEGATE_REGISTRY_CONTRACT && (
+          <SelectBox
+            selected={method === 'on-chain'}
+            label="Save to onchain registry"
+            description={onChainText}
+            value="on-chain"
+            tag="Recommended"
+            onChange={value => (isLoading ? null : setMethod(value))}
+          />
+        )}
         <SelectBox
           selected={method === 'off-chain'}
           label="Save locally"
@@ -117,7 +119,7 @@ export const SelectSavingMethod: React.FC<SelectSavingMethodProps> = ({
           onChange={value => (isLoading ? null : setMethod(value))}
         />
       </Flex>
-      <Flex justifyContent="flex-end" w="full" gap="10">
+      <Flex justifyContent="flex-end" alignItems="center" w="full" gap="10">
         <Button variant="link" onClick={onCancel}>
           Cancel
         </Button>
