@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDAO, useDelegates, useGovernanceVotes, useWallet } from 'contexts';
 import {
@@ -6,6 +7,7 @@ import {
   FormControl,
   NumberInput,
   NumberInputField,
+  Skeleton,
   Text,
   Tooltip,
 } from '@chakra-ui/react';
@@ -39,10 +41,10 @@ export const TrackDelegation: React.FC<StepProps> = ({
   walletAddress,
 }) => {
   const { daoData, daoInfo } = useDAO();
-  const { GET_LOCKED_TOKENS_ACTION } = daoInfo.config;
+  // const { GET_LOCKED_TOKENS_ACTION } = daoInfo.config;
   const { addToDelegatePool, tracks: daoTracks } = useDelegates();
   const { address: delegator } = useWallet();
-  const { symbol } = useGovernanceVotes();
+  const { symbol, loadedVotes } = useGovernanceVotes();
   const [conviction, setConviction] = useState<number | undefined>(undefined);
 
   const schema = yup
@@ -60,15 +62,21 @@ export const TrackDelegation: React.FC<StepProps> = ({
     .required('Amount is required');
   type FormData = yup.InferType<typeof schema>;
 
+  const voteValue =
+    Number(votes) >= 0.1 && !Number.isNaN(Number(votes))
+      ? Number(votes) - 0.1
+      : 0;
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
+    setValue,
   } = useForm<FormData>({
     resolver: yupResolver(schema),
     defaultValues: {
-      amount: Number(votes) - 0.1 || 0,
+      amount: voteValue,
     },
     reValidateMode: 'onChange',
     mode: 'onChange',
@@ -98,6 +106,13 @@ export const TrackDelegation: React.FC<StepProps> = ({
       behavior: 'smooth',
     });
   };
+
+  // updating token amount after loading votes
+  useEffect(() => {
+    if (watch('amount') === 0) {
+      setValue('amount', voteValue);
+    }
+  }, [loadedVotes, votes]);
 
   if (!daoData) return null;
 
@@ -145,6 +160,15 @@ export const TrackDelegation: React.FC<StepProps> = ({
   const disableButton =
     selectedTracks.length === 0 || !!errors.amount || conviction === undefined;
 
+  const tooltipHint = () => {
+    if (watch('amount') < 0.2)
+      return 'You need at least 0.2 tokens to delegate';
+    if (selectedTracks.length === 0)
+      return 'You need select at least 1 track to delegate';
+    if (conviction) return 'You must select a conviction.';
+    return null;
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormControl isInvalid={!!errors.amount}>
@@ -178,7 +202,10 @@ export const TrackDelegation: React.FC<StepProps> = ({
               >
                 You are delegating
               </Text>
-              {daoInfo.config.DELEGATION_CUSTOM_AMOUNT ? (
+
+              {!loadedVotes ? (
+                <Skeleton w="32" h="8" />
+              ) : daoInfo.config.DELEGATION_CUSTOM_AMOUNT ? (
                 <Flex
                   flexDirection="row"
                   alignItems="center"
@@ -324,13 +351,7 @@ export const TrackDelegation: React.FC<StepProps> = ({
               ) : undefined}
             </Flex>
             <Flex w="full" flexDir="row-reverse">
-              <Tooltip
-                label={
-                  watch('amount') < 0.2
-                    ? 'You need at least 0.2 votes to delegate'
-                    : null
-                }
-              >
+              <Tooltip label={tooltipHint()}>
                 <Button
                   bg="#000000"
                   color="#1DE9B6"
