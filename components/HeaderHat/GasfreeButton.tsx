@@ -36,7 +36,7 @@ export const GasfreeButton: React.FC<GasfreeButtonProps> = ({
       name: newName || '',
       profilePictureUrl: newProfilePicture || '',
       statement: newStatement.value as string,
-      interests: newInterests.value as string[],
+      interests: (newInterests.value as string[])?.join(',') || '',
       status: 'Active',
     }),
     [newInterests, newName, newProfilePicture, newStatement]

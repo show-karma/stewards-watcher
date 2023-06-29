@@ -10,7 +10,7 @@ import {
   writeContract as writeFn,
   waitForTransaction,
   readContract as readFn,
-  signMessage,
+  signTypedData,
 } from '@wagmi/core';
 import { Hex } from 'types';
 import { GelatoRelay } from '@gelatonetwork/relay-sdk';
@@ -134,27 +134,54 @@ export class DelegateRegistryContract extends GelatoRelay {
     address: Hex,
     data: DelegateWithProfile
   ): Promise<Parameters<GelatoRelay['sponsoredCall']>> {
-    const signature = await signMessage({
-      message: JSON.stringify(data),
+    const { nonce } = await this.getNonce(address);
+    const expiry = BigInt(((Date.now() + 1000 * 60) / 1000).toFixed(0));
+
+    const metadata = JSON.stringify(data.profile);
+
+    const types = {
+      RegisterDelegate: [
+        { name: 'tokenAddress', type: 'address' },
+        { name: 'tokenChainId', type: 'uint256' },
+        { name: 'metadata', type: 'string' },
+        { name: 'nonce', type: 'uint256' },
+        { name: 'expiry', type: 'uint256' },
+      ],
+    } as const;
+
+    const signature = await signTypedData({
+      message: {
+        tokenAddress: data.tokenAddress,
+        tokenChainId: BigInt(data.tokenChainId),
+        metadata,
+        nonce: BigInt(nonce),
+        expiry,
+      },
+      domain: {
+        name: 'DelegateRegistry',
+        version: '1',
+        chainId: data.tokenChainId,
+      },
+      primaryType: 'RegisterDelegate',
+      types,
     });
 
     const { r, s, v } = this.getRSV(signature);
-    const { nonce } = await this.getNonce(address);
 
     const { data: payload } =
       await this.contract.populateTransaction.registerDelegateBySig(
         data.tokenAddress,
-        data.tokenChainId,
-        JSON.stringify(data.profile),
-        nonce,
-        Date.now(),
+        BigInt(data.tokenChainId),
+        metadata,
+        BigInt(nonce),
+        expiry,
         v,
         r,
         s
       );
 
+    console.log({ payload, signature });
     if (!payload) throw new Error('Payload is undefined');
-
     return [
       {
         data: payload,
