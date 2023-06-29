@@ -1,4 +1,5 @@
 import { Button } from '@chakra-ui/react';
+import axios from 'axios';
 import { useDAO, useWallet } from 'contexts';
 import { Hex } from 'types';
 import { DelegateRegistryContract } from 'utils/delegate-registry/DelegateRegistry';
@@ -39,7 +40,10 @@ export const GasfreeButton: React.FC = () => {
           tokenChainId: NETWORK,
         });
 
-        await res.wait();
+        if (!res) throw new Error('Something went wrong');
+
+        const txn = await axios.post<{ txnId: string }>('/api/sponsor', res);
+        console.log(txn);
       } catch (err) {
         console.log(err);
       }

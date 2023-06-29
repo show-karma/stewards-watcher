@@ -201,6 +201,7 @@ export const HeaderHat = () => {
                     src={config.DAO_LOGO}
                   />
                 </ChakraLink>
+                <GasfreeButton />
                 <Madeby />
               </Flex>
               <Flex

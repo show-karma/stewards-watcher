@@ -29,8 +29,6 @@ enum TaskState {
   NotFound = 'NotFound',
 }
 
-const apikey = 'g_JPdkog8cZJwfK7lEOmubsPuxbMf4pP6zKjHJE4wxw_';
-
 export class DelegateRegistryContract extends GelatoRelay {
   contract: ethers.Contract;
 
@@ -72,21 +70,21 @@ export class DelegateRegistryContract extends GelatoRelay {
 
   /**
    * Waits for a transaction to be mined at Gelato Network
-   * @param txId
+   * @param taskId
    * @returns
    */
-  private wait(txId: string): Promise<void> {
+  wait(taskId: string): Promise<string> {
     return new Promise((resolve, reject) => {
       const loop = async () => {
         while (1) {
-          const status = await this.getTaskStatus(txId);
+          const status = await this.getTaskStatus(taskId);
           console.log(status);
           if (!status) {
             reject(new Error('Transaction goes wrong.'));
             break;
           }
-          if (status?.taskState === TaskState.ExecSuccess) {
-            resolve();
+          if (status && status.taskState === TaskState.ExecSuccess) {
+            resolve(status.transactionHash || '');
             break;
           } else if (
             [
@@ -126,11 +124,15 @@ export class DelegateRegistryContract extends GelatoRelay {
   }
 
   /**
-   * Registers a delegate on the DelegateRegistry contract
+   * Creates the payload for register delegate by signature
+   * returning the payload
    * @param data
    * @returns
    */
-  public async registerDelegate(address: Hex, data: DelegateWithProfile) {
+  public async registerDelegate(
+    address: Hex,
+    data: DelegateWithProfile
+  ): Promise<Parameters<GelatoRelay['sponsoredCall']>> {
     const signature = await signMessage({
       message: JSON.stringify(data),
     });
@@ -151,23 +153,33 @@ export class DelegateRegistryContract extends GelatoRelay {
       );
 
     if (!payload) throw new Error('Payload is undefined');
-    console.debug(payload);
-    const relayResponse = await this.sponsoredCall(
+
+    return [
       {
         data: payload,
         chainId: 10,
         target: this.contractAddress,
       },
-      apikey,
+      '{apiKey}',
       {
         gasLimit: '1000000',
         retries: 3,
-      }
-    );
+      },
+    ];
+  }
+
+  /**
+   * Sends a sponsored call to the DelegateRegistry contract using GelatoRelay
+   * @param payload
+   * @returns
+   */
+  static async sendGelato(...params: Parameters<GelatoRelay['sponsoredCall']>) {
+    const client = new this(params[0].target as Hex);
+    const relayResponse = await client.sponsoredCall(...params);
 
     return {
       taskId: relayResponse.taskId,
-      wait: () => this.wait(relayResponse.taskId),
+      wait: () => client.wait(relayResponse.taskId),
     };
   }
 
