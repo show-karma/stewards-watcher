@@ -68,7 +68,8 @@ const DelegatesCounter: FC<{
 };
 
 export const BodyTitle: FC = () => {
-  const { isLoading, isSearchDirty, delegateCount } = useDelegates();
+  const { isLoading, isSearchDirty, delegateCount, delegatePoolList } =
+    useDelegates();
   const { daoInfo, theme } = useDAO();
   const { config } = daoInfo;
   const [showHeaderText, setShowHeaderText] = useState(true);
@@ -276,7 +277,9 @@ export const BodyTitle: FC = () => {
           />
         </Flex>
       </Collapse>
-      {config.ALLOW_BULK_DELEGATE && <DelegationPool />}
+      {config.ALLOW_BULK_DELEGATE && delegatePoolList.length ? (
+        <DelegationPool />
+      ) : undefined}
       <Filters />
       <Flex
         flexDir={{ base: 'column', md: 'row' }}
