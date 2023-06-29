@@ -188,7 +188,7 @@ export class DelegateRegistryContract extends GelatoRelay {
         chainId: 10,
         target: this.contractAddress,
       },
-      '{apiKey}',
+      '{apiKey}', // filled in the api
       {
         retries: 3,
       },
