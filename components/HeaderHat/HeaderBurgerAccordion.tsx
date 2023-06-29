@@ -83,6 +83,7 @@ export const HeaderBurgerAccordion: FC<IHeaderBurgerAccordionProps> = ({
                 <Icon
                   as={isExpanded ? CloseMenuIcon : BurgerMenuIcon}
                   boxSize="6"
+                  color={theme.hat.text.primary}
                 />
               </AccordionButton>
             </Flex>
