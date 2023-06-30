@@ -70,7 +70,7 @@ const HandleCases: FC<IHandleCasesProps> = ({
       handle: yup
         .string()
         .required('Handle is required')
-        .url('Please enter a valid URL'),
+        .url('Please enter a valid URL.'),
     })
     .required();
 
