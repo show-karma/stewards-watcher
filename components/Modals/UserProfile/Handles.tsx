@@ -67,7 +67,10 @@ const HandleCases: FC<IHandleCasesProps> = ({
 
   const websiteSchema = yup
     .object({
-      handle: yup.string().required('Handle is required').url(),
+      handle: yup
+        .string()
+        .required('Handle is required')
+        .url('Please enter a valid URL'),
     })
     .required();
 
