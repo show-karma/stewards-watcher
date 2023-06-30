@@ -32,7 +32,7 @@ interface IEditProfileProps {
   newProfilePicture: string | null;
   changeHandle: (
     newHandle: string,
-    media: 'twitter' | 'forum'
+    media: 'twitter' | 'forum' | 'website'
   ) => Promise<void>;
   acceptedTerms: boolean;
   changeAcceptedTerms: (choice: boolean) => void;
@@ -114,6 +114,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     twitter: profileSelected?.twitterHandle || '',
     aboutMe: profileSelected?.aboutMe || '',
     realName: profileSelected?.realName || '',
+    website: profileSelected?.website || '',
   };
 
   const [newToA, setNewToA] = useState('');
@@ -350,6 +351,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
         actualError = error.response.data.error.message;
       }
     }
+
     const tracksMap = profileSelected?.tracks?.map(
       (track: { id: number }) => track.id
     );
@@ -494,7 +496,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const changeHandle = async (
     newHandle: string,
-    media: 'twitter' | 'forum'
+    media: 'twitter' | 'forum' | 'website'
   ) => {
     try {
       const authorizedAPI = axios.create({
@@ -505,17 +507,35 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
           Authorization: authToken ? `Bearer ${authToken}` : '',
         },
       });
-      await authorizedAPI
-        .put(
-          `${KARMA_API.base_url}/user/${daoInfo.config.DAO_KARMA_ID}/handles/${profileSelected?.address}`,
-          {
-            [`${media}Handle`]: newHandle,
-          }
-        )
-        .then(() => {
-          refreshProfileModal('handles');
-          fetchDelegates(0);
-        });
+      console.log(newHandle);
+
+      if (media === 'website') {
+        await authorizedAPI
+          .put(
+            `${KARMA_API.base_url}/user/${config.DAO_KARMA_ID}/${profileSelected?.address}`,
+            {
+              website: newHandle,
+            }
+          )
+          .then(() => {
+            refreshProfileModal('handles');
+            fetchDelegates(0);
+          });
+      } else {
+        const bodyParam =
+          media === 'twitter' || media === 'forum' ? `${media}Handle` : media;
+        await authorizedAPI
+          .put(
+            `${KARMA_API.base_url}/user/${daoInfo.config.DAO_KARMA_ID}/handles/${profileSelected?.address}`,
+            {
+              [bodyParam]: newHandle,
+            }
+          )
+          .then(() => {
+            refreshProfileModal('handles');
+            fetchDelegates(0);
+          });
+      }
       toast({
         description: `${
           media.charAt(0).toUpperCase() + media.slice(1)

@@ -365,6 +365,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           workstreams: item.workstreams,
           tracks: item.tracks,
           userCreatedAt: item.userCreatedAt,
+          website: item.website,
         };
       });
 
@@ -437,6 +438,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           tracks: item.tracks,
           status: item.status,
           userCreatedAt: item.userCreatedAt,
+          website: item.website,
         };
       });
       setDelegates(delegatesList);
@@ -585,6 +587,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         status: fetchedDelegate.status,
         userCreatedAt: fetchedDelegate.userCreatedAt,
         acceptedTOS: fetchedDelegate.acceptedTOS,
+        website: fetchedDelegate.website,
       };
       return userFound;
     } catch {
@@ -641,6 +644,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         status: fetchedDelegate.status,
         userCreatedAt: fetchedDelegate.userCreatedAt,
         acceptedTOS: fetchedDelegate.acceptedTOS,
+        website: fetchedDelegate.website,
       };
 
       const getTab = asPath.split('#');
@@ -713,6 +717,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         status: fetchedDelegate.status,
         userCreatedAt: fetchedDelegate.userCreatedAt,
         acceptedTOS: fetchedDelegate.acceptedTOS,
+        website: fetchedDelegate.website,
       };
 
       setProfileSelected(userFound);
@@ -796,6 +801,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           gitcoinHealthScore: fetchedPeriod?.gitcoinHealthScore || 0,
           userCreatedAt: item.userCreatedAt,
           status: item.status,
+          website: item.website,
         });
       });
     } catch (error) {
