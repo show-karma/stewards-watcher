@@ -23,6 +23,7 @@ export interface IDelegateFromAPI {
   userType: string;
   aboutMe?: string;
   realName?: string;
+  website?: string;
   profilePicture?: string;
   voteWeight?: number;
   status: string;

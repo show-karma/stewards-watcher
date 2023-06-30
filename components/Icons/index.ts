@@ -32,4 +32,5 @@ export * from './VotedProposalsIcon';
 export * from './VoteForIcon';
 export * from './VotesIcon';
 export * from './VotingIcon';
+export * from './WebsiteIcon';
 export * from './XMarkIcon';
