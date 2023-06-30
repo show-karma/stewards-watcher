@@ -459,6 +459,11 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     setSelectedProfileData(delegate);
   };
 
+  const shouldShowForumHandle =
+    data?.discourseHandle &&
+    daoData?.socialLinks.forum &&
+    config.DAO_FORUM_TYPE;
+
   return (
     <Flex
       bg={theme.card.background}
@@ -826,22 +831,27 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                 <UserInfoButton onOpen={selectProfile} profile={data} />
               </Flex>
               <Flex gap="4" align="center" justify="center">
-                {data?.website && (
-                  <Link
-                    href={data.website}
-                    isExternal
-                    color={theme.card.socialMedia}
-                    _hover={{
-                      transform: 'scale(1.25)',
-                    }}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    h="max-content"
-                  >
-                    <WebsiteIcon w="17px" h="17px" />
-                  </Link>
-                )}
+                {data?.website &&
+                  !(
+                    data.twitterHandle &&
+                    shouldShowForumHandle &&
+                    data.discordUsername
+                  ) && (
+                    <Link
+                      href={data.website}
+                      isExternal
+                      color={theme.card.socialMedia}
+                      _hover={{
+                        transform: 'scale(1.25)',
+                      }}
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      h="max-content"
+                    >
+                      <WebsiteIcon w="17px" h="17px" />
+                    </Link>
+                  )}
                 {data?.twitterHandle && (
                   <Link
                     href={`https://twitter.com/${data.twitterHandle}`}

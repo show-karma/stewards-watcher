@@ -119,6 +119,7 @@ const HandleCases: FC<IHandleCasesProps> = ({
       const media = mediaName.toLowerCase() as 'twitter' | 'forum' | 'website';
       changeHandle(cleanNewHandle, media).finally(() => setIsLoading(false));
     };
+
     return (
       <form onSubmit={handleSubmitWebsite(onSubmitWebsite)}>
         <FormControl isInvalid={!!errorsWebsite.handle}>
