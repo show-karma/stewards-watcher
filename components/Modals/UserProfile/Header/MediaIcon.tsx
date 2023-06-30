@@ -13,7 +13,7 @@ import { FC, ReactNode } from 'react';
 import { IActiveTab, IProfile } from 'types';
 import { getUserForumUrl, lessThanDays } from 'utils';
 
-type IMedias = 'twitter' | 'forum' | 'discord';
+type IMedias = 'twitter' | 'forum' | 'discord' | 'website';
 interface IMediaIcon {
   profile: IProfile;
   media: IMedias;
@@ -65,6 +65,10 @@ export const MediaIcon: FC<IMediaIcon> = ({
     discord: {
       url: `https://discord.com/users/${profile.discordHandle}`,
       value: profile.discordUsername,
+    },
+    website: {
+      url: profile.website || '',
+      value: profile.website,
     },
   };
 

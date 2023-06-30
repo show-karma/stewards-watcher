@@ -13,6 +13,7 @@ export type IProfile = {
   avatar?: string;
   aboutMe?: string;
   realName?: string;
+  website?: string;
   forumHandle?: string;
   discordHandle?: string;
   discordUsername?: string;

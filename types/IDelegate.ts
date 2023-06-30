@@ -22,6 +22,7 @@ export interface IDelegate {
   updatedAt?: string;
   aboutMe?: string;
   realName?: string;
+  website?: string;
   profilePicture?: string;
   status: string;
   userCreatedAt?: string;
