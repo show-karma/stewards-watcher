@@ -124,13 +124,21 @@ export class DelegateRegistryContract extends GelatoRelay {
     };
   }
 
+  public async registerDelegate(data: DelegateWithProfile) {
+    return this.transaction('registerDelegate', [
+      data.tokenAddress,
+      BigInt(data.tokenChainId),
+      JSON.stringify(data.profile),
+    ]);
+  }
+
   /**
    * Creates the payload for register delegate by signature
    * returning the payload
    * @param data
    * @returns
    */
-  public async registerDelegate(
+  public async registerDelegateBySig(
     address: Hex,
     data: DelegateWithProfile
   ): Promise<Parameters<GelatoRelay['sponsoredCall']>> {
@@ -161,6 +169,7 @@ export class DelegateRegistryContract extends GelatoRelay {
         name: 'DelegateRegistry',
         version: '1',
         chainId: data.tokenChainId,
+        verifyingContract: this.contractAddress,
       },
       primaryType: 'RegisterDelegate',
       types,
@@ -180,7 +189,7 @@ export class DelegateRegistryContract extends GelatoRelay {
         s
       );
 
-    console.log({ payload, signature });
+    console.log({ payload, signature, r, s, v });
     if (!payload) throw new Error('Payload is undefined');
     return [
       {

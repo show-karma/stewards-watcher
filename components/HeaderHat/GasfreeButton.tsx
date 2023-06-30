@@ -58,21 +58,27 @@ export const GasfreeButton: React.FC<GasfreeButtonProps> = ({
 
       try {
         setEditSaving(true);
-        const payload = await contract.registerDelegate(address as Hex, {
+        // const payload = await contract.registerDelegate(address as Hex, {
+        //   profile,
+        //   tokenAddress: DAO_DELEGATE_CONTRACT,
+        //   tokenChainId: NETWORK,
+        // });
+
+        // if (!payload) throw new Error('Something went wrong');
+
+        // const { data } = await axios.post<{ txId: string }>(
+        //   '/api/sponsor',
+        //   payload
+        // );
+        const res = await contract.registerDelegate({
           profile,
           tokenAddress: DAO_DELEGATE_CONTRACT,
           tokenChainId: NETWORK,
         });
-
-        if (!payload) throw new Error('Something went wrong');
-
-        const { data } = await axios.post<{ txId: string }>(
-          '/api/sponsor',
-          payload
-        );
+        const { transactionHash } = await res.wait();
         toast({
           title: 'Transaction sent',
-          description: `Transaction sent successfully. TxId: ${data.txId}`,
+          description: `Transaction sent successfully. TxId: ${transactionHash}`,
           status: 'success',
         });
         setIsEditing(false);
