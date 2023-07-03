@@ -5,6 +5,7 @@ import {
   Button,
   Flex,
   FormControl,
+  Input,
   NumberInput,
   NumberInputField,
   Skeleton,
@@ -215,21 +216,20 @@ export const TrackDelegation: React.FC<StepProps> = ({
                   borderRadius="5"
                   backgroundColor="rgba(217, 217, 217, 0.5)"
                 >
-                  <NumberInput>
-                    <NumberInputField
-                      placeholder="Enter an amount to delegate"
-                      maxW="32"
-                      h="max-content"
-                      px="2"
-                      color="black"
-                      bgColor="gray.300"
-                      fontSize="sm"
-                      _placeholder={{
-                        color: 'gray.800',
-                      }}
-                      {...register('amount')}
-                    />
-                  </NumberInput>
+                  <Input
+                    placeholder="Enter an amount to delegate"
+                    maxW="32"
+                    h="max-content"
+                    px="2"
+                    color="black"
+                    bgColor="gray.300"
+                    fontSize="sm"
+                    _placeholder={{
+                      color: 'gray.800',
+                    }}
+                    {...register('amount')}
+                    type="text"
+                  />
                   <Text
                     fontStyle="normal"
                     fontWeight="500"
@@ -244,6 +244,7 @@ export const TrackDelegation: React.FC<StepProps> = ({
                     boxSize="20px"
                     borderRadius="full"
                   />
+                  {voteValue}-{votes}
                 </Flex>
               ) : (
                 <VotesToDelegate
