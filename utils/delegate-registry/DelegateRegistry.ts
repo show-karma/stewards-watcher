@@ -156,7 +156,6 @@ export class DelegateRegistryContract extends GelatoRelay {
         { name: 'expiry', type: 'uint256' },
       ],
     } as const;
-    console.log({ data }, this.contractAddress);
     const signature = await signTypedData({
       message: {
         tokenAddress: data.tokenAddress,
