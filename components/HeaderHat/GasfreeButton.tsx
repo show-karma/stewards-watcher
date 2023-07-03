@@ -58,24 +58,20 @@ export const GasfreeButton: React.FC<GasfreeButtonProps> = ({
 
       try {
         setEditSaving(true);
-        // const payload = await contract.registerDelegate(address as Hex, {
-        //   profile,
-        //   tokenAddress: DAO_DELEGATE_CONTRACT,
-        //   tokenChainId: NETWORK,
-        // });
-
-        // if (!payload) throw new Error('Something went wrong');
-
-        // const { data } = await axios.post<{ txId: string }>(
-        //   '/api/sponsor',
-        //   payload
-        // );
-        const res = await contract.registerDelegate({
+        const payload = await contract.registerDelegateBySig(address as Hex, {
           profile,
           tokenAddress: DAO_DELEGATE_CONTRACT,
           tokenChainId: NETWORK,
         });
-        const { transactionHash } = await res.wait();
+
+        if (!payload) throw new Error('Something went wrong');
+
+        const { data } = await axios.post<{ txId: string }>(
+          '/api/sponsor',
+          payload
+        );
+
+        const { txId: transactionHash } = data;
         toast({
           title: 'Transaction sent',
           description: `Transaction sent successfully. TxId: ${transactionHash}`,

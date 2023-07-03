@@ -432,6 +432,11 @@
         "inputs": [
             {
                 "internalType": "address",
+                "name": "delegateAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
                 "name": "tokenAddress",
                 "type": "address"
             },

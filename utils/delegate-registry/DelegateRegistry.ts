@@ -156,7 +156,7 @@ export class DelegateRegistryContract extends GelatoRelay {
         { name: 'expiry', type: 'uint256' },
       ],
     } as const;
-
+    console.log({ data }, this.contractAddress);
     const signature = await signTypedData({
       message: {
         tokenAddress: data.tokenAddress,
@@ -166,8 +166,8 @@ export class DelegateRegistryContract extends GelatoRelay {
         expiry,
       },
       domain: {
-        name: 'DelegateRegistry',
-        version: '1',
+        name: 'delegate-registry',
+        version: '1.0',
         chainId: data.tokenChainId,
         verifyingContract: this.contractAddress,
       },
@@ -179,6 +179,7 @@ export class DelegateRegistryContract extends GelatoRelay {
 
     const { data: payload } =
       await this.contract.populateTransaction.registerDelegateBySig(
+        address,
         data.tokenAddress,
         BigInt(data.tokenChainId),
         metadata,
