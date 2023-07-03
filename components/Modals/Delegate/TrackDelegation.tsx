@@ -244,7 +244,6 @@ export const TrackDelegation: React.FC<StepProps> = ({
                     boxSize="20px"
                     borderRadius="full"
                   />
-                  {voteValue}-{votes}
                 </Flex>
               ) : (
                 <VotesToDelegate
