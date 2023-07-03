@@ -32,8 +32,8 @@ export const GasfreeButton: React.FC<GasfreeButtonProps> = ({
 
   const profile: DelegateProfile = useMemo(
     () => ({
-      ipfsMetadata: '',
-      name: newName || '',
+      ipfsMetadata: null,
+      name: newName || null,
       profilePictureUrl: newProfilePicture || '',
       statement: newStatement.value as string,
       interests: (newInterests.value as string[])?.join(',') || '',
