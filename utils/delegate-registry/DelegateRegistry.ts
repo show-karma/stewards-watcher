@@ -15,8 +15,14 @@ import {
 import { Hex } from 'types';
 import { GelatoRelay } from '@gelatonetwork/relay-sdk';
 import { ethers } from 'ethers';
+import axios from 'axios';
 import ABI from './ABI.json';
-import type { DelegateWithProfile, DelegateWithAddress } from './types';
+import type {
+  DelegateWithProfile,
+  DelegateWithAddress,
+  DelegateStatementRes,
+  DelegateRegistryWithInterests,
+} from './types';
 
 enum TaskState {
   CheckPending = 'CheckPending',
@@ -31,6 +37,9 @@ enum TaskState {
 
 export class DelegateRegistryContract extends GelatoRelay {
   contract: ethers.Contract;
+
+  private static readonly subgraphUrl =
+    'https://api.thegraph.com/subgraphs/name/andremury/governance-playground';
 
   constructor(readonly contractAddress: Hex) {
     super();
@@ -236,16 +245,45 @@ export class DelegateRegistryContract extends GelatoRelay {
    * @param tokenChainId
    * @returns
    */
-  public async getDelegate(
-    delegateAddress: string,
+  static async getDelegate(
+    addresses: string[],
     tokenAddress: string,
     tokenChainId: number
-  ): Promise<DelegateWithAddress> {
-    return <DelegateWithAddress>await readFn({
-      abi: ABI,
-      address: this.contractAddress,
-      functionName: 'getDelegate',
-      args: [delegateAddress, tokenAddress, tokenChainId],
+  ): Promise<DelegateRegistryWithInterests[]> {
+    const query = `
+    {
+      delegates(where: { delegateAddress_in: ["${addresses.join(
+        '","'
+      )}"], tokenAddress: "${tokenAddress}", tokenChainId: ${tokenChainId} }) {
+        id
+        delegateAddress
+        tokenAddress
+        tokenChainId
+        statement
+        status
+        blockTimestamp
+        name
+        ipfsMetadata
+        acceptedCoC
+        interests
+      }
+    }`;
+
+    const {
+      data: {
+        data: { delegates },
+      },
+    } = await axios.post<{ data: DelegateStatementRes }>(this.subgraphUrl, {
+      query,
+    });
+
+    return delegates.map(item => {
+      if (Array.isArray(item.interests))
+        return item as DelegateRegistryWithInterests;
+      return <DelegateRegistryWithInterests>{
+        ...item,
+        interests: item.interests.split(','),
+      };
     });
   }
 }

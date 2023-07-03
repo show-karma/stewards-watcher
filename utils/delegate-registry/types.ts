@@ -21,3 +21,24 @@ export type DelegateWithProfile = Delegate & {
 export type DelegateWithAddress = Delegate & {
   delegateAddress: Hex; // address of this delegate's account
 };
+
+export interface DelegateRegistry {
+  delegateAddress: Hex; // address of this delegate's account
+  statement: string; // Delegate's statement for this DAO
+  tokenAddress: Hex; // address of the DAO's token
+  tokenChainId: number; // chain ID of this DAO's network
+  status: 'Active' | 'Withdrawn' | 'Pending'; // status of the delegate
+  blockTimestamp: number; // timestamp of the block when the delegate was registered
+  name?: string | null; // name of the delegate
+  ipfsMetadata?: string | null; // IPFS hash of delegate's metadata
+  interests: string | string[]; // Delegate's interests
+  acceptedCoC: boolean; // whether the delegate has accepted the CoC
+}
+
+export interface DelegateStatementRes {
+  delegates: DelegateRegistry[];
+}
+
+export interface DelegateRegistryWithInterests extends DelegateRegistry {
+  interests: string[]; // Delegate's interests
+}
