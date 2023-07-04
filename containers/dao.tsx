@@ -31,9 +31,13 @@ const HandlesProvider = dynamic(() =>
 
 interface IDAOContainer {
   user?: string;
+  shouldOpenDelegateToAnyone?: boolean;
 }
 
-export const DAOContainer: React.FC<IDAOContainer> = ({ user }) => {
+export const DAOContainer: React.FC<IDAOContainer> = ({
+  user,
+  shouldOpenDelegateToAnyone,
+}) => {
   const { daoInfo, theme } = useDAO();
   const { config } = daoInfo;
 
@@ -107,7 +111,9 @@ export const DAOContainer: React.FC<IDAOContainer> = ({ user }) => {
                     align="center"
                     background={theme.secondBg || theme.bodyBg}
                   >
-                    <HeaderHat />
+                    <HeaderHat
+                      shouldOpenDelegateToAnyone={shouldOpenDelegateToAnyone}
+                    />
                     <MainLayout>
                       <BodyTitle />
                       <DelegatesList pathUser={user} />

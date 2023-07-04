@@ -15,7 +15,7 @@ import {
 } from 'components';
 import { DelegateVotesModal } from 'components/Modals/DelegateToAnyone';
 import { useDAO, useDelegates, useWallet } from 'contexts';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { KARMA_WEBSITE } from 'helpers';
 import { UndelegateModal } from 'components/pages/token-holders/UndelegateModal';
 import { NavMenu } from './NavMenu';
@@ -48,7 +48,13 @@ export const StyledButton: FC<ButtonProps> = ({ children, ...rest }) => {
   );
 };
 
-export const HeaderHat = () => {
+interface IHeaderHat {
+  shouldOpenDelegateToAnyone?: boolean;
+}
+
+export const HeaderHat: FC<IHeaderHat> = ({
+  shouldOpenDelegateToAnyone = false,
+}) => {
   const { daoInfo, theme, rootPathname } = useDAO();
   const { config } = daoInfo;
   const {
@@ -117,6 +123,12 @@ export const HeaderHat = () => {
 
     return array;
   };
+
+  useEffect(() => {
+    if (shouldOpenDelegateToAnyone) {
+      onToggleVoteToAnyone();
+    }
+  }, [shouldOpenDelegateToAnyone]);
 
   return (
     <Flex flexDir="column" w="full">
