@@ -26,6 +26,7 @@ export const GasfreeButton: React.FC<GasfreeButtonProps> = ({
     newProfilePicture,
     setEditSaving,
     setIsEditing,
+    saveEdit,
   } = useEditProfile();
 
   const { toast } = useToasty();
@@ -77,14 +78,13 @@ export const GasfreeButton: React.FC<GasfreeButtonProps> = ({
           description: `Transaction sent successfully. TxId: ${transactionHash}`,
           status: 'success',
         });
-        setIsEditing(false);
+        saveEdit();
       } catch (err: any) {
         toast({
           title: 'Transaction failed',
           description: err.response?.data || err.message,
           status: 'error',
         });
-      } finally {
         setEditSaving(false);
       }
     }

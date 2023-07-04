@@ -29,6 +29,7 @@ export interface IDelegate {
     threadId: number;
     customFields: ICustomFields[];
     postId: number;
+    updatedAt: string;
   };
   workstreams?: { id: number; name: string; description: string }[];
   tracks?: {

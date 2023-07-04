@@ -103,7 +103,11 @@ export class DelegateRegistryContract extends GelatoRelay {
               TaskState.Blacklisted,
             ].includes(status?.taskState)
           ) {
-            reject(new Error(status.lastCheckMessage));
+            reject(
+              new Error(
+                status.lastCheckMessage?.split('RegisterDelegate: ')[1] || ''
+              )
+            );
             break;
           }
 

@@ -22,12 +22,14 @@ import {
   IWorkstream,
   IStatsID,
   ITracks,
+  Hex,
 } from 'types';
 import { useMixpanel, useToasty } from 'hooks';
 import { api } from 'helpers';
 import { useAccount } from 'wagmi';
 import { IBulkDelegatePayload } from 'utils/moonbeam/moonriverDelegateAction';
 import { ITrackBadgeProps } from 'components/DelegationPool/TrackBadge';
+import { DelegateRegistryContract } from 'utils/delegate-registry/DelegateRegistry';
 import { useDAO } from './dao';
 
 interface IDelegateProps {
@@ -292,6 +294,46 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     setDelegateOffersToA(value);
   };
 
+  const fetchOnChainStatements = async (list: IDelegate[]) => {
+    const {
+      config: { DAO_DELEGATE_CONTRACT, DELEGATE_REGISTRY_CONTRACT },
+    } = daoInfo;
+    if (!(DAO_DELEGATE_CONTRACT && DELEGATE_REGISTRY_CONTRACT)) return [];
+
+    const statements = await DelegateRegistryContract.getDelegate(
+      list.map(item => item.address as Hex),
+      DAO_DELEGATE_CONTRACT,
+      DELEGATE_REGISTRY_CONTRACT.NETWORK
+    );
+
+    return list.map(delegate => {
+      const hasStatement = statements.find(
+        statement =>
+          statement.delegateAddress === delegate.address &&
+          (!delegate.delegatePitch?.updatedAt ||
+            new Date(statement.blockTimestamp * 1000) >
+              new Date(delegate.delegatePitch.updatedAt))
+      );
+
+      if (hasStatement) {
+        delegate.delegatePitch?.customFields?.forEach(field => {
+          Object.entries(hasStatement).forEach(([key, value]) => {
+            if (field.label.toLowerCase().includes(key)) {
+              // eslint-disable-next-line no-param-reassign
+              field.value = value;
+            }
+
+            if (field.displayAs === 'headline' && key === 'statement') {
+              // eslint-disable-next-line no-param-reassign
+              field.value = value;
+            }
+          });
+        });
+      }
+      return delegate;
+    });
+  };
+
   const fetchDelegates = async (_offset = offset) => {
     setLoading(true);
     try {
@@ -361,7 +403,10 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         };
       });
 
-      setDelegates(delegatesList);
+      const delegatesWithStatements = await fetchOnChainStatements(
+        delegatesList
+      );
+      setDelegates(delegatesWithStatements);
       setDelegateCount(count || 0);
     } catch (error) {
       setDelegates([]);
@@ -432,7 +477,11 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           userCreatedAt: item.userCreatedAt,
         };
       });
-      setDelegates(delegatesList);
+      const delegatesWithStatements = await fetchOnChainStatements(
+        delegatesList
+      );
+      console.log({ delegatesWithStatements });
+      setDelegates(delegatesWithStatements);
 
       setDelegateCount(count || 0);
     } catch (error) {
@@ -577,7 +626,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         userCreatedAt: fetchedDelegate.userCreatedAt,
         acceptedTOS: fetchedDelegate.acceptedTOS,
       };
-      return userFound;
+      const userWithStatement = await fetchOnChainStatements([userFound]);
+      console.log({ userWithStatement });
+      return userWithStatement?.[0] || null;
     } catch {
       return null;
     }
@@ -752,12 +803,15 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       if (fetchedDelegates.length) {
         setLastUpdate(fetchedDelegates[0].stats[0].updatedAt);
       }
+
+      const newDelegates: IDelegate[] = [];
+
       fetchedDelegates.forEach((item: IDelegateFromAPI) => {
         const fetchedPeriod = item.stats.find(
           fetchedStat => fetchedStat.period === period
         );
 
-        delegates.push({
+        newDelegates.push({
           address: item.publicAddress,
           ensName: item.ensName,
           delegatorCount: item.delegatorCount || 0,
@@ -787,6 +841,11 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           status: item.status,
         });
       });
+      const delegatesWithStatements = await fetchOnChainStatements(
+        newDelegates
+      );
+
+      delegates.push(...delegatesWithStatements);
     } catch (error) {
       setDelegates([]);
       console.log(error);

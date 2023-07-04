@@ -6,7 +6,6 @@ import { api, API_ROUTES, KARMA_API } from 'helpers';
 import { useAccount } from 'wagmi';
 import axios from 'axios';
 import { DelegateRegistryContract } from 'utils/delegate-registry/DelegateRegistry';
-import { useQuery } from '@tanstack/react-query';
 import { useDelegates } from './delegates';
 import { useDAO } from './dao';
 import { useAuth } from './auth';
@@ -146,11 +145,6 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     }
   };
 
-  // const { data: onChainStatement } = useQuery({
-  //   queryKey: ['delegate-pitch', profileSelected?.address],
-  //   queryFn: async () => getOnChainStatement([profileSelected?.address as Hex]),
-  // });
-
   const queryStatement = async () => {
     if (!profile.address) return;
     setIsLoadingStatement(true);
@@ -163,9 +157,10 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       let offChainStatement: any;
 
       try {
-        offChainStatement = await api.get(
+        const { data } = await api.get(
           `/forum-user/${config.DAO_KARMA_ID}/delegate-pitch/${profile.address}`
         );
+        offChainStatement = data;
       } catch {
         // ignore if failed
       }
@@ -173,12 +168,13 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       if (!(offChainStatement?.data.delegatePitch || stmt)) return;
 
       const isOnChainStatementNewer =
-        !offChainStatement?.data.delegatePitch.updatedAt ||
+        !offChainStatement?.data.delegatePitch?.updatedAt ||
         new Date(stmt.blockTimestamp * 1000) >
           new Date(offChainStatement?.data.delegatePitch.updatedAt);
+      console.log({ isOnChainStatementNewer, offChainStatement, stmt });
 
       const customFields: ICustomFields[] =
-        offChainStatement?.data.delegatePitch.customFields;
+        offChainStatement?.data.delegatePitch?.customFields;
       const emptyField: ICustomFields = { label: '', value: [] };
 
       let fetchedInterests = isOnChainStatementNewer
@@ -393,6 +389,9 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
             }
           );
         }
+        // subgrpah refresh time (not always work).
+        // The new profile data should be replaced with the local
+        // data instead of fetching again.
         await queryStatement();
       } catch (error: any) {
         hasError = true;
