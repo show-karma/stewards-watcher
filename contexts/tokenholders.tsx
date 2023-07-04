@@ -34,7 +34,7 @@ interface IProviderProps {
 }
 
 export const TokenHoldersProvider: FC<IProviderProps> = ({ children }) => {
-  const { daoInfo } = useDAO();
+  const { daoInfo, rootPathname } = useDAO();
 
   const [selectedAddresses, setSelectedAddresses] = useState<string[]>([]);
   const [selectedAddressesData, setSelectedAddressesData] = useState<
@@ -122,7 +122,7 @@ export const TokenHoldersProvider: FC<IProviderProps> = ({ children }) => {
     router
       .push(
         {
-          pathname: `/delegate-lookup/`,
+          pathname: `${rootPathname}/delegate-lookup/`,
           query: {
             addresses: addresses.join(','),
           },

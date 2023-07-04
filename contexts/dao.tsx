@@ -9,6 +9,7 @@ interface IDAOProps {
   theme: IDAOTheme;
   daoData: IDAOData | undefined;
   selectedDAO: string;
+  rootPathname: string;
 }
 
 export const DAOContext = createContext({} as IDAOProps);
@@ -17,16 +18,22 @@ interface ProviderProps {
   selectedDAO: string;
   children: React.ReactNode;
   shouldFetchInfo?: boolean;
+  withPathname?: boolean;
 }
 
 export const DAOProvider: React.FC<ProviderProps> = ({
   children,
   selectedDAO,
   shouldFetchInfo = true,
+  withPathname = false,
 }) => {
   const [daoInfo, setDAOInfo] = useState<IDAOInfo>({} as IDAOInfo);
   const [daoData, setDAOData] = useState<IDAOData>();
   const theme = usePicasso({ light: daoInfo.light, dark: daoInfo.dark });
+
+  const [rootPathname] = useState(
+    withPathname ? `/${selectedDAO.toLowerCase()}` : ''
+  );
 
   const searchConfig = (dao: string) => {
     const findDAO = supportedDAOs[dao];
@@ -55,8 +62,9 @@ export const DAOProvider: React.FC<ProviderProps> = ({
       theme,
       daoData,
       selectedDAO,
+      rootPathname,
     }),
-    [daoInfo, theme, daoData]
+    [daoInfo, theme, daoData, rootPathname]
   );
 
   return (

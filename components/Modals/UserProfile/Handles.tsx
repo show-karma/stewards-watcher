@@ -7,7 +7,13 @@ import {
   Input,
   FormControl,
 } from '@chakra-ui/react';
-import { DiscordIcon, ForumIcon, TwitterIcon, ChakraLink } from 'components';
+import {
+  DiscordIcon,
+  ForumIcon,
+  TwitterIcon,
+  ChakraLink,
+  WebsiteIcon,
+} from 'components';
 import {
   useAuth,
   useDAO,
@@ -53,19 +59,33 @@ const HandleCases: FC<IHandleCasesProps> = ({
   const { isEditing, changeHandle } = useEditProfile();
   const [isLoading, setIsLoading] = useState(false);
 
-  const schema = yup
+  const simpleInputSchema = yup
     .object({
       handle: yup.string().required('Handle is required'),
     })
     .required();
-  type FormData = yup.InferType<typeof schema>;
+
+  const websiteSchema = yup
+    .object({
+      handle: yup
+        .string()
+        .required('Handle is required')
+        .url('Please enter a valid URL.'),
+    })
+    .required();
+
+  type FormDataAdminEdit = yup.InferType<typeof simpleInputSchema>;
+  type FormDataWebsiteEdit = yup.InferType<typeof websiteSchema>;
 
   const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<FormData>({
-    resolver: yupResolver(schema),
+    register: registerSimpleInput,
+    handleSubmit: handleSubmitSimpleInput,
+    formState: {
+      errors: errorsSimpleInput,
+      isSubmitting: isSubmittingSimpleInput,
+    },
+  } = useForm<FormDataAdminEdit>({
+    resolver: yupResolver(simpleInputSchema),
     defaultValues: {
       handle: currentHandle || '',
     },
@@ -73,7 +93,20 @@ const HandleCases: FC<IHandleCasesProps> = ({
     mode: 'onChange',
   });
 
-  const onSubmit = (data: { handle: string }) => {
+  const {
+    register: registerWebsite,
+    handleSubmit: handleSubmitWebsite,
+    formState: { errors: errorsWebsite, isSubmitting: isSubmittingWebsite },
+  } = useForm<FormDataWebsiteEdit>({
+    resolver: yupResolver(websiteSchema),
+    defaultValues: {
+      handle: currentHandle || '',
+    },
+    reValidateMode: 'onChange',
+    mode: 'onChange',
+  });
+
+  const onSubmitAdminEdit = (data: { handle: string }) => {
     const cleanNewHandle = data.handle.replace(/[|;$%@"<>()+,.]/g, '');
     if (!cleanNewHandle) return;
     setIsLoading(true);
@@ -81,10 +114,18 @@ const HandleCases: FC<IHandleCasesProps> = ({
     changeHandle(cleanNewHandle, media).finally(() => setIsLoading(false));
   };
 
-  if (isDaoAdmin && isEditing && canAdminEdit)
+  if (mediaName === 'Website') {
+    const onSubmitWebsite = (data: { handle: string }) => {
+      const cleanNewHandle = data.handle;
+      if (!cleanNewHandle) return;
+      setIsLoading(true);
+      const media = mediaName.toLowerCase() as 'twitter' | 'forum' | 'website';
+      changeHandle(cleanNewHandle, media).finally(() => setIsLoading(false));
+    };
+
     return (
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <FormControl isInvalid={!!errors.handle}>
+      <form onSubmit={handleSubmitWebsite(onSubmitWebsite)}>
+        <FormControl isInvalid={!!errorsWebsite.handle}>
           <Flex flexDir="column" gap="1">
             <Flex flexDir="row" gap="4">
               <Input
@@ -95,18 +136,50 @@ const HandleCases: FC<IHandleCasesProps> = ({
                 minW="60"
                 maxW="60"
                 w="max-content"
-                {...register('handle')}
+                {...registerWebsite('handle')}
               />
               <Button
                 type="submit"
-                isLoading={isSubmitting || isLoading}
-                isDisabled={!!errors.handle || isLoading}
-                disabled={!!errors.handle || isLoading}
+                isLoading={isSubmittingWebsite || isLoading}
+                isDisabled={!!errorsWebsite.handle || isLoading}
+                disabled={!!errorsWebsite.handle || isLoading}
               >
                 Save
               </Button>
             </Flex>
-            <Text color="red.200">{errors.handle?.message}</Text>
+            <Text color="red.200">{errorsWebsite.handle?.message}</Text>
+          </Flex>
+        </FormControl>
+      </form>
+    );
+  }
+
+  if ((isDaoAdmin && isEditing && canAdminEdit) || actionType === 'input')
+    return (
+      <form onSubmit={handleSubmitSimpleInput(onSubmitAdminEdit)}>
+        <FormControl isInvalid={!!errorsSimpleInput.handle}>
+          <Flex flexDir="column" gap="1">
+            <Flex flexDir="row" gap="4">
+              <Input
+                px="4"
+                py="2"
+                borderWidth="1px"
+                borderColor={theme.modal.statement.sidebar.item}
+                minW="60"
+                maxW="60"
+                w="max-content"
+                {...registerSimpleInput('handle')}
+              />
+              <Button
+                type="submit"
+                isLoading={isSubmittingSimpleInput || isLoading}
+                isDisabled={!!errorsSimpleInput.handle || isLoading}
+                disabled={!!errorsSimpleInput.handle || isLoading}
+              >
+                Save
+              </Button>
+            </Flex>
+            <Text color="red.200">{errorsSimpleInput.handle?.message}</Text>
           </Flex>
         </FormControl>
       </form>
@@ -152,6 +225,7 @@ const HandleCases: FC<IHandleCasesProps> = ({
           </Button>
         </Tooltip>
       );
+
     if (actionType === 'text' && mediaName === 'Discord') {
       return (
         <Flex align="center" h="100%" mt="2">
@@ -219,14 +293,19 @@ export const Handles: FC = () => {
       icon: TwitterIcon,
       name: 'Twitter',
       disabledCondition: notShowCondition,
-      actionType: 'button',
-      action: () => {
-        twitterOnOpen();
-      },
+      // TODO TEMPORARY DISABLED
+      // actionType: 'button',
+      // action: () => {
+      //   twitterOnOpen();
+      // },
       handle: profileSelected?.twitterHandle
         ? `@${profileSelected?.twitterHandle}`
         : undefined,
       canAdminEdit: true,
+      // TODO TEMPORARY DISABLED
+      action: undefined,
+      actionType: 'text',
+      hideCondition: !profileSelected?.twitterHandle,
     },
     {
       icon: ForumIcon,
@@ -251,6 +330,14 @@ export const Handles: FC = () => {
       handle: profileSelected?.discordUsername
         ? `@${profileSelected?.discordUsername}`
         : undefined,
+      canAdminEdit: true,
+    },
+    {
+      icon: WebsiteIcon,
+      name: 'Website',
+      action: undefined,
+      actionType: 'input',
+      handle: profileSelected?.website ? profileSelected?.website : undefined,
       canAdminEdit: true,
     },
   ];
@@ -312,11 +399,13 @@ export const Handles: FC = () => {
           )}
         </Flex>
       </Flex>
+      {/* 
+      TODO: TEMPORARY FIX
       <TwitterModal
         open={twitterIsOpen}
         handleModal={twitterOnToggle}
         onClose={twitterOnClose}
-      />
+      /> */}
       {daoData?.forumTopicURL && (
         <DiscourseModal
           open={forumIsOpen}

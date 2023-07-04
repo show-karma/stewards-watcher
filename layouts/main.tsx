@@ -18,8 +18,8 @@ export const MainLayout: React.FC<IMainLayout> = ({ children, ...rest }) => {
   const router = useRouter();
 
   const isHome =
-    router.pathname === '/_sites/[site]' ||
-    router.pathname.includes('/_sites/[site]/profile');
+    router.pathname.match(/(\/_sites\/\[site\])|(\[site\])/) ||
+    router.pathname.match(/(\/_sites\/\[site\])|(\[site\])\/profile/);
 
   return (
     <Flex

@@ -5,7 +5,6 @@ import {
   Flex,
   Img,
   useColorModeValue,
-  useDisclosure,
   useMediaQuery,
 } from '@chakra-ui/react';
 import {
@@ -16,7 +15,7 @@ import {
 } from 'components';
 import { DelegateVotesModal } from 'components/Modals/DelegateToAnyone';
 import { useDAO, useDelegates, useWallet } from 'contexts';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { KARMA_WEBSITE } from 'helpers';
 import { UndelegateModal } from 'components/pages/token-holders/UndelegateModal';
 import { NavMenu } from './NavMenu';
@@ -49,12 +48,23 @@ export const StyledButton: FC<ButtonProps> = ({ children, ...rest }) => {
   );
 };
 
-export const HeaderHat = () => {
-  const { daoInfo, theme } = useDAO();
+interface IHeaderHat {
+  shouldOpenDelegateToAnyone?: boolean;
+}
+
+export const HeaderHat: FC<IHeaderHat> = ({
+  shouldOpenDelegateToAnyone = false,
+}) => {
+  const { daoInfo, theme, rootPathname } = useDAO();
   const { config } = daoInfo;
-  const { isOpen, onToggle } = useDisclosure();
-  const { isOpenProfile, onCloseProfile, profileSelected, selectedTab } =
-    useDelegates();
+  const {
+    isOpenProfile,
+    onCloseProfile,
+    profileSelected,
+    selectedTab,
+    isOpenVoteToAnyone,
+    onToggleVoteToAnyone,
+  } = useDelegates();
   const { delegateLoginIsOpen, delegateLoginOnClose, delegateLoginOnOpen } =
     useWallet();
 
@@ -72,7 +82,7 @@ export const HeaderHat = () => {
     if (daoInfo.config.ENABLE_DELEGATE_TRACKER)
       array.push({
         title: 'Delegate Look Up',
-        path: '/delegate-lookup',
+        path: `${rootPathname}/delegate-lookup`,
         isExternal: false,
       });
     if (
@@ -81,7 +91,7 @@ export const HeaderHat = () => {
     )
       array.push({
         title: 'Delegate Tokens',
-        action: onToggle,
+        action: onToggleVoteToAnyone,
       });
 
     return array;
@@ -114,6 +124,12 @@ export const HeaderHat = () => {
     return array;
   };
 
+  useEffect(() => {
+    if (shouldOpenDelegateToAnyone) {
+      onToggleVoteToAnyone();
+    }
+  }, [shouldOpenDelegateToAnyone]);
+
   return (
     <Flex flexDir="column" w="full">
       <Flex
@@ -138,7 +154,11 @@ export const HeaderHat = () => {
                 childrens={mountingForTokenholders()}
                 accordion
               >
-                <UndelegateModal />
+                <UndelegateModal
+                  buttonProps={{
+                    color: theme.hat.text.primary,
+                  }}
+                />
               </NavMenu>
               {daoInfo.config.HIDE_FOR_DELEGATES?.length ? undefined : (
                 <NavMenu
@@ -147,11 +167,11 @@ export const HeaderHat = () => {
                   accordion
                 />
               )}
-              <ChakraLink href="/guide" _hover={{}}>
+              <ChakraLink href={`${rootPathname}/guide`} _hover={{}}>
                 <StyledButton>Guide</StyledButton>
               </ChakraLink>
               {daoInfo.config.DAO_DEFAULT_SETTINGS?.FAQ && (
-                <ChakraLink href="/faq" _hover={{}} w="full">
+                <ChakraLink href={`${rootPathname}/faq`} _hover={{}} w="full">
                   <StyledButton w="full">FAQs</StyledButton>
                 </ChakraLink>
               )}
@@ -191,7 +211,7 @@ export const HeaderHat = () => {
                 align={['flex-start', 'flex-start']}
                 gap="1"
               >
-                <ChakraLink href="/">
+                <ChakraLink href={`${rootPathname}/`}>
                   <Img
                     w="auto"
                     maxW="36"
@@ -230,11 +250,11 @@ export const HeaderHat = () => {
 
                   {isSmallScreen ? null : (
                     <>
-                      <ChakraLink href="/guide" _hover={{}}>
+                      <ChakraLink href={`${rootPathname}/guide`} _hover={{}}>
                         <StyledButton>Guide</StyledButton>
                       </ChakraLink>
                       {daoInfo.config.DAO_DEFAULT_SETTINGS?.FAQ && (
-                        <ChakraLink href="/faq" _hover={{}}>
+                        <ChakraLink href={`${rootPathname}/faq`} _hover={{}}>
                           <StyledButton>FAQs</StyledButton>
                         </ChakraLink>
                       )}
@@ -254,9 +274,11 @@ export const HeaderHat = () => {
             </Flex>
           </Flex>
         )}
-
-        <DelegateVotesModal isOpen={isOpen} onClose={onToggle} />
       </Flex>
+      <DelegateVotesModal
+        isOpen={isOpenVoteToAnyone}
+        onClose={onToggleVoteToAnyone}
+      />
       <DelegateLoginModal
         isOpen={delegateLoginIsOpen}
         onClose={delegateLoginOnClose}

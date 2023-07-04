@@ -46,7 +46,7 @@ interface IIndex {
 
 const Index = ({ dao }: IIndex) => (
   <DAOProvider selectedDAO={dao}>
-    <DAOContainer />
+    <DAOContainer shouldOpenDelegateToAnyone />
   </DAOProvider>
 );
 

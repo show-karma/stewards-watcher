@@ -106,6 +106,8 @@ interface IDelegateProps {
   changeAmountOfDelegation: (address: string, amount: string) => void;
   delegationWillHaveError: boolean;
   setDelegationError: (value: boolean) => void;
+  isOpenVoteToAnyone: boolean;
+  onToggleVoteToAnyone: () => void;
 }
 
 export const DelegatesContext = createContext({} as IDelegateProps);
@@ -135,7 +137,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
   children,
   ignoreAutoFetch,
 }) => {
-  const { daoInfo } = useDAO();
+  const { daoInfo, rootPathname } = useDAO();
   const { config } = daoInfo;
 
   const defaultTimePeriod =
@@ -173,12 +175,14 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     return statsToShow;
   };
 
-  const [statuses, setStatuses] = useState<IStatusOptions[]>(
-    config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER?.DEFAULT_STATUSES ||
-      defaultStatuses
-  );
+  const statusesOptions: IStatusOptions[] =
+    config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER?.CUSTOM_STATUS ||
+    defaultStatuses;
 
-  const [statusesOptions] = useState<IStatusOptions[]>(defaultStatuses);
+  const [statuses, setStatuses] = useState<IStatusOptions[]>(
+    config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER?.DEFAULT_STATUS_SELECTED ||
+      statusesOptions
+  );
 
   const statOptions = prepareStatOptions();
 
@@ -212,6 +216,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     onOpen: onOpenProfile,
     onClose: closeModalProfile,
   } = useDisclosure();
+
+  const { isOpen: isOpenVoteToAnyone, onToggle: onToggleVoteToAnyone } =
+    useDisclosure();
 
   const isSearchDirty = userToFind !== '';
   const isFiltering = interests.length > 0;
@@ -354,7 +361,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           tracks: getTracks(),
           statuses: statuses.length
             ? statuses.join(',')
-            : config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER?.DEFAULT_STATUSES?.join(
+            : config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER?.DEFAULT_STATUS_SELECTED?.join(
                 ','
               ) || defaultStatuses.join(','),
         },
@@ -400,6 +407,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           workstreams: item.workstreams,
           tracks: item.tracks,
           userCreatedAt: item.userCreatedAt,
+          website: item.website,
         };
       });
 
@@ -475,6 +483,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           tracks: item.tracks,
           status: item.status,
           userCreatedAt: item.userCreatedAt,
+          website: item.website,
         };
       });
       const delegatesWithStatements = await fetchOnChainStatements(
@@ -507,7 +516,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     router
       .push(
         {
-          pathname: `/profile/${profile.ensName || profile.address}`,
+          pathname: `${rootPathname}/profile/${
+            profile.ensName || profile.address
+          }`,
           hash: tab,
         },
         undefined,
@@ -528,8 +539,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
   );
 
   const checkIfUserNotFound = (
-    error: string,
     userToSearch: string,
+    error?: string,
     defaultTab?: IActiveTab
   ) => {
     if (!publicAddress) {
@@ -575,7 +586,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
   useEffect(() => {
     if (publicAddress && profileSearching && shouldOpenModal) {
       setShouldOpenModal(false);
-      checkIfUserNotFound('Not Found', profileSearching);
+      checkIfUserNotFound(profileSearching, 'Not Found');
     }
   }, [publicAddress, isConnected]);
 
@@ -625,6 +636,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         status: fetchedDelegate.status,
         userCreatedAt: fetchedDelegate.userCreatedAt,
         acceptedTOS: fetchedDelegate.acceptedTOS,
+        website: fetchedDelegate.website,
       };
       const userWithStatement = await fetchOnChainStatements([userFound]);
       console.log({ userWithStatement });
@@ -683,6 +695,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         status: fetchedDelegate.status,
         userCreatedAt: fetchedDelegate.userCreatedAt,
         acceptedTOS: fetchedDelegate.acceptedTOS,
+        website: fetchedDelegate.website,
       };
 
       const getTab = asPath.split('#');
@@ -699,11 +712,13 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
 
       selectProfile(userFound, checkTab ? shouldOpenTab : undefined);
     } catch (error: any) {
-      checkIfUserNotFound(
-        error?.response?.data.error.error,
-        userToSearch,
-        defaultTab
-      );
+      if (error?.response?.data && error?.response?.data.error) {
+        checkIfUserNotFound(
+          userToSearch,
+          error?.response?.data.error.error,
+          defaultTab
+        );
+      }
     }
   };
 
@@ -753,6 +768,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         status: fetchedDelegate.status,
         userCreatedAt: fetchedDelegate.userCreatedAt,
         acceptedTOS: fetchedDelegate.acceptedTOS,
+        website: fetchedDelegate.website,
       };
 
       setProfileSelected(userFound);
@@ -793,7 +809,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           workstreamId: getWorkstreams(),
           statuses: statuses.length
             ? statuses.join(',')
-            : config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER?.DEFAULT_STATUSES?.join(
+            : config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER?.DEFAULT_STATUS_SELECTED?.join(
                 ','
               ) || defaultStatuses.join(','),
         },
@@ -839,6 +855,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           gitcoinHealthScore: fetchedPeriod?.gitcoinHealthScore || 0,
           userCreatedAt: item.userCreatedAt,
           status: item.status,
+          website: item.website,
         });
       });
       const delegatesWithStatements = await fetchOnChainStatements(
@@ -919,7 +936,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
 
     router.push(
       {
-        pathname: '/',
+        pathname: `/${rootPathname}`,
         query,
       },
       undefined,
@@ -1274,6 +1291,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       changeAmountOfDelegation,
       delegationWillHaveError,
       setDelegationError,
+      isOpenVoteToAnyone,
+      onToggleVoteToAnyone,
     }),
     [
       profileSelected,
@@ -1319,6 +1338,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       changeAmountOfDelegation,
       delegationWillHaveError,
       setDelegationError,
+      isOpenVoteToAnyone,
+      onToggleVoteToAnyone,
     ]
   );
 

@@ -16,7 +16,6 @@ import {
   PopoverTrigger,
   PopoverContent,
   PopoverArrow,
-  PopoverCloseButton,
   PopoverBody,
 } from '@chakra-ui/react';
 import { FC, useState, useMemo } from 'react';
@@ -42,7 +41,7 @@ import dynamic from 'next/dynamic';
 import { FaDiscord } from 'react-icons/fa';
 import { ImgWithFallback } from '../ImgWithFallback';
 import { DelegateButton } from '../DelegateButton';
-import { ForumIcon, TwitterIcon } from '../Icons';
+import { ForumIcon, TwitterIcon, WebsiteIcon } from '../Icons';
 import { ExpandableCardText } from './ExpandableCardText';
 
 const DelegateStat = dynamic(() =>
@@ -321,23 +320,58 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       return (
         <Flex w="full" overflowX="hidden" gap="1">
           {data?.tracks?.map((track, index) => (
-            <Text
+            <Tooltip
               key={+index}
-              color={theme.card.workstream.text}
-              bgColor={theme.card.workstream.bg}
-              px="2"
-              py="1"
-              borderRadius="md"
-              fontSize="10px"
-              fontWeight="medium"
-              _hover={{
-                backgroundColor: convertHexToRGBA(theme.title, 0.8),
-              }}
-              w="max-content"
-              minW="max-content"
+              label={
+                daoInfo.config.TRACKS_DICTIONARY &&
+                daoInfo.config.TRACKS_DICTIONARY[track.name]
+                  ? daoInfo.config.TRACKS_DICTIONARY[track.name].description
+                  : undefined
+              }
+              bg={theme.collapse.bg || theme.card.background}
+              color={theme.collapse.text}
             >
-              {track.name}
-            </Text>
+              <Flex
+                flexDir="row"
+                gap="1"
+                bgColor={theme.card.workstream.bg}
+                px="2"
+                py="1"
+                borderRadius="md"
+                align="center"
+                w="max-content"
+                minW="max-content"
+              >
+                <Text
+                  color={theme.card.workstream.text}
+                  fontSize="10px"
+                  fontWeight="medium"
+                  _hover={{
+                    backgroundColor: convertHexToRGBA(theme.title, 0.8),
+                  }}
+                  w="max-content"
+                  minW="max-content"
+                >
+                  {daoInfo.config.TRACKS_DICTIONARY &&
+                  daoInfo.config.TRACKS_DICTIONARY[track.name]
+                    ? daoInfo.config.TRACKS_DICTIONARY[track.name].emoji
+                    : undefined}
+                </Text>
+                <Text
+                  color={theme.card.workstream.text}
+                  bgColor={theme.card.workstream.bg}
+                  fontSize="10px"
+                  fontWeight="medium"
+                  _hover={{
+                    backgroundColor: convertHexToRGBA(theme.title, 0.8),
+                  }}
+                  w="max-content"
+                  minW="max-content"
+                >
+                  {track.name}
+                </Text>
+              </Flex>
+            </Tooltip>
           ))}
         </Flex>
       );
@@ -424,6 +458,11 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   const handleAddToDelegatePool = (delegate: IDelegate) => {
     setSelectedProfileData(delegate);
   };
+
+  const shouldShowForumHandle =
+    data?.discourseHandle &&
+    daoData?.socialLinks.forum &&
+    config.DAO_FORUM_TYPE;
 
   return (
     <Flex
@@ -792,6 +831,27 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                 <UserInfoButton onOpen={selectProfile} profile={data} />
               </Flex>
               <Flex gap="4" align="center" justify="center">
+                {data?.website &&
+                  !(
+                    data.twitterHandle &&
+                    shouldShowForumHandle &&
+                    data.discordUsername
+                  ) && (
+                    <Link
+                      href={data.website}
+                      isExternal
+                      color={theme.card.socialMedia}
+                      _hover={{
+                        transform: 'scale(1.25)',
+                      }}
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      h="max-content"
+                    >
+                      <WebsiteIcon w="17px" h="17px" />
+                    </Link>
+                  )}
                 {data?.twitterHandle && (
                   <Link
                     href={`https://twitter.com/${data.twitterHandle}`}

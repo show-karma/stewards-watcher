@@ -36,7 +36,7 @@ export const HeaderBurgerAccordion: FC<IHeaderBurgerAccordionProps> = ({
   mountingForTokenholders,
   mountingForDelegates,
 }) => {
-  const { theme, daoInfo } = useDAO();
+  const { theme, daoInfo, rootPathname } = useDAO();
   const { config } = daoInfo;
   const [isMobile] = useMediaQuery('(max-width: 768px)');
 
@@ -56,7 +56,7 @@ export const HeaderBurgerAccordion: FC<IHeaderBurgerAccordionProps> = ({
                 gap={{ base: '4', sm: '1' }}
                 flexDir={{ base: 'row', sm: 'column' }}
               >
-                <ChakraLink href="/">
+                <ChakraLink href={`${rootPathname}/`}>
                   <Img
                     w="auto"
                     maxW="36"
@@ -83,6 +83,7 @@ export const HeaderBurgerAccordion: FC<IHeaderBurgerAccordionProps> = ({
                 <Icon
                   as={isExpanded ? CloseMenuIcon : BurgerMenuIcon}
                   boxSize="6"
+                  color={theme.hat.text.primary}
                 />
               </AccordionButton>
             </Flex>

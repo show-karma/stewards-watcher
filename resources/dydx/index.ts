@@ -37,7 +37,8 @@ const config: IDAOConfig = {
   DAO_DEFAULT_SETTINGS: {
     FAQ: true,
     STATUS_FILTER: {
-      DEFAULT_STATUSES: ['active', 'recognized'],
+      DEFAULT_STATUS_SELECTED: ['active'],
+      CUSTOM_STATUS: ['endorsed', 'active', 'inactive', 'withdrawn'],
     },
     ORDERSTAT: 'karmaScore',
     SORT_ORDER: [

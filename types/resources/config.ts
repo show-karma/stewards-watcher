@@ -48,7 +48,8 @@ export interface IDAOConfig {
     DISABLE_LOGIN?: boolean;
     SORT?: IStatsID;
     STATUS_FILTER?: {
-      DEFAULT_STATUSES?: IStatusOptions[];
+      CUSTOM_STATUS?: IStatusOptions[];
+      DEFAULT_STATUS_SELECTED?: IStatusOptions[];
     };
     SORT_ORDER?: string[];
   };
@@ -81,6 +82,7 @@ export interface IDAOConfig {
     NETWORK: number;
     ADDRESS: Hex;
   };
+  TRACKS_DICTIONARY?: { [key: string]: { emoji: string; description: string } };
   // TODO: type anys
   /**
    * Defines a function to bulk delegate

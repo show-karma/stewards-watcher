@@ -14,7 +14,7 @@ const addressRegex = /^0x[a-fA-F0-9]{40}$/;
 const ensNameRegex = /^\S+\.eth$/;
 
 export const TokenHolderDelegation: FC = () => {
-  const { theme, daoInfo } = useDAO();
+  const { theme, rootPathname } = useDAO();
 
   const {
     changeAddresses,
@@ -75,7 +75,7 @@ export const TokenHolderDelegation: FC = () => {
           return false;
         }
       )
-      .required(),
+      .required('Please enter a valid address or ENS name.'),
   });
   type FormData = yup.InferType<typeof schema>;
 
@@ -149,7 +149,11 @@ export const TokenHolderDelegation: FC = () => {
           >
             {getAddressesToAText()} has not delegated any tokens. <br /> Find a
             suitable candidate and delegate your tokens{' '}
-            <ChakraLink href="/" isExternal textDecor="underline">
+            <ChakraLink
+              href={`${rootPathname}/`}
+              isExternal
+              textDecor="underline"
+            >
               here.
             </ChakraLink>
           </Text>

@@ -6,6 +6,7 @@ import {
   Flex,
   Skeleton,
   Text,
+  Tooltip,
 } from '@chakra-ui/react';
 import { ChakraLink } from 'components/ChakraLink';
 import { ImgWithFallback } from 'components/ImgWithFallback';
@@ -53,7 +54,7 @@ export const DelegationCard: FC<IDelegationCardProps> = ({
         track => track.id === delegationData.trackId
       );
       if (hasTrack) {
-        return `Track: ${hasTrack.displayName} `;
+        return hasTrack.displayName;
       }
     }
 
@@ -226,7 +227,39 @@ export const DelegationCard: FC<IDelegationCardProps> = ({
                 >
                   {sinceDate}
                 </Text>
-                <Text>{getTrackText(userDelegatedTo)}</Text>
+                {daoInfo.config.DAO_CATEGORIES_TYPE === 'tracks' ? (
+                  <Tooltip
+                    label={
+                      daoInfo.config.TRACKS_DICTIONARY &&
+                      daoInfo.config.TRACKS_DICTIONARY[
+                        getTrackText(userDelegatedTo)
+                      ]
+                        ? daoInfo.config.TRACKS_DICTIONARY[
+                            getTrackText(userDelegatedTo)
+                          ].description
+                        : undefined
+                    }
+                    bg={theme.collapse.bg || theme.card.background}
+                    color={theme.collapse.text}
+                  >
+                    <Flex flexDir="row">
+                      <Text>Track:</Text>
+                      <Flex flexDir="row" gap="1">
+                        <Text>
+                          {daoInfo.config.TRACKS_DICTIONARY &&
+                          daoInfo.config.TRACKS_DICTIONARY[
+                            getTrackText(userDelegatedTo)
+                          ]
+                            ? daoInfo.config.TRACKS_DICTIONARY[
+                                getTrackText(userDelegatedTo)
+                              ].emoji
+                            : undefined}
+                        </Text>
+                        <Text>{getTrackText(userDelegatedTo)}</Text>
+                      </Flex>
+                    </Flex>
+                  </Tooltip>
+                ) : undefined}
               </Flex>
             </Flex>
             <AccordionButton

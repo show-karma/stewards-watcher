@@ -288,7 +288,7 @@ export const OnChainVotingBreakdown: FC = () => {
             data={dataConfig}
             options={options}
             isLoading={isLoading}
-            hasError={hasError}
+            hasError={hasError || !voteBreakdown?.totalVotes}
           />
           <Flex
             position="absolute"
@@ -313,7 +313,7 @@ export const OnChainVotingBreakdown: FC = () => {
             )}
           </Flex>
         </Flex>
-        {!hasError && !isLoading && (
+        {!hasError && !isLoading && voteBreakdown?.totalVotes ? (
           <>
             <Divider h="1px" />
             <Flex
@@ -348,7 +348,7 @@ export const OnChainVotingBreakdown: FC = () => {
               ))}
             </Flex>
           </>
-        )}
+        ) : null}
       </Flex>
     </Flex>
   );

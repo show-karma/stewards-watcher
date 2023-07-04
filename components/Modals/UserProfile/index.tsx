@@ -75,7 +75,7 @@ interface IUserProfileProps {
 export const UserProfile: FC<IUserProfileProps> = props => {
   const { isOpen, onClose, profile, selectedTab } = props;
   const router = useRouter();
-  const { theme } = useDAO();
+  const { theme, rootPathname } = useDAO();
   const { mixpanel } = useMixpanel();
   const [activeTab, setActiveTab] = useState<IActiveTab>(selectedTab);
 
@@ -93,7 +93,9 @@ export const UserProfile: FC<IUserProfileProps> = props => {
     router
       .push(
         {
-          pathname: `/profile/${profile.ensName || profile.address}`,
+          pathname: `${rootPathname}/profile/${
+            profile.ensName || profile.address
+          }`,
           hash,
         },
         undefined,
@@ -111,7 +113,7 @@ export const UserProfile: FC<IUserProfileProps> = props => {
     router
       .push(
         {
-          pathname: '/',
+          pathname: `/${rootPathname}`,
         },
         undefined,
         { shallow: true }

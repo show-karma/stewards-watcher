@@ -13,7 +13,7 @@ import { FC, ReactNode } from 'react';
 import { IActiveTab, IProfile } from 'types';
 import { getUserForumUrl, lessThanDays } from 'utils';
 
-type IMedias = 'twitter' | 'forum' | 'discord';
+type IMedias = 'twitter' | 'forum' | 'discord' | 'website';
 interface IMediaIcon {
   profile: IProfile;
   media: IMedias;
@@ -66,10 +66,15 @@ export const MediaIcon: FC<IMediaIcon> = ({
       url: `https://discord.com/users/${profile.discordHandle}`,
       value: profile.discordUsername,
     },
+    website: {
+      url: profile.website || '',
+      value: profile.website,
+    },
   };
 
   const chosenMedia = medias[media];
 
+  // TODO REFACTOR THIS ASAP
   const disabledCondition =
     chosenMedia?.disabledCondition ||
     daoInfo.config.SHOULD_NOT_SHOW === 'handles' ||
@@ -78,9 +83,12 @@ export const MediaIcon: FC<IMediaIcon> = ({
       !!profile?.userCreatedAt &&
       lessThanDays(profile?.userCreatedAt, 100));
 
+  // TODO TEMPORARY HIDE
+  const hideTwitter = media === 'twitter';
+
   const labelTooltip = () => {
     if (media === 'discord' && chosenMedia.value) return chosenMedia.value;
-    if (disabledCondition) return '';
+    if (disabledCondition || hideTwitter) return '';
     if (isConnected) return `Update your ${media} handle now`;
     return `Login to update your ${media} handle`;
   };
@@ -89,7 +97,8 @@ export const MediaIcon: FC<IMediaIcon> = ({
     if (!isSamePerson) return;
     changeTab('handles');
     const onOpens: { [key: string]: () => void } = {
-      twitter: twitterOnOpen,
+      // TODO TEMPORARY DISABLED
+      // twitter: twitterOnOpen,
       forum: forumOnOpen,
     };
     if (onOpens[media]) onOpens[media]();

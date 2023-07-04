@@ -39,10 +39,6 @@ export const DelegateLoginModal: FC<IDelegateLogin> = ({ isOpen, onClose }) => {
       text: 'Verify and link your social handles',
       icon: '/icons/edit.svg',
     },
-    {
-      text: 'Add voting reason to proposals you have voted on',
-      icon: '/icons/votingcheck.svg',
-    },
   ];
 
   const variantImg = useColorModeValue(

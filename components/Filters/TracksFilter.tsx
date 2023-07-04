@@ -1,17 +1,20 @@
 import {
   Button,
+  Flex,
   Menu,
   MenuButton,
   MenuItemOption,
   MenuList,
   MenuOptionGroup,
+  Text,
+  Tooltip,
 } from '@chakra-ui/react';
 import { useDAO, useDelegates } from 'contexts';
 import { IoChevronDownOutline } from 'react-icons/io5';
 
 export const TracksFilter = () => {
   const { tracks, tracksFilter, selectTracks } = useDelegates();
-  const { theme } = useDAO();
+  const { theme, daoInfo } = useDAO();
 
   return (
     <Menu isLazy closeOnSelect={false}>
@@ -62,8 +65,30 @@ export const TracksFilter = () => {
               _hover={{
                 bg: theme.filters.activeBg,
               }}
+              icon={null}
             >
-              {option.displayName}
+              <Tooltip
+                label={
+                  daoInfo.config.TRACKS_DICTIONARY &&
+                  daoInfo.config.TRACKS_DICTIONARY[option.displayName]
+                    ? daoInfo.config.TRACKS_DICTIONARY[option.displayName]
+                        .description
+                    : undefined
+                }
+                bg={theme.collapse.bg || theme.card.background}
+                color={theme.collapse.text}
+              >
+                <Flex flexDir="row" align="center" gap="2">
+                  <Text fontSize="xs">
+                    {daoInfo.config.TRACKS_DICTIONARY &&
+                    daoInfo.config.TRACKS_DICTIONARY[option.displayName]
+                      ? daoInfo.config.TRACKS_DICTIONARY[option.displayName]
+                          .emoji
+                      : undefined}
+                  </Text>
+                  <Text fontSize="md">{option.displayName}</Text>
+                </Flex>
+              </Tooltip>
             </MenuItemOption>
           ))}
         </MenuOptionGroup>

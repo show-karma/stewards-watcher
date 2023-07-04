@@ -9,7 +9,7 @@ interface ISectionItem {
 }
 
 export const SectionItem: FC<ISectionItem> = ({ icon, label }) => {
-  const { theme } = useDAO();
+  const { theme, daoInfo } = useDAO();
   return (
     <Flex
       flexDir="row"
@@ -29,6 +29,14 @@ export const SectionItem: FC<ISectionItem> = ({ icon, label }) => {
       {icon && (
         <Icon as={icon} color={theme.modal.statement.sidebar.item.border} />
       )}
+
+      {label &&
+      daoInfo.config.TRACKS_DICTIONARY &&
+      daoInfo.config.TRACKS_DICTIONARY[label] ? (
+        <Text fontSize="xs">
+          {daoInfo.config.TRACKS_DICTIONARY[label].emoji}
+        </Text>
+      ) : undefined}
       <Text
         fontSize="xs"
         color={theme.modal.statement.sidebar.item.text}
