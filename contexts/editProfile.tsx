@@ -1,10 +1,12 @@
 import React, { useContext, createContext, useMemo, useState } from 'react';
 import { useIsMounted } from 'hooks/useIsMounted';
 import { useToasty } from 'hooks';
-import { ICustomFields, IProfile } from 'types';
+import { Hex, ICustomFields, IProfile } from 'types';
 import { api, API_ROUTES, KARMA_API } from 'helpers';
 import { useAccount } from 'wagmi';
 import axios from 'axios';
+import { DelegateRegistryContract } from 'utils/delegate-registry/DelegateRegistry';
+import { useQuery } from '@tanstack/react-query';
 import { useDelegates } from './delegates';
 import { useDAO } from './dao';
 import { useAuth } from './auth';
@@ -123,36 +125,82 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
   const [newStatement, setNewStatement] =
     useState<ICustomFields>(defaultCustomFields);
 
+  const getOnChainStatement = async (addresses: Hex[]) => {
+    const {
+      config: { DAO_DELEGATE_CONTRACT, DELEGATE_REGISTRY_CONTRACT },
+    } = daoInfo;
+    if (!(DAO_DELEGATE_CONTRACT && DELEGATE_REGISTRY_CONTRACT))
+      return undefined;
+
+    try {
+      const onChainStatement = await DelegateRegistryContract.getDelegate(
+        addresses,
+        DAO_DELEGATE_CONTRACT,
+        DELEGATE_REGISTRY_CONTRACT.NETWORK
+      );
+
+      return onChainStatement;
+    } catch (error) {
+      console.log(error);
+      return undefined;
+    }
+  };
+
+  // const { data: onChainStatement } = useQuery({
+  //   queryKey: ['delegate-pitch', profileSelected?.address],
+  //   queryFn: async () => getOnChainStatement([profileSelected?.address as Hex]),
+  // });
+
   const queryStatement = async () => {
     if (!profile.address) return;
     setIsLoadingStatement(true);
     try {
-      const { data } = await api.get(
-        `/forum-user/${config.DAO_KARMA_ID}/delegate-pitch/${profile.address}`
-      );
+      const onChainStatement = await getOnChainStatement([
+        profile.address as Hex,
+      ]);
+      const [stmt] = onChainStatement || [];
+
+      let offChainStatement: any;
+
+      try {
+        offChainStatement = await api.get(
+          `/forum-user/${config.DAO_KARMA_ID}/delegate-pitch/${profile.address}`
+        );
+      } catch {
+        // ignore if failed
+      }
+
+      if (!(offChainStatement?.data.delegatePitch || stmt)) return;
+
+      const isOnChainStatementNewer =
+        !offChainStatement?.data.delegatePitch.updatedAt ||
+        new Date(stmt.blockTimestamp * 1000) >
+          new Date(offChainStatement?.data.delegatePitch.updatedAt);
 
       const customFields: ICustomFields[] =
-        data?.data.delegatePitch.customFields;
+        offChainStatement?.data.delegatePitch.customFields;
       const emptyField: ICustomFields = { label: '', value: [] };
 
-      let fetchedInterests =
-        customFields?.find(
-          item =>
-            item.label.toLowerCase().includes('interests') ||
-            item.displayAs === 'interests'
-        ) || emptyField;
+      let fetchedInterests = isOnChainStatementNewer
+        ? { label: 'interests', value: stmt.interests }
+        : customFields?.find(
+            item =>
+              item.label.toLowerCase().includes('interests') ||
+              item.displayAs === 'interests'
+          ) || emptyField;
 
-      const fetchedStatement =
-        customFields?.find(
-          (item: {
-            value: string | string[];
-            label: string;
-            displayAs?: string;
-          }) =>
-            typeof item.value === 'string' &&
-            (item.label.includes('statement') ||
-              item.displayAs?.includes('headline'))
-        ) || emptyField;
+      const fetchedStatement = isOnChainStatementNewer
+        ? { label: 'statement', value: stmt.statement }
+        : customFields?.find(
+            (item: {
+              value: string | string[];
+              label: string;
+              displayAs?: string;
+            }) =>
+              typeof item.value === 'string' &&
+              (item.label.includes('statement') ||
+                item.displayAs?.includes('headline'))
+          ) || emptyField;
 
       if (fetchedInterests.value.length) {
         const interestsValue = Array.isArray(fetchedInterests.value)

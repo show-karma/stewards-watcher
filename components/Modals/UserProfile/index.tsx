@@ -75,22 +75,9 @@ interface IUserProfileProps {
 export const UserProfile: FC<IUserProfileProps> = props => {
   const { isOpen, onClose, profile, selectedTab } = props;
   const router = useRouter();
-  const { theme, daoInfo } = useDAO();
+  const { theme } = useDAO();
   const { mixpanel } = useMixpanel();
   const [activeTab, setActiveTab] = useState<IActiveTab>(selectedTab);
-
-  const getOnChainStatement = async () => {
-    const statement = await DelegateRegistryContract.getDelegate(
-      ['0x1718eaa3aa6becbb7af5b57efa27f73e69a107a5'],
-      daoInfo.config.DAO_DELEGATE_CONTRACT! as Hex,
-      daoInfo.config.DELEGATE_REGISTRY_CONTRACT!.NETWORK
-    );
-    console.log({ statement });
-  };
-
-  useEffect(() => {
-    getOnChainStatement();
-  }, []);
 
   useMemo(() => {
     setActiveTab(selectedTab);
