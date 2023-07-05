@@ -172,7 +172,6 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
         !offChainStatement?.data.delegatePitch?.updatedAt ||
         new Date(stmt.blockTimestamp * 1000) >
           new Date(offChainStatement?.data.delegatePitch.updatedAt);
-      console.log({ isOnChainStatementNewer, offChainStatement, stmt });
 
       const customFields: ICustomFields[] =
         offChainStatement?.data.delegatePitch?.customFields;
@@ -555,7 +554,6 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
           Authorization: authToken ? `Bearer ${authToken}` : '',
         },
       });
-      console.log(newHandle);
 
       if (media === 'website') {
         await authorizedAPI

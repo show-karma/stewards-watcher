@@ -489,7 +489,6 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       const delegatesWithStatements = await fetchOnChainStatements(
         delegatesList
       );
-      console.log({ delegatesWithStatements });
       setDelegates(delegatesWithStatements);
 
       setDelegateCount(count || 0);
@@ -639,7 +638,6 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         website: fetchedDelegate.website,
       };
       const userWithStatement = await fetchOnChainStatements([userFound]);
-      console.log({ userWithStatement });
       return userWithStatement?.[0] || null;
     } catch {
       return null;

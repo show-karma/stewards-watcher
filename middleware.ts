@@ -19,7 +19,7 @@ const getDAOName = (host: string) => host.split('.')[0];
 
 const devUrl = 'dapp.karmahq.xyz';
 const DAO_CUSTOM_DOMAIN: Record<string, string | string[]> = {
-  [devUrl]: 'moonriver',
+  [devUrl]: 'op',
   'daostewards.xyz': 'gitcoin',
   'delegate.gitcoin.co': 'gitcoin',
   'delegate.starknet.io': 'starknet',
