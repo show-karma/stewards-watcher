@@ -56,6 +56,7 @@ export interface IDelegateFromAPI {
     threadId: number;
     customFields: ICustomFields[];
     postId: number;
+    updatedAt: string;
   };
   snapshotDelegatedVotes?: number;
   workstreams?: {
