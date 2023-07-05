@@ -5,6 +5,7 @@ import {
   Flex,
   Skeleton,
   SkeletonText,
+  Spinner,
   Text,
 } from '@chakra-ui/react';
 import { FC, useEffect, useState } from 'react';
@@ -119,6 +120,14 @@ export const Statement: FC = () => {
     saveEdit,
   } = useEditProfile();
 
+  const { daoInfo } = useDAO();
+
+  const {
+    ENABLE_ONCHAIN_REGISTRY,
+    DELEGATE_REGISTRY_CONTRACT,
+    DAO_TOKEN_CONTRACT,
+  } = daoInfo.config;
+
   const [savingStep, setSavingStep] = useState<0 | 1>(0);
 
   useEffect(() => {
@@ -128,6 +137,18 @@ export const Statement: FC = () => {
   const handleSubmit = (method: 'on-chain' | 'off-chain' | null) => {
     if (method !== 'on-chain') {
       saveEdit();
+    }
+  };
+
+  const handleOnClick = () => {
+    if (
+      ENABLE_ONCHAIN_REGISTRY &&
+      DELEGATE_REGISTRY_CONTRACT &&
+      DAO_TOKEN_CONTRACT
+    ) {
+      setSavingStep(1);
+    } else {
+      handleSubmit('off-chain');
     }
   };
 
@@ -179,15 +200,17 @@ export const Statement: FC = () => {
                   h="10"
                   fontSize={['md']}
                   fontWeight="medium"
-                  onClick={() => setSavingStep(1)}
+                  onClick={handleOnClick}
                   _hover={{
                     backgroundColor: convertHexToRGBA(theme.branding, 0.8),
                   }}
                   _focus={{}}
                   _active={{}}
+                  isDisabled={isEditSaving}
                   color={theme.buttonText}
                 >
                   <Flex gap="2" align="center">
+                    {isEditSaving && <Spinner size="sm" color="white" />}
                     Save profile
                   </Flex>
                 </Button>

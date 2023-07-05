@@ -48,9 +48,20 @@ export const GasfreeButton: React.FC<GasfreeButtonProps> = ({
       openConnectModal?.();
     }
 
-    const { DELEGATE_REGISTRY_CONTRACT, DAO_DELEGATE_CONTRACT } = config;
+    const {
+      DELEGATE_REGISTRY_CONTRACT,
+      DAO_DELEGATE_CONTRACT,
+      ENABLE_ONCHAIN_REGISTRY,
+    } = config;
 
-    if (!(DELEGATE_REGISTRY_CONTRACT && DAO_DELEGATE_CONTRACT)) return;
+    if (
+      !(
+        ENABLE_ONCHAIN_REGISTRY &&
+        DELEGATE_REGISTRY_CONTRACT &&
+        DAO_DELEGATE_CONTRACT
+      )
+    )
+      return;
 
     const { ADDRESS: REGISTRY_CONTRACT, NETWORK } = DELEGATE_REGISTRY_CONTRACT;
 

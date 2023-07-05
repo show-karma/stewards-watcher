@@ -127,9 +127,19 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const getOnChainStatement = async (addresses: Hex[]) => {
     const {
-      config: { DAO_DELEGATE_CONTRACT, DELEGATE_REGISTRY_CONTRACT },
+      config: {
+        DAO_DELEGATE_CONTRACT,
+        DELEGATE_REGISTRY_CONTRACT,
+        ENABLE_ONCHAIN_REGISTRY,
+      },
     } = daoInfo;
-    if (!(DAO_DELEGATE_CONTRACT && DELEGATE_REGISTRY_CONTRACT))
+    if (
+      !(
+        DAO_DELEGATE_CONTRACT &&
+        DELEGATE_REGISTRY_CONTRACT &&
+        ENABLE_ONCHAIN_REGISTRY
+      )
+    )
       return undefined;
 
     try {
@@ -169,9 +179,10 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       if (!(offChainStatement?.data.delegatePitch || stmt)) return;
 
       const isOnChainStatementNewer =
-        !offChainStatement?.data.delegatePitch?.updatedAt ||
-        new Date(stmt.blockTimestamp * 1000) >
-          new Date(offChainStatement?.data.delegatePitch.updatedAt);
+        stmt &&
+        (!offChainStatement?.data.delegatePitch?.updatedAt ||
+          new Date(stmt.blockTimestamp * 1000) >
+            new Date(offChainStatement?.data.delegatePitch.updatedAt));
 
       const customFields: ICustomFields[] =
         offChainStatement?.data.delegatePitch?.customFields;

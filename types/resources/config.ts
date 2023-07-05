@@ -78,6 +78,7 @@ export interface IDAOConfig {
   DELEGATION_CUSTOM_AMOUNT?: boolean;
   DELEGATION_CUSTOM_CONVICTION?: boolean;
   DELEGATION_CONVICTION_OPTIONS?: IConvictionOption[];
+  ENABLE_ONCHAIN_REGISTRY?: boolean;
   DELEGATE_REGISTRY_CONTRACT?: {
     NETWORK: number;
     ADDRESS: Hex;

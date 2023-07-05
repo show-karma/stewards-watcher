@@ -101,16 +101,17 @@ export const SelectSavingMethod: React.FC<SelectSavingMethodProps> = ({
   return (
     <Flex flexWrap="wrap">
       <Flex justifyContent="flex-start" w="full" direction="column">
-        {!!daoInfo.config.DELEGATE_REGISTRY_CONTRACT && (
-          <SelectBox
-            selected={method === 'on-chain'}
-            label="Save to onchain registry"
-            description={onChainText}
-            value="on-chain"
-            tag="Recommended"
-            onChange={value => (isLoading ? null : setMethod(value))}
-          />
-        )}
+        {daoInfo.config.ENABLE_ONCHAIN_REGISTRY &&
+          !!daoInfo.config.DELEGATE_REGISTRY_CONTRACT && (
+            <SelectBox
+              selected={method === 'on-chain'}
+              label="Save to onchain registry"
+              description={onChainText}
+              value="on-chain"
+              tag="Recommended"
+              onChange={value => (isLoading ? null : setMethod(value))}
+            />
+          )}
         <SelectBox
           selected={method === 'off-chain'}
           label="Save locally"

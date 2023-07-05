@@ -303,9 +303,21 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
 
   const fetchOnChainStatements = async (list: IDelegate[]) => {
     const {
-      config: { DAO_DELEGATE_CONTRACT, DELEGATE_REGISTRY_CONTRACT },
+      config: {
+        DAO_DELEGATE_CONTRACT,
+        DELEGATE_REGISTRY_CONTRACT,
+        ENABLE_ONCHAIN_REGISTRY,
+      },
     } = daoInfo;
-    if (!(DAO_DELEGATE_CONTRACT && DELEGATE_REGISTRY_CONTRACT)) return [];
+
+    if (
+      !(
+        DAO_DELEGATE_CONTRACT &&
+        DELEGATE_REGISTRY_CONTRACT &&
+        ENABLE_ONCHAIN_REGISTRY
+      )
+    )
+      return list;
 
     const statements = await DelegateRegistryContract.getDelegate(
       list.map(item => item.address as Hex),
