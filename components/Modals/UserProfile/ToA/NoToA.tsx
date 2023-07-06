@@ -25,27 +25,26 @@ export const NoToA: FC = () => {
         You have not created a delegation agreement. Edit Profile to create.
       </Text>
 
-      {!isConnected ||
-        (isConnected && !isAuthenticated && (
-          <Button
-            w="min-content"
-            py="3"
-            px="6"
-            bgColor="white"
-            color="black"
-            mt="6"
-            fontSize="md"
-            fontWeight="semibold"
-            _hover={{}}
-            _active={{}}
-            _focus={{}}
-            _focusVisible={{}}
-            _focusWithin={{}}
-            onClick={authenticate}
-          >
-            Connect Wallet
-          </Button>
-        ))}
+      {!isConnected || !isAuthenticated ? (
+        <Button
+          w="min-content"
+          py="3"
+          px="6"
+          bgColor="white"
+          color="black"
+          mt="6"
+          fontSize="md"
+          fontWeight="semibold"
+          _hover={{}}
+          _active={{}}
+          _focus={{}}
+          _focusVisible={{}}
+          _focusWithin={{}}
+          onClick={authenticate}
+        >
+          Connect Wallet
+        </Button>
+      ) : null}
     </Flex>
   );
 };

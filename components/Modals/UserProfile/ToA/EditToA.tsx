@@ -37,6 +37,7 @@ export const EditToA: FC = () => {
           previewOptions={{
             rehypePlugins: [[rehypeSanitize]],
           }}
+          overflow={false}
         />
       </Flex>
     </Flex>

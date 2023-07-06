@@ -223,7 +223,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const editInterests = (selectedInterest: string) => {
     const newInterestsValue = Array.isArray(newInterests.value)
-      ? newInterests.value
+      ? [...newInterests.value]
       : newInterests.value.split(',');
     const findInterest = newInterestsValue.find(
       item => item === selectedInterest
