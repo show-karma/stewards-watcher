@@ -188,15 +188,7 @@ const HandleCases: FC<IHandleCasesProps> = ({
   if (!currentHandle) {
     if (actionType === 'button')
       return (
-        <Tooltip
-          label={
-            disabledCondition
-              ? 'We are validating your address. Please check back in few days to verify your handle.'
-              : ''
-          }
-          placement="top"
-          hasArrow
-        >
+        <Tooltip placement="top" hasArrow>
           <Button
             onClick={() => {
               if (disabledCondition) return;
@@ -280,13 +272,13 @@ export const Handles: FC = () => {
     forumOnClose,
   } = useHandles();
   const { profileSelected } = useDelegates();
-
-  const notShowCondition =
-    daoInfo.config.SHOULD_NOT_SHOW === 'handles' ||
-    !profileSelected?.userCreatedAt ||
-    (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
-      !!profileSelected?.userCreatedAt &&
-      lessThanDays(profileSelected?.userCreatedAt, 100));
+  // TODO enable when twitter comeback
+  // const notShowCondition =
+  //   daoInfo.config.SHOULD_NOT_SHOW === 'handles' ||
+  //   (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
+  //     !!profileSelected?.userCreatedAt &&
+  //     lessThanDays(profileSelected?.userCreatedAt, 100));
+  const notShowCondition = daoInfo.config.SHOULD_NOT_SHOW === 'handles';
 
   const socialMedias = [
     {
