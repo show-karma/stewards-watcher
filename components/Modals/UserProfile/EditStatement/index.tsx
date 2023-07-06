@@ -45,6 +45,7 @@ export const EditStatement: FC = () => {
           previewOptions={{
             rehypePlugins: [[rehypeSanitize]],
           }}
+          overflow={false}
         />
       </Flex>
       {daoInfo.config.TOS_URL ? (
