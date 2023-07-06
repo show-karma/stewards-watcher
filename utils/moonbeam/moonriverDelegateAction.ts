@@ -41,9 +41,14 @@ export const moonriverDelegateAction =
       payload[0].delegator,
       'moonriver'
     );
+
     const trackIds = payload.flatMap(item =>
       item.tracks.map(track => track.id)
     );
+    console.log({
+      activeTracks,
+      trackIds,
+    });
 
     // Create undelegaion data for tracks that needs to be undelegated and unlocked before
     // delegating again

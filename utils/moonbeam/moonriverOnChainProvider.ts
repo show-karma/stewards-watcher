@@ -251,56 +251,41 @@ export async function moonriverActiveDelegatedTracks(
 
   // count trackId for delegatingHistory, undelegeted and unlocked
 
-  const delegationCount = delegatingHistories.reduce(
-    (acc, delegatingHistory) => {
-      const { trackId } = delegatingHistory;
+  const [delegationCount, undelegationCount, unlockedCount] = [
+    delegatingHistories,
+    undelegatedHistories,
+    unlockeds,
+  ].map(item =>
+    item.reduce((acc, history) => {
+      const { trackId } = history;
       if (acc[trackId]) {
         acc[trackId] += 1;
       } else {
         acc[trackId] = 1;
       }
       return acc;
-    },
-    {} as Record<NumberIsh, number>
+    }, {} as Record<NumberIsh, number>)
   );
 
-  const undelegationCount = undelegatedHistories.reduce((acc, undelegated) => {
-    const { trackId } = undelegated;
-    if (acc[trackId]) {
-      acc[trackId] += 1;
-    } else {
-      acc[trackId] = 1;
-    }
-    return acc;
-  }, {} as Record<NumberIsh, number>);
-
-  const unlockedCount = unlockeds.reduce((acc, unlocked) => {
-    const { trackId } = unlocked;
-    if (acc[trackId]) {
-      acc[trackId] += 1;
-    } else {
-      acc[trackId] = 1;
-    }
-    return acc;
-  }, {} as Record<NumberIsh, number>);
+  console.log({ delegationCount, undelegationCount, unlockedCount });
 
   const delegations: IActiveDelegatedTracks[] = delegatingHistories
     .filter(
       delegatingHistory =>
-        unlockedCount[delegatingHistory.trackId] <
-          delegationCount[delegatingHistory.trackId] ||
-        undelegationCount[delegatingHistory.trackId] <
-          delegationCount[delegatingHistory.trackId]
+        (unlockedCount[delegatingHistory.trackId] || 0) <
+          (delegationCount[delegatingHistory.trackId] || 0) ||
+        (undelegationCount[delegatingHistory.trackId] || 0) <
+          (delegationCount[delegatingHistory.trackId] || 0)
     )
     .map(delegatingHistory => ({
       trackId: delegatingHistory.trackId,
       locked:
-        delegationCount[delegatingHistory.trackId] -
-        unlockedCount[delegatingHistory.trackId],
+        (delegationCount[delegatingHistory.trackId] || 0) -
+        (unlockedCount[delegatingHistory.trackId] || 0),
       amount: ethers.utils.formatEther(delegatingHistory.amount),
       active:
-        undelegationCount[delegatingHistory.trackId] <
-        delegationCount[delegatingHistory.trackId],
+        (undelegationCount[delegatingHistory.trackId] || 0) <
+        (delegationCount[delegatingHistory.trackId] || 0),
       toDelegate: delegatingHistory.toDelegate,
     }));
 
