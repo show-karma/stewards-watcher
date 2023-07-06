@@ -83,12 +83,10 @@ export const GasfreeButton: React.FC<GasfreeButtonProps> = ({
           payload
         );
 
-        const { txId: transactionHash } = data;
-        toast({
-          title: 'Transaction sent',
-          description: `Transaction sent successfully. TxId: ${transactionHash}`,
-          status: 'success',
-        });
+        const { txId } = data;
+        // I'll let it here for confirmation (and debug) resaons
+        // because we don't show the toast
+        console.info('Transaction hash', { txId });
         saveEdit();
       } catch (err: any) {
         toast({
