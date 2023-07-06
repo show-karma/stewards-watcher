@@ -26,7 +26,7 @@ export const NoStatement: FC = () => {
         you must hook up your wallet.
       </Text>
 
-      {!isConnected || !isAuthenticated ? (
+      {!isConnected ? (
         <Button
           w="min-content"
           py="3"

@@ -18,7 +18,7 @@ export const NavigatorRow: FC<INavigatorRow> = ({
   changeTab,
 }) => {
   const { theme, daoInfo } = useDAO();
-  const { isDaoAdmin } = useAuth();
+  const { isDaoAdmin, isAuthenticated } = useAuth();
   const isActiveTab = (section: IActiveTab) => activeTab === section;
 
   return (
@@ -70,7 +70,7 @@ export const NavigatorRow: FC<INavigatorRow> = ({
           Voting History
         </NavButton>
 
-        {isSamePerson && (
+        {isSamePerson && isAuthenticated && (
           <NavButton
             isActive={isActiveTab('withdraw')}
             onClick={() => changeTab('withdraw')}
@@ -82,6 +82,7 @@ export const NavigatorRow: FC<INavigatorRow> = ({
         )}
 
         {(isSamePerson || isDaoAdmin) &&
+        isAuthenticated &&
         daoInfo.config.SHOULD_NOT_SHOW !== 'handles' ? (
           <NavButton
             isActive={isActiveTab('handles')}
