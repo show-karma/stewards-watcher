@@ -41,6 +41,7 @@ export const moonriverDelegateAction =
       payload[0].delegator,
       'moonriver'
     );
+
     const trackIds = payload.flatMap(item =>
       item.tracks.map(track => track.id)
     );
