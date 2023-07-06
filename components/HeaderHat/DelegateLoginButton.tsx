@@ -229,7 +229,7 @@ export const DelegateLoginButton: FC<{ onOpen: () => void }> = ({ onOpen }) => {
 
   if (daoInfo.config.DAO_DEFAULT_SETTINGS?.DISABLE_LOGIN) return null;
 
-  if (!isAuthenticated && !isConnected) return <LoginButton onOpen={onOpen} />;
+  if (!isAuthenticated || !isConnected) return <LoginButton onOpen={onOpen} />;
 
   if (isMobile) return <LoginAccordion />;
 

@@ -259,24 +259,24 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
             align="center"
           >
             {!isEditing &&
-              (profile.address.toLowerCase() === address?.toLowerCase() ||
-                isDaoAdmin) && (
-                <Button
-                  fontWeight="normal"
-                  bgColor="transparent"
-                  color={theme.modal.header.title}
-                  _hover={{}}
-                  _active={{}}
-                  _focus={{}}
-                  _focusVisible={{}}
-                  _focusWithin={{}}
-                  onClick={() => handleAuth()}
-                  border="1px solid"
-                  borderColor={theme.modal.header.title}
-                >
-                  Edit profile
-                </Button>
-              )}
+            (profile.address.toLowerCase() === address?.toLowerCase() ||
+              isDaoAdmin) ? (
+              <Button
+                fontWeight="normal"
+                bgColor="transparent"
+                color={theme.modal.header.title}
+                _hover={{}}
+                _active={{}}
+                _focus={{}}
+                _focusVisible={{}}
+                _focusWithin={{}}
+                onClick={() => handleAuth()}
+                border="1px solid"
+                borderColor={theme.modal.header.title}
+              >
+                Edit profile
+              </Button>
+            ) : null}
 
             {isEditing ? (
               <Button
@@ -334,7 +334,7 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
   const { address: fullAddress } = profile;
   const { isConnected } = useWallet();
   const { address } = useAccount();
-  const { isDaoAdmin } = useAuth();
+  const { isDaoAdmin, isAuthenticated } = useAuth();
 
   const isSamePerson =
     isConnected && address?.toLowerCase() === fullAddress?.toLowerCase();
@@ -343,7 +343,7 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
     if (
       !isDaoAdmin &&
       (((activeTab === 'handles' || activeTab === 'withdraw') &&
-        !isSamePerson) ||
+        (!isSamePerson || !isAuthenticated)) ||
         (activeTab === 'handles' &&
           daoInfo.config.SHOULD_NOT_SHOW === 'handles'))
     ) {
