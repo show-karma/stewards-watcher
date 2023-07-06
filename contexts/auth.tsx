@@ -105,8 +105,6 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
     }
   };
 
-  console.log('rootPathname', rootPathname);
-
   const saveToken = (token: string | null) => {
     const rightPathname =
       rootPathname[0] === '/' ? rootPathname : `/${rootPathname}`;
