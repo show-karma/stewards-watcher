@@ -84,7 +84,7 @@ export const GasfreeButton: React.FC<GasfreeButtonProps> = ({
         );
 
         const { txId } = data;
-        // I'll let it here for confirmation (and debug) resaons
+        // I'll let it here for confirmation (and debug) reasons
         // because we don't show the toast
         console.info('Transaction hash', { txId });
         saveEdit();

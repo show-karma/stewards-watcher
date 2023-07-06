@@ -156,7 +156,8 @@ export class DelegateRegistryContract extends GelatoRelay {
     data: DelegateWithProfile
   ): Promise<Parameters<GelatoRelay['sponsoredCall']>> {
     const { nonce } = await this.getNonce(address);
-    const expiry = BigInt(((Date.now() + 1000 * 60) / 1000).toFixed(0));
+    // 2 minutes expiry
+    const expiry = BigInt(((Date.now() - 1) / 1000).toFixed(0));
 
     const metadata = JSON.stringify(data.profile);
 
