@@ -26,27 +26,26 @@ export const NoStatement: FC = () => {
         you must hook up your wallet.
       </Text>
 
-      {!isConnected ||
-        (isConnected && !isAuthenticated && (
-          <Button
-            w="min-content"
-            py="3"
-            px="6"
-            bgColor="white"
-            color="black"
-            mt="6"
-            fontSize="md"
-            fontWeight="semibold"
-            _hover={{}}
-            _active={{}}
-            _focus={{}}
-            _focusVisible={{}}
-            _focusWithin={{}}
-            onClick={authenticate}
-          >
-            Connect Wallet
-          </Button>
-        ))}
+      {!isConnected || !isAuthenticated ? (
+        <Button
+          w="min-content"
+          py="3"
+          px="6"
+          bgColor="white"
+          color="black"
+          mt="6"
+          fontSize="md"
+          fontWeight="semibold"
+          _hover={{}}
+          _active={{}}
+          _focus={{}}
+          _focusVisible={{}}
+          _focusWithin={{}}
+          onClick={authenticate}
+        >
+          Connect Wallet
+        </Button>
+      ) : null}
     </Flex>
   );
 };
