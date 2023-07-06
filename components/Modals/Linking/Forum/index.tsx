@@ -138,13 +138,14 @@ export const DiscourseModal: React.FC<IModal> = ({
       />
     );
   };
-
-  const notShowCondition =
-    daoInfo.config.SHOULD_NOT_SHOW === 'handles' ||
-    !profileSelected?.userCreatedAt ||
-    (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
-      !!profileSelected?.userCreatedAt &&
-      lessThanDays(profileSelected?.userCreatedAt, 100));
+  // TODO enable when twitter come back
+  // const notShowCondition =
+  //   daoInfo.config.SHOULD_NOT_SHOW === 'handles' ||
+  //   !profileSelected?.userCreatedAt ||
+  //   (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
+  //     !!profileSelected?.userCreatedAt &&
+  //     lessThanDays(profileSelected?.userCreatedAt, 100));
+  const notShowCondition = daoInfo.config.SHOULD_NOT_SHOW === 'handles';
 
   useEffect(() => {
     if (notShowCondition) {
