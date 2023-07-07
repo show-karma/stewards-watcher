@@ -50,7 +50,6 @@ const config: IDAOConfig = {
   // DAO_DELEGATE_CONTRACT: '0x0000000000000000000000000000000000000812',
   EXCLUDED_CARD_FIELDS: [
     'healthScore',
-    'karmaScore',
     'discordScore',
     'offChainVotesPct',
   ],
