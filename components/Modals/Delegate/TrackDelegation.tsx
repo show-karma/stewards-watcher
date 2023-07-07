@@ -152,12 +152,6 @@ export const TrackDelegation: React.FC<StepProps> = ({
     }
   };
 
-  const onSubmit = (data: FormData) => {
-    if (!delegator) return;
-    setTimeout(() => scrollToTop(), 300);
-    handleAddToDelegatePool(delegatedUser, data.amount);
-  };
-
   const disableButton =
     selectedTracks.length === 0 ||
     !!errors.amount ||
@@ -172,6 +166,12 @@ export const TrackDelegation: React.FC<StepProps> = ({
     if (conviction === undefined) return 'You must select a conviction.';
     if (conviction >= 8) return 'You must select less than 4x conviction.';
     return null;
+  };
+
+  const onSubmit = (data: FormData) => {
+    if (!delegator || disableButton) return;
+    setTimeout(() => scrollToTop(), 300);
+    handleAddToDelegatePool(delegatedUser, data.amount);
   };
 
   return (
