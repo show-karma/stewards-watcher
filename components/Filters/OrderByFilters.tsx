@@ -3,7 +3,8 @@ import { useDAO, useDelegates } from 'contexts';
 import { DelegateStatusFilter } from './DelegateStatusFilter';
 import { InterestsFilter } from './InterestsFilter';
 import { PeriodFilter } from './PeriodFilter';
-import { TermsFilter } from './TermsFilter';
+import { ToAFilter } from './ToAFilter';
+import { ToSFilter } from './ToSFilter';
 import { TracksFilter } from './TracksFilter';
 import { WorkstreamFilter } from './WorkstreamFilter';
 
@@ -29,7 +30,8 @@ export const OrderByFilters = () => {
           ) : null}
           <DelegateStatusFilter />
           <PeriodFilter />
-          {daoInfo.config.DAO_SUPPORTS_TOA ? <TermsFilter /> : null}
+          {/* {daoInfo.config.TOS_URL ? <ToSFilter /> : null} */}
+          {daoInfo.config.DAO_SUPPORTS_TOA ? <ToAFilter /> : null}
         </Flex>
       </Flex>
     </Flex>

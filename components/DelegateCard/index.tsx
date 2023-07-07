@@ -20,6 +20,7 @@ import {
 } from '@chakra-ui/react';
 import { FC, useState, useMemo } from 'react';
 import { BsChat } from 'react-icons/bs';
+
 import { IoCopy, IoPersonOutline } from 'react-icons/io5';
 import { IoIosCheckboxOutline } from 'react-icons/io';
 import { AiOutlineThunderbolt } from 'react-icons/ai';
@@ -37,6 +38,7 @@ import { useRouter } from 'next/router';
 import { useToasty } from 'hooks';
 import { IBreakdownProps } from 'contexts/scoreBreakdown';
 import { DELEGATOR_TRACKER_DAOS } from 'helpers';
+import { HiUserGroup } from 'react-icons/hi';
 import dynamic from 'next/dynamic';
 import { FaDiscord } from 'react-icons/fa';
 import { ImgWithFallback } from '../ImgWithFallback';
@@ -678,25 +680,44 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
               </>
             )}
           </Flex>
-          {!config.EXCLUDED_CARD_FIELDS.includes('karmaScore') &&
-            !config.SHOULD_NOT_SHOW?.includes('stats') && (
-              <>
-                {isLoaded ? (
-                  <Flex
-                    cursor="pointer"
-                    right="0"
-                    top="0"
-                    onClick={() => {
-                      openScoreBreakdown('karmaScore');
+          <Flex flexDir="column" gap="3" align="center">
+            {!config.EXCLUDED_CARD_FIELDS.includes('karmaScore') &&
+              !config.SHOULD_NOT_SHOW?.includes('stats') && (
+                <>
+                  {isLoaded ? (
+                    <Flex
+                      cursor="pointer"
+                      right="0"
+                      top="0"
+                      onClick={() => {
+                        openScoreBreakdown('karmaScore');
+                      }}
+                    >
+                      <ScoreStat stat={score} />
+                    </Flex>
+                  ) : (
+                    <Skeleton w="16" h="8" />
+                  )}
+                </>
+              )}
+            {data?.status.toLowerCase() === 'community' ? (
+              <Tooltip
+                label="Community Delegate"
+                bg={theme.collapse.bg || theme.card.background}
+                color={theme.collapse.text}
+              >
+                <Flex>
+                  <HiUserGroup
+                    style={{
+                      width: '20px',
+                      height: '20px',
+                      color: theme.card.text.primary,
                     }}
-                  >
-                    <ScoreStat stat={score} />
-                  </Flex>
-                ) : (
-                  <Skeleton w="16" h="8" />
-                )}
-              </>
-            )}
+                  />
+                </Flex>
+              </Tooltip>
+            ) : null}
+          </Flex>
         </Flex>
       </Flex>
       <Flex flexDir="column" justifyContent="space-between" h="full">
