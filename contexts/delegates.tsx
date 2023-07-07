@@ -411,9 +411,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         );
 
         return {
+          ...item,
           address: item.publicAddress,
-          ensName: item.ensName,
-          delegatorCount: item.delegatorCount,
           forumActivity: fetchedPeriod?.forumActivityScore || 0,
           discordScore: fetchedPeriod?.discordScore || 0,
           delegateSince: item.joinDateAt || item.firstTokenDelegatedAt,
@@ -421,24 +420,11 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
             onChain: fetchedPeriod?.onChainVotesPct || 0,
             offChain: fetchedPeriod?.offChainVotesPct || 0,
           },
-          discourseHandle: item.discourseHandle,
-          discordHandle: item.discordHandle,
-          discordUsername: item.discordUsername,
           votingWeight: item.voteWeight,
-          delegatePitch: item.delegatePitch,
           delegatedVotes: +item.delegatedVotes || item.snapshotDelegatedVotes,
           gitcoinHealthScore: fetchedPeriod?.gitcoinHealthScore || 0,
-          twitterHandle: item.twitterHandle,
           updatedAt: fetchedPeriod?.updatedAt,
           karmaScore: fetchedPeriod?.karmaScore || 0,
-          aboutMe: item.aboutMe,
-          realName: item.realName,
-          profilePicture: item.profilePicture,
-          workstreams: item.workstreams,
-          tracks: item.tracks,
-          status: item.status,
-          userCreatedAt: item.userCreatedAt,
-          website: item.website,
         };
       });
       setDelegates(delegatesList);
