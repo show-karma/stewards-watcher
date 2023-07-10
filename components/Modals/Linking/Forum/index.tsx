@@ -1,5 +1,6 @@
 import { ModalContent, ModalOverlay, Modal } from '@chakra-ui/react';
-import { useDAO } from 'contexts';
+import { AxiosError } from 'axios';
+import { useDAO, useDelegates } from 'contexts';
 import { AxiosClient } from 'helpers';
 import { useToasty } from 'hooks';
 import dynamic from 'next/dynamic';
@@ -56,11 +57,13 @@ export const DiscourseModal: React.FC<IModal> = ({
           });
           return resolve(true);
         })
-        .catch(error => {
+        .catch((error: any) => {
           setStep(ESteps.PUBLISH);
+          const errorMessage = error?.response?.data;
+          if (!errorMessage) return reject(error);
           updateState({
             title: 'Forum verification failed',
-            description: `We're sorry, the verification failed. Make sure you published the correct message and click the verify button again.`,
+            description: errorMessage?.error,
             status: 'error',
             duration: 10000,
           });
@@ -137,12 +140,14 @@ export const DiscourseModal: React.FC<IModal> = ({
     );
   };
   // TODO enable when twitter come back
+
   // const notShowCondition =
   //   daoInfo.config.SHOULD_NOT_SHOW === 'handles' ||
   //   !profileSelected?.userCreatedAt ||
   //   (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
   //     !!profileSelected?.userCreatedAt &&
   //     lessThanDays(profileSelected?.userCreatedAt, 100));
+
   const notShowCondition = daoInfo.config.SHOULD_NOT_SHOW === 'handles';
 
   useEffect(() => {

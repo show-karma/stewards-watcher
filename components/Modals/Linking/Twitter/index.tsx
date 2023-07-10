@@ -58,9 +58,11 @@ export const TwitterModal: React.FC<IModal> = ({
         })
         .catch(error => {
           setStep(ESteps.PUBLISH);
+          const errorMessage = error?.response?.data;
+          if (!errorMessage) return reject(error);
           updateState({
             title: 'Twitter verification failed',
-            description: `We're sorry, the verification failed. Make sure you tweeted the correct message and click the verify button again.`,
+            description: errorMessage.error,
             status: 'error',
             duration: 10000,
           });
