@@ -313,7 +313,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           field: stat,
           period,
           pageSize: 10,
-          tos: daoInfo.config.TOS_URL ? acceptedTermsOnly : undefined,
+          tos: undefined,
           toa: daoInfo.config.DAO_SUPPORTS_TOA ? delegateOffersToA : undefined,
           workstreamId: getWorkstreams(),
           tracks: getTracks(),
@@ -739,7 +739,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           field: stat,
           period,
           pageSize: 10,
-          tos: daoInfo.config.TOS_URL ? acceptedTermsOnly : undefined,
+          tos: undefined,
           toa: daoInfo.config.DAO_SUPPORTS_TOA ? delegateOffersToA : undefined,
           workstreamId: getWorkstreams(),
           statuses: statuses.length
