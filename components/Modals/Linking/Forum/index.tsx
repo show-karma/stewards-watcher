@@ -1,10 +1,9 @@
 import { ModalContent, ModalOverlay, Modal } from '@chakra-ui/react';
-import { useDAO, useDelegates } from 'contexts';
+import { useDAO } from 'contexts';
 import { AxiosClient } from 'helpers';
 import { useToasty } from 'hooks';
 import dynamic from 'next/dynamic';
 import React, { useEffect, useMemo, useState } from 'react';
-import { lessThanDays } from 'utils';
 import { useAccount } from 'wagmi';
 import { ESteps } from './ESteps';
 
@@ -32,7 +31,6 @@ export const DiscourseModal: React.FC<IModal> = ({
   const { toast, updateState } = useToasty();
   const { address } = useAccount();
   const { daoData, daoInfo } = useDAO();
-  const { profileSelected } = useDelegates();
   const daoName = daoData?.name || '';
   const logoUrl = daoData?.socialLinks.logoUrl || '';
   const forumTopicURL = daoData?.forumTopicURL || '';
@@ -43,7 +41,7 @@ export const DiscourseModal: React.FC<IModal> = ({
     new Promise((resolve, reject) =>
       // eslint-disable-next-line no-promise-executor-return
       request
-        .post('/dao/link/delegate', {
+        .post('/dao/link/forum', {
           daoName,
           message: username,
         })
