@@ -529,13 +529,17 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
             />
           </Flex>
         )}
-        <Flex w="full" justifyContent="space-between" align="flex-start">
+        <Flex
+          w="full"
+          justifyContent="space-between"
+          align="flex-start"
+          position="relative"
+        >
           <Flex
             flexDir="column"
             gap="1"
             justify="center"
             w="max-content"
-            maxW="full"
             textOverflow="ellipsis"
             overflow="hidden"
             whiteSpace="break-spaces"
@@ -614,7 +618,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   gap="1.5"
                   overflowX="hidden"
                   width="100%"
-                  maxW={{ base: '310px', lg: '350px' }}
+                  maxW={{ base: '310px' }}
                 >
                   {renderCategory()}
                   {!isLoaded ? (
@@ -687,8 +691,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   {isLoaded ? (
                     <Flex
                       cursor="pointer"
-                      right="0"
-                      top="0"
                       onClick={() => {
                         openScoreBreakdown('karmaScore');
                       }}

@@ -153,10 +153,7 @@ export const TrackDelegation: React.FC<StepProps> = ({
   };
 
   const disableButton =
-    selectedTracks.length === 0 ||
-    !!errors.amount ||
-    conviction === undefined ||
-    conviction >= 8;
+    selectedTracks.length === 0 || !!errors.amount || conviction === undefined;
 
   const tooltipHint = () => {
     if (watch('amount') < 0.2)
@@ -164,7 +161,6 @@ export const TrackDelegation: React.FC<StepProps> = ({
     if (selectedTracks.length === 0)
       return 'You need select at least 1 track to delegate';
     if (conviction === undefined) return 'You must select a conviction.';
-    if (conviction >= 8) return 'You must select less than 4x conviction.';
     return null;
   };
 
