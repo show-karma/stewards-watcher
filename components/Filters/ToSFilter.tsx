@@ -1,9 +1,9 @@
 import { Flex, Switch } from '@chakra-ui/react';
 import { useDAO, useDelegates } from 'contexts';
 
-export const TermsFilter = () => {
+export const ToSFilter = () => {
   const { theme } = useDAO();
-  const { delegateOffersToA, handleDelegateOffersToA, setupFilteringUrl } =
+  const { acceptedTermsOnly, handleAcceptedTermsOnly, setupFilteringUrl } =
     useDelegates();
   return (
     <Flex
@@ -27,23 +27,23 @@ export const TermsFilter = () => {
       <Switch
         color={theme.filters.title}
         colorScheme="green"
-        defaultChecked={delegateOffersToA}
+        defaultChecked={acceptedTermsOnly}
         onChange={event => {
-          handleDelegateOffersToA(event.target.checked);
-          setupFilteringUrl('toa', event.target.checked.toString());
+          handleAcceptedTermsOnly(event.target.checked);
+          setupFilteringUrl('tos', event.target.checked.toString());
         }}
         display="flex"
         alignItems="center"
         sx={{
           '.chakra-switch__track': {
-            bg: delegateOffersToA ? '#0FAC85' : '#C8C8C8',
+            bg: acceptedTermsOnly ? '#0FAC85' : '#C8C8C8',
           },
           '.chakra-switch__label': {
-            opacity: delegateOffersToA ? 1 : 0.5,
+            opacity: acceptedTermsOnly ? 1 : 0.5,
           },
         }}
       >
-        Offer Delegation Agreement
+        Accepted Code of Conduct
       </Switch>
     </Flex>
   );
