@@ -15,22 +15,22 @@ export const moonriverConvictionOptions = [
     locktime: '2x, locked for 2 enactment period(s)',
   },
   {
-    value: 4,
+    value: 3,
     multiplier: 3,
     locktime: '3x, locked for 4 enactment period(s)',
   },
   {
-    value: 8,
+    value: 4,
     multiplier: 4,
     locktime: '4x, locked for 8 enactment period(s)',
   },
   {
-    value: 16,
+    value: 5,
     multiplier: 5,
     locktime: '5x, locked for 16 enactment period(s)',
   },
   {
-    value: 32,
+    value: 6,
     multiplier: 6,
     locktime: '6x, locked for 32 enactment period(s)',
   },
