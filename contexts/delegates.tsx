@@ -76,7 +76,7 @@ interface IDelegateProps {
   statusesOptions: IStatusOptions[];
   setSelectedProfileData: (selected: IDelegate) => void;
   setupFilteringUrl: (
-    paramToSetup: 'sortby' | 'order' | 'period' | 'statuses' | 'toa',
+    paramToSetup: 'sortby' | 'order' | 'period' | 'statuses' | 'toa' | 'tos',
     paramValue: string
   ) => void;
   refreshProfileModal: (tab?: IActiveTab) => Promise<void>;
@@ -842,23 +842,15 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
   }, [delegates]);
 
   const setupFilteringUrl = (
-    paramToSetup: 'sortby' | 'order' | 'period' | 'statuses' | 'toa',
+    paramToSetup: 'sortby' | 'order' | 'period' | 'statuses' | 'toa' | 'tos',
     paramValue: string
   ) => {
     const queries = router.query;
     delete queries.site;
 
-    const filters = {
-      sortby: paramValue,
-      order: paramValue,
-      period: paramValue,
-      statuses: paramValue,
-      toa: paramValue,
-    };
-
     const query = {
       ...queries,
-      [paramToSetup]: filters[paramToSetup],
+      [paramToSetup]: paramValue,
     };
 
     router.push(
