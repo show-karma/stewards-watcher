@@ -624,7 +624,13 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   {!isLoaded ? (
                     <Flex h="21px" />
                   ) : (
-                    <>
+                    <Flex
+                      w="full"
+                      gap="1"
+                      overflowX="hidden"
+                      width="100%"
+                      maxW={{ base: '160px' }}
+                    >
                       {interests.value.length > 0 &&
                         (interests.value.slice(0, 3) as string[]).map(
                           (interest, index) => (
@@ -673,7 +679,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                             </Tooltip>
                           )
                         )}
-                    </>
+                    </Flex>
                   )}
                 </Flex>
               </>
