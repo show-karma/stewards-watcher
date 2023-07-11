@@ -1,5 +1,5 @@
 # Moonriver Delegate Dashboard
-
+---
 --details--
 --summary--How to become a delegate?--/summary--
 
