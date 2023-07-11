@@ -1,5 +1,6 @@
 import { Flex } from '@chakra-ui/react';
 import axios from 'axios';
+import { useDAO } from 'contexts';
 import MarkdownIt from 'markdown-it';
 import React, { FC, useEffect, useRef, useState } from 'react';
 
@@ -13,12 +14,19 @@ const addBlankToLinkTag = (str: string) =>
 
 export const GuidePage: FC = () => {
   const [markdown, setMarkdown] = useState<string>('');
+  const { selectedDAO } = useDAO();
+
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     async function getMarkdown() {
-      const { data: md } = await axios.get(`/daos/guide.md`);
-      setMarkdown(md);
+      try {
+        const { data: md } = await axios.get(`/daos/${selectedDAO}/guide.md`);
+        setMarkdown(md);
+      } catch {
+        const { data } = await axios.get(`/daos/guide.md`);
+        setMarkdown(data);
+      }
     }
 
     getMarkdown();
