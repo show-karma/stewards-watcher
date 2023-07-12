@@ -16,6 +16,7 @@ import {
 import { useEffect, useState } from 'react';
 import { NumberIsh } from 'types';
 import {
+  formatNumber,
   IActiveDelegatedTracks,
   moonriverActiveDelegatedTracks,
   truncateAddress,
@@ -251,10 +252,32 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
                           }}
                         >
                           {trackFound && disabledCondition ? (
-                            <Text color={theme.text} fontSize="md">
-                              You have {trackFound.amount} tokens locked with
-                              conviction {trackFound.conviction}
-                            </Text>
+                            <Flex flexDir="column" gap="2">
+                              <Flex flexDir="row" gap="1">
+                                <Text
+                                  color={theme.text}
+                                  fontSize="sm"
+                                  align="center"
+                                >
+                                  {daoInfo.config.TRACKS_DICTIONARY &&
+                                  daoInfo.config.TRACKS_DICTIONARY[
+                                    track.displayName
+                                  ]
+                                    ? daoInfo.config.TRACKS_DICTIONARY[
+                                        track.displayName
+                                      ].emoji
+                                    : undefined}
+                                </Text>
+                                <Text color={theme.text} fontSize="md">
+                                  {track.displayName}
+                                </Text>
+                              </Flex>
+                              <Text color={theme.text} fontSize="sm">
+                                You have {formatNumber(trackFound.amount)}{' '}
+                                tokens locked with conviction{' '}
+                                {trackFound.conviction}
+                              </Text>
+                            </Flex>
                           ) : (
                             <TrackBadge
                               track={{
