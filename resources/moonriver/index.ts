@@ -33,7 +33,7 @@ const config: IDAOConfig = {
     URL: `https://moonriver.karmahq.xyz`,
   },
   DAO_DEFAULT_SETTINGS: {
-    FAQ: false,
+    FAQ: true,
     STATUS_FILTER: {
       CUSTOM_STATUS: ['community', 'active', 'inactive', 'withdrawn'],
     },
