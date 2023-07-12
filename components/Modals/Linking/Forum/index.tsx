@@ -45,6 +45,7 @@ export const DiscourseModal: React.FC<IModal> = ({
         .post('/dao/link/forum', {
           daoName,
           message: username,
+          address,
         })
         .then(() => {
           setStep(ESteps.VERIFIED);
