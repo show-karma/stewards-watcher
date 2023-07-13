@@ -15,7 +15,11 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { NumberIsh } from 'types';
-import { IActiveDelegatedTracks, moonriverActiveDelegatedTracks } from 'utils';
+import {
+  IActiveDelegatedTracks,
+  moonriverActiveDelegatedTracks,
+  truncateAddress,
+} from 'utils';
 import { useMixpanel, useToasty } from 'hooks';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { writeContract, waitForTransaction } from '@wagmi/core';
@@ -256,7 +260,9 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
                 </>
               ) : (
                 <Text color={theme.text}>
-                  You have no active delegations or locked tokens.
+                  Wallet account {truncateAddress(address || '')} has no active
+                  delegations. <br />
+                  Please make sure you are connected to the right wallet account
                 </Text>
               )}
             </DelegateModalBody>

@@ -48,7 +48,7 @@ const SelectBox: React.FC<{
       <Box
         height="21px"
         width="21px"
-        borderRadius="50%"
+        borderRadius="10px"
         border={`2px solid ${selected ? '#0FAC85' : 'white'}`}
         display="flex"
         alignItems="center"
@@ -58,9 +58,9 @@ const SelectBox: React.FC<{
             content: '""',
             display: 'block',
             transition: '300ms ease-in-out',
-            height: selected ? '50%' : '0%',
-            width: selected ? '50%' : '0%',
-            borderRadius: '50%',
+            height: selected ? '11px' : '0%',
+            width: selected ? '11px' : '0%',
+            borderRadius: '21px',
             backgroundColor: selected ? '#0FAC85' : 'transparent',
           },
         }}

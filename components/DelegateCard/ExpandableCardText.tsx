@@ -1,8 +1,13 @@
 import { Flex, Text } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
+import dynamic from 'next/dynamic';
 import { FC } from 'react';
 import { removeHtmlTagWithRegex } from 'utils';
 
+// eslint-disable-next-line import/no-extraneous-dependencies
+const MDPreview = dynamic(() => import('@uiw/react-markdown-preview'), {
+  ssr: false,
+});
 interface IExpandableText {
   text: string;
   maxChars?: number;
@@ -64,7 +69,13 @@ export const ExpandableCardText: FC<IExpandableText> = props => {
               flex="1"
               wordBreak="break-word"
             >
-              {formattedText}
+              <MDPreview
+                source={(formattedText as string) || ''}
+                style={{
+                  backgroundColor: 'transparent',
+                  color: theme.modal.statement.text,
+                }}
+              />
             </Text>
           </Flex>
           <Flex

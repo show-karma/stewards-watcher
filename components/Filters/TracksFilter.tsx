@@ -65,7 +65,6 @@ export const TracksFilter = () => {
               _hover={{
                 bg: theme.filters.activeBg,
               }}
-              icon={null}
             >
               <Tooltip
                 label={

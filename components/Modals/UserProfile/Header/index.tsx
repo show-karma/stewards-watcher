@@ -71,7 +71,7 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
   const { isConnected, openConnectModal } = useWallet();
   const { theme, daoData, daoInfo } = useDAO();
   const { profileSelected } = useDelegates();
-  const { isEditing, setIsEditing } = useEditProfile();
+  const { isEditing, setIsEditing, isEditSaving, saveEdit } = useEditProfile();
   const { address } = useAccount();
   const { authenticate, isAuthenticated, isDaoAdmin } = useAuth();
   const { toast } = useToasty();
@@ -266,24 +266,52 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
             align="center"
           >
             {!isEditing &&
-              (profile.address.toLowerCase() === address?.toLowerCase() ||
-                isDaoAdmin) && (
-                <Button
-                  fontWeight="normal"
-                  bgColor="transparent"
-                  color={theme.modal.header.title}
-                  _hover={{}}
-                  _active={{}}
-                  _focus={{}}
-                  _focusVisible={{}}
-                  _focusWithin={{}}
-                  onClick={() => handleAuth()}
-                  border="1px solid"
-                  borderColor={theme.modal.header.title}
-                >
-                  Edit profile
-                </Button>
-              )}
+            (profile.address.toLowerCase() === address?.toLowerCase() ||
+              isDaoAdmin) ? (
+              <Button
+                fontWeight="normal"
+                bgColor="transparent"
+                color={theme.modal.header.title}
+                _hover={{}}
+                _active={{}}
+                _focus={{}}
+                _focusVisible={{}}
+                _focusWithin={{}}
+                onClick={() => handleAuth()}
+                border="1px solid"
+                borderColor={theme.modal.header.title}
+              >
+                Edit profile
+              </Button>
+            ) : null}
+
+            {isEditing ? (
+              <Button
+                background={theme.branding}
+                px={['4', '6']}
+                py={['3', '6']}
+                h="10"
+                fontSize={['md']}
+                fontWeight="medium"
+                onClick={saveEdit}
+                _hover={{
+                  backgroundColor: convertHexToRGBA(theme.branding, 0.8),
+                }}
+                _focus={{}}
+                _active={{}}
+                color={theme.buttonText}
+              >
+                <Flex gap="2" align="center">
+                  {isEditSaving && <Spinner />}
+                  Save profile
+                </Flex>
+              </Button>
+            ) : (
+              <DelegateCases
+                fullAddress={fullAddress}
+                status={profileSelected?.status}
+              />
+            )}
           </Flex>
         </Flex>
       </Flex>
@@ -313,7 +341,7 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
   const { address: fullAddress } = profile;
   const { isConnected } = useWallet();
   const { address } = useAccount();
-  const { isDaoAdmin } = useAuth();
+  const { isDaoAdmin, isAuthenticated } = useAuth();
 
   const isSamePerson =
     isConnected && address?.toLowerCase() === fullAddress?.toLowerCase();
@@ -322,7 +350,7 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
     if (
       !isDaoAdmin &&
       (((activeTab === 'handles' || activeTab === 'withdraw') &&
-        !isSamePerson) ||
+        (!isSamePerson || !isAuthenticated)) ||
         (activeTab === 'handles' &&
           daoInfo.config.SHOULD_NOT_SHOW === 'handles'))
     ) {

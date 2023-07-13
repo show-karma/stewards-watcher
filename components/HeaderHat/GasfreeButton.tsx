@@ -2,7 +2,7 @@ import { Text } from '@chakra-ui/react';
 import axios from 'axios';
 import { useDAO, useEditProfile, useWallet } from 'contexts';
 import { useToasty } from 'hooks';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Hex } from 'types';
 import { DelegateRegistryContract } from 'utils/delegate-registry/DelegateRegistry';
 import { DelegateProfile } from 'utils/delegate-registry/types';
@@ -14,7 +14,8 @@ interface GasfreeButtonProps {
 export const GasfreeButton: React.FC<GasfreeButtonProps> = ({
   title = 'Save',
 }) => {
-  const { address, isConnected, openConnectModal } = useWallet();
+  const { address, isConnected, openConnectModal, chain, openChainModal } =
+    useWallet();
   const {
     daoInfo: { config },
   } = useDAO();
@@ -31,6 +32,8 @@ export const GasfreeButton: React.FC<GasfreeButtonProps> = ({
 
   const { toast } = useToasty();
 
+  const [recallAfterAction, setRecallAfterAction] = useState(false);
+
   const profile: DelegateProfile = useMemo(
     () => ({
       ipfsMetadata: null,
@@ -44,10 +47,6 @@ export const GasfreeButton: React.FC<GasfreeButtonProps> = ({
   );
 
   const sendSponoredTx = async () => {
-    if (!isConnected || !address) {
-      openConnectModal?.();
-    }
-
     const {
       DELEGATE_REGISTRY_CONTRACT,
       DAO_DELEGATE_CONTRACT,
@@ -65,7 +64,7 @@ export const GasfreeButton: React.FC<GasfreeButtonProps> = ({
 
     const { ADDRESS: REGISTRY_CONTRACT, NETWORK } = DELEGATE_REGISTRY_CONTRACT;
 
-    if (isConnected && address) {
+    if (isConnected && address && chain?.id) {
       const contract = new DelegateRegistryContract(REGISTRY_CONTRACT);
 
       try {
@@ -100,8 +99,33 @@ export const GasfreeButton: React.FC<GasfreeButtonProps> = ({
   };
 
   const handleOnClick = () => {
+    if (!isConnected || !address) {
+      openConnectModal?.();
+      setRecallAfterAction(true);
+      return;
+    }
+
+    if (chain?.id !== 10) {
+      toast({
+        title: 'Wrong network',
+        description: 'Please switch to Optimism network',
+        status: 'error',
+      });
+
+      openChainModal?.();
+      setRecallAfterAction(true);
+      return;
+    }
+
     sendSponoredTx();
   };
+
+  useEffect(() => {
+    if (recallAfterAction) {
+      setRecallAfterAction(false);
+      handleOnClick();
+    }
+  }, [chain, isConnected]);
 
   return (
     <Text as="span" onClick={handleOnClick}>

@@ -56,8 +56,9 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
   const { signMessageAsync, isLoading: isLoadingSign } = useSignMessage();
 
   const disconnect = async () => {
-    cookies.remove(cookieNames.cookieAuth, { path: `/${rootPathname}` });
-    cookies.remove(cookieNames.daoAdmin, { path: `/${rootPathname}` });
+    const rightPathname = rootPathname[0] === '/' ? rootPathname : '/';
+    cookies.remove(cookieNames.cookieAuth, { path: rightPathname });
+    cookies.remove(cookieNames.daoAdmin, { path: rightPathname });
     setToken(null);
     setIsAuthenticated(false);
     disconnectWallet();
@@ -105,9 +106,11 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
   };
 
   const saveToken = (token: string | null) => {
+    const rightPathname =
+      rootPathname[0] === '/' ? rootPathname : `/${rootPathname}`;
     setToken(token);
     if (token)
-      cookies.set(cookieNames.cookieAuth, token, { path: `/${rootPathname}` });
+      cookies.set(cookieNames.cookieAuth, token, { path: rightPathname });
     setIsAuthenticated(true);
   };
 
@@ -128,8 +131,9 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
         ? daosManaged.includes(daoInfo.config.DAO_KARMA_ID)
         : false;
       setIsDaoAdmin(daoAdmin);
+      const rightPathname = rootPathname[0] === '/' ? rootPathname : '/';
       cookies.set(cookieNames.daoAdmin, daoAdmin ? 1 : 0, {
-        path: `/${rootPathname}`,
+        path: rightPathname,
       });
 
       return token;

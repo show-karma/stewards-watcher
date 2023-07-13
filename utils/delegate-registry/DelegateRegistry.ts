@@ -105,7 +105,9 @@ export class DelegateRegistryContract extends GelatoRelay {
           ) {
             reject(
               new Error(
-                status.lastCheckMessage?.split('RegisterDelegate: ')[1] || ''
+                status.lastCheckMessage
+                  ?.split(/(RegisterDelegate)|(Execution error): /)
+                  .at(-1) || ''
               )
             );
             break;
@@ -283,11 +285,11 @@ export class DelegateRegistryContract extends GelatoRelay {
     });
 
     return delegates.map(item => {
-      if (Array.isArray(item.interests))
+      if (Array.isArray(item?.interests))
         return item as DelegateRegistryWithInterests;
       return <DelegateRegistryWithInterests>{
         ...item,
-        interests: item.interests.split(','),
+        interests: item.interests?.split(',') || [],
       };
     });
   }

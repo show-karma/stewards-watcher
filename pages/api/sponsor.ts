@@ -65,6 +65,7 @@ const handler: NextApiHandler = async (
     res.send({ txId });
   } catch (error: any) {
     res.statusCode = 400;
+    console.log(error)
     res.send(error.message);
   }
 };

@@ -78,7 +78,7 @@ interface IDelegateProps {
   statusesOptions: IStatusOptions[];
   setSelectedProfileData: (selected: IDelegate) => void;
   setupFilteringUrl: (
-    paramToSetup: 'sortby' | 'order' | 'period' | 'statuses' | 'toa',
+    paramToSetup: 'sortby' | 'order' | 'period' | 'statuses' | 'toa' | 'tos',
     paramValue: string
   ) => void;
   refreshProfileModal: (tab?: IActiveTab) => Promise<void>;
@@ -367,7 +367,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           field: stat,
           period,
           pageSize: 10,
-          tos: daoInfo.config.TOS_URL ? acceptedTermsOnly : undefined,
+          tos: undefined,
           toa: daoInfo.config.DAO_SUPPORTS_TOA ? delegateOffersToA : undefined,
           workstreamId: getWorkstreams(),
           tracks: getTracks(),
@@ -468,9 +468,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         );
 
         return {
+          ...item,
           address: item.publicAddress,
-          ensName: item.ensName,
-          delegatorCount: item.delegatorCount,
           forumActivity: fetchedPeriod?.forumActivityScore || 0,
           discordScore: fetchedPeriod?.discordScore || 0,
           delegateSince: item.joinDateAt || item.firstTokenDelegatedAt,
@@ -478,24 +477,11 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
             onChain: fetchedPeriod?.onChainVotesPct || 0,
             offChain: fetchedPeriod?.offChainVotesPct || 0,
           },
-          discourseHandle: item.discourseHandle,
-          discordHandle: item.discordHandle,
-          discordUsername: item.discordUsername,
           votingWeight: item.voteWeight,
-          delegatePitch: item.delegatePitch,
           delegatedVotes: +item.delegatedVotes || item.snapshotDelegatedVotes,
           gitcoinHealthScore: fetchedPeriod?.gitcoinHealthScore || 0,
-          twitterHandle: item.twitterHandle,
           updatedAt: fetchedPeriod?.updatedAt,
           karmaScore: fetchedPeriod?.karmaScore || 0,
-          aboutMe: item.aboutMe,
-          realName: item.realName,
-          profilePicture: item.profilePicture,
-          workstreams: item.workstreams,
-          tracks: item.tracks,
-          status: item.status,
-          userCreatedAt: item.userCreatedAt,
-          website: item.website,
         };
       });
       const delegatesWithStatements = await fetchOnChainStatements(
@@ -814,7 +800,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           field: stat,
           period,
           pageSize: 10,
-          tos: daoInfo.config.TOS_URL ? acceptedTermsOnly : undefined,
+          tos: undefined,
           toa: daoInfo.config.DAO_SUPPORTS_TOA ? delegateOffersToA : undefined,
           workstreamId: getWorkstreams(),
           statuses: statuses.length
@@ -925,23 +911,15 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
   }, [delegates]);
 
   const setupFilteringUrl = (
-    paramToSetup: 'sortby' | 'order' | 'period' | 'statuses' | 'toa',
+    paramToSetup: 'sortby' | 'order' | 'period' | 'statuses' | 'toa' | 'tos',
     paramValue: string
   ) => {
     const queries = router.query;
     delete queries.site;
 
-    const filters = {
-      sortby: paramValue,
-      order: paramValue,
-      period: paramValue,
-      statuses: paramValue,
-      toa: paramValue,
-    };
-
     const query = {
       ...queries,
-      [paramToSetup]: filters[paramToSetup],
+      [paramToSetup]: paramValue,
     };
 
     router.push(
