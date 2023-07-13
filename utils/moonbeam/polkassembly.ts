@@ -19,6 +19,13 @@ interface OnChainPostsRes {
   posts: Post[];
 }
 
+export const polkassemblyProposalUrl = {
+  moonriver: (proposalId: number | string) =>
+    `https://moonriver.polkassembly.io/proposal/${proposalId}`,
+  moonbeam: (proposalId: number | string) =>
+    `https://moonbeam.polkassembly.io/proposal/${proposalId}`,
+};
+
 const routes = {
   onChainPosts: (trackNo: NumberIsh, page = 1, limit = 100) => ({
     url: '/listing/on-chain-posts',

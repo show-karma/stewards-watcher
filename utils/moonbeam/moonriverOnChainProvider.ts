@@ -43,6 +43,9 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
       reason: vote?.reason,
       executed: moment.unix(timestamp).format('MMMM D, YYYY'),
       voteId: proposalString,
+      trackId: Number(
+        proposals.find(item => item.id === proposalString)?.trackId
+      ),
     });
   });
 
@@ -56,6 +59,7 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
         executed: moment.unix(proposal.timestamp).format('MMMM D, YYYY'),
         voteId: proposal.id.toString(),
         finished: proposal.finished,
+        trackId: Number(proposal?.trackId),
       });
   });
 

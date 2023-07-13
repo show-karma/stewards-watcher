@@ -1,7 +1,9 @@
+/* eslint-disable no-nested-ternary */
 import {
   Divider,
   Flex,
   Icon,
+  Link,
   Skeleton,
   SkeletonCircle,
   Text,
@@ -14,7 +16,7 @@ import {
   VoteAgainstIcon,
   VoteForIcon,
 } from 'components/Icons';
-import { useDAO } from 'contexts';
+import { useDAO, useDelegates } from 'contexts';
 import { useVoteReason } from 'hooks';
 import { FC } from 'react';
 import { IChainRow } from 'types';
@@ -246,7 +248,8 @@ export const ProposalVote: FC<IProposalVote> = ({
   isLast,
   index,
 }) => {
-  const { theme } = useDAO();
+  const { theme, daoInfo } = useDAO();
+  const { tracks } = useDelegates();
   const { getVoteReason } = useVoteReason({ address });
   const { colorMode } = useColorMode();
 
@@ -269,9 +272,9 @@ export const ProposalVote: FC<IProposalVote> = ({
     showChoice().split(' ').length === 1 ||
     showChoice().split(' ')[1].length === 0;
 
-  console.log(
-    colorMode === 'dark' ? colorDecision(vote) : voteBg[checkDecision(vote)]
-  );
+  const foundTrack = tracks.find(
+    track => track.id === vote?.trackId
+  )?.displayName;
 
   return (
     <Flex
@@ -283,51 +286,124 @@ export const ProposalVote: FC<IProposalVote> = ({
     >
       <Flex flexDir="row" w="full" align="center" gap="2">
         <Flex flexDir="column" w="full">
+          {daoInfo.config.DAO_CATEGORIES_TYPE === 'tracks' ? (
+            isLoaded ? (
+              <Flex
+                gap="1"
+                flexDir="row"
+                borderBottomWidth="1px"
+                borderBottomColor={
+                  theme.tokenHolders.delegations.card.columns.voting.proposals
+                    .title
+                }
+                pb="1"
+                mb="1"
+                flex="1"
+              >
+                {daoInfo.config.TRACKS_DICTIONARY &&
+                foundTrack &&
+                daoInfo.config.TRACKS_DICTIONARY[foundTrack] ? (
+                  <Text
+                    fontSize="md"
+                    fontWeight="medium"
+                    color={
+                      theme.tokenHolders.delegations.card.columns.voting
+                        .proposals.title
+                    }
+                  >
+                    {daoInfo.config.TRACKS_DICTIONARY[foundTrack].emoji}
+                  </Text>
+                ) : null}
+                <Text
+                  fontSize="md"
+                  fontWeight="medium"
+                  color={
+                    theme.tokenHolders.delegations.card.columns.voting.proposals
+                      .title
+                  }
+                >
+                  {foundTrack || null}
+                </Text>
+              </Flex>
+            ) : (
+              <Skeleton isLoaded={isLoaded} w="32" h="6" />
+            )
+          ) : null}
           {isLoaded ? (
             <ExpandableTitle text={vote.proposal} />
           ) : (
             <Skeleton isLoaded={isLoaded} w="300px" maxW="372" h="6" />
           )}
-          <Flex flexDir="column">
-            <Flex gap="3" pt="6">
-              {isLoaded ? (
-                <Text
-                  fontSize="sm"
-                  fontWeight="400"
-                  color={
-                    theme.tokenHolders.delegations.card.columns.voting.proposals
-                      .description
-                  }
-                >
-                  {vote.voteMethod}
-                </Text>
-              ) : (
-                <Skeleton isLoaded={isLoaded} w="full" maxW="240" h="4" />
-              )}
-              <Divider
-                orientation="vertical"
-                bgColor={
+          <Flex gap="3" pt="6" align="center">
+            {isLoaded ? (
+              <Text
+                fontSize="sm"
+                fontWeight="400"
+                color={
                   theme.tokenHolders.delegations.card.columns.voting.proposals
                     .description
                 }
-                w="1px"
-                h="4"
-              />
-              {isLoaded ? (
-                <Text
+              >
+                {vote.voteMethod}
+              </Text>
+            ) : (
+              <Skeleton isLoaded={isLoaded} w="full" maxW="240" h="4" />
+            )}
+            <Divider
+              orientation="vertical"
+              bgColor={
+                theme.tokenHolders.delegations.card.columns.voting.proposals
+                  .description
+              }
+              w="1px"
+              h="4"
+            />
+            {isLoaded ? (
+              <Text
+                fontSize="sm"
+                fontWeight="400"
+                color={
+                  theme.tokenHolders.delegations.card.columns.voting.proposals
+                    .description
+                }
+              >
+                Executed {vote && formatDate(vote.executed, 'MMMM D, YYYY')}
+              </Text>
+            ) : (
+              <Skeleton isLoaded={isLoaded} w="full" maxW="160" h="4" />
+            )}
+            <Divider
+              orientation="vertical"
+              bgColor={theme.modal.votingHistory.proposal.verticalDivider}
+              w="1px"
+              h="4"
+            />
+            {daoInfo.config.PROPOSAL_LINK && vote?.voteId ? (
+              <>
+                <Divider
+                  orientation="vertical"
+                  bgColor={theme.modal.votingHistory.proposal.verticalDivider}
+                  w="1px"
+                  h="4"
+                />
+                <Link
+                  href={daoInfo.config.PROPOSAL_LINK(vote.voteId)}
+                  isExternal
+                  color="blue.400"
                   fontSize="sm"
-                  fontWeight="400"
-                  color={
-                    theme.tokenHolders.delegations.card.columns.voting.proposals
-                      .description
-                  }
+                  borderBottomColor="blue.400"
+                  borderBottomWidth="1px"
+                  borderBottomStyle="solid"
+                  _hover={{
+                    borderBottomColor: 'blue.300',
+                    borderBottomWidth: '1px',
+                    borderBottomStyle: 'solid',
+                  }}
                 >
-                  Executed {vote && formatDate(vote.executed, 'MMMM D, YYYY')}
-                </Text>
-              ) : (
-                <Skeleton isLoaded={isLoaded} w="full" maxW="160" h="4" />
-              )}
-            </Flex>
+                  See proposal
+                </Link>
+              </>
+            ) : null}
           </Flex>
         </Flex>
         {isSimpleVote ? (
