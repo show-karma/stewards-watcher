@@ -36,6 +36,7 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
       solution: null,
       executed: moment.unix(proposal.timestamp).format('MMMM D, YYYY'),
       voteId: proposal?.id,
+      finished: proposal?.status?.toLowerCase() !== 'active',
     });
   });
 

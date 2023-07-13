@@ -107,18 +107,20 @@ export const VotesProvider: React.FC<ProviderProps> = ({
   const changeOffset = (newOffset: number) => setOffset(newOffset);
 
   const allVotes = useMemo(() => {
-    const filteredOffChainVotes = offChainVotes?.filter(vote =>
-      moment(vote.executed).isBetween(
+    const filteredOffChainVotes = offChainVotes?.filter(vote => {
+      if (!selectedTimeframe) return true;
+      return moment(vote.executed).isBetween(
         moment.unix(timeframe.from),
         moment.unix(timeframe.to)
-      )
-    );
-    const filteredOnChainVotes = onChainVotes?.filter(vote =>
-      moment(vote.executed).isBetween(
+      );
+    });
+    const filteredOnChainVotes = onChainVotes?.filter(vote => {
+      if (!selectedTimeframe) return true;
+      return moment(vote.executed).isBetween(
         moment.unix(timeframe.from),
         moment.unix(timeframe.to)
-      )
-    );
+      );
+    });
 
     if (sortby === 'Choice') {
       const concatenatedVotes = (filteredOffChainVotes || []).concat(
@@ -142,7 +144,11 @@ export const VotesProvider: React.FC<ProviderProps> = ({
         );
 
       const notVotedVotes = concatenatedVotes
-        .filter(vote => checkDecision(vote) === 'NOTVOTED')
+        .filter(
+          vote =>
+            checkDecision(vote) === 'NOTVOTED' ||
+            checkDecision(vote) === 'NOTYET'
+        )
         .sort((voteA, voteB) =>
           moment(voteA.executed).isBefore(voteB.executed) ? 1 : -1
         );
