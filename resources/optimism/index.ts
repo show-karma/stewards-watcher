@@ -38,6 +38,7 @@ const config: IDAOConfig = {
     'healthScore',
     'karmaScore',
     'discordScore',
+    'offChainVotesPct',
   ],
   ENABLE_DELEGATE_TRACKER: true,
   EXCLUDED_VOTING_HISTORY_COLUMN: ['onChainVoteBreakdown'],
