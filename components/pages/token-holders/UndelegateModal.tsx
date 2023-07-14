@@ -16,6 +16,7 @@ import {
 import { useEffect, useState } from 'react';
 import { NumberIsh } from 'types';
 import {
+  formatNumber,
   IActiveDelegatedTracks,
   moonriverActiveDelegatedTracks,
   truncateAddress,
@@ -208,7 +209,7 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
             <DelegateModalBody flexProps={{ px: 10, pb: 5 }}>
               {tracksDelegated.length > 0 ? (
                 <>
-                  <Text color={theme.text}>
+                  <Text color={theme.text} mb="2">
                     Select tracks you want to undelegate from:
                   </Text>
                   {tracks
@@ -217,42 +218,98 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
                         delegatedTrack => +delegatedTrack.trackId === +track.id
                       )
                     )
-                    .map(track => (
-                      <Flex
-                        mt={3}
-                        pb={5}
-                        key={track.id}
-                        flexDirection="column"
-                        __css={{
-                          ':not(:last-of-type)': {
-                            borderBottom: '1px solid',
-                          },
-                        }}
-                      >
-                        <TrackBadge
-                          track={{
-                            id: track.id,
-                            name: track.displayName,
+                    .map(track => {
+                      const lockTime: { [key: number]: number } = {
+                        0: 0,
+                        1: 1,
+                        2: 2,
+                        3: 4,
+                        4: 8,
+                        5: 16,
+                        6: 32,
+                      };
+
+                      const trackFound = tracksDelegated.find(
+                        trackToFind => trackToFind.trackId === track.id
+                      );
+
+                      const disabledCondition = trackFound
+                        ? trackFound.timestamp * 1000 +
+                            lockTime[+trackFound.conviction] * 86400000 >
+                          Date.now()
+                        : false;
+
+                      return (
+                        <Flex
+                          mt={3}
+                          pb={5}
+                          key={track.id}
+                          flexDirection="column"
+                          __css={{
+                            ':not(:last-of-type)': {
+                              borderBottom: '1px solid',
+                            },
                           }}
-                          onRemove={removed => {
-                            handleRemoveTrack(removed);
-                          }}
-                          onSelect={selected => {
-                            handleSelectTrack(selected.id);
-                          }}
-                          selected={selectedTracks.some(
-                            arr => arr === track.id
+                        >
+                          {trackFound && disabledCondition ? (
+                            <Flex flexDir="column" gap="2">
+                              <Flex flexDir="row" gap="1">
+                                <Text
+                                  color={theme.text}
+                                  fontSize="sm"
+                                  align="center"
+                                >
+                                  {daoInfo.config.TRACKS_DICTIONARY &&
+                                  daoInfo.config.TRACKS_DICTIONARY[
+                                    track.displayName
+                                  ]
+                                    ? daoInfo.config.TRACKS_DICTIONARY[
+                                        track.displayName
+                                      ].emoji
+                                    : undefined}
+                                </Text>
+                                <Text color={theme.text} fontSize="md">
+                                  {track.displayName}
+                                </Text>
+                              </Flex>
+                              <Text color={theme.text} fontSize="sm">
+                                You have {formatNumber(trackFound.amount)}{' '}
+                                tokens locked with conviction{' '}
+                                {trackFound.conviction}
+                              </Text>
+                            </Flex>
+                          ) : (
+                            <TrackBadge
+                              track={{
+                                id: track.id,
+                                name: track.displayName,
+                              }}
+                              onRemove={removed => {
+                                handleRemoveTrack(removed);
+                              }}
+                              onSelect={selected => {
+                                handleSelectTrack(selected.id);
+                              }}
+                              selected={selectedTracks.some(
+                                arr => arr === track.id
+                              )}
+                            />
                           )}
-                        />
-                      </Flex>
-                    ))}
+                        </Flex>
+                      );
+                    })}
                   <Box textAlign="center" py={3}>
                     <Button
                       mt={5}
                       background={theme.branding}
                       color={theme.buttonText}
-                      disabled={selectedTracks.length === 0}
+                      disabled={selectedTracks.length === 0 || !selectedTracks}
+                      isDisabled={
+                        selectedTracks.length === 0 || !selectedTracks
+                      }
                       onClick={handleSubmit}
+                      _hover={{}}
+                      _active={{}}
                     >
                       Submit
                     </Button>
