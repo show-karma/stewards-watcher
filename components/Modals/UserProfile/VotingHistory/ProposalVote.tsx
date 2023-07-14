@@ -27,6 +27,9 @@ const iconStyle = {
 };
 
 const CheckDecision = (choice: string) => {
+  if (choice === 'Not voted yet') {
+    return <Icon as={DidNotVoteIcon} color="#f1c40f" {...iconStyle} />;
+  }
   if (/not vote/gi.test(choice)) {
     return <Icon as={DidNotVoteIcon} color="#FFF7AE" {...iconStyle} />;
   }
@@ -59,16 +62,12 @@ const VoteIcon: FC<{ vote: IChainRow }> = ({ vote }) => {
       return <Icon as={AgainstIcon} color="#CA4444" {...iconStyle} />;
     case 1:
       return <Icon as={ForIcon} color="#02E2AC" {...iconStyle} />;
-    case 'DID NOT VOTE':
+    case 'Did not vote':
       return <Icon as={DidNotVoteIcon} color="#FFF7AE" {...iconStyle} />;
+    case 'Not voted yet':
+      return <Icon as={DidNotVoteIcon} color="#f1c40f" {...iconStyle} />;
     case 'ABSTAIN':
-      return (
-        <Icon
-          as={EmptyCircleIcon}
-          color={theme.modal.votingHistory.proposal.icons.abstain}
-          {...iconStyle}
-        />
-      );
+      return <Icon as={EmptyCircleIcon} color="gray.300" {...iconStyle} />;
     default:
       return <Icon as={DidNotVoteIcon} color="#FFF7AE" {...iconStyle} />;
   }
@@ -94,16 +93,12 @@ export const ProposalVote: FC<IProposalVote> = ({
 
   const showChoice = () => {
     if (vote && typeof vote.choice === 'string') return vote.choice;
-    switch (vote.choice) {
-      case 0:
-        return 'Against';
-      case 1:
-        return 'For';
-      case 'ABSTAIN':
-        return 'Abstain';
-      default:
-        return 'DID NOT VOTE';
-    }
+    if (vote.choice === 0) return 'Against';
+    if (vote.choice === 1) return 'For';
+    if (vote.choice === 'ABSTAIN') return 'Abstain';
+    if (vote.choice === -1 && !vote.finished) return 'Not voted yet';
+
+    return 'Did not vote';
   };
 
   const isLoaded = !isLoading && vote;

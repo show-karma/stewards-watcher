@@ -55,8 +55,10 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
         solution: null,
         executed: moment.unix(proposal.timestamp).format('MMMM D, YYYY'),
         voteId: proposal.id.toString(),
+        finished: proposal.finished,
       });
   });
+
   // removing duplicate items on array that have same proposal id
   const filteredArray = array.filter(
     (item, index, self) =>
@@ -129,6 +131,7 @@ async function getDaoProposals(): Promise<IProposal[]> {
           proposal.proposal || `Proposal ${proposal.proposalId.toString()}`,
         timestamp: proposalTimestamp,
         trackId: proposal.trackId,
+        finished: status[0] !== 'ongoing',
       };
     })
   );

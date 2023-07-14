@@ -22,16 +22,11 @@ export const checkDecision = (vote: IChainRow) => {
     return 'FOR';
   }
   if (vote.solution) return 'FOR';
-  switch (vote.choice) {
-    case 0:
-      return 'AGAINST';
-    case 1:
-      return 'FOR';
-    case 'DID NOT VOTE':
-      return 'NOTVOTED';
-    case 'ABSTAIN':
-      return 'ABSTAIN';
-    default:
-      return 'DID NOT VOTE';
-  }
+  if (vote.choice === 0) return 'AGAINST';
+  if (vote.choice === 1) return 'FOR';
+  if (vote.choice === 'ABSTAIN') return 'ABSTAIN';
+  if (vote.choice === -1 && !vote.finished) return 'NOTYET';
+  if (vote.choice === 'Did not vote') return 'NOTVOTED';
+
+  return 'NOTVOTED';
 };
