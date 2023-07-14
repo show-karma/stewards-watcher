@@ -6,13 +6,14 @@ export const VOTING_HISTORY = {
       proposals(
         first: 1000
         skip: 0
-        where: { space_in: $daoname, state: "closed" }
+        where: { space_in: $daoname }
         orderBy: "created"
         orderDirection: desc
       ) {
         id
         title
         end
+        state
       }
     }
   `,
@@ -41,6 +42,7 @@ export const VOTING_HISTORY = {
         id
         description
         timestamp
+        status
       }
     }
   `,

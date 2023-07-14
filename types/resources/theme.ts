@@ -105,13 +105,6 @@ export interface IDAOTheme {
         verticalDivider: string;
         divider: string;
         bg: string;
-        icons: {
-          for: string;
-          against: string;
-          abstain: string;
-          notVoted: string;
-          multiple: string;
-        };
       };
       reason: {
         title: string;
@@ -248,11 +241,6 @@ export interface IDAOTheme {
               vote: {
                 iconBg: string;
                 text: string;
-                for: string;
-                against: string;
-                abstain: string;
-                notVoted: string;
-                multiple: string;
                 divider: string;
                 reason: { title: string; text: string };
               };

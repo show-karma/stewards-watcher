@@ -31,15 +31,20 @@ const concatOffChainProposals = (proposals: any[], votes: any[]) => {
   });
 
   proposals.forEach(proposal => {
-    if (!votes.find(vote => vote.proposal.id === proposal.id))
+    if (!votes.find(vote => vote.proposal.id === proposal.id)) {
       array.push({
         voteMethod: 'Off-chain',
         proposal: proposal?.title,
-        choice: 'DID NOT VOTE',
+        choice:
+          proposal?.state?.toLowerCase() !== 'active'
+            ? 'Did not vote'
+            : 'Not voted yet',
         solution: null,
         executed: moment.unix(proposal.end).format('MMMM D, YYYY'),
         voteId: proposal?.id,
+        finished: proposal?.state?.toLowerCase() !== 'active',
       });
+    }
   });
 
   return array;
@@ -86,7 +91,6 @@ const useOffChainVotes = (daoName: string | string[], address: string) => {
       config: { DAO_EXT_VOTES_PROVIDER },
     },
   } = useDAO();
-
   return useQuery(['offChainVotes', daoName, address], async () => {
     if (DAO_EXT_VOTES_PROVIDER?.offChain) {
       return DAO_EXT_VOTES_PROVIDER.offChain(daoName, address);
