@@ -74,10 +74,8 @@ export const TokenHolderDelegation: FC = () => {
           }
           return false;
         }
-      )
-      .required('Please enter a valid address or ENS name.'),
+      ),
   });
-  type FormData = yup.InferType<typeof schema>;
 
   const {
     handleSubmit,
@@ -86,7 +84,7 @@ export const TokenHolderDelegation: FC = () => {
     watch,
     clearErrors,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm({
     resolver: yupResolver(schema),
     reValidateMode: 'onChange',
     mode: 'onChange',
@@ -131,6 +129,7 @@ export const TokenHolderDelegation: FC = () => {
   };
 
   const getAddressesToAText = () => {
+    if (!selectedAddresses) return '';
     const addrs = selectedAddresses.map(addr =>
       addressRegex.test(addr) ? truncateAddress(addr) : addr
     );

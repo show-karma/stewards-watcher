@@ -16,7 +16,7 @@
     "@chakra-ui/react": "^2.4.9",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
-    "@hookform/resolvers": "^3.0.0",
+    "@hookform/resolvers": "^3.1.1",
     "@polkadot/api": "^10.9.1",
     "@rainbow-me/rainbowkit": "^1.0.2",
     "@sentry/nextjs": "^7.23.0",
@@ -59,7 +59,7 @@
     "universal-cookie": "^4.0.4",
     "viem": "^0.3.31",
     "wagmi": "^1.2.0",
-    "yup": "^1.0.2"
+    "yup": "^1.2.0"
   },
   "devDependencies": {
     "@types/dompurify": "^2.4.0",
