@@ -6,6 +6,7 @@ import {
   moonriverGetLockedTokensAction,
   moonriverOnChainProvider,
   moonriverTracksDictionary,
+  polkassemblyProposalUrl,
 } from 'utils';
 import { moonriverUndelegateAction } from 'utils/moonbeam/moonriverUndelegateAction';
 import { moonriver } from 'wagmi/chains';
@@ -71,6 +72,7 @@ const config: IDAOConfig = {
   ENABLE_DELEGATE_TRACKER: true,
   DISABLE_EMAIL_INPUT: true,
   DAO_SUPPORTS_TOS: true,
+  PROPOSAL_LINK: polkassemblyProposalUrl.moonriver,
   TOS_URL:
     'https://forum.moonbeam.foundation/t/introducing-delegated-voting-enhancing-governance-on-moonriver-and-moonbeam/843',
   HIDE_FOR_DELEGATES: ['delegator-lookup'],
