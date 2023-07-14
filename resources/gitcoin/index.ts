@@ -181,13 +181,6 @@ const dark: IDAOTheme = {
         verticalDivider: 'rgba(173, 184, 192, 0.5)',
         divider: 'rgba(173, 184, 192, 0.2)',
         bg: '#291555',
-        icons: {
-          for: 'green.300',
-          against: 'red.500',
-          abstain: 'gray.300',
-          notVoted: 'gray.300',
-          multiple: 'green.300',
-        },
       },
       reason: {
         title: '#FFFFFF',
@@ -283,11 +276,6 @@ const dark: IDAOTheme = {
               vote: {
                 iconBg: '#E1F7EA',
                 text: '#F5F5F5',
-                for: '#00BD62',
-                against: '#E10000',
-                abstain: '#E37423',
-                notVoted: '#4F5D6C',
-                multiple: 'green.300',
                 divider: '#88939F1A',
                 reason: {
                   title: '#FFFFFF',
@@ -456,13 +444,6 @@ const light: IDAOTheme = {
         verticalDivider: 'rgba(173, 184, 192, 0.5)',
         divider: 'rgba(173, 184, 192, 0.2)',
         bg: '#291555',
-        icons: {
-          for: 'green.300',
-          against: 'red.500',
-          abstain: 'gray.300',
-          notVoted: 'gray.300',
-          multiple: 'green.300',
-        },
       },
       reason: {
         title: '#FFFFFF',
@@ -559,11 +540,6 @@ const light: IDAOTheme = {
               vote: {
                 iconBg: '#E1F7EA',
                 text: '#4F5D6C',
-                for: '#00BD62',
-                against: '#E10000',
-                abstain: '#E37423',
-                notVoted: '#4F5D6C',
-                multiple: 'green.300',
                 divider: '#88939F1A',
                 reason: {
                   title: '#080A0E',

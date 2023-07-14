@@ -43,6 +43,9 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
       reason: vote?.reason,
       executed: moment.unix(timestamp).format('MMMM D, YYYY'),
       voteId: proposalString,
+      trackId: Number(
+        proposals.find(item => item.id === proposalString)?.trackId
+      ),
     });
   });
 
@@ -55,8 +58,11 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
         solution: null,
         executed: moment.unix(proposal.timestamp).format('MMMM D, YYYY'),
         voteId: proposal.id.toString(),
+        finished: proposal.finished,
+        trackId: Number(proposal?.trackId),
       });
   });
+
   // removing duplicate items on array that have same proposal id
   const filteredArray = array.filter(
     (item, index, self) =>
@@ -129,6 +135,7 @@ async function getDaoProposals(): Promise<IProposal[]> {
           proposal.proposal || `Proposal ${proposal.proposalId.toString()}`,
         timestamp: proposalTimestamp,
         trackId: proposal.trackId,
+        finished: status[0] !== 'ongoing',
       };
     })
   );
@@ -170,6 +177,8 @@ interface IDelegatingHistory {
   trackId: NumberIsh;
   amount: string;
   toDelegate: string;
+  conviction: number;
+  timestamp: number;
 }
 
 interface IUndelegated {
@@ -186,12 +195,13 @@ interface IDelegatingHistoryResponse {
 const delegateHistoryQuery = (address: string, daoName: string) => gql`
 {
 	delegatingHistories(
+    first: 1000,
     where:{
       delegator:"${address.toLowerCase()}",
       daoName:"${daoName}"
     }
     orderBy: timestamp
-    orderDirection: asc
+    orderDirection: desc
   ) {
 	  id    
     delegator
@@ -199,21 +209,25 @@ const delegateHistoryQuery = (address: string, daoName: string) => gql`
     amount
     toDelegate
     conviction
+    timestamp
 	}
   undelegatedHistories (
+    first: 1000,
   where:{
     delegator: "${address.toLowerCase()}",
   }
   orderBy: blockTimestamp
-  orderDirection: asc
+  orderDirection: desc
   ) {
     id
     trackId
+    blockTimestamp
   }
   unlockeds(
+    first: 1000,
    where: {caller: "${address.toLowerCase()}"}
   orderBy: blockTimestamp
-  orderDirection: asc
+  orderDirection: desc
   ) {
     trackId
   }
@@ -226,6 +240,8 @@ export interface IActiveDelegatedTracks {
   amount: string;
   active: boolean;
   toDelegate: string;
+  conviction: number;
+  timestamp: number;
 }
 
 /**
@@ -250,7 +266,7 @@ export async function moonriverActiveDelegatedTracks(
 
   const { delegatingHistories, undelegatedHistories, unlockeds } = data;
 
-  // count trackId for delegatingHistory, undelegeted and unlocked
+  // count trackId for delegatingHistory, undelegated and unlocked
 
   const [delegationCount, undelegationCount, unlockedCount] = [
     delegatingHistories,
@@ -286,6 +302,8 @@ export async function moonriverActiveDelegatedTracks(
         (undelegationCount[delegatingHistory.trackId] || 0) <
         (delegationCount[delegatingHistory.trackId] || 0),
       toDelegate: delegatingHistory.toDelegate,
+      timestamp: delegatingHistory.timestamp,
+      conviction: delegatingHistory.conviction,
     }));
 
   const unique = delegations.reduce((acc, cur) => {

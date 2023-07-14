@@ -6,6 +6,7 @@ import {
   moonriverGetLockedTokensAction,
   moonriverOnChainProvider,
   moonriverTracksDictionary,
+  polkassemblyProposalUrl,
 } from 'utils';
 import { moonriverUndelegateAction } from 'utils/moonbeam/moonriverUndelegateAction';
 import { moonriver } from 'wagmi/chains';
@@ -71,6 +72,7 @@ const config: IDAOConfig = {
   ENABLE_DELEGATE_TRACKER: true,
   DISABLE_EMAIL_INPUT: true,
   DAO_SUPPORTS_TOS: true,
+  PROPOSAL_LINK: polkassemblyProposalUrl.moonriver,
   TOS_URL:
     'https://forum.moonbeam.foundation/t/introducing-delegated-voting-enhancing-governance-on-moonriver-and-moonbeam/843',
   HIDE_FOR_DELEGATES: ['delegator-lookup'],
@@ -164,13 +166,6 @@ const dark: IDAOTheme = {
         verticalDivider: 'rgba(173, 184, 192, 0.5)',
         divider: 'rgba(173, 184, 192, 0.2)',
         bg: '#fcc10e',
-        icons: {
-          for: 'green.300',
-          against: 'red.500',
-          abstain: 'gray.300',
-          notVoted: 'gray.300',
-          multiple: 'green.300',
-        },
       },
       modules: {
         chart: {
@@ -313,11 +308,6 @@ const dark: IDAOTheme = {
               vote: {
                 iconBg: '#E1F7EA',
                 text: '#F5F5F5',
-                for: '#00BD62',
-                against: '#E10000',
-                abstain: '#E37423',
-                notVoted: '#4F5D6C',
-                multiple: 'green.300',
                 divider: '#88939F1A',
                 reason: {
                   title: '#FFFFFF',
@@ -469,13 +459,6 @@ const light: IDAOTheme = {
         verticalDivider: 'rgba(173, 184, 192, 0.5)',
         divider: 'rgba(173, 184, 192, 0.2)',
         bg: '#fcc10e',
-        icons: {
-          for: 'green.300',
-          against: 'red.500',
-          abstain: 'gray.300',
-          notVoted: 'gray.300',
-          multiple: 'green.300',
-        },
       },
       modules: {
         chart: {
@@ -589,11 +572,6 @@ const light: IDAOTheme = {
               vote: {
                 iconBg: '#E1F7EA',
                 text: '#4F5D6C',
-                for: '#00BD62',
-                against: '#E10000',
-                abstain: '#E37423',
-                notVoted: '#4F5D6C',
-                multiple: 'green.300',
                 divider: '#88939F1A',
                 reason: {
                   title: '#080A0E',

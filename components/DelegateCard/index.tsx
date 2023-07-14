@@ -320,7 +320,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
 
     if (type === 'tracks')
       return (
-        <Flex w="full" overflowX="hidden" gap="1">
+        <Flex w="full" overflowX="hidden" gap="1" flex="1">
           {data?.tracks?.map((track, index) => (
             <Tooltip
               key={+index}
@@ -629,7 +629,8 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                       gap="1"
                       overflowX="hidden"
                       width="100%"
-                      maxW={{ base: '160px' }}
+                      // maxW={{ base: '160px' }}
+                      flex="1"
                     >
                       {interests.value.length > 0 &&
                         (interests.value.slice(0, 3) as string[]).map(

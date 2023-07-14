@@ -6,4 +6,6 @@ export interface IChainRow {
   executed: string;
   reason?: string | null;
   voteId?: string | null;
+  finished?: boolean | null;
+  trackId?: number | null;
 }

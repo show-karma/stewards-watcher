@@ -20,7 +20,6 @@ export const VotingHistory: FC<IVotingHistory> = ({ profile }) => {
   const { theme, daoInfo } = useDAO();
   const { isLoading: voteLoading, showingVotes, allVotes } = useVotes();
   const [isLoading, setIsLoading] = useState(true);
-
   const loadArray = Array.from({ length: 6 });
 
   useMemo(() => {
