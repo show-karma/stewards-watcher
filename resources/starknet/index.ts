@@ -42,6 +42,12 @@ const config: IDAOConfig = {
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
   HEADER_MARGIN: true,
+  HANDLE_NOT_SHOW_CONDITIONS: {
+    twitter: {
+      minimalDays: 100,
+      requiredProperties: ['userCreatedAt'],
+    },
+  },
   EXCLUDED_CARD_FIELDS: [
     'onChainVotesPct',
     'healthScore',

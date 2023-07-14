@@ -140,14 +140,26 @@ export const DiscourseModal: React.FC<IModal> = ({
       />
     );
   };
+
   // TODO enable when twitter come back
+
+  // const checkProperties = () => {
+  //   const properties =
+  //     daoInfo.config.HANDLE_NOT_SHOW_CONDITIONS?.forum?.requiredProperties;
+  //   if (!properties) return false;
+  //   const hasAllProperties = properties.find(
+  //     property => Boolean(profileSelected[property]) === false
+  //   );
+  //   return !!hasAllProperties;
+  // };
 
   // const notShowCondition =
   //   daoInfo.config.SHOULD_NOT_SHOW === 'handles' ||
-  //   !profileSelected?.userCreatedAt ||
-  //   (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
-  //     !!profileSelected?.userCreatedAt &&
-  //     lessThanDays(profileSelected?.userCreatedAt, 100));
+  //     checkProperties() ||
+  //     lessThanDays(
+  //       profileSelected?.userCreatedAt,
+  //       daoInfo.config.HANDLE_NOT_SHOW_CONDITIONS?.forum?.minimalDays || 0
+  //     );
 
   const notShowCondition = daoInfo.config.SHOULD_NOT_SHOW === 'handles';
 

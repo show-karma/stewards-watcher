@@ -137,13 +137,26 @@ export const TwitterModal: React.FC<IModal> = ({
       />
     );
   };
-  // TODO uncomment when twitter comeback
+
+  // TODO enable when twitter come back
+
+  // const checkProperties = () => {
+  //   const properties =
+  //     daoInfo.config.HANDLE_NOT_SHOW_CONDITIONS?.twitter?.requiredProperties;
+  //   if (!properties) return false;
+  //   const hasAllProperties = properties.find(
+  //     property => Boolean(profileSelected[property]) === false
+  //   );
+  //   return !!hasAllProperties;
+  // };
+
   // const notShowCondition =
   //   daoInfo.config.SHOULD_NOT_SHOW === 'handles' ||
-  //   !profileSelected?.userCreatedAt ||
-  //   (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
-  //     !!profileSelected?.userCreatedAt &&
-  //     lessThanDays(profileSelected?.userCreatedAt, 100));
+  //     checkProperties() ||
+  //     lessThanDays(
+  //       profileSelected?.userCreatedAt,
+  //       daoInfo.config.HANDLE_NOT_SHOW_CONDITIONS?.twitter?.minimalDays || 0
+  //     );
 
   // TODO: TEMPORARY HIDE
   // useEffect(() => {

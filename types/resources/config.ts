@@ -4,10 +4,13 @@ import { writeContract } from '@wagmi/core';
 import { Chain } from 'wagmi';
 import { IChainRow } from 'types/IChainRow';
 import { IConvictionOption, Hex } from 'types/votes';
+import { IDelegate } from 'types/IDelegate';
 import { IForumType } from './forum';
 import { IStats, IStatsID } from './stats';
 import { IVotingHistoryColumn } from './modal';
 import { IForDelegates } from './header';
+
+type HandleMedias = 'twitter' | 'github' | 'forum' | 'discord';
 
 export interface IDAOConfig {
   DAO: string;
@@ -41,6 +44,12 @@ export interface IDAOConfig {
   DAO_GTAG?: string;
   HEADER_MARGIN?: boolean;
   DAO_DISCORD_CHANNEL?: string;
+  HANDLE_NOT_SHOW_CONDITIONS?: {
+    [key: string]: {
+      minimalDays?: number;
+      requiredProperties?: Array<keyof IDelegate>;
+    };
+  };
   DAO_DEFAULT_SETTINGS?: {
     FAQ?: boolean;
     TIMEPERIOD?: IFilterPeriod;

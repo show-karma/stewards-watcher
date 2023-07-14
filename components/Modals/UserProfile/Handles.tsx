@@ -272,12 +272,26 @@ export const Handles: FC = () => {
     forumOnClose,
   } = useHandles();
   const { profileSelected } = useDelegates();
-  // TODO enable when twitter comeback
-  // const notShowCondition =
+  // TODO enable when twitter come back
+
+  // const checkProperties = (media: string) => {
+  //   const properties =
+  //     daoInfo.config.HANDLE_NOT_SHOW_CONDITIONS?.[media]?.requiredProperties;
+  //   if (!properties) return false;
+  //   const hasAllProperties = properties.find(
+  //     property => Boolean(profileSelected[property]) === false
+  //   );
+  //   return !!hasAllProperties;
+  // };
+
+  // const notShowCondition = (media: string) =
   //   daoInfo.config.SHOULD_NOT_SHOW === 'handles' ||
-  //   (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
-  //     !!profileSelected?.userCreatedAt &&
-  //     lessThanDays(profileSelected?.userCreatedAt, 100));
+  //     checkProperties(media) ||
+  //     lessThanDays(
+  //       profileSelected?.userCreatedAt,
+  //       daoInfo.config.HANDLE_NOT_SHOW_CONDITIONS?.twitter?.minimalDays || 0
+  //     );
+
   const notShowCondition = daoInfo.config.SHOULD_NOT_SHOW === 'handles';
 
   const socialMedias = [

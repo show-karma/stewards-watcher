@@ -74,15 +74,24 @@ export const MediaIcon: FC<IMediaIcon> = ({
 
   const chosenMedia = medias[media];
 
-  // // TODO REFACTOR THIS ASAP | uncomment when twitter comeback
-  // const disabledCondition =
-  //   chosenMedia?.disabledCondition ||
+  // const checkProperties = () => {
+  //   const properties =
+  //     daoInfo.config.HANDLE_NOT_SHOW_CONDITIONS?.[media]?.requiredProperties;
+  //   if (!properties) return false;
+  //   const hasAllProperties = properties.find(
+  //     property => Boolean(profileSelected[property]) === false
+  //   );
+  //   return !!hasAllProperties;
+  // };
+
+  // const notShowCondition =
   //   daoInfo.config.SHOULD_NOT_SHOW === 'handles' ||
-  //   !profile?.userCreatedAt ||
-  //   (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
-  //     !!profile?.userCreatedAt &&
-  //     lessThanDays(profile?.userCreatedAt, 100));
-  // TODO REFACTOR THIS ASAP
+  //     checkProperties() ||
+  //     lessThanDays(
+  //       profileSelected?.userCreatedAt,
+  //       daoInfo.config.HANDLE_NOT_SHOW_CONDITIONS?.twitter?.minimalDays || 0
+  //     );
+
   const disabledCondition =
     chosenMedia?.disabledCondition ||
     daoInfo.config.SHOULD_NOT_SHOW === 'handles';
