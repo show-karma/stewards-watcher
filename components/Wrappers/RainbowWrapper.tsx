@@ -17,6 +17,7 @@ import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { useDAO } from 'contexts';
 import { RPCS } from 'helpers';
 import { talismanWallet } from 'utils';
+import { optimism } from 'wagmi/chains';
 
 interface ProviderProps {
   children: React.ReactNode;
@@ -28,7 +29,7 @@ export const RainbowWrapper: React.FC<ProviderProps> = ({ children }) => {
   const { config } = daoInfo;
 
   const { chains, publicClient, webSocketPublicClient } = configureChains(
-    [config.DAO_CHAIN],
+    [config.DAO_CHAIN, optimism],
     [
       process.env.NEXT_PUBLIC_ALCHEMY_KEY
         ? alchemyProvider({

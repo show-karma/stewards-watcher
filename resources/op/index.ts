@@ -34,6 +34,11 @@ const config: IDAOConfig = {
   EXCLUDED_VOTING_HISTORY_COLUMN: ['onChainVoteBreakdown'],
   ENABLE_DELEGATE_TRACKER: true,
   DAO_CATEGORIES_TYPE: 'workstreams',
+  ENABLE_ONCHAIN_REGISTRY: true,
+  DELEGATE_REGISTRY_CONTRACT: {
+    ADDRESS: '0xd17206EC4D268D0E55bb08A369b6864f1178B81d',
+    NETWORK: 10,
+  },
 };
 
 const dark: IDAOTheme = {
