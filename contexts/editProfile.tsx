@@ -125,46 +125,10 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
   const [newStatement, setNewStatement] =
     useState<ICustomFields>(defaultCustomFields);
 
-  const getOnChainStatement = async (addresses: Hex[]) => {
-    const {
-      config: {
-        DAO_DELEGATE_CONTRACT,
-        DELEGATE_REGISTRY_CONTRACT,
-        ENABLE_ONCHAIN_REGISTRY,
-      },
-    } = daoInfo;
-    if (
-      !(
-        DAO_DELEGATE_CONTRACT &&
-        DELEGATE_REGISTRY_CONTRACT &&
-        ENABLE_ONCHAIN_REGISTRY
-      )
-    )
-      return undefined;
-
-    try {
-      const onChainStatement = await DelegateRegistryContract.getDelegate(
-        addresses,
-        DAO_DELEGATE_CONTRACT,
-        DELEGATE_REGISTRY_CONTRACT.NETWORK
-      );
-
-      return onChainStatement;
-    } catch (error) {
-      console.log(error);
-      return undefined;
-    }
-  };
-
   const queryStatement = async () => {
     if (!profile.address) return;
     setIsLoadingStatement(true);
     try {
-      const onChainStatement = await getOnChainStatement([
-        profile.address as Hex,
-      ]);
-      const [stmt] = onChainStatement || [];
-
       let offChainStatement: any;
 
       try {
@@ -176,7 +140,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
         // ignore if failed
       }
 
-      if (!(offChainStatement?.data.delegatePitch || stmt)) return;
+      if (!offChainStatement?.data.delegatePitch) return;
 
       const customFields: ICustomFields[] =
         offChainStatement?.data.delegatePitch?.customFields;
