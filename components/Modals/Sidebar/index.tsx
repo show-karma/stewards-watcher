@@ -37,7 +37,7 @@ export const Sidebar: FC<ISidebar> = ({ interests, isEditMode }) => {
     <Flex w={{ base: 'full', lg: '16.875rem' }}>
       <Flex flexDir="column" gap="10" w="full">
         <Flex flexDir="column" gap="5">
-          {profileSelected?.tracks?.length || isEditing ? (
+          {profileSelected?.tracks?.length || (isEditing && tracks.length) ? (
             <SectionHeader>Tracks</SectionHeader>
           ) : undefined}
           <Flex columnGap="1" rowGap="2" flexWrap="wrap">

@@ -1,10 +1,11 @@
 import React, { useContext, createContext, useMemo, useState } from 'react';
 import { useIsMounted } from 'hooks/useIsMounted';
 import { useToasty } from 'hooks';
-import { ICustomFields, IProfile } from 'types';
+import { Hex, ICustomFields, IProfile } from 'types';
 import { api, API_ROUTES, KARMA_API } from 'helpers';
 import { useAccount } from 'wagmi';
 import axios from 'axios';
+import { DelegateRegistryContract } from 'utils/delegate-registry/DelegateRegistry';
 import { useDelegates } from './delegates';
 import { useDAO } from './dao';
 import { useAuth } from './auth';
@@ -12,6 +13,7 @@ import { useAuth } from './auth';
 interface IEditProfileProps {
   isEditing: boolean;
   setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
+  setEditSaving: React.Dispatch<React.SetStateAction<boolean>>;
   value: string;
   setValue: React.Dispatch<React.SetStateAction<string>>;
   isEditSaving: boolean;
@@ -127,12 +129,13 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     if (!profile.address) return;
     setIsLoadingStatement(true);
     try {
-      const { data } = await api.get(
+      const { data: offChainStatement } = await api.get(
         `/forum-user/${config.DAO_KARMA_ID}/delegate-pitch/${profile.address}`
       );
+      if (!offChainStatement?.data.delegatePitch) return;
 
       const customFields: ICustomFields[] =
-        data?.data.delegatePitch.customFields;
+        offChainStatement?.data.delegatePitch?.customFields;
       const emptyField: ICustomFields = { label: '', value: [] };
 
       let fetchedInterests =
@@ -154,22 +157,21 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
               item.displayAs?.includes('headline'))
         ) || emptyField;
 
-      if (fetchedInterests.value.length) {
-        const interestsValue = Array.isArray(fetchedInterests.value)
-          ? fetchedInterests.value
-          : fetchedInterests.value.split(',');
-        const trimmedMap = interestsValue.map((item: string) => item.trim());
-        fetchedInterests = {
-          ...fetchedInterests,
-          value: trimmedMap,
-        };
-      }
+      const interestsValue = Array.isArray(fetchedInterests.value)
+        ? fetchedInterests.value
+        : fetchedInterests.value?.split(',') || [];
+      const trimmedMap = interestsValue.map((item: string) => item.trim());
+      fetchedInterests = {
+        ...fetchedInterests,
+        value: trimmedMap,
+      };
 
       setInterests(fetchedInterests);
       setStatement(fetchedStatement);
       setNewInterests(fetchedInterests);
       setNewStatement(fetchedStatement);
     } catch (error) {
+      console.debug(error);
       setInterests(defaultCustomFields);
       setStatement(defaultCustomFields);
       setNewInterests(defaultCustomFields);
@@ -345,6 +347,9 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
             }
           );
         }
+        // subgrpah refresh time (not always work).
+        // The new profile data should be replaced with the local
+        // data instead of fetching again.
         await queryStatement();
       } catch (error: any) {
         hasError = true;
@@ -507,7 +512,6 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
           Authorization: authToken ? `Bearer ${authToken}` : '',
         },
       });
-      console.log(newHandle);
 
       if (media === 'website') {
         await authorizedAPI
@@ -596,6 +600,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       value,
       setValue,
       isEditSaving,
+      setEditSaving,
       saveEdit,
       profile,
       statement,
@@ -627,6 +632,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       value,
       setValue,
       isEditSaving,
+      setEditSaving,
       profile,
       statement,
       languages,

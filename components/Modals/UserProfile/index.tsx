@@ -7,10 +7,11 @@ import {
 } from '@chakra-ui/react';
 import { EditProfileProvider, useDAO, VotesProvider } from 'contexts';
 import { useRouter } from 'next/router';
-import { FC, useMemo, useState } from 'react';
-import { IActiveTab, IProfile } from 'types';
+import { FC, useEffect, useMemo, useState } from 'react';
+import { Hex, IActiveTab, IProfile } from 'types';
 import { useMixpanel } from 'hooks';
 import dynamic from 'next/dynamic';
+import { DelegateRegistryContract } from 'utils/delegate-registry/DelegateRegistry';
 import { Header } from './Header';
 import { VotingHistory } from './VotingHistory';
 

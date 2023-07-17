@@ -235,7 +235,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     const { value } = foundInterests;
     return {
       label: 'Interests',
-      value: value.split(','),
+      value: value?.split(',') || [],
       displayAs: 'interests',
     };
   };
