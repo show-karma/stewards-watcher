@@ -178,36 +178,28 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
 
       if (!(offChainStatement?.data.delegatePitch || stmt)) return;
 
-      const isOnChainStatementNewer =
-        stmt &&
-        (!offChainStatement?.data.delegatePitch?.updatedAt ||
-          new Date(stmt.blockTimestamp * 1000) >
-            new Date(offChainStatement?.data.delegatePitch.updatedAt));
-
       const customFields: ICustomFields[] =
         offChainStatement?.data.delegatePitch?.customFields;
       const emptyField: ICustomFields = { label: '', value: [] };
 
-      let fetchedInterests = isOnChainStatementNewer
-        ? { label: 'interests', value: stmt.interests }
-        : customFields?.find(
-            item =>
-              item.label.toLowerCase().includes('interests') ||
-              item.displayAs === 'interests'
-          ) || emptyField;
+      let fetchedInterests =
+        customFields?.find(
+          item =>
+            item.label.toLowerCase().includes('interests') ||
+            item.displayAs === 'interests'
+        ) || emptyField;
 
-      const fetchedStatement = isOnChainStatementNewer
-        ? { label: 'statement', value: stmt.statement }
-        : customFields?.find(
-            (item: {
-              value: string | string[];
-              label: string;
-              displayAs?: string;
-            }) =>
-              typeof item.value === 'string' &&
-              (item.label.includes('statement') ||
-                item.displayAs?.includes('headline'))
-          ) || emptyField;
+      const fetchedStatement =
+        customFields?.find(
+          (item: {
+            value: string | string[];
+            label: string;
+            displayAs?: string;
+          }) =>
+            typeof item.value === 'string' &&
+            (item.label.includes('statement') ||
+              item.displayAs?.includes('headline'))
+        ) || emptyField;
 
       if (fetchedInterests.value.length) {
         const interestsValue = Array.isArray(fetchedInterests.value)

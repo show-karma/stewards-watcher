@@ -19,7 +19,6 @@ import axios from 'axios';
 import ABI from './ABI.json';
 import type {
   DelegateWithProfile,
-  DelegateWithAddress,
   DelegateStatementRes,
   DelegateRegistryWithInterests,
 } from './types';
