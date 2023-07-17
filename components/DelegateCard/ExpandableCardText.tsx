@@ -14,6 +14,7 @@ interface IExpandableText {
   isExpanded: boolean;
   toggleIsExpanded: () => void;
   selectProfile: () => void;
+  color?: string;
 }
 
 export const ExpandableCardText: FC<IExpandableText> = props => {
@@ -25,6 +26,7 @@ export const ExpandableCardText: FC<IExpandableText> = props => {
     isExpanded,
     toggleIsExpanded,
     selectProfile,
+    color,
   } = props;
 
   const formattedText = removeHtmlTagWithRegex(text.replaceAll(/\s/g, ' '));
@@ -73,7 +75,7 @@ export const ExpandableCardText: FC<IExpandableText> = props => {
                 source={(formattedText as string) || ''}
                 style={{
                   backgroundColor: 'transparent',
-                  color: theme.modal.statement.text,
+                  color: color || theme.modal.statement.text,
                 }}
               />
             </Text>

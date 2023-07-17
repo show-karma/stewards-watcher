@@ -6,6 +6,7 @@ import { PeriodFilter } from './PeriodFilter';
 import { ToAFilter } from './ToAFilter';
 import { ToSFilter } from './ToSFilter';
 import { TracksFilter } from './TracksFilter';
+import { ResetFiltersButton } from './ResetFiltersButton';
 import { WorkstreamFilter } from './WorkstreamFilter';
 
 export const OrderByFilters = () => {
@@ -32,6 +33,7 @@ export const OrderByFilters = () => {
           <PeriodFilter />
           {/* {daoInfo.config.TOS_URL ? <ToSFilter /> : null} */}
           {daoInfo.config.DAO_SUPPORTS_TOA ? <ToAFilter /> : null}
+          <ResetFiltersButton />
         </Flex>
       </Flex>
     </Flex>

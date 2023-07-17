@@ -746,6 +746,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                     isExpanded={isExpanded}
                     toggleIsExpanded={toggleIsExpanded}
                     selectProfile={() => selectProfile(data, 'statement')}
+                    color={theme.card.text.primary}
                   />
                 </Flex>
               ) : (

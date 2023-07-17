@@ -1135,10 +1135,19 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
    * @description This function is used to clear all filters
    */
   const clearFilters = () => {
-    setStat(statOptions[0].id);
+    setStat(config.DAO_DEFAULT_SETTINGS?.SORT || statOptions[0].id);
     setOrder('desc');
     setPeriod(defaultTimePeriod);
     setUserToFind('');
+    setAcceptedTermsOnly(false);
+    setStatuses(
+      config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER?.DEFAULT_STATUS_SELECTED ||
+        statusesOptions
+    );
+    setInterestFilter([]);
+    setWorkstreamsFilter([]);
+    setTracksFilter([]);
+    setDelegateOffersToA(false);
   };
 
   const onCloseProfile = () => {
