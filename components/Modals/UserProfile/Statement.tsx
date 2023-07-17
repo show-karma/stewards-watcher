@@ -133,6 +133,9 @@ export const Statement: FC = () => {
   useEffect(() => {
     if (!isEditing) setSavingStep(0);
   }, [isEditing]);
+  useEffect(() => {
+    console.debug({ statement, interests })
+  },[statement, interests])
 
   const handleSubmit = (method: 'on-chain' | 'off-chain' | null) => {
     if (method !== 'on-chain') {

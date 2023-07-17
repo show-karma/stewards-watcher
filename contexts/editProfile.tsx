@@ -129,17 +129,9 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     if (!profile.address) return;
     setIsLoadingStatement(true);
     try {
-      let offChainStatement: any;
-
-      try {
-        const { data } = await api.get(
-          `/forum-user/${config.DAO_KARMA_ID}/delegate-pitch/${profile.address}`
-        );
-        offChainStatement = data;
-      } catch {
-        // ignore if failed
-      }
-
+      const { data: offChainStatement } = await api.get(
+        `/forum-user/${config.DAO_KARMA_ID}/delegate-pitch/${profile.address}`
+      );
       if (!offChainStatement?.data.delegatePitch) return;
 
       const customFields: ICustomFields[] =
@@ -165,22 +157,21 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
               item.displayAs?.includes('headline'))
         ) || emptyField;
 
-      if (fetchedInterests.value.length) {
-        const interestsValue = Array.isArray(fetchedInterests.value)
-          ? fetchedInterests.value
-          : fetchedInterests.value.split(',');
-        const trimmedMap = interestsValue.map((item: string) => item.trim());
-        fetchedInterests = {
-          ...fetchedInterests,
-          value: trimmedMap,
-        };
-      }
+      const interestsValue = Array.isArray(fetchedInterests.value)
+        ? fetchedInterests.value
+        : fetchedInterests.value?.split(',') || [];
+      const trimmedMap = interestsValue.map((item: string) => item.trim());
+      fetchedInterests = {
+        ...fetchedInterests,
+        value: trimmedMap,
+      };
 
       setInterests(fetchedInterests);
       setStatement(fetchedStatement);
       setNewInterests(fetchedInterests);
       setNewStatement(fetchedStatement);
     } catch (error) {
+      console.debug(error);
       setInterests(defaultCustomFields);
       setStatement(defaultCustomFields);
       setNewInterests(defaultCustomFields);
