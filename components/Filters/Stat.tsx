@@ -1,34 +1,27 @@
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { DownChevron } from 'components/Icons';
 import { useDAO, useDelegates } from 'contexts';
-import { IFilterPeriod } from 'types';
+import { IStatOptions } from 'types';
 
-interface IPeriodOptions {
-  title: string;
-  period: IFilterPeriod;
-}
+export const StatFilter = () => {
+  const {
+    theme,
+    daoInfo: { config },
+  } = useDAO();
+  const { selectStat, statOptions, stat, setupFilteringUrl } = useDelegates();
 
-const periodOptions: IPeriodOptions[] = [
-  { title: 'Lifetime', period: 'lifetime' },
-  { title: '30 days', period: '30d' },
-  { title: '180 days', period: '180d' },
-];
+  const selectedStat = statOptions.find(option => option.id === stat)?.title;
 
-export const PeriodFilter = () => {
-  const { period, selectPeriod, setupFilteringUrl } = useDelegates();
-  const { theme } = useDAO();
-
-  const selectedPeriod = periodOptions.find(
-    option => option.period === period
-  )?.title;
-
-  const handleSelectPeriod = async (option: IFilterPeriod) => {
-    selectPeriod(option);
-    setupFilteringUrl('period', option);
+  const handleSelectStat = async (option: IStatOptions) => {
+    selectStat(option.id);
+    setupFilteringUrl('sortby', option.stat);
   };
 
+  const defaultState =
+    stat === (config.DAO_DEFAULT_SETTINGS?.SORT || statOptions[0].id);
+
   return (
-    <Menu isLazy id="period-filter">
+    <Menu isLazy id="stat-filter">
       <MenuButton
         as={Button}
         rightIcon={
@@ -39,33 +32,26 @@ export const PeriodFilter = () => {
             boxSize="5"
           />
         }
-        bgColor={theme.filters.bg}
-        borderWidth="1px"
-        borderColor={theme.filters.border}
-        borderStyle="solid"
-        boxShadow={theme.filters.shadow}
-        color={theme.filters.title}
-        gap="1"
+        bg={defaultState ? theme.filters.bg : theme.branding}
+        color={defaultState ? theme.filters.title : theme.buttonText}
+        _hover={{
+          opacity: 0.8,
+        }}
+        _active={{
+          opacity: 0.8,
+        }}
         fontFamily="heading"
         fontWeight="normal"
         textAlign="left"
-        fontSize="md"
-        minW="min-content"
-        w={{ base: 'full', md: 'max-content' }}
-        maxW="full"
-        _hover={{
-          bg: theme.filters.activeBg,
-        }}
-        _active={{
-          bg: theme.filters.activeBg,
-        }}
+        w="full"
+        maxW={{ base: 'full', md: 'max-content' }}
         px="4"
-        py="5"
+        py="3"
         borderRadius="4px"
         _focus={{}}
         _focusWithin={{}}
       >
-        {selectedPeriod}
+        {selectedStat}
       </MenuButton>
       <MenuList
         bgColor={theme.filters.listBg}
@@ -85,10 +71,10 @@ export const PeriodFilter = () => {
           },
         }}
       >
-        {periodOptions.map((option, index) => (
+        {statOptions.map((option, index) => (
           <MenuItem
             key={+index}
-            onClick={() => handleSelectPeriod(option.period)}
+            onClick={() => handleSelectStat(option)}
             bgColor="transparent"
             _hover={{
               bg: theme.filters.activeBg,

@@ -1,33 +1,40 @@
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { DownChevron } from 'components/Icons';
 import { useDAO, useDelegates } from 'contexts';
-import { IFilterOrder } from 'types';
+import { IFilterPeriod } from 'types';
 
-interface IOrderOptions {
+interface IPeriodOptions {
   title: string;
-  order: IFilterOrder;
+  period: IFilterPeriod;
 }
 
-const orderOptions: IOrderOptions[] = [
-  { title: 'Descending', order: 'desc' },
-  { title: 'Ascending', order: 'asc' },
+const periodOptions: IPeriodOptions[] = [
+  { title: 'Lifetime', period: 'lifetime' },
+  { title: '30 days', period: '30d' },
+  { title: '180 days', period: '180d' },
 ];
 
-export const OrderFilter = () => {
-  const { order, selectOrder, setupFilteringUrl } = useDelegates();
-  const { theme } = useDAO();
+export const PeriodFilter = () => {
+  const { period, selectPeriod, setupFilteringUrl } = useDelegates();
+  const {
+    theme,
+    daoInfo: { config },
+  } = useDAO();
 
-  const selectedOrder = orderOptions.find(
-    option => option.order === order
+  const selectedPeriod = periodOptions.find(
+    option => option.period === period
   )?.title;
 
-  const handleSelectOrder = async (option: IFilterOrder) => {
-    selectOrder(option);
-    setupFilteringUrl('order', option);
+  const handleSelectPeriod = async (option: IFilterPeriod) => {
+    selectPeriod(option);
+    setupFilteringUrl('period', option);
   };
 
+  const defaultState =
+    period === (config.DAO_DEFAULT_SETTINGS?.TIMEPERIOD || 'lifetime');
+
   return (
-    <Menu isLazy id="order-filter">
+    <Menu isLazy id="period-filter">
       <MenuButton
         as={Button}
         rightIcon={
@@ -38,29 +45,33 @@ export const OrderFilter = () => {
             boxSize="5"
           />
         }
-        bgColor={theme.filters.bg}
-        color={theme.filters.title}
+        bg={defaultState ? theme.filters.bg : theme.branding}
+        color={defaultState ? theme.filters.title : theme.buttonText}
+        _hover={{
+          opacity: 0.8,
+        }}
+        _active={{
+          opacity: 0.8,
+        }}
+        borderWidth="1px"
+        borderColor={theme.filters.border}
+        borderStyle="solid"
+        boxShadow={theme.filters.shadow}
         gap="1"
         fontFamily="heading"
         fontWeight="normal"
         textAlign="left"
         fontSize="md"
         minW="min-content"
-        w="full"
-        maxW={{ base: 'full', md: 'max-content' }}
-        _hover={{
-          bg: theme.filters.activeBg,
-        }}
-        _active={{
-          bg: theme.filters.activeBg,
-        }}
+        w={{ base: 'full', md: 'max-content' }}
+        maxW="full"
         px="4"
-        py="3"
+        py="5"
         borderRadius="4px"
         _focus={{}}
         _focusWithin={{}}
       >
-        {selectedOrder}
+        {selectedPeriod}
       </MenuButton>
       <MenuList
         bgColor={theme.filters.listBg}
@@ -80,10 +91,10 @@ export const OrderFilter = () => {
           },
         }}
       >
-        {orderOptions.map((option, index) => (
+        {periodOptions.map((option, index) => (
           <MenuItem
             key={+index}
-            onClick={() => handleSelectOrder(option.order)}
+            onClick={() => handleSelectPeriod(option.period)}
             bgColor="transparent"
             _hover={{
               bg: theme.filters.activeBg,

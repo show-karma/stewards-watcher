@@ -106,6 +106,7 @@ interface IDelegateProps {
   setDelegationError: (value: boolean) => void;
   isOpenVoteToAnyone: boolean;
   onToggleVoteToAnyone: () => void;
+  isFiltersDirty: () => boolean;
 }
 
 export const DelegatesContext = createContext({} as IDelegateProps);
@@ -1148,6 +1149,35 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     setWorkstreamsFilter([]);
     setTracksFilter([]);
     setDelegateOffersToA(false);
+
+    router.push(
+      {
+        pathname: `/${rootPathname}`,
+        query: null,
+      },
+      undefined,
+      { shallow: true }
+    );
+  };
+
+  const isFiltersDirty = () => {
+    if (stat !== (config.DAO_DEFAULT_SETTINGS?.SORT || statOptions[0].id))
+      return true;
+    if (order !== 'desc') return true;
+    if (period !== defaultTimePeriod) return true;
+    if (userToFind !== '') return true;
+    if (acceptedTermsOnly) return true;
+    if (
+      statuses !==
+      (config.DAO_DEFAULT_SETTINGS?.STATUS_FILTER?.DEFAULT_STATUS_SELECTED ||
+        statusesOptions)
+    )
+      return true;
+    if (interestFilter.length > 0) return true;
+    if (workstreamsFilter.length > 0) return true;
+    if (tracksFilter.length > 0) return true;
+    if (delegateOffersToA) return true;
+    return false;
   };
 
   const onCloseProfile = () => {
@@ -1221,6 +1251,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       setDelegationError,
       isOpenVoteToAnyone,
       onToggleVoteToAnyone,
+      isFiltersDirty,
     }),
     [
       profileSelected,
@@ -1268,6 +1299,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       setDelegationError,
       isOpenVoteToAnyone,
       onToggleVoteToAnyone,
+      isFiltersDirty,
     ]
   );
 
