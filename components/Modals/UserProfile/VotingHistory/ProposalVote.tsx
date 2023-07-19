@@ -130,10 +130,7 @@ export const ProposalVote: FC<IProposalVote> = ({
                 gap="1"
                 flexDir="row"
                 borderBottomWidth="1px"
-                borderBottomColor={
-                  theme.tokenHolders.delegations.card.columns.voting.proposals
-                    .title
-                }
+                borderBottomColor={theme.modal.votingHistory.proposal.result}
                 pb="1"
                 mb="1"
                 flex="1"
