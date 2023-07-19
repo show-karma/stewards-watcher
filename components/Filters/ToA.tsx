@@ -5,6 +5,7 @@ export const ToAFilter = () => {
   const { theme } = useDAO();
   const { delegateOffersToA, handleDelegateOffersToA, setupFilteringUrl } =
     useDelegates();
+
   return (
     <Flex
       bgColor="transparent"
@@ -17,7 +18,7 @@ export const ToAFilter = () => {
       minW="min-content"
       w={{ base: 'full', md: 'max-content' }}
       maxW="full"
-      px="4"
+      px="1"
       borderRadius="4px"
       _focus={{}}
       _focusWithin={{}}

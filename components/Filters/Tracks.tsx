@@ -16,6 +16,8 @@ export const TracksFilter = () => {
   const { tracks, tracksFilter, selectTracks } = useDelegates();
   const { theme, daoInfo } = useDAO();
 
+  const defaultState = tracksFilter.length === 0;
+
   return (
     <Menu isLazy closeOnSelect={false}>
       <MenuButton
@@ -23,10 +25,16 @@ export const TracksFilter = () => {
         rightIcon={<IoChevronDownOutline />}
         borderWidth="1px"
         borderStyle="solid"
-        bgColor={theme.filters.bg}
+        bg={defaultState ? theme.filters.bg : theme.branding}
+        color={defaultState ? theme.filters.title : theme.buttonText}
+        _hover={{
+          opacity: 0.8,
+        }}
+        _active={{
+          opacity: 0.8,
+        }}
         borderColor={theme.filters.border}
         boxShadow={theme.filters.shadow}
-        color={theme.filters.title}
         borderRadius="sm"
         gap="4"
         fontFamily="heading"

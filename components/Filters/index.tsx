@@ -1,7 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
-import { OrderByFilters } from './OrderByFilters';
-import { SearchFilter } from './SearchFilter';
+import { OrderByFilters } from './OrderBy';
+import { SearchFilter } from './Search';
 
 export const Filters = () => {
   const { theme } = useDAO();

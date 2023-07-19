@@ -1,26 +1,31 @@
-import { Button, Icon } from '@chakra-ui/react';
+import { FC } from 'react';
+import { Button } from '@chakra-ui/react';
 import { useDAO, useDelegates } from 'contexts';
-import { MdClose } from 'react-icons/md';
 
-export const ClearButton = () => {
-  const { clearFilters } = useDelegates();
+export const ClearButton: FC = () => {
   const { theme } = useDAO();
+  const { clearFilters, isFiltersDirty } = useDelegates();
+  const filterDirty = isFiltersDirty();
   return (
     <Button
-      bg="transparent"
-      color={theme.text}
-      fontSize="md"
-      fontFamily="body"
-      onClick={clearFilters}
-      _hover={{}}
+      bg={filterDirty ? theme.branding : 'transparent'}
+      borderWidth="1px"
+      borderStyle="solid"
+      borderColor={filterDirty ? 'transparent' : theme.filters.title}
+      color={filterDirty ? theme.buttonText : theme.filters.title}
+      fontWeight="normal"
+      _hover={{
+        opacity: 0.8,
+      }}
       _active={{}}
       _focus={{}}
+      _focusVisible={{}}
       _focusWithin={{}}
-      fontWeight="semibold"
-      gap="1"
+      px="4"
+      borderRadius="full"
+      onClick={() => clearFilters()}
     >
-      <Icon as={MdClose} h="4" w="4" />
-      Clear
+      Clear filters
     </Button>
   );
 };

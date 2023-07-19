@@ -6,49 +6,41 @@ import {
   MenuList,
   MenuOptionGroup,
 } from '@chakra-ui/react';
-import { DownChevron } from 'components/Icons';
 import { useDAO, useDelegates } from 'contexts';
+import { IoChevronDownOutline } from 'react-icons/io5';
 
-export const InterestsFilter = () => {
-  const { interests, interestFilter, selectInterests } = useDelegates();
+export const WorkstreamFilter = () => {
+  const { workstreams, workstreamsFilter, selectWorkstream } = useDelegates();
   const { theme } = useDAO();
+
+  const defaultState = workstreamsFilter.length === 0;
 
   return (
     <Menu isLazy closeOnSelect={false}>
       <MenuButton
         as={Button}
-        rightIcon={
-          <DownChevron
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            boxSize="5"
-          />
-        }
+        rightIcon={<IoChevronDownOutline />}
         borderWidth="1px"
         borderStyle="solid"
-        bgColor={theme.filters.bg}
+        bg={defaultState ? theme.filters.bg : theme.branding}
+        color={defaultState ? theme.filters.title : theme.buttonText}
+        _hover={{
+          opacity: 0.8,
+        }}
+        _active={{
+          opacity: 0.8,
+        }}
         borderColor={theme.filters.border}
         boxShadow={theme.filters.shadow}
-        color={theme.filters.title}
-        gap="1"
+        borderRadius="sm"
+        gap="4"
         fontFamily="heading"
         fontWeight="normal"
         textAlign="left"
         w={{ base: 'full', md: 'max-content' }}
-        _hover={{
-          bg: theme.filters.activeBg,
-        }}
-        _active={{
-          bg: theme.filters.activeBg,
-        }}
-        px="4"
-        py="5"
-        borderRadius="4px"
-        _focus={{}}
-        _focusWithin={{}}
+        minW="min-content"
       >
-        Delegate Interest
+        Workstream
       </MenuButton>
       <MenuList
         bgColor={theme.filters.listBg}
@@ -68,18 +60,18 @@ export const InterestsFilter = () => {
           },
         }}
       >
-        <MenuOptionGroup type="checkbox" value={interestFilter}>
-          {interests.map((option, index) => (
+        <MenuOptionGroup type="checkbox" value={workstreamsFilter}>
+          {workstreams.map((option, index) => (
             <MenuItemOption
               key={+index}
-              value={option}
-              onClick={() => selectInterests(index)}
+              value={option.id.toString()}
+              onClick={() => selectWorkstream(index)}
               bgColor="transparent"
               _hover={{
                 bg: theme.filters.activeBg,
               }}
             >
-              {option}
+              {option.description}
             </MenuItemOption>
           ))}
         </MenuOptionGroup>

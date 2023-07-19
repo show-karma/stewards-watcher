@@ -1,12 +1,13 @@
 import { Flex, Text } from '@chakra-ui/react';
 import { useDAO, useDelegates } from 'contexts';
-import { DelegateStatusFilter } from './DelegateStatusFilter';
-import { InterestsFilter } from './InterestsFilter';
-import { PeriodFilter } from './PeriodFilter';
-import { ToAFilter } from './ToAFilter';
-import { ToSFilter } from './ToSFilter';
-import { TracksFilter } from './TracksFilter';
-import { WorkstreamFilter } from './WorkstreamFilter';
+import { DelegateStatusFilter } from './DelegateStatus';
+import { InterestsFilter } from './Interests';
+import { PeriodFilter } from './Period';
+import { ToAFilter } from './ToA';
+import { ToSFilter } from './ToS';
+import { TracksFilter } from './Tracks';
+import { ClearButton } from './ClearButton';
+import { WorkstreamFilter } from './Workstream';
 
 export const OrderByFilters = () => {
   const { interests, workstreams, tracks } = useDelegates();
@@ -18,7 +19,7 @@ export const OrderByFilters = () => {
         <Text fontFamily="heading" color={theme.filters.head} pb="5px">
           Filter by
         </Text>
-        <Flex flexDir="row" gap="4" flexWrap="wrap">
+        <Flex flexDir="row" gap="2" flexWrap="wrap">
           {interests.length > 0 && <InterestsFilter />}
           {workstreams.length > 0 &&
           daoInfo.config.DAO_CATEGORIES_TYPE === 'workstreams' ? (
@@ -32,6 +33,7 @@ export const OrderByFilters = () => {
           <PeriodFilter />
           {/* {daoInfo.config.TOS_URL ? <ToSFilter /> : null} */}
           {daoInfo.config.DAO_SUPPORTS_TOA ? <ToAFilter /> : null}
+          <ClearButton />
         </Flex>
       </Flex>
     </Flex>

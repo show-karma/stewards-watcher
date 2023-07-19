@@ -233,6 +233,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     if (!foundInterests) return emptyField;
     if (Array.isArray(foundInterests.value)) return foundInterests;
     const { value } = foundInterests;
+    if (!value) return emptyField;
     return {
       label: 'Interests',
       value: value?.split(',') || [],
@@ -746,6 +747,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                     isExpanded={isExpanded}
                     toggleIsExpanded={toggleIsExpanded}
                     selectProfile={() => selectProfile(data, 'statement')}
+                    color={theme.card.text.primary}
                   />
                 </Flex>
               ) : (
