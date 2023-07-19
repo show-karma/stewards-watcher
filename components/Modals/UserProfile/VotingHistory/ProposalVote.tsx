@@ -144,10 +144,7 @@ export const ProposalVote: FC<IProposalVote> = ({
                   <Text
                     fontSize="md"
                     fontWeight="medium"
-                    color={
-                      theme.tokenHolders.delegations.card.columns.voting
-                        .proposals.title
-                    }
+                    color={theme.modal.votingHistory.proposal.result}
                   >
                     {daoInfo.config.TRACKS_DICTIONARY[foundTrack].emoji}
                   </Text>
@@ -155,10 +152,7 @@ export const ProposalVote: FC<IProposalVote> = ({
                 <Text
                   fontSize="md"
                   fontWeight="medium"
-                  color={
-                    theme.tokenHolders.delegations.card.columns.voting.proposals
-                      .title
-                  }
+                  color={theme.modal.votingHistory.proposal.result}
                 >
                   {foundTrack || null}
                 </Text>
