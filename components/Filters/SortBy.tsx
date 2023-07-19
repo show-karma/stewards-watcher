@@ -1,8 +1,8 @@
 import { Flex, Text } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
 import { FC } from 'react';
-import { OrderFilter } from './OrderFilter';
-import { StatFilter } from './StatFilter';
+import { OrderFilter } from './Order';
+import { StatFilter } from './Stat';
 
 export const SortBy: FC = () => {
   const { theme } = useDAO();

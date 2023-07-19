@@ -9,36 +9,14 @@ import {
 import { DownChevron } from 'components/Icons';
 import { useDAO, useDelegates } from 'contexts';
 
-export const DelegateStatusFilter = () => {
-  const { selectStatus, statuses, statusesOptions, setupFilteringUrl } =
-    useDelegates();
+export const InterestsFilter = () => {
+  const { interests, interestFilter, selectInterests } = useDelegates();
   const { theme } = useDAO();
 
-  const handleDelegateStatus = (index: number) => {
-    if (!statusesOptions[index]) return;
-
-    // search for the index in the statuses array
-    const filterIdx = statuses.findIndex(
-      filter => filter === statusesOptions[index]
-    );
-
-    // clone the statuses array
-    const items = [...statuses];
-
-    // if the status is already in the statusesOptions array, remove it
-    if (filterIdx >= 0) {
-      items.splice(filterIdx, 1);
-    } else {
-      items.push(statusesOptions[index]);
-    }
-
-    // set the new statuses array
-    selectStatus(items);
-    setupFilteringUrl('statuses', items.join(','));
-  };
+  const defaultState = interestFilter.length === 0;
 
   return (
-    <Menu isLazy closeOnSelect={false} id="delegate-status-filter">
+    <Menu isLazy closeOnSelect={false}>
       <MenuButton
         as={Button}
         rightIcon={
@@ -49,23 +27,22 @@ export const DelegateStatusFilter = () => {
             boxSize="5"
           />
         }
-        bgColor={theme.filters.bg}
         borderWidth="1px"
-        borderColor={theme.filters.border}
         borderStyle="solid"
+        bg={defaultState ? theme.filters.bg : theme.branding}
+        color={defaultState ? theme.filters.title : theme.buttonText}
+        borderColor={theme.filters.border}
         boxShadow={theme.filters.shadow}
-        color={theme.filters.title}
-        gap="4"
+        gap="1"
         fontFamily="heading"
         fontWeight="normal"
         textAlign="left"
         w={{ base: 'full', md: 'max-content' }}
-        maxW="full"
         _hover={{
-          bg: theme.filters.activeBg,
+          opacity: 0.8,
         }}
         _active={{
-          bg: theme.filters.activeBg,
+          opacity: 0.8,
         }}
         px="4"
         py="5"
@@ -73,7 +50,7 @@ export const DelegateStatusFilter = () => {
         _focus={{}}
         _focusWithin={{}}
       >
-        Status
+        Delegate Interest
       </MenuButton>
       <MenuList
         bgColor={theme.filters.listBg}
@@ -93,18 +70,18 @@ export const DelegateStatusFilter = () => {
           },
         }}
       >
-        <MenuOptionGroup type="checkbox" value={statuses}>
-          {statusesOptions.map((option, index) => (
+        <MenuOptionGroup type="checkbox" value={interestFilter}>
+          {interests.map((option, index) => (
             <MenuItemOption
               key={+index}
               value={option}
-              onClick={() => handleDelegateStatus(index)}
+              onClick={() => selectInterests(index)}
               bgColor="transparent"
               _hover={{
                 bg: theme.filters.activeBg,
               }}
             >
-              {option.charAt(0).toUpperCase() + option.slice(1)}
+              {option}
             </MenuItemOption>
           ))}
         </MenuOptionGroup>

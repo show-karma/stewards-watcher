@@ -1,21 +1,35 @@
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { DownChevron } from 'components/Icons';
 import { useDAO, useDelegates } from 'contexts';
-import { IStatOptions } from 'types';
+import { IFilterOrder } from 'types';
 
-export const StatFilter = () => {
+interface IOrderOptions {
+  title: string;
+  order: IFilterOrder;
+}
+
+const orderOptions: IOrderOptions[] = [
+  { title: 'Descending', order: 'desc' },
+  { title: 'Ascending', order: 'asc' },
+];
+
+export const OrderFilter = () => {
+  const { order, selectOrder, setupFilteringUrl } = useDelegates();
   const { theme } = useDAO();
-  const { selectStat, statOptions, stat, setupFilteringUrl } = useDelegates();
 
-  const selectedStat = statOptions.find(option => option.id === stat)?.title;
+  const selectedOrder = orderOptions.find(
+    option => option.order === order
+  )?.title;
 
-  const handleSelectStat = async (option: IStatOptions) => {
-    selectStat(option.id);
-    setupFilteringUrl('sortby', option.stat);
+  const handleSelectOrder = async (option: IFilterOrder) => {
+    selectOrder(option);
+    setupFilteringUrl('order', option);
   };
 
+  const defaultState = order === 'desc';
+
   return (
-    <Menu isLazy id="stat-filter">
+    <Menu isLazy id="order-filter">
       <MenuButton
         as={Button}
         rightIcon={
@@ -26,26 +40,29 @@ export const StatFilter = () => {
             boxSize="5"
           />
         }
-        bgColor={theme.filters.bg}
-        color={theme.filters.title}
+        bg={defaultState ? theme.filters.bg : theme.branding}
+        color={defaultState ? theme.filters.title : theme.buttonText}
+        _hover={{
+          opacity: 0.8,
+        }}
+        _active={{
+          opacity: 0.8,
+        }}
+        gap="1"
         fontFamily="heading"
         fontWeight="normal"
         textAlign="left"
+        fontSize="md"
+        minW="min-content"
         w="full"
         maxW={{ base: 'full', md: 'max-content' }}
-        _hover={{
-          bg: theme.filters.activeBg,
-        }}
-        _active={{
-          bg: theme.filters.activeBg,
-        }}
         px="4"
         py="3"
         borderRadius="4px"
         _focus={{}}
         _focusWithin={{}}
       >
-        {selectedStat}
+        {selectedOrder}
       </MenuButton>
       <MenuList
         bgColor={theme.filters.listBg}
@@ -65,10 +82,10 @@ export const StatFilter = () => {
           },
         }}
       >
-        {statOptions.map((option, index) => (
+        {orderOptions.map((option, index) => (
           <MenuItem
             key={+index}
-            onClick={() => handleSelectStat(option)}
+            onClick={() => handleSelectOrder(option.order)}
             bgColor="transparent"
             _hover={{
               bg: theme.filters.activeBg,

@@ -10,10 +10,21 @@ import {
 } from '@chakra-ui/react';
 import { BiSearch } from 'react-icons/bi';
 import { useDAO, useDelegates } from 'contexts';
+import { useMemo, useState } from 'react';
 
 export const SearchFilter = () => {
   const { theme } = useDAO();
-  const { handleSearch } = useDelegates();
+  const { handleSearch, userToFind } = useDelegates();
+  const [input, setInput] = useState(userToFind);
+
+  const handleInput = (event: any) => {
+    setInput(event.target.value);
+    handleSearch(event.target.value);
+  };
+
+  useMemo(() => {
+    if (!userToFind) setInput('');
+  }, [userToFind]);
 
   return (
     <Flex flexDir="column" maxW="27rem" width="full">
@@ -29,7 +40,8 @@ export const SearchFilter = () => {
           type="text"
           placeholder="Find delegate by Name, ENS name or address"
           w="full"
-          onChange={event => handleSearch(event.target.value)}
+          value={input}
+          onChange={handleInput}
           boxShadow={theme.card.shadow}
           _placeholder={{
             color: theme.subtitle,
