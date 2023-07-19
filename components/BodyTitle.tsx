@@ -62,7 +62,6 @@ const DelegatesCounter: FC<{
           </Flex>
         )}
       </Flex>
-      {isSearchDirty && <ClearButton />}
     </Flex>
   );
 };
