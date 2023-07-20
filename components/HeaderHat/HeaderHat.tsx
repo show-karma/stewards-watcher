@@ -154,11 +154,13 @@ export const HeaderHat: FC<IHeaderHat> = ({
                 childrens={mountingForTokenholders()}
                 accordion
               >
-                <UndelegateModal
-                  buttonProps={{
-                    color: theme.hat.text.primary,
-                  }}
-                />
+                {daoInfo.config?.ALLOW_UNDELEGATE && (
+                  <UndelegateModal
+                    buttonProps={{
+                      color: theme.hat.text.primary,
+                    }}
+                  />
+                )}
               </NavMenu>
               {daoInfo.config.HIDE_FOR_DELEGATES?.length ? undefined : (
                 <NavMenu
@@ -238,7 +240,7 @@ export const HeaderHat: FC<IHeaderHat> = ({
                     title="For Tokenholders"
                     childrens={mountingForTokenholders()}
                   >
-                    <UndelegateModal />
+                    {daoInfo.config?.ALLOW_UNDELEGATE && <UndelegateModal />}
                   </NavMenu>
                   {daoInfo.config.HIDE_FOR_DELEGATES?.length ? undefined : (
                     <NavMenu
