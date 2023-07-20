@@ -171,9 +171,9 @@ const dark: IDAOTheme = {
       divider: '#E6E6E6',
       modules: {
         chart: {
-          point: '#B999FF',
-          openGradient: '#8E6ADC',
-          endGradient: '#070A0E',
+          point: '#E6E6E6',
+          openGradient: '#00D395',
+          endGradient: '#181e2b',
         },
       },
       proposal: {
@@ -247,7 +247,7 @@ const dark: IDAOTheme = {
         },
         legend: {
           text: '#F5F5F5',
-          bg: '#3A295F',
+          bg: '#03543d',
           pillText: '#F5F5F5',
           pillBg: '#070A0E',
         },
@@ -434,9 +434,9 @@ const light: IDAOTheme = {
       divider: '#E6E6E6',
       modules: {
         chart: {
-          point: '#B999FF',
-          openGradient: '#8E6ADC',
-          endGradient: '#070A0E',
+          point: '#E6E6E6',
+          openGradient: '#00D395',
+          endGradient: '#181e2b',
         },
       },
       proposal: {
@@ -522,7 +522,7 @@ const light: IDAOTheme = {
             text: '#121B23',
           },
           stats: {
-            primary: '#4A269B',
+            primary: '#03543d',
             secondary: '#4F5D6C',
             leftBorder: '#121B23',
             border: '#DBDFE3',
@@ -532,7 +532,7 @@ const light: IDAOTheme = {
             totalNumber: '#88939F',
             proposals: {
               title: '#080A0E',
-              hyperlink: '#4A269B',
+              hyperlink: '#03543d',
               description: '#4F5D6C',
               sort: {
                 bg: '#FFFFFF',
