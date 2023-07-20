@@ -7,6 +7,7 @@ import yamfinance from './yamfinance';
 import ssvnetwork from './ssvnetwork';
 import dydx from './dydx';
 import dimo from './dimo';
+import compound from './compound';
 import gitcoin from './gitcoin';
 import elementFinance from './element-finance';
 import starknet from './starknet';
@@ -44,6 +45,7 @@ export const supportedDAOs: ISupportedDAOs = {
     DELEGATE_ABI: dimo.ABI,
     TOKEN_ABI: dimo.ABI,
   },
+
   dydx: {
     config: dydx.config,
     light: dydx.light,
@@ -132,5 +134,12 @@ export const supportedDAOs: ISupportedDAOs = {
     light: moonriver.light,
     DELEGATE_ABI: [],
     TOKEN_ABI: ERC20ABI,
+  },
+  compound: {
+    config: compound.config,
+    light: compound.light,
+    dark: compound.dark,
+    DELEGATE_ABI: compound.ABI,
+    TOKEN_ABI: compound.ABI,
   },
 };
