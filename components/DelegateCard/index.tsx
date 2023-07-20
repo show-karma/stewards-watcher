@@ -838,16 +838,11 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                       color={theme.collapse.text}
                     >
                       <Flex>
-                        <DelegateButton
-                          delegated={data.address}
-                          disabled
-                          isDisabled
-                        />
+                        <DelegateButton disabled isDisabled />
                       </Flex>
                     </Tooltip>
                   ) : (
                     <DelegateButton
-                      delegated={data.address}
                       px={['4', '8']}
                       beforeOnClick={() => {
                         if (config.ALLOW_BULK_DELEGATE) {

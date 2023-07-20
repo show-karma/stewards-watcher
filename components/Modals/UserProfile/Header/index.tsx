@@ -47,16 +47,11 @@ const DelegateCases: FC<{ status?: string; fullAddress: string }> = ({
         color={theme.collapse.text}
       >
         <Flex>
-          <DelegateButton
-            delegated={fullAddress}
-            text="Select as Delegate"
-            isDisabled
-            disabled
-          />
+          <DelegateButton text="Select as Delegate" isDisabled disabled />
         </Flex>
       </Tooltip>
     );
-  return <DelegateButton delegated={fullAddress} text="Select as Delegate" />;
+  return <DelegateButton text="Select as Delegate" />;
 };
 
 interface IUserSection {

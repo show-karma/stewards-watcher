@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { IDelegate } from 'types';
-import { useDAO, useGovernanceVotes } from 'contexts';
+import { DelegationProvider, useDAO, useGovernanceVotes } from 'contexts';
 
 import { Modal, ModalContent, ModalOverlay } from '@chakra-ui/react';
 import { ESteps } from './ESteps';
@@ -31,8 +31,16 @@ export const DelegateModal: React.FC<IModal> = ({
     resetStep();
   };
 
+  const successEmitter = () => {
+    setStep(ESteps.PROCESSED);
+  };
+
   const renderStep = () => {
     if (!daoData) return null;
+
+    if (step === ESteps.DONE)
+      return <Step2 handleModal={closeModal} delegatedUser={delegateData} />;
+
     if (daoInfo.config.ALLOW_BULK_DELEGATE)
       return (
         <TrackDelegation
@@ -42,8 +50,7 @@ export const DelegateModal: React.FC<IModal> = ({
           walletAddress={walletAddress}
         />
       );
-    if (step === ESteps.DONE)
-      return <Step2 handleModal={closeModal} delegatedUser={delegateData} />;
+
     if (
       delegatedBefore !== '0x0000000000000000000000000000000000000000' &&
       delegatedBefore
@@ -55,6 +62,8 @@ export const DelegateModal: React.FC<IModal> = ({
           delegatedUser={delegateData}
           delegatedBefore={delegatedBefore}
           walletAddress={walletAddress}
+          successEmitter={successEmitter}
+          step={step}
         />
       );
 
@@ -64,6 +73,8 @@ export const DelegateModal: React.FC<IModal> = ({
         votes={votes}
         delegatedUser={delegateData}
         walletAddress={walletAddress}
+        successEmitter={successEmitter}
+        step={step}
       />
     );
   };
@@ -77,7 +88,12 @@ export const DelegateModal: React.FC<IModal> = ({
       isCentered
     >
       <ModalOverlay />
-      <ModalContent maxW="max-content">{renderStep()}</ModalContent>
+      <DelegationProvider
+        delegatee={delegateData.address}
+        onSuccessFunction={successEmitter}
+      >
+        <ModalContent maxW="max-content">{renderStep()}</ModalContent>
+      </DelegationProvider>
     </Modal>
   );
 };

@@ -9,12 +9,16 @@ import { DelegateModalFooter } from './DelegateModalFooter';
 import { DelegateModalBody } from './DelegateModalBody';
 import { ModalDelegateButton } from './ModalDelegateButton';
 import { VotesToDelegate } from './VotesToDelegate';
+import { ProcessedTransaction } from './Processed';
+import { ESteps } from './ESteps';
 
 interface StepProps {
   handleModal: () => void;
   votes: string;
   delegatedUser: IDelegate;
   walletAddress?: string;
+  successEmitter?: () => void;
+  step: ESteps;
 }
 
 export const Step1: React.FC<StepProps> = ({
@@ -22,6 +26,8 @@ export const Step1: React.FC<StepProps> = ({
   votes,
   delegatedUser,
   walletAddress,
+  successEmitter,
+  step,
 }) => {
   const { daoData } = useDAO();
   if (!daoData) return null;
@@ -31,6 +37,9 @@ export const Step1: React.FC<StepProps> = ({
   const modalSpacing = {
     padding: '16px 32px',
   };
+
+  if (step === ESteps.PROCESSED)
+    return <ProcessedTransaction handleModal={handleModal} />;
 
   return (
     <Flex
@@ -113,7 +122,7 @@ export const Step1: React.FC<StepProps> = ({
             </Flex>
           </Flex>
         </Flex>
-        <ModalDelegateButton delegated={delegatedUser.address} votes={votes} />
+        <ModalDelegateButton votes={votes} />
       </DelegateModalBody>
       <DelegateModalFooter
         flexProps={{ ...modalSpacing }}

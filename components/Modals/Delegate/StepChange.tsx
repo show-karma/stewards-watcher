@@ -15,6 +15,8 @@ import { ModalDelegateButton } from './ModalDelegateButton';
 import { DelegateModalBody } from './DelegateModalBody';
 import { DelegateModalFooter } from './DelegateModalFooter';
 import { DelegateModalHeader } from './DelegateModalHeader';
+import { ProcessedTransaction } from './Processed';
+import { ESteps } from './ESteps';
 
 interface StepProps {
   handleModal: () => void;
@@ -22,6 +24,8 @@ interface StepProps {
   delegatedUser: IDelegate;
   delegatedBefore: string;
   walletAddress?: string;
+  successEmitter?: () => void;
+  step: ESteps;
 }
 
 export const StepChange: React.FC<StepProps> = ({
@@ -30,6 +34,8 @@ export const StepChange: React.FC<StepProps> = ({
   delegatedUser,
   delegatedBefore,
   walletAddress,
+  successEmitter,
+  step,
 }) => {
   const [beforeENSName, setBeforeEnsName] = useState('');
   const [beforeImage, setBeforeImage] = useState(
@@ -70,6 +76,9 @@ export const StepChange: React.FC<StepProps> = ({
       duration: 3000,
     });
   };
+
+  if (step === ESteps.PROCESSED)
+    return <ProcessedTransaction handleModal={handleModal} />;
 
   return (
     <Flex
@@ -212,14 +221,14 @@ export const StepChange: React.FC<StepProps> = ({
                   textOverflow="ellipsis"
                   whiteSpace="nowrap"
                   overflow="hidden"
-                >{`${delegatedUser.ensName || delegatedUser.address}`}</Text>
+                >{`${
+                  delegatedUser.ensName ||
+                  truncateAddress(delegatedUser.address)
+                }`}</Text>
               </Flex>
             </Flex>
           </Flex>
-          <ModalDelegateButton
-            delegated={delegatedUser.address}
-            votes={votes}
-          />
+          <ModalDelegateButton votes={votes} />
         </DelegateModalBody>
       </Flex>
       <DelegateModalFooter

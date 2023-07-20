@@ -147,13 +147,11 @@ export const ToDelegate: FC<IToDelegateProps> = ({
         </Text>
       )}
       <DelegateButton
-        delegated={address}
         disabled={!isEthAddress}
         w="full"
         maxW="full"
         borderRadius="4px"
         mt={4}
-        successEmitter={emitSuccess}
         beforeOnClick={() => setDelegate()}
         text={
           daoInfo.config.DAO_DELEGATE_CONTRACT ||

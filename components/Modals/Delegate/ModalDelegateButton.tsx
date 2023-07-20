@@ -4,17 +4,15 @@ import { FC } from 'react';
 import { useAccount } from 'wagmi';
 
 interface IDelegateButtonProps extends ButtonProps {
-  delegated: string;
   votes: string;
 }
 
 export const ModalDelegateButton: FC<IDelegateButtonProps> = props => {
-  const { votes, delegated } = props;
+  const { votes } = props;
   const { isConnected } = useAccount();
 
   return (
     <DelegateButton
-      delegated={delegated}
       fontStyle="normal"
       fontSize="16px"
       color="#FFF"

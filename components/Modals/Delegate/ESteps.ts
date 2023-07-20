@@ -2,4 +2,5 @@
 export enum ESteps {
   DELEGATE,
   DONE,
+  PROCESSED,
 }

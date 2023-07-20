@@ -44,7 +44,7 @@ export const StyledModal: React.FC<
         bgColor={theme.background}
         overflow="hidden"
       >
-        <ModalCloseButton zIndex={10} id="cu" color={modalTheme.subtext} />
+        <ModalCloseButton zIndex={10} id="cb" color={modalTheme.subtext} />
         <Flex
           alignItems="center"
           justifyContent="center"

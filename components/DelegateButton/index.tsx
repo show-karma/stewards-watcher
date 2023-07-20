@@ -1,22 +1,18 @@
 import { Button, ButtonProps, Flex } from '@chakra-ui/react';
-import { useDAO, useWallet } from 'contexts';
-import { useDelegation, useMixpanel } from 'hooks';
+import { useDAO, useDelegation, useWallet } from 'contexts';
+import { useMixpanel } from 'hooks';
 import { convertHexToRGBA } from 'utils';
 import { FC, useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 
 interface IDelegateButton extends ButtonProps {
-  delegated: string;
   text?: string;
-  successEmitter?: () => void;
   beforeOnClick?: () => void;
   shouldBlockModal?: boolean;
 }
 
 export const DelegateButton: FC<IDelegateButton> = ({
-  delegated,
   text = 'Delegate',
-  successEmitter,
   beforeOnClick,
   shouldBlockModal,
   ...props
@@ -31,10 +27,8 @@ export const DelegateButton: FC<IDelegateButton> = ({
 
   const [writeAfterAction, setWriteAfterAction] = useState(false);
 
-  const { isLoading, write } = useDelegation({
-    delegatee: delegated,
-    onSuccessFunction: successEmitter,
-  });
+  const { isLoading, write } = useDelegation();
+
   const sameNetwork = chain?.id === config.DAO_CHAIN.id;
 
   useEffect(() => {
