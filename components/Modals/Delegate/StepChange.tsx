@@ -212,7 +212,9 @@ export const StepChange: React.FC<StepProps> = ({
                   textOverflow="ellipsis"
                   whiteSpace="nowrap"
                   overflow="hidden"
-                >{`${delegatedUser.ensName || delegatedUser.address}`}</Text>
+                >
+                  {delegatedUser.ensName || delegatedUser.address}
+                </Text>
               </Flex>
             </Flex>
           </Flex>

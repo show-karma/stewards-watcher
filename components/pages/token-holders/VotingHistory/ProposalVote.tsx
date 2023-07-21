@@ -515,7 +515,10 @@ export const ProposalVote: FC<IProposalVote> = ({
       </Flex>
       {!isLast && (
         <Divider
-          bgColor={`${theme.tokenHolders.delegations.card.columns.voting.proposals.vote.divider}`}
+          bgColor={
+            theme.tokenHolders.delegations.card.columns.voting.proposals.vote
+              .divider
+          }
           mt="4"
           h="1px"
         />
@@ -526,7 +529,10 @@ export const ProposalVote: FC<IProposalVote> = ({
           <ExpandableReason text={voteReason} />
 
           <Divider
-            bgColor={`${theme.tokenHolders.delegations.card.columns.voting.proposals.vote.divider}`}
+            bgColor={
+              theme.tokenHolders.delegations.card.columns.voting.proposals.vote
+                .divider
+            }
             mt="4"
             h="1px"
           />

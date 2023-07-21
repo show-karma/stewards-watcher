@@ -108,7 +108,9 @@ export const Step1: React.FC<StepProps> = ({
                   maxW={[100, 100, 130]}
                   whiteSpace="nowrap"
                   overflow="hidden"
-                >{`${delegatedUser.ensName || delegatedUser.address}`}</Text>
+                >
+                  {delegatedUser.ensName || delegatedUser.address}
+                </Text>
               </Flex>
             </Flex>
           </Flex>
