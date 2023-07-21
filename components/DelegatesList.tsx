@@ -72,7 +72,7 @@ const DelegatesCases: FC<IDelegatesCasesProps> = ({
       <>
         {delegates.map(item => (
           <DelegateCard
-            key={`${JSON.stringify(item)}`}
+            key={JSON.stringify(item)}
             data={item}
             onModalOpen={onModalOpen}
           />
@@ -84,7 +84,7 @@ const DelegatesCases: FC<IDelegatesCasesProps> = ({
     <>
       {delegates.map(item => (
         <DelegateCard
-          key={`${JSON.stringify(item)}`}
+          key={JSON.stringify(item)}
           data={item}
           onModalOpen={onModalOpen}
         />

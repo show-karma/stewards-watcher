@@ -42,7 +42,7 @@ const ContrarionBox: FC<IContrarionBoxProps> = ({ contrarionIndex }) => {
           w="4"
           h="4"
           mt="1"
-          color={`${theme.modal.votingHistory.proposal.title}`}
+          color={theme.modal.votingHistory.proposal.title}
         />
         <Text
           fontWeight="light"
