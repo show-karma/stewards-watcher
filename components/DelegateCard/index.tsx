@@ -321,7 +321,13 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
 
     if (type === 'tracks')
       return (
-        <Flex w="full" overflowX="hidden" gap="1" flex="1">
+        <Flex
+          overflowX="hidden"
+          textOverflow="ellipsis"
+          whiteSpace="nowrap"
+          gap="1"
+          flex="1"
+        >
           {data?.tracks?.map((track, index) => (
             <Tooltip
               key={+index}
@@ -343,7 +349,11 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                 borderRadius="md"
                 align="center"
                 w="max-content"
-                minW="max-content"
+                minW="min-content"
+                textOverflow="ellipsis"
+                whiteSpace="nowrap"
+                overflow="hidden"
+                flex="1"
               >
                 <Text
                   color={theme.card.workstream.text}
@@ -619,7 +629,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   gap="1.5"
                   overflowX="hidden"
                   width="100%"
-                  maxW={{ base: '310px' }}
+                  maxW={{ base: '280px' }}
                 >
                   {renderCategory()}
                   {!isLoaded ? (
