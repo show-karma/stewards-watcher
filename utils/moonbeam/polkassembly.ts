@@ -26,7 +26,7 @@ export const polkassemblyProposalUrl = {
     `https://moonbeam.polkassembly.io/proposal/${proposalId}`,
 };
 
-const routes = {
+export const routes = {
   onChainPosts: (trackNo: NumberIsh, page = 1, limit = 100) => ({
     url: '/listing/on-chain-posts',
     params: {

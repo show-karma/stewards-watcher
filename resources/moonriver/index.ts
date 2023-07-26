@@ -6,10 +6,10 @@ import {
   moonriverGetLockedTokensAction,
   moonriverOnChainProvider,
   moonriverTracksDictionary,
-  polkassemblyProposalUrl,
 } from 'utils';
-import { moonriverUndelegateAction } from 'utils/moonbeam/moonriverUndelegateAction';
 import { moonriver } from 'wagmi/chains';
+import { moonriverUndelegateAction } from '../../utils/moonbeam/moonriverUndelegateAction';
+import { polkassemblyProposalUrl } from '../../utils/moonbeam/polkassembly';
 import ABI from './ABI.json';
 import batchContractAbi from './ABI_BATCH_CONTRACT.json';
 
