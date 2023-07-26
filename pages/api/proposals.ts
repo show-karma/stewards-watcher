@@ -29,6 +29,7 @@ const handler: NextApiHandler = async (
 
   const cached = cache.get(cacheKey);
   if (cached) {
+    res.setHeader('Cache-Control', 's-maxage=86400');
     res.json(cached);
     return;
   }
@@ -41,6 +42,7 @@ const handler: NextApiHandler = async (
   }
 
   cache.set(cacheKey, result);
+  res.setHeader('Cache-Control', 's-maxage=86400');
   res.json(result);
 };
 
