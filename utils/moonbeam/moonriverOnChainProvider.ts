@@ -12,6 +12,7 @@ import moment from 'moment';
 import { ethers, providers } from 'ethers';
 import { RPCS } from 'helpers';
 import { fetchBlockTimestamp } from 'utils';
+import axios from 'axios';
 import { MoonbeamWSC } from './moonbeamwsc';
 import { polkassembly, Post } from './polkassembly';
 
@@ -75,39 +76,8 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
 async function proposalsWithMetadata(): Promise<
   (MoonbeamProposal & { proposal: string; trackId: NumberIsh })[]
 > {
-  const client = await MoonbeamWSC.createClient();
-
-  const proposals = await client.getProposals();
-  const tracks = client.getTracks(true);
-  const postWithTrackId: (Post & { trackId: NumberIsh })[] = [];
-
-  const promises = tracks.map(async track => {
-    const posts = await polkassembly.fetchOnChainPosts(track.id, 'moonriver');
-    postWithTrackId.push(
-      ...posts.map(post => ({ ...post, trackId: track.id }))
-    );
-  });
-
-  await Promise.all(promises);
-  const result: (MoonbeamProposal & {
-    proposal: string;
-    trackId: NumberIsh;
-  })[] = [];
-
-  postWithTrackId.forEach(post => {
-    const currentProposal = proposals.find(
-      proposal => +proposal.proposalId === +post.post_id
-    );
-
-    if (currentProposal) {
-      result.push({
-        ...currentProposal,
-        proposal: post.title,
-        trackId: post.trackId,
-      });
-    }
-  });
-  return result;
+  const { data } = await axios.get('/api/proposals?dao=moonriver');
+  return data;
 }
 
 async function getDaoProposals(): Promise<IProposal[]> {
