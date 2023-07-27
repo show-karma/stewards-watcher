@@ -68,6 +68,7 @@ export class DelegateRegistryContract extends GelatoRelay {
       address: this.contractAddress,
       functionName: 'nonces',
       args: [address],
+      chainId: 10,
     });
 
     return {
@@ -131,6 +132,7 @@ export class DelegateRegistryContract extends GelatoRelay {
       address: this.contractAddress,
       functionName: fn,
       args,
+      chainId: 10,
     });
     return {
       hash,
