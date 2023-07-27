@@ -53,8 +53,6 @@ const VOTING_HISTORY = {
 function concatOnChainProposals(proposals: any[], votes: any[]) {
   const array: IChainRow[] = [];
 
-  console.log('votes', votes);
-
   votes.forEach((vote: any) => {
     const { proposal } = vote;
     array.push({
