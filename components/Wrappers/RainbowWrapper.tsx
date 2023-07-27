@@ -28,8 +28,18 @@ export const RainbowWrapper: React.FC<ProviderProps> = ({ children }) => {
 
   const { config } = daoInfo;
 
+  const mountChains = () => {
+    const chains = [config.DAO_CHAIN];
+
+    if (config.ENABLE_ONCHAIN_REGISTRY) {
+      chains.push(optimism);
+    }
+
+    return chains;
+  };
+
   const { chains, publicClient, webSocketPublicClient } = configureChains(
-    [config.DAO_CHAIN, optimism],
+    mountChains(),
     [
       process.env.NEXT_PUBLIC_ALCHEMY_KEY
         ? alchemyProvider({
