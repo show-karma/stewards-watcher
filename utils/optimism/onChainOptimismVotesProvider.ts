@@ -1,8 +1,5 @@
 /* eslint-disable no-useless-catch */
 import { ApolloClient, gql, InMemoryCache } from '@apollo/client';
-import { useQuery } from '@tanstack/react-query';
-import { useDAO } from 'contexts';
-
 import moment from 'moment';
 import { IChainRow } from 'types';
 
