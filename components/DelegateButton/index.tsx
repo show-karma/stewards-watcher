@@ -3,7 +3,7 @@ import { useDAO, useWallet } from 'contexts';
 import { useDelegation, useMixpanel } from 'hooks';
 import { convertHexToRGBA } from 'utils';
 import { FC, useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
+import { useAccount, useSwitchNetwork } from 'wagmi';
 
 interface IDelegateButton extends ButtonProps {
   delegated: string;
@@ -21,8 +21,7 @@ export const DelegateButton: FC<IDelegateButton> = ({
   shouldBlockModal,
   ...props
 }) => {
-  const { openConnectModal, openChainModal, chain, connectIsOpen } =
-    useWallet();
+  const { openConnectModal, chain, connectIsOpen } = useWallet();
   const { isConnected } = useAccount();
   const { daoInfo, theme } = useDAO();
   const { config } = daoInfo;
@@ -44,6 +43,10 @@ export const DelegateButton: FC<IDelegateButton> = ({
     }
   }, [isConnected && writeAfterAction && sameNetwork && !connectIsOpen]);
 
+  const { switchNetwork } = useSwitchNetwork({
+    chainId: config.DAO_CHAIN.id,
+  });
+
   const handleCase = () => {
     mixpanel.reportEvent({
       event: 'delegateButtonClick',
@@ -60,7 +63,7 @@ export const DelegateButton: FC<IDelegateButton> = ({
 
     if (chain && !sameNetwork) {
       setWriteAfterAction(true);
-      return openChainModal && openChainModal();
+      return switchNetwork?.();
     }
 
     if (!delegateIsOpen && !shouldBlockModal) return delegateOnToggle();
