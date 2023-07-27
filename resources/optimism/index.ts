@@ -1,4 +1,5 @@
 import { IDAOConfig, IDAOTheme } from 'types';
+import { onChainOptimismVotesProvider } from 'utils/optimism';
 import { optimism } from 'wagmi/chains';
 import ABI from './ABI.json';
 
@@ -41,8 +42,11 @@ const config: IDAOConfig = {
     'offChainVotesPct',
   ],
   ENABLE_DELEGATE_TRACKER: true,
-  EXCLUDED_VOTING_HISTORY_COLUMN: ['onChainVoteBreakdown'],
+  EXCLUDED_VOTING_HISTORY_COLUMN: [],
   DAO_CATEGORIES_TYPE: 'workstreams',
+  DAO_EXT_VOTES_PROVIDER: {
+    onChain: onChainOptimismVotesProvider,
+  },
   ENABLE_ONCHAIN_REGISTRY: true,
   DELEGATE_REGISTRY_CONTRACT: {
     ADDRESS: '0xd17206EC4D268D0E55bb08A369b6864f1178B81d',
