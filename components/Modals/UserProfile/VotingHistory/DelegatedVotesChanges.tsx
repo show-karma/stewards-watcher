@@ -206,8 +206,8 @@ export const DelegatedVotesChanges: FC = () => {
     animation: { duration: isLoading || hasError ? 0 : 1000 },
     elements: {
       point: {
-        radius: 5,
-        hoverRadius: 4,
+        radius: 0,
+        hoverRadius: 6,
       },
     },
     scales: {
