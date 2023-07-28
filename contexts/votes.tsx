@@ -70,6 +70,7 @@ export const VotesProvider: React.FC<ProviderProps> = ({
     from: moment().subtract(40, 'year').unix(),
     to: moment().unix(),
   };
+
   const [isLoading, setIsLoading] = useState(true);
   const [sortby, setSortBy] = useState<'Date' | 'Choice'>('Date');
   const [offset, setOffset] = useState(0);
