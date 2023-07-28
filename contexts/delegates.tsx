@@ -229,7 +229,6 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       } = await api.get<{ data: { snapshotIds: string[]; onChainId: string } }>(
         `/dao/${config.DAO_KARMA_ID}`
       );
-      console.log(data);
       setVoteInfos({ ...data });
     } catch (error) {
       console.error(error);
