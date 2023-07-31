@@ -27,6 +27,7 @@ import { writeContract, waitForTransaction } from '@wagmi/core';
 import { IBulkUndelegatePayload } from 'utils/moonbeam/moonriverUndelegateAction';
 import { handleError } from 'utils/handleWriteError';
 import { StyledButton } from 'components/HeaderHat';
+import { useSwitchNetwork } from 'wagmi';
 
 interface IUndelegateModalProps {
   buttonProps?: ButtonProps;
@@ -41,8 +42,7 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
   const { tracks } = useDelegates();
   const { isOpen, onClose, onOpen } = useDisclosure();
   const { mixpanel } = useMixpanel();
-  const { openConnectModal, openChainModal, chain, isConnected, address } =
-    useWallet();
+  const { openConnectModal, chain, isConnected, address } = useWallet();
 
   const { toast } = useToasty();
 
@@ -71,6 +71,10 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
 
   const sameNetwork = chain?.id === config.DAO_CHAIN.id;
 
+  const { switchNetwork } = useSwitchNetwork({
+    chainId: config.DAO_CHAIN.id,
+  });
+
   const handleOnClick = () => {
     mixpanel.reportEvent({
       event: 'undelegateButtonClick',
@@ -83,7 +87,7 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
 
     if (chain && !sameNetwork) {
       setOpenModalAfterConnect(true);
-      return openChainModal && openChainModal();
+      return switchNetwork?.();
     }
 
     return onOpen();

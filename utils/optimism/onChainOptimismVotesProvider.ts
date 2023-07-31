@@ -1,11 +1,46 @@
 /* eslint-disable no-useless-catch */
-import { ApolloClient, InMemoryCache } from '@apollo/client';
-import { useQuery } from '@tanstack/react-query';
-import { useDAO } from 'contexts';
-
+import { ApolloClient, gql, InMemoryCache } from '@apollo/client';
 import moment from 'moment';
 import { IChainRow } from 'types';
-import { VOTING_HISTORY } from 'utils';
+
+const VOTING_HISTORY = {
+  onChainProposalsReq: gql`
+    query Proposals($skipIds: [String!]!) {
+      proposals(
+        where: { organization: "optimism.eth", id_not_in: $skipIds }
+        orderBy: "timestamp"
+        orderDirection: desc
+      ) {
+        id
+        description
+        timestamp
+        status
+      }
+    }
+  `,
+  onChainVotesReq: gql`
+    query Votes($address: String!) {
+      votes(
+        orderBy: timestamp
+        orderDirection: desc
+        where: { user: $address, organization: "optimism.eth" }
+      ) {
+        id
+        proposal {
+          id
+          description
+          timestamp
+        }
+        organization {
+          id
+        }
+        solution
+        timestamp
+        support
+      }
+    }
+  `,
+};
 
 /**
  * Concat proposal and votes into a common interface
@@ -48,21 +83,19 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
  * @param daoName
  * @returns array of voted and not voted proposals (not sorted)
  */
-async function fetchOnChainProposalVotes(
+export async function onChainOptimismVotesProvider(
   daoName: string | string[],
-  address: string,
-  clientUrl = 'https://api.thegraph.com/subgraphs/name/show-karma/dao-on-chain-voting'
+  address: string
 ) {
   if (!daoName || !address) return [];
   try {
     const onChainClient = new ApolloClient({
-      uri: clientUrl,
+      uri: 'https://api.thegraph.com/subgraphs/name/show-karma/dao-onchain-voting-optimism',
       cache: new InMemoryCache(),
     });
     const { data: votes } = await onChainClient.query({
       query: VOTING_HISTORY.onChainVotesReq,
       variables: {
-        daoname: [daoName].flat(),
         address,
       },
     });
@@ -72,7 +105,6 @@ async function fetchOnChainProposalVotes(
       const { data: proposals } = await onChainClient.query({
         query: VOTING_HISTORY.onChainProposalsReq,
         variables: {
-          daoname: [daoName].flat(),
           skipIds,
         },
       });
@@ -83,23 +115,3 @@ async function fetchOnChainProposalVotes(
   }
   return [];
 }
-
-const useOnChainVotes = (
-  daoName: string | string[],
-  address: string,
-  clientUrl?: string
-) => {
-  const {
-    daoInfo: {
-      config: { DAO_EXT_VOTES_PROVIDER },
-    },
-  } = useDAO();
-  return useQuery(['onChainVotes', daoName, address], async () => {
-    if (DAO_EXT_VOTES_PROVIDER?.onChain) {
-      return DAO_EXT_VOTES_PROVIDER.onChain(daoName, address);
-    }
-    return fetchOnChainProposalVotes(daoName, address, clientUrl);
-  });
-};
-
-export { useOnChainVotes, fetchOnChainProposalVotes };

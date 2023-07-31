@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Hex } from 'types';
 import { DelegateRegistryContract } from 'utils/delegate-registry/DelegateRegistry';
 import { DelegateProfile } from 'utils/delegate-registry/types';
+import { useSwitchNetwork } from 'wagmi';
 
 interface GasfreeButtonProps {
   title?: string;
@@ -14,8 +15,7 @@ interface GasfreeButtonProps {
 export const GasfreeButton: React.FC<GasfreeButtonProps> = ({
   title = 'Save',
 }) => {
-  const { address, isConnected, openConnectModal, chain, openChainModal } =
-    useWallet();
+  const { address, isConnected, openConnectModal, chain } = useWallet();
   const {
     daoInfo: { config },
   } = useDAO();
@@ -46,7 +46,7 @@ export const GasfreeButton: React.FC<GasfreeButtonProps> = ({
     [newInterests, newName, newProfilePicture, newStatement]
   );
 
-  const sendSponoredTx = async () => {
+  const sendSponsoredTx = async () => {
     const {
       DELEGATE_REGISTRY_CONTRACT,
       DAO_DELEGATE_CONTRACT,
@@ -98,6 +98,10 @@ export const GasfreeButton: React.FC<GasfreeButtonProps> = ({
     }
   };
 
+  const { switchNetwork } = useSwitchNetwork({
+    chainId: 10,
+  });
+
   const handleOnClick = () => {
     if (!isConnected || !address) {
       openConnectModal?.();
@@ -112,12 +116,12 @@ export const GasfreeButton: React.FC<GasfreeButtonProps> = ({
         status: 'error',
       });
 
-      openChainModal?.();
+      switchNetwork?.();
       setRecallAfterAction(true);
       return;
     }
 
-    sendSponoredTx();
+    sendSponsoredTx();
   };
 
   useEffect(() => {
