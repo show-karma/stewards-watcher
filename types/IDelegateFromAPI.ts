@@ -10,6 +10,7 @@ export interface IDelegateFromAPI {
   isForumVerified: boolean;
   isNominee: boolean;
   joinDateAt: string;
+  discussionThread?: string;
   firstTokenDelegatedAt: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   pitch: any;

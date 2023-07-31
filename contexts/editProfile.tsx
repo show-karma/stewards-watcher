@@ -34,7 +34,7 @@ interface IEditProfileProps {
   newProfilePicture: string | null;
   changeHandle: (
     newHandle: string,
-    media: 'twitter' | 'forum' | 'website'
+    media: 'twitter' | 'forum' | 'website' | 'thread'
   ) => Promise<void>;
   acceptedTerms: boolean;
   changeAcceptedTerms: (choice: boolean) => void;
@@ -501,7 +501,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const changeHandle = async (
     newHandle: string,
-    media: 'twitter' | 'forum' | 'website'
+    media: 'twitter' | 'forum' | 'website' | 'thread'
   ) => {
     try {
       const authorizedAPI = axios.create({
@@ -519,6 +519,18 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
             `${KARMA_API.base_url}/user/${config.DAO_KARMA_ID}/${profileSelected?.address}`,
             {
               website: newHandle,
+            }
+          )
+          .then(() => {
+            refreshProfileModal('handles');
+            fetchDelegates(0);
+          });
+      } else if (media === 'thread') {
+        await authorizedAPI
+          .put(
+            `${KARMA_API.base_url}/delegate/${config.DAO_KARMA_ID}/discussion-thread`,
+            {
+              discussionThread: newHandle,
             }
           )
           .then(() => {

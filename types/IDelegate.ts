@@ -26,6 +26,7 @@ export interface IDelegate {
   profilePicture?: string;
   status: string;
   userCreatedAt?: string;
+  discussionThread?: string;
   delegatePitch?: {
     threadId: number;
     customFields: ICustomFields[];
