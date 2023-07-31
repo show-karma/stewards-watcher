@@ -24,6 +24,7 @@ export * from './RightCircleArrowIcon';
 export * from './SearchIcon';
 export * from './SearchUserIcon';
 export * from './StatsIcon';
+export * from './ThreadIcon';
 export * from './TwitterIcon';
 export * from './UpChevronIcon';
 export * from './VoteAgainstIcon';

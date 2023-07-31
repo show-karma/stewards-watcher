@@ -14,6 +14,7 @@ import {
   TwitterIcon,
   DiscordIcon,
   WebsiteIcon,
+  ThreadIcon,
 } from 'components';
 import { GasfreeButton } from 'components/HeaderHat/GasfreeButton';
 import { useDAO, useDelegates, useEditProfile, useWallet } from 'contexts';
@@ -197,6 +198,14 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
                   isSamePerson={isSamePerson}
                 >
                   <WebsiteIcon boxSize="6" color={theme.modal.header.title} />
+                </MediaIcon>
+                <MediaIcon
+                  profile={profile}
+                  media="thread"
+                  changeTab={changeTab}
+                  isSamePerson={isSamePerson}
+                >
+                  <ThreadIcon boxSize="6" color={theme.modal.header.title} />
                 </MediaIcon>
               </Flex>
             </Flex>

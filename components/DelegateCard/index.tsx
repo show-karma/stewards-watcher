@@ -43,7 +43,7 @@ import dynamic from 'next/dynamic';
 import { FaDiscord } from 'react-icons/fa';
 import { ImgWithFallback } from '../ImgWithFallback';
 import { DelegateButton } from '../DelegateButton';
-import { ForumIcon, TwitterIcon, WebsiteIcon } from '../Icons';
+import { ForumIcon, ThreadIcon, TwitterIcon, WebsiteIcon } from '../Icons';
 import { ExpandableCardText } from './ExpandableCardText';
 
 const DelegateStat = dynamic(() =>
@@ -932,6 +932,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                       <ForumIcon w="17px" h="17px" />
                     </Link>
                   )}
+
                 {data.discordUsername && (
                   <Popover>
                     <PopoverTrigger>
@@ -968,6 +969,22 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                       <PopoverBody>{data.discordUsername}</PopoverBody>
                     </PopoverContent>
                   </Popover>
+                )}
+                {data?.discussionThread && (
+                  <Link
+                    href={data.discussionThread}
+                    isExternal
+                    color={theme.card.socialMedia}
+                    _hover={{
+                      transform: 'scale(1.25)',
+                    }}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    h="max-content"
+                  >
+                    <ThreadIcon w="17px" h="17px" />
+                  </Link>
                 )}
               </Flex>
             </Flex>
