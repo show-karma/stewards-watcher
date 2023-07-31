@@ -366,6 +366,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           tracks: item.tracks,
           userCreatedAt: item.userCreatedAt,
           website: item.website,
+          discussionThread: item.discussionThread,
         };
       });
 
@@ -574,6 +575,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         userCreatedAt: fetchedDelegate.userCreatedAt,
         acceptedTOS: fetchedDelegate.acceptedTOS,
         website: fetchedDelegate.website,
+        discussionThread: fetchedDelegate.discussionThread,
       };
       return userFound;
     } catch {
@@ -631,6 +633,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         userCreatedAt: fetchedDelegate.userCreatedAt,
         acceptedTOS: fetchedDelegate.acceptedTOS,
         website: fetchedDelegate.website,
+        discussionThread: fetchedDelegate.discussionThread,
       };
 
       const getTab = asPath.split('#');
@@ -704,6 +707,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         userCreatedAt: fetchedDelegate.userCreatedAt,
         acceptedTOS: fetchedDelegate.acceptedTOS,
         website: fetchedDelegate.website,
+        discussionThread: fetchedDelegate.discussionThread,
       };
 
       setProfileSelected(userFound);
@@ -788,6 +792,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           userCreatedAt: item.userCreatedAt,
           status: item.status,
           website: item.website,
+          discussionThread: item.discussionThread,
         });
       });
     } catch (error) {

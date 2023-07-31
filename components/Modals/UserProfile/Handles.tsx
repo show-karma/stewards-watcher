@@ -22,7 +22,7 @@ import {
   useHandles,
 } from 'contexts';
 import { FC, useState } from 'react';
-import { lessThanDays } from 'utils';
+import { GoCommentDiscussion } from 'react-icons/go';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -74,8 +74,20 @@ const HandleCases: FC<IHandleCasesProps> = ({
     })
     .required();
 
+  const discussionThreadSchema = yup
+    .object({
+      handle: yup
+        .string()
+        .required('Handle is required')
+        .url('Please enter a valid URL.'),
+    })
+    .required();
+
   type FormDataAdminEdit = yup.InferType<typeof simpleInputSchema>;
   type FormDataWebsiteEdit = yup.InferType<typeof websiteSchema>;
+  type FormDataDiscussionThreadEdit = yup.InferType<
+    typeof discussionThreadSchema
+  >;
 
   const {
     register: registerSimpleInput,
@@ -99,6 +111,22 @@ const HandleCases: FC<IHandleCasesProps> = ({
     formState: { errors: errorsWebsite, isSubmitting: isSubmittingWebsite },
   } = useForm<FormDataWebsiteEdit>({
     resolver: yupResolver(websiteSchema),
+    defaultValues: {
+      handle: currentHandle || '',
+    },
+    reValidateMode: 'onChange',
+    mode: 'onChange',
+  });
+
+  const {
+    register: registerDiscussionThread,
+    handleSubmit: handleSubmitDiscussionThread,
+    formState: {
+      errors: errorsDiscussionThread,
+      isSubmitting: isSubmittingDiscussionThread,
+    },
+  } = useForm<FormDataDiscussionThreadEdit>({
+    resolver: yupResolver(discussionThreadSchema),
     defaultValues: {
       handle: currentHandle || '',
     },
@@ -148,6 +176,47 @@ const HandleCases: FC<IHandleCasesProps> = ({
               </Button>
             </Flex>
             <Text color="red.200">{errorsWebsite.handle?.message}</Text>
+          </Flex>
+        </FormControl>
+      </form>
+    );
+  }
+  if (mediaName === 'Thread') {
+    const onSubmitThread = (data: { handle: string }) => {
+      const cleanNewHandle = data.handle;
+      if (!cleanNewHandle) return;
+      setIsLoading(true);
+
+      changeHandle(cleanNewHandle, 'thread').finally(() => setIsLoading(false));
+    };
+
+    return (
+      <form onSubmit={handleSubmitDiscussionThread(onSubmitThread)}>
+        <FormControl isInvalid={!!errorsDiscussionThread.handle}>
+          <Flex flexDir="column" gap="1">
+            <Flex flexDir="row" gap="4">
+              <Input
+                px="4"
+                py="2"
+                borderWidth="1px"
+                borderColor={theme.modal.statement.sidebar.item}
+                minW="60"
+                maxW="60"
+                w="max-content"
+                {...registerDiscussionThread('handle')}
+              />
+              <Button
+                type="submit"
+                isLoading={isSubmittingDiscussionThread || isLoading}
+                isDisabled={!!errorsDiscussionThread.handle || isLoading}
+                disabled={!!errorsDiscussionThread.handle || isLoading}
+              >
+                Save
+              </Button>
+            </Flex>
+            <Text color="red.200">
+              {errorsDiscussionThread.handle?.message}
+            </Text>
           </Flex>
         </FormControl>
       </form>
@@ -330,6 +399,16 @@ export const Handles: FC = () => {
       action: undefined,
       actionType: 'input',
       handle: profileSelected?.website ? profileSelected?.website : undefined,
+      canAdminEdit: true,
+    },
+    {
+      icon: GoCommentDiscussion,
+      name: 'Thread',
+      action: undefined,
+      actionType: 'input',
+      handle: profileSelected?.discussionThread
+        ? profileSelected?.discussionThread
+        : undefined,
       canAdminEdit: true,
     },
   ];
