@@ -16,6 +16,7 @@ export type IProfile = {
   website?: string;
   forumHandle?: string;
   discordHandle?: string;
+  discussionThread?: string;
   discordUsername?: string;
   status?: string;
   userCreatedAt?: string;

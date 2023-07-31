@@ -11,9 +11,9 @@ import {
 import { useDAO, useHandles, useWallet } from 'contexts';
 import { FC, ReactNode } from 'react';
 import { IActiveTab, IProfile } from 'types';
-import { getUserForumUrl, lessThanDays } from 'utils';
+import { getUserForumUrl } from 'utils';
 
-type IMedias = 'twitter' | 'forum' | 'discord' | 'website';
+type IMedias = 'twitter' | 'forum' | 'discord' | 'website' | 'thread';
 interface IMediaIcon {
   profile: IProfile;
   media: IMedias;
@@ -47,6 +47,10 @@ export const MediaIcon: FC<IMediaIcon> = ({
     twitter: {
       url: `https://twitter.com/${profile.twitter}`,
       value: profile.twitter,
+    },
+    thread: {
+      url: profile.discussionThread || '',
+      value: profile.discussionThread,
     },
     forum: {
       url:
