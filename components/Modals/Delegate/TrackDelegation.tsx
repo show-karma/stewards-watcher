@@ -64,7 +64,9 @@ export const TrackDelegation: React.FC<StepProps> = ({
   type FormData = yup.InferType<typeof schema>;
 
   const voteValue =
-    Number(votes) >= 0.1 && !Number.isNaN(Number(votes)) ? Number(votes) : 0;
+    Number(votes) - 0.1 >= 0.1 && !Number.isNaN(Number(votes))
+      ? Number(votes) - 0.1
+      : 0;
 
   const {
     register,
