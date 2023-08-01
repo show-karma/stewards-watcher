@@ -6,7 +6,7 @@ const config: IDAOConfig = {
   DAO: 'Compound Finance',
   DAO_DESCRIPTION: `The Delegates of Compound Finance DAO play a vital role in driving the Compound Finance
   ecosystem forward through their work in governance.`,
-  DAO_SUBDESCRIPTION: `This site helps token holders choose delegates and boost transparency by displaying steward contribution to indicate their involvement in the DAO.`,
+  DAO_SUBDESCRIPTION: `This site helps token holders choose delegates and boost transparency by displaying delegate contribution to indicate their involvement in the DAO.`,
   DAO_URL: 'https://compound.finance/',
   GOVERNANCE_FORUM: 'https://www.comp.xyz/',
   DAO_KARMA_ID: 'compound',
