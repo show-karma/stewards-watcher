@@ -18,7 +18,7 @@ const config: IDAOConfig = {
     IMAGE_DISCORD:
       'https://compound.karmahq.xyz/daos/compound/preview-discord.png',
     IMAGE_TWITTER:
-      'https://compound.karmahq.xyz/daos/compound/preview-twitter.png',
+      'https://compound.karmahq.xyz/daos/compound/preview-discord.png',
     FAVICON: '/daos/compound/favicon.ico',
     URL: `https://compound.karmahq.xyz`,
   },
