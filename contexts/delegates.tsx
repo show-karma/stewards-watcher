@@ -39,7 +39,7 @@ interface IDelegateProps {
   fetchNextDelegates: () => Promise<void>;
   findDelegate: () => Promise<void>;
   fetchDelegates: (_offset?: number) => Promise<void>;
-  handleSearch: DebouncedFunc<(text: any) => void>;
+  handleSearch: DebouncedFunc<(text: string) => void>;
   isSearchDirty: boolean;
   selectStat: (_selectedStat: IStatsID) => void;
   selectOrder: (selectedOrder: IFilterOrder) => void;
@@ -79,7 +79,7 @@ interface IDelegateProps {
     paramToSetup: 'sortby' | 'order' | 'period' | 'statuses' | 'toa' | 'tos',
     paramValue: string
   ) => void;
-  refreshProfileModal: (tab?: IActiveTab) => Promise<void>;
+  refreshProfileModal: () => Promise<void>;
   handleAcceptedTermsOnly: (value: boolean) => void;
   acceptedTermsOnly: boolean;
   handleDelegateOffersToA: (value: boolean) => void;
@@ -231,6 +231,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       );
       setVoteInfos({ ...data });
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
     }
   };
@@ -246,6 +247,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         setInterests(orderedInterests);
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
     }
   };
@@ -272,6 +274,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         }
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
     }
   };
@@ -374,6 +377,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       setDelegateCount(count || 0);
     } catch (error) {
       setDelegates([]);
+      // eslint-disable-next-line no-console
       console.log(error);
     } finally {
       setLoading(false);
@@ -432,6 +436,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
 
       setDelegateCount(count || 0);
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log(error);
       setDelegates([]);
       return;
@@ -649,6 +654,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       const shouldOpenTab = defaultTab || (getTab[1] as IActiveTab);
 
       selectProfile(userFound, checkTab ? shouldOpenTab : undefined);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error?.response?.data && error?.response?.data.error) {
         checkIfUserNotFound(
@@ -660,7 +666,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     }
   };
 
-  const refreshProfileModal = async (tab?: IActiveTab) => {
+  const refreshProfileModal = async () => {
     try {
       const axiosClient = await api.get(`/dao/find-delegate`, {
         params: {
@@ -712,6 +718,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
 
       setProfileSelected(userFound);
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
     }
   };
@@ -797,6 +804,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       });
     } catch (error) {
       setDelegates([]);
+      // eslint-disable-next-line no-console
       console.log(error);
     } finally {
       setFetchingMore(false);
@@ -831,6 +839,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         snapshotIds,
       });
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log(error);
     }
   };
@@ -1132,7 +1141,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     setupQueryParams();
   }, []);
 
-  const handleSearch = debounce(text => {
+  const handleSearch = debounce((text: string) => {
     selectUserToFind(text);
   }, 250);
 

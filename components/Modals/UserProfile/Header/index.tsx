@@ -16,7 +16,6 @@ import {
   WebsiteIcon,
   ThreadIcon,
 } from 'components';
-import { GasfreeButton } from 'components/HeaderHat/GasfreeButton';
 import { useDAO, useDelegates, useEditProfile, useWallet } from 'contexts';
 import { useAuth } from 'contexts/auth';
 import { useToasty } from 'hooks';
@@ -24,10 +23,7 @@ import { FC, useMemo, useState } from 'react';
 import { IoCopy } from 'react-icons/io5';
 import { IActiveTab, IProfile } from 'types';
 import { convertHexToRGBA, truncateAddress } from 'utils';
-import {
-  DelegateProfile,
-  DelegateWithProfile,
-} from 'utils/delegate-registry/types';
+
 import { useAccount } from 'wagmi';
 import { NameEditable, PictureEditable } from '../EditProfile';
 import { MediaIcon } from './MediaIcon';

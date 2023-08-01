@@ -34,6 +34,7 @@ const handler: NextApiHandler = async (
     return;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let result: any = [];
 
   if (req.query.dao === 'moonriver') {

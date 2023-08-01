@@ -39,6 +39,7 @@ export const useDelegation = (args: IDelegation) => {
       });
     },
     onError(error) {
+      // eslint-disable-next-line no-console
       console.log(error);
       if (
         error.stack?.includes('code=ACTION_REJECTED') ||

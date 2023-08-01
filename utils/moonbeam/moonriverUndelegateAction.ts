@@ -40,6 +40,7 @@ function digest(payload: IBulkUndelegatePayload) {
 export function moonriverUndelegateAction(
   batchContractAddr: `0x${string}`,
   delegateContract: `0x${string}`,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   batchContractAbi: any[]
 ) {
   return async (

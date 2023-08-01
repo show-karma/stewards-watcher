@@ -31,6 +31,7 @@ export interface IDAOConfig {
   DAO_TOKEN_CONTRACT?: {
     contractAddress: `0x${string}`;
     method: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ABI?: any;
   }[];
   DAO_DELEGATE_ACTION?: () => void;
@@ -93,6 +94,7 @@ export interface IDAOConfig {
    * @returns tx hash
    */
   UNDELEGATE_ACTION?: (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     payload: any,
     write: typeof writeContract
   ) => Promise<`0x${string}`>;
@@ -103,6 +105,7 @@ export interface IDAOConfig {
    * @returns tx hash
    */
   BULK_DELEGATE_ACTION?: (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     payload: any,
     write: typeof writeContract
   ) => Promise<`0x${string}`>;

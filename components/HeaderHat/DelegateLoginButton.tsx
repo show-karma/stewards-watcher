@@ -11,7 +11,6 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  Show,
   useMediaQuery,
 } from '@chakra-ui/react';
 import { ArrowRightIcon, DownChevron } from 'components/Icons';

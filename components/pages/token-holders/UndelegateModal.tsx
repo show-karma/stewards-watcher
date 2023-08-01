@@ -26,7 +26,6 @@ import { useMixpanel, useToasty } from 'hooks';
 import { writeContract, waitForTransaction } from '@wagmi/core';
 import { IBulkUndelegatePayload } from 'utils/moonbeam/moonriverUndelegateAction';
 import { handleError } from 'utils/handleWriteError';
-import { StyledButton } from 'components/HeaderHat';
 import { useSwitchNetwork } from 'wagmi';
 
 interface IUndelegateModalProps {
@@ -103,6 +102,7 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
         );
         setTracksDelegated(foundTracks);
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.log(error);
       } finally {
         setIsLoading(false);

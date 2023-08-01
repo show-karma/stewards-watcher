@@ -6,13 +6,11 @@ import {
   Flex,
   FormControl,
   Input,
-  NumberInput,
-  NumberInputField,
   Skeleton,
   Text,
   Tooltip,
 } from '@chakra-ui/react';
-import { Hex, IDelegate } from 'types';
+import { IDelegate } from 'types';
 import { ImgWithFallback } from 'components/ImgWithFallback';
 import makeBlockie from 'ethereum-blockies-base64';
 import {

@@ -3,6 +3,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { IDAOInfo } from 'types';
 
 export const handleError = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error: any,
   daoInfo: IDAOInfo,
   toast: Dispatch<SetStateAction<UseToastOptions>>

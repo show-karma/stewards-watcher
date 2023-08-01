@@ -61,6 +61,7 @@ export class MoonbeamWSC {
     entries.forEach(([keys, exposure]) => {
       proposals.push({
         proposalId: keys.args
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           .map((key: { toJSON: () => any }) => key.toJSON())
           .join(', '),
         information: exposure.toJSON() as MoonbeamProposal['information'],

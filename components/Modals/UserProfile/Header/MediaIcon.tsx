@@ -41,7 +41,7 @@ export const MediaIcon: FC<IMediaIcon> = ({
 
   const { isConnected } = useWallet();
   const { config } = daoInfo;
-  const { twitterOnOpen, forumOnOpen } = useHandles();
+  const { forumOnOpen } = useHandles();
 
   const medias: IMediasObj = {
     twitter: {

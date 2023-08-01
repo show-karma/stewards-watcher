@@ -71,6 +71,7 @@ export const WithdrawPopover: FC = () => {
         status: 'error',
         duration: 5000,
       });
+      // eslint-disable-next-line no-console
       console.log(error);
     } finally {
       setLoading(false);

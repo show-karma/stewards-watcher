@@ -1,11 +1,5 @@
 /* eslint-disable no-useless-catch */
-import {
-  Hex,
-  IChainRow,
-  MoonbeamProposal,
-  NumberIsh,
-  OpenGovLockedBalanceResponse,
-} from 'types';
+import { Hex, IChainRow, MoonbeamProposal, NumberIsh } from 'types';
 import { ApolloClient, gql, InMemoryCache } from '@apollo/client';
 import { VOTING_HISTORY } from 'utils/GraphQL';
 import moment from 'moment';
@@ -14,7 +8,6 @@ import { RPCS } from 'helpers';
 import { fetchBlockTimestamp } from 'utils';
 import axios from 'axios';
 import { MoonbeamWSC } from './moonbeamwsc';
-import { polkassembly, Post } from './polkassembly';
 
 interface IProposal {
   id: string;
@@ -28,10 +21,11 @@ interface IProposal {
  * @param proposals
  * @param votes
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function concatOnChainProposals(proposals: any[], votes: any[]) {
   const array: IChainRow[] = [];
 
-  votes.forEach((vote: any) => {
+  votes.forEach(vote => {
     const { proposal, timestamp } = vote;
     const proposalString = parseInt(proposal, 16).toString();
     array.push({
@@ -87,6 +81,7 @@ async function getDaoProposals(): Promise<IProposal[]> {
 
   const proposalsMap = await Promise.all(
     proposals.map(async proposal => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const status = Object.entries(proposal.information)[0] as any;
       let blockNumber = 0;
       if (status[1].submitted) {

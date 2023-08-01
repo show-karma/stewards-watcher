@@ -29,9 +29,9 @@ import * as yup from 'yup';
 import dynamic from 'next/dynamic';
 import { YOUTUBE_LINKS } from 'helpers';
 
-const TwitterModal = dynamic(() =>
-  import('../Linking/Twitter').then(module => module.TwitterModal)
-);
+// const TwitterModal = dynamic(() =>
+//   import('../Linking/Twitter').then(module => module.TwitterModal)
+// );
 
 const DiscourseModal = dynamic(() =>
   import('../Linking/Forum').then(module => module.DiscourseModal)
@@ -331,13 +331,13 @@ const HandleCases: FC<IHandleCasesProps> = ({
 export const Handles: FC = () => {
   const { theme, daoData, daoInfo } = useDAO();
   const {
-    twitterIsOpen,
-    twitterOnOpen,
-    twitterOnToggle,
+    // twitterIsOpen,
+    // twitterOnOpen,
+    // twitterOnToggle,
     forumIsOpen,
     forumOnToggle,
     forumOnOpen,
-    twitterOnClose,
+    // twitterOnClose,
     forumOnClose,
   } = useHandles();
   const { profileSelected } = useDelegates();

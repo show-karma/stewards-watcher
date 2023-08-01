@@ -1,11 +1,10 @@
 import React, { useContext, createContext, useMemo, useState } from 'react';
 import { useIsMounted } from 'hooks/useIsMounted';
 import { useToasty } from 'hooks';
-import { Hex, ICustomFields, IProfile } from 'types';
+import { ICustomFields, IProfile } from 'types';
 import { api, API_ROUTES, KARMA_API } from 'helpers';
 import { useAccount } from 'wagmi';
 import axios from 'axios';
-import { DelegateRegistryContract } from 'utils/delegate-registry/DelegateRegistry';
 import { useDelegates } from './delegates';
 import { useDAO } from './dao';
 import { useAuth } from './auth';
@@ -96,8 +95,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const [statement, setStatement] =
     useState<ICustomFields>(defaultCustomFields);
-  const [languages, setLanguages] =
-    useState<ICustomFields>(defaultCustomFields);
+  const [languages] = useState<ICustomFields>(defaultCustomFields);
   const [interests, setInterests] =
     useState<ICustomFields>(defaultCustomFields);
 
@@ -171,13 +169,12 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       setNewInterests(fetchedInterests);
       setNewStatement(fetchedStatement);
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.debug(error);
       setInterests(defaultCustomFields);
       setStatement(defaultCustomFields);
       setNewInterests(defaultCustomFields);
       setNewStatement(defaultCustomFields);
-
-      console.log(error);
     } finally {
       setIsLoadingStatement(false);
     }
@@ -351,6 +348,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
         // The new profile data should be replaced with the local
         // data instead of fetching again.
         await queryStatement();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         hasError = true;
         actualError = error.response.data.error.message;
@@ -384,6 +382,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
             tracks: newTracks,
           }
         );
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         hasError = true;
         actualError = error.response.data.error.message;
@@ -421,6 +420,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
             );
           }
           await queryToA();
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
           hasError = true;
           actualError = error.response.data.error.message;
@@ -431,6 +431,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     if (daoInfo.config.DAO_SUPPORTS_TOS) {
       try {
         await sendAcceptedTerms();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         hasError = true;
         actualError = error.response.data.error.message;
@@ -475,7 +476,8 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
             ),
           }
         );
-        refreshProfileModal('statement');
+        refreshProfileModal();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         hasError = true;
         actualError = error.response.data.error.message;
@@ -522,7 +524,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
             }
           )
           .then(() => {
-            refreshProfileModal('handles');
+            refreshProfileModal();
             fetchDelegates(0);
           });
       } else if (media === 'thread') {
@@ -534,7 +536,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
             }
           )
           .then(() => {
-            refreshProfileModal('handles');
+            refreshProfileModal();
             fetchDelegates(0);
           });
       } else {
@@ -548,7 +550,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
             }
           )
           .then(() => {
-            refreshProfileModal('handles');
+            refreshProfileModal();
             fetchDelegates(0);
           });
       }
@@ -558,6 +560,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
         } has been saved`,
         status: 'success',
       });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error.response?.data?.error?.message)
         toast({

@@ -34,6 +34,7 @@ export const moonriverDelegateAction =
   (
     batchContractAddr: `0x${string}`,
     delegateContract: `0x${string}`,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     batchContractAbi: any[]
   ) =>
   async (payload: IBulkDelegatePayload[], write: typeof writeContract) => {

@@ -47,10 +47,11 @@ const VOTING_HISTORY = {
  * @param proposals
  * @param votes
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function concatOnChainProposals(proposals: any[], votes: any[]) {
   const array: IChainRow[] = [];
 
-  votes.forEach((vote: any) => {
+  votes.forEach(vote => {
     const { proposal } = vote;
     array.push({
       voteMethod: 'On-chain',
@@ -101,7 +102,9 @@ export async function onChainOptimismVotesProvider(
     });
 
     if (votes && Array.isArray(votes.votes)) {
-      const skipIds = votes.votes.map((vote: any) => vote.proposal.id);
+      const skipIds = votes.votes.map(
+        (vote: { proposal: { id: number | string } }) => vote.proposal.id
+      );
       const { data: proposals } = await onChainClient.query({
         query: VOTING_HISTORY.onChainProposalsReq,
         variables: {

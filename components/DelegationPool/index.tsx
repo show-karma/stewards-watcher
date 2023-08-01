@@ -51,6 +51,7 @@ export const DelegationPool: React.FC = () => {
           description: `Transaction ${hash} completed.`,
           status: 'success',
         });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         let errorMessage = '';
 

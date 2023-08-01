@@ -52,7 +52,6 @@ const CheckDecision = (choice: string) => {
 };
 
 const VoteIcon: FC<{ vote: IChainRow }> = ({ vote }) => {
-  const { theme } = useDAO();
   if (typeof vote === 'undefined')
     return <Icon as={DidNotVoteIcon} color="#FFF7AE" {...iconStyle} />;
   if (vote.voteMethod !== 'On-chain' && typeof vote.choice === 'string')

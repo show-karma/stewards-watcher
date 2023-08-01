@@ -283,6 +283,7 @@ export const ProposalVote: FC<IProposalVote> = ({
       bg="transparent"
       pt="5"
       pb={isLast ? '4' : '0'}
+      key={+index}
     >
       <Flex flexDir="row" w="full" align="center" gap="2">
         <Flex flexDir="column" w="full">

@@ -26,7 +26,6 @@ export const GasfreeButton: React.FC<GasfreeButtonProps> = ({
     newStatement,
     newProfilePicture,
     setEditSaving,
-    setIsEditing,
     saveEdit,
   } = useEditProfile();
 
@@ -85,8 +84,10 @@ export const GasfreeButton: React.FC<GasfreeButtonProps> = ({
         const { txId } = data;
         // I'll let it here for confirmation (and debug) reasons
         // because we don't show the toast
+        // eslint-disable-next-line no-console
         console.info('Transaction hash', { txId });
         saveEdit();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         toast({
           title: 'Transaction failed',
