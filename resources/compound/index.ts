@@ -14,7 +14,7 @@ const config: IDAOConfig = {
   DAO_LOGO: '/daos/compound/logo.svg',
   METATAGS: {
     TITLE: `Stewards of Compound Finance DAO`,
-    DESCRIPTION: `Find all the active stewards in Compound Finance DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
+    DESCRIPTION: `Find all the active delegates in Compound Finance DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
     IMAGE_DISCORD:
       'https://compound.karmahq.xyz/daos/compound/preview-discord.png',
     IMAGE_TWITTER:
