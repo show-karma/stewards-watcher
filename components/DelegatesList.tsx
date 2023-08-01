@@ -137,11 +137,15 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
         maxW={{ base: '400px', md: '820px', lg: '944px', xl: '1360px' }}
       >
         {!!interestFilter.length && (
-          <Flex textAlign="start" w={{ base: 'full' }} fontSize={12} mb={4}>
-            <Text as="span">
-              <Text as="b">Delegate Interests: </Text>
-              {interestFilter.join(', ')}
-            </Text>
+          <Flex
+            textAlign="start"
+            w={{ base: 'full' }}
+            fontSize={12}
+            mb={4}
+            gap="1"
+          >
+            <Text as="b">Delegate Interests:</Text>
+            <Text as="span"> {interestFilter.join(', ')}</Text>
           </Flex>
         )}
         {!!profileSelected &&
