@@ -13,7 +13,10 @@ export const useMixpanel = (prefix = 'delegateApp'): IUseMixpanel => {
   const [mixpanel, setMixpanel] = useState<Mixpanel | undefined>();
 
   useEffect(() => {
-    if (process.env.NEXT_PUBLIC_MIXPANEL_KEY) {
+    if (
+      process.env.NEXT_PUBLIC_MIXPANEL_KEY &&
+      process.env.NODE_ENV === 'production'
+    ) {
       mp.init(process.env.NEXT_PUBLIC_MIXPANEL_KEY);
       setMixpanel(mp);
     }
