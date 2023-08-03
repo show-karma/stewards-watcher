@@ -55,6 +55,17 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
   const [openModalAfterConnect, setOpenModalAfterConnect] = useState(false);
 
   const handleSelectTrack = (trackId: NumberIsh) => {
+    if (
+      config.BULK_DELEGATE_MAXSIZE &&
+      selectedTracks.length >= config.BULK_DELEGATE_MAXSIZE
+    ) {
+      toast({
+        title: 'Too many choices',
+        description: `You can only undelegate ${config.BULK_DELEGATE_MAXSIZE} track at a time, please deselect one.`,
+        status: 'error',
+      });
+      return;
+    }
     const isSelected = selectedTracks.includes(trackId);
     if (isSelected) {
       const filteredTracks = selectedTracks.filter(item => item !== trackId);
