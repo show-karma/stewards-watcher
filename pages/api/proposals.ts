@@ -1,9 +1,11 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
+import { moonriverProposalPoll } from 'utils/api/moonriver-poll';
 import { moonriverProposals } from 'utils/api/proposals';
 import { SafeCache } from 'utils/api/safe-cache';
 
 const cache = SafeCache.create({ expire: 86400 });
 
+const { start, stop } = moonriverProposalPoll(cache);
 /**
  *
  * @param payload
@@ -25,6 +27,21 @@ const handler: NextApiHandler = async (
     return;
   }
 
+  // Start polling
+  if (req.query.poll === 'start') {
+    await start(req.query.dao);
+
+    res.send('Polling started');
+    return;
+  }
+
+  // Stop polling
+  if (req.query.poll === 'stop') {
+    stop(req.query.dao);
+    res.send('Polling stopped');
+    return;
+  }
+
   const cacheKey = `proposals-${req.query.dao}`;
 
   const cached = cache.get(cacheKey);
@@ -33,10 +50,10 @@ const handler: NextApiHandler = async (
     res.json(cached);
     return;
   }
-
   let result: any = [];
 
   if (req.query.dao === 'moonriver') {
+    await start(req.query.dao);
     const data = await moonriverProposals();
     result = data;
   }

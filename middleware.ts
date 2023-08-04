@@ -52,5 +52,6 @@ export default function middleware(req: NextRequest) {
 
     url.pathname = `/_sites/${dao}${currentPathname}`;
   }
+
   return NextResponse.rewrite(url);
 }
