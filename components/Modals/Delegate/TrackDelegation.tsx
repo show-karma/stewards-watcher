@@ -6,13 +6,11 @@ import {
   Flex,
   FormControl,
   Input,
-  NumberInput,
-  NumberInputField,
   Skeleton,
   Text,
   Tooltip,
 } from '@chakra-ui/react';
-import { Hex, IDelegate } from 'types';
+import { IDelegate } from 'types';
 import { ImgWithFallback } from 'components/ImgWithFallback';
 import makeBlockie from 'ethereum-blockies-base64';
 import {
@@ -22,6 +20,7 @@ import {
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { useToasty } from 'hooks';
 import { DelegateModalHeader } from './DelegateModalHeader';
 import { DelegateModalFooter } from './DelegateModalFooter';
 import { DelegateModalBody } from './DelegateModalBody';
@@ -42,6 +41,7 @@ export const TrackDelegation: React.FC<StepProps> = ({
   walletAddress,
 }) => {
   const { daoData, daoInfo } = useDAO();
+  const { toast } = useToasty();
   // const { GET_LOCKED_TOKENS_ACTION } = daoInfo.config;
   const { addToDelegatePool, tracks: daoTracks } = useDelegates();
   const { address: delegator } = useWallet();
@@ -125,6 +125,22 @@ export const TrackDelegation: React.FC<StepProps> = ({
   };
 
   const selectTrack = (track: ITrackBadgeProps['track']) => {
+    if (
+      daoInfo.config.BULK_DELEGATE_MAXSIZE &&
+      selectedTracks.length >= daoInfo.config.BULK_DELEGATE_MAXSIZE
+    ) {
+      toast({
+        title: 'Too many tracks',
+        description: `You can only select up to ${
+          daoInfo.config.BULK_DELEGATE_MAXSIZE
+        } track${
+          daoInfo.config.BULK_DELEGATE_MAXSIZE > 1 ? 's' : ''
+        } at a time.`,
+        status: 'error',
+      });
+
+      return;
+    }
     setSelectedTracks(old => [...old, track]);
   };
 

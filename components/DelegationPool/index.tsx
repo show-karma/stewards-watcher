@@ -1,10 +1,12 @@
 import { Box, Button, Flex, Text } from '@chakra-ui/react';
 import { useDAO, useDelegates } from 'contexts';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { writeContract, waitForTransaction } from '@wagmi/core';
 import { useToasty } from 'hooks';
 import { BaseError, ContractFunctionRevertedError } from 'viem';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { debounce } from 'lodash';
 import { DelegatePoolList } from './DelegatePoolList';
 import { EmptyDelegatePool } from './EmptyDelegatePool';
 
@@ -18,18 +20,7 @@ export const DelegationPool: React.FC = () => {
     delegationWillHaveError,
   } = useDelegates();
 
-  // const { votes } = useGovernanceVotes();
   const { toast } = useToasty();
-
-  // const votesToDelegate = useMemo(() => {
-  //   const totalVotes = delegatePoolList.reduce(
-  //     (acc, cur) => acc + +cur.amount,
-  //     0
-  //   );
-  //   return totalVotes >= +votes
-  //     ? (+votes - 0.1).toString()
-  //     : totalVotes.toString();
-  // }, [delegatePoolList]);
 
   const handleDelegation = async () => {
     if (daoInfo.config.BULK_DELEGATE_ACTION) {
@@ -133,6 +124,22 @@ export const DelegationPool: React.FC = () => {
       }
     }
   };
+
+  const debouncedDelegation = debounce(handleDelegation, 1000);
+
+  useEffect(() => {
+    // If maxsize is 1, then automatically pops up delegation
+    if (
+      daoInfo.config.BULK_DELEGATE_MAXSIZE &&
+      daoInfo.config.BULK_DELEGATE_MAXSIZE === 1 &&
+      delegatePoolList.length > 0 &&
+      delegatePoolList.every(
+        item => item.tracks.length > 0 && item.conviction >= 0
+      )
+    ) {
+      debouncedDelegation();
+    }
+  }, [delegatePoolList[0].tracks]);
 
   return (
     <Flex
