@@ -26,7 +26,6 @@ import { useMixpanel, useToasty } from 'hooks';
 import { writeContract, waitForTransaction } from '@wagmi/core';
 import { IBulkUndelegatePayload } from 'utils/moonbeam/moonriverUndelegateAction';
 import { handleError } from 'utils/handleWriteError';
-import { StyledButton } from 'components/HeaderHat';
 import { useSwitchNetwork } from 'wagmi';
 
 interface IUndelegateModalProps {
@@ -61,7 +60,7 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
     ) {
       toast({
         title: 'Too many choices',
-        description: `You can only undelegate ${config.BULK_DELEGATE_MAXSIZE} track at a time, please deselect one.`,
+        description: `You can only undelegate ${config.BULK_DELEGATE_MAXSIZE} track at a time.`,
         status: 'error',
       });
       return;
@@ -110,7 +109,7 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
         setIsLoading(true);
         const foundTracks = await moonriverActiveDelegatedTracks(
           address,
-          'moonriver'
+          daoInfo.config.DAO_KARMA_ID
         );
         setTracksDelegated(foundTracks);
       } catch (error) {

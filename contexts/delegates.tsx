@@ -1019,13 +1019,6 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     );
 
     if (!~delegateIndex) {
-      console.log({
-        selectedTracks,
-        tracks: selectedTracks.slice(
-          0,
-          config.BULK_DELEGATE_MAXSIZE || selectedTracks.length
-        ),
-      });
       newDelegates.push({
         delegator,
         delegate,

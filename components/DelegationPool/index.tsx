@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Spinner, Text } from '@chakra-ui/react';
 import { useDAO, useDelegates } from 'contexts';
 import React, { useEffect, useState } from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -162,11 +162,16 @@ export const DelegationPool: React.FC = () => {
           top="0"
           borderRadius="xl"
           left="0"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
           w="full"
           h="full"
           bg="rgba(255,255,255,0.5)"
           zIndex="1"
-        />
+        >
+          <Spinner color="primary.500" w="50px" h="50px" />
+        </Box>
       )}
       <Flex
         justifyContent="space-between"

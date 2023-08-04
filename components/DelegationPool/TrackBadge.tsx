@@ -1,6 +1,8 @@
 import { Box, Flex, FlexProps, Text, Tooltip } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
+import { useToasty } from 'hooks';
 import { BsPlus } from 'react-icons/bs';
+import { IoWarning } from 'react-icons/io5';
 
 export interface ITrackBadgeProps {
   track: {
@@ -11,6 +13,7 @@ export interface ITrackBadgeProps {
   onSelect: (track: ITrackBadgeProps['track']) => void;
   onRemove: (trackId: number) => void;
   styles?: FlexProps;
+  alreadyDelegated?: boolean;
 }
 
 export const TrackBadge: React.FC<ITrackBadgeProps> = ({
@@ -19,11 +22,19 @@ export const TrackBadge: React.FC<ITrackBadgeProps> = ({
   onSelect,
   selected,
   styles,
+  alreadyDelegated,
 }) => {
   const { theme, daoInfo } = useDAO();
+  const { toast } = useToasty();
 
   const handleSelect = () => {
-    onSelect(track);
+    if (alreadyDelegated) {
+      toast({
+        title: 'Track already delegated',
+        description: 'Please undelegate before trying.',
+        status: 'error',
+      });
+    } else onSelect(track);
   };
 
   const handleRemove = () => {
@@ -35,7 +46,12 @@ export const TrackBadge: React.FC<ITrackBadgeProps> = ({
       label={
         daoInfo.config.TRACKS_DICTIONARY &&
         daoInfo.config.TRACKS_DICTIONARY[track.name]
-          ? daoInfo.config.TRACKS_DICTIONARY[track.name].description
+          ? `${daoInfo.config.TRACKS_DICTIONARY[track.name].description}
+          ${
+            alreadyDelegated
+              ? ' - ⚠️Track already delegated, please undelegate before trying.'
+              : ''
+          }`
           : undefined
       }
       bg={theme.collapse.bg || theme.card.background}
@@ -55,8 +71,8 @@ export const TrackBadge: React.FC<ITrackBadgeProps> = ({
         key={track.id}
         onClick={selected ? handleRemove : handleSelect}
         color={selected ? '#1DE9B6' : theme.text}
-        background={selected ? 'black' : 'transparent'}
         {...styles}
+        background={selected ? 'black' : 'transparent'}
       >
         <Flex flexDir="row" gap="1">
           <Text>
@@ -73,7 +89,7 @@ export const TrackBadge: React.FC<ITrackBadgeProps> = ({
           transition="200ms ease-in-out"
           fontSize={24}
         >
-          <BsPlus />
+          {alreadyDelegated ? <IoWarning color="orange" /> : <BsPlus />}
         </Box>
       </Flex>
     </Tooltip>
