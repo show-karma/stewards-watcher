@@ -13,7 +13,7 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { NumberIsh } from 'types';
 import {
   formatNumber,
@@ -31,6 +31,16 @@ import { useSwitchNetwork } from 'wagmi';
 interface IUndelegateModalProps {
   buttonProps?: ButtonProps;
 }
+
+const lockTime: { [key: number]: number } = {
+  0: 0,
+  1: 1,
+  2: 2,
+  3: 4,
+  4: 8,
+  5: 16,
+  6: 32,
+};
 
 export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
   buttonProps,
@@ -171,6 +181,14 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
     }
   };
 
+  const hasUnlockableTracks = useMemo(() => {
+    console.log({ tracksDelegated });
+    return tracksDelegated.some(
+      tr =>
+        tr.timestamp * 1000 + lockTime[+tr.conviction] * 86400000 <= Date.now()
+    );
+  }, [tracksDelegated]);
+
   useEffect(() => {
     if (openModalAfterConnect && isConnected && sameNetwork) {
       setOpenModalAfterConnect(false);
@@ -223,9 +241,11 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
             <DelegateModalBody flexProps={{ px: 10, pb: 5 }}>
               {tracksDelegated.length > 0 ? (
                 <>
-                  <Text color={theme.text} mb="2">
-                    Select tracks you want to undelegate from:
-                  </Text>
+                  {hasUnlockableTracks && (
+                    <Text color={theme.text} mb="2">
+                      Select tracks you want to undelegate from:
+                    </Text>
+                  )}
                   {tracks
                     .filter(track =>
                       tracksDelegated.some(
@@ -233,16 +253,6 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
                       )
                     )
                     .map(track => {
-                      const lockTime: { [key: number]: number } = {
-                        0: 0,
-                        1: 1,
-                        2: 2,
-                        3: 4,
-                        4: 8,
-                        5: 16,
-                        6: 32,
-                      };
-
                       const trackFound = tracksDelegated.find(
                         trackToFind => trackToFind.trackId === track.id
                       );
