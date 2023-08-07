@@ -22,12 +22,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useToasty } from 'hooks';
 import { IActiveDelegatedTracks, moonriverActiveDelegatedTracks } from 'utils';
+import { numberToWords } from 'utils/numberToWords';
 import { DelegateModalHeader } from './DelegateModalHeader';
 import { DelegateModalFooter } from './DelegateModalFooter';
 import { DelegateModalBody } from './DelegateModalBody';
 import { VotesToDelegate } from './VotesToDelegate';
 import { ConvictionMenu } from './ConvictionMenu';
-import { numberToWords } from 'utils/numberToWords';
 
 interface StepProps {
   handleModal: () => void;
