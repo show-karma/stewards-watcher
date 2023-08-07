@@ -27,6 +27,7 @@ import { DelegateModalFooter } from './DelegateModalFooter';
 import { DelegateModalBody } from './DelegateModalBody';
 import { VotesToDelegate } from './VotesToDelegate';
 import { ConvictionMenu } from './ConvictionMenu';
+import { numberToWords } from 'utils/numberToWords';
 
 interface StepProps {
   handleModal: () => void;
@@ -162,9 +163,9 @@ export const TrackDelegation: React.FC<StepProps> = ({
     ) {
       toast({
         title: 'Too many tracks',
-        description: `You can only select up to ${
+        description: `You can only select ${numberToWords(
           daoInfo.config.BULK_DELEGATE_MAXSIZE
-        } track${
+        )} track${
           daoInfo.config.BULK_DELEGATE_MAXSIZE > 1 ? 's' : ''
         } at a time.`,
         status: 'error',

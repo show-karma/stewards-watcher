@@ -29,6 +29,7 @@ import { useAccount } from 'wagmi';
 import { IBulkDelegatePayload } from 'utils/moonbeam/moonriverDelegateAction';
 import { ITrackBadgeProps } from 'components/DelegationPool/TrackBadge';
 import { useDAO } from './dao';
+import { numberToWords } from 'utils/numberToWords';
 
 interface IDelegateProps {
   delegates: IDelegate[];
@@ -1096,9 +1097,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       ) {
         toast({
           title: 'Too many tracks',
-          description: `You can only delegate to ${
-            config.BULK_DELEGATE_MAXSIZE
-          } track${config.BULK_DELEGATE_MAXSIZE > 1 ? 's' : ''} at a time.`,
+          description: `You can only select ${numberToWords(
+            onfig.BULK_DELEGATE_MAXSIZE
+          )} track${config.BULK_DELEGATE_MAXSIZE > 1 ? 's' : ''} at a time.`,
           status: 'error',
         });
         return;

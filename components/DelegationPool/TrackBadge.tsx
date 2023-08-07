@@ -1,4 +1,15 @@
-import { Box, Flex, FlexProps, Text, Tooltip } from '@chakra-ui/react';
+import {
+  AlertDescription,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  Box,
+  Flex,
+  FlexProps,
+  Text,
+  Tooltip,
+  CloseButton,
+} from '@chakra-ui/react';
 import { useDAO } from 'contexts';
 import { useToasty } from 'hooks';
 import { BsPlus } from 'react-icons/bs';
@@ -27,11 +38,32 @@ export const TrackBadge: React.FC<ITrackBadgeProps> = ({
   const { theme, daoInfo } = useDAO();
   const { toast } = useToasty();
 
+  const dispatchUndelegateOpenEvent = () => {
+    if (typeof window === 'undefined') return;
+    window.dispatchEvent(new Event('undelegateOpen'));
+  };
+
   const handleSelect = () => {
     if (alreadyDelegated) {
       toast({
-        title: 'Track already delegated',
-        description: 'Please undelegate before trying.',
+        render: () => (
+          <Alert status="error" backgroundColor="#feb2b2" borderRadius={6}>
+            <AlertIcon color="black" />
+            <Box color="black">
+              <AlertTitle>Track already delegated</AlertTitle>
+              <AlertDescription>
+                <p>
+                  You have already delegated to this track. Please undelegate
+                  before redelegating by clicking{' '}
+                  <button type="button" onClick={dispatchUndelegateOpenEvent}>
+                    <u>here</u>
+                  </button>
+                  .{' '}
+                </p>
+              </AlertDescription>
+            </Box>
+          </Alert>
+        ),
         status: 'error',
       });
     } else onSelect(track);
