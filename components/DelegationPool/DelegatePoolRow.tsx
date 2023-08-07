@@ -8,7 +8,11 @@ import {
 import { ImgWithFallback } from 'components/ImgWithFallback';
 import { useDAO, useDelegates, useGovernanceVotes } from 'contexts';
 import { FC, useEffect, useMemo, useState } from 'react';
-import { IBulkDelegatePayload, truncateAddress } from 'utils';
+import {
+  IActiveDelegatedTracks,
+  IBulkDelegatePayload,
+  truncateAddress,
+} from 'utils';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -18,11 +22,13 @@ import { TrackBadge } from './TrackBadge';
 interface IDelegatePoolRowProps {
   payload: IBulkDelegatePayload;
   onRemove: (address: string) => void;
+  activeTracks: IActiveDelegatedTracks[];
 }
 
 export const DelegatePoolRow: FC<IDelegatePoolRowProps> = ({
   payload,
   onRemove,
+  activeTracks = [],
 }) => {
   const { daoInfo, theme, daoData } = useDAO();
   const { config } = daoInfo;
@@ -162,6 +168,9 @@ export const DelegatePoolRow: FC<IDelegatePoolRowProps> = ({
                   <TrackBadge
                     track={track}
                     key={track.id}
+                    alreadyDelegated={activeTracks.some(
+                      tr => tr.trackId === track.id
+                    )}
                     selected={!!payload.tracks.find(tr => tr.id === track.id)}
                     onSelect={() =>
                       addTrackToDelegateInPool(track, payload.delegate.address)

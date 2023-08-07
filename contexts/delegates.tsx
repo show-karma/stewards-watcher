@@ -28,6 +28,7 @@ import { api } from 'helpers';
 import { useAccount } from 'wagmi';
 import { IBulkDelegatePayload } from 'utils/moonbeam/moonriverDelegateAction';
 import { ITrackBadgeProps } from 'components/DelegationPool/TrackBadge';
+import { numberToWords } from 'utils/numberToWords';
 import { useDAO } from './dao';
 
 interface IDelegateProps {
@@ -1022,10 +1023,26 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       newDelegates.push({
         delegator,
         delegate,
-        tracks: selectedTracks,
+        tracks: selectedTracks.slice(
+          0,
+          config.BULK_DELEGATE_MAXSIZE || selectedTracks.length
+        ),
         amount,
         conviction,
       });
+    }
+    if (
+      config.BULK_DELEGATE_MAXSIZE &&
+      newDelegates.length > config.BULK_DELEGATE_MAXSIZE
+    ) {
+      toast({
+        title: 'Too many delegates',
+        description: `You can only delegate to ${
+          config.BULK_DELEGATE_MAXSIZE
+        } user${config.BULK_DELEGATE_MAXSIZE > 1 ? 's' : ''} at a time.`,
+        status: 'error',
+      });
+      return;
     }
 
     setDelegatePoolList(newDelegates);
@@ -1074,6 +1091,19 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
 
     if (~delegateIndex) {
       const newTracks = [...newDelegates[delegateIndex].tracks];
+      if (
+        config.BULK_DELEGATE_MAXSIZE &&
+        newTracks.length >= config.BULK_DELEGATE_MAXSIZE
+      ) {
+        toast({
+          title: 'Too many tracks',
+          description: `You can only select ${numberToWords(
+            config.BULK_DELEGATE_MAXSIZE
+          )} track${config.BULK_DELEGATE_MAXSIZE > 1 ? 's' : ''} at a time.`,
+          status: 'error',
+        });
+        return;
+      }
       const trackIndex = newTracks.findIndex(item => item.id === track.id);
       if (!~trackIndex) {
         newTracks.push(track);

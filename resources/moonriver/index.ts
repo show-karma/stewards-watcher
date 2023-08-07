@@ -52,6 +52,7 @@ const config: IDAOConfig = {
   EXCLUDED_CARD_FIELDS: ['healthScore', 'discordScore', 'offChainVotesPct'],
   DAO_CATEGORIES_TYPE: 'tracks',
   ALLOW_BULK_DELEGATE: true,
+  BULK_DELEGATE_MAXSIZE: 1,
   ALLOW_UNDELEGATE: true,
   UNDELEGATE_ACTION: moonriverUndelegateAction(
     bulkContractAddr,
@@ -61,7 +62,8 @@ const config: IDAOConfig = {
   BULK_DELEGATE_ACTION: moonriverDelegateAction(
     bulkContractAddr, // Batch contract
     delegateContractAddr, // Delegate contract
-    batchContractAbi
+    batchContractAbi,
+    false
   ),
   GET_LOCKED_TOKENS_ACTION: moonriverGetLockedTokensAction,
   DAO_EXT_VOTES_PROVIDER: {

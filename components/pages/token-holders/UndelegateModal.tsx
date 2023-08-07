@@ -6,6 +6,7 @@ import {
   Box,
   Button,
   ButtonProps,
+  Divider,
   Flex,
   Modal,
   ModalContent,
@@ -13,7 +14,7 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { NumberIsh } from 'types';
 import {
   formatNumber,
@@ -26,8 +27,18 @@ import { useMixpanel, useToasty } from 'hooks';
 import { writeContract, waitForTransaction } from '@wagmi/core';
 import { IBulkUndelegatePayload } from 'utils/moonbeam/moonriverUndelegateAction';
 import { handleError } from 'utils/handleWriteError';
-import { StyledButton } from 'components/HeaderHat';
 import { useSwitchNetwork } from 'wagmi';
+import { UndelegateItems } from './UndelegateItems';
+
+export const convictionLockTime: { [key: number]: number } = {
+  0: 0,
+  1: 1,
+  2: 2,
+  3: 4,
+  4: 8,
+  5: 16,
+  6: 32,
+};
 
 interface IUndelegateModalProps {
   buttonProps?: ButtonProps;
@@ -55,6 +66,17 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
   const [openModalAfterConnect, setOpenModalAfterConnect] = useState(false);
 
   const handleSelectTrack = (trackId: NumberIsh) => {
+    if (
+      config.BULK_DELEGATE_MAXSIZE &&
+      selectedTracks.length >= config.BULK_DELEGATE_MAXSIZE
+    ) {
+      toast({
+        title: 'Too many choices',
+        description: `You can only undelegate ${config.BULK_DELEGATE_MAXSIZE} track at a time.`,
+        status: 'error',
+      });
+      return;
+    }
     const isSelected = selectedTracks.includes(trackId);
     if (isSelected) {
       const filteredTracks = selectedTracks.filter(item => item !== trackId);
@@ -99,7 +121,7 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
         setIsLoading(true);
         const foundTracks = await moonriverActiveDelegatedTracks(
           address,
-          'moonriver'
+          daoInfo.config.DAO_KARMA_ID
         );
         setTracksDelegated(foundTracks);
       } catch (error) {
@@ -161,6 +183,26 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
     }
   };
 
+  const unlockableTracks = useMemo(
+    () =>
+      tracksDelegated.filter(
+        tr =>
+          tr.timestamp * 1000 + convictionLockTime[+tr.conviction] * 86400000 <=
+          Date.now()
+      ),
+    [tracksDelegated]
+  );
+
+  const notUnlockableTracks = useMemo(
+    () =>
+      tracksDelegated.filter(
+        tr =>
+          tr.timestamp * 1000 + convictionLockTime[+tr.conviction] * 86400000 >
+          Date.now()
+      ),
+    [tracksDelegated]
+  );
+
   useEffect(() => {
     if (openModalAfterConnect && isConnected && sameNetwork) {
       setOpenModalAfterConnect(false);
@@ -171,6 +213,19 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
   useEffect(() => {
     if (isOpen) getActiveDelegations();
   }, [isOpen]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.addEventListener('undelegateOpen', onOpen);
+      return () => {
+        window.removeEventListener('undelegateOpen', onOpen);
+      };
+    }
+
+    return () => {
+      // do nothing
+    };
+  }, []);
 
   return (
     <>
@@ -213,95 +268,37 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
             <DelegateModalBody flexProps={{ px: 10, pb: 5 }}>
               {tracksDelegated.length > 0 ? (
                 <>
-                  <Text color={theme.text} mb="2">
-                    Select tracks you want to undelegate from:
-                  </Text>
-                  {tracks
-                    .filter(track =>
-                      tracksDelegated.some(
-                        delegatedTrack => +delegatedTrack.trackId === +track.id
-                      )
-                    )
-                    .map(track => {
-                      const lockTime: { [key: number]: number } = {
-                        0: 0,
-                        1: 1,
-                        2: 2,
-                        3: 4,
-                        4: 8,
-                        5: 16,
-                        6: 32,
-                      };
+                  {unlockableTracks.length > 0 && (
+                    <Box>
+                      <Text color={theme.text} mb="10">
+                        Select tracks you want to undelegate from:
+                      </Text>
 
-                      const trackFound = tracksDelegated.find(
-                        trackToFind => trackToFind.trackId === track.id
-                      );
+                      <UndelegateItems
+                        tracksDelegated={unlockableTracks}
+                        onRemoveTrack={handleRemoveTrack}
+                        onSelectTrack={handleSelectTrack}
+                        selectedTracks={selectedTracks}
+                      />
+                    </Box>
+                  )}
+                  {unlockableTracks.length && notUnlockableTracks.length && (
+                    <Divider my={5} />
+                  )}
+                  {notUnlockableTracks.length > 0 && (
+                    <Box mt={3}>
+                      <Text color={theme.text} mb="10">
+                        Tokens not available for unlock/undelegate:
+                      </Text>
 
-                      const disabledCondition = trackFound
-                        ? trackFound.timestamp * 1000 +
-                            lockTime[+trackFound.conviction] * 86400000 >
-                          Date.now()
-                        : false;
-
-                      return (
-                        <Flex
-                          mt={3}
-                          pb={5}
-                          key={track.id}
-                          flexDirection="column"
-                          __css={{
-                            ':not(:last-of-type)': {
-                              borderBottom: '1px solid',
-                            },
-                          }}
-                        >
-                          {trackFound && disabledCondition ? (
-                            <Flex flexDir="column" gap="2">
-                              <Flex flexDir="row" gap="1">
-                                <Text
-                                  color={theme.text}
-                                  fontSize="sm"
-                                  align="center"
-                                >
-                                  {daoInfo.config.TRACKS_DICTIONARY &&
-                                  daoInfo.config.TRACKS_DICTIONARY[
-                                    track.displayName
-                                  ]
-                                    ? daoInfo.config.TRACKS_DICTIONARY[
-                                        track.displayName
-                                      ].emoji
-                                    : undefined}
-                                </Text>
-                                <Text color={theme.text} fontSize="md">
-                                  {track.displayName}
-                                </Text>
-                              </Flex>
-                              <Text color={theme.text} fontSize="sm">
-                                You have {formatNumber(trackFound.amount)}{' '}
-                                tokens locked with conviction{' '}
-                                {trackFound.conviction}
-                              </Text>
-                            </Flex>
-                          ) : (
-                            <TrackBadge
-                              track={{
-                                id: track.id,
-                                name: track.displayName,
-                              }}
-                              onRemove={removed => {
-                                handleRemoveTrack(removed);
-                              }}
-                              onSelect={selected => {
-                                handleSelectTrack(selected.id);
-                              }}
-                              selected={selectedTracks.some(
-                                arr => arr === track.id
-                              )}
-                            />
-                          )}
-                        </Flex>
-                      );
-                    })}
+                      <UndelegateItems
+                        tracksDelegated={notUnlockableTracks}
+                        onRemoveTrack={handleRemoveTrack}
+                        onSelectTrack={handleSelectTrack}
+                        selectedTracks={selectedTracks}
+                      />
+                    </Box>
+                  )}
                   <Box textAlign="center" py={3}>
                     <Button
                       mt={5}
