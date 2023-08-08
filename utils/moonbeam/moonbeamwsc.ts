@@ -79,17 +79,23 @@ export class MoonbeamWSC {
     address: Hex,
     destroy?: boolean
   ): Promise<[OpenGovLockedBalance[], number]> {
-    const response = await this.client.query.balances.locks(address);
+    const response = await this.client.query.balances.locks(
+      '0xd87f6ec59f558ae5b1a647bfd466ea51849ea203'
+    );
     if (destroy) this.destroy();
 
     const readable =
       response.toJSON() as unknown as OpenGovLockedBalanceResponse;
     if (readable) {
-      const locks = [readable].flat().map(lock => ({
-        ...lock,
-        amount: ethers.utils.formatEther(lock.amount),
-      }));
-
+      console.log({ readable });
+      const locks = [readable]
+        .flat()
+        .filter(item => item.reasons === 'Misc')
+        .map(lock => ({
+          ...lock,
+          amount: ethers.utils.formatEther(lock.amount),
+        }));
+      console.log({ locks });
       return [locks, locks.reduce((acc, lock) => acc + Number(lock.amount), 0)];
     }
 
