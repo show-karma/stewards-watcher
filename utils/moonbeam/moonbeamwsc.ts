@@ -87,7 +87,6 @@ export class MoonbeamWSC {
     const readable =
       response.toJSON() as unknown as OpenGovLockedBalanceResponse;
     if (readable) {
-      console.log({ readable });
       const locks = [readable]
         .flat()
         .filter(item => item.reasons === 'Misc')
@@ -95,7 +94,6 @@ export class MoonbeamWSC {
           ...lock,
           amount: ethers.utils.formatEther(lock.amount),
         }));
-      console.log({ locks });
       return [locks, locks.reduce((acc, lock) => acc + Number(lock.amount), 0)];
     }
 
