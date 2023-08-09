@@ -79,9 +79,8 @@ export class MoonbeamWSC {
     address: Hex,
     destroy?: boolean
   ): Promise<[OpenGovLockedBalance[], number]> {
-    const response = await this.client.query.balances.locks(
-      '0xd87f6ec59f558ae5b1a647bfd466ea51849ea203'
-    );
+    const response = await this.client.query.balances.locks(address);
+
     if (destroy) this.destroy();
 
     const readable =
@@ -94,6 +93,7 @@ export class MoonbeamWSC {
           ...lock,
           amount: ethers.utils.formatEther(lock.amount),
         }));
+
       return [locks, locks.reduce((acc, lock) => acc + Number(lock.amount), 0)];
     }
 
