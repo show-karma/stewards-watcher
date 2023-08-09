@@ -282,9 +282,9 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
                       />
                     </Box>
                   )}
-                  {unlockableTracks.length && notUnlockableTracks.length && (
-                    <Divider my={5} />
-                  )}
+                  {!!(
+                    unlockableTracks.length && notUnlockableTracks.length
+                  ) && <Divider my={5} />}
                   {notUnlockableTracks.length > 0 && (
                     <Box mt={3}>
                       <Text color={theme.text} mb="10">
