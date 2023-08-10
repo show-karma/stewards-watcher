@@ -1,11 +1,17 @@
 interface SafeCacheConfig {
   /**
-   * Seconds
+   * Expiration time in **seconds**
    */
   expire?: number;
   prefix?: string;
   namespace?: string;
+  /**
+   * Fallback function to be called when key is not found
+   */
   fallback?: () => unknown;
+  /**
+   * Store cache on file
+   */
   [key: string]: any;
 }
 

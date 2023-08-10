@@ -1,6 +1,7 @@
 /* eslint-disable no-useless-catch */
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { useDAO } from 'contexts';
 
 import moment from 'moment';
@@ -43,6 +44,26 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
   return array;
 }
 
+async function fetchOnChainProposals(
+  daoName: string | string[],
+  skipIds: string[],
+  clientUrl = 'https://api.thegraph.com/subgraphs/name/show-karma/dao-on-chain-voting'
+): Promise<any[]> {
+  if (!daoName) return [];
+  const onChainClient = new ApolloClient({
+    uri: clientUrl,
+    cache: new InMemoryCache(),
+  });
+  const { data } = await onChainClient.query({
+    query: VOTING_HISTORY.onChainProposalsReq,
+    variables: {
+      daoname: [daoName].flat(),
+      skipIds,
+    },
+  });
+  return data.proposals || [];
+}
+
 /**
  * Fetch proposals from the subgraph
  * @param daoName
@@ -69,14 +90,12 @@ async function fetchOnChainProposalVotes(
 
     if (votes && Array.isArray(votes.votes)) {
       const skipIds = votes.votes.map((vote: any) => vote.proposal.id);
-      const { data: proposals } = await onChainClient.query({
-        query: VOTING_HISTORY.onChainProposalsReq,
-        variables: {
-          daoname: [daoName].flat(),
-          skipIds,
-        },
-      });
-      return concatOnChainProposals(proposals.proposals, votes.votes);
+      const { data: proposals } = await axios.get(
+        `/api/proposals?dao=${daoName}&skipIds=${skipIds.join(
+          ','
+        )}&source=on-chain`
+      );
+      return concatOnChainProposals(proposals, votes.votes);
     }
   } catch (error) {
     throw error;
@@ -102,4 +121,4 @@ const useOnChainVotes = (
   });
 };
 
-export { useOnChainVotes, fetchOnChainProposalVotes };
+export { useOnChainVotes, fetchOnChainProposalVotes, fetchOnChainProposals };
