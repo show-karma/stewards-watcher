@@ -9,8 +9,6 @@ if (
   mp.init(process.env.NEXT_PUBLIC_MIXPANEL_KEY);
   mixpanel = mp;
 }
-console.log(process.env.NEXT_PUBLIC_MIXPANEL_KEY);
-console.log(mixpanel);
 
 const reportEvent = (prefix: string, data: IMixpanelEvent): Promise<void> =>
   new Promise((resolve, reject) => {
