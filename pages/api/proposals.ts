@@ -3,16 +3,27 @@ import { proposalsPoll } from 'utils/api/proposals-poll';
 import { moonriverProposals } from 'utils/api/proposals';
 import { SafeCache } from 'utils/api/safe-cache';
 import { fetchOffChainProposals, fetchOnChainProposals } from 'hooks';
+import { MixpanelService } from 'utils/mixpanel';
 
 const cache = SafeCache.create({ expire: 86400 });
 
 const { start, stop } = proposalsPoll(cache);
 interface ProposalQuery {
   dao: string;
-  source: 'on-chain' | 'off-chain';
+  source: 'on-chain' | 'off-chain' | 'all';
   poll?: 'start' | 'stop';
   skipIds?: string;
   [key: string]: string | string[] | undefined;
+}
+
+function reportMixpanel(cacheKey: string, hit: boolean) {
+  MixpanelService.reportEvent('daoDelegatesApp', {
+    event: 'cache',
+    properties: {
+      cacheKey,
+      hit,
+    },
+  });
 }
 
 function validateRequest(req: NextApiRequest): ProposalQuery {
@@ -26,7 +37,7 @@ function validateRequest(req: NextApiRequest): ProposalQuery {
     throw new Error('400:Missing dao or source');
   }
 
-  if (!['on-chain', 'off-chain'].includes(source)) {
+  if (!['on-chain', 'off-chain', 'all'].includes(source)) {
     throw new Error('400:Source should be on-chain or off-chain');
   }
 
@@ -56,33 +67,50 @@ const handler: NextApiHandler = async (
     const cacheKey = `proposals-${source}-${dao}`;
     // Stop polling
     if (poll === 'stop') {
-      stop(dao);
+      stop(cacheKey);
       res.send('Polling stopped');
       return;
     }
 
+    let result: any = [];
     const cached = cache.get(cacheKey);
     if (cached) {
+      result = cached;
       res.setHeader(
         'Cache-Control',
         'public, s-maxage=1800, stale-while-revalidate=86400'
       );
       res.setHeader('x-source', 'cache');
-      res.json(cached);
+
+      if (skipIds) {
+        result = result.filter(
+          (proposal: any) => !skipIds.includes(proposal.id)
+        );
+      }
+
+      res.json(result);
+      reportMixpanel(cacheKey, true);
       return;
     }
 
-    let result: any = [];
+    reportMixpanel(cacheKey, false);
 
     if (dao === 'moonriver') {
       // Start polling
       result = await start(cacheKey, moonriverProposals);
-    } else if (dao && source) {
+    } else if (dao && source && source !== 'all') {
       result = await start(cacheKey, () =>
         source === 'off-chain'
           ? fetchOffChainProposals(dao)
-          : fetchOnChainProposals(dao, skipIds?.split(',') || [])
+          : fetchOnChainProposals(dao, [])
       );
+    } else if (dao && source && source === 'all') {
+      const results = await Promise.all([
+        start(cacheKey, () => fetchOffChainProposals(dao)),
+        start(cacheKey, () => fetchOnChainProposals(dao, [])),
+      ]);
+
+      result = results.flat();
     }
 
     res.setHeader(
@@ -90,6 +118,9 @@ const handler: NextApiHandler = async (
       'public, s-maxage=1800, stale-while-revalidate=86400'
     );
     res.setHeader('x-source', 'api');
+    if (skipIds) {
+      result = result.filter((proposal: any) => !skipIds.includes(proposal.id));
+    }
     res.json(result);
   } catch (error: any) {
     const [code, msg] = error.message.split(':');
