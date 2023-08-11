@@ -23,6 +23,7 @@
     "@sentry/nextjs": "^7.23.0",
     "@talismn/wagmi-connector": "^0.3.1",
     "@tanstack/react-query": "^4.13.0",
+    "@types/lodash": "^4.14.196",
     "@uiw/react-md-editor": "^3.23.3",
     "@vercel/analytics": "^1.0.0",
     "axios": "^0.27.2",
@@ -65,7 +66,6 @@
   "devDependencies": {
     "@types/dompurify": "^2.4.0",
     "@types/human-format": "^1.0.0",
-    "@types/lodash": "^4.14.191",
     "@types/lodash.debounce": "^4.0.7",
     "@types/lodash.startcase": "^4.4.7",
     "@types/markdown-it": "^12.2.3",

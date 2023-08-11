@@ -73,6 +73,7 @@ export interface IDAOConfig {
   };
   ALLOW_UNDELEGATE?: boolean;
   ALLOW_BULK_DELEGATE?: boolean;
+  BULK_DELEGATE_MAXSIZE?: number;
   DISABLE_EMAIL_INPUT?: boolean;
   HIDE_FOR_DELEGATES?: IForDelegates[];
   PROPOSAL_LINK?: (proposalId: number | string) => string;
