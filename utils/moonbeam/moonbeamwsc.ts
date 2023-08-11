@@ -88,7 +88,7 @@ export class MoonbeamWSC {
     if (readable) {
       const locks = [readable]
         .flat()
-        .filter(item => item.reasons === 'Misc')
+        .filter(item => item.reasons === 'All')
         .map(lock => ({
           ...lock,
           amount: ethers.utils.formatEther(lock.amount),
