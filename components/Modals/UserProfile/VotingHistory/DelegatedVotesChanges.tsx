@@ -315,6 +315,8 @@ export const DelegatedVotesChanges: FC = () => {
     fetchData();
   }, []);
 
+  if (hasError) return null;
+
   return (
     <Flex borderRadius="md" flexDir="column" w="full">
       <Flex
