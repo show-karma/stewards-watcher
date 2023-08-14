@@ -21,9 +21,9 @@ interface OnChainPostsRes {
 
 export const polkassemblyProposalUrl = {
   moonriver: (proposalId: number | string) =>
-    `https://moonriver.polkassembly.io/proposal/${proposalId}`,
+    `https://moonriver.polkassembly.io/referenda/${proposalId}`,
   moonbeam: (proposalId: number | string) =>
-    `https://moonbeam.polkassembly.io/proposal/${proposalId}`,
+    `https://moonbeam.polkassembly.io/referenda/${proposalId}`,
 };
 
 export const routes = {
