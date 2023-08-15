@@ -1,5 +1,5 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
-import { moonriverProposals } from 'utils/api/proposals';
+import { moonbeamProposals, moonriverProposals } from 'utils/api/proposals';
 import { SafeCache } from 'utils/api/safe-cache';
 
 const cache = SafeCache.create({ expire: 86400 });
@@ -19,7 +19,7 @@ const handler: NextApiHandler = async (
     return;
   }
 
-  if (req.query.dao !== 'moonriver') {
+  if (req.query.dao !== 'moonriver' && req.query.dao !== 'moonbeam') {
     res.statusCode = 400;
     res.send('Bad request');
     return;
@@ -38,6 +38,10 @@ const handler: NextApiHandler = async (
 
   if (req.query.dao === 'moonriver') {
     const data = await moonriverProposals();
+    result = data;
+  }
+  if (req.query.dao === 'moonbeam') {
+    const data = await moonbeamProposals();
     result = data;
   }
 
