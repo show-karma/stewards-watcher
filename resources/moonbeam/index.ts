@@ -7,7 +7,7 @@ import {
   moonbeamOnChainProvider,
   moonriverTracksDictionary,
 } from 'utils';
-import { moonbeam } from 'wagmi/chains';
+import { moonbeam } from 'utils/moonbeam/network';
 import { moonriverUndelegateAction } from '../../utils/moonbeam/moonriverUndelegateAction';
 import { polkassemblyProposalUrl } from '../../utils/moonbeam/polkassembly';
 import ABI from './ABI.json';
