@@ -24,7 +24,7 @@ const DAO_CUSTOM_DOMAIN: Record<string, string | string[]> = {
   'delegate.gitcoin.co': 'gitcoin',
   'delegate.starknet.io': 'starknet',
   'delegate.ssv.network': 'ssvnetwork',
-  'delegate.moonbeam.network': ['moonbeam', 'moonriver'],
+  'delegate.moonbeam.network': 'moonriver',
 };
 //
 export default function middleware(req: NextRequest) {
@@ -37,13 +37,23 @@ export default function middleware(req: NextRequest) {
 
   const usePathname = Array.isArray(dao);
 
-  const hasDAOOnPathname = Object.values(DAO_CUSTOM_DOMAIN)
-    .flat()
-    .includes(url.pathname.split('/')[1]);
+  if (
+    rootUrl === 'delegate.moonbeam.network' &&
+    !Object.values(DAO_CUSTOM_DOMAIN)
+      .flat()
+      .includes(url.pathname.split('/')[1])
+  ) {
+    url.pathname = `/_sites/moonbeam/${currentPathname}`;
+  }
 
-  dao = hasDAOOnPathname && !usePathname ? dao : DAO_CUSTOM_DOMAIN[rootUrl][0];
-
-  if (!(usePathname && hasDAOOnPathname)) {
+  if (
+    !(
+      usePathname &&
+      Object.values(DAO_CUSTOM_DOMAIN)
+        .flat()
+        .includes(url.pathname.split('/')[1])
+    )
+  ) {
     if (rootUrl === devUrl && !Array.isArray(dao)) {
       const daoName = url.searchParams.get('dao');
       dao = daoName ? getDAOName(daoName) : DAO_CUSTOM_DOMAIN[devUrl];
