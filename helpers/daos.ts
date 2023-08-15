@@ -15,5 +15,6 @@ export const daosDictionary: Record<string, string> = {
   safe: 'safe',
   rocketpool: 'rocketpool',
   moonriver: 'moonriver',
+  moonbeam: 'moonbeam',
   compound: 'compound',
 };

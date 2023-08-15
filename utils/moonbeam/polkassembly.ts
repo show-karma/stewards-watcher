@@ -51,7 +51,7 @@ class PolkassemblyClient {
 
   async fetchOnChainPosts(
     trackNo: NumberIsh,
-    network: 'moonriver' | 'moonbeam' = 'moonriver',
+    network: 'moonriver' | 'moonbeam',
     page = 1,
     limit = 100
   ): Promise<Post[]> {

@@ -76,7 +76,10 @@ export interface IDAOConfig {
   BULK_DELEGATE_MAXSIZE?: number;
   DISABLE_EMAIL_INPUT?: boolean;
   HIDE_FOR_DELEGATES?: IForDelegates[];
-  PROPOSAL_LINK?: (proposalId: number | string) => string;
+  PROPOSAL_LINK?: {
+    onChain?: (proposalId: number | string) => string;
+    offChain?: (proposalId: number | string) => string;
+  };
   DELEGATION_CUSTOM_AMOUNT?: boolean;
   DELEGATION_CUSTOM_CONVICTION?: boolean;
   DELEGATION_CONVICTION_OPTIONS?: IConvictionOption[];
