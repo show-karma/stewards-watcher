@@ -44,6 +44,7 @@ export default function middleware(req: NextRequest) {
       .includes(url.pathname.split('/')[1])
   ) {
     url.pathname = `/_sites/moonbeam/${currentPathname}`;
+    return NextResponse.rewrite(url);
   }
 
   if (
