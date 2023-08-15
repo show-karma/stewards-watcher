@@ -39,6 +39,11 @@ export const RainbowWrapper: React.FC<ProviderProps> = ({ children }) => {
 
       jsonRpcProvider({
         rpc: () => ({
+          http: RPCS.moonbeam,
+        }),
+      }),
+      jsonRpcProvider({
+        rpc: () => ({
           http: RPCS.moonriver,
         }),
       }),
