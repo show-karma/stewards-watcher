@@ -43,7 +43,7 @@ export default function middleware(req: NextRequest) {
       .flat()
       .includes(url.pathname.split('/')[1])
   ) {
-    url.pathname = `/_sites/moonbeam/${currentPathname}`;
+    url.pathname = `/_sites/moonbeam${currentPathname}`;
     return NextResponse.rewrite(url);
   }
 
