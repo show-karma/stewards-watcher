@@ -31,9 +31,6 @@ interface IProposal {
 function concatOnChainProposals(proposals: any[], votes: any[]) {
   const array: IChainRow[] = [];
 
-  console.log(proposals);
-  console.log(votes);
-
   votes.forEach((vote: any) => {
     const { proposal, timestamp } = vote;
     const proposalString = parseInt(proposal, 16).toString();
@@ -128,15 +125,12 @@ const providerUrl =
   'https://api.thegraph.com/subgraphs/name/show-karma/moonbeam-dao-delegate-voting';
 
 async function fetchOnChainVotes(daoName: string | string[], address: string) {
-  console.log('111');
   if (!daoName || !address) return [];
-  console.log('222');
   try {
     const onChainClient = new ApolloClient({
       uri: providerUrl,
       cache: new InMemoryCache(),
     });
-    console.log('333');
     const { data: votes } = await onChainClient.query({
       query: VOTING_HISTORY.onChainVotesReq,
       variables: {
@@ -144,12 +138,9 @@ async function fetchOnChainVotes(daoName: string | string[], address: string) {
         address,
       },
     });
-    console.log('444');
 
     if (votes && Array.isArray(votes.votes)) {
-      console.log('555');
       const proposals = await getDaoProposals();
-      console.log('666');
       return concatOnChainProposals(proposals, votes.votes);
     }
   } catch (error) {

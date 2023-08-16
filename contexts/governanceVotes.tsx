@@ -68,12 +68,6 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
     chainId: daoInfo.config.DAO_CHAIN.id,
   });
 
-  console.log(
-    fetchedSymbol,
-    daoInfo.config.DAO_TOKEN_CONTRACT?.[0].contractAddress,
-    daoInfo.config.DAO_CHAIN.id
-  );
-
   const getVotes = async () => {
     setLoadedVotes(false);
     if (!voteAmounts || !voteAmounts?.length) {
