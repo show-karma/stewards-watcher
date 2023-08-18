@@ -4,10 +4,18 @@ import { writeContract } from '@wagmi/core';
 import { Chain } from 'wagmi';
 import { IChainRow } from 'types/IChainRow';
 import { IConvictionOption, Hex } from 'types/votes';
+import { jsonRpcProvider } from 'wagmi/dist/providers/jsonRpc';
 import { IForumType } from './forum';
 import { IStats, IStatsID } from './stats';
 import { IVotingHistoryColumn } from './modal';
 import { IForDelegates } from './header';
+
+type JsonRpcProviderConfig = {
+  rpc: (chain: Chain) => {
+    http: string;
+    webSocket?: string;
+  } | null;
+};
 
 export interface IDAOConfig {
   DAO: string;
@@ -127,4 +135,7 @@ export interface IDAOConfig {
       address: string
     ) => Promise<IChainRow[]>;
   };
+  // TODO change it from any
+  // Had few issues w/ types, for now we'll leave it as any
+  CUSTOM_RPC?: any;
 }

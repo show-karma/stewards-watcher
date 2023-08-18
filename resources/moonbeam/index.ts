@@ -8,6 +8,8 @@ import {
   moonriverTracksDictionary,
 } from 'utils';
 import { moonbeam } from 'utils/moonbeam/network';
+import { RPCS } from 'helpers';
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { moonriverUndelegateAction } from '../../utils/moonbeam/moonriverUndelegateAction';
 import { polkassemblyProposalUrl } from '../../utils/moonbeam/polkassembly';
 import ABI from './ABI.json';
@@ -86,6 +88,11 @@ const config: IDAOConfig = {
   DELEGATION_CUSTOM_CONVICTION: true,
   DELEGATION_CONVICTION_OPTIONS: moonriverConvictionOptions,
   TRACKS_DICTIONARY: moonriverTracksDictionary,
+  CUSTOM_RPC: jsonRpcProvider({
+    rpc: () => ({
+      http: RPCS.moonbeam,
+    }),
+  }),
 };
 
 const dark: IDAOTheme = {

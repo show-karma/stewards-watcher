@@ -28,26 +28,17 @@ export const RainbowWrapper: React.FC<ProviderProps> = ({ children }) => {
 
   const { config } = daoInfo;
 
+  const rpcs = [
+    process.env.NEXT_PUBLIC_ALCHEMY_KEY
+      ? alchemyProvider({
+          apiKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY,
+        })
+      : publicProvider(),
+    config.CUSTOM_RPC ? config.CUSTOM_RPC : null,
+  ].filter(item => item !== null);
   const { chains, publicClient, webSocketPublicClient } = configureChains(
     [config.DAO_CHAIN, optimism],
-    [
-      process.env.NEXT_PUBLIC_ALCHEMY_KEY
-        ? alchemyProvider({
-            apiKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY,
-          })
-        : publicProvider(),
-
-      jsonRpcProvider({
-        rpc: () => ({
-          http: RPCS.moonbeam,
-        }),
-      }),
-      jsonRpcProvider({
-        rpc: () => ({
-          http: RPCS.moonriver,
-        }),
-      }),
-    ]
+    rpcs
   );
 
   const connectors = connectorsForWallets([
