@@ -1,20 +1,13 @@
 /* eslint-disable no-useless-catch */
-import {
-  Hex,
-  IChainRow,
-  MoonbeamProposal,
-  NumberIsh,
-  OpenGovLockedBalanceResponse,
-} from 'types';
+import { Hex, IChainRow, MoonbeamProposal, NumberIsh } from 'types';
 import { ApolloClient, gql, InMemoryCache } from '@apollo/client';
 import { VOTING_HISTORY } from 'utils/GraphQL';
 import moment from 'moment';
 import { ethers, providers } from 'ethers';
 import { RPCS } from 'helpers';
-import { IActiveDelegatedTracks, fetchBlockTimestamp } from 'utils';
+import { IActiveDelegatedTracks } from 'utils';
 import axios from 'axios';
 import { MoonbeamWSC } from './moonbeamwsc';
-import { polkassembly, Post } from './polkassembly';
 
 interface IProposal {
   id: string;
@@ -97,27 +90,18 @@ async function getDaoProposals(): Promise<IProposal[]> {
   const proposalsMap = await Promise.all(
     filteredProposals.map(async proposal => {
       const status = Object.entries(proposal.information)[0] as any;
-      let blockNumber = 0;
-      if (status[1].submitted) {
-        blockNumber = status?.submitted as number;
-      } else {
-        blockNumber = status.flat()[1] as number;
-      }
-      const proposalTimestamp = await fetchBlockTimestamp(
-        provider,
-        blockNumber
-      );
 
       return {
         id: `${proposal.proposalId}`,
         description:
           proposal.proposal || `Proposal ${proposal.proposalId.toString()}`,
-        timestamp: proposalTimestamp,
+        timestamp: proposal.timestamp,
         trackId: proposal.trackId,
         finished: status[0] !== 'ongoing',
       };
     })
   );
+
   return proposalsMap;
 }
 

@@ -9,6 +9,11 @@ export interface Post {
   end?: Date;
   hash: string;
   parent_bounty_index: null;
+  status_history: {
+    id: string;
+    block: number;
+    status: string;
+  }[];
   post_id: number;
   status: string;
   title: string;
@@ -27,13 +32,23 @@ export const polkassemblyProposalUrl = {
 };
 
 export const routes = {
-  onChainPosts: (trackNo: NumberIsh, page = 1, limit = 100) => ({
+  onChainPosts: (trackNo: NumberIsh, page = 1, limit = 200) => ({
     url: '/listing/on-chain-posts',
     params: {
       page,
       proposalType: 'referendums_v2',
       listingLimit: limit,
       trackNo,
+      trackStatus: 'All',
+      sortBy: 'newest',
+    },
+  }),
+  onChainPostsV1: (page = 1, limit = 200) => ({
+    url: '/listing/on-chain-posts',
+    params: {
+      page,
+      proposalType: 'referendums',
+      listingLimit: limit,
       trackStatus: 'All',
       sortBy: 'newest',
     },
@@ -49,12 +64,25 @@ class PolkassemblyClient {
     });
   }
 
-  async fetchOnChainPosts(
+  async fetchOnChainPostsV1(
+    network: 'moonriver' | 'moonbeam' = 'moonriver',
+    page = 1,
+    limit = 200
+  ) {
+    const { url, params } = routes.onChainPostsV1(page, limit);
+    const { data } = await this.api.get<OnChainPostsRes>(url, {
+      params,
+      headers: { 'X-Network': network },
+    });
+    return data.posts;
+  }
+
+  async fetchOnChainPostsV2(
     trackNo: NumberIsh,
     network: 'moonriver' | 'moonbeam',
     page = 1,
-    limit = 100
-  ): Promise<Post[]> {
+    limit = 200
+  ) {
     const { url, params } = routes.onChainPosts(trackNo, page, limit);
     const { data } = await this.api.get<OnChainPostsRes>(url, {
       params,
