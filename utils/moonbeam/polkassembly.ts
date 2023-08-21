@@ -25,10 +25,16 @@ interface OnChainPostsRes {
 }
 
 export const polkassemblyProposalUrl = {
-  moonriver: (proposalId: number | string) =>
-    `https://moonriver.polkassembly.io/referendum/${proposalId}`,
-  moonbeam: (proposalId: number | string) =>
-    `https://moonbeam.polkassembly.io/referendum/${proposalId}`,
+  moonriver: (proposalId: number | string, version?: string) => {
+    if (version === 'V1')
+      return `https://moonriver.polkassembly.io/referendum/${proposalId}`;
+    return `https://moonriver.polkassembly.io/referenda/${proposalId}`;
+  },
+  moonbeam: (proposalId: number | string, version?: string) => {
+    if (version === 'V1')
+      return `https://moonbeam.polkassembly.io/referendum/${proposalId}`;
+    return `https://moonbeam.polkassembly.io/referenda/${proposalId}`;
+  },
 };
 
 export const routes = {

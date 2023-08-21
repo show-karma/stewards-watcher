@@ -198,7 +198,8 @@ export const ProposalVote: FC<IProposalVote> = ({
               vote.voteMethod === 'On-chain') ||
               (daoInfo.config.PROPOSAL_LINK?.offChain &&
                 vote.voteMethod === 'Off-chain')) &&
-            vote?.voteId ? (
+            vote?.voteId &&
+            vote.version ? (
               <>
                 <Divider
                   orientation="vertical"
@@ -209,7 +210,7 @@ export const ProposalVote: FC<IProposalVote> = ({
                 <Link
                   href={daoInfo.config.PROPOSAL_LINK[
                     vote.voteMethod === 'On-chain' ? 'onChain' : 'offChain'
-                  ]?.(vote.voteId)}
+                  ]?.(vote.voteId, vote.version)}
                   isExternal
                   color="blue.400"
                   fontSize="sm"

@@ -25,6 +25,7 @@ interface IProposal {
   timestamp: number;
   description: string;
   trackId: NumberIsh;
+  version?: string;
 }
 
 const getVoteReason = (vote: any) => {
@@ -55,6 +56,7 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
         .format('MMMM D, YYYY'),
       voteId: proposal,
       trackId: Number(original?.trackId),
+      version: original?.version,
     });
   });
 
@@ -69,6 +71,7 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
         voteId: proposal.id.toString(),
         finished: proposal.finished,
         trackId: Number(proposal?.trackId),
+        version: proposal?.version,
       });
   });
 
@@ -91,9 +94,13 @@ async function getDaoProposals(
   cachedProposals: VoteResponse['proposals'] = []
 ): Promise<IProposal[]> {
   const proposals = await proposalsWithMetadata();
-  console.log({ cachedProposals });
   const proposalsMap = proposals.map(proposal => {
     const status = Object.entries(proposal.information)[0] as any;
+    const matchedProposal = cachedProposals.find(
+      pr =>
+        +pr.id === +proposal.proposalId &&
+        (proposal.trackId === null) === (pr.version === 'V1')
+    );
     const timestamp =
       (cachedProposals.find(
         pr =>
@@ -109,6 +116,7 @@ async function getDaoProposals(
       timestamp: Math.round(timestamp),
       trackId: proposal.trackId,
       finished: !status ? true : status[0] !== 'ongoing',
+      version: matchedProposal?.version,
     };
   });
 
