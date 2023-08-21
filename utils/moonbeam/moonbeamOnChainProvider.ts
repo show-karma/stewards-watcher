@@ -1,13 +1,24 @@
 /* eslint-disable no-useless-catch */
 import { Hex, IChainRow, MoonbeamProposal, NumberIsh } from 'types';
 import { ApolloClient, gql, InMemoryCache } from '@apollo/client';
-import { VOTING_HISTORY } from 'utils/GraphQL';
 import moment from 'moment';
-import { ethers, providers } from 'ethers';
-import { RPCS } from 'helpers';
-import { IActiveDelegatedTracks } from 'utils';
+import { ethers } from 'ethers';
+import { api } from 'helpers';
 import axios from 'axios';
 import { MoonbeamWSC } from './moonbeamwsc';
+
+type VoteResponse = {
+  proposals: {
+    id: number;
+    version: string;
+    startDate: number;
+    endDate: number;
+  }[];
+  votes: {
+    proposalId: string;
+    reason: boolean;
+  }[];
+};
 
 interface IProposal {
   id: string;
@@ -15,6 +26,12 @@ interface IProposal {
   description: string;
   trackId: NumberIsh;
 }
+
+const getVoteReason = (vote: any) => {
+  if (!vote.reason || typeof vote.reason === 'boolean') return 'Did not vote';
+  const reason = vote.reason.toLowerCase() === 'ayes' ? 1 : 0;
+  return reason;
+};
 
 /**
  * Concat proposal and votes into a common interface
@@ -25,26 +42,24 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
   const array: IChainRow[] = [];
 
   votes.forEach((vote: any) => {
-    const { proposal, timestamp } = vote;
-    const proposalString = parseInt(proposal, 16).toString();
+    const { proposal } = vote;
+    const original = proposals.find(item => +item.id === +proposal);
     array.push({
       voteMethod: 'On-chain',
-      proposal:
-        proposals.find(item => item.id === proposalString)?.description ||
-        `Proposal ${proposalString.toString()}`,
-      choice: vote?.support,
+      proposal: original?.description || `Proposal ${proposal}`,
+      choice: getVoteReason(vote),
       solution: vote?.solution,
       reason: vote?.reason,
-      executed: moment.unix(timestamp).format('MMMM D, YYYY'),
-      voteId: proposalString,
-      trackId: Number(
-        proposals.find(item => item.id === proposalString)?.trackId
-      ),
+      executed: moment
+        .unix(original?.timestamp || Math.round(Date.now() / 1000))
+        .format('MMMM D, YYYY'),
+      voteId: proposal,
+      trackId: Number(original?.trackId),
     });
   });
 
   proposals.forEach(proposal => {
-    if (!array.find(item => item.voteId === proposal.id.toString()))
+    if (!array.find(item => item.voteId && +item.voteId === +proposal.id))
       array.push({
         voteMethod: 'On-chain',
         proposal: proposal.description,
@@ -58,12 +73,11 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
   });
 
   // removing duplicate items on array that have same proposal id
-  const filteredArray = array.filter(
-    (item, index, self) =>
-      index === self.findIndex(current => current.voteId === item.voteId)
-  );
-
-  return filteredArray;
+  // const filteredArray = array.filter(
+  //   (item, index, self) =>
+  //     index === self.findIndex(current => current.voteId === item.voteId)
+  // );
+  return array;
 }
 
 async function proposalsWithMetadata(): Promise<
@@ -73,36 +87,33 @@ async function proposalsWithMetadata(): Promise<
   return data;
 }
 
-async function getDaoProposals(): Promise<IProposal[]> {
+async function getDaoProposals(
+  cachedProposals: VoteResponse['proposals'] = []
+): Promise<IProposal[]> {
   const proposals = await proposalsWithMetadata();
-
-  const provider = new providers.JsonRpcProvider(RPCS.moonbeam);
-
-  const currentBlock = await provider.getBlockNumber();
-  const filteredProposals = proposals.filter(proposal => {
+  console.log({ cachedProposals });
+  const proposalsMap = proposals.map(proposal => {
     const status = Object.entries(proposal.information)[0] as any;
-    if (status[1].submitted) {
-      return status?.submitted <= currentBlock;
-    }
-    return status.flat()[1] <= currentBlock;
+    const timestamp =
+      (cachedProposals.find(
+        pr =>
+          +pr.id === +proposal.proposalId &&
+          (proposal.trackId === null) === (pr.version === 'V1')
+      )?.startDate || 0) / 1000;
+
+    return {
+      proposal: proposal.proposalId,
+      id: `${proposal.proposalId}`,
+      description:
+        proposal.proposal || `Proposal ${proposal.proposalId.toString()}`,
+      timestamp: Math.round(timestamp),
+      trackId: proposal.trackId,
+      finished: !status ? true : status[0] !== 'ongoing',
+    };
   });
 
-  const proposalsMap = await Promise.all(
-    filteredProposals.map(async proposal => {
-      const status = Object.entries(proposal.information)[0] as any;
-
-      return {
-        id: `${proposal.proposalId}`,
-        description:
-          proposal.proposal || `Proposal ${proposal.proposalId.toString()}`,
-        timestamp: proposal.timestamp,
-        trackId: proposal.trackId,
-        finished: status[0] !== 'ongoing',
-      };
-    })
-  );
-
-  return proposalsMap;
+  // eslint-disable-next-line id-length
+  return proposalsMap.sort((a, b) => b.timestamp - a.timestamp);
 }
 
 const providerUrl =
@@ -111,24 +122,25 @@ const providerUrl =
 async function fetchOnChainVotes(daoName: string | string[], address: string) {
   if (!daoName || !address) return [];
   try {
-    const onChainClient = new ApolloClient({
-      uri: providerUrl,
-      cache: new InMemoryCache(),
-    });
-    const { data: votes } = await onChainClient.query({
-      query: VOTING_HISTORY.onChainVotesReq,
-      variables: {
-        daoname: [daoName].flat(),
-        address,
+    const {
+      data: {
+        data: { votes, proposals: cachedProposals },
       },
-    });
+    } = await api.get<{ data: VoteResponse }>(
+      `delegate/${[daoName].flat()[0]}/${address}/voting-history`
+    );
 
-    if (votes && Array.isArray(votes.votes)) {
-      const proposals = await getDaoProposals();
-      return concatOnChainProposals(proposals, votes.votes);
+    const voteList = votes.map(vote => ({
+      proposal: vote.proposalId.split('-')[0],
+      openGov: vote.proposalId.split('-')[1] === 'V2',
+      reason: vote.reason,
+    }));
+    if (voteList && Array.isArray(voteList)) {
+      const proposals = await getDaoProposals(cachedProposals);
+
+      return concatOnChainProposals(proposals, voteList);
     }
   } catch (error) {
-    console.log('error on proposals fetch', error);
     return [];
   }
   return [];
@@ -156,46 +168,55 @@ interface IDelegatingHistoryResponse {
 }
 
 const delegateHistoryQuery = (address: string, daoName: string) => gql`
-  {
-      delegatingHistories(
-      first: 1000,
-      where:{
-        delegator:"${address.toLowerCase()}",
-        daoName:"${daoName}"
-      }
-      orderBy: timestamp
-      orderDirection: desc
-    ) {
-        id    
-      delegator
-      trackId
-      amount
-      toDelegate
-      conviction
-      timestamp
-      }
-    undelegatedHistories (
-      first: 1000,
+{
+	delegatingHistories(
+    first: 1000,
     where:{
-      delegator: "${address.toLowerCase()}",
+      delegator:"${address.toLowerCase()}",
+      daoName:"${daoName}"
     }
-    orderBy: blockTimestamp
+    orderBy: timestamp
     orderDirection: desc
-    ) {
-      id
-      trackId
-      blockTimestamp
-    }
-    unlockeds(
-      first: 1000,
-     where: {caller: "${address.toLowerCase()}"}
-    orderBy: blockTimestamp
-    orderDirection: desc
-    ) {
-      trackId
-    }
+  ) {
+	  id    
+    delegator
+    trackId
+    amount
+    toDelegate
+    conviction
+    timestamp
+	}
+  undelegatedHistories (
+    first: 1000,
+  where:{
+    delegator: "${address.toLowerCase()}",
   }
-  `;
+  orderBy: blockTimestamp
+  orderDirection: desc
+  ) {
+    id
+    trackId
+    blockTimestamp
+  }
+  unlockeds(
+    first: 1000,
+   where: {caller: "${address.toLowerCase()}"}
+  orderBy: blockTimestamp
+  orderDirection: desc
+  ) {
+    trackId
+  }
+}`;
+
+export interface IActiveDelegatedTracks {
+  trackId: NumberIsh;
+  locked: number;
+  amount: string;
+  active: boolean;
+  toDelegate: string;
+  conviction: number;
+  timestamp: number;
+}
 
 /**
  * Fetches the active delegated tracks for a given address
