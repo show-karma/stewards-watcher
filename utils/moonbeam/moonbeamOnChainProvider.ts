@@ -6,6 +6,7 @@ import { ethers } from 'ethers';
 import { api } from 'helpers';
 import axios from 'axios';
 import { MoonbeamWSC } from './moonbeamwsc';
+import { IActiveDelegatedTracks } from './moonriverOnChainProvider';
 
 type VoteResponse = {
   proposals: {
@@ -207,16 +208,6 @@ const delegateHistoryQuery = (address: string, daoName: string) => gql`
     trackId
   }
 }`;
-
-export interface IActiveDelegatedTracks {
-  trackId: NumberIsh;
-  locked: number;
-  amount: string;
-  active: boolean;
-  toDelegate: string;
-  conviction: number;
-  timestamp: number;
-}
 
 /**
  * Fetches the active delegated tracks for a given address
