@@ -2,30 +2,51 @@ import { MoonbeamProposal, NumberIsh } from 'types';
 import { MoonbeamWSC } from '../moonbeam/moonbeamwsc';
 import { polkassembly, Post } from '../moonbeam/polkassembly';
 
-export const moonriverProposals = async () => {
-  const client = await MoonbeamWSC.createClient();
+export const moonriverProposals = async (
+  daoName: 'moonbeam' | 'moonriver' = 'moonriver'
+) => {
+  const clientV2 = await MoonbeamWSC.createClient();
 
-  const proposals = await client.getProposals();
-  const tracks = client.getTracks(true);
-  const postWithTrackId: (Post & { trackId: NumberIsh })[] = [];
+  const [proposals, tracks] = await Promise.all([
+    clientV2.getProposals(),
+    clientV2.getTracks(),
+  ]);
 
-  const promises = tracks.map(async track => {
-    const posts = await polkassembly.fetchOnChainPosts(track.id, 'moonriver');
-    postWithTrackId.push(
-      ...posts.map(post => ({ ...post, trackId: track.id }))
-    );
-  });
+  const postWithTrackId: (Post & {
+    trackId: NumberIsh | null;
+    openGov: boolean;
+  })[] = [];
+
+  const postsV1: (Post & {
+    trackId: NumberIsh | null;
+    openGov: boolean;
+  })[] = [];
+
+  const promises = [
+    ...tracks.map(async track => {
+      const posts = await polkassembly.fetchOnChainPostsV2(track.id, daoName);
+      postWithTrackId.push(
+        ...posts.map(post => ({ ...post, trackId: track.id, openGov: true }))
+      );
+    }),
+    (async () => {
+      const posts = await polkassembly.fetchOnChainPostsV1(daoName);
+      postsV1.push(
+        ...posts.map(post => ({ ...post, trackId: null, openGov: false }))
+      );
+    })(),
+  ];
 
   await Promise.all(promises);
-
   const result: (MoonbeamProposal & {
     proposal: string;
-    trackId: NumberIsh;
+    trackId: NumberIsh | null;
+    openGov: boolean;
   })[] = [];
 
   postWithTrackId.forEach(post => {
     const currentProposal = proposals.find(
-      proposal => +proposal.proposalId === +post.post_id
+      proposal => +proposal.proposalId === +post.post_id && post.openGov
     );
 
     if (currentProposal) {
@@ -33,45 +54,29 @@ export const moonriverProposals = async () => {
         ...currentProposal,
         proposal: post.title,
         trackId: post.trackId,
+        openGov: post.openGov,
       });
     }
   });
-  return result;
+
+  return result.concat(
+    postsV1.map(post => ({
+      information: {
+        timedOut: [
+          post.status_history[0].block,
+          {
+            who: '0x0',
+            amount: '0x0',
+          },
+        ],
+      },
+      proposalId: post.post_id,
+      openGov: false,
+      proposal: post.title,
+      trackId: null,
+      timestamp: 0,
+    }))
+  );
 };
 
-export const moonbeamProposals = async () => {
-  const client = await MoonbeamWSC.createClient();
-
-  const proposals = await client.getProposals();
-  const tracks = client.getTracks(true);
-  const postWithTrackId: (Post & { trackId: NumberIsh })[] = [];
-
-  const promises = tracks.map(async track => {
-    const posts = await polkassembly.fetchOnChainPosts(track.id, 'moonbeam');
-    postWithTrackId.push(
-      ...posts.map(post => ({ ...post, trackId: track.id }))
-    );
-  });
-
-  await Promise.all(promises);
-
-  const result: (MoonbeamProposal & {
-    proposal: string;
-    trackId: NumberIsh;
-  })[] = [];
-
-  postWithTrackId.forEach(post => {
-    const currentProposal = proposals.find(
-      proposal => +proposal.proposalId === +post.post_id
-    );
-
-    if (currentProposal) {
-      result.push({
-        ...currentProposal,
-        proposal: post.title,
-        trackId: post.trackId,
-      });
-    }
-  });
-  return result;
-};
+export const moonbeamProposals = () => moonriverProposals('moonbeam');

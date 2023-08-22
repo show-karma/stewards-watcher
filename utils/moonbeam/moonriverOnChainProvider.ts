@@ -1,27 +1,38 @@
 /* eslint-disable no-useless-catch */
-import {
-  Hex,
-  IChainRow,
-  MoonbeamProposal,
-  NumberIsh,
-  OpenGovLockedBalanceResponse,
-} from 'types';
+import { Hex, IChainRow, MoonbeamProposal, NumberIsh } from 'types';
 import { ApolloClient, gql, InMemoryCache } from '@apollo/client';
-import { VOTING_HISTORY } from 'utils/GraphQL';
 import moment from 'moment';
-import { ethers, providers } from 'ethers';
-import { RPCS } from 'helpers';
-import { fetchBlockTimestamp } from 'utils';
+import { ethers } from 'ethers';
+import { api } from 'helpers';
 import axios from 'axios';
 import { MoonbeamWSC } from './moonbeamwsc';
-import { polkassembly, Post } from './polkassembly';
+
+type VoteResponse = {
+  proposals: {
+    id: number;
+    version: string;
+    startDate: number;
+    endDate: number;
+  }[];
+  votes: {
+    proposalId: string;
+    reason: boolean;
+  }[];
+};
 
 interface IProposal {
   id: string;
   timestamp: number;
   description: string;
   trackId: NumberIsh;
+  version?: string;
 }
+
+const getVoteReason = (vote: any) => {
+  if (!vote.reason || typeof vote.reason === 'boolean') return 'Did not vote';
+  const reason = vote.reason.toLowerCase() === 'for' ? 1 : 0;
+  return reason;
+};
 
 /**
  * Concat proposal and votes into a common interface
@@ -32,26 +43,25 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
   const array: IChainRow[] = [];
 
   votes.forEach((vote: any) => {
-    const { proposal, timestamp } = vote;
-    const proposalString = parseInt(proposal, 16).toString();
+    const { proposal } = vote;
+    const original = proposals.find(item => +item.id === +proposal);
     array.push({
       voteMethod: 'On-chain',
-      proposal:
-        proposals.find(item => item.id === proposalString)?.description ||
-        `Proposal ${proposalString.toString()}`,
-      choice: vote?.support,
+      proposal: original?.description || `Proposal ${proposal}`,
+      choice: getVoteReason(vote),
       solution: vote?.solution,
       reason: vote?.reason,
-      executed: moment.unix(timestamp).format('MMMM D, YYYY'),
-      voteId: proposalString,
-      trackId: Number(
-        proposals.find(item => item.id === proposalString)?.trackId
-      ),
+      executed: moment
+        .unix(original?.timestamp || Math.round(Date.now() / 1000))
+        .format('MMMM D, YYYY'),
+      voteId: proposal,
+      trackId: Number(original?.trackId),
+      version: original?.version,
     });
   });
 
   proposals.forEach(proposal => {
-    if (!array.find(item => item.voteId === proposal.id.toString()))
+    if (!array.find(item => item.voteId && +item.voteId === +proposal.id))
       array.push({
         voteMethod: 'On-chain',
         proposal: proposal.description,
@@ -61,16 +71,16 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
         voteId: proposal.id.toString(),
         finished: proposal.finished,
         trackId: Number(proposal?.trackId),
+        version: proposal?.version,
       });
   });
 
   // removing duplicate items on array that have same proposal id
-  const filteredArray = array.filter(
-    (item, index, self) =>
-      index === self.findIndex(current => current.voteId === item.voteId)
-  );
-
-  return filteredArray;
+  // const filteredArray = array.filter(
+  //   (item, index, self) =>
+  //     index === self.findIndex(current => current.voteId === item.voteId)
+  // );
+  return array;
 }
 
 async function proposalsWithMetadata(): Promise<
@@ -80,37 +90,38 @@ async function proposalsWithMetadata(): Promise<
   return data;
 }
 
-async function getDaoProposals(): Promise<IProposal[]> {
+async function getDaoProposals(
+  cachedProposals: VoteResponse['proposals'] = []
+): Promise<IProposal[]> {
   const proposals = await proposalsWithMetadata();
+  const proposalsMap = proposals.map(proposal => {
+    const status = Object.entries(proposal.information)[0] as any;
+    const matchedProposal = cachedProposals.find(
+      pr =>
+        +pr.id === +proposal.proposalId &&
+        (proposal.trackId === null) === (pr.version === 'V1')
+    );
+    const timestamp =
+      (cachedProposals.find(
+        pr =>
+          +pr.id === +proposal.proposalId &&
+          (proposal.trackId === null) === (pr.version === 'V1')
+      )?.startDate || 0) / 1000;
 
-  const provider = new providers.JsonRpcProvider(RPCS.moonriver);
+    return {
+      proposal: proposal.proposalId,
+      id: `${proposal.proposalId}`,
+      description:
+        proposal.proposal || `Proposal ${proposal.proposalId.toString()}`,
+      timestamp: Math.round(timestamp),
+      trackId: proposal.trackId,
+      finished: !status ? true : status[0] !== 'ongoing',
+      version: matchedProposal?.version,
+    };
+  });
 
-  const proposalsMap = await Promise.all(
-    proposals.map(async proposal => {
-      const status = Object.entries(proposal.information)[0] as any;
-      let blockNumber = 0;
-      if (status[1].submitted) {
-        blockNumber = status?.submitted as number;
-      } else {
-        blockNumber = status.flat()[1] as number;
-      }
-      const proposalTimestamp = await fetchBlockTimestamp(
-        provider,
-        blockNumber
-      );
-
-      return {
-        id: `${proposal.proposalId}`,
-        description:
-          proposal.proposal || `Proposal ${proposal.proposalId.toString()}`,
-        timestamp: proposalTimestamp,
-        trackId: proposal.trackId,
-        finished: status[0] !== 'ongoing',
-      };
-    })
-  );
-
-  return proposalsMap;
+  // eslint-disable-next-line id-length
+  return proposalsMap.sort((a, b) => b.timestamp - a.timestamp);
 }
 
 const providerUrl =
@@ -119,21 +130,23 @@ const providerUrl =
 async function fetchOnChainVotes(daoName: string | string[], address: string) {
   if (!daoName || !address) return [];
   try {
-    const onChainClient = new ApolloClient({
-      uri: providerUrl,
-      cache: new InMemoryCache(),
-    });
-    const { data: votes } = await onChainClient.query({
-      query: VOTING_HISTORY.onChainVotesReq,
-      variables: {
-        daoname: [daoName].flat(),
-        address,
+    const {
+      data: {
+        data: { votes, proposals: cachedProposals },
       },
-    });
+    } = await api.get<{ data: VoteResponse }>(
+      `delegate/${[daoName].flat()[0]}/${address}/voting-history`
+    );
 
-    if (votes && Array.isArray(votes.votes)) {
-      const proposals = await getDaoProposals();
-      return concatOnChainProposals(proposals, votes.votes);
+    const voteList = votes.map(vote => ({
+      proposal: vote.proposalId.split('-')[0],
+      openGov: vote.proposalId.split('-')[1] === 'V2',
+      reason: vote.reason,
+    }));
+    if (voteList && Array.isArray(voteList)) {
+      const proposals = await getDaoProposals(cachedProposals);
+
+      return concatOnChainProposals(proposals, voteList);
     }
   } catch (error) {
     return [];
@@ -201,8 +214,7 @@ const delegateHistoryQuery = (address: string, daoName: string) => gql`
   ) {
     trackId
   }
-}
-`;
+}`;
 
 export interface IActiveDelegatedTracks {
   trackId: NumberIsh;
