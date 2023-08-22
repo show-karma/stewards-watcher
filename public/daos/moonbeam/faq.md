@@ -5,11 +5,15 @@
 --details--
 --summary--How to become a delegate?--/summary--
 
-Delegates have the ability to onboard themselves, create a pitch, and verify their social handles. These actions not only facilitate their participation but also enhance trustworthiness within the community.
-Click the Login button on the top right corner of the page and log in through your wallet.
-Create a pitch, explaining the reasons you want to be a delegate.
-Verify your social handles and connect them to your Karma profile.
-We will start indexing your data and surfacing stats within a day of creating your profile.
+Delegates have the ability to onboard themselves, create a pitch, and verify their social handles. These actions not only facilitate their participation but also enhance trustworthiness within the community. Follow these steps to become a delegate.
+
+- Click the Login button on the top right corner of the page and log in through your wallet.
+
+- Create a pitch, explaining the reasons you want to be a delegate.
+
+- Verify your social handles and connect them to your Karma profile.
+
+- We will start indexing your data and surfacing stats within a day of creating your profile.
 --/details--
 
 --details--
@@ -31,7 +35,7 @@ Becoming a delegate is open to anyone, but there is a distinction for Community 
   --/details--
 
 --details--
---summary--If I delegate my voting power to a delegate, do they have access to my ns?--/summary--
+--summary--If I delegate my voting power to a delegate, do they have access to my tokens?--/summary--
 
 No, they do not. It’s important to note that even when tokens are delegated, they remain securely stored in the original wallet. Additionally, you can modify your chosen delegates or reclaim your voting power whenever you deem necessary.
 --/details--
@@ -45,15 +49,17 @@ As a delegate, you can passionately advocate for a specific group of stakeholder
 --details--
 --summary--How to choose a delegate? --/summary--
 
-When choosing a delegate, there are many factors to consider. Deciding which factors are important and how they will factor into your decision is a personal choice. That said, here are somethings to consider:
-Read their bios. Expertise and knowledge play a crucial role. Look for delegates who have a deep understanding of the subject matter or industry related to the decision at hand.
+When choosing a delegate, there are many factors to consider. Deciding which factors are important and how they will factor into your decision is a personal choice. That said, here are somethings to consider: 
 
-Voting history and track record. Consider delegates who have a proven history of acting in the best interests of the community and making sound decisions by looking at the number of times they have previously participated in governance and how they voted.
+- Read their bios: Expertise and knowledge play a crucial role. Look for delegates who have a deep understanding of the subject matter or industry related to the decision at hand.
 
-Transparency and communication are essential as well. Look for delegates who are open and transparent about their decision-making process and regularly communicate with the community they represent via Community Forum.
-Accessibility and responsiveness are additional factors to consider. Delegates should be easily reachable and responsive to inquiries or concerns from token holders via indicated channels such as Community Forum or Twitter.
+- Voting history and track record: Consider delegates who have a proven history of acting in the best interests of the community and making sound decisions by looking at the number of times they have previously participated in governance and how they voted.
 
-Evaluate the delegate's alignment with your own interests and values. Choose delegates who share similar goals and priorities to ensure that your voice is effectively represented in the decision-making process.
+- Transparency and communication are essential as well. Look for delegates who are open and transparent about their decision-making process and regularly communicate with the community they represent via Community Forum.
+
+- Accessibility and responsiveness are additional factors to consider. Delegates should be easily reachable and responsive to inquiries or concerns from token holders via indicated channels such as Community Forum or Twitter.
+
+- Evaluate the delegate's alignment with your own interests and values. Choose delegates who share similar goals and priorities to ensure that your voice is effectively represented in the decision-making process.
 
 --/details--
 
