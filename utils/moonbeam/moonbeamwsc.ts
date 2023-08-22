@@ -64,6 +64,7 @@ export class MoonbeamWSC {
           .map((key: { toJSON: () => any }) => key.toJSON())
           .join(', '),
         information: exposure.toJSON() as MoonbeamProposal['information'],
+        timestamp: 0,
       });
     });
     if (destroy) this.destroy();
