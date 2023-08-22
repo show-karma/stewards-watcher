@@ -30,7 +30,7 @@ interface IProposal {
 
 const getVoteReason = (vote: any) => {
   if (!vote.reason || typeof vote.reason === 'boolean') return 'Did not vote';
-  const reason = vote.reason.toLowerCase() === 'ayes' ? 1 : 0;
+  const reason = vote.reason.toLowerCase() === 'for' ? 1 : 0;
   return reason;
 };
 
