@@ -50,7 +50,7 @@ export const UnlinkProxy: FC<ProxyProps> = ({ isOpen, onClose }) => {
             mb="5"
           >{`Do you really want to unlink proxy (${truncateAddress(
             address as string
-          )}) and real account (${realWallet})?`}</Text>
+          )}) and real account (${truncateAddress(realWallet)})?`}</Text>
           <Button
             mt="4"
             _hover={{}}

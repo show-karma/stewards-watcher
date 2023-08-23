@@ -62,7 +62,7 @@ export const ProxyProvider: React.FC<ProviderProps> = ({ children }) => {
 
   useEffect(() => {
     if (profileSelected?.address) checkProxy(profileSelected.address);
-  }, [profileSelected?.address]);
+  }, [profileSelected?.address, address]);
 
   const setupRealAddress = async () => {
     if (!address) return;
@@ -76,7 +76,7 @@ export const ProxyProvider: React.FC<ProviderProps> = ({ children }) => {
 
   useEffect(() => {
     setupRealAddress();
-  }, [address]);
+  }, [profileSelected?.address, address, hasProxy]);
 
   const removeProxy = async () => {
     if (!profileSelected?.address) return;
