@@ -24,12 +24,13 @@ import {
   ITracks,
 } from 'types';
 import { useMixpanel, useToasty } from 'hooks';
-import { api } from 'helpers';
+import { api, API_ROUTES } from 'helpers';
 import { useAccount } from 'wagmi';
 import { IBulkDelegatePayload } from 'utils/moonbeam/moonriverDelegateAction';
 import { ITrackBadgeProps } from 'components/DelegationPool/TrackBadge';
 import { numberToWords } from 'utils/numberToWords';
 import { useDAO } from './dao';
+import { useWallet } from './wallet';
 
 interface IDelegateProps {
   delegates: IDelegate[];
@@ -477,6 +478,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     undefined
   );
 
+  const { compareProxy } = useWallet();
+
   const checkIfUserNotFound = (
     userToSearch: string,
     error?: string,
@@ -488,11 +491,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       return;
     }
 
-    if (
-      error === 'Not Found' &&
-      publicAddress?.toLowerCase() === userToSearch.toLowerCase() &&
-      isConnected
-    ) {
+    if (error === 'Not Found' && compareProxy(userToSearch) && isConnected) {
       const userWithoutDelegate: IDelegate = {
         address: userToSearch,
         forumActivity: 0,

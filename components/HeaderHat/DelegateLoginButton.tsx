@@ -7,24 +7,27 @@ import {
   Box,
   Button,
   Divider,
+  Flex,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
   Show,
+  Text,
   useMediaQuery,
 } from '@chakra-ui/react';
 import { ArrowRightIcon, DownChevron } from 'components/Icons';
-import { useAuth, useDAO, useDelegates } from 'contexts';
+import { useAuth, useDAO, useDelegates, useWallet } from 'contexts';
 import { FC } from 'react';
 import { truncateAddress } from 'utils';
 import { useAccount } from 'wagmi';
 
 const LoginMenu = () => {
-  const { theme } = useDAO();
+  const { theme, daoInfo } = useDAO();
   const { disconnect } = useAuth();
   const { address } = useAccount();
   const { searchProfileModal } = useDelegates();
+  const { realWallet } = useWallet();
 
   const openProfile = () => address && searchProfileModal(address, 'statement');
 
@@ -70,6 +73,15 @@ const LoginMenu = () => {
         w="max-content"
         minW="max-content"
       >
+        {daoInfo.config.ENABLE_PROXY_SUPPORT && (
+          <Flex flexDir="column" align="flex-start" px="4">
+            <Text color={theme.filters.listText}>Real wallet</Text>
+            <Text color={theme.filters.listText}>
+              {truncateAddress(realWallet)}
+            </Text>
+          </Flex>
+        )}
+        <Divider orientation="horizontal" my="2" />
         <MenuItem
           bgColor={theme.filters.listBg}
           _hover={{
@@ -152,10 +164,11 @@ const LoginButton: FC<{ onOpen: () => void }> = ({ onOpen }) => {
 };
 
 const LoginAccordion = () => {
-  const { theme } = useDAO();
+  const { theme, daoInfo } = useDAO();
   const { disconnect } = useAuth();
   const { address } = useAccount();
   const { searchProfileModal } = useDelegates();
+  const { realWallet } = useWallet();
 
   const openProfile = () => address && searchProfileModal(address, 'statement');
   return (
@@ -190,6 +203,18 @@ const LoginAccordion = () => {
           <AccordionIcon />
         </AccordionButton>
         <AccordionPanel pb={4}>
+          {daoInfo.config.ENABLE_PROXY_SUPPORT && (
+            <Flex
+              flexDir="column"
+              align={{ base: 'center', md: 'flex-start' }}
+              px="4"
+            >
+              <Text color={theme.filters.listText}>Real wallet</Text>
+              <Text color={theme.filters.listText}>
+                {truncateAddress(realWallet)}
+              </Text>
+            </Flex>
+          )}
           <Button
             bgColor="transparent"
             _hover={{

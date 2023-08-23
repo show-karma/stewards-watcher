@@ -1,9 +1,16 @@
-import React, { useContext, createContext, useMemo } from 'react';
+import React, {
+  useContext,
+  createContext,
+  useMemo,
+  useState,
+  useEffect,
+} from 'react';
 
 import { useChainModal, useConnectModal } from '@rainbow-me/rainbowkit';
 import { Chain, useAccount, useNetwork } from 'wagmi';
 import { useIsMounted } from 'hooks/useIsMounted';
 import { useDisclosure } from '@chakra-ui/react';
+import { api, API_ROUTES } from 'helpers';
 
 interface IWalletProps {
   isConnected: boolean;
@@ -27,6 +34,8 @@ interface IWalletProps {
   delegateLoginOnClose: () => void;
   delegateLoginOnOpen: () => void;
   address: string | undefined;
+  realWallet: string;
+  compareProxy: (walletToCompare: string) => boolean;
 }
 
 export const WalletContext = createContext({} as IWalletProps);
@@ -41,6 +50,32 @@ export const WalletProvider: React.FC<ProviderProps> = ({ children }) => {
   const { openChainModal } = useChainModal();
   const { isConnected, address } = useAccount();
   const { chain } = useNetwork();
+
+  const [realWallet, setRealWallet] = useState('');
+
+  const checkProxy = async () => {
+    if (!address) return;
+    try {
+      const response = await api.get(API_ROUTES.USER.GET_USER(address));
+      const { address: addressReturn } = response.data.data;
+      setRealWallet(addressReturn);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (address) {
+      checkProxy();
+    }
+  }, [address]);
+
+  const compareProxy = (walletToCompare: string) => {
+    if (!address || !walletToCompare) return false;
+    if (walletToCompare.toLowerCase() === realWallet.toLowerCase()) return true;
+    if (walletToCompare.toLowerCase() === address.toLowerCase()) return true;
+    return false;
+  };
 
   const {
     onClose: connectOnClose,
@@ -81,6 +116,8 @@ export const WalletProvider: React.FC<ProviderProps> = ({ children }) => {
       delegateLoginOnToggle,
       delegateLoginOnClose,
       delegateLoginOnOpen,
+      realWallet,
+      compareProxy,
     }),
     [
       isConnected,
@@ -100,6 +137,8 @@ export const WalletProvider: React.FC<ProviderProps> = ({ children }) => {
       delegateLoginOnToggle,
       delegateLoginOnClose,
       delegateLoginOnOpen,
+      realWallet,
+      compareProxy,
     ]
   );
 

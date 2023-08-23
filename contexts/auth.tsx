@@ -152,6 +152,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
       return false;
     }
     try {
+      console.log(address);
       const nonceMessage = await getNonce(address);
       const signedMessage = await signMessage(nonceMessage);
       if (!signedMessage) return false;
