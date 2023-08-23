@@ -500,8 +500,9 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     }
 
     if (error === 'Not Found' && compareAddress(userToSearch) && isConnected) {
+      const getRealWallet = await checkRealAddress(publicAddress);
       const userWithoutDelegate: IDelegate = {
-        address: userToSearch,
+        address: getRealWallet || userToSearch,
         forumActivity: 0,
         karmaScore: 0,
         discordScore: 0,
