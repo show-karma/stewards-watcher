@@ -18,18 +18,19 @@ import {
   ThreadIcon,
 } from 'components';
 import { GasfreeButton } from 'components/HeaderHat/GasfreeButton';
-import { useDAO, useDelegates, useEditProfile, useWallet } from 'contexts';
+import {
+  useDAO,
+  useDelegates,
+  useEditProfile,
+  useProxy,
+  useWallet,
+} from 'contexts';
 import { useAuth } from 'contexts/auth';
 import { useToasty } from 'hooks';
 import { FC, useMemo, useState } from 'react';
 import { IoCopy } from 'react-icons/io5';
 import { IActiveTab, IProfile } from 'types';
 import { convertHexToRGBA, truncateAddress } from 'utils';
-import {
-  DelegateProfile,
-  DelegateWithProfile,
-} from 'utils/delegate-registry/types';
-import { useAccount } from 'wagmi';
 import { NameEditable, PictureEditable } from '../EditProfile';
 import { MediaIcon } from './MediaIcon';
 import { NavigatorRow } from './NavigatorRow';
@@ -40,7 +41,7 @@ const DelegateCases: FC<{ status?: string; fullAddress: string }> = ({
   fullAddress,
 }) => {
   const { theme } = useDAO();
-  const { compareProxy } = useWallet();
+  const { compareProxy } = useProxy();
   if (compareProxy(fullAddress)) return null;
   if (status === 'withdrawn')
     return (
@@ -71,7 +72,8 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
   const { address: fullAddress, ensName, realName } = profile;
 
   const truncatedAddress = truncateAddress(fullAddress);
-  const { isConnected, openConnectModal, compareProxy } = useWallet();
+  const { isConnected, openConnectModal } = useWallet();
+  const { compareProxy } = useProxy();
   const { theme, daoData, daoInfo } = useDAO();
   const { profileSelected } = useDelegates();
   const { isEditing, setIsEditing, isEditSaving, saveEdit } = useEditProfile();
@@ -212,7 +214,7 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
                   <ThreadIcon boxSize="6" color={theme.modal.header.title} />
                 </MediaIcon>
               </Flex>
-              {daoInfo.config.ENABLE_PROXY_SUPPORT && isEditing && (
+              {daoInfo.config.ENABLE_PROXY_SUPPORT && isSamePerson && (
                 <ProxySwitch />
               )}
             </Flex>
@@ -353,7 +355,8 @@ interface IHeader {
 export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
   const { theme, daoInfo } = useDAO();
   const { address: fullAddress } = profile;
-  const { isConnected, compareProxy } = useWallet();
+  const { isConnected } = useWallet();
+  const { compareProxy } = useProxy();
   const { isDaoAdmin, isAuthenticated } = useAuth();
 
   const isSamePerson = isConnected && compareProxy(fullAddress);

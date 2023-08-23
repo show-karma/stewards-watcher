@@ -16,7 +16,7 @@ import { FC, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useDAO, useEditProfile, useWallet } from 'contexts';
+import { useDAO, useProxy, useWallet } from 'contexts';
 import { truncateAddress } from 'utils';
 
 interface ProxyProps {
@@ -29,7 +29,7 @@ const addressRegex = /^0x[a-fA-F0-9]{40}$/;
 export const Proxy: FC<ProxyProps> = ({ isOpen, onClose }) => {
   const cancelRef = useRef();
   const { theme } = useDAO();
-  const { handleProxy } = useEditProfile();
+  const { handleProxy } = useProxy();
   const { address } = useWallet();
 
   const walletSchema = yup

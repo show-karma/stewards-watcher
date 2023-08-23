@@ -29,8 +29,8 @@ import { useAccount } from 'wagmi';
 import { IBulkDelegatePayload } from 'utils/moonbeam/moonriverDelegateAction';
 import { ITrackBadgeProps } from 'components/DelegationPool/TrackBadge';
 import { numberToWords } from 'utils/numberToWords';
+import { checkRealAddress } from 'utils';
 import { useDAO } from './dao';
-import { useWallet } from './wallet';
 
 interface IDelegateProps {
   delegates: IDelegate[];
@@ -81,7 +81,10 @@ interface IDelegateProps {
     paramToSetup: 'sortby' | 'order' | 'period' | 'statuses' | 'toa' | 'tos',
     paramValue: string
   ) => void;
-  refreshProfileModal: (tab?: IActiveTab) => Promise<void>;
+  refreshProfileModal: (
+    tab?: IActiveTab,
+    addressToFind?: string
+  ) => Promise<void>;
   handleAcceptedTermsOnly: (value: boolean) => void;
   acceptedTermsOnly: boolean;
   handleDelegateOffersToA: (value: boolean) => void;
@@ -478,9 +481,15 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     undefined
   );
 
-  const { compareProxy } = useWallet();
+  const compareProxy = (walletToCompare: string, realWallet: string) => {
+    if (!publicAddress || !walletToCompare) return false;
+    if (walletToCompare.toLowerCase() === realWallet.toLowerCase()) return true;
+    if (walletToCompare.toLowerCase() === publicAddress.toLowerCase())
+      return true;
+    return false;
+  };
 
-  const checkIfUserNotFound = (
+  const checkIfUserNotFound = async (
     userToSearch: string,
     error?: string,
     defaultTab?: IActiveTab
@@ -490,11 +499,17 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       setShouldOpenModal(true);
       return;
     }
+    const foundRealWallet = await checkRealAddress(publicAddress);
+    if (!foundRealWallet) {
+      setProfileSearching(userToSearch);
+      setShouldOpenModal(true);
+      return;
+    }
 
     if (
       error === 'Not Found' &&
       compareProxy &&
-      compareProxy(userToSearch) &&
+      compareProxy(userToSearch, foundRealWallet) &&
       isConnected
     ) {
       const userWithoutDelegate: IDelegate = {
@@ -656,7 +671,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       selectProfile(userFound, checkTab ? shouldOpenTab : undefined);
     } catch (error: any) {
       if (error?.response?.data && error?.response?.data.error) {
-        checkIfUserNotFound(
+        await checkIfUserNotFound(
           userToSearch,
           error?.response?.data.error.error,
           defaultTab
@@ -665,12 +680,15 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     }
   };
 
-  const refreshProfileModal = async (tab?: IActiveTab) => {
+  const refreshProfileModal = async (
+    tab?: IActiveTab,
+    addressToFind?: string
+  ) => {
     try {
       const axiosClient = await api.get(`/dao/find-delegate`, {
         params: {
           dao: config.DAO_KARMA_ID,
-          user: profileSelected?.address,
+          user: addressToFind || profileSelected?.address,
         },
       });
       const { data } = axiosClient.data;

@@ -1,12 +1,12 @@
 import { Flex, Switch, Text, useDisclosure } from '@chakra-ui/react';
 import { Proxy } from 'components/Modals/Proxy';
-import { useEditProfile } from 'contexts';
+import { useProxy } from 'contexts';
 import { FC } from 'react';
 
 export const ProxySwitch: FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { hasProxy, handleProxy } = useEditProfile();
+  const { hasProxy, handleProxy } = useProxy();
 
   return (
     <>

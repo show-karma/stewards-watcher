@@ -16,6 +16,7 @@ import { useDelegates } from './delegates';
 import { useDAO } from './dao';
 import { useAuth } from './auth';
 import { useWallet } from './wallet';
+import { useProxy } from './proxy';
 
 interface IEditProfileProps {
   isEditing: boolean;
@@ -51,8 +52,6 @@ interface IEditProfileProps {
   isLoadingToA: boolean;
   editTracks: (selectedTrack: number) => void;
   newTracks: number[];
-  handleProxy: (coldWalletAddress: string) => Promise<void>;
-  hasProxy: boolean;
 }
 
 export const EditProfileContext = createContext({} as IEditProfileProps);
@@ -114,6 +113,8 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const [isLoadingStatement, setIsLoadingStatement] = useState(false);
   const [isLoadingToA, setIsLoadingToA] = useState(false);
+
+  const { compareProxy } = useProxy();
 
   const profile: IProfile = {
     address: profileSelected?.address || '',
@@ -259,82 +260,6 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       label: 'Interests',
       displayAs: 'interests',
     });
-  };
-
-  const [hasProxy, setHasProxy] = useState(false);
-
-  const { compareProxy } = useWallet();
-
-  const checkProxy = async () => {
-    if (!profileSelected?.address) return;
-    try {
-      const response = await api.get(
-        API_ROUTES.USER.GET_USER(profileSelected?.address)
-      );
-      const { address: addressReturn } = response.data.data;
-      if (addressReturn.toLowerCase() === address?.toLowerCase()) {
-        setHasProxy(false);
-      } else {
-        setHasProxy(true);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    checkProxy();
-  }, [profileSelected]);
-
-  const handleProxy = async (coldWalletAddress: string) => {
-    if (!profileSelected?.address) return;
-    const authorizedAPI = axios.create({
-      timeout: 30000,
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: authToken ? `Bearer ${authToken}` : '',
-      },
-    });
-    if (hasProxy) {
-      try {
-        await authorizedAPI.delete(API_ROUTES.USER.DELETE_PROXY);
-        toast({
-          title:
-            'Your proxy and real addresses have been successfully unlinked.',
-          status: 'success',
-        });
-        disconnect();
-      } catch (error) {
-        toast({
-          title: `We could not unlink the addresses. Please make sure ${address} is the proxy for ${profileSelected?.address}.`,
-          status: 'error',
-        });
-      }
-    } else {
-      try {
-        await authorizedAPI.post(
-          API_ROUTES.USER.PROXY(profileSelected?.address),
-          {
-            daoName: daoInfo.config.DAO_KARMA_ID,
-            coldWalletAddress,
-          }
-        );
-        toast({
-          title: 'Your proxy and real addresses have been successfully linked.',
-          status: 'success',
-        });
-      } catch (error) {
-        toast({
-          title: `We could not link the addresses. Please make sure ${profileSelected?.address} is the proxy for ${coldWalletAddress}.`,
-          status: 'error',
-        });
-        console.log(error);
-      }
-    }
-    setTimeout(() => {
-      checkProxy();
-    }, 500);
   };
 
   const sendAcceptedTerms = async () => {
@@ -723,8 +648,6 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       isLoadingToA,
       editTracks,
       newTracks,
-      handleProxy,
-      hasProxy,
     }),
     [
       isEditing,
@@ -756,8 +679,6 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       isLoadingToA,
       editTracks,
       newTracks,
-      handleProxy,
-      hasProxy,
     ]
   );
 
