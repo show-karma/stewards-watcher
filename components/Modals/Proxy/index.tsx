@@ -29,7 +29,7 @@ const addressRegex = /^0x[a-fA-F0-9]{40}$/;
 export const LinkProxy: FC<ProxyProps> = ({ isOpen, onClose }) => {
   const cancelRef = useRef();
   const { theme } = useDAO();
-  const { handleProxy } = useProxy();
+  const { addProxy } = useProxy();
   const { address } = useWallet();
 
   const walletSchema = yup
@@ -57,7 +57,7 @@ export const LinkProxy: FC<ProxyProps> = ({ isOpen, onClose }) => {
   });
 
   const onSubmit = async (values: FormDataDiscussionWallet) => {
-    await handleProxy(values.wallet).then(() => {
+    await addProxy(values.wallet).then(() => {
       onClose();
     });
   };

@@ -6,16 +6,10 @@ import {
   AlertDialogHeader,
   AlertDialogOverlay,
   Button,
-  Flex,
-  FormControl,
-  Input,
   Text,
 } from '@chakra-ui/react';
 import { FC, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import { useDAO, useProxy, useWallet } from 'contexts';
+import { useProxy, useWallet } from 'contexts';
 import { truncateAddress } from 'utils';
 
 interface ProxyProps {
@@ -27,11 +21,11 @@ export const UnlinkProxy: FC<ProxyProps> = ({ isOpen, onClose }) => {
   const cancelRef = useRef();
   const { address } = useWallet();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { handleProxy, realWallet } = useProxy();
+  const { removeProxy, realWallet } = useProxy();
 
   const submit = async () => {
     setIsSubmitting(true);
-    await handleProxy('');
+    await removeProxy();
     setIsSubmitting(false);
   };
 

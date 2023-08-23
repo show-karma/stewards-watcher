@@ -17,10 +17,11 @@ import { useAuth } from './auth';
 import { useWallet } from './wallet';
 
 interface IProxyContextProps {
-  handleProxy: (coldWalletAddress: string) => Promise<void>;
+  addProxy: (coldWalletAddress: string) => Promise<void>;
   hasProxy: boolean;
   realWallet: string;
   compareProxy: (walletToCompare: string) => boolean;
+  removeProxy: () => Promise<void>;
 }
 
 export const ProxyContext = createContext({} as IProxyContextProps);
@@ -77,7 +78,7 @@ export const ProxyProvider: React.FC<ProviderProps> = ({ children }) => {
     setupRealAddress();
   }, [address]);
 
-  const handleProxy = async (coldWalletAddress: string) => {
+  const removeProxy = async () => {
     if (!profileSelected?.address) return;
     const authorizedAPI = axios.create({
       timeout: 30000,
@@ -87,42 +88,56 @@ export const ProxyProvider: React.FC<ProviderProps> = ({ children }) => {
         Authorization: authToken ? `Bearer ${authToken}` : '',
       },
     });
-    if (hasProxy) {
-      try {
-        await authorizedAPI.delete(API_ROUTES.USER.DELETE_PROXY);
-        toast({
-          title:
-            'The proxy wallet account has been unlinked. Please log in again.',
-          status: 'success',
-        });
-        disconnect();
-      } catch (error) {
-        toast({
-          title: `We could not unlink the addresses. Please make sure ${address} is the proxy for ${profileSelected?.address}.`,
-          status: 'error',
-        });
-      }
-    } else {
-      try {
-        await authorizedAPI.post(
-          API_ROUTES.USER.PROXY(profileSelected?.address),
-          {
-            daoName: daoInfo.config.DAO_KARMA_ID,
-            coldWalletAddress,
-          }
-        );
-        toast({
-          title: 'Your proxy and real addresses have been successfully linked.',
-          status: 'success',
-        });
-        refreshProfileModal('statement', coldWalletAddress);
-      } catch (error) {
-        toast({
-          title: `We could not link the addresses. Please make sure ${profileSelected?.address} is the proxy for ${coldWalletAddress}.`,
-          status: 'error',
-        });
-        console.log(error);
-      }
+    try {
+      await authorizedAPI.delete(API_ROUTES.USER.DELETE_PROXY);
+      toast({
+        title:
+          'The proxy wallet account has been unlinked. Please log in again.',
+        status: 'success',
+      });
+      disconnect();
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: `We could not unlink the addresses. Please make sure ${address} is the proxy for ${profileSelected?.address}.`,
+        status: 'error',
+      });
+    }
+    setTimeout(() => {
+      checkProxy(address as string);
+    }, 500);
+  };
+
+  const addProxy = async (coldWalletAddress: string) => {
+    if (!profileSelected?.address) return;
+    const authorizedAPI = axios.create({
+      timeout: 30000,
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: authToken ? `Bearer ${authToken}` : '',
+      },
+    });
+
+    try {
+      await authorizedAPI.post(
+        API_ROUTES.USER.PROXY(profileSelected?.address),
+        {
+          daoName: daoInfo.config.DAO_KARMA_ID,
+          coldWalletAddress,
+        }
+      );
+      toast({
+        title: 'Your proxy and real addresses have been successfully linked.',
+        status: 'success',
+      });
+      refreshProfileModal('statement', coldWalletAddress);
+    } catch (error) {
+      toast({
+        title: `We could not link the addresses. Please make sure ${profileSelected?.address} is the proxy for ${coldWalletAddress}.`,
+        status: 'error',
+      });
+      console.log(error);
     }
     setTimeout(() => {
       checkProxy(address as string);
@@ -144,12 +159,13 @@ export const ProxyProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const providerValue = useMemo(
     () => ({
-      handleProxy,
+      addProxy,
       hasProxy,
       realWallet,
       compareProxy,
+      removeProxy,
     }),
-    [handleProxy, hasProxy, realWallet, compareProxy]
+    [addProxy, hasProxy, realWallet, compareProxy, removeProxy]
   );
 
   return isMounted ? (
