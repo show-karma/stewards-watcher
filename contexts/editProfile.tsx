@@ -438,7 +438,10 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       }
     }
 
-    if (daoInfo.config.DAO_SUPPORTS_TOS) {
+    if (
+      daoInfo.config.DAO_SUPPORTS_TOS &&
+      acceptedTerms !== profileSelected?.acceptedTOS
+    ) {
       try {
         await sendAcceptedTerms();
       } catch (error: any) {

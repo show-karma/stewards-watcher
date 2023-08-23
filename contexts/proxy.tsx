@@ -67,7 +67,7 @@ export const ProxyProvider: React.FC<ProviderProps> = ({ children }) => {
     if (!address) return;
     try {
       const addressFound = await checkRealAddress(address as string);
-      setRealWallet(addressFound);
+      setRealWallet(addressFound || '');
     } catch (error) {
       console.log(error);
     }
@@ -92,7 +92,7 @@ export const ProxyProvider: React.FC<ProviderProps> = ({ children }) => {
         await authorizedAPI.delete(API_ROUTES.USER.DELETE_PROXY);
         toast({
           title:
-            'Your proxy and real addresses have been successfully unlinked.',
+            'The proxy wallet account has been unlinked. Please log in again.',
           status: 'success',
         });
         disconnect();

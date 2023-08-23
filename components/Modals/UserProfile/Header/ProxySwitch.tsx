@@ -1,12 +1,22 @@
 import { Flex, Switch, Text, useDisclosure } from '@chakra-ui/react';
-import { Proxy } from 'components/Modals/Proxy';
+import { LinkProxy } from 'components/Modals/Proxy';
+import { UnlinkProxy } from 'components/Modals/Proxy/Unlink';
 import { useProxy } from 'contexts';
 import { FC } from 'react';
 
 export const ProxySwitch: FC = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenLink,
+    onOpen: onOpenLink,
+    onClose: onCloseLink,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenUnlink,
+    onOpen: onOpenUnlink,
+    onClose: onCloseUnlink,
+  } = useDisclosure();
 
-  const { hasProxy, handleProxy } = useProxy();
+  const { hasProxy } = useProxy();
 
   return (
     <>
@@ -17,14 +27,15 @@ export const ProxySwitch: FC = () => {
           isChecked={hasProxy}
           onChange={() => {
             if (hasProxy) {
-              handleProxy('');
+              onOpenUnlink?.();
             } else {
-              onOpen?.();
+              onOpenLink?.();
             }
           }}
         />
       </Flex>
-      <Proxy isOpen={isOpen} onClose={onClose} />
+      <LinkProxy isOpen={isOpenLink} onClose={onCloseLink} />
+      <UnlinkProxy isOpen={isOpenUnlink} onClose={onCloseUnlink} />
     </>
   );
 };

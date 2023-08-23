@@ -481,9 +481,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     undefined
   );
 
-  const compareProxy = (walletToCompare: string, realWallet: string) => {
+  const compareAddress = (walletToCompare: string) => {
     if (!publicAddress || !walletToCompare) return false;
-    if (walletToCompare.toLowerCase() === realWallet.toLowerCase()) return true;
     if (walletToCompare.toLowerCase() === publicAddress.toLowerCase())
       return true;
     return false;
@@ -499,19 +498,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       setShouldOpenModal(true);
       return;
     }
-    const foundRealWallet = await checkRealAddress(publicAddress);
-    if (!foundRealWallet) {
-      setProfileSearching(userToSearch);
-      setShouldOpenModal(true);
-      return;
-    }
 
-    if (
-      error === 'Not Found' &&
-      compareProxy &&
-      compareProxy(userToSearch, foundRealWallet) &&
-      isConnected
-    ) {
+    if (error === 'Not Found' && compareAddress(userToSearch) && isConnected) {
       const userWithoutDelegate: IDelegate = {
         address: userToSearch,
         forumActivity: 0,

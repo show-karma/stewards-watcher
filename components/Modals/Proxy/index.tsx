@@ -26,7 +26,7 @@ interface ProxyProps {
 
 const addressRegex = /^0x[a-fA-F0-9]{40}$/;
 
-export const Proxy: FC<ProxyProps> = ({ isOpen, onClose }) => {
+export const LinkProxy: FC<ProxyProps> = ({ isOpen, onClose }) => {
   const cancelRef = useRef();
   const { theme } = useDAO();
   const { handleProxy } = useProxy();
