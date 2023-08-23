@@ -491,7 +491,12 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       return;
     }
 
-    if (error === 'Not Found' && compareProxy(userToSearch) && isConnected) {
+    if (
+      error === 'Not Found' &&
+      compareProxy &&
+      compareProxy(userToSearch) &&
+      isConnected
+    ) {
       const userWithoutDelegate: IDelegate = {
         address: userToSearch,
         forumActivity: 0,

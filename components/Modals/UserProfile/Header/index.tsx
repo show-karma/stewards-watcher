@@ -108,11 +108,7 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
       });
       return;
     }
-    console.log(
-      compareProxy(fullAddress) || isDaoAdmin,
-      isConnected,
-      isAuthenticated
-    );
+
     if (
       (compareProxy(fullAddress) || isDaoAdmin) &&
       isConnected &&

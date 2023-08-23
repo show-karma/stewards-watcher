@@ -22,6 +22,7 @@ export const API_ROUTES = {
     GET_USER: (address: string) => `${KARMA_API.base_url}/user/${address}`,
     PROXY: (address: string) =>
       `${KARMA_API.base_url}/user/proxy-wallet/${address}`,
+    DELETE_PROXY: `${KARMA_API.base_url}/user/remove/proxy-wallet`,
   },
   DELEGATE: {
     TERMS_OF_SERVICE: (daoName: string) =>

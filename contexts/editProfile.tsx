@@ -91,7 +91,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const { daoInfo } = useDAO();
   const { address } = useAccount();
-  const { authToken, isAuthenticated, isDaoAdmin } = useAuth();
+  const { authToken, isAuthenticated, isDaoAdmin, disconnect } = useAuth();
   const { config } = daoInfo;
 
   const defaultInterests = delegatesInterests.length
@@ -288,20 +288,31 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const handleProxy = async (coldWalletAddress: string) => {
     if (!profileSelected?.address) return;
-    try {
-      const authorizedAPI = axios.create({
-        timeout: 30000,
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: authToken ? `Bearer ${authToken}` : '',
-        },
-      });
-      if (hasProxy) {
-        await authorizedAPI.delete(
-          API_ROUTES.USER.PROXY(profileSelected?.address)
-        );
-      } else {
+    const authorizedAPI = axios.create({
+      timeout: 30000,
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: authToken ? `Bearer ${authToken}` : '',
+      },
+    });
+    if (hasProxy) {
+      try {
+        await authorizedAPI.delete(API_ROUTES.USER.DELETE_PROXY);
+        toast({
+          title:
+            'Your proxy and real addresses have been successfully unlinked.',
+          status: 'success',
+        });
+        disconnect();
+      } catch (error) {
+        toast({
+          title: `We could not unlink the addresses. Please make sure ${address} is the proxy for ${profileSelected?.address}.`,
+          status: 'error',
+        });
+      }
+    } else {
+      try {
         await authorizedAPI.post(
           API_ROUTES.USER.PROXY(profileSelected?.address),
           {
@@ -309,18 +320,21 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
             coldWalletAddress,
           }
         );
+        toast({
+          title: 'Your proxy and real addresses have been successfully linked.',
+          status: 'success',
+        });
+      } catch (error) {
+        toast({
+          title: `We could not link the addresses. Please make sure ${profileSelected?.address} is the proxy for ${coldWalletAddress}.`,
+          status: 'error',
+        });
+        console.log(error);
       }
-      toast({
-        title: 'Your proxy and real addresses have been successfully linked.',
-        status: 'success',
-      });
-    } catch (error) {
-      toast({
-        title: `We could not link the addresses. Please make sure ${profileSelected?.address} is the proxy for ${coldWalletAddress}.`,
-        status: 'error',
-      });
-      console.log(error);
     }
+    setTimeout(() => {
+      checkProxy();
+    }, 500);
   };
 
   const sendAcceptedTerms = async () => {

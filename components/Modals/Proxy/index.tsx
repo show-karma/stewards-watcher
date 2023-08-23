@@ -55,7 +55,9 @@ export const Proxy: FC<ProxyProps> = ({ isOpen, onClose }) => {
   });
 
   const onSubmit = async (values: FormDataDiscussionWallet) => {
-    await handleProxy(values.wallet);
+    await handleProxy(values.wallet).then(() => {
+      onClose();
+    });
   };
 
   return (
@@ -68,8 +70,8 @@ export const Proxy: FC<ProxyProps> = ({ isOpen, onClose }) => {
     >
       <AlertDialogOverlay />
 
-      <AlertDialogContent>
-        <AlertDialogHeader>Use as proxy</AlertDialogHeader>
+      <AlertDialogContent bgColor="gray.900">
+        <AlertDialogHeader color="white">Use as proxy</AlertDialogHeader>
         <AlertDialogCloseButton />
         <AlertDialogBody py="8">
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -80,7 +82,7 @@ export const Proxy: FC<ProxyProps> = ({ isOpen, onClose }) => {
                 justifyContent="flex-start"
                 gap="2"
               >
-                <Text>Cold wallet address</Text>
+                <Text color="white">Cold wallet address</Text>
                 <Input
                   px="4"
                   py="2"
@@ -89,6 +91,7 @@ export const Proxy: FC<ProxyProps> = ({ isOpen, onClose }) => {
                   minW="60"
                   maxW="60"
                   w="max-content"
+                  color="white"
                   {...register('wallet')}
                 />
                 {!isValid && (
@@ -105,6 +108,8 @@ export const Proxy: FC<ProxyProps> = ({ isOpen, onClose }) => {
                 _hover={{}}
                 _disabled={{ opacity: '0.4' }}
                 isLoading={isSubmitting}
+                bgColor="black"
+                color="white"
               >
                 Link wallets
               </Button>
