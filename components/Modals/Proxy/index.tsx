@@ -16,7 +16,8 @@ import { FC, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useDAO, useEditProfile } from 'contexts';
+import { useDAO, useEditProfile, useWallet } from 'contexts';
+import { truncateAddress } from 'utils';
 
 interface ProxyProps {
   isOpen: boolean;
@@ -29,6 +30,7 @@ export const Proxy: FC<ProxyProps> = ({ isOpen, onClose }) => {
   const cancelRef = useRef();
   const { theme } = useDAO();
   const { handleProxy } = useEditProfile();
+  const { address } = useWallet();
 
   const walletSchema = yup
     .object({
@@ -71,9 +73,15 @@ export const Proxy: FC<ProxyProps> = ({ isOpen, onClose }) => {
       <AlertDialogOverlay />
 
       <AlertDialogContent bgColor="gray.900">
-        <AlertDialogHeader color="white">Use as proxy</AlertDialogHeader>
+        <AlertDialogHeader color="white">Proxy account setup</AlertDialogHeader>
         <AlertDialogCloseButton />
-        <AlertDialogBody py="8">
+        <AlertDialogBody pb="8">
+          <Text
+            color="white"
+            mb="5"
+          >{`If you would like to use ${truncateAddress(
+            address as string
+          )} as proxy of a real account, please enter the real account address below.`}</Text>
           <form onSubmit={handleSubmit(onSubmit)}>
             <FormControl isInvalid={!!errors.wallet}>
               <Flex
@@ -82,15 +90,14 @@ export const Proxy: FC<ProxyProps> = ({ isOpen, onClose }) => {
                 justifyContent="flex-start"
                 gap="2"
               >
-                <Text color="white">Cold wallet address</Text>
+                <Text color="white">Real account address</Text>
                 <Input
                   px="4"
                   py="2"
                   borderWidth="1px"
                   borderColor={theme.modal.statement.sidebar.item}
                   minW="60"
-                  maxW="60"
-                  w="max-content"
+                  w="full"
                   color="white"
                   {...register('wallet')}
                 />
@@ -111,7 +118,7 @@ export const Proxy: FC<ProxyProps> = ({ isOpen, onClose }) => {
                 bgColor="black"
                 color="white"
               >
-                Link wallets
+                Link accounts
               </Button>
             </FormControl>
           </form>
