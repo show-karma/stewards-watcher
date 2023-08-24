@@ -1,4 +1,10 @@
-import React, { useContext, createContext, useMemo, useState } from 'react';
+import React, {
+  useContext,
+  createContext,
+  useMemo,
+  useState,
+  useEffect,
+} from 'react';
 import { useIsMounted } from 'hooks/useIsMounted';
 import { useToasty } from 'hooks';
 import { Hex, ICustomFields, IProfile } from 'types';
@@ -9,6 +15,8 @@ import { DelegateRegistryContract } from 'utils/delegate-registry/DelegateRegist
 import { useDelegates } from './delegates';
 import { useDAO } from './dao';
 import { useAuth } from './auth';
+import { useWallet } from './wallet';
+import { useProxy } from './proxy';
 
 interface IEditProfileProps {
   isEditing: boolean;
@@ -82,7 +90,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const { daoInfo } = useDAO();
   const { address } = useAccount();
-  const { authToken, isAuthenticated, isDaoAdmin } = useAuth();
+  const { authToken, isAuthenticated, isDaoAdmin, disconnect } = useAuth();
   const { config } = daoInfo;
 
   const defaultInterests = delegatesInterests.length
@@ -105,6 +113,8 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const [isLoadingStatement, setIsLoadingStatement] = useState(false);
   const [isLoadingToA, setIsLoadingToA] = useState(false);
+
+  const { compareProxy } = useProxy();
 
   const profile: IProfile = {
     address: profileSelected?.address || '',
@@ -428,7 +438,10 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       }
     }
 
-    if (daoInfo.config.DAO_SUPPORTS_TOS) {
+    if (
+      daoInfo.config.DAO_SUPPORTS_TOS &&
+      acceptedTerms !== profileSelected?.acceptedTOS
+    ) {
       try {
         await sendAcceptedTerms();
       } catch (error: any) {
@@ -570,7 +583,8 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
   useMemo(() => {
     setIsEditing(false);
     if (
-      (address?.toLowerCase() === profileSelected?.address?.toLowerCase() &&
+      (profileSelected &&
+        compareProxy(profileSelected.address) &&
         isConnected &&
         isAuthenticated) ||
       isDaoAdmin
