@@ -2,6 +2,7 @@
 import {
   DelegatesProvider,
   GovernanceVotesProvider,
+  ProxyProvider,
   useDAO,
   WalletProvider,
 } from 'contexts';
@@ -104,22 +105,24 @@ export const DAOContainer: React.FC<IDAOContainer> = ({
           <WalletProvider>
             <AuthProvider>
               <GovernanceVotesProvider>
-                <HandlesProvider>
-                  <Flex
-                    w="full"
-                    flexDir="column"
-                    align="center"
-                    background={theme.secondBg || theme.bodyBg}
-                  >
-                    <HeaderHat
-                      shouldOpenDelegateToAnyone={shouldOpenDelegateToAnyone}
-                    />
-                    <MainLayout>
-                      <BodyTitle />
-                      <DelegatesList pathUser={user} />
-                    </MainLayout>
-                  </Flex>
-                </HandlesProvider>
+                <ProxyProvider>
+                  <HandlesProvider>
+                    <Flex
+                      w="full"
+                      flexDir="column"
+                      align="center"
+                      background={theme.secondBg || theme.bodyBg}
+                    >
+                      <HeaderHat
+                        shouldOpenDelegateToAnyone={shouldOpenDelegateToAnyone}
+                      />
+                      <MainLayout>
+                        <BodyTitle />
+                        <DelegatesList pathUser={user} />
+                      </MainLayout>
+                    </Flex>
+                  </HandlesProvider>
+                </ProxyProvider>
               </GovernanceVotesProvider>
             </AuthProvider>
           </WalletProvider>

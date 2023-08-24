@@ -2,6 +2,7 @@ import {
   DelegatesProvider,
   GovernanceVotesProvider,
   HandlesProvider,
+  ProxyProvider,
   TokenHoldersProvider,
   useDAO,
   WalletProvider,
@@ -79,23 +80,25 @@ export const TokenHoldersContainer: React.FC<IDAOContainer> = ({ user }) => {
             <AuthProvider>
               <GovernanceVotesProvider>
                 <HandlesProvider>
-                  <TokenHoldersProvider>
-                    <Flex
-                      w="full"
-                      flexDir="column"
-                      align="center"
-                      background={theme.secondBg || theme.bodyBg}
-                    >
-                      <HeaderHat />
-                      <MainLayout
-                        px="0"
+                  <ProxyProvider>
+                    <TokenHoldersProvider>
+                      <Flex
                         w="full"
-                        bgColor={theme.tokenHolders.bg}
+                        flexDir="column"
+                        align="center"
+                        background={theme.secondBg || theme.bodyBg}
                       >
-                        <TokenHolders />
-                      </MainLayout>
-                    </Flex>
-                  </TokenHoldersProvider>
+                        <HeaderHat />
+                        <MainLayout
+                          px="0"
+                          w="full"
+                          bgColor={theme.tokenHolders.bg}
+                        >
+                          <TokenHolders />
+                        </MainLayout>
+                      </Flex>
+                    </TokenHoldersProvider>
+                  </ProxyProvider>
                 </HandlesProvider>
               </GovernanceVotesProvider>
             </AuthProvider>
