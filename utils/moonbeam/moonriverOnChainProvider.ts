@@ -191,7 +191,7 @@ const delegateHistoryQuery = (address: string, daoName: string) => gql`
     trackId
     amount
     toDelegate
-    
+    conviction
     timestamp
 	}
   undelegatedHistories (
