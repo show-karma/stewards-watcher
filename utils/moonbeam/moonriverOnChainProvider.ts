@@ -191,7 +191,7 @@ const delegateHistoryQuery = (address: string, daoName: string) => gql`
     trackId
     amount
     toDelegate
-    conviction
+    
     timestamp
 	}
   undelegatedHistories (
@@ -208,7 +208,7 @@ const delegateHistoryQuery = (address: string, daoName: string) => gql`
   }
   unlockeds(
     first: 1000,
-   where: {caller: "${address.toLowerCase()}"}
+  where: {caller: "${address.toLowerCase()}"}
   orderBy: blockTimestamp
   orderDirection: desc
   ) {
@@ -276,16 +276,18 @@ export async function moonriverActiveDelegatedTracks(
     )
     .map(delegatingHistory => ({
       trackId: delegatingHistory.trackId,
-      locked:
+      locked: Math.max(
         (delegationCount[delegatingHistory.trackId] || 0) -
-        (unlockedCount[delegatingHistory.trackId] || 0),
+          (unlockedCount[delegatingHistory.trackId] || 0),
+        0
+      ),
       amount: ethers.utils.formatEther(delegatingHistory.amount),
       active:
-        (undelegationCount[delegatingHistory.trackId] || 0) <
-        (delegationCount[delegatingHistory.trackId] || 0),
+        (delegationCount[delegatingHistory.trackId] || 0) >
+        (undelegationCount[delegatingHistory.trackId] || 0),
       toDelegate: delegatingHistory.toDelegate,
       timestamp: delegatingHistory.timestamp,
-      conviction: delegatingHistory.conviction,
+      conviction: delegatingHistory.conviction || 0,
     }));
 
   const unique = delegations.reduce((acc, cur) => {
