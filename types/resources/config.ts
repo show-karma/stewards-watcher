@@ -85,8 +85,8 @@ export interface IDAOConfig {
   DISABLE_EMAIL_INPUT?: boolean;
   HIDE_FOR_DELEGATES?: IForDelegates[];
   PROPOSAL_LINK?: {
-    onChain?: (proposalId: number | string) => string;
-    offChain?: (proposalId: number | string) => string;
+    onChain?: (proposalId: number | string, version?: string) => string;
+    offChain?: (proposalId: number | string, version?: string) => string;
   };
   DELEGATION_CUSTOM_AMOUNT?: boolean;
   DELEGATION_CUSTOM_CONVICTION?: boolean;

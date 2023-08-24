@@ -8,4 +8,5 @@ export interface IChainRow {
   voteId?: string | null;
   finished?: boolean | null;
   trackId?: number | null;
+  version?: string;
 }
