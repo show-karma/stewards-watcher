@@ -9,6 +9,7 @@ import { IForumType } from './forum';
 import { IStats, IStatsID } from './stats';
 import { IVotingHistoryColumn } from './modal';
 import { IForDelegates } from './header';
+import { IActiveDelegatedTracks } from 'utils';
 
 type JsonRpcProviderConfig = {
   rpc: (chain: Chain) => {
@@ -100,6 +101,10 @@ export interface IDAOConfig {
   };
   TRACKS_DICTIONARY?: { [key: string]: { emoji: string; description: string } };
   // TODO: type anys
+  GET_ACTIVE_DELEGATIONS_ACTION?: (
+    address: string,
+    daoName: string
+  ) => Promise<IActiveDelegatedTracks[]>;
   /**
    * Defines a function to bulk delegate
    * @param payload

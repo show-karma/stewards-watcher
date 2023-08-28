@@ -16,12 +16,7 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useMemo, useState } from 'react';
 import { NumberIsh } from 'types';
-import {
-  formatNumber,
-  IActiveDelegatedTracks,
-  moonriverActiveDelegatedTracks,
-  truncateAddress,
-} from 'utils';
+import { IActiveDelegatedTracks, truncateAddress } from 'utils';
 import { useMixpanel, useToasty } from 'hooks';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { writeContract, waitForTransaction } from '@wagmi/core';
@@ -116,10 +111,11 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
   };
 
   const getActiveDelegations = async () => {
-    if (address) {
+    const { GET_ACTIVE_DELEGATIONS_ACTION } = daoInfo.config;
+    if (address && GET_ACTIVE_DELEGATIONS_ACTION) {
       try {
         setIsLoading(true);
-        const foundTracks = await moonriverActiveDelegatedTracks(
+        const foundTracks = await GET_ACTIVE_DELEGATIONS_ACTION(
           address,
           daoInfo.config.DAO_KARMA_ID
         );
