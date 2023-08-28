@@ -1,6 +1,7 @@
 import { IDAOConfig, IDAOTheme } from 'types';
 import { moonriverDelegateAction } from 'utils/moonbeam/moonriverDelegateAction';
 import {
+  moonriverActiveDelegatedTracks,
   moonriverConvictionOptions,
   moonriverDelegateErrors,
   moonriverGetLockedTokensAction,
@@ -56,6 +57,7 @@ const config: IDAOConfig = {
   ALLOW_BULK_DELEGATE: true,
   BULK_DELEGATE_MAXSIZE: 1,
   ALLOW_UNDELEGATE: true,
+  GET_ACTIVE_DELEGATIONS_ACTION: moonriverActiveDelegatedTracks,
   UNDELEGATE_ACTION: moonriverUndelegateAction(
     bulkContractAddr,
     delegateContractAddr,
