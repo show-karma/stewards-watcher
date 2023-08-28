@@ -289,7 +289,9 @@ export async function moonbeamActiveDelegatedTracks(
 }
 
 export async function moonbeamGetLockedTokensAction(address: Hex) {
-  const client = await MoonbeamWSC.createClient();
+  const client = await MoonbeamWSC.createClient(
+    'wss://moonbeam.public.blastapi.io'
+  );
   const [, total] = await client.getLockedBalanceOf(address, true);
 
   return total;

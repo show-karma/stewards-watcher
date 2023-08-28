@@ -3,9 +3,10 @@ import { moonriverDelegateAction } from 'utils/moonbeam/moonriverDelegateAction'
 import {
   moonriverConvictionOptions,
   moonriverDelegateErrors,
-  moonriverGetLockedTokensAction,
   moonbeamOnChainProvider,
   moonriverTracksDictionary,
+  moonbeamGetLockedTokensAction,
+  moonbeamActiveDelegatedTracks,
 } from 'utils';
 import { moonbeam } from 'utils/moonbeam/network';
 import { RPCS } from 'helpers';
@@ -67,7 +68,8 @@ const config: IDAOConfig = {
     batchContractAbi,
     false
   ),
-  GET_LOCKED_TOKENS_ACTION: moonriverGetLockedTokensAction,
+  GET_ACTIVE_DELEGATIONS_ACTION: moonbeamActiveDelegatedTracks,
+  GET_LOCKED_TOKENS_ACTION: moonbeamGetLockedTokensAction,
   DAO_EXT_VOTES_PROVIDER: {
     onChain: moonbeamOnChainProvider,
   },
