@@ -6,6 +6,7 @@ import { ethers } from 'ethers';
 import { api } from 'helpers';
 import axios from 'axios';
 import { MoonbeamWSC } from './moonbeamwsc';
+import { IActiveDelegatedTracks } from './moonriverOnChainProvider';
 
 type VoteResponse = {
   proposals: {
@@ -29,8 +30,9 @@ interface IProposal {
 }
 
 const getVoteReason = (vote: any) => {
-  if (!vote.reason || typeof vote.reason === 'boolean') return 'Did not vote';
+  if (!vote?.reason) return 'Did not vote';
   const reason = vote.reason.toLowerCase() === 'for' ? 1 : 0;
+  console.log(vote);
   return reason;
 };
 
@@ -39,7 +41,6 @@ const getVoteReason = (vote: any) => {
  * @param proposals
  * @param votes
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function concatOnChainProposals(proposals: any[], votes: any[]) {
   const array: IChainRow[] = [];
 
@@ -87,7 +88,7 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
 async function proposalsWithMetadata(): Promise<
   (MoonbeamProposal & { proposal: string; trackId: NumberIsh })[]
 > {
-  const { data } = await axios.get('/api/proposals?dao=moonriver');
+  const { data } = await axios.get('/api/proposals?dao=moonbeam');
   return data;
 }
 
@@ -126,7 +127,7 @@ async function getDaoProposals(
 }
 
 const providerUrl =
-  'https://api.thegraph.com/subgraphs/name/show-karma/moonriver-dao-delegate-voting';
+  'https://api.thegraph.com/subgraphs/name/show-karma/moonbeam-dao-delegate-voting';
 
 async function fetchOnChainVotes(daoName: string | string[], address: string) {
   if (!daoName || !address) return [];
@@ -209,23 +210,13 @@ const delegateHistoryQuery = (address: string, daoName: string) => gql`
   }
   unlockeds(
     first: 1000,
-  where: {caller: "${address.toLowerCase()}"}
+   where: {caller: "${address.toLowerCase()}"}
   orderBy: blockTimestamp
   orderDirection: desc
   ) {
     trackId
   }
 }`;
-
-export interface IActiveDelegatedTracks {
-  trackId: NumberIsh;
-  locked: number;
-  amount: string;
-  active: boolean;
-  toDelegate: string;
-  conviction: number;
-  timestamp: number;
-}
 
 /**
  * Fetches the active delegated tracks for a given address
@@ -234,9 +225,9 @@ export interface IActiveDelegatedTracks {
  * @param daoName
  * @returns array of track ids that is currently delegated
  */
-export async function moonriverActiveDelegatedTracks(
+export async function moonbeamActiveDelegatedTracks(
   address: string,
-  daoName = 'moonriver'
+  daoName = 'moonbeam'
 ): Promise<IActiveDelegatedTracks[]> {
   const onChainClient = new ApolloClient({
     uri: providerUrl,
@@ -277,18 +268,16 @@ export async function moonriverActiveDelegatedTracks(
     )
     .map(delegatingHistory => ({
       trackId: delegatingHistory.trackId,
-      locked: Math.max(
+      locked:
         (delegationCount[delegatingHistory.trackId] || 0) -
-          (unlockedCount[delegatingHistory.trackId] || 0),
-        0
-      ),
+        (unlockedCount[delegatingHistory.trackId] || 0),
       amount: ethers.utils.formatEther(delegatingHistory.amount),
       active:
-        (delegationCount[delegatingHistory.trackId] || 0) >
-        (undelegationCount[delegatingHistory.trackId] || 0),
+        (undelegationCount[delegatingHistory.trackId] || 0) <
+        (delegationCount[delegatingHistory.trackId] || 0),
       toDelegate: delegatingHistory.toDelegate,
       timestamp: delegatingHistory.timestamp,
-      conviction: delegatingHistory.conviction || 0,
+      conviction: delegatingHistory.conviction,
     }));
 
   const unique = delegations.reduce((acc, cur) => {
@@ -299,14 +288,16 @@ export async function moonriverActiveDelegatedTracks(
   return Object.values(unique);
 }
 
-export async function moonriverGetLockedTokensAction(address: Hex) {
-  const client = await MoonbeamWSC.createClient();
+export async function moonbeamGetLockedTokensAction(address: Hex) {
+  const client = await MoonbeamWSC.createClient(
+    'wss://moonbeam.public.blastapi.io'
+  );
   const [, total] = await client.getLockedBalanceOf(address, true);
 
   return total;
 }
 
-export async function moonriverOnChainProvider(
+export async function moonbeamOnChainProvider(
   daoName: string | string[],
   address: string
 ): Promise<IChainRow[]> {

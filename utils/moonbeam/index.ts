@@ -1,3 +1,4 @@
+export * from './moonbeamOnChainProvider';
 export * from './moonbeamwsc';
 export * from './moonriverConvictionOptions';
 export * from './moonriverDelegateAction';

@@ -65,6 +65,7 @@ export class MoonbeamWSC {
           .map((key: { toJSON: () => any }) => key.toJSON())
           .join(', '),
         information: exposure.toJSON() as MoonbeamProposal['information'],
+        timestamp: 0,
       });
     });
     if (destroy) this.destroy();
@@ -81,15 +82,19 @@ export class MoonbeamWSC {
     destroy?: boolean
   ): Promise<[OpenGovLockedBalance[], number]> {
     const response = await this.client.query.balances.locks(address);
+
     if (destroy) this.destroy();
 
     const readable =
       response.toJSON() as unknown as OpenGovLockedBalanceResponse;
     if (readable) {
-      const locks = [readable].flat().map(lock => ({
-        ...lock,
-        amount: ethers.utils.formatEther(lock.amount),
-      }));
+      const locks = [readable]
+        .flat()
+        .filter(item => item.reasons === 'All')
+        .map(lock => ({
+          ...lock,
+          amount: ethers.utils.formatEther(lock.amount),
+        }));
 
       return [locks, locks.reduce((acc, lock) => acc + Number(lock.amount), 0)];
     }

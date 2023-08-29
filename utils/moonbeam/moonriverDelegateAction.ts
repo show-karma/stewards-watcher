@@ -30,31 +30,38 @@ function digest(payload: IBulkDelegatePayload[]) {
   return calldatas;
 }
 
+async function prepareUndelegation(payload: IBulkDelegatePayload[]) {
+  const trackIds = payload.flatMap(item => item.tracks.map(track => track.id));
+  const activeTracks = await moonriverActiveDelegatedTracks(
+    payload[0].delegator,
+    'moonriver'
+  );
+  // Create undelegaion data for tracks that needs to be undelegated and unlocked before
+  // delegating again
+  return moonriverDigestUndelegate({
+    delegate: payload[0].delegate.address,
+    tracks: activeTracks.filter(track => trackIds.includes(+track.trackId)),
+  });
+}
+
 export const moonriverDelegateAction =
   (
     batchContractAddr: `0x${string}`,
     delegateContract: `0x${string}`,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    batchContractAbi: any[]
+    batchContractAbi: any[],
+    shouldUndelegate = false
   ) =>
   async (payload: IBulkDelegatePayload[], write: typeof writeContract) => {
-    const activeTracks = await moonriverActiveDelegatedTracks(
-      payload[0].delegator,
-      'moonriver'
-    );
+    const calldatas = [];
+    console.log({ shouldUndelegate, payload });
 
-    const trackIds = payload.flatMap(item =>
-      item.tracks.map(track => track.id)
-    );
+    if (shouldUndelegate) {
+      calldatas.push(...(await prepareUndelegation(payload)));
+    }
 
-    // Create undelegaion data for tracks that needs to be undelegated and unlocked before
-    // delegating again
-    const calldatas = moonriverDigestUndelegate({
-      delegate: payload[0].delegate.address,
-      tracks: activeTracks.filter(track => trackIds.includes(+track.trackId)),
-    })
-      // Concat delegation data
-      .concat(digest(payload.filter(item => item.delegator)));
+    // Concat delegation data
+    calldatas.push(...digest(payload.filter(item => item.delegator)));
 
     const args = [
       new Array(calldatas.length).fill(delegateContract),
@@ -67,6 +74,7 @@ export const moonriverDelegateAction =
       address: batchContractAddr,
       abi: batchContractAbi,
       functionName: 'batchAll',
+      gas: 11250000n,
       args,
     });
 

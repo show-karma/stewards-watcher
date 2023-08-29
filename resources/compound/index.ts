@@ -4,21 +4,21 @@ import ABI from './ABI.json';
 
 const config: IDAOConfig = {
   DAO: 'Compound Finance',
-  DAO_DESCRIPTION: `The Stewards of Compound Finance DAO play a vital role in driving the Compound Finance
+  DAO_DESCRIPTION: `The Delegates of Compound Finance DAO play a vital role in driving the Compound Finance
   ecosystem forward through their work in governance.`,
-  DAO_SUBDESCRIPTION: `This site helps token holders choose stewards and boost transparency by displaying steward contribution to indicate their involvement in the DAO.`,
+  DAO_SUBDESCRIPTION: `This site helps token holders choose delegates and boost transparency by displaying delegate contribution to indicate their involvement in the DAO.`,
   DAO_URL: 'https://compound.finance/',
   GOVERNANCE_FORUM: 'https://www.comp.xyz/',
   DAO_KARMA_ID: 'compound',
   IMAGE_PREFIX_URL: 'https://cdn.stamp.fyi/avatar/eth:',
   DAO_LOGO: '/daos/compound/logo.svg',
   METATAGS: {
-    TITLE: `Stewards of Compound Finance DAO`,
+    TITLE: `Delegates of Compound Finance DAO`,
     DESCRIPTION: `Find all the active delegates in Compound Finance DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
     IMAGE_DISCORD:
       'https://compound.karmahq.xyz/daos/compound/preview-discord.png',
     IMAGE_TWITTER:
-      'https://compound.karmahq.xyz/daos/compound/preview-twitter.png',
+      'https://compound.karmahq.xyz/daos/compound/preview-discord.png',
     FAVICON: '/daos/compound/favicon.ico',
     URL: `https://compound.karmahq.xyz`,
   },

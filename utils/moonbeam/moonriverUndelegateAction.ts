@@ -60,6 +60,7 @@ export function moonriverUndelegateAction(
       address: batchContractAddr,
       abi: batchContractAbi,
       functionName: 'batchAll',
+      gas: 11250000n,
       args,
     });
 

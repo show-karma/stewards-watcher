@@ -2,6 +2,7 @@ import {
   DelegatesProvider,
   GovernanceVotesProvider,
   HandlesProvider,
+  ProxyProvider,
   useDAO,
   WalletProvider,
 } from 'contexts';
@@ -82,19 +83,21 @@ export const FAQContainer: React.FC = () => {
           <WalletProvider>
             <GovernanceVotesProvider>
               <AuthProvider>
-                <HandlesProvider>
-                  <Flex
-                    w="full"
-                    flexDir="column"
-                    align="center"
-                    bg={theme.background}
-                  >
-                    <HeaderHat />
-                    <MainLayout px="0" w="full">
-                      <FAQPage />
-                    </MainLayout>
-                  </Flex>
-                </HandlesProvider>
+                <ProxyProvider>
+                  <HandlesProvider>
+                    <Flex
+                      w="full"
+                      flexDir="column"
+                      align="center"
+                      bg={theme.background}
+                    >
+                      <HeaderHat />
+                      <MainLayout px="0" w="full">
+                        <FAQPage />
+                      </MainLayout>
+                    </Flex>
+                  </HandlesProvider>
+                </ProxyProvider>
               </AuthProvider>
             </GovernanceVotesProvider>
           </WalletProvider>

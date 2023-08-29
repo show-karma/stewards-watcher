@@ -1,9 +1,11 @@
-# Moonriver Delegate Dashboard
+# Moonbeam Delegate Dashboard
+
 ---
+
 --details--
 --summary--How to become a delegate?--/summary--
 
-Delegates have the ability to onboard themselves, create a pitch, and verify their social handles. These actions not only facilitate their participation but also enhance trustworthiness within the community.
+Delegates have the ability to onboard themselves, create a pitch, and verify their social handles. These actions not only facilitate their participation but also enhance trustworthiness within the community. Follow these steps to become a delegate.
 
 - Click the Login button on the top right corner of the page and log in through your wallet.
 
@@ -30,7 +32,7 @@ Becoming a delegate is open to anyone, but there is a distinction for Community 
 - Use the various filtering options to find delegates based on their interests, voting participation, Forum participation, and overall score.
 
 - Once you find a suitable delegate, click the Delegate button. Follow the steps to connect your wallet, verify the tokens you are delegating and confirm.
---/details--
+  --/details--
 
 --details--
 --summary--If I delegate my voting power to a delegate, do they have access to my tokens?--/summary--
@@ -41,7 +43,7 @@ No, they do not. It’s important to note that even when tokens are delegated, t
 --details--
 --summary--Why become a Community Delegate?--/summary--
 
-As a delegate, you can passionately advocate for a specific group of stakeholders who share common interests. Your active participation as a delegate enables you to shape the network and influence its direction, directly impacting the community you deeply care about. Being recognized as a trusted delegate earns you credibility and respect from other community members. Additionally, the networking aspect of being a delegate can significantly expand your professional network and create avenues for future collaborations. You can read more about the incentives of becoming a Community Delegate here. 
+As a delegate, you can passionately advocate for a specific group of stakeholders who share common interests. Your active participation as a delegate enables you to shape the network and influence its direction, directly impacting the community you deeply care about. Being recognized as a trusted delegate earns you credibility and respect from other community members. Additionally, the networking aspect of being a delegate can significantly expand your professional network and create avenues for future collaborations. You can read more about the incentives of becoming a Community Delegate here.
 --/details--
 
 --details--
@@ -83,7 +85,7 @@ These different tracks in OpenGov facilitate efficient and organized decision-ma
 --details--
 --summary--How does a conviction work in OpenGov?--/summary--
 
-When participating in voting for a proposal, token holders have the option to select a "conviction" level linked to their vote. The conviction reflects the level of dedication the token holder has towards their decision. This conviction system works by locking the tokens for a specific duration determined by the chosen conviction level. The longer the lock duration, the more weight their vote has. 
+When participating in voting for a proposal, token holders have the option to select a "conviction" level linked to their vote. The conviction reflects the level of dedication the token holder has towards their decision. This conviction system works by locking the tokens for a specific duration determined by the chosen conviction level. The longer the lock duration, the more weight their vote has.
 --/details--
 
 --details--
@@ -95,7 +97,7 @@ Yes, you can.
 --details--
 --summary--Can I choose different delegates for different tracks?--/summary--
 
-Yes. However, you can only have one delegate per each track. 
+Yes. However, you can only have one delegate per each track.
 --/details--
 
 --details--
