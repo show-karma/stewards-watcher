@@ -19,7 +19,6 @@ interface ISinceDelegationProps {
     picture?: string;
   };
   selectedDelegation: IDelegatingHistories;
-  delegations: IDelegatingHistories[];
 }
 
 interface IDelegationStats {
@@ -32,7 +31,6 @@ interface IDelegationStats {
 export const PerformanceStats: FC<ISinceDelegationProps> = ({
   userDelegatedTo,
   selectedDelegation,
-  delegations,
 }) => {
   const { theme } = useDAO();
   const { voteInfos } = useDelegates();

@@ -4,7 +4,6 @@ import { DelegateStatusFilter } from './DelegateStatus';
 import { InterestsFilter } from './Interests';
 import { PeriodFilter } from './Period';
 import { ToAFilter } from './ToA';
-import { ToSFilter } from './ToS';
 import { TracksFilter } from './Tracks';
 import { ClearButton } from './ClearButton';
 import { WorkstreamFilter } from './Workstream';

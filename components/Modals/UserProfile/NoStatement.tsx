@@ -5,7 +5,7 @@ import { FC } from 'react';
 export const NoStatement: FC = () => {
   const { theme } = useDAO();
   const { isConnected } = useWallet();
-  const { isAuthenticated, authenticate } = useAuth();
+  const { authenticate } = useAuth();
 
   return (
     <Flex flexDir="column" w="full" pt="4">

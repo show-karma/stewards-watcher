@@ -8,7 +8,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { ChakraLink } from 'components/ChakraLink';
 import { DelegatesAccordion } from './DelegatesAccordion';
-import { UndelegateModal } from './UndelegateModal';
 
 const addressRegex = /^0x[a-fA-F0-9]{40}$/;
 const ensNameRegex = /^\S+\.eth$/;
@@ -18,7 +17,6 @@ export const TokenHolderDelegation: FC = () => {
 
   const {
     changeAddresses,
-    isLoadingSelectedAddresses: isLoading,
     isFetchingSelectedAddresses: isFetching,
     selectedAddressesData: tokenholders,
     selectedAddresses,

@@ -14,16 +14,14 @@ import { IoClose } from 'react-icons/io5';
 import { TbExternalLink } from 'react-icons/tb';
 import { formatNumber, getTimeFromNow } from 'utils';
 import { Filters } from './Filters';
-import { ClearButton } from './Filters/ClearButton';
 import { SortBy } from './Filters/SortBy';
 import { DelegationPool } from './DelegationPool';
 
 const DelegatesCounter: FC<{
   isLoading: boolean;
-  isSearchDirty: boolean;
   theme: IDAOTheme;
   delegateCount?: number;
-}> = ({ isLoading, isSearchDirty, theme, delegateCount = 0 }) => {
+}> = ({ isLoading, theme, delegateCount = 0 }) => {
   const { delegates, lastUpdate } = useDelegates();
   if (isLoading) return <Skeleton w="40" h="6" />;
 
@@ -67,8 +65,7 @@ const DelegatesCounter: FC<{
 };
 
 export const BodyTitle: FC = () => {
-  const { isLoading, isSearchDirty, delegateCount, delegatePoolList } =
-    useDelegates();
+  const { isLoading, delegateCount, delegatePoolList } = useDelegates();
   const { daoInfo, theme } = useDAO();
   const { config } = daoInfo;
   const [showHeaderText, setShowHeaderText] = useState(true);
@@ -290,7 +287,6 @@ export const BodyTitle: FC = () => {
       >
         <DelegatesCounter
           isLoading={isLoading}
-          isSearchDirty={isSearchDirty}
           theme={theme}
           delegateCount={delegateCount}
         />

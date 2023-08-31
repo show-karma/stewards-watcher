@@ -17,6 +17,7 @@ export const SearchFilter = () => {
   const { handleSearch, userToFind } = useDelegates();
   const [input, setInput] = useState(userToFind);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleInput = (event: any) => {
     setInput(event.target.value);
     handleSearch(event.target.value);
