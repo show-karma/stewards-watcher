@@ -7,6 +7,7 @@ import {
   Text,
   Tooltip,
   useClipboard,
+  Switch,
 } from '@chakra-ui/react';
 import {
   DelegateButton,
@@ -17,25 +18,33 @@ import {
   ThreadIcon,
 } from 'components';
 import { useDAO, useDelegates, useEditProfile, useWallet } from 'contexts';
+import { GasfreeButton } from 'components/HeaderHat/GasfreeButton';
+import {
+  useDAO,
+  useDelegates,
+  useEditProfile,
+  useProxy,
+  useWallet,
+} from 'contexts';
 import { useAuth } from 'contexts/auth';
 import { useToasty } from 'hooks';
 import { FC, useMemo, useState } from 'react';
 import { IoCopy } from 'react-icons/io5';
 import { IActiveTab, IProfile } from 'types';
 import { convertHexToRGBA, truncateAddress } from 'utils';
-
 import { useAccount } from 'wagmi';
 import { NameEditable, PictureEditable } from '../EditProfile';
 import { MediaIcon } from './MediaIcon';
 import { NavigatorRow } from './NavigatorRow';
+import { ProxySwitch } from './ProxySwitch';
 
 const DelegateCases: FC<{ status?: string; fullAddress: string }> = ({
   status,
   fullAddress,
 }) => {
   const { theme } = useDAO();
-  const { address } = useAccount();
-  if (fullAddress.toLowerCase() === address?.toLowerCase()) return null;
+  const { compareProxy } = useProxy();
+  if (compareProxy(fullAddress)) return null;
   if (status === 'withdrawn')
     return (
       <Tooltip
@@ -66,10 +75,10 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
 
   const truncatedAddress = truncateAddress(fullAddress);
   const { isConnected, openConnectModal } = useWallet();
+  const { compareProxy } = useProxy();
   const { theme, daoData, daoInfo } = useDAO();
   const { profileSelected } = useDelegates();
   const { isEditing, setIsEditing, isEditSaving, saveEdit } = useEditProfile();
-  const { address } = useAccount();
   const { authenticate, isAuthenticated, isDaoAdmin } = useAuth();
   const { toast } = useToasty();
 
@@ -78,9 +87,7 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
 
   const [isConnecting, setConnecting] = useState(false);
 
-  const isSamePerson =
-    isConnected &&
-    (address?.toLowerCase() === fullAddress?.toLowerCase() || isDaoAdmin);
+  const isSamePerson = isConnected && (compareProxy(fullAddress) || isDaoAdmin);
 
   const copyText = () => {
     onCopy();
@@ -98,15 +105,16 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
       return;
     }
     setConnecting(false);
-    if (address?.toLowerCase() !== fullAddress?.toLowerCase() && !isDaoAdmin) {
+    if (!compareProxy(fullAddress) && !isDaoAdmin) {
       toast({
         description: 'You can only edit your own profile.',
         status: 'error',
       });
       return;
     }
+
     if (
-      (address?.toLowerCase() === fullAddress?.toLowerCase() || isDaoAdmin) &&
+      (compareProxy(fullAddress) || isDaoAdmin) &&
       isConnected &&
       isAuthenticated
     ) {
@@ -151,13 +159,17 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
         />
         <Flex justifyContent="space-between" w="full" align="flex-end">
           <Flex flexDirection="column" gap="0.5" w="full">
-            <Flex
-              flexDir="row"
-              gap="2"
-              align="center"
-              width={{ base: '200px', sm: '300px', md: '600px', lg: '340px' }}
-            >
-              <NameEditable name={realName || ensName} />
+            <Flex flexDir="row" gap="6" align="center" flex="1">
+              <Flex
+                width="full"
+                maxWidth={{
+                  base: '200px',
+                  sm: '300px',
+                  lg: '240px',
+                }}
+              >
+                <NameEditable name={realName || ensName} />
+              </Flex>
               <Flex flexDir="row" gap="4" ml="4">
                 {daoInfo.config.SHOULD_NOT_SHOW !== 'handles' && (
                   <MediaIcon
@@ -204,6 +216,9 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
                   <ThreadIcon boxSize="6" color={theme.modal.header.title} />
                 </MediaIcon>
               </Flex>
+              {daoInfo.config.ENABLE_PROXY_SUPPORT && isSamePerson && (
+                <ProxySwitch />
+              )}
             </Flex>
             <Flex gap="1.5" flexDir="row" align="center">
               <Text
@@ -270,9 +285,7 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
             w="max-content"
             align="center"
           >
-            {!isEditing &&
-            (profile.address.toLowerCase() === address?.toLowerCase() ||
-              isDaoAdmin) ? (
+            {!isEditing && (compareProxy(profile.address) || isDaoAdmin) ? (
               <Button
                 fontWeight="normal"
                 bgColor="transparent"
@@ -345,11 +358,10 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
   const { theme, daoInfo } = useDAO();
   const { address: fullAddress } = profile;
   const { isConnected } = useWallet();
-  const { address } = useAccount();
+  const { compareProxy } = useProxy();
   const { isDaoAdmin, isAuthenticated } = useAuth();
 
-  const isSamePerson =
-    isConnected && address?.toLowerCase() === fullAddress?.toLowerCase();
+  const isSamePerson = isConnected && compareProxy(fullAddress);
 
   useMemo(() => {
     if (

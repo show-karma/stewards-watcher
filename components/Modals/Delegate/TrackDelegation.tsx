@@ -20,6 +20,9 @@ import {
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { useToasty } from 'hooks';
+import { IActiveDelegatedTracks, moonriverActiveDelegatedTracks } from 'utils';
+import { numberToWords } from 'utils/numberToWords';
 import { DelegateModalHeader } from './DelegateModalHeader';
 import { DelegateModalFooter } from './DelegateModalFooter';
 import { DelegateModalBody } from './DelegateModalBody';
@@ -40,11 +43,38 @@ export const TrackDelegation: React.FC<StepProps> = ({
   walletAddress,
 }) => {
   const { daoData, daoInfo } = useDAO();
+  const { toast } = useToasty();
   // const { GET_LOCKED_TOKENS_ACTION } = daoInfo.config;
   const { addToDelegatePool, tracks: daoTracks } = useDelegates();
   const { address: delegator } = useWallet();
   const { symbol, loadedVotes } = useGovernanceVotes();
+
+  const [isLoading, setIsLoading] = useState(true);
   const [conviction, setConviction] = useState<number | undefined>(undefined);
+  const [tracksDelegated, setTracksDelegated] = useState<
+    IActiveDelegatedTracks[]
+  >([]);
+
+  const getActiveDelegations = async () => {
+    if (delegator) {
+      try {
+        setIsLoading(true);
+        const foundTracks = await moonriverActiveDelegatedTracks(
+          delegator,
+          daoInfo.config.DAO_KARMA_ID
+        );
+        setTracksDelegated(foundTracks);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
+
+  useEffect(() => {
+    getActiveDelegations();
+  }, []);
 
   const schema = yup
     .object({
@@ -94,10 +124,14 @@ export const TrackDelegation: React.FC<StepProps> = ({
     ITrackBadgeProps['track'][]
   >([]);
 
-  useEffect(() => {
-    if (delegatedUser.tracks?.length && !selectedTracks.length)
-      setSelectedTracks(delegatedUser.tracks);
-  }, [tracks]);
+  // useEffect(() => {
+  //   if (delegatedUser.tracks?.length && !selectedTracks.length)
+  //     setSelectedTracks(
+  //       delegatedUser.tracks.filter(track =>
+  //         tracksDelegated.every(tr => tr.trackId !== track.id)
+  //       )
+  //     );
+  // }, [tracksDelegated]);
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -123,6 +157,22 @@ export const TrackDelegation: React.FC<StepProps> = ({
   };
 
   const selectTrack = (track: ITrackBadgeProps['track']) => {
+    if (
+      daoInfo.config.BULK_DELEGATE_MAXSIZE &&
+      selectedTracks.length >= daoInfo.config.BULK_DELEGATE_MAXSIZE
+    ) {
+      toast({
+        title: 'Too many tracks',
+        description: `You can only select ${numberToWords(
+          daoInfo.config.BULK_DELEGATE_MAXSIZE
+        )} track${
+          daoInfo.config.BULK_DELEGATE_MAXSIZE > 1 ? 's' : ''
+        } at a time.`,
+        status: 'error',
+      });
+
+      return;
+    }
     setSelectedTracks(old => [...old, track]);
   };
 
@@ -317,6 +367,9 @@ export const TrackDelegation: React.FC<StepProps> = ({
                       track={track}
                       key={track.id}
                       selected={selected}
+                      alreadyDelegated={tracksDelegated.some(
+                        item => item.trackId === track.id
+                      )}
                       onSelect={() => selectTrack(track)}
                       onRemove={() => removeTrack(track)}
                       styles={{

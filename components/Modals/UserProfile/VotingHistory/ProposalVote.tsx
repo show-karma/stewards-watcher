@@ -123,7 +123,7 @@ export const ProposalVote: FC<IProposalVote> = ({
     >
       <Flex flexDir="row" w="full" align="center" px="4" gap="2">
         <Flex flexDir="column" w="full">
-          {daoInfo.config.DAO_CATEGORIES_TYPE === 'tracks' ? (
+          {daoInfo.config.DAO_CATEGORIES_TYPE === 'tracks' && foundTrack ? (
             isLoaded ? (
               <Flex
                 gap="1"
@@ -193,7 +193,12 @@ export const ProposalVote: FC<IProposalVote> = ({
               <Skeleton isLoaded={isLoaded} w="full" maxW="160" h="4" />
             )}
 
-            {daoInfo.config.PROPOSAL_LINK && vote?.voteId ? (
+            {((daoInfo.config.PROPOSAL_LINK?.onChain &&
+              vote.voteMethod === 'On-chain') ||
+              (daoInfo.config.PROPOSAL_LINK?.offChain &&
+                vote.voteMethod === 'Off-chain')) &&
+            vote?.voteId &&
+            vote.version ? (
               <>
                 <Divider
                   orientation="vertical"
@@ -202,7 +207,9 @@ export const ProposalVote: FC<IProposalVote> = ({
                   h="4"
                 />
                 <Link
-                  href={daoInfo.config.PROPOSAL_LINK(vote.voteId)}
+                  href={daoInfo.config.PROPOSAL_LINK[
+                    vote.voteMethod === 'On-chain' ? 'onChain' : 'offChain'
+                  ]?.(vote.voteId, vote.version)}
                   isExternal
                   color="blue.400"
                   fontSize="sm"
