@@ -12,6 +12,7 @@ const offChainClient = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const concatOffChainProposals = (proposals: any[], votes: any[]) => {
   const array: IChainRow[] = [];
 

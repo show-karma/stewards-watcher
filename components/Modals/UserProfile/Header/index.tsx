@@ -17,6 +17,7 @@ import {
   WebsiteIcon,
   ThreadIcon,
 } from 'components';
+import { useDAO, useDelegates, useEditProfile, useWallet } from 'contexts';
 import { GasfreeButton } from 'components/HeaderHat/GasfreeButton';
 import {
   useDAO,
@@ -31,6 +32,7 @@ import { FC, useMemo, useState } from 'react';
 import { IoCopy } from 'react-icons/io5';
 import { IActiveTab, IProfile } from 'types';
 import { convertHexToRGBA, truncateAddress } from 'utils';
+import { useAccount } from 'wagmi';
 import { NameEditable, PictureEditable } from '../EditProfile';
 import { MediaIcon } from './MediaIcon';
 import { NavigatorRow } from './NavigatorRow';

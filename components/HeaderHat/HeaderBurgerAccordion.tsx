@@ -3,7 +3,6 @@ import {
   AccordionButton,
   AccordionItem,
   AccordionPanel,
-  Button,
   Flex,
   Icon,
   Img,

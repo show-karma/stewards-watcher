@@ -121,6 +121,7 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
         );
         setTracksDelegated(foundTracks);
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.log(error);
       } finally {
         setIsLoading(false);

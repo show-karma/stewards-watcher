@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Select,
-  Spinner,
-  TagLabel,
-  Text,
-} from '@chakra-ui/react';
+import { Box, Button, Flex, Spinner, Text } from '@chakra-ui/react';
 import { GasfreeButton } from 'components/HeaderHat/GasfreeButton';
 import { useDAO } from 'contexts';
 import { useState } from 'react';

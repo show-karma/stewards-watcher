@@ -17,13 +17,14 @@
  */
 
 // import * as Sentry from '@sentry/nextjs';
-import NextErrorComponent from 'next/error';
+import { NextPageContext } from 'next';
+import NextErrorComponent, { ErrorProps } from 'next/error';
 
-const CustomErrorComponent = ({ statusCode }: any) => (
+const CustomErrorComponent = ({ statusCode }: ErrorProps) => (
   <NextErrorComponent statusCode={statusCode} />
 );
 
-CustomErrorComponent.getInitialProps = async (contextData: any) =>
+CustomErrorComponent.getInitialProps = async (contextData: NextPageContext) =>
   // In case this is running in a serverless function, await this in order to give Sentry
   // time to send the error before the lambda exits
   // await Sentry.captureUnderscoreErrorException(contextData);

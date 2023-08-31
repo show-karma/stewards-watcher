@@ -2,7 +2,6 @@ import { Flex, Input, Text } from '@chakra-ui/react';
 import { DelegateButton } from 'components';
 import { useDAO, useDelegates } from 'contexts';
 import { ethers } from 'ethers';
-import { useToasty } from 'hooks';
 import { FC, useMemo } from 'react';
 
 interface IToDelegateProps {
@@ -26,7 +25,6 @@ export const ToDelegate: FC<IToDelegateProps> = ({
     () => ethers.utils.isAddress(address),
     [address]
   );
-  const { toast } = useToasty();
 
   const handleChange = (addr: string) => {
     if (address !== addr) setAddress(addr);

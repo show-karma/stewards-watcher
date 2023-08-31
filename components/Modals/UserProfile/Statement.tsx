@@ -1,6 +1,5 @@
 /* eslint-disable no-nested-ternary */
 import {
-  Box,
   Button,
   Flex,
   Skeleton,
@@ -13,8 +12,6 @@ import { useDAO, useEditProfile } from 'contexts';
 import { ICustomFields } from 'types';
 import dynamic from 'next/dynamic';
 import { convertHexToRGBA } from 'utils';
-import parse from 'html-react-parser';
-import DOMPurify from 'dompurify';
 import { Sidebar } from '../Sidebar';
 import { NoStatement } from './NoStatement';
 import { SelectSavingMethod } from './SelectSavingMethod';
@@ -29,13 +26,6 @@ interface ITextSection {
 const TextSection: FC<ITextSection> = ({ statement }) => {
   const { theme } = useDAO();
 
-  const htmlFrom = (htmlString: string) => {
-    const cleanHtmlString = DOMPurify.sanitize(htmlString, {
-      USE_PROFILES: { html: true },
-    });
-    const html = parse(cleanHtmlString);
-    return html;
-  };
   return (
     <Flex
       maxW={{ base: 'full', lg: '30rem' }}

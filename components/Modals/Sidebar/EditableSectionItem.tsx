@@ -6,8 +6,9 @@ import { IconBaseProps, IconType } from 'react-icons';
 interface ISectionItem {
   icon?: IconType | ComponentWithAs<'svg', IconBaseProps>;
   isEditMode: boolean;
-  value: any;
+  value: number | string;
   isSelected: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   selectItem: (item: any) => void;
   label?: string;
 }

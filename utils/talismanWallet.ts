@@ -20,14 +20,14 @@ export const talismanWallet = ({
   },
   createConnector: () => {
     const connector = new TalismanConnector({
-      chains: chains as any,
+      chains,
       options: {
         shimDisconnect,
       },
     });
 
     return {
-      connector: connector as any,
+      connector,
     };
   },
 });

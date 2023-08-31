@@ -12,7 +12,7 @@ const assertionObj = [
     retries: /\d+/,
   },
 ];
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function assert(body: any) {
   if (!Array.isArray(body) || body.length !== assertionObj.length)
     throw new Error('Invalid request body');
@@ -63,9 +63,11 @@ const handler: NextApiHandler = async (
 
     const txId = await result.wait();
     res.send({ txId });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    res.statusCode = 400;
+    // eslint-disable-next-line no-console
     console.log(error);
+    res.statusCode = 400;
     res.send(error.message);
   }
 };

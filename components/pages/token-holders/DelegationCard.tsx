@@ -12,7 +12,7 @@ import { ChakraLink } from 'components/ChakraLink';
 import { ImgWithFallback } from 'components/ImgWithFallback';
 import { useDAO, useDelegates } from 'contexts';
 import moment from 'moment';
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { IDelegatingHistories } from 'types';
 import { addressToENSName, formatNumber, truncateAddress } from 'utils';
 import { PerformanceStats } from './PerformanceStats';
@@ -82,6 +82,7 @@ export const DelegationCard: FC<IDelegationCardProps> = ({
         setDelegatedUserEnsName(name);
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log(error);
     } finally {
       setIsLoadingEnsName(false);
@@ -379,7 +380,6 @@ export const DelegationCard: FC<IDelegationCardProps> = ({
                   picture: userDelegatedTo.picture,
                 }}
                 selectedDelegation={selectedDelegation}
-                delegations={data}
               />
               <VotingHistory address={userDelegatedTo.address} />
             </Flex>

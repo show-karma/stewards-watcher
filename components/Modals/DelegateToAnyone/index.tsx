@@ -8,7 +8,7 @@ import {
   ModalOverlay,
 } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ToDelegate } from './ToDelegate';
 import { TokensDelegated } from './TokensDelegated';
 
