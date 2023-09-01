@@ -17,6 +17,7 @@ import safe from './safe';
 import rocketpool from './rocketpool';
 import moonriver from './moonriver';
 import moonbeam from './moonbeam';
+import moonbase from './moonbase';
 import snapshotABI from './contracts/snapshotABI.json';
 import ERC20ABI from './contracts/ERC20_ABI.json';
 
@@ -140,6 +141,13 @@ export const supportedDAOs: ISupportedDAOs = {
     config: moonbeam.config,
     dark: moonbeam.dark,
     light: moonbeam.light,
+    DELEGATE_ABI: [],
+    TOKEN_ABI: ERC20ABI,
+  },
+  moonbase: {
+    config: moonbase.config,
+    dark: moonbase.dark,
+    light: moonbase.light,
     DELEGATE_ABI: [],
     TOKEN_ABI: ERC20ABI,
   },

@@ -17,7 +17,6 @@ import {
   WebsiteIcon,
   ThreadIcon,
 } from 'components';
-import { useDAO, useDelegates, useEditProfile, useWallet } from 'contexts';
 import { GasfreeButton } from 'components/HeaderHat/GasfreeButton';
 import {
   useDAO,
