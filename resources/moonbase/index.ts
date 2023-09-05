@@ -43,6 +43,7 @@ const config: IDAOConfig = {
     },
   },
   DAO_CHAIN: moonbeam,
+  ENABLE_DELEGATED_VOTES_BREAKDOWN: true,
   DAO_TOKEN_CONTRACT: [
     {
       contractAddress: '0x0000000000000000000000000000000000000802',

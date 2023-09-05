@@ -101,7 +101,7 @@ const StatCases: FC<IStatCasesProps> = ({
   )
     return (
       <DelegatedTokensBreakdown delegateAddress={delegateAddress}>
-        <DelegateStat stat={statItem} />
+        <DelegateStat stat={statItem} disableTooltip />
       </DelegatedTokensBreakdown>
     );
   if (
