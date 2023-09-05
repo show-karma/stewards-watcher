@@ -3,7 +3,6 @@ import { moonbeamProposals, moonriverProposals } from 'utils/api/proposals';
 import { SafeCache } from 'utils/api/safe-cache';
 
 const cache = SafeCache.create({ expire: 86400 });
-
 /**
  *
  * @param payload
