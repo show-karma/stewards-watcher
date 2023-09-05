@@ -20,14 +20,14 @@ const bulkContractAddr = '0x0000000000000000000000000000000000000808';
 const delegateContractAddr = '0x0000000000000000000000000000000000000812';
 
 const config: IDAOConfig = {
-  DAO: 'Moonbeam',
+  DAO: 'Moonbase',
   DAO_DESCRIPTION: `The Delegates of Moonbeam DAO play a vital role in driving the Moonbeam ecosystem forward through their work in governance.`,
   DAO_SUBDESCRIPTION: `This site will help boost transparency by displaying delegate contribution to indicate their involvement and engagement in the DAO.`,
   DAO_URL: 'https://moonbeam.network/',
   GOVERNANCE_FORUM: 'https://forum.moonbeam.foundation/',
-  DAO_KARMA_ID: 'moonbeam',
+  DAO_KARMA_ID: 'moonbase',
   IMAGE_PREFIX_URL: 'https://cdn.stamp.fyi/avatar/eth:',
-  DAO_LOGO: '/daos/moonbeam/logo.png',
+  DAO_LOGO: '/daos/moonbase/logo.png',
   METATAGS: {
     TITLE: `Delegates of Moonbeam DAO`,
     DESCRIPTION: `Find all the active delegates in Moonbeam DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
@@ -55,7 +55,7 @@ const config: IDAOConfig = {
   EXCLUDED_CARD_FIELDS: ['healthScore', 'discordScore', 'offChainVotesPct'],
   DAO_CATEGORIES_TYPE: 'tracks',
   ALLOW_BULK_DELEGATE: true,
-  BULK_DELEGATE_MAXSIZE: 999,
+  BULK_DELEGATE_MAXSIZE: 1,
   ALLOW_UNDELEGATE: true,
   UNDELEGATE_ACTION: moonriverUndelegateAction(
     bulkContractAddr,
@@ -93,7 +93,7 @@ const config: IDAOConfig = {
   ENABLE_PROXY_SUPPORT: true,
   CUSTOM_RPC: jsonRpcProvider({
     rpc: () => ({
-      http: RPCS.moonbeam,
+      http: RPCS.moonbase,
     }),
   }),
 };
