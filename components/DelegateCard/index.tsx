@@ -95,7 +95,9 @@ const StatCases: FC<IStatCasesProps> = ({
     );
   if (
     statItem.id === 'delegatedVotes' &&
-    daoInfo.config.ENABLE_DELEGATED_VOTES_BREAKDOWN
+    daoInfo.config.ENABLE_DELEGATED_VOTES_BREAKDOWN &&
+    statItem.value !== '-' &&
+    statItem.value !== '0'
   )
     return (
       <DelegatedTokensBreakdown delegateAddress={delegateAddress}>

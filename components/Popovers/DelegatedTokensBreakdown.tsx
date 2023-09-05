@@ -74,8 +74,6 @@ export const DelegatedTokensBreakdown: FC<DelegatedTokensBreakdownProps> = ({
     if (isOpen) getBreakdownData();
   }, [isOpen]);
 
-  console.log('breakdownData', breakdownData);
-
   return (
     <Popover isOpen={isOpen}>
       <PopoverTrigger>
@@ -105,20 +103,29 @@ export const DelegatedTokensBreakdown: FC<DelegatedTokensBreakdownProps> = ({
             </Flex>
           ) : (
             <Flex flexDir="column">
-              {breakdownData?.map(track => (
-                <Flex
-                  key={track.id}
-                  flexDir="row"
-                  alignItems="center"
-                  justifyContent="space-between"
-                  gap="4"
-                >
-                  <Text fontWeight="bold">{`${
-                    daoInfo.config.TRACKS_DICTIONARY?.[track.displayName].emoji
-                  } ${track.displayName}`}</Text>
-                  <Text fontWeight="normal">{formatNumber(track.value)}</Text>
-                </Flex>
-              ))}
+              {breakdownData?.length ? (
+                breakdownData?.map(track => (
+                  <Flex
+                    key={track.id}
+                    flexDir="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    gap="4"
+                  >
+                    <Text fontWeight="bold" color={theme.card.text.primary}>{`${
+                      daoInfo.config.TRACKS_DICTIONARY?.[track.displayName]
+                        .emoji
+                    } ${track.displayName}`}</Text>
+                    <Text fontWeight="normal" color={theme.card.text.primary}>
+                      {formatNumber(track.value)}
+                    </Text>
+                  </Flex>
+                ))
+              ) : (
+                <Text color={theme.card.text.primary}>
+                  Not enough data about this delegate.
+                </Text>
+              )}
             </Flex>
           )}
         </PopoverBody>
