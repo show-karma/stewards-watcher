@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  createContext,
-  useMemo,
-  useState,
-  useEffect,
-} from 'react';
+import React, { useContext, createContext, useMemo, useState } from 'react';
 import { useIsMounted } from 'hooks/useIsMounted';
 import { useToasty } from 'hooks';
 import { ICustomFields, IProfile } from 'types';
@@ -14,7 +8,6 @@ import axios from 'axios';
 import { useDelegates } from './delegates';
 import { useDAO } from './dao';
 import { useAuth } from './auth';
-import { useWallet } from './wallet';
 import { useProxy } from './proxy';
 
 interface IEditProfileProps {

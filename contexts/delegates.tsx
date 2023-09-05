@@ -24,7 +24,7 @@ import {
   ITracks,
 } from 'types';
 import { useMixpanel, useToasty } from 'hooks';
-import { api, API_ROUTES } from 'helpers';
+import { api } from 'helpers';
 import { useAccount } from 'wagmi';
 import { IBulkDelegatePayload } from 'utils/moonbeam/moonriverDelegateAction';
 import { ITrackBadgeProps } from 'components/DelegationPool/TrackBadge';

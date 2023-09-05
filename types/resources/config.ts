@@ -4,12 +4,11 @@ import { writeContract } from '@wagmi/core';
 import { Chain } from 'wagmi';
 import { IChainRow } from 'types/IChainRow';
 import { IConvictionOption, Hex } from 'types/votes';
-import { jsonRpcProvider } from 'wagmi/dist/providers/jsonRpc';
+import { IActiveDelegatedTracks } from 'utils';
 import { IForumType } from './forum';
 import { IStats, IStatsID } from './stats';
 import { IVotingHistoryColumn } from './modal';
 import { IForDelegates } from './header';
-import { IActiveDelegatedTracks } from 'utils';
 
 type JsonRpcProviderConfig = {
   rpc: (chain: Chain) => {

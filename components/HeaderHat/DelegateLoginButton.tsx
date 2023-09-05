@@ -16,7 +16,7 @@ import {
   useMediaQuery,
 } from '@chakra-ui/react';
 import { ArrowRightIcon, DownChevron } from 'components/Icons';
-import { useAuth, useDAO, useDelegates, useProxy, useWallet } from 'contexts';
+import { useAuth, useDAO, useDelegates, useProxy } from 'contexts';
 import { FC } from 'react';
 import { truncateAddress } from 'utils';
 import { useAccount } from 'wagmi';

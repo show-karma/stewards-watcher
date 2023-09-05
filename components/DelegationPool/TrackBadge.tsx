@@ -8,7 +8,6 @@ import {
   FlexProps,
   Text,
   Tooltip,
-  CloseButton,
 } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
 import { useToasty } from 'hooks';
