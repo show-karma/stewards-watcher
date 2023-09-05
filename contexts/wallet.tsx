@@ -1,16 +1,9 @@
-import React, {
-  useContext,
-  createContext,
-  useMemo,
-  useState,
-  useEffect,
-} from 'react';
+import React, { useContext, createContext, useMemo } from 'react';
 
 import { useChainModal, useConnectModal } from '@rainbow-me/rainbowkit';
 import { Chain, useAccount, useNetwork } from 'wagmi';
 import { useIsMounted } from 'hooks/useIsMounted';
 import { useDisclosure } from '@chakra-ui/react';
-import { api, API_ROUTES } from 'helpers';
 
 interface IWalletProps {
   isConnected: boolean;

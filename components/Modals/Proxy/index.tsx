@@ -3,7 +3,6 @@ import {
   AlertDialogBody,
   AlertDialogCloseButton,
   AlertDialogContent,
-  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogOverlay,
   Button,

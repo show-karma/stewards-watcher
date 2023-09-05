@@ -14,7 +14,6 @@ import { checkRealAddress } from 'utils';
 import { useDelegates } from './delegates';
 import { useDAO } from './dao';
 import { useAuth } from './auth';
-import { useWallet } from './wallet';
 
 interface IProxyContextProps {
   addProxy: (coldWalletAddress: string) => Promise<void>;
