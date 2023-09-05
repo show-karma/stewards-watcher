@@ -87,6 +87,7 @@ const config: IDAOConfig = {
   DELEGATION_CONVICTION_OPTIONS: moonriverConvictionOptions,
   TRACKS_DICTIONARY: moonriverTracksDictionary,
   ENABLE_PROXY_SUPPORT: true,
+  ENABLE_DELEGATED_VOTES_BREAKDOWN: true,
   CUSTOM_RPC: jsonRpcProvider({
     rpc: () => ({
       http: RPCS.moonriver,

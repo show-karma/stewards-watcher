@@ -12,6 +12,7 @@ export * from './Icons';
 export * from './ImgWithFallback';
 export * from './Modals';
 export * from './pages';
+export * from './Popovers';
 export * from './ScoreBreakdown';
 export * from './UserInfoButton';
 export * from './Wrappers';

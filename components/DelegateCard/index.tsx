@@ -41,6 +41,7 @@ import { DELEGATOR_TRACKER_DAOS } from 'helpers';
 import { HiUserGroup } from 'react-icons/hi';
 import dynamic from 'next/dynamic';
 import { FaDiscord } from 'react-icons/fa';
+import { DelegatedTokensBreakdown } from 'components/Popovers';
 import { ImgWithFallback } from '../ImgWithFallback';
 import { DelegateButton } from '../DelegateButton';
 import { ForumIcon, ThreadIcon, TwitterIcon, WebsiteIcon } from '../Icons';
@@ -75,6 +76,7 @@ const StatCases: FC<IStatCasesProps> = ({
   daoName,
   delegateAddress,
 }) => {
+  const { daoInfo } = useDAO();
   const daoSupportsDelegatorPage = DELEGATOR_TRACKER_DAOS.find(
     dao => dao === daoName
   );
@@ -90,6 +92,15 @@ const StatCases: FC<IStatCasesProps> = ({
       >
         <DelegateStat stat={statItem} />
       </Link>
+    );
+  if (
+    statItem.id === 'delegatedVotes' &&
+    daoInfo.config.ENABLE_DELEGATED_VOTES_BREAKDOWN
+  )
+    return (
+      <DelegatedTokensBreakdown delegateAddress={delegateAddress}>
+        <DelegateStat stat={statItem} />
+      </DelegatedTokensBreakdown>
     );
   if (
     (statItem.id === 'forumScore' && canShowBreakdown) ||
