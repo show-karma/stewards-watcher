@@ -3,7 +3,7 @@ import { MoonbeamWSC } from '../moonbeam/moonbeamwsc';
 import { polkassembly, Post } from '../moonbeam/polkassembly';
 
 export const moonriverProposals = async (
-  daoName: 'moonbeam' | 'moonriver' | 'moonbase'= 'moonriver'
+  daoName: 'moonbeam' | 'moonriver' | 'moonbase' = 'moonriver'
 ) => {
   const clientV2 = await MoonbeamWSC.createClient();
 
