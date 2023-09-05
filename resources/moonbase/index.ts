@@ -1,14 +1,14 @@
 import { IDAOConfig, IDAOTheme } from 'types';
 import { moonriverDelegateAction } from 'utils/moonbeam/moonriverDelegateAction';
 import {
-  moonriverActiveDelegatedTracks,
   moonriverConvictionOptions,
   moonriverDelegateErrors,
-  moonriverGetLockedTokensAction,
-  moonriverOnChainProvider,
+  moonbeamOnChainProvider,
   moonriverTracksDictionary,
+  moonbeamGetLockedTokensAction,
+  moonbeamActiveDelegatedTracks,
 } from 'utils';
-import { moonriver } from 'wagmi/chains';
+import { moonbeam } from 'utils/moonbeam/network';
 import { RPCS } from 'helpers';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { moonriverUndelegateAction } from '../../utils/moonbeam/moonriverUndelegateAction';
@@ -20,21 +20,21 @@ const bulkContractAddr = '0x0000000000000000000000000000000000000808';
 const delegateContractAddr = '0x0000000000000000000000000000000000000812';
 
 const config: IDAOConfig = {
-  DAO: 'Moonriver',
-  DAO_DESCRIPTION: `The Delegates of Moonriver DAO play a vital role in driving the Moonriver ecosystem forward through their work in governance.`,
+  DAO: 'Moonbase',
+  DAO_DESCRIPTION: `The Delegates of Moonbeam DAO play a vital role in driving the Moonbeam ecosystem forward through their work in governance.`,
   DAO_SUBDESCRIPTION: `This site will help boost transparency by displaying delegate contribution to indicate their involvement and engagement in the DAO.`,
   DAO_URL: 'https://moonbeam.network/',
   GOVERNANCE_FORUM: 'https://forum.moonbeam.foundation/',
-  DAO_KARMA_ID: 'moonriver',
+  DAO_KARMA_ID: 'moonbase',
   IMAGE_PREFIX_URL: 'https://cdn.stamp.fyi/avatar/eth:',
-  DAO_LOGO: '/daos/moonriver/logo_orange.png',
+  DAO_LOGO: '/daos/moonbase/logo.png',
   METATAGS: {
-    TITLE: `Delegates of Moonriver DAO`,
-    DESCRIPTION: `Find all the active delegates in Moonriver DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
-    IMAGE_DISCORD: '/daos/moonriver/preview-discord.png',
-    IMAGE_TWITTER: '/daos/moonriver/preview-twitter.png',
-    FAVICON: '/daos/moonriver/favicon.png',
-    URL: `https://moonriver.karmahq.xyz`,
+    TITLE: `Delegates of Moonbeam DAO`,
+    DESCRIPTION: `Find all the active delegates in Moonbeam DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
+    IMAGE_DISCORD: '/daos/moonbeam/preview-discord.png',
+    IMAGE_TWITTER: '/daos/moonbeam/preview-twitter.png',
+    FAVICON: '/daos/moonbeam/favicon.png',
+    URL: `https://moonbeam.karmahq.xyz`,
   },
   DAO_DEFAULT_SETTINGS: {
     FAQ: true,
@@ -42,7 +42,8 @@ const config: IDAOConfig = {
       CUSTOM_STATUS: ['community', 'active', 'inactive', 'withdrawn'],
     },
   },
-  DAO_CHAIN: moonriver,
+  DAO_CHAIN: moonbeam,
+  ENABLE_DELEGATED_VOTES_BREAKDOWN: true,
   DAO_TOKEN_CONTRACT: [
     {
       contractAddress: '0x0000000000000000000000000000000000000802',
@@ -57,7 +58,6 @@ const config: IDAOConfig = {
   ALLOW_BULK_DELEGATE: true,
   BULK_DELEGATE_MAXSIZE: 1,
   ALLOW_UNDELEGATE: true,
-  GET_ACTIVE_DELEGATIONS_ACTION: moonriverActiveDelegatedTracks,
   UNDELEGATE_ACTION: moonriverUndelegateAction(
     bulkContractAddr,
     delegateContractAddr,
@@ -69,16 +69,21 @@ const config: IDAOConfig = {
     batchContractAbi,
     false
   ),
-  GET_LOCKED_TOKENS_ACTION: moonriverGetLockedTokensAction,
+  GET_ACTIVE_DELEGATIONS_ACTION: moonbeamActiveDelegatedTracks,
+  GET_LOCKED_TOKENS_ACTION: moonbeamGetLockedTokensAction,
   DAO_EXT_VOTES_PROVIDER: {
-    onChain: moonriverOnChainProvider,
+    onChain: moonbeamOnChainProvider,
   },
   DELEGATION_ERRORS_DICTIONARY: moonriverDelegateErrors,
   EXCLUDED_VOTING_HISTORY_COLUMN: ['contrarionIndex', 'offChainVoteBreakdown'],
   ENABLE_DELEGATE_TRACKER: true,
   DISABLE_EMAIL_INPUT: true,
   DAO_SUPPORTS_TOS: true,
-  PROPOSAL_LINK: { onChain: polkassemblyProposalUrl.moonriver },
+  PROPOSAL_LINK: {
+    onChain: polkassemblyProposalUrl.moonbeam,
+    offChain: (proposalId: string | number) =>
+      `https://snapshot.org/#/moonbeam-foundation.eth/proposal/${proposalId}`,
+  },
   TOS_URL:
     'https://forum.moonbeam.foundation/t/introducing-delegated-voting-enhancing-governance-on-moonriver-and-moonbeam/843',
   HIDE_FOR_DELEGATES: ['delegator-lookup'],
@@ -87,27 +92,26 @@ const config: IDAOConfig = {
   DELEGATION_CONVICTION_OPTIONS: moonriverConvictionOptions,
   TRACKS_DICTIONARY: moonriverTracksDictionary,
   ENABLE_PROXY_SUPPORT: true,
-  ENABLE_DELEGATED_VOTES_BREAKDOWN: true,
   CUSTOM_RPC: jsonRpcProvider({
     rpc: () => ({
-      http: RPCS.moonriver,
+      http: RPCS.moonbase,
     }),
   }),
 };
 
 const dark: IDAOTheme = {
-  background: '#151515',
-  bodyBg: '#151515',
+  background: 'linear-gradient(45deg,#0d1126 0%,#301748 100%)',
+  bodyBg: 'linear-gradient(45deg,#0d1126 0%,#301748 100%)',
   title: '#FFFFFF',
   subtitle: '#a0aec0',
   text: '#FFFFFF',
-  branding: '#fcc10e',
-  buttonText: '#000000',
+  branding: '#e1147b',
+  buttonText: '#FFFFFF',
   buttonTextSec: '#FFFFFF',
-  headerBg: '#2D424D',
+  headerBg: '#0D1126',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
-  collapse: { text: '#53cbc9', subtext: '#ADB8C0' },
+  collapse: { text: '#FFFFFF', subtext: '#ADB8C0' },
   hat: {
     text: {
       primary: '#FFFFFF',
@@ -121,13 +125,13 @@ const dark: IDAOTheme = {
     border: '#ADB8C033',
     title: 'white',
     bg: 'transparent',
-    listBg: '#151515',
+    listBg: '#1B2030',
     listText: 'white',
     activeBg: 'rgba(102, 102, 102, 0.15)',
   },
   card: {
     icon: '#ADB8C0',
-    background: '#2D424D',
+    background: '#0D1126',
     statBg: 'rgba(102, 102, 102, 0.15)',
     divider: 'rgba(173, 184, 192, 0.2)',
     text: { primary: '#FFFFFF', secondary: '#ADB8C0' },
@@ -138,7 +142,7 @@ const dark: IDAOTheme = {
     socialMedia: '#FFFFFF',
   },
   modal: {
-    background: '#151515',
+    background: '#0D1126',
     header: {
       border: '#ADB8C0',
       title: '#FFFFFF',
@@ -149,8 +153,8 @@ const dark: IDAOTheme = {
     buttons: {
       selectBg: '#6C1E6D',
       selectText: '#FFFFFF',
-      navBg: '#fcc10e',
-      navText: '#000000',
+      navBg: '#c4136b',
+      navText: '#FFFFFF',
       navUnselectedText: '#ADB8C0',
       navBorder: '#FFFFFF',
     },
@@ -178,13 +182,13 @@ const dark: IDAOTheme = {
         result: '#FFFFFF',
         verticalDivider: 'rgba(173, 184, 192, 0.5)',
         divider: 'rgba(173, 184, 192, 0.2)',
-        bg: '#fcc10e',
+        bg: '#c4136b',
       },
       modules: {
         chart: {
           point: '#FFFFFF',
-          openGradient: '#fcc10e',
-          endGradient: '#151515',
+          openGradient: '#c4136b',
+          endGradient: '#0D1126',
         },
       },
       reason: {
@@ -196,7 +200,7 @@ const dark: IDAOTheme = {
         color: '#ADB8C0',
         buttons: {
           selectedBg: '#ADB8C0',
-          selectedText: '#151515',
+          selectedText: '#0D1126',
           unSelectedBg: 'transparent',
           unSelectedText: '#ADB8C0',
         },
@@ -235,12 +239,12 @@ const dark: IDAOTheme = {
     },
   },
   loginModal: {
-    background: '#2D424D',
+    background: '#0D1126',
     text: '#FFFFFF',
-    footer: { bg: '#FFFFFF', text: '#151515' },
+    footer: { bg: '#FFFFFF', text: '#0D1126' },
     button: {
-      bg: '#fcc10e',
-      text: '#000000',
+      bg: '#c4136b',
+      text: '#FFFFFF',
     },
   },
   tokenHolders: {
@@ -313,7 +317,7 @@ const dark: IDAOTheme = {
               hyperlink: '#b3a1dd',
               description: '#ADB8C0',
               sort: {
-                bg: '#151515',
+                bg: '#0D1126',
                 border: '#FFFFFF',
                 text: '#F5F5F5',
                 label: '#ADB8C0',
@@ -347,9 +351,9 @@ const dark: IDAOTheme = {
         },
       },
       bg: {
-        primary: '#151515',
+        primary: '#0D1126',
         secondary: '#1B2030',
-        tertiary: '#fcc10e',
+        tertiary: 'linear-gradient(248.86deg, #B6509E 10.51%, #2EBAC6 93.41%)',
       },
     },
   },
@@ -358,13 +362,13 @@ const dark: IDAOTheme = {
 const light: IDAOTheme = {
   background: '#F2F4F9',
   bodyBg: '#F2F4F9',
-  title: '#151515',
+  title: '#0D1126',
   subtitle: '#666666',
-  text: '#151515',
-  branding: '#fcc10e',
-  buttonText: '#000000',
-  buttonTextSec: '#151515',
-  headerBg: '#151515',
+  text: '#0D1126',
+  branding: '#e1147b',
+  buttonText: '#FFFFFF',
+  buttonTextSec: '#0D1126',
+  headerBg: '#2F1747',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
   collapse: { text: '#676767', subtext: '#2A2C32', bg: '#FFFFFF' },
@@ -400,7 +404,7 @@ const light: IDAOTheme = {
     socialMedia: '#595A5E',
   },
   modal: {
-    background: '#151515',
+    background: '#0D1126',
     header: {
       border: '#ADB8C0',
       title: '#FFFFFF',
@@ -411,7 +415,7 @@ const light: IDAOTheme = {
     buttons: {
       selectBg: '#6C1E6D',
       selectText: '#FFFFFF',
-      navBg: '#fcc10e',
+      navBg: '#c4136b',
       navText: '#FFFFFF',
       navUnselectedText: '#ADB8C0',
       navBorder: '#FFFFFF',
@@ -471,13 +475,13 @@ const light: IDAOTheme = {
         result: '#FFFFFF',
         verticalDivider: 'rgba(173, 184, 192, 0.5)',
         divider: 'rgba(173, 184, 192, 0.2)',
-        bg: '#fcc10e',
+        bg: '#c4136b',
       },
       modules: {
         chart: {
           point: '#5f6a8e',
-          openGradient: '#fcc10e',
-          endGradient: '#151515',
+          openGradient: '#c4136b',
+          endGradient: '#0D1126',
         },
       },
       reason: {
@@ -489,7 +493,7 @@ const light: IDAOTheme = {
         color: '#ADB8C0',
         buttons: {
           selectedBg: '#ADB8C0',
-          selectedText: '#151515',
+          selectedText: '#0D1126',
           unSelectedBg: 'transparent',
           unSelectedText: '#ADB8C0',
         },
@@ -497,12 +501,11 @@ const light: IDAOTheme = {
     },
   },
   loginModal: {
-    logo: '/daos/moonriver/logo_orange.png',
-    text: '#212328',
-    background: '#FFFFFF',
-    footer: { bg: '#EBEDEF', text: '#151515' },
+    background: '#0D1126',
+    text: '#FFFFFF',
+    footer: { bg: '#FFFFFF', text: '#0D1126' },
     button: {
-      bg: '#6C1E6D',
+      bg: '#c4136b',
       text: '#FFFFFF',
     },
   },

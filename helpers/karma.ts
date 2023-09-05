@@ -18,6 +18,9 @@ export const KARMA_LINKS = {
 };
 
 export const API_ROUTES = {
+  DAO: {
+    TRACKS: (daoName: string) => `${KARMA_API.base_url}/dao/${daoName}/tracks`,
+  },
   USER: {
     GET_USER: (address: string) => `${KARMA_API.base_url}/user/${address}`,
     PROXY: (address: string) =>

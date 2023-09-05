@@ -1,6 +1,5 @@
 import { DelegateModalBody } from 'components/Modals/Delegate/DelegateModalBody';
 import { DelegateModalHeader } from 'components/Modals/Delegate/DelegateModalHeader';
-import { TrackBadge } from 'components/DelegationPool/TrackBadge';
 import { useDAO, useDelegates, useWallet } from 'contexts';
 import {
   Box,

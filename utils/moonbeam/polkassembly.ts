@@ -71,7 +71,7 @@ class PolkassemblyClient {
   }
 
   async fetchOnChainPostsV1(
-    network: 'moonriver' | 'moonbeam' = 'moonriver',
+    network: 'moonriver' | 'moonbeam' | 'moonbase' = 'moonriver',
     page = 1,
     limit = 200
   ) {
@@ -85,7 +85,7 @@ class PolkassemblyClient {
 
   async fetchOnChainPostsV2(
     trackNo: NumberIsh,
-    network: 'moonriver' | 'moonbeam',
+    network: 'moonriver' | 'moonbeam' | 'moonbase',
     page = 1,
     limit = 200
   ) {

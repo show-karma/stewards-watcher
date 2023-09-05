@@ -403,7 +403,7 @@ export const Handles: FC = () => {
     },
     {
       icon: GoCommentDiscussion,
-      name: 'Thread',
+      name: 'Delegate Communication Thread',
       action: undefined,
       actionType: 'input',
       handle: profileSelected?.discussionThread
@@ -453,7 +453,7 @@ export const Handles: FC = () => {
                 >
                   <Flex flexDir="row" gap="3" align="center" mt="2">
                     <Icon boxSize="6" as={media.icon} />
-                    <Text fontSize="lg" fontWeight="medium" w="20" mr="6">
+                    <Text fontSize="lg" fontWeight="medium" w="40" mr="6">
                       {media.name}
                     </Text>
                   </Flex>

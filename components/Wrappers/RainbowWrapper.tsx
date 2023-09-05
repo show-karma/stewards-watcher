@@ -13,9 +13,7 @@ import {
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
-import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { useDAO } from 'contexts';
-import { RPCS } from 'helpers';
 import { talismanWallet } from 'utils';
 import { optimism } from 'wagmi/chains';
 
