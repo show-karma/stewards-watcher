@@ -7,8 +7,8 @@ import {
   moonriverTracksDictionary,
   moonbeamGetLockedTokensAction,
   moonbeamActiveDelegatedTracks,
+  moonbase,
 } from 'utils';
-import { moonbeam } from 'utils/moonbeam/network';
 import { RPCS } from 'helpers';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { moonriverUndelegateAction } from '../../utils/moonbeam/moonriverUndelegateAction';
@@ -42,7 +42,7 @@ const config: IDAOConfig = {
       CUSTOM_STATUS: ['community', 'active', 'inactive', 'withdrawn'],
     },
   },
-  DAO_CHAIN: moonbeam,
+  DAO_CHAIN: moonbase,
   ENABLE_DELEGATED_VOTES_BREAKDOWN: true,
   DAO_TOKEN_CONTRACT: [
     {

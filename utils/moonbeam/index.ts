@@ -6,4 +6,5 @@ export * from './moonriverDelegateErrors';
 export * from './moonriverOnChainProvider';
 export * from './moonriverTracksDictionary';
 export * from './moonriverUndelegateAction';
+export * from './network';
 export * from './polkassembly';
