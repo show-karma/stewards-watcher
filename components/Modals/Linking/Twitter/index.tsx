@@ -60,7 +60,10 @@ export const TwitterModal: React.FC<IModal> = ({
           if (!errorMessage) return reject(error);
           updateState({
             title: 'Twitter verification failed',
-            description: errorMessage.error,
+            description:
+              errorMessage?.error?.message ||
+              errorMessage?.error?.error ||
+              errorMessage?.error,
             status: 'error',
             duration: 10000,
           });
@@ -80,7 +83,7 @@ export const TwitterModal: React.FC<IModal> = ({
       validationPromise();
     } catch (error) {
       // eslint-disable-next-line no-console
-      console.log(error);
+      console.log('error', error);
     }
   };
 
@@ -136,7 +139,9 @@ export const TwitterModal: React.FC<IModal> = ({
       />
     );
   };
-  // TODO uncomment when twitter comeback
+  const { daoInfo } = useDAO();
+  // const { profileSelected } = useDelegates();
+
   // const notShowCondition =
   //   daoInfo.config.SHOULD_NOT_SHOW === 'handles' ||
   //   !profileSelected?.userCreatedAt ||
@@ -144,14 +149,13 @@ export const TwitterModal: React.FC<IModal> = ({
   //     !!profileSelected?.userCreatedAt &&
   //     lessThanDays(profileSelected?.userCreatedAt, 100));
 
-  // TODO: TEMPORARY HIDE
-  // useEffect(() => {
-  //   if (notShowCondition) {
-  //     onClose();
-  //   }
-  // }, [open]);
+  const notShowCondition =
+    !daoInfo.config.ENABLE_HANDLES_EDIT?.includes('twitter');
+
   useEffect(() => {
-    onClose();
+    if (notShowCondition) {
+      onClose();
+    }
   }, [open]);
 
   return (

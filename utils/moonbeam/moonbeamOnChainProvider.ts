@@ -32,7 +32,6 @@ interface IProposal {
 const getVoteReason = (vote: any) => {
   if (!vote?.reason) return 'Did not vote';
   const reason = vote.reason.toLowerCase() === 'for' ? 1 : 0;
-  console.log(vote);
   return reason;
 };
 
