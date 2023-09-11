@@ -10,10 +10,9 @@ import {
 } from '@chakra-ui/react';
 import { useDAO, useHandles, useWallet } from 'contexts';
 import { FC, ReactNode } from 'react';
-import { IActiveTab, IProfile } from 'types';
+import { IActiveTab, IMedias, IProfile } from 'types';
 import { getUserForumUrl } from 'utils';
 
-type IMedias = 'twitter' | 'forum' | 'discord' | 'website' | 'thread';
 interface IMediaIcon {
   profile: IProfile;
   media: IMedias;
@@ -41,12 +40,14 @@ export const MediaIcon: FC<IMediaIcon> = ({
 
   const { isConnected } = useWallet();
   const { config } = daoInfo;
-  const { forumOnOpen } = useHandles();
+  const { forumOnOpen, twitterOnOpen } = useHandles();
 
   const medias: IMediasObj = {
     twitter: {
       url: `https://twitter.com/${profile.twitter}`,
       value: profile.twitter,
+      disabledCondition:
+        !daoInfo.config.ENABLE_HANDLES_EDIT?.includes('twitter'),
     },
     thread: {
       url: profile.discussionThread || '',
@@ -78,25 +79,13 @@ export const MediaIcon: FC<IMediaIcon> = ({
 
   const chosenMedia = medias[media];
 
-  // // TODO REFACTOR THIS ASAP | uncomment when twitter comeback
-  // const disabledCondition =
-  //   chosenMedia?.disabledCondition ||
-  //   daoInfo.config.SHOULD_NOT_SHOW === 'handles' ||
-  //   !profile?.userCreatedAt ||
-  //   (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
-  //     !!profile?.userCreatedAt &&
-  //     lessThanDays(profile?.userCreatedAt, 100));
-  // TODO REFACTOR THIS ASAP
   const disabledCondition =
     chosenMedia?.disabledCondition ||
     daoInfo.config.SHOULD_NOT_SHOW === 'handles';
 
-  // TODO TEMPORARY HIDE
-  const hideTwitter = media === 'twitter';
-
   const labelTooltip = () => {
     if (media === 'discord' && chosenMedia.value) return chosenMedia.value;
-    if (disabledCondition || hideTwitter) return '';
+    if (disabledCondition) return '';
     if (isConnected) return `Update your ${media} handle now`;
     return `Login to update your ${media} handle`;
   };
@@ -105,8 +94,7 @@ export const MediaIcon: FC<IMediaIcon> = ({
     if (!isSamePerson) return;
     changeTab('handles');
     const onOpens: { [key: string]: () => void } = {
-      // TODO TEMPORARY DISABLED
-      // twitter: twitterOnOpen,
+      twitter: twitterOnOpen,
       forum: forumOnOpen,
     };
     if (onOpens[media]) onOpens[media]();

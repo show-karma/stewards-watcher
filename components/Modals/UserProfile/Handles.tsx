@@ -28,10 +28,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import dynamic from 'next/dynamic';
 import { YOUTUBE_LINKS } from 'helpers';
+import { lessThanDays } from 'utils';
 
-// const TwitterModal = dynamic(() =>
-//   import('../Linking/Twitter').then(module => module.TwitterModal)
-// );
+const TwitterModal = dynamic(() =>
+  import('../Linking/Twitter').then(module => module.TwitterModal)
+);
 
 const DiscourseModal = dynamic(() =>
   import('../Linking/Forum').then(module => module.DiscourseModal)
@@ -331,42 +332,41 @@ const HandleCases: FC<IHandleCasesProps> = ({
 export const Handles: FC = () => {
   const { theme, daoData, daoInfo } = useDAO();
   const {
-    // twitterIsOpen,
-    // twitterOnOpen,
-    // twitterOnToggle,
+    twitterIsOpen,
+    twitterOnOpen,
+    twitterOnToggle,
     forumIsOpen,
     forumOnToggle,
     forumOnOpen,
-    // twitterOnClose,
+    twitterOnClose,
     forumOnClose,
   } = useHandles();
   const { profileSelected } = useDelegates();
-  // TODO enable when twitter comeback
-  // const notShowCondition =
-  //   daoInfo.config.SHOULD_NOT_SHOW === 'handles' ||
-  //   (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
-  //     !!profileSelected?.userCreatedAt &&
-  //     lessThanDays(profileSelected?.userCreatedAt, 100));
-  const notShowCondition = daoInfo.config.SHOULD_NOT_SHOW === 'handles';
+
+  const notShowCondition =
+    daoInfo.config.DAO_KARMA_ID === 'starknet' &&
+    !!profileSelected?.userCreatedAt &&
+    lessThanDays(profileSelected?.userCreatedAt, 100);
 
   const socialMedias = [
     {
       icon: TwitterIcon,
       name: 'Twitter',
-      disabledCondition: notShowCondition,
-      // TODO TEMPORARY DISABLED
-      // actionType: 'button',
-      // action: () => {
-      //   twitterOnOpen();
-      // },
+      disabledCondition:
+        notShowCondition ||
+        daoInfo.config.ENABLE_HANDLES_EDIT?.includes('twitter') === false,
+      actionType: 'button',
+      action: () => {
+        twitterOnOpen();
+      },
       handle: profileSelected?.twitterHandle
         ? `@${profileSelected?.twitterHandle}`
         : undefined,
       canAdminEdit: true,
-      // TODO TEMPORARY DISABLED
-      action: undefined,
-      actionType: 'text',
-      hideCondition: !profileSelected?.twitterHandle,
+      hideCondition:
+        !daoInfo.config.ENABLE_HANDLES_EDIT?.includes('twitter') ||
+        (!daoInfo.config.ENABLE_HANDLES_EDIT?.includes('twitter') &&
+          !profileSelected?.twitterHandle),
     },
     {
       icon: ForumIcon,
@@ -470,13 +470,12 @@ export const Handles: FC = () => {
           )}
         </Flex>
       </Flex>
-      {/* 
-      TODO: TEMPORARY FIX
+
       <TwitterModal
         open={twitterIsOpen}
         handleModal={twitterOnToggle}
         onClose={twitterOnClose}
-      /> */}
+      />
       {daoData?.forumTopicURL && (
         <DiscourseModal
           open={forumIsOpen}

@@ -17,6 +17,8 @@ type JsonRpcProviderConfig = {
   } | null;
 };
 
+export type IMedias = 'twitter' | 'forum' | 'discord' | 'website' | 'thread';
+
 export interface IDAOConfig {
   DAO: string;
   DAO_DESCRIPTION: string;
@@ -95,6 +97,7 @@ export interface IDAOConfig {
   ENABLE_ONCHAIN_REGISTRY?: boolean;
   ENABLE_PROXY_SUPPORT?: boolean;
   ENABLE_DELEGATED_VOTES_BREAKDOWN?: boolean;
+  ENABLE_HANDLES_EDIT?: IMedias[];
 
   DELEGATE_REGISTRY_CONTRACT?: {
     NETWORK: number;
