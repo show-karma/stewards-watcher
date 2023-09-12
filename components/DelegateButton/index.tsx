@@ -1,6 +1,6 @@
 import { Button, ButtonProps, Flex } from '@chakra-ui/react';
-import { useDAO, useWallet } from 'contexts';
-import { useDelegation, useMixpanel } from 'hooks';
+import { useDAO, useDelegates, useWallet } from 'contexts';
+import { useDelegation, useMixpanel, useToasty } from 'hooks';
 import { convertHexToRGBA } from 'utils';
 import { FC, useEffect, useState } from 'react';
 import { useAccount, useSwitchNetwork } from 'wagmi';
@@ -21,12 +21,14 @@ export const DelegateButton: FC<IDelegateButton> = ({
   shouldBlockModal,
   ...props
 }) => {
+  const { toast } = useToasty();
   const { openConnectModal, chain, connectIsOpen } = useWallet();
   const { isConnected } = useAccount();
   const { daoInfo, theme } = useDAO();
   const { config } = daoInfo;
   const { mixpanel } = useMixpanel();
   const { delegateOnToggle, delegateIsOpen } = useWallet();
+  const { delegatePoolList } = useDelegates();
 
   const [writeAfterAction, setWriteAfterAction] = useState(false);
 
@@ -48,6 +50,18 @@ export const DelegateButton: FC<IDelegateButton> = ({
   });
 
   const handleCase = () => {
+    if (
+      config.ALLOW_BULK_DELEGATE &&
+      config.BULK_DELEGATE_MAXSIZE &&
+      delegatePoolList.length > config.BULK_DELEGATE_MAXSIZE
+    ) {
+      toast({
+        title: 'Too many delegates',
+        description: `You can only delegate to ${config.BULK_DELEGATE_MAXSIZE} user at a time.`,
+        status: 'error',
+      });
+    }
+
     mixpanel.reportEvent({
       event: 'delegateButtonClick',
     });

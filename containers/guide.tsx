@@ -2,6 +2,7 @@ import {
   DelegatesProvider,
   GovernanceVotesProvider,
   HandlesProvider,
+  ProxyProvider,
   useDAO,
   WalletProvider,
 } from 'contexts';
@@ -63,11 +64,13 @@ export const GuideContainer: React.FC = () => {
       <Script
         async
         src={`https://www.googletagmanager.com/gtag/js?id=${config.DAO_GTAG}`}
+        // eslint-disable-next-line no-console
         onLoad={() => console.log('GTAG code setup')}
       />
       <Script
         id="google-analytics"
         strategy="afterInteractive"
+        // eslint-disable-next-line no-console
         onLoad={() => console.log('Google-Analytics code setup')}
       >
         {`window.dataLayer = window.dataLayer || [];
@@ -81,19 +84,21 @@ export const GuideContainer: React.FC = () => {
           <WalletProvider>
             <GovernanceVotesProvider>
               <AuthProvider>
-                <HandlesProvider>
-                  <Flex
-                    w="full"
-                    flexDir="column"
-                    align="center"
-                    bg={theme.background}
-                  >
-                    <HeaderHat />
-                    <MainLayout px="0" w="full">
-                      <GuidePage />
-                    </MainLayout>
-                  </Flex>
-                </HandlesProvider>
+                <ProxyProvider>
+                  <HandlesProvider>
+                    <Flex
+                      w="full"
+                      flexDir="column"
+                      align="center"
+                      bg={theme.background}
+                    >
+                      <HeaderHat />
+                      <MainLayout px="0" w="full">
+                        <GuidePage />
+                      </MainLayout>
+                    </Flex>
+                  </HandlesProvider>
+                </ProxyProvider>
               </AuthProvider>
             </GovernanceVotesProvider>
           </WalletProvider>

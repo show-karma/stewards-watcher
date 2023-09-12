@@ -13,10 +13,11 @@ import { VOTING_HISTORY } from 'utils';
  * @param proposals
  * @param votes
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function concatOnChainProposals(proposals: any[], votes: any[]) {
   const array: IChainRow[] = [];
 
-  votes.forEach((vote: any) => {
+  votes.forEach(vote => {
     const { proposal } = vote;
     array.push({
       voteMethod: 'On-chain',
@@ -89,6 +90,7 @@ async function fetchOnChainProposalVotes(
     });
 
     if (votes && Array.isArray(votes.votes)) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const skipIds = votes.votes.map((vote: any) => vote.proposal.id);
       const { data: proposals } = await axios.get(
         `/api/proposals?dao=${daoName}&skipIds=${skipIds.join(

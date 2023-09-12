@@ -35,10 +35,22 @@
     "react",
     "@typescript-eslint",
     "@typescript-eslint/eslint-plugin",
-    "prettier"
+    "prettier",
+    "unused-imports"
   ],
 
   "rules": {
+    "no-unused-vars": "off",
+    "unused-imports/no-unused-imports": "error",
+    "unused-imports/no-unused-vars": [
+      "warn",
+      {
+        "vars": "all",
+        "varsIgnorePattern": "^_",
+        "args": "after-used",
+        "argsIgnorePattern": "^_"
+      }
+    ],
     "prettier/prettier": "error",
     "react/prop-types": "off",
     "react/require-default-props": "off",
@@ -66,6 +78,6 @@
       }
     ],
     "no-bitwise": ["error", { "allow": ["~"] }],
-    "id-length": ["error", { "min": 2, "max": 30, "exceptions": ["_"] }]
+    "id-length": ["error", { "min": 2, "max": 40, "exceptions": ["_"] }]
   }
 }

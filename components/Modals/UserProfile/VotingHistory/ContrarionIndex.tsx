@@ -95,47 +95,49 @@ export const ContrarionIndexComponent: FC = () => {
     );
   }
 
-  if (isVoteBreakdownError || !voteBreakdown) {
-    return (
-      <Flex w="full" align="center" justify="center" position="relative">
-        <Flex
-          top="0"
-          right="0"
-          position="absolute"
-          w="100%"
-          h="100%"
-          align="center"
-          justify="center"
-        >
-          <Flex
-            zIndex="10000"
-            align="center"
-            justify="center"
-            flexDir="column"
-            color={theme.modal.buttons.navText}
-          >
-            <InfoIcon w="10" h="10" />
-            <Text
-              textAlign="center"
-              fontWeight="400"
-              fontSize="14px"
-              maxW="270px"
-            >
-              There is no contrarian index for this contributor yet.
-            </Text>
-          </Flex>
-        </Flex>
-        <Flex
-          bg="rgba(217, 217, 217, 0.05)"
-          w="100%"
-          h="100%"
-          backdropFilter="blur(15px)"
-          position="absolute"
-        />
-        <ContrarionBox contrarionIndex={1} />
-      </Flex>
-    );
-  }
+  if (isVoteBreakdownError || !voteBreakdown) return null;
+
+  // if (isVoteBreakdownError || !voteBreakdown) {
+  //   return (
+  //     <Flex w="full" align="center" justify="center" position="relative">
+  //       <Flex
+  //         top="0"
+  //         right="0"
+  //         position="absolute"
+  //         w="100%"
+  //         h="100%"
+  //         align="center"
+  //         justify="center"
+  //       >
+  //         <Flex
+  //           zIndex="10000"
+  //           align="center"
+  //           justify="center"
+  //           flexDir="column"
+  //           color={theme.modal.buttons.navText}
+  //         >
+  //           <InfoIcon w="10" h="10" />
+  //           <Text
+  //             textAlign="center"
+  //             fontWeight="400"
+  //             fontSize="14px"
+  //             maxW="270px"
+  //           >
+  //             There is no contrarian index for this contributor yet.
+  //           </Text>
+  //         </Flex>
+  //       </Flex>
+  //       <Flex
+  //         bg="rgba(217, 217, 217, 0.05)"
+  //         w="100%"
+  //         h="100%"
+  //         backdropFilter="blur(15px)"
+  //         position="absolute"
+  //       />
+  //       <ContrarionBox contrarionIndex={1} />
+  //     </Flex>
+  //   );
+  // }
 
   const { contrarionIndex } = voteBreakdown;
 

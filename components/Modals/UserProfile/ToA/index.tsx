@@ -2,8 +2,6 @@ import { Flex, SkeletonText, Text } from '@chakra-ui/react';
 import { FC } from 'react';
 import { useDAO, useEditProfile } from 'contexts';
 import dynamic from 'next/dynamic';
-import parse from 'html-react-parser';
-import DOMPurify from 'dompurify';
 import { NoToA } from './NoToA';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -12,19 +10,12 @@ const MDPreview = dynamic(() => import('@uiw/react-markdown-preview'), {
 });
 
 interface ITextSection {
-  delegateToA: any;
+  delegateToA: string;
 }
 
 const TextSection: FC<ITextSection> = ({ delegateToA }) => {
   const { theme } = useDAO();
 
-  const htmlFrom = (htmlString: string) => {
-    const cleanHtmlString = DOMPurify.sanitize(htmlString, {
-      USE_PROFILES: { html: true },
-    });
-    const html = parse(cleanHtmlString);
-    return html;
-  };
   return (
     <Flex
       maxW={{ base: 'full', lg: '30rem' }}

@@ -1,11 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
 import { proposalsPoll } from 'utils/api/proposals-poll';
-import { moonriverProposals } from 'utils/api/proposals';
+import {
+  moonbaseProposals,
+  moonbeamProposals,
+  moonriverProposals,
+} from 'utils/api/proposals';
 import { SafeCache } from 'utils/api/safe-cache';
 import { fetchOffChainProposals, fetchOnChainProposals } from 'hooks';
 import { MixpanelService } from 'utils/mixpanel';
 
-const cache = SafeCache.create({ expire: 86400 });
+const cache = SafeCache.create();
 
 const { start, stop } = proposalsPoll(cache);
 interface ProposalQuery {
@@ -98,6 +103,10 @@ const handler: NextApiHandler = async (
     if (dao === 'moonriver') {
       // Start polling
       result = await start(cacheKey, moonriverProposals);
+    } else if (req.query.dao === 'moonbeam') {
+      result = await start(cacheKey, moonbeamProposals);
+    } else if (req.query.dao === 'moonbase') {
+      result = await start(cacheKey, moonbaseProposals);
     } else if (dao && source && source !== 'all') {
       result = await start(cacheKey, () =>
         source === 'off-chain'

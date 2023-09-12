@@ -2,6 +2,7 @@ import {
   DelegatesProvider,
   GovernanceVotesProvider,
   HandlesProvider,
+  ProxyProvider,
   TokenHoldersProvider,
   useDAO,
   WalletProvider,
@@ -9,23 +10,13 @@ import {
 import { MainLayout } from 'layouts';
 import Head from 'next/head';
 import React from 'react';
-import {
-  RainbowWrapper,
-  DelegatesList,
-  HeaderHat,
-  BodyTitle,
-  TokenHolders,
-} from 'components';
+import { RainbowWrapper, HeaderHat, TokenHolders } from 'components';
 import { Flex } from '@chakra-ui/react';
 import Script from 'next/script';
 import { AuthProvider } from 'contexts/auth';
 import { useRouter } from 'next/router';
 
-interface IDAOContainer {
-  user?: string;
-}
-
-export const TokenHoldersContainer: React.FC<IDAOContainer> = ({ user }) => {
+export const TokenHoldersContainer: React.FC = () => {
   const { daoInfo, theme } = useDAO();
   const { config } = daoInfo;
   const router = useRouter();
@@ -60,11 +51,13 @@ export const TokenHoldersContainer: React.FC<IDAOContainer> = ({ user }) => {
       <Script
         async
         src={`https://www.googletagmanager.com/gtag/js?id=${config.DAO_GTAG}`}
+        // eslint-disable-next-line no-console
         onLoad={() => console.log('GTAG code setup')}
       />
       <Script
         id="google-analytics"
         strategy="afterInteractive"
+        // eslint-disable-next-line no-console
         onLoad={() => console.log('Google-Analytics code setup')}
       >
         {`window.dataLayer = window.dataLayer || [];
@@ -79,23 +72,25 @@ export const TokenHoldersContainer: React.FC<IDAOContainer> = ({ user }) => {
             <AuthProvider>
               <GovernanceVotesProvider>
                 <HandlesProvider>
-                  <TokenHoldersProvider>
-                    <Flex
-                      w="full"
-                      flexDir="column"
-                      align="center"
-                      background={theme.secondBg || theme.bodyBg}
-                    >
-                      <HeaderHat />
-                      <MainLayout
-                        px="0"
+                  <ProxyProvider>
+                    <TokenHoldersProvider>
+                      <Flex
                         w="full"
-                        bgColor={theme.tokenHolders.bg}
+                        flexDir="column"
+                        align="center"
+                        background={theme.secondBg || theme.bodyBg}
                       >
-                        <TokenHolders />
-                      </MainLayout>
-                    </Flex>
-                  </TokenHoldersProvider>
+                        <HeaderHat />
+                        <MainLayout
+                          px="0"
+                          w="full"
+                          bgColor={theme.tokenHolders.bg}
+                        >
+                          <TokenHolders />
+                        </MainLayout>
+                      </Flex>
+                    </TokenHoldersProvider>
+                  </ProxyProvider>
                 </HandlesProvider>
               </GovernanceVotesProvider>
             </AuthProvider>

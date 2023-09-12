@@ -12,6 +12,7 @@ interface SafeCacheConfig {
   /**
    * Store cache on file
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 
@@ -27,6 +28,7 @@ export class SafeCache {
     this.store = {} as SafeCacheStore;
     // eslint-disable-next-line no-param-reassign
     if (config?.expire) config.expire *= 1000;
+    // eslint-disable-next-line no-console
     console.log(`SafeCache created with config: ${JSON.stringify(config)}`);
   }
 
@@ -40,6 +42,7 @@ export class SafeCache {
     if (this.config?.expire) {
       setTimeout(() => {
         delete this.store[realKey];
+        // eslint-disable-next-line no-console
         console.log(`Key expired: ${realKey}`);
       }, this.config.expire);
     }
@@ -49,6 +52,7 @@ export class SafeCache {
     const realKey = this.getKey(key);
     this.store[realKey] = value;
     this.expireKey(realKey);
+    // eslint-disable-next-line no-console
     console.log(`Key set: ${realKey}`);
   }
 

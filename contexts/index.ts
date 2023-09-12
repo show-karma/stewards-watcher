@@ -5,6 +5,7 @@ export * from './delegates';
 export * from './editProfile';
 export * from './governanceVotes';
 export * from './handles';
+export * from './proxy';
 export * from './scoreBreakdown';
 export * from './tokenholders';
 export * from './votes';

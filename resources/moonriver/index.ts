@@ -1,6 +1,7 @@
 import { IDAOConfig, IDAOTheme } from 'types';
 import { moonriverDelegateAction } from 'utils/moonbeam/moonriverDelegateAction';
 import {
+  moonriverActiveDelegatedTracks,
   moonriverConvictionOptions,
   moonriverDelegateErrors,
   moonriverGetLockedTokensAction,
@@ -8,6 +9,8 @@ import {
   moonriverTracksDictionary,
 } from 'utils';
 import { moonriver } from 'wagmi/chains';
+import { RPCS } from 'helpers';
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { moonriverUndelegateAction } from '../../utils/moonbeam/moonriverUndelegateAction';
 import { polkassemblyProposalUrl } from '../../utils/moonbeam/polkassembly';
 import ABI from './ABI.json';
@@ -52,7 +55,9 @@ const config: IDAOConfig = {
   EXCLUDED_CARD_FIELDS: ['healthScore', 'discordScore', 'offChainVotesPct'],
   DAO_CATEGORIES_TYPE: 'tracks',
   ALLOW_BULK_DELEGATE: true,
+  BULK_DELEGATE_MAXSIZE: 1,
   ALLOW_UNDELEGATE: true,
+  GET_ACTIVE_DELEGATIONS_ACTION: moonriverActiveDelegatedTracks,
   UNDELEGATE_ACTION: moonriverUndelegateAction(
     bulkContractAddr,
     delegateContractAddr,
@@ -61,7 +66,8 @@ const config: IDAOConfig = {
   BULK_DELEGATE_ACTION: moonriverDelegateAction(
     bulkContractAddr, // Batch contract
     delegateContractAddr, // Delegate contract
-    batchContractAbi
+    batchContractAbi,
+    false
   ),
   GET_LOCKED_TOKENS_ACTION: moonriverGetLockedTokensAction,
   DAO_EXT_VOTES_PROVIDER: {
@@ -72,7 +78,7 @@ const config: IDAOConfig = {
   ENABLE_DELEGATE_TRACKER: true,
   DISABLE_EMAIL_INPUT: true,
   DAO_SUPPORTS_TOS: true,
-  PROPOSAL_LINK: polkassemblyProposalUrl.moonriver,
+  PROPOSAL_LINK: { onChain: polkassemblyProposalUrl.moonriver },
   TOS_URL:
     'https://forum.moonbeam.foundation/t/introducing-delegated-voting-enhancing-governance-on-moonriver-and-moonbeam/843',
   HIDE_FOR_DELEGATES: ['delegator-lookup'],
@@ -80,6 +86,13 @@ const config: IDAOConfig = {
   DELEGATION_CUSTOM_CONVICTION: true,
   DELEGATION_CONVICTION_OPTIONS: moonriverConvictionOptions,
   TRACKS_DICTIONARY: moonriverTracksDictionary,
+  ENABLE_PROXY_SUPPORT: true,
+  ENABLE_DELEGATED_VOTES_BREAKDOWN: true,
+  CUSTOM_RPC: jsonRpcProvider({
+    rpc: () => ({
+      http: RPCS.moonriver,
+    }),
+  }),
 };
 
 const dark: IDAOTheme = {

@@ -13,9 +13,7 @@ import {
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
-import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { useDAO } from 'contexts';
-import { RPCS } from 'helpers';
 import { talismanWallet } from 'utils';
 import { optimism } from 'wagmi/chains';
 
@@ -28,21 +26,17 @@ export const RainbowWrapper: React.FC<ProviderProps> = ({ children }) => {
 
   const { config } = daoInfo;
 
+  const rpcs = [
+    process.env.NEXT_PUBLIC_ALCHEMY_KEY
+      ? alchemyProvider({
+          apiKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY,
+        })
+      : publicProvider(),
+    config.CUSTOM_RPC ? config.CUSTOM_RPC : null,
+  ].filter(item => item !== null);
   const { chains, publicClient, webSocketPublicClient } = configureChains(
     [config.DAO_CHAIN, optimism],
-    [
-      process.env.NEXT_PUBLIC_ALCHEMY_KEY
-        ? alchemyProvider({
-            apiKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY,
-          })
-        : publicProvider(),
-
-      jsonRpcProvider({
-        rpc: () => ({
-          http: RPCS.moonriver,
-        }),
-      }),
-    ]
+    rpcs
   );
 
   const connectors = connectorsForWallets([

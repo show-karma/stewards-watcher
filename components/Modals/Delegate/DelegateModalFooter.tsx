@@ -1,8 +1,7 @@
-import { Box, FlexProps, Text, Icon, Flex } from '@chakra-ui/react';
+import { FlexProps, Text, Flex } from '@chakra-ui/react';
 import { SubmitEmailInput } from 'components/Inputs/SubmitEmailInput';
 import { useDAO } from 'contexts';
 import { useToasty } from 'hooks';
-import { BsExclamationCircleFill } from 'react-icons/bs';
 import { saveLeadEmail } from 'utils/sendLeadEmail';
 
 export const DelegateModalFooter: React.FC<{

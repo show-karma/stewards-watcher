@@ -43,21 +43,6 @@ interface IAPIData {
   timestamp: number;
 }
 
-const menuOptions = [
-  {
-    label: 'Monthly',
-    value: 1,
-  },
-  {
-    label: 'Half yearly',
-    value: 6,
-  },
-  {
-    label: 'Yearly',
-    value: 12,
-  },
-];
-
 const defaultLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May'];
 
 const defaultData = [1, 4, 2, 8];
@@ -167,7 +152,6 @@ const ChartComponent: FC<IChartComponentProps> = ({
 export const DelegatedVotesChanges: FC = () => {
   const { theme, daoInfo } = useDAO();
   const { profileSelected } = useDelegates();
-  const [selectedInterval, setInterval] = useState(menuOptions[2]);
   // const [data, setData] = useState<IAPIData[]>([]);
   const [labels, setLabels] = useState<string[]>(defaultLabels);
   const [dataset, setDataset] = useState<number[]>(defaultData);
@@ -262,7 +246,7 @@ export const DelegatedVotesChanges: FC = () => {
     },
   };
 
-  const setupDataset = (fetchedData: IAPIData[], interval: number) => {
+  const setupDataset = (fetchedData: IAPIData[]) => {
     if (!fetchedData.length) {
       setLabels([]);
       setDataset([]);
@@ -302,8 +286,10 @@ export const DelegatedVotesChanges: FC = () => {
       ).data;
       const { timeline } = fetchedData;
 
-      setupDataset(timeline, selectedInterval.value);
+      setupDataset(timeline);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
+      // eslint-disable-next-line no-console
       console.error(error);
       setHasError(true);
     } finally {
@@ -314,6 +300,8 @@ export const DelegatedVotesChanges: FC = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  if (hasError) return null;
 
   return (
     <Flex borderRadius="md" flexDir="column" w="full">

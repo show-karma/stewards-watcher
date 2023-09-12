@@ -90,6 +90,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
       const { nonceMessage } = response.data.data;
       return nonceMessage;
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error in login:', error);
       return null;
     }
@@ -100,6 +101,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
       const signedMessage = await signMessageAsync({ message: messageToSign });
       return signedMessage;
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.log(err);
       return null;
     }
@@ -138,6 +140,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
 
       return token;
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log('Error in getAccountAssets', error);
       return null;
     }
@@ -161,6 +164,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
       searchProfileModal(address, 'statement');
       return true;
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log(error);
       return false;
     } finally {

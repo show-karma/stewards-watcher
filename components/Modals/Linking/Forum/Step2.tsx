@@ -39,6 +39,7 @@ export const Step2: React.FC<IModal> = ({
       setSignature(sign);
       nextStep();
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log(error);
     }
   };

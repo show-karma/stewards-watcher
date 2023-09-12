@@ -1,6 +1,18 @@
-import { Box, Flex, FlexProps, Text, Tooltip } from '@chakra-ui/react';
+import {
+  AlertDescription,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  Box,
+  Flex,
+  FlexProps,
+  Text,
+  Tooltip,
+} from '@chakra-ui/react';
 import { useDAO } from 'contexts';
+import { useToasty } from 'hooks';
 import { BsPlus } from 'react-icons/bs';
+import { IoWarning } from 'react-icons/io5';
 
 export interface ITrackBadgeProps {
   track: {
@@ -11,6 +23,7 @@ export interface ITrackBadgeProps {
   onSelect: (track: ITrackBadgeProps['track']) => void;
   onRemove: (trackId: number) => void;
   styles?: FlexProps;
+  alreadyDelegated?: boolean;
 }
 
 export const TrackBadge: React.FC<ITrackBadgeProps> = ({
@@ -19,11 +32,40 @@ export const TrackBadge: React.FC<ITrackBadgeProps> = ({
   onSelect,
   selected,
   styles,
+  alreadyDelegated,
 }) => {
   const { theme, daoInfo } = useDAO();
+  const { toast } = useToasty();
+
+  const dispatchUndelegateOpenEvent = () => {
+    if (typeof window === 'undefined') return;
+    window.dispatchEvent(new Event('undelegateOpen'));
+  };
 
   const handleSelect = () => {
-    onSelect(track);
+    if (alreadyDelegated) {
+      toast({
+        render: () => (
+          <Alert status="error" backgroundColor="#feb2b2" borderRadius={6}>
+            <AlertIcon color="black" />
+            <Box color="black">
+              <AlertTitle>Track already delegated</AlertTitle>
+              <AlertDescription>
+                <p>
+                  You have already delegated to this track. Please undelegate
+                  before redelegating by clicking{' '}
+                  <button type="button" onClick={dispatchUndelegateOpenEvent}>
+                    <u>here</u>
+                  </button>
+                  .{' '}
+                </p>
+              </AlertDescription>
+            </Box>
+          </Alert>
+        ),
+        status: 'error',
+      });
+    } else onSelect(track);
   };
 
   const handleRemove = () => {
@@ -35,7 +77,12 @@ export const TrackBadge: React.FC<ITrackBadgeProps> = ({
       label={
         daoInfo.config.TRACKS_DICTIONARY &&
         daoInfo.config.TRACKS_DICTIONARY[track.name]
-          ? daoInfo.config.TRACKS_DICTIONARY[track.name].description
+          ? `${daoInfo.config.TRACKS_DICTIONARY[track.name].description}
+          ${
+            alreadyDelegated
+              ? ' - ⚠️Track already delegated, please undelegate before trying.'
+              : ''
+          }`
           : undefined
       }
       bg={theme.collapse.bg || theme.card.background}
@@ -55,8 +102,8 @@ export const TrackBadge: React.FC<ITrackBadgeProps> = ({
         key={track.id}
         onClick={selected ? handleRemove : handleSelect}
         color={selected ? '#1DE9B6' : theme.text}
-        background={selected ? 'black' : 'transparent'}
         {...styles}
+        background={selected ? 'black' : 'transparent'}
       >
         <Flex flexDir="row" gap="1">
           <Text>
@@ -73,7 +120,7 @@ export const TrackBadge: React.FC<ITrackBadgeProps> = ({
           transition="200ms ease-in-out"
           fontSize={24}
         >
-          <BsPlus />
+          {alreadyDelegated ? <IoWarning color="orange" /> : <BsPlus />}
         </Box>
       </Flex>
     </Tooltip>

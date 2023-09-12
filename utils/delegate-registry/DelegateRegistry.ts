@@ -85,9 +85,11 @@ export class DelegateRegistryContract extends GelatoRelay {
   wait(taskId: string): Promise<string> {
     return new Promise((resolve, reject) => {
       const loop = async () => {
-        while (1) {
+        const oneSecond = 1;
+        while (oneSecond) {
           const status = await this.getTaskStatus(taskId);
           // print status :D so we can debug this for now
+          // eslint-disable-next-line no-console
           console.log(status);
           if (!status) {
             reject(new Error('Transaction goes wrong.'));
@@ -206,6 +208,7 @@ export class DelegateRegistryContract extends GelatoRelay {
         s
       );
 
+    // eslint-disable-next-line no-console
     console.log({ payload, signature, r, s, v });
     if (!payload) throw new Error('Payload is undefined');
     return [

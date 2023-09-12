@@ -28,6 +28,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import dynamic from 'next/dynamic';
 import { YOUTUBE_LINKS } from 'helpers';
+import { lessThanDays } from 'utils';
 
 const TwitterModal = dynamic(() =>
   import('../Linking/Twitter').then(module => module.TwitterModal)
@@ -341,32 +342,31 @@ export const Handles: FC = () => {
     forumOnClose,
   } = useHandles();
   const { profileSelected } = useDelegates();
-  // TODO enable when twitter comeback
-  // const notShowCondition =
-  //   daoInfo.config.SHOULD_NOT_SHOW === 'handles' ||
-  //   (daoInfo.config.DAO_KARMA_ID === 'starknet' &&
-  //     !!profileSelected?.userCreatedAt &&
-  //     lessThanDays(profileSelected?.userCreatedAt, 100));
-  const notShowCondition = daoInfo.config.SHOULD_NOT_SHOW === 'handles';
+
+  const notShowCondition =
+    daoInfo.config.DAO_KARMA_ID === 'starknet' &&
+    !!profileSelected?.userCreatedAt &&
+    lessThanDays(profileSelected?.userCreatedAt, 100);
 
   const socialMedias = [
     {
       icon: TwitterIcon,
       name: 'Twitter',
-      disabledCondition: notShowCondition,
-      // TODO TEMPORARY DISABLED
-      // actionType: 'button',
-      // action: () => {
-      //   twitterOnOpen();
-      // },
+      disabledCondition:
+        notShowCondition ||
+        daoInfo.config.ENABLE_HANDLES_EDIT?.includes('twitter') === false,
+      actionType: 'button',
+      action: () => {
+        twitterOnOpen();
+      },
       handle: profileSelected?.twitterHandle
         ? `@${profileSelected?.twitterHandle}`
         : undefined,
       canAdminEdit: true,
-      // TODO TEMPORARY DISABLED
-      action: undefined,
-      actionType: 'text',
-      hideCondition: !profileSelected?.twitterHandle,
+      hideCondition:
+        !daoInfo.config.ENABLE_HANDLES_EDIT?.includes('twitter') ||
+        (!daoInfo.config.ENABLE_HANDLES_EDIT?.includes('twitter') &&
+          !profileSelected?.twitterHandle),
     },
     {
       icon: ForumIcon,
@@ -403,7 +403,7 @@ export const Handles: FC = () => {
     },
     {
       icon: GoCommentDiscussion,
-      name: 'Thread',
+      name: 'Delegate Communication Thread',
       action: undefined,
       actionType: 'input',
       handle: profileSelected?.discussionThread
@@ -453,7 +453,7 @@ export const Handles: FC = () => {
                 >
                   <Flex flexDir="row" gap="3" align="center" mt="2">
                     <Icon boxSize="6" as={media.icon} />
-                    <Text fontSize="lg" fontWeight="medium" w="20" mr="6">
+                    <Text fontSize="lg" fontWeight="medium" w="40" mr="6">
                       {media.name}
                     </Text>
                   </Flex>
@@ -470,13 +470,12 @@ export const Handles: FC = () => {
           )}
         </Flex>
       </Flex>
-      {/* 
-      TODO: TEMPORARY FIX
+
       <TwitterModal
         open={twitterIsOpen}
         handleModal={twitterOnToggle}
         onClose={twitterOnClose}
-      /> */}
+      />
       {daoData?.forumTopicURL && (
         <DiscourseModal
           open={forumIsOpen}

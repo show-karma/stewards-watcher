@@ -77,6 +77,7 @@ type ProposalStatusInfo = [NumberIsh, ProposalStatusData, ProposalStatusData?];
 
 export interface MoonbeamProposal {
   proposalId: NumberIsh;
+  timestamp: number;
   information: {
     ongoing?: {
       track: string;

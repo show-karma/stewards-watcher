@@ -3,11 +3,14 @@ import { useDAO } from 'contexts';
 import { FC } from 'react';
 import { ICardStat } from 'types';
 
-export const DelegateStat: FC<{ stat: ICardStat }> = ({ stat }) => {
+export const DelegateStat: FC<{
+  stat: ICardStat;
+  disableTooltip?: boolean;
+}> = ({ stat, disableTooltip }) => {
   const { theme } = useDAO();
   return (
     <Tooltip
-      label={stat.tooltipText}
+      label={disableTooltip ? '' : stat.tooltipText}
       hasArrow
       bgColor="black"
       color="white"

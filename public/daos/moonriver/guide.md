@@ -9,4 +9,4 @@ Community Delegates are individuals or groups entrusted with voting power by tok
 ### Tokenholders
 
 Tokenholders and the community members can access real-time insights into delegate activity across platforms like Snapshot, On-Chain voting, Discourse, Discord, and other systems via this dashboard. This promotes transparency and better decision-making in the Moonriver/Moonbeam governance.
-If you're interested in delegating your tokens, utilize the various filtering features to refine your options, identify suitable candidates, and delegate your tokens accordingly.
+If you're interested in delegating your tokens, utilize the various filtering features to refine your options, identify suitable candidates, and delegate your tokens accordingly. 

@@ -28,6 +28,8 @@ import { api } from 'helpers';
 import { useAccount } from 'wagmi';
 import { IBulkDelegatePayload } from 'utils/moonbeam/moonriverDelegateAction';
 import { ITrackBadgeProps } from 'components/DelegationPool/TrackBadge';
+import { numberToWords } from 'utils/numberToWords';
+import { checkRealAddress } from 'utils';
 import { useDAO } from './dao';
 
 interface IDelegateProps {
@@ -79,7 +81,10 @@ interface IDelegateProps {
     paramToSetup: 'sortby' | 'order' | 'period' | 'statuses' | 'toa' | 'tos',
     paramValue: string
   ) => void;
-  refreshProfileModal: (tab?: IActiveTab) => Promise<void>;
+  refreshProfileModal: (
+    tab?: IActiveTab,
+    addressToFind?: string
+  ) => Promise<void>;
   handleAcceptedTermsOnly: (value: boolean) => void;
   acceptedTermsOnly: boolean;
   handleDelegateOffersToA: (value: boolean) => void;
@@ -476,7 +481,14 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     undefined
   );
 
-  const checkIfUserNotFound = (
+  const compareAddress = (walletToCompare: string) => {
+    if (!publicAddress || !walletToCompare) return false;
+    if (walletToCompare.toLowerCase() === publicAddress.toLowerCase())
+      return true;
+    return false;
+  };
+
+  const checkIfUserNotFound = async (
     userToSearch: string,
     error?: string,
     defaultTab?: IActiveTab
@@ -487,13 +499,10 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       return;
     }
 
-    if (
-      error === 'Not Found' &&
-      publicAddress?.toLowerCase() === userToSearch.toLowerCase() &&
-      isConnected
-    ) {
+    if (error === 'Not Found' && compareAddress(userToSearch) && isConnected) {
+      const getRealWallet = await checkRealAddress(publicAddress);
       const userWithoutDelegate: IDelegate = {
-        address: userToSearch,
+        address: getRealWallet || userToSearch,
         forumActivity: 0,
         karmaScore: 0,
         discordScore: 0,
@@ -651,7 +660,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       selectProfile(userFound, checkTab ? shouldOpenTab : undefined);
     } catch (error: any) {
       if (error?.response?.data && error?.response?.data.error) {
-        checkIfUserNotFound(
+        await checkIfUserNotFound(
           userToSearch,
           error?.response?.data.error.error,
           defaultTab
@@ -660,12 +669,15 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     }
   };
 
-  const refreshProfileModal = async (tab?: IActiveTab) => {
+  const refreshProfileModal = async (
+    tab?: IActiveTab,
+    addressToFind?: string
+  ) => {
     try {
       const axiosClient = await api.get(`/dao/find-delegate`, {
         params: {
           dao: config.DAO_KARMA_ID,
-          user: profileSelected?.address,
+          user: addressToFind || profileSelected?.address,
         },
       });
       const { data } = axiosClient.data;
@@ -1022,10 +1034,26 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       newDelegates.push({
         delegator,
         delegate,
-        tracks: selectedTracks,
+        tracks: selectedTracks.slice(
+          0,
+          config.BULK_DELEGATE_MAXSIZE || selectedTracks.length
+        ),
         amount,
         conviction,
       });
+    }
+    if (
+      config.BULK_DELEGATE_MAXSIZE &&
+      newDelegates.length > config.BULK_DELEGATE_MAXSIZE
+    ) {
+      toast({
+        title: 'Too many delegates',
+        description: `You can only delegate to ${
+          config.BULK_DELEGATE_MAXSIZE
+        } user${config.BULK_DELEGATE_MAXSIZE > 1 ? 's' : ''} at a time.`,
+        status: 'error',
+      });
+      return;
     }
 
     setDelegatePoolList(newDelegates);
@@ -1074,6 +1102,19 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
 
     if (~delegateIndex) {
       const newTracks = [...newDelegates[delegateIndex].tracks];
+      if (
+        config.BULK_DELEGATE_MAXSIZE &&
+        newTracks.length >= config.BULK_DELEGATE_MAXSIZE
+      ) {
+        toast({
+          title: 'Too many tracks',
+          description: `You can only select ${numberToWords(
+            config.BULK_DELEGATE_MAXSIZE
+          )} track${config.BULK_DELEGATE_MAXSIZE > 1 ? 's' : ''} at a time.`,
+          status: 'error',
+        });
+        return;
+      }
       const trackIndex = newTracks.findIndex(item => item.id === track.id);
       if (!~trackIndex) {
         newTracks.push(track);

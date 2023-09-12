@@ -11,7 +11,6 @@ import {
   Img,
   Button,
   Grid,
-  useColorModeValue,
 } from '@chakra-ui/react';
 import { useAuth } from 'contexts/auth';
 import { useDAO } from 'contexts';
@@ -40,11 +39,6 @@ export const DelegateLoginModal: FC<IDelegateLogin> = ({ isOpen, onClose }) => {
       icon: '/icons/edit.svg',
     },
   ];
-
-  const variantImg = useColorModeValue(
-    '/images/karma_logo_green_and_black.svg',
-    '/images/karma_logo_white.png'
-  );
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>

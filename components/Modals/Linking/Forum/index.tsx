@@ -1,6 +1,5 @@
 import { ModalContent, ModalOverlay, Modal } from '@chakra-ui/react';
-import { AxiosError } from 'axios';
-import { useDAO, useDelegates } from 'contexts';
+import { useDAO } from 'contexts';
 import { AxiosClient } from 'helpers';
 import { useToasty } from 'hooks';
 import dynamic from 'next/dynamic';
@@ -58,6 +57,7 @@ export const DiscourseModal: React.FC<IModal> = ({
           });
           return resolve(true);
         })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .catch((error: any) => {
           setStep(ESteps.PUBLISH);
           const errorMessage = error?.response?.data;
@@ -83,6 +83,7 @@ export const DiscourseModal: React.FC<IModal> = ({
       });
       validationPromise();
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log(error);
     }
   };

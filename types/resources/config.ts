@@ -4,10 +4,20 @@ import { writeContract } from '@wagmi/core';
 import { Chain } from 'wagmi';
 import { IChainRow } from 'types/IChainRow';
 import { IConvictionOption, Hex } from 'types/votes';
+import { IActiveDelegatedTracks } from 'utils';
 import { IForumType } from './forum';
 import { IStats, IStatsID } from './stats';
 import { IVotingHistoryColumn } from './modal';
 import { IForDelegates } from './header';
+
+type JsonRpcProviderConfig = {
+  rpc: (chain: Chain) => {
+    http: string;
+    webSocket?: string;
+  } | null;
+};
+
+export type IMedias = 'twitter' | 'forum' | 'discord' | 'website' | 'thread';
 
 export interface IDAOConfig {
   DAO: string;
@@ -31,6 +41,7 @@ export interface IDAOConfig {
   DAO_TOKEN_CONTRACT?: {
     contractAddress: `0x${string}`;
     method: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ABI?: any;
   }[];
   DAO_DELEGATE_ACTION?: () => void;
@@ -73,19 +84,31 @@ export interface IDAOConfig {
   };
   ALLOW_UNDELEGATE?: boolean;
   ALLOW_BULK_DELEGATE?: boolean;
+  BULK_DELEGATE_MAXSIZE?: number;
   DISABLE_EMAIL_INPUT?: boolean;
   HIDE_FOR_DELEGATES?: IForDelegates[];
-  PROPOSAL_LINK?: (proposalId: number | string) => string;
+  PROPOSAL_LINK?: {
+    onChain?: (proposalId: number | string, version?: string) => string;
+    offChain?: (proposalId: number | string, version?: string) => string;
+  };
   DELEGATION_CUSTOM_AMOUNT?: boolean;
   DELEGATION_CUSTOM_CONVICTION?: boolean;
   DELEGATION_CONVICTION_OPTIONS?: IConvictionOption[];
   ENABLE_ONCHAIN_REGISTRY?: boolean;
+  ENABLE_PROXY_SUPPORT?: boolean;
+  ENABLE_DELEGATED_VOTES_BREAKDOWN?: boolean;
+  ENABLE_HANDLES_EDIT?: IMedias[];
+
   DELEGATE_REGISTRY_CONTRACT?: {
     NETWORK: number;
     ADDRESS: Hex;
   };
   TRACKS_DICTIONARY?: { [key: string]: { emoji: string; description: string } };
   // TODO: type anys
+  GET_ACTIVE_DELEGATIONS_ACTION?: (
+    address: string,
+    daoName: string
+  ) => Promise<IActiveDelegatedTracks[]>;
   /**
    * Defines a function to bulk delegate
    * @param payload
@@ -93,6 +116,7 @@ export interface IDAOConfig {
    * @returns tx hash
    */
   UNDELEGATE_ACTION?: (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     payload: any,
     write: typeof writeContract
   ) => Promise<`0x${string}`>;
@@ -103,6 +127,7 @@ export interface IDAOConfig {
    * @returns tx hash
    */
   BULK_DELEGATE_ACTION?: (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     payload: any,
     write: typeof writeContract
   ) => Promise<`0x${string}`>;
@@ -123,4 +148,7 @@ export interface IDAOConfig {
       address: string
     ) => Promise<IChainRow[]>;
   };
+  // TODO change it from any
+  // Had few issues w/ types, for now we'll leave it as any
+  CUSTOM_RPC?: any;
 }
