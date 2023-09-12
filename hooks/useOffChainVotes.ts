@@ -1,6 +1,7 @@
 /* eslint-disable no-useless-catch */
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { useDAO } from 'contexts';
 
 import moment from 'moment';
@@ -30,7 +31,6 @@ const concatOffChainProposals = (proposals: any[], votes: any[]) => {
       voteId: proposal?.id,
     });
   });
-
   proposals.forEach(proposal => {
     if (!votes.find(vote => vote.proposal.id === proposal.id)) {
       array.push({
@@ -50,6 +50,19 @@ const concatOffChainProposals = (proposals: any[], votes: any[]) => {
 
   return array;
 };
+
+async function fetchOffChainProposals(
+  daoName: string | string[]
+): Promise<any[]> {
+  const { data: proposals } = await offChainClient.query({
+    query: VOTING_HISTORY.offChainProposalsReq,
+    variables: {
+      daoname: [daoName].flat(),
+    },
+  });
+
+  return proposals.proposals || [];
+}
 
 /**
  * Fetch proposals from the subgraph
@@ -71,13 +84,10 @@ async function fetchOffChainProposalVotes(
       },
     });
     if (votes && Array.isArray(votes.votes)) {
-      const { data: proposals } = await offChainClient.query({
-        query: VOTING_HISTORY.offChainProposalsReq,
-        variables: {
-          daoname: [daoName].flat(),
-        },
-      });
-      return concatOffChainProposals(proposals.proposals, votes.votes);
+      const { data: proposals } = await axios.get(
+        `/api/proposals?dao=${daoName}&source=off-chain`
+      );
+      return concatOffChainProposals(proposals, votes.votes);
     }
   } catch (error) {
     throw error;
@@ -99,4 +109,4 @@ const useOffChainVotes = (daoName: string | string[], address: string) => {
     return fetchOffChainProposalVotes(daoName, address);
   });
 };
-export { useOffChainVotes, fetchOffChainProposalVotes };
+export { useOffChainVotes, fetchOffChainProposalVotes, fetchOffChainProposals };
