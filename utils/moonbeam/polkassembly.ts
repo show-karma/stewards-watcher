@@ -35,6 +35,11 @@ export const polkassemblyProposalUrl = {
       return `https://moonbeam.polkassembly.io/referendum/${proposalId}`;
     return `https://moonbeam.polkassembly.io/referenda/${proposalId}`;
   },
+  moonbase: (proposalId: number | string, version?: string) => {
+    if (version === 'V1')
+      return `https://moonbase.polkassembly.io/referendum/${proposalId}`;
+    return `https://moonbase.polkassembly.io/referenda/${proposalId}`;
+  },
 };
 
 export const routes = {
