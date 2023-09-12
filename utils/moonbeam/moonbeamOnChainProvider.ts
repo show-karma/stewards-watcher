@@ -88,7 +88,9 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
 async function proposalsWithMetadata(): Promise<
   (MoonbeamProposal & { proposal: string; trackId: NumberIsh })[]
 > {
-  const { data } = await axios.get('/api/proposals?dao=moonbeam');
+  const { data } = await axios.get(
+    '/api/proposals?dao=moonbeam&source=on-chain'
+  );
   return data;
 }
 
