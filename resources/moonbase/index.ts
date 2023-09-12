@@ -3,14 +3,16 @@ import { moonriverDelegateAction } from 'utils/moonbeam/moonriverDelegateAction'
 import {
   moonriverConvictionOptions,
   moonriverDelegateErrors,
-  moonbeamOnChainProvider,
   moonriverTracksDictionary,
-  moonbeamGetLockedTokensAction,
-  moonbeamActiveDelegatedTracks,
   moonbase,
 } from 'utils';
 import { RPCS } from 'helpers';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
+import {
+  moonbaseActiveDelegatedTracks,
+  moonbaseGetLockedTokensAction,
+  moonbaseOnChainProvider,
+} from 'utils/moonbeam/moonbaseOnChainProvider';
 import { moonriverUndelegateAction } from '../../utils/moonbeam/moonriverUndelegateAction';
 import { polkassemblyProposalUrl } from '../../utils/moonbeam/polkassembly';
 import ABI from './ABI.json';
@@ -68,10 +70,10 @@ const config: IDAOConfig = {
     batchContractAbi,
     false
   ),
-  GET_ACTIVE_DELEGATIONS_ACTION: moonbeamActiveDelegatedTracks,
-  GET_LOCKED_TOKENS_ACTION: moonbeamGetLockedTokensAction,
+  GET_ACTIVE_DELEGATIONS_ACTION: moonbaseActiveDelegatedTracks,
+  GET_LOCKED_TOKENS_ACTION: moonbaseGetLockedTokensAction,
   DAO_EXT_VOTES_PROVIDER: {
-    onChain: moonbeamOnChainProvider,
+    onChain: moonbaseOnChainProvider,
   },
   DELEGATION_ERRORS_DICTIONARY: moonriverDelegateErrors,
   EXCLUDED_VOTING_HISTORY_COLUMN: ['contrarionIndex', 'offChainVoteBreakdown'],
@@ -79,9 +81,7 @@ const config: IDAOConfig = {
   DISABLE_EMAIL_INPUT: true,
   DAO_SUPPORTS_TOS: true,
   PROPOSAL_LINK: {
-    onChain: polkassemblyProposalUrl.moonbeam,
-    offChain: (proposalId: string | number) =>
-      `https://snapshot.org/#/moonbeam-foundation.eth/proposal/${proposalId}`,
+    onChain: polkassemblyProposalUrl.moonbase,
   },
   TOS_URL:
     'https://forum.moonbeam.foundation/t/introducing-delegated-voting-enhancing-governance-on-moonriver-and-moonbeam/843',
