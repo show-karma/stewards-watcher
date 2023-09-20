@@ -1,10 +1,10 @@
 /* eslint-disable no-useless-catch */
 import { Hex, IChainRow, MoonbeamProposal, NumberIsh } from 'types';
-import { ApolloClient, gql, InMemoryCache } from '@apollo/client';
 import moment from 'moment';
 import { ethers } from 'ethers';
 import { api } from 'helpers';
 import axios from 'axios';
+import { ISubscanSearchResponse } from 'types/ISubscanSearchResponse';
 import { MoonbeamWSC } from './moonbeamwsc';
 import { IActiveDelegatedTracks } from './moonriverOnChainProvider';
 
@@ -77,11 +77,6 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
       });
   });
 
-  // removing duplicate items on array that have same proposal id
-  // const filteredArray = array.filter(
-  //   (item, index, self) =>
-  //     index === self.findIndex(current => current.voteId === item.voteId)
-  // );
   return array;
 }
 
@@ -128,8 +123,7 @@ async function getDaoProposals(
   return proposalsMap.sort((a, b) => b.timestamp - a.timestamp);
 }
 
-const providerUrl =
-  'https://api.thegraph.com/subgraphs/name/show-karma/moonbeam-dao-delegate-voting';
+const providerUrl = 'https://moonbase.api.subscan.io/api/v2/scan/search';
 
 async function fetchOnChainVotes(daoName: string | string[], address: string) {
   if (!daoName || !address) return [];
@@ -158,129 +152,41 @@ async function fetchOnChainVotes(daoName: string | string[], address: string) {
   return [];
 }
 
-interface IDelegatingHistory {
-  id: string;
-  delegator: string;
-  trackId: NumberIsh;
-  amount: string;
-  toDelegate: string;
-  conviction: number;
-  timestamp: number;
-}
-
-interface IUndelegated {
-  id: string;
-  trackId: NumberIsh;
-}
-
-interface IDelegatingHistoryResponse {
-  delegatingHistories: IDelegatingHistory[];
-  undelegatedHistories: IUndelegated[];
-  unlockeds: { trackId: NumberIsh }[];
-}
-
-const delegateHistoryQuery = (address: string, daoName: string) => gql`
-{
-	delegatingHistories(
-    first: 1000,
-    where:{
-      delegator:"${address.toLowerCase()}",
-      daoName:"${daoName}"
-    }
-    orderBy: timestamp
-    orderDirection: desc
-  ) {
-	  id    
-    delegator
-    trackId
-    amount
-    toDelegate
-    conviction
-    timestamp
-	}
-  undelegatedHistories (
-    first: 1000,
-  where:{
-    delegator: "${address.toLowerCase()}",
-  }
-  orderBy: blockTimestamp
-  orderDirection: desc
-  ) {
-    id
-    trackId
-    blockTimestamp
-  }
-  unlockeds(
-    first: 1000,
-   where: {caller: "${address.toLowerCase()}"}
-  orderBy: blockTimestamp
-  orderDirection: desc
-  ) {
-    trackId
-  }
-}`;
-
 /**
  * Fetches the active delegated tracks for a given address
  *
  * @param address
- * @param daoName
  * @returns array of track ids that is currently delegated
  */
-export async function moonbeamActiveDelegatedTracks(
-  address: string,
-  daoName = 'moonbeam'
+export async function moonriverActiveDelegatedTracks(
+  address: string
 ): Promise<IActiveDelegatedTracks[]> {
-  const onChainClient = new ApolloClient({
-    uri: providerUrl,
-    cache: new InMemoryCache(),
-  });
+  const subscanKey = process.env.NEXT_PUBLIC_SUBSCAN_API_KEY;
+  if (!subscanKey) throw new Error('Subscan API key not found');
 
-  const { data } = await onChainClient.query<IDelegatingHistoryResponse>({
-    query: delegateHistoryQuery(address, daoName),
-  });
-
-  const { delegatingHistories, undelegatedHistories, unlockeds } = data;
-
-  // count trackId for delegatingHistory, undelegated and unlocked
-
-  const [delegationCount, undelegationCount, unlockedCount] = [
-    delegatingHistories,
-    undelegatedHistories,
-    unlockeds,
-  ].map(item =>
-    item.reduce((acc, history) => {
-      const { trackId } = history;
-      if (acc[trackId]) {
-        acc[trackId] += 1;
-      } else {
-        acc[trackId] = 1;
-      }
-      return acc;
-    }, {} as Record<NumberIsh, number>)
+  const { data } = await axios.post<ISubscanSearchResponse>(
+    providerUrl,
+    {
+      key: address,
+    },
+    {
+      headers: {
+        'x-api-key': subscanKey,
+      },
+    }
   );
 
-  const delegations: IActiveDelegatedTracks[] = delegatingHistories
-    .filter(
-      delegatingHistory =>
-        (unlockedCount[delegatingHistory.trackId] || 0) <
-          (delegationCount[delegatingHistory.trackId] || 0) ||
-        (undelegationCount[delegatingHistory.trackId] || 0) <
-          (delegationCount[delegatingHistory.trackId] || 0)
-    )
-    .map(delegatingHistory => ({
-      trackId: delegatingHistory.trackId,
-      locked:
-        (delegationCount[delegatingHistory.trackId] || 0) -
-        (unlockedCount[delegatingHistory.trackId] || 0),
-      amount: ethers.utils.formatEther(delegatingHistory.amount),
-      active:
-        (undelegationCount[delegatingHistory.trackId] || 0) <
-        (delegationCount[delegatingHistory.trackId] || 0),
-      toDelegate: delegatingHistory.toDelegate,
-      timestamp: delegatingHistory.timestamp,
-      conviction: delegatingHistory.conviction,
-    }));
+  const delegations = data.data.account.delegate.conviction_delegate.map(
+    (item): IActiveDelegatedTracks => ({
+      trackId: item.origins,
+      locked: +item.conviction > 0 ? 1 : 0,
+      amount: ethers.utils.formatEther(item.amount),
+      active: true,
+      toDelegate: item.delegate_account.address,
+      conviction: +item.conviction,
+      timestamp: moment().unix(),
+    })
+  );
 
   const unique = delegations.reduce((acc, cur) => {
     if (!acc[cur.trackId]) acc[cur.trackId] = cur;

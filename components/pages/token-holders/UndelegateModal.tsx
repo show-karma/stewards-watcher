@@ -184,7 +184,7 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
       tracksDelegated.filter(
         tr =>
           tr.timestamp * 1000 + convictionLockTime[+tr.conviction] * 86400000 <=
-          Date.now()
+            Date.now() || tr.conviction === 0
       ),
     [tracksDelegated]
   );
@@ -194,10 +194,14 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
       tracksDelegated.filter(
         tr =>
           tr.timestamp * 1000 + convictionLockTime[+tr.conviction] * 86400000 >
-          Date.now()
+            Date.now() || tr.conviction > 0
       ),
     [tracksDelegated]
   );
+
+  useEffect(() => {
+    console.log({ notUnlockableTracks, unlockableTracks });
+  }, [notUnlockableTracks, unlockableTracks]);
 
   useEffect(() => {
     if (openModalAfterConnect && isConnected && sameNetwork) {
