@@ -38,7 +38,7 @@ const config: IDAOConfig = {
       DEFAULT_STATUS_SELECTED: ['active'],
       CUSTOM_STATUS: ['endorsed', 'active', 'inactive', 'withdrawn'],
     },
-    ORDERSTAT: 'karmaScore',
+    ORDERSTAT: 'delegatedVotes',
     SORT_ORDER: [
       'delegatedVotes',
       'offChainVotesPct',
@@ -154,7 +154,8 @@ const dark: IDAOTheme = {
       divider: 'rgba(173, 184, 192, 0.2)',
     },
     buttons: {
-      selectBg: '#FBB03B',
+      selectBg:
+        'linear-gradient(90deg,#d86292,#ab00ff 50%,#29c1fc 100%,#d86292 100%,#d86292 100%,rgba(216,98,146,0))',
       selectText: '#FFFFFF',
       navBg: '#34344c',
       navText: '#FFFFFF',
@@ -316,7 +317,8 @@ const dark: IDAOTheme = {
       bg: {
         primary: '#18191E',
         secondary: '#1B2030',
-        tertiary: '#FBB03B',
+        tertiary:
+          'linear-gradient(90deg,#d86292,#ab00ff 50%,#29c1fc 100%,#d86292 100%,#d86292 100%,rgba(216,98,146,0))',
       },
     },
   },
@@ -373,7 +375,7 @@ const light: IDAOTheme = {
     text: '#212328',
     footer: { bg: '#EBEDEF', text: '#212328' },
     button: {
-      bg: '#FBB03B',
+      bg: 'linear-gradient(90deg,#d86292,#ab00ff 50%,#29c1fc 100%,#d86292 100%,#d86292 100%,rgba(216,98,146,0))',
       text: '#FFFFFF',
     },
   },
@@ -418,7 +420,8 @@ const light: IDAOTheme = {
       },
     },
     buttons: {
-      selectBg: '#FBB03B',
+      selectBg:
+        'linear-gradient(90deg,#d86292,#ab00ff 50%,#29c1fc 100%,#d86292 100%,#d86292 100%,rgba(216,98,146,0))',
       selectText: '#FFFFFF',
       navBg: '#34344c',
       navText: '#FFFFFF',
