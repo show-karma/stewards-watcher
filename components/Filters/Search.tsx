@@ -20,7 +20,7 @@ export const SearchFilter = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleInput = (event: any) => {
     setInput(event.target.value);
-    handleSearch(event.target.value);
+    handleSearch(event.target.value.trim());
   };
 
   useMemo(() => {
