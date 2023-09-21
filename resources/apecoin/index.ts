@@ -22,7 +22,7 @@ const config: IDAOConfig = {
     FAVICON: '/daos/apecoin/favicon.png',
     URL: `https://apecoin.karmahq.xyz`,
   },
-  DAO_CHAIN: mainnet,
+  DAO_CHAINS: [mainnet],
   DAO_DEFAULT_SETTINGS: {
     TIMEPERIOD: '180d',
     ORDERSTAT: 'karmaScore',
@@ -32,14 +32,21 @@ const config: IDAOConfig = {
     {
       contractAddress: '0x4d224452801aced8b2f0aebe155379bb5d594381',
       method: 'balanceOf',
+      chain: mainnet,
     },
     {
       contractAddress: '0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9',
       method: 'stakedTotal',
       ABI: STAKE_CONTRACT_ABI,
+      chain: mainnet,
     },
   ],
-  DAO_DELEGATE_CONTRACT: '0x469788fe6e9e9681c6ebf3bf78e7fd26fc015446',
+  DAO_DELEGATE_CONTRACT: [
+    {
+      contractAddress: '0x469788fe6e9e9681c6ebf3bf78e7fd26fc015446',
+      chain: mainnet,
+    },
+  ],
   DAO_DELEGATE_FUNCTION: 'setDelegate',
   DAO_DELEGATE_FUNCTION_ARGS: [getIdBySnapshotId('apecoin.eth')],
   DAO_FORUM_TYPE: 'discourse',

@@ -284,7 +284,7 @@ export const TrackDelegation: React.FC<StepProps> = ({
                     fontSize="1.15em"
                     color="#000000"
                   >
-                    {symbol}
+                    {symbol[0]}
                   </Text>
                   <ImgWithFallback
                     fallback={daoName}

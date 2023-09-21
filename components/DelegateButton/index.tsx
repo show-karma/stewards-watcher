@@ -36,7 +36,9 @@ export const DelegateButton: FC<IDelegateButton> = ({
     delegatee: delegated,
     onSuccessFunction: successEmitter,
   });
-  const sameNetwork = chain?.id === config.DAO_CHAIN.id;
+  const sameNetwork = !!config.DAO_CHAINS.find(
+    chainToSearch => chainToSearch.id === chain?.id
+  )?.id;
 
   useEffect(() => {
     if (isConnected && writeAfterAction && sameNetwork && !connectIsOpen) {
@@ -46,7 +48,7 @@ export const DelegateButton: FC<IDelegateButton> = ({
   }, [isConnected && writeAfterAction && sameNetwork && !connectIsOpen]);
 
   const { switchNetwork } = useSwitchNetwork({
-    chainId: config.DAO_CHAIN.id,
+    chainId: config.DAO_CHAINS[0].id,
   });
 
   const handleCase = () => {

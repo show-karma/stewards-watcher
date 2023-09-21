@@ -1,5 +1,13 @@
 import { IDAOConfig, IDAOTheme } from 'types';
-import { mainnet } from 'wagmi/chains';
+import {
+  arbitrum,
+  bsc,
+  gnosis,
+  mainnet,
+  optimism,
+  polygon,
+} from 'wagmi/chains';
+import { customGnosis } from 'utils/customChains';
 import ABI from './ABI.json';
 
 const config: IDAOConfig = {
@@ -21,11 +29,37 @@ const config: IDAOConfig = {
     FAVICON: '/daos/connext/favicon.png',
     URL: `https://connext.karmahq.xyz`,
   },
-  DAO_CHAIN: mainnet,
+  DAO_CHAINS: [mainnet, arbitrum, optimism, polygon, gnosis, bsc],
   DAO_TOKEN_CONTRACT: [
     {
       contractAddress: '0xFE67A4450907459c3e1FFf623aA927dD4e28c67a',
       method: 'balanceOf',
+      chain: mainnet,
+    },
+    {
+      contractAddress: '0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8',
+      method: 'balanceOf',
+      chain: arbitrum,
+    },
+    {
+      contractAddress: '0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8',
+      method: 'balanceOf',
+      chain: optimism,
+    },
+    {
+      contractAddress: '0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8',
+      method: 'balanceOf',
+      chain: polygon,
+    },
+    {
+      contractAddress: '0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8',
+      method: 'balanceOf',
+      chain: customGnosis,
+    },
+    {
+      contractAddress: '0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8',
+      method: 'balanceOf',
+      chain: bsc,
     },
   ],
   DAO_DELEGATE_CONTRACT: undefined,
@@ -59,6 +93,11 @@ const config: IDAOConfig = {
     ADDRESS: '0xd17206EC4D268D0E55bb08A369b6864f1178B81d',
     NETWORK: 10,
   },
+  // CUSTOM_RPC: jsonRpcProvider({
+  //   rpc: () => ({
+  //     http: 'https://rpc.gnosis.gateway.fm',
+  //   }),
+  // }),
 };
 
 const dark: IDAOTheme = {

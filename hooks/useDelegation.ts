@@ -1,4 +1,4 @@
-import { useContractWrite, usePrepareContractWrite } from 'wagmi';
+import { useContractWrite, useNetwork, usePrepareContractWrite } from 'wagmi';
 import { useDAO } from 'contexts';
 import { IDelegation } from 'types';
 import { useToasty } from './useToasty';
@@ -16,12 +16,16 @@ export const useDelegation = (args: IDelegation) => {
 
   const { mixpanel } = useMixpanel();
 
+  const { chain } = useNetwork();
+
   const { config } = usePrepareContractWrite({
-    address: daoInfo.config.DAO_DELEGATE_CONTRACT,
+    address: daoInfo.config.DAO_DELEGATE_CONTRACT?.find(
+      contract => contract.chain.id === (args.network || chain?.id)
+    )?.contractAddress,
     abi: daoInfo.DELEGATE_ABI,
     functionName: daoInfo.config.DAO_DELEGATE_FUNCTION || 'delegate',
     args: getArgs(),
-    chainId: daoInfo.config.DAO_CHAIN.id,
+    chainId: args.network || chain?.id,
   });
 
   const { toast } = useToasty();

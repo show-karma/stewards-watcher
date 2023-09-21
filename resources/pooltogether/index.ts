@@ -22,14 +22,20 @@ const config: IDAOConfig = {
     FAVICON: '/daos/pooltogether/favicon.png',
     URL: `https://pooltogether.karmahq.xyz`,
   },
-  DAO_CHAIN: mainnet,
+  DAO_CHAINS: [mainnet],
   DAO_TOKEN_CONTRACT: [
     {
       contractAddress: '0x0cec1a9154ff802e7934fc916ed7ca50bde6844e',
       method: 'balanceOf',
+      chain: mainnet,
     },
   ],
-  DAO_DELEGATE_CONTRACT: '0x0cec1a9154ff802e7934fc916ed7ca50bde6844e',
+  DAO_DELEGATE_CONTRACT: [
+    {
+      contractAddress: '0x0cec1a9154ff802e7934fc916ed7ca50bde6844e',
+      chain: mainnet,
+    },
+  ],
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
   EXCLUDED_CARD_FIELDS: ['healthScore', 'karmaScore', 'discordScore'],

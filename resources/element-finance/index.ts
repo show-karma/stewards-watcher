@@ -30,7 +30,7 @@ const config: IDAOConfig = {
       url: 'https://forum.element.fi/discussion/7046-governance-resources',
     },
   ],
-  DAO_CHAIN: mainnet,
+  DAO_CHAINS: [mainnet],
   DAO_FORUM_TYPE: 'commonwealth',
   DAO_FORUM_URL: 'https://forum.element.fi/',
   DAO_GTAG: 'G-67LDHT697P',

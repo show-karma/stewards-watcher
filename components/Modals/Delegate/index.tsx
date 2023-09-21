@@ -45,15 +45,15 @@ export const DelegateModal: React.FC<IModal> = ({
     if (step === ESteps.DONE)
       return <Step2 handleModal={closeModal} delegatedUser={delegateData} />;
     if (
-      delegatedBefore !== '0x0000000000000000000000000000000000000000' &&
-      delegatedBefore
+      delegatedBefore[0] !== '0x0000000000000000000000000000000000000000' &&
+      delegatedBefore[0]
     )
       return (
         <StepChange
           handleModal={closeModal}
           votes={votes}
           delegatedUser={delegateData}
-          delegatedBefore={delegatedBefore}
+          delegatedBefore={delegatedBefore[0]}
           walletAddress={walletAddress}
         />
       );

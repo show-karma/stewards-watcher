@@ -22,14 +22,22 @@ const config: IDAOConfig = {
     FAVICON: '/daos/compound/favicon.ico',
     URL: `https://compound.karmahq.xyz`,
   },
-  DAO_CHAIN: mainnet,
+  DAO_CHAINS: [mainnet],
   DAO_TOKEN_CONTRACT: [
     {
       contractAddress: '0xc00e94cb662c3520282e6f5717214004a7f26888',
       method: 'balanceOf',
+      chain: mainnet,
     },
   ],
-  DAO_DELEGATE_CONTRACT: '0xc00e94cb662c3520282e6f5717214004a7f26888',
+
+  DAO_DELEGATE_CONTRACT: [
+    {
+      contractAddress: '0xc00e94cb662c3520282e6f5717214004a7f26888',
+      chain: mainnet,
+    },
+  ],
+
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
   DAO_DEFAULT_SETTINGS: {

@@ -5,7 +5,9 @@ import React, {
   useState,
   useEffect,
 } from 'react';
-import { useContractRead, useContractReads } from 'wagmi';
+import { useContractReads } from 'wagmi';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { readContracts } from '@wagmi/core';
 import { formatEther } from 'utils';
 import { BigNumber } from 'ethers';
 import { Hex } from 'types';
@@ -15,11 +17,13 @@ import { useWallet } from './wallet';
 interface IGovernanceVotesProps {
   votes: string;
   isLoadingVotes: boolean;
-  delegatedBefore: string;
-  symbol: string;
+  delegatedBefore: string[];
+  symbol: string[];
   walletAddress?: string;
   getVotes: () => Promise<void>;
   loadedVotes: boolean;
+  loadedMultiChainsVotes: boolean;
+  multiChainVotes: { chainId: number; sum: string }[];
 }
 
 export const GovernanceVotesContext = createContext(
@@ -36,10 +40,15 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
   const { daoInfo } = useDAO();
   const { address: walletAddress, isConnected } = useWallet();
   const [votes, setVotes] = useState('0');
-  const [symbol, setSymbol] = useState('');
+  const [multiChainVotes, setMultiChainVotes] = useState<
+    { chainId: number; sum: string }[]
+  >([]);
+  const [loadedMultiChainsVotes, setLoadedMultiChainsVotes] = useState(false);
+  const [symbol, setSymbol] = useState(['']);
   const [loadedVotes, setLoadedVotes] = useState(false);
 
-  const [delegatedBefore, setDelegatedBefore] = useState('');
+  const [delegatedBefore, setDelegatedBefore] = useState(['']);
+
   const { data: voteAmounts, isFetching: isLoadingVotes } = useContractReads({
     contracts: daoInfo.config.DAO_TOKEN_CONTRACT
       ? daoInfo.config.DAO_TOKEN_CONTRACT.map(contract => ({
@@ -47,25 +56,33 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
           abi: contract.ABI || daoInfo.TOKEN_ABI,
           functionName: contract.method,
           args: walletAddress ? [walletAddress] : undefined,
-          chainId: daoInfo.config.DAO_CHAIN.id,
+          chainId: contract.chain.id,
         }))
       : undefined,
   });
 
-  const { data: delegated } = useContractRead({
-    address: daoInfo.config.DAO_DELEGATE_CONTRACT,
-    abi: daoInfo.DELEGATE_ABI,
-    functionName: 'delegates',
-    args: [walletAddress],
-    chainId: daoInfo.config.DAO_CHAIN.id,
-    enabled: !!walletAddress,
+  const { data: delegated } = useContractReads({
+    contracts: daoInfo.config.DAO_DELEGATE_CONTRACT
+      ? daoInfo.config.DAO_DELEGATE_CONTRACT.map(contract => ({
+          address: contract.contractAddress,
+          abi: daoInfo.DELEGATE_ABI,
+          functionName: 'delegates',
+          args: walletAddress ? [walletAddress] : undefined,
+          chainId: contract.chain.id,
+          enabled: !!walletAddress,
+        }))
+      : undefined,
   });
 
-  const { data: fetchedSymbol } = useContractRead({
-    address: daoInfo.config.DAO_TOKEN_CONTRACT?.[0].contractAddress,
-    abi: daoInfo.TOKEN_ABI,
-    functionName: 'symbol',
-    chainId: daoInfo.config.DAO_CHAIN.id,
+  const { data: fetchedSymbol } = useContractReads({
+    contracts: daoInfo.config.DAO_TOKEN_CONTRACT
+      ? daoInfo.config.DAO_TOKEN_CONTRACT.map(contract => ({
+          address: contract.contractAddress,
+          abi: daoInfo.TOKEN_ABI,
+          functionName: 'symbol',
+          chainId: contract.chain.id,
+        }))
+      : undefined,
   });
 
   const getVotes = async () => {
@@ -106,12 +123,72 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
     getVotes();
   }, [walletAddress, voteAmounts, isConnected]);
 
+  // it doesn't support locked_tokens yet
+  const getMultiChainsVotes = async () => {
+    setLoadedMultiChainsVotes(false);
+    try {
+      const groupContractsByChain = daoInfo.config.DAO_TOKEN_CONTRACT?.reduce(
+        (acc, contract) => {
+          if (!acc[contract.chain.id]) acc[contract.chain.id] = [];
+          acc[contract.chain.id].push(contract);
+          return acc;
+        },
+        {} as Record<string, any[]>
+      );
+      if (!groupContractsByChain) return;
+      const keys = Object.keys(groupContractsByChain as object);
+      const multiChainAmounts = await Promise.all(
+        keys.map(async key => {
+          const data = await readContracts({
+            contracts: groupContractsByChain[key].map(contract => ({
+              address: contract.contractAddress,
+              abi: contract.ABI || daoInfo.TOKEN_ABI,
+              functionName: contract.method,
+              args: walletAddress ? [walletAddress] : undefined,
+              chainId: contract.chain.id,
+            })),
+          });
+
+          const amountsBN = data.map(amount => {
+            if (amount && amount.result)
+              return BigNumber.from(amount.result).toString();
+            return '0';
+          });
+
+          const onlyZeros = amountsBN.every(amount => amount === '0');
+          if (onlyZeros) {
+            return { chainId: +key, sum: '0' };
+          }
+          const sumBNs = amountsBN.reduce(
+            (acc, amount) => acc.add(BigNumber.from(amount)),
+            BigNumber.from('0')
+          );
+
+          const fromWeiAmount = formatEther(sumBNs.toString());
+
+          return { chainId: +key, sum: fromWeiAmount };
+        })
+      );
+
+      setMultiChainVotes(multiChainAmounts);
+    } catch {
+      setMultiChainVotes([]);
+    } finally {
+      setLoadedMultiChainsVotes(true);
+    }
+  };
+
+  useEffect(() => {
+    if (daoInfo.config.DAO_CHAINS.length > 1) getMultiChainsVotes();
+  }, [walletAddress, isConnected]);
+
   const getDelegated = async () => {
     if (!delegated) {
-      setDelegatedBefore('');
+      setDelegatedBefore(['']);
       return;
     }
-    setDelegatedBefore(delegated.toString());
+    const delegateds = delegated.map(item => item.result) as string[];
+    setDelegatedBefore(delegateds);
   };
 
   useEffect(() => {
@@ -120,10 +197,11 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
 
   const getSymbol = async () => {
     if (!fetchedSymbol) {
-      setSymbol('');
+      setSymbol(['']);
       return;
     }
-    setSymbol(fetchedSymbol.toString());
+    const symbols = fetchedSymbol.map(item => item.result) as string[];
+    setSymbol(symbols);
   };
 
   useEffect(() => {
@@ -140,6 +218,8 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
       walletAddress,
       getVotes,
       loadedVotes,
+      multiChainVotes,
+      loadedMultiChainsVotes,
     }),
     [
       votes,
@@ -150,6 +230,8 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
       walletAddress,
       getVotes,
       loadedVotes,
+      multiChainVotes,
+      loadedMultiChainsVotes,
     ]
   );
 
