@@ -1,7 +1,7 @@
 export const customGnosis = {
   id: 100,
   name: 'Gnosis',
-  network: 'gnosischain',
+  network: 'gnosis',
   nativeCurrency: {
     decimals: 18,
     name: 'Gnosis',

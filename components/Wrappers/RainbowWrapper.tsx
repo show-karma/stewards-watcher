@@ -35,7 +35,9 @@ export const RainbowWrapper: React.FC<ProviderProps> = ({ children }) => {
     config.CUSTOM_RPC ? config.CUSTOM_RPC : null,
   ].filter(item => item !== null);
 
-  const setChains = config.DAO_CHAINS.concat([optimism]);
+  const setChains = config.DAO_CHAINS.find(item => item.id === optimism.id)
+    ? config.DAO_CHAINS
+    : config.DAO_CHAINS.concat([optimism]);
 
   const { chains, publicClient, webSocketPublicClient } = configureChains(
     setChains,

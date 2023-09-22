@@ -40,6 +40,7 @@ export interface IDAOConfig {
   DAO_DELEGATE_CONTRACT?: {
     contractAddress: `0x${string}`;
     chain: Chain;
+    ABI?: any;
   }[];
   DAO_TOKEN_CONTRACT?: {
     contractAddress: `0x${string}`;

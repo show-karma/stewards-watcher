@@ -1,13 +1,8 @@
 import { IDAOConfig, IDAOTheme } from 'types';
-import {
-  arbitrum,
-  bsc,
-  gnosis,
-  mainnet,
-  optimism,
-  polygon,
-} from 'wagmi/chains';
+import { arbitrum, bsc, mainnet, optimism, polygon } from 'wagmi/chains';
 import { customGnosis } from 'utils/customChains';
+// import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
+import { publicProvider } from 'wagmi/providers/public';
 import ABI from './ABI.json';
 
 const config: IDAOConfig = {
@@ -29,7 +24,7 @@ const config: IDAOConfig = {
     FAVICON: '/daos/connext/favicon.png',
     URL: `https://connext.karmahq.xyz`,
   },
-  DAO_CHAINS: [mainnet, arbitrum, optimism, polygon, gnosis, bsc],
+  DAO_CHAINS: [mainnet, arbitrum, optimism, polygon, customGnosis, bsc],
   DAO_TOKEN_CONTRACT: [
     {
       contractAddress: '0xFE67A4450907459c3e1FFf623aA927dD4e28c67a',
@@ -62,7 +57,32 @@ const config: IDAOConfig = {
       chain: bsc,
     },
   ],
-  DAO_DELEGATE_CONTRACT: undefined,
+  DAO_DELEGATE_CONTRACT: [
+    {
+      contractAddress: '0xFE67A4450907459c3e1FFf623aA927dD4e28c67a',
+      chain: mainnet,
+    },
+    {
+      contractAddress: '0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8',
+      chain: arbitrum,
+    },
+    {
+      contractAddress: '0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8',
+      chain: optimism,
+    },
+    {
+      contractAddress: '0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8',
+      chain: polygon,
+    },
+    {
+      contractAddress: '0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8',
+      chain: customGnosis,
+    },
+    {
+      contractAddress: '0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8',
+      chain: bsc,
+    },
+  ],
   DAO_FORUM_TYPE: 'discourse',
   DAO_FORUM_URL: 'https://forum.connext.network/',
   DAO_GTAG: 'G-67LDHT697P',
@@ -93,11 +113,7 @@ const config: IDAOConfig = {
     ADDRESS: '0xd17206EC4D268D0E55bb08A369b6864f1178B81d',
     NETWORK: 10,
   },
-  // CUSTOM_RPC: jsonRpcProvider({
-  //   rpc: () => ({
-  //     http: 'https://rpc.gnosis.gateway.fm',
-  //   }),
-  // }),
+  CUSTOM_RPC: publicProvider(),
 };
 
 const dark: IDAOTheme = {
