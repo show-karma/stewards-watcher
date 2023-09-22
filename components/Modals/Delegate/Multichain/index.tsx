@@ -103,10 +103,8 @@ export const MultiChain: React.FC<StepProps> = ({
         return;
       }
 
-      console.log(chain.id, chainsToDelegate[0]);
       if (chain.id !== chainsToDelegate[0]) {
         await switchNetworkAsync?.(chainsToDelegate[0]).then(async ({ id }) => {
-          console.log('switchNetworkAsync');
           await delegate(id);
         });
         return;
@@ -205,50 +203,54 @@ export const MultiChain: React.FC<StepProps> = ({
             </Flex>
           </Flex>
           <Flex flexDir="column" gap="2" mb="6">
-            {votes.map((item, index) => {
-              const before = delegatedBefore.find(
-                delegated => delegated.chain.id === item.chain.id
-              )?.value;
-              return (
-                <Flex
-                  flexDir="row"
-                  flexWrap="wrap"
-                  key={+index}
-                  alignItems="center"
-                  gap="2"
-                  backgroundColor="gray.100"
-                  px="4"
-                  py="2"
-                  borderRadius="lg"
-                  justifyContent="flex-start"
-                >
-                  <Checkbox
-                    defaultChecked={false}
-                    isChecked={chainsToDelegate.includes(item.chain.id)}
-                    onChange={() => handleChainToDelegate(item.chain.id)}
-                    colorScheme="blue"
-                    backgroundColor="gray.300"
-                  />
-                  <Image
-                    src={`/images/chains/${item.chain.network}.svg`}
-                    alt={item.chain.name}
-                    boxSize="24px"
-                    borderRadius="full"
-                  />
-                  <Text
-                    color="black"
-                    fontStyle="normal"
-                    fontWeight="500"
-                    fontSize="14px"
+            {votes
+              .filter(vote => +vote.value !== 0)
+              .map((item, index) => {
+                const before = delegatedBefore.find(
+                  delegated => delegated.chain.id === item.chain.id
+                )?.value;
+                return (
+                  <Flex
+                    flexDir="row"
+                    flexWrap="wrap"
+                    key={+index}
+                    alignItems="center"
+                    gap="2"
+                    backgroundColor="gray.100"
+                    px="4"
+                    py="2"
+                    borderRadius="lg"
+                    justifyContent="flex-start"
                   >
-                    {item.chain.name}: {formatNumber(item.value)}{' '}
-                    {before
-                      ? `(currently delegating to: ${truncateAddress(before)})`
-                      : ''}
-                  </Text>
-                </Flex>
-              );
-            })}
+                    <Checkbox
+                      defaultChecked={false}
+                      isChecked={chainsToDelegate.includes(item.chain.id)}
+                      onChange={() => handleChainToDelegate(item.chain.id)}
+                      colorScheme="blue"
+                      backgroundColor="gray.300"
+                    />
+                    <Image
+                      src={`/images/chains/${item.chain.network}.svg`}
+                      alt={item.chain.name}
+                      boxSize="24px"
+                      borderRadius="full"
+                    />
+                    <Text
+                      color="black"
+                      fontStyle="normal"
+                      fontWeight="500"
+                      fontSize="14px"
+                    >
+                      {item.chain.name}: {formatNumber(item.value)}{' '}
+                      {before
+                        ? `(currently delegating to: ${truncateAddress(
+                            before
+                          )})`
+                        : ''}
+                    </Text>
+                  </Flex>
+                );
+              })}
           </Flex>
         </Flex>
         {/* <ModalDelegateButton

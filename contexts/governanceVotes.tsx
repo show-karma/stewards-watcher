@@ -136,7 +136,6 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
         }
       );
       const promisedResults = await Promise.all(promises);
-      console.log('promisedResults', promisedResults);
       setDelegatedBefore(promisedResults);
     } catch (error) {
       console.log(error);
