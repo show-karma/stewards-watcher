@@ -54,10 +54,18 @@ const concatOffChainProposals = (proposals: any[], votes: any[]) => {
 async function fetchOffChainProposals(
   daoName: string | string[]
 ): Promise<any[]> {
+  const getDAOName = () => {
+    if (Array.isArray(daoName)) {
+      return daoName;
+    }
+    const newName = daoName.includes(',') ? daoName.split(',') : [daoName];
+    return newName;
+  };
+
   const { data: proposals } = await offChainClient.query({
     query: VOTING_HISTORY.offChainProposalsReq,
     variables: {
-      daoname: [daoName].flat(),
+      daoname: getDAOName(),
     },
   });
 
@@ -75,6 +83,7 @@ async function fetchOffChainProposalVotes(
 ) {
   // Assure that the string isn't null or array is also not empty
   if (![daoName].flat().length || !address) return [];
+
   try {
     const { data: votes } = await offChainClient.query({
       query: VOTING_HISTORY.offChainVotesReq,
@@ -83,10 +92,12 @@ async function fetchOffChainProposalVotes(
         address,
       },
     });
+
     if (votes && Array.isArray(votes.votes)) {
       const { data: proposals } = await axios.get(
         `/api/proposals?dao=${daoName}&source=off-chain`
       );
+
       return concatOffChainProposals(proposals, votes.votes);
     }
   } catch (error) {

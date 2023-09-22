@@ -105,7 +105,7 @@ const config: IDAOConfig = {
     ],
   },
   EXCLUDED_VOTING_HISTORY_COLUMN: [],
-  EXCLUDED_CARD_FIELDS: ['healthScore'],
+  EXCLUDED_CARD_FIELDS: ['healthScore', 'discordScore', 'onChainVotesPct'],
   ENABLE_DELEGATE_TRACKER: true,
   DAO_CATEGORIES_TYPE: 'workstreams',
   ENABLE_ONCHAIN_REGISTRY: true,

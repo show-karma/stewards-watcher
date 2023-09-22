@@ -131,7 +131,7 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
             functionName: 'delegates',
             args: [walletAddress],
             chainId: contract.chain.id,
-          }).then((res: any) => res.result);
+          });
           return { chain: contract.chain, value: result };
         }
       );

@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { useDAO, useDelegates, useGovernanceVotes, useWallet } from 'contexts';
-import { Button, Checkbox, Flex, Image, Text } from '@chakra-ui/react';
+import { Button, Flex, Icon, Image, Radio, Text } from '@chakra-ui/react';
 import { IDelegate, MultiChainResult } from 'types';
 import { ImgWithFallback } from 'components/ImgWithFallback';
 import makeBlockie from 'ethereum-blockies-base64';
+import { IoAlertCircleOutline } from 'react-icons/io5';
 import { formatNumber, truncateAddress } from 'utils';
 import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
 import { useMixpanel, useToasty } from 'hooks';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { prepareWriteContract, writeContract } from '@wagmi/core';
+import { zeroAddress } from 'viem';
 import { DelegateModalHeader } from '../DelegateModalHeader';
 import { DelegateModalBody } from '../DelegateModalBody';
 
@@ -28,7 +30,7 @@ export const MultiChain: React.FC<StepProps> = ({
   const { daoInfo, daoData } = useDAO();
   const { config } = daoInfo;
   const { delegatedBefore } = useGovernanceVotes();
-  const [chainsToDelegate, setChainsToDelegate] = useState<number[]>([]);
+  const [chainToDelegate, setChainsToDelegate] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isDelegating, setIsDelegating] = useState(false);
 
@@ -40,11 +42,7 @@ export const MultiChain: React.FC<StepProps> = ({
   const { toast } = useToasty();
 
   const handleChainToDelegate = (chainId: number) => {
-    if (chainsToDelegate.includes(chainId)) {
-      setChainsToDelegate(chainsToDelegate.filter(ch => ch !== chainId));
-      return;
-    }
-    setChainsToDelegate([...chainsToDelegate, chainId]);
+    setChainsToDelegate(chainId);
   };
 
   const modalSpacing = {
@@ -62,27 +60,18 @@ export const MultiChain: React.FC<StepProps> = ({
       functionName: daoInfo.config.DAO_DELEGATE_FUNCTION || 'delegate',
       args: [delegatedUser.address],
       abi: daoInfo.DELEGATE_ABI,
-      chainId: chainsToDelegate[0],
+      chainId: chainToDelegate,
     });
 
     mixpanel.reportEvent({
       event: 'delegateButtonClick',
     });
 
-    await writeContract(prepareConfig).then(() => {
-      const filteredChains = chainsToDelegate.filter(
-        newChain => newChain !== chainsToDelegate[0]
-      );
-      setChainsToDelegate(filteredChains);
-      if (filteredChains.length > 0) {
-        // eslint-disable-next-line no-use-before-define
-        multiChainDelegate();
-      }
-    });
+    await writeContract(prepareConfig);
   };
 
   const multiChainDelegate = async () => {
-    if (!chainsToDelegate.length) return;
+    if (!chainToDelegate) return;
     try {
       setIsLoading(true);
       setIsDelegating(false);
@@ -103,8 +92,8 @@ export const MultiChain: React.FC<StepProps> = ({
         return;
       }
 
-      if (chain.id !== chainsToDelegate[0]) {
-        await switchNetworkAsync?.(chainsToDelegate[0]).then(async ({ id }) => {
+      if (chain.id !== chainToDelegate) {
+        await switchNetworkAsync?.(chainToDelegate).then(async ({ id }) => {
           await delegate(id);
         });
         return;
@@ -141,6 +130,32 @@ export const MultiChain: React.FC<StepProps> = ({
           paddingBottom: 7,
         }}
       >
+        {votes.every(vote => !(+vote.value > 0)) ? (
+          <Flex
+            background="rgba(244, 171, 104, 0.11)"
+            borderRadius="4px"
+            color="#ffa552"
+            flexDirection="row"
+            gap="8px"
+            display="flex"
+            position="absolute"
+            top="12px"
+            right="12px"
+            padding="8px 12px"
+            mr={10}
+            alignItems="center"
+          >
+            <Icon as={IoAlertCircleOutline} boxSize="20px" />
+            <Text
+              color="#ffa552"
+              fontStyle="normal"
+              fontWeight={['400', '400', '700']}
+              fontSize={['10px', '10px', '12px']}
+            >
+              No tokens to delegate
+            </Text>
+          </Flex>
+        ) : null}
         <Flex flex="1" flexDirection="column">
           <Flex
             flex="1"
@@ -222,9 +237,9 @@ export const MultiChain: React.FC<StepProps> = ({
                     borderRadius="lg"
                     justifyContent="flex-start"
                   >
-                    <Checkbox
+                    <Radio
                       defaultChecked={false}
-                      isChecked={chainsToDelegate.includes(item.chain.id)}
+                      isChecked={chainToDelegate === item.chain.id}
                       onChange={() => handleChainToDelegate(item.chain.id)}
                       colorScheme="blue"
                       backgroundColor="gray.300"
@@ -242,7 +257,7 @@ export const MultiChain: React.FC<StepProps> = ({
                       fontSize="14px"
                     >
                       {item.chain.name}: {formatNumber(item.value)}{' '}
-                      {before
+                      {before !== zeroAddress
                         ? `(currently delegating to: ${truncateAddress(
                             before
                           )})`
@@ -258,8 +273,8 @@ export const MultiChain: React.FC<StepProps> = ({
           votes={votes[0].value}
         /> */}
         <Button
-          disabled={chainsToDelegate.length === 0}
-          isDisabled={chainsToDelegate.length === 0}
+          disabled={!chainToDelegate}
+          isDisabled={!chainToDelegate}
           bgColor="black"
           color="white"
           _focus={{ opacity: 0.8 }}
@@ -267,7 +282,7 @@ export const MultiChain: React.FC<StepProps> = ({
           _focusVisible={{ opacity: 0.8 }}
           _active={{ opacity: 0.8 }}
           _hover={{ opacity: 0.8 }}
-          _disabled={{ opacity: 0.8 }}
+          _disabled={{ opacity: 0.2 }}
           isLoading={isLoading}
           onClick={() => multiChainDelegate()}
         >
