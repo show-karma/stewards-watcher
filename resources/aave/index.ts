@@ -22,14 +22,20 @@ const config: IDAOConfig = {
   DAO_DEFAULT_SETTINGS: {
     FAQ: false,
   },
-  DAO_CHAIN: mainnet,
+  DAO_CHAINS: [mainnet],
   DAO_TOKEN_CONTRACT: [
     {
       contractAddress: '0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9',
       method: 'balanceOf',
+      chain: mainnet,
     },
   ],
-  DAO_DELEGATE_CONTRACT: '0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9',
+  DAO_DELEGATE_CONTRACT: [
+    {
+      contractAddress: '0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9',
+      chain: mainnet,
+    },
+  ],
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
   DAO_CATEGORIES_TYPE: 'workstreams',

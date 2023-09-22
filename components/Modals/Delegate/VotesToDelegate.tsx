@@ -38,7 +38,7 @@ export const VotesToDelegate: React.FC<IVotesToDelegate> = ({
             fontWeight="500"
             fontSize="1.15em"
             color="#000000"
-          >{`${formatNumber(votes)} ${symbol}`}</Text>
+          >{`${formatNumber(votes)} ${symbol?.[0]?.value || ''}`}</Text>
         )}
         <ImgWithFallback
           fallback={daoName}

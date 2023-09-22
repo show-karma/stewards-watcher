@@ -42,11 +42,12 @@ const config: IDAOConfig = {
       CUSTOM_STATUS: ['community', 'active', 'inactive', 'withdrawn'],
     },
   },
-  DAO_CHAIN: moonriver,
+  DAO_CHAINS: [moonriver],
   DAO_TOKEN_CONTRACT: [
     {
       contractAddress: '0x0000000000000000000000000000000000000802',
       method: 'balanceOf',
+      chain: moonriver,
     },
   ],
   DAO_FORUM_TYPE: 'discourse',

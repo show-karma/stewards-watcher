@@ -44,12 +44,13 @@ const config: IDAOConfig = {
       CUSTOM_STATUS: ['community', 'active', 'inactive', 'withdrawn'],
     },
   },
-  DAO_CHAIN: moonbase,
+  DAO_CHAINS: [moonbase],
   ENABLE_DELEGATED_VOTES_BREAKDOWN: true,
   DAO_TOKEN_CONTRACT: [
     {
       contractAddress: '0x0000000000000000000000000000000000000802',
       method: 'balanceOf',
+      chain: moonbase,
     },
   ],
   DAO_FORUM_TYPE: 'discourse',

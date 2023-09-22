@@ -1,17 +1,6 @@
 [
-  {
-    "inputs": [
-      { "internalType": "address", "name": "account", "type": "address" },
-      { "internalType": "address", "name": "minter_", "type": "address" },
-      {
-        "internalType": "uint256",
-        "name": "mintingAllowedAfter_",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
+  { "inputs": [], "name": "IXERC20_NotFactory", "type": "error" },
+  { "inputs": [], "name": "IXERC20_NotHighEnoughLimits", "type": "error" },
   {
     "anonymous": false,
     "inputs": [
@@ -30,11 +19,36 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount",
+        "name": "value",
         "type": "uint256"
       }
     ],
     "name": "Approval",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_mintingLimit",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_burningLimit",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "_bridge",
+        "type": "address"
+      }
+    ],
+    "name": "BridgeLimitsSet",
     "type": "event"
   },
   {
@@ -89,21 +103,21 @@
   },
   {
     "anonymous": false,
+    "inputs": [],
+    "name": "EIP712DomainChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
     "inputs": [
       {
         "indexed": false,
-        "internalType": "address",
-        "name": "delegator",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "delegatee",
-        "type": "address"
+        "internalType": "uint8",
+        "name": "version",
+        "type": "uint8"
       }
     ],
-    "name": "GTCDistChanged",
+    "name": "Initialized",
     "type": "event"
   },
   {
@@ -112,17 +126,43 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "minter",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "newMinter",
+        "name": "_lockbox",
         "type": "address"
       }
     ],
-    "name": "MinterChanged",
+    "name": "LockboxSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "proposedOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipProposed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
     "type": "event"
   },
   {
@@ -143,7 +183,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount",
+        "name": "value",
         "type": "uint256"
       }
     ],
@@ -152,35 +192,35 @@
   },
   {
     "inputs": [],
-    "name": "DELEGATION_TYPEHASH",
+    "name": "CLOCK_MODE",
+    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "DOMAIN_SEPARATOR",
     "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "DOMAIN_TYPEHASH",
-    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "GTCDist",
+    "name": "FACTORY",
     "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "PERMIT_TYPEHASH",
-    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
-    "stateMutability": "view",
+    "name": "acceptProposedOwner",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "account", "type": "address" },
+      { "internalType": "address", "name": "owner", "type": "address" },
       { "internalType": "address", "name": "spender", "type": "address" }
     ],
     "name": "allowance",
@@ -191,7 +231,7 @@
   {
     "inputs": [
       { "internalType": "address", "name": "spender", "type": "address" },
-      { "internalType": "uint256", "name": "rawAmount", "type": "uint256" }
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
     ],
     "name": "approve",
     "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
@@ -208,15 +248,107 @@
     "type": "function"
   },
   {
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "bridges",
+    "outputs": [
+      {
+        "components": [
+          { "internalType": "uint256", "name": "timestamp", "type": "uint256" },
+          {
+            "internalType": "uint256",
+            "name": "ratePerSecond",
+            "type": "uint256"
+          },
+          { "internalType": "uint256", "name": "maxLimit", "type": "uint256" },
+          {
+            "internalType": "uint256",
+            "name": "currentLimit",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct IXERC20.BridgeParameters",
+        "name": "minterParams",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          { "internalType": "uint256", "name": "timestamp", "type": "uint256" },
+          {
+            "internalType": "uint256",
+            "name": "ratePerSecond",
+            "type": "uint256"
+          },
+          { "internalType": "uint256", "name": "maxLimit", "type": "uint256" },
+          {
+            "internalType": "uint256",
+            "name": "currentLimit",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct IXERC20.BridgeParameters",
+        "name": "burnerParams",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
-      { "internalType": "address", "name": "", "type": "address" },
-      { "internalType": "uint32", "name": "", "type": "uint32" }
+      { "internalType": "address", "name": "_user", "type": "address" },
+      { "internalType": "uint256", "name": "_amount", "type": "uint256" }
+    ],
+    "name": "burn",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_bridge", "type": "address" }
+    ],
+    "name": "burningCurrentLimitOf",
+    "outputs": [
+      { "internalType": "uint256", "name": "_limit", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_bridge", "type": "address" }
+    ],
+    "name": "burningMaxLimitOf",
+    "outputs": [
+      { "internalType": "uint256", "name": "_limit", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "account", "type": "address" },
+      { "internalType": "uint32", "name": "pos", "type": "uint32" }
     ],
     "name": "checkpoints",
     "outputs": [
-      { "internalType": "uint32", "name": "fromBlock", "type": "uint32" },
-      { "internalType": "uint96", "name": "votes", "type": "uint96" }
+      {
+        "components": [
+          { "internalType": "uint32", "name": "fromBlock", "type": "uint32" },
+          { "internalType": "uint224", "name": "votes", "type": "uint224" }
+        ],
+        "internalType": "struct ERC20VotesUpgradeable.Checkpoint",
+        "name": "",
+        "type": "tuple"
+      }
     ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "clock",
+    "outputs": [{ "internalType": "uint48", "name": "", "type": "uint48" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -224,6 +356,27 @@
     "inputs": [],
     "name": "decimals",
     "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "spender", "type": "address" },
+      {
+        "internalType": "uint256",
+        "name": "subtractedValue",
+        "type": "uint256"
+      }
+    ],
+    "name": "decreaseAllowance",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "delay",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -252,18 +405,48 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "delegator", "type": "address" },
-      { "internalType": "address", "name": "delegatee", "type": "address" }
+      { "internalType": "address", "name": "account", "type": "address" }
     ],
-    "name": "delegateOnDist",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "name": "delegates",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "name": "delegates",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "inputs": [],
+    "name": "eip712Domain",
+    "outputs": [
+      { "internalType": "bytes1", "name": "fields", "type": "bytes1" },
+      { "internalType": "string", "name": "name", "type": "string" },
+      { "internalType": "string", "name": "version", "type": "string" },
+      { "internalType": "uint256", "name": "chainId", "type": "uint256" },
+      {
+        "internalType": "address",
+        "name": "verifyingContract",
+        "type": "address"
+      },
+      { "internalType": "bytes32", "name": "salt", "type": "bytes32" },
+      { "internalType": "uint256[]", "name": "extensions", "type": "uint256[]" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "timepoint", "type": "uint256" }
+    ],
+    "name": "getPastTotalSupply",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "account", "type": "address" },
+      { "internalType": "uint256", "name": "timepoint", "type": "uint256" }
+    ],
+    "name": "getPastVotes",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -271,32 +454,53 @@
     "inputs": [
       { "internalType": "address", "name": "account", "type": "address" }
     ],
-    "name": "getCurrentVotes",
-    "outputs": [{ "internalType": "uint96", "name": "", "type": "uint96" }],
+    "name": "getVotes",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "account", "type": "address" },
-      { "internalType": "uint256", "name": "blockNumber", "type": "uint256" }
+      { "internalType": "address", "name": "spender", "type": "address" },
+      { "internalType": "uint256", "name": "addedValue", "type": "uint256" }
     ],
-    "name": "getPriorVotes",
-    "outputs": [{ "internalType": "uint96", "name": "", "type": "uint96" }],
-    "stateMutability": "view",
+    "name": "increaseAllowance",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_factory", "type": "address" },
+      { "internalType": "address", "name": "_owner", "type": "address" },
+      { "internalType": "address[]", "name": "_bridges", "type": "address[]" },
+      {
+        "internalType": "uint256[]",
+        "name": "_mintingLimits",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "_burningLimits",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "minimumTimeBetweenMints",
-    "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
+    "name": "lockbox",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "dst", "type": "address" },
-      { "internalType": "uint256", "name": "rawAmount", "type": "uint256" }
+      { "internalType": "address", "name": "_user", "type": "address" },
+      { "internalType": "uint256", "name": "_amount", "type": "uint256" }
     ],
     "name": "mint",
     "outputs": [],
@@ -304,23 +508,24 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "mintCap",
-    "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }],
+    "inputs": [
+      { "internalType": "address", "name": "_bridge", "type": "address" }
+    ],
+    "name": "mintingCurrentLimitOf",
+    "outputs": [
+      { "internalType": "uint256", "name": "_limit", "type": "uint256" }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "minter",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "mintingAllowedAfter",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "inputs": [
+      { "internalType": "address", "name": "_bridge", "type": "address" }
+    ],
+    "name": "mintingMaxLimitOf",
+    "outputs": [
+      { "internalType": "uint256", "name": "_limit", "type": "uint256" }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
@@ -332,16 +537,27 @@
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "inputs": [
+      { "internalType": "address", "name": "owner", "type": "address" }
+    ],
     "name": "nonces",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "inputs": [
+      { "internalType": "address", "name": "account", "type": "address" }
+    ],
     "name": "numCheckpoints",
     "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -349,7 +565,7 @@
     "inputs": [
       { "internalType": "address", "name": "owner", "type": "address" },
       { "internalType": "address", "name": "spender", "type": "address" },
-      { "internalType": "uint256", "name": "rawAmount", "type": "uint256" },
+      { "internalType": "uint256", "name": "value", "type": "uint256" },
       { "internalType": "uint256", "name": "deadline", "type": "uint256" },
       { "internalType": "uint8", "name": "v", "type": "uint8" },
       { "internalType": "bytes32", "name": "r", "type": "bytes32" },
@@ -362,18 +578,66 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "GTCDist_", "type": "address" }
+      { "internalType": "address", "name": "newlyProposed", "type": "address" }
     ],
-    "name": "setGTCDist",
+    "name": "proposeNewOwner",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "proposed",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "proposedTimestamp",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "renounced",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_factory", "type": "address" }
+    ],
+    "name": "setFactory",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "minter_", "type": "address" }
+      { "internalType": "address", "name": "_bridge", "type": "address" },
+      { "internalType": "uint256", "name": "_mintingLimit", "type": "uint256" },
+      { "internalType": "uint256", "name": "_burningLimit", "type": "uint256" }
     ],
-    "name": "setMinter",
+    "name": "setLimits",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_lockbox", "type": "address" }
+    ],
+    "name": "setLockbox",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -394,8 +658,8 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "dst", "type": "address" },
-      { "internalType": "uint256", "name": "rawAmount", "type": "uint256" }
+      { "internalType": "address", "name": "to", "type": "address" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
     ],
     "name": "transfer",
     "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
@@ -404,9 +668,9 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "src", "type": "address" },
-      { "internalType": "address", "name": "dst", "type": "address" },
-      { "internalType": "uint256", "name": "rawAmount", "type": "uint256" }
+      { "internalType": "address", "name": "from", "type": "address" },
+      { "internalType": "address", "name": "to", "type": "address" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
     ],
     "name": "transferFrom",
     "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],

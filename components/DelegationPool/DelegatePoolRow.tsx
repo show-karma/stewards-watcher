@@ -158,7 +158,7 @@ export const DelegatePoolRow: FC<IDelegatePoolRowProps> = ({
                 borderRadius="full"
               />
             ) : null}
-            <Text>{symbol}</Text>
+            <Text>{symbol?.[0]?.value || ''}</Text>
           </Flex>
           {tracks.length > 0 && (
             <>

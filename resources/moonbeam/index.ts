@@ -42,11 +42,12 @@ const config: IDAOConfig = {
       CUSTOM_STATUS: ['community', 'active', 'inactive', 'withdrawn'],
     },
   },
-  DAO_CHAIN: moonbeam,
+  DAO_CHAINS: [moonbeam],
   DAO_TOKEN_CONTRACT: [
     {
       contractAddress: '0x0000000000000000000000000000000000000802',
       method: 'balanceOf',
+      chain: moonbeam,
     },
   ],
   DAO_FORUM_TYPE: 'discourse',

@@ -36,13 +36,18 @@ export interface IDAOConfig {
     FAVICON: string;
     URL: string;
   };
-  DAO_CHAIN: Chain;
-  DAO_DELEGATE_CONTRACT?: `0x${string}`;
+  DAO_CHAINS: Chain[];
+  DAO_DELEGATE_CONTRACT?: {
+    contractAddress: `0x${string}`;
+    chain: Chain;
+    ABI?: any;
+  }[];
   DAO_TOKEN_CONTRACT?: {
     contractAddress: `0x${string}`;
     method: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ABI?: any;
+    chain: Chain;
   }[];
   DAO_DELEGATE_ACTION?: () => void;
   DAO_FORUM_TYPE?: IForumType;

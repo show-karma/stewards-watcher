@@ -19,7 +19,7 @@ const config: IDAOConfig = {
     FAVICON: '/daos/safe/favicon.png',
     URL: `https://safe.karmahq.xyz`,
   },
-  DAO_CHAIN: mainnet,
+  DAO_CHAINS: [mainnet],
   DAO_DEFAULT_SETTINGS: {
     TIMEPERIOD: 'lifetime',
     ORDERSTAT: 'karmaScore',
@@ -28,9 +28,15 @@ const config: IDAOConfig = {
     {
       contractAddress: '0x5afe3855358e112b5647b952709e6165e1c1eeee',
       method: 'balanceOf',
+      chain: mainnet,
     },
   ],
-  DAO_DELEGATE_CONTRACT: '0x469788fe6e9e9681c6ebf3bf78e7fd26fc015446',
+  DAO_DELEGATE_CONTRACT: [
+    {
+      contractAddress: '0x469788fe6e9e9681c6ebf3bf78e7fd26fc015446',
+      chain: mainnet,
+    },
+  ],
   DAO_DELEGATE_FUNCTION: 'setDelegate',
   DAO_DELEGATE_FUNCTION_ARGS: [getIdBySnapshotId('safe.eth')],
   DAO_FORUM_TYPE: 'discourse',
