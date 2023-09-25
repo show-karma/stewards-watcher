@@ -45,7 +45,7 @@ const config: IDAOConfig = {
     },
   },
   DAO_CHAINS: [moonbase],
-  ENABLE_DELEGATED_VOTES_BREAKDOWN: true,
+  DELEGATED_VOTES_BREAKDOWN_BY_TRACKS: true,
   DAO_TOKEN_CONTRACT: [
     {
       contractAddress: '0x0000000000000000000000000000000000000802',

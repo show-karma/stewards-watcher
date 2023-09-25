@@ -1,1 +1,2 @@
-export * from './DelegatedTokensBreakdown';
+export * from './DelegatedTokensByNetwork';
+export * from './DelegatedTokensByTrack';
