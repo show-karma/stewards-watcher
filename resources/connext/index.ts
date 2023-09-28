@@ -87,7 +87,6 @@ const config: IDAOConfig = {
   DAO_FORUM_URL: 'https://forum.connext.network/',
   DAO_GTAG: 'G-67LDHT697P',
   DAO_DEFAULT_SETTINGS: {
-    FAQ: true,
     STATUS_FILTER: {
       DEFAULT_STATUS_SELECTED: ['active'],
       CUSTOM_STATUS: ['endorsed', 'active', 'inactive', 'withdrawn'],

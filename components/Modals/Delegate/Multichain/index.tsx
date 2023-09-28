@@ -9,7 +9,11 @@ import { formatNumber, truncateAddress } from 'utils';
 import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
 import { useMixpanel, useToasty } from 'hooks';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { prepareWriteContract, writeContract } from '@wagmi/core';
+import {
+  prepareWriteContract,
+  writeContract,
+  waitForTransaction,
+} from '@wagmi/core';
 import { zeroAddress } from 'viem';
 import { DelegateModalHeader } from '../DelegateModalHeader';
 import { DelegateModalBody } from '../DelegateModalBody';
@@ -67,7 +71,17 @@ export const MultiChain: React.FC<StepProps> = ({
       event: 'delegateButtonClick',
     });
 
-    await writeContract(prepareConfig);
+    const { hash } = await writeContract(prepareConfig);
+    await waitForTransaction({
+      confirmations: 3,
+      hash,
+    }).then(() => {
+      toast({
+        title: 'Success',
+        description: `You have successfully delegated to ${delegatedUser.ensName} on ${chain?.name}`,
+        status: 'success',
+      });
+    });
   };
 
   const multiChainDelegate = async () => {
