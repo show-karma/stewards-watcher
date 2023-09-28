@@ -17,7 +17,7 @@ import { API_ROUTES } from 'helpers';
 import { FC, ReactNode, useEffect, useState } from 'react';
 import { formatNumber } from 'utils';
 
-interface DelegatedTokensBreakdownProps {
+interface DelegatedTokensByTrackProps {
   children: ReactNode;
   delegateAddress: string;
 }
@@ -28,7 +28,7 @@ type BreakdownData = {
   value: number | string;
 };
 
-export const DelegatedTokensBreakdown: FC<DelegatedTokensBreakdownProps> = ({
+export const DelegatedTokensByTrack: FC<DelegatedTokensByTrackProps> = ({
   children,
   delegateAddress,
 }) => {

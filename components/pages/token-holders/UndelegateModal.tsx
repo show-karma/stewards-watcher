@@ -84,11 +84,12 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
     const filteredTracks = selectedTracks.filter(item => item !== trackId);
     setSelectedTracks(filteredTracks);
   };
-
-  const sameNetwork = chain?.id === config.DAO_CHAIN.id;
+  const sameNetwork = !!config.DAO_CHAINS.find(
+    chainToSearch => chainToSearch.id === chain?.id
+  )?.id;
 
   const { switchNetwork } = useSwitchNetwork({
-    chainId: config.DAO_CHAIN.id,
+    chainId: config.DAO_CHAINS[0].id,
   });
 
   const handleOnClick = () => {

@@ -29,14 +29,20 @@ const config: IDAOConfig = {
       CUSTOM_STATUS: ['endorsed', 'active', 'inactive', 'withdrawn'],
     },
   },
-  DAO_CHAIN: mainnet,
-  DAO_DELEGATE_CONTRACT: '0x469788fe6e9e9681c6ebf3bf78e7fd26fc015446',
+  DAO_CHAINS: [mainnet],
+  DAO_DELEGATE_CONTRACT: [
+    {
+      contractAddress: '0x469788fe6e9e9681c6ebf3bf78e7fd26fc015446',
+      chain: mainnet,
+    },
+  ],
   DAO_DELEGATE_FUNCTION: 'setDelegate',
   DAO_DELEGATE_FUNCTION_ARGS: [getIdBySnapshotId('starknet.eth')],
   DAO_TOKEN_CONTRACT: [
     {
       contractAddress: '0xCa14007Eff0dB1f8135f4C25B34De49AB0d42766',
       method: 'balanceOf',
+      chain: mainnet,
     },
   ],
   DAO_FORUM_TYPE: 'discourse',

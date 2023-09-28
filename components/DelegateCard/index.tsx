@@ -41,7 +41,10 @@ import { DELEGATOR_TRACKER_DAOS } from 'helpers';
 import { HiUserGroup } from 'react-icons/hi';
 import dynamic from 'next/dynamic';
 import { FaDiscord } from 'react-icons/fa';
-import { DelegatedTokensBreakdown } from 'components/Popovers';
+import {
+  DelegatedTokensByNetwork,
+  DelegatedTokensByTrack,
+} from 'components/Popovers';
 import { ImgWithFallback } from '../ImgWithFallback';
 import { DelegateButton } from '../DelegateButton';
 import { ForumIcon, ThreadIcon, TwitterIcon, WebsiteIcon } from '../Icons';
@@ -95,14 +98,25 @@ const StatCases: FC<IStatCasesProps> = ({
     );
   if (
     statItem.id === 'delegatedVotes' &&
-    daoInfo.config.ENABLE_DELEGATED_VOTES_BREAKDOWN &&
+    daoInfo.config.DELEGATED_VOTES_BREAKDOWN_BY_NETWORK &&
     statItem.value !== '-' &&
     statItem.value !== '0'
   )
     return (
-      <DelegatedTokensBreakdown delegateAddress={delegateAddress}>
+      <DelegatedTokensByNetwork delegateAddress={delegateAddress}>
         <DelegateStat stat={statItem} disableTooltip />
-      </DelegatedTokensBreakdown>
+      </DelegatedTokensByNetwork>
+    );
+  if (
+    statItem.id === 'delegatedVotes' &&
+    daoInfo.config.DELEGATED_VOTES_BREAKDOWN_BY_TRACKS &&
+    statItem.value !== '-' &&
+    statItem.value !== '0'
+  )
+    return (
+      <DelegatedTokensByTrack delegateAddress={delegateAddress}>
+        <DelegateStat stat={statItem} disableTooltip />
+      </DelegatedTokensByTrack>
     );
   if (
     (statItem.id === 'forumScore' && canShowBreakdown) ||

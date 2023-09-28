@@ -18,6 +18,7 @@ import rocketpool from './rocketpool';
 import moonriver from './moonriver';
 import moonbeam from './moonbeam';
 import moonbase from './moonbase';
+import connext from './connext';
 import snapshotABI from './contracts/snapshotABI.json';
 import ERC20ABI from './contracts/ERC20_ABI.json';
 
@@ -54,6 +55,13 @@ export const supportedDAOs: ISupportedDAOs = {
     dark: dydx.dark,
     DELEGATE_ABI: dydx.ABI,
     TOKEN_ABI: dydx.ABI,
+  },
+  connext: {
+    config: connext.config,
+    light: connext.light,
+    dark: connext.dark,
+    DELEGATE_ABI: connext.ABI,
+    TOKEN_ABI: connext.ABI,
   },
   aave: {
     config: aave.config,

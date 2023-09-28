@@ -21,7 +21,7 @@ const config: IDAOConfig = {
     FAVICON: '/daos/rocketpool/favicon.ico',
     URL: `https://rocketpool.karmahq.xyz`,
   },
-  DAO_CHAIN: mainnet,
+  DAO_CHAINS: [mainnet],
   DAO_DEFAULT_SETTINGS: {
     TIMEPERIOD: 'lifetime',
     ORDERSTAT: 'karmaScore',
@@ -30,9 +30,15 @@ const config: IDAOConfig = {
     {
       contractAddress: '0xD33526068D116cE69F19A9ee46F0bd304F21A51f',
       method: 'balanceOf',
+      chain: mainnet,
     },
   ],
-  DAO_DELEGATE_CONTRACT: '0x469788fe6e9e9681c6ebf3bf78e7fd26fc015446',
+  DAO_DELEGATE_CONTRACT: [
+    {
+      contractAddress: '0x469788fe6e9e9681c6ebf3bf78e7fd26fc015446',
+      chain: mainnet,
+    },
+  ],
   DAO_DELEGATE_FUNCTION: 'setDelegate',
   DAO_DELEGATE_FUNCTION_ARGS: [getIdBySnapshotId('rocketpool-dao.eth')],
   DAO_FORUM_TYPE: 'discourse',

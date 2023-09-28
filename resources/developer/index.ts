@@ -16,7 +16,7 @@ const config: IDAOConfig = {
     FAVICON: '/daos/developerdao/favicon.png',
     URL: `https://developerdao.karmahq.xyz`,
   },
-  DAO_CHAIN: mainnet,
+  DAO_CHAINS: [mainnet],
   DAO_TOKEN_CONTRACT: undefined,
   DAO_DELEGATE_CONTRACT: undefined,
   DAO_FORUM_TYPE: 'discourse',

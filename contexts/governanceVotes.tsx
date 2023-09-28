@@ -5,18 +5,20 @@ import React, {
   useState,
   useEffect,
 } from 'react';
-import { useContractRead, useContractReads } from 'wagmi';
+import { Chain } from 'wagmi';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { readContracts, readContract } from '@wagmi/core';
 import { formatEther } from 'utils';
 import { BigNumber } from 'ethers';
-import { Hex } from 'types';
+import { Hex, MultiChainResult } from 'types';
 import { useDAO } from './dao';
 import { useWallet } from './wallet';
 
 interface IGovernanceVotesProps {
-  votes: string;
+  votes: MultiChainResult[];
   isLoadingVotes: boolean;
-  delegatedBefore: string;
-  symbol: string;
+  delegatedBefore: MultiChainResult[];
+  symbol: MultiChainResult[];
   walletAddress?: string;
   getVotes: () => Promise<void>;
   loadedVotes: boolean;
@@ -35,100 +37,142 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
 }) => {
   const { daoInfo } = useDAO();
   const { address: walletAddress, isConnected } = useWallet();
-  const [votes, setVotes] = useState('0');
-  const [symbol, setSymbol] = useState('');
+  const [votes, setVotes] = useState<MultiChainResult[]>([]);
+
+  const [symbol, setSymbol] = useState<MultiChainResult[]>([]);
   const [loadedVotes, setLoadedVotes] = useState(false);
+  const [isLoadingVotes, setIsLoadingVotes] = useState(false);
 
-  const [delegatedBefore, setDelegatedBefore] = useState('');
-  const { data: voteAmounts, isFetching: isLoadingVotes } = useContractReads({
-    contracts: daoInfo.config.DAO_TOKEN_CONTRACT
-      ? daoInfo.config.DAO_TOKEN_CONTRACT.map(contract => ({
-          address: contract.contractAddress,
-          abi: contract.ABI || daoInfo.TOKEN_ABI,
-          functionName: contract.method,
-          args: walletAddress ? [walletAddress] : undefined,
-          chainId: daoInfo.config.DAO_CHAIN.id,
-        }))
-      : undefined,
-  });
+  const [delegatedBefore, setDelegatedBefore] = useState<MultiChainResult[]>(
+    []
+  );
 
-  const { data: delegated } = useContractRead({
-    address: daoInfo.config.DAO_DELEGATE_CONTRACT,
-    abi: daoInfo.DELEGATE_ABI,
-    functionName: 'delegates',
-    args: [walletAddress],
-    chainId: daoInfo.config.DAO_CHAIN.id,
-    enabled: !!walletAddress,
-  });
-
-  const { data: fetchedSymbol } = useContractRead({
-    address: daoInfo.config.DAO_TOKEN_CONTRACT?.[0].contractAddress,
-    abi: daoInfo.TOKEN_ABI,
-    functionName: 'symbol',
-    chainId: daoInfo.config.DAO_CHAIN.id,
-  });
+  const groupContractsByChain = daoInfo.config.DAO_TOKEN_CONTRACT?.reduce(
+    (acc, contract) => {
+      if (!acc[contract.chain.id]) acc[contract.chain.id] = [];
+      acc[contract.chain.id].push(contract);
+      return acc;
+    },
+    {} as Record<string, any[]>
+  );
+  const chainKeys = Object.keys(groupContractsByChain as object);
 
   const getVotes = async () => {
     setLoadedVotes(false);
-    if (!voteAmounts || !voteAmounts?.length) {
-      setVotes('0');
+    setIsLoadingVotes(true);
+    try {
+      if (!daoInfo.config.DAO_TOKEN_CONTRACT || !groupContractsByChain)
+        throw new Error(`No Token contract found`);
+
+      const multiChainAmounts = await Promise.all(
+        chainKeys.map(async key => {
+          const data = await readContracts({
+            contracts: groupContractsByChain[key].map(contract => ({
+              address: contract.contractAddress,
+              abi: contract.ABI || daoInfo.TOKEN_ABI,
+              functionName: contract.method,
+              args: walletAddress ? [walletAddress] : undefined,
+              chainId: contract.chain.id,
+            })),
+          });
+
+          const amountsBN = data.map(amount => {
+            if (amount && amount.result)
+              return BigNumber.from(amount.result).toString();
+            return '0';
+          });
+          const chain = daoInfo.config.DAO_TOKEN_CONTRACT?.find(
+            contract => contract.chain.id === +key
+          )?.chain as Chain;
+
+          const onlyZeros = amountsBN.every(amount => amount === '0');
+          if (onlyZeros) {
+            return { chain, value: '0' };
+          }
+          const sumBNs = amountsBN.reduce(
+            (acc, amount) => acc.add(BigNumber.from(amount)),
+            BigNumber.from('0')
+          );
+
+          const fromWeiAmount = formatEther(sumBNs.toString());
+          if (daoInfo.config.GET_LOCKED_TOKENS_ACTION) {
+            const { GET_LOCKED_TOKENS_ACTION: getLocked } = daoInfo.config;
+            const lockedVotes = await getLocked(walletAddress as Hex);
+            return { chain, value: (+fromWeiAmount + +lockedVotes).toString() };
+          }
+
+          return { chain, value: fromWeiAmount };
+        })
+      );
+
+      setVotes(multiChainAmounts);
+    } catch {
+      setVotes([]);
+    } finally {
       setLoadedVotes(true);
-      return;
+      setIsLoadingVotes(false);
     }
-
-    const amountsBN = voteAmounts.map(amount => {
-      if (amount && amount.result)
-        return BigNumber.from(amount.result).toString();
-      return '0';
-    });
-    const onlyZeros = amountsBN.every(amount => amount === '0');
-    if (onlyZeros) {
-      setVotes('0');
-      setLoadedVotes(true);
-      return;
-    }
-    const sumBNs = amountsBN.reduce(
-      (acc, amount) => acc.add(BigNumber.from(amount)),
-      BigNumber.from('0')
-    );
-
-    const fromWeiAmount = formatEther(sumBNs.toString());
-
-    if (daoInfo.config.GET_LOCKED_TOKENS_ACTION) {
-      const { GET_LOCKED_TOKENS_ACTION: getLocked } = daoInfo.config;
-      const lockedVotes = await getLocked(walletAddress as Hex);
-      setVotes((+fromWeiAmount + +lockedVotes).toString());
-    } else setVotes(fromWeiAmount);
-    setLoadedVotes(true);
   };
 
   useEffect(() => {
     getVotes();
-  }, [walletAddress, voteAmounts, isConnected]);
+  }, [walletAddress, isConnected]);
 
-  const getDelegated = async () => {
-    if (!delegated) {
-      setDelegatedBefore('');
-      return;
+  const getDelegatedBefore = async () => {
+    try {
+      if (!daoInfo.config.DAO_DELEGATE_CONTRACT || !groupContractsByChain)
+        return;
+
+      const promises = daoInfo.config.DAO_DELEGATE_CONTRACT.map(
+        async contract => {
+          const result = await readContract({
+            address: contract.contractAddress,
+            abi: daoInfo.DELEGATE_ABI,
+            functionName: 'delegates',
+            args: [walletAddress],
+            chainId: contract.chain.id,
+          });
+          return { chain: contract.chain, value: result };
+        }
+      );
+      const promisedResults = await Promise.all(promises);
+      setDelegatedBefore(promisedResults);
+    } catch (error) {
+      console.log(error);
+      setDelegatedBefore([]);
     }
-    setDelegatedBefore(delegated.toString());
   };
 
   useEffect(() => {
-    getDelegated();
+    getDelegatedBefore();
   }, [walletAddress, isConnected]);
 
   const getSymbol = async () => {
-    if (!fetchedSymbol) {
-      setSymbol('');
-      return;
+    try {
+      if (!daoInfo.config.DAO_TOKEN_CONTRACT || !groupContractsByChain) return;
+
+      const promises = daoInfo.config.DAO_TOKEN_CONTRACT.map(async contract => {
+        const result = await readContract({
+          address: contract.contractAddress,
+          abi: daoInfo.TOKEN_ABI,
+          functionName: 'symbol',
+          args: [],
+          chainId: contract.chain.id,
+        }).then(value => value);
+        return { chain: contract.chain, value: result };
+      });
+
+      const promisedResults = await Promise.all(promises);
+      setSymbol(promisedResults);
+    } catch (error) {
+      console.log(error);
+      setSymbol([]);
     }
-    setSymbol(fetchedSymbol.toString());
   };
 
   useEffect(() => {
     getSymbol();
-  }, [fetchedSymbol, isConnected]);
+  }, [isConnected]);
 
   const providerValue = useMemo(
     () => ({

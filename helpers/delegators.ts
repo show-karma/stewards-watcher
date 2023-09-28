@@ -2,6 +2,7 @@ export const DELEGATOR_TRACKER_DAOS: string[] = [
   'aave',
   'compound',
   'dimo',
+  'connext',
   'dydx',
   'ens',
   'feiprotocol',

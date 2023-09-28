@@ -42,11 +42,12 @@ const config: IDAOConfig = {
       CUSTOM_STATUS: ['community', 'active', 'inactive', 'withdrawn'],
     },
   },
-  DAO_CHAIN: moonriver,
+  DAO_CHAINS: [moonriver],
   DAO_TOKEN_CONTRACT: [
     {
       contractAddress: '0x0000000000000000000000000000000000000802',
       method: 'balanceOf',
+      chain: moonriver,
     },
   ],
   DAO_FORUM_TYPE: 'discourse',
@@ -87,7 +88,7 @@ const config: IDAOConfig = {
   DELEGATION_CONVICTION_OPTIONS: moonriverConvictionOptions,
   TRACKS_DICTIONARY: moonriverTracksDictionary,
   ENABLE_PROXY_SUPPORT: true,
-  ENABLE_DELEGATED_VOTES_BREAKDOWN: true,
+  DELEGATED_VOTES_BREAKDOWN_BY_TRACKS: true,
   CUSTOM_RPC: jsonRpcProvider({
     rpc: () => ({
       http: RPCS.moonriver,

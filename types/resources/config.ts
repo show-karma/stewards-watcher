@@ -36,13 +36,18 @@ export interface IDAOConfig {
     FAVICON: string;
     URL: string;
   };
-  DAO_CHAIN: Chain;
-  DAO_DELEGATE_CONTRACT?: `0x${string}`;
+  DAO_CHAINS: Chain[];
+  DAO_DELEGATE_CONTRACT?: {
+    contractAddress: `0x${string}`;
+    chain: Chain;
+    ABI?: any;
+  }[];
   DAO_TOKEN_CONTRACT?: {
     contractAddress: `0x${string}`;
     method: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ABI?: any;
+    chain: Chain;
   }[];
   DAO_DELEGATE_ACTION?: () => void;
   DAO_FORUM_TYPE?: IForumType;
@@ -96,7 +101,8 @@ export interface IDAOConfig {
   DELEGATION_CONVICTION_OPTIONS?: IConvictionOption[];
   ENABLE_ONCHAIN_REGISTRY?: boolean;
   ENABLE_PROXY_SUPPORT?: boolean;
-  ENABLE_DELEGATED_VOTES_BREAKDOWN?: boolean;
+  DELEGATED_VOTES_BREAKDOWN_BY_TRACKS?: boolean;
+  DELEGATED_VOTES_BREAKDOWN_BY_NETWORK?: boolean;
   ENABLE_HANDLES_EDIT?: IMedias[];
 
   DELEGATE_REGISTRY_CONTRACT?: {

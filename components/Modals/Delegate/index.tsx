@@ -8,6 +8,7 @@ import { Step1 } from './Step1';
 import { Step2 } from './Step2';
 import { StepChange } from './StepChange';
 import { TrackDelegation } from './TrackDelegation';
+import { MultiChain } from './Multichain';
 
 interface IModal {
   open: boolean;
@@ -44,16 +45,29 @@ export const DelegateModal: React.FC<IModal> = ({
       );
     if (step === ESteps.DONE)
       return <Step2 handleModal={closeModal} delegatedUser={delegateData} />;
+
+    if (daoInfo.config.DAO_CHAINS.length > 1) {
+      return (
+        <MultiChain
+          handleModal={closeModal}
+          votes={votes}
+          delegatedUser={delegateData}
+          walletAddress={walletAddress}
+        />
+      );
+    }
+
     if (
-      delegatedBefore !== '0x0000000000000000000000000000000000000000' &&
-      delegatedBefore
+      delegatedBefore[0].value !==
+        '0x0000000000000000000000000000000000000000' &&
+      delegatedBefore[0].value
     )
       return (
         <StepChange
           handleModal={closeModal}
-          votes={votes}
+          votes={votes[0].value}
           delegatedUser={delegateData}
-          delegatedBefore={delegatedBefore}
+          delegatedBefore={delegatedBefore[0].value}
           walletAddress={walletAddress}
         />
       );
@@ -61,7 +75,7 @@ export const DelegateModal: React.FC<IModal> = ({
     return (
       <Step1
         handleModal={closeModal}
-        votes={votes}
+        votes={votes[0].value}
         delegatedUser={delegateData}
         walletAddress={walletAddress}
       />

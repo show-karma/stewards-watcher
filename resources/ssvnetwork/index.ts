@@ -22,19 +22,26 @@ const config: IDAOConfig = {
     FAVICON: '/daos/ssvnetwork/favicon.png',
     URL: `https://ssvnetwork.karmahq.xyz`,
   },
-  DAO_CHAIN: mainnet,
-  DAO_DELEGATE_CONTRACT: '0x469788fe6e9e9681c6ebf3bf78e7fd26fc015446',
+  DAO_CHAINS: [mainnet],
+  DAO_DELEGATE_CONTRACT: [
+    {
+      contractAddress: '0x469788fe6e9e9681c6ebf3bf78e7fd26fc015446',
+      chain: mainnet,
+    },
+  ],
   DAO_DELEGATE_FUNCTION: 'setDelegate',
   DAO_DELEGATE_FUNCTION_ARGS: [getIdBySnapshotId('mainnet.ssvnetwork.eth')],
   DAO_TOKEN_CONTRACT: [
     {
       contractAddress: '0x9D65fF81a3c488d585bBfb0Bfe3c7707c7917f54',
       method: 'balanceOf',
+      chain: mainnet,
     },
     {
       contractAddress: '0xB8471180C79A0a69C7790A1CCf62e91b3c3559Bf',
       method: 'totalVestingBalanceOf',
       ABI: TokenVestingABI,
+      chain: mainnet,
     },
   ],
   DAO_FORUM_TYPE: 'discourse',
