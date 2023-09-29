@@ -40,7 +40,11 @@ export const getDelegateVotesByNetwork = async (
   );
 
   results.forEach(result => {
-    if (result.data.data?.delegateOrganizations[0]) {
+    if (
+      result.data.data?.delegateOrganizations[0] &&
+      result.data.data.delegateOrganizations[0].voteBalance &&
+      result.data.data.delegateOrganizations[0].voteBalance !== '0'
+    ) {
       delegatedVotes.push({
         votes: Math.round(
           result.data.data.delegateOrganizations[0].voteBalance / 10 ** 18
