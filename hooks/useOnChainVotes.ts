@@ -16,7 +16,6 @@ import { VOTING_HISTORY } from 'utils';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function concatOnChainProposals(proposals: any[], votes: any[]) {
   const array: IChainRow[] = [];
-
   votes.forEach(vote => {
     const { proposal } = vote;
     array.push({
@@ -55,6 +54,7 @@ async function fetchOnChainProposals(
     uri: clientUrl,
     cache: new InMemoryCache(),
   });
+
   const { data } = await onChainClient.query({
     query: VOTING_HISTORY.onChainProposalsReq,
     variables: {

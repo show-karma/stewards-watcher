@@ -67,6 +67,8 @@ const VoteIcon: FC<{ vote: IChainRow }> = ({ vote }) => {
       return <Icon as={DidNotVoteIcon} color="#FFF7AE" {...iconStyle} />;
     case 'Not voted yet':
       return <Icon as={DidNotVoteIcon} color="#f1c40f" {...iconStyle} />;
+    case 2:
+      return <Icon as={EmptyCircleIcon} color="gray.300" {...iconStyle} />;
     case 'ABSTAIN':
       return <Icon as={EmptyCircleIcon} color="gray.300" {...iconStyle} />;
     default:
@@ -97,6 +99,7 @@ export const ProposalVote: FC<IProposalVote> = ({
     if (vote && typeof vote.choice === 'string') return vote.choice;
     if (vote.choice === 0) return 'Against';
     if (vote.choice === 1) return 'For';
+    if (vote.choice === 2) return 'Abstain';
     if (vote.choice === 'ABSTAIN') return 'Abstain';
     if (vote.choice === -1 && !vote.finished) return 'Not voted yet';
 
