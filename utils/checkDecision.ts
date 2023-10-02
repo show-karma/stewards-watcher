@@ -24,7 +24,7 @@ export const checkDecision = (vote: IChainRow) => {
   if (vote.solution) return 'FOR';
   if (vote.choice === 0) return 'AGAINST';
   if (vote.choice === 1) return 'FOR';
-  if (vote.choice === 'ABSTAIN') return 'ABSTAIN';
+  if (vote.choice === 'ABSTAIN' || vote.choice === 2) return 'ABSTAIN';
   if (vote.choice === -1 && !vote.finished) return 'NOTYET';
   if (vote.choice === 'Did not vote') return 'NOTVOTED';
 

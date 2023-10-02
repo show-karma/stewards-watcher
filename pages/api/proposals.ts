@@ -130,7 +130,7 @@ const handler: NextApiHandler = async (
     if (skipIds) {
       result = result.filter((proposal: any) => !skipIds.includes(proposal.id));
     }
-    console.log(result);
+
     res.json(result);
   } catch (error: any) {
     const [code, msg] = error.message.split(':');

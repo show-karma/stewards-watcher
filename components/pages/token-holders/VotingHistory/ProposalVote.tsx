@@ -74,7 +74,7 @@ const colorDecision = (vote: IChainRow) => {
   if (vote.choice === 'Not voted yet' || (vote.choice === -1 && !vote.finished))
     return colors.notYet;
   if (vote.choice === 'Did not vote') return colors.notVoted;
-  if (vote.choice === 'ABSTAIN') return colors.abstain;
+  if (vote.choice === 'ABSTAIN' || vote.choice === 2) return colors.abstain;
 
   return colors.notVoted;
 };
@@ -210,7 +210,7 @@ const VoteIcon: FC<{ vote: IChainRow }> = ({ vote }) => {
         {...iconStyle}
       />
     );
-  if (vote.choice === 'ABSTAIN')
+  if (vote.choice === 'ABSTAIN' || vote.choice === 2)
     return (
       <Icon
         as={EmptyCircleIcon}
@@ -257,6 +257,7 @@ export const ProposalVote: FC<IProposalVote> = ({
     if (vote && typeof vote.choice === 'string') return vote.choice;
     if (vote.choice === 0) return 'Against';
     if (vote.choice === 1) return 'For';
+    if (vote.choice === 2) return 'Abstain';
     if (vote.choice === 'ABSTAIN') return 'Abstain';
     if (vote.choice === -1 && !vote.finished) return 'Not voted yet';
     return 'Did not vote';
