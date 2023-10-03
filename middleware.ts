@@ -24,6 +24,7 @@ const DAO_CUSTOM_DOMAIN: Record<string, string | string[]> = {
   'delegate.gitcoin.co': 'gitcoin',
   'delegate.starknet.io': 'starknet',
   'delegate.ssv.network': 'ssvnetwork',
+  'delegate.connext.network': 'connext',
   'delegate.moonbeam.network': ['moonriver', 'moonbase'],
 };
 //
