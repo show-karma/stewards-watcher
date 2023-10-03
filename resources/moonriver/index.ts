@@ -56,6 +56,7 @@ const config: IDAOConfig = {
   EXCLUDED_CARD_FIELDS: ['healthScore', 'discordScore', 'offChainVotesPct'],
   DAO_CATEGORIES_TYPE: 'tracks',
   ALLOW_BULK_DELEGATE: true,
+  BULK_DELEGATE_MAXSIZE: 999,
   ALLOW_UNDELEGATE: true,
   GET_ACTIVE_DELEGATIONS_ACTION: moonriverActiveDelegatedTracks,
   UNDELEGATE_ACTION: moonriverUndelegateAction(
