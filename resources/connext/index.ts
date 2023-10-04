@@ -18,11 +18,11 @@ const config: IDAOConfig = {
     TITLE: `Delegates of Connext DAO`,
     DESCRIPTION: `Find all the active delegates in Connext DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
     IMAGE_DISCORD:
-      'https://connext.karmahq.xyz/daos/connext/preview-discord.png',
+      'https://delegate.connext.network/daos/connext/preview-discord.png',
     IMAGE_TWITTER:
-      'https://connext.karmahq.xyz/daos/connext/preview-twitter.png',
+      'https://delegate.connext.network/daos/connext/preview-twitter.png',
     FAVICON: '/daos/connext/favicon.png',
-    URL: `https://connext.karmahq.xyz`,
+    URL: `https://delegate.connext.network`,
   },
   DAO_CHAINS: [mainnet, arbitrum, optimism, polygon, customGnosis, bsc],
   DAO_TOKEN_CONTRACT: [
