@@ -17,6 +17,7 @@ export const DelegatesAccordion: FC<IDelegatesAccordionProps> = ({
   const dataArray = holderData.delegatingHistories;
 
   const lastDelegation = dataArray[0];
+
   return useMemo(
     () => (
       <VotesProvider
