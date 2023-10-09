@@ -79,9 +79,9 @@ export const TrackBadge: React.FC<ITrackBadgeProps> = ({
         daoInfo.config.TRACKS_DICTIONARY &&
         daoInfo.config.TRACKS_DICTIONARY[track.name]
           ? alreadyDelegated
-            ? `⚠️ You have already delegated to this ${
+            ? `⚠️ You have already delegated to ${
                 daoInfo.config.TRACKS_DICTIONARY[track.name].emoji
-              } ${track.name}. Undelegate before redelegating.`
+              } ${track.name} track. Undelegate before redelegating.`
             : `${daoInfo.config.TRACKS_DICTIONARY[track.name].description}`
           : undefined
       }
