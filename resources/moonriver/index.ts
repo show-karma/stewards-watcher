@@ -9,7 +9,7 @@ import {
   moonriverTracksDictionary,
 } from 'utils';
 import { moonriver } from 'wagmi/chains';
-import { RPCS } from 'helpers';
+import { ECOSYSTEMS, RPCS } from 'helpers';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { moonriverUndelegateAction } from '../../utils/moonbeam/moonriverUndelegateAction';
 import { polkassemblyProposalUrl } from '../../utils/moonbeam/polkassembly';
@@ -88,6 +88,7 @@ const config: IDAOConfig = {
   TRACKS_DICTIONARY: moonriverTracksDictionary,
   ENABLE_PROXY_SUPPORT: true,
   DELEGATED_VOTES_BREAKDOWN_BY_TRACKS: true,
+  ECOSYSTEM: ECOSYSTEMS.moonbeam,
   CUSTOM_RPC: jsonRpcProvider({
     rpc: () => ({
       http: RPCS.moonriver,

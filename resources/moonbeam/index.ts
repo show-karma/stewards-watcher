@@ -9,7 +9,7 @@ import {
   moonbeamActiveDelegatedTracks,
 } from 'utils';
 import { moonbeam } from 'utils/moonbeam/network';
-import { RPCS } from 'helpers';
+import { ECOSYSTEMS, RPCS } from 'helpers';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { moonriverUndelegateAction } from '../../utils/moonbeam/moonriverUndelegateAction';
 import { polkassemblyProposalUrl } from '../../utils/moonbeam/polkassembly';
@@ -91,6 +91,7 @@ const config: IDAOConfig = {
   DELEGATION_CONVICTION_OPTIONS: moonriverConvictionOptions,
   TRACKS_DICTIONARY: moonriverTracksDictionary,
   ENABLE_PROXY_SUPPORT: true,
+  ECOSYSTEM: ECOSYSTEMS.moonbeam,
   DELEGATED_VOTES_BREAKDOWN_BY_TRACKS: true,
   CUSTOM_RPC: jsonRpcProvider({
     rpc: () => ({

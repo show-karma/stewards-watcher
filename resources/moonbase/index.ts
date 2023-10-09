@@ -6,7 +6,7 @@ import {
   moonriverTracksDictionary,
   moonbase,
 } from 'utils';
-import { RPCS } from 'helpers';
+import { ECOSYSTEMS, RPCS } from 'helpers';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import {
   moonbaseActiveDelegatedTracks,
@@ -92,7 +92,7 @@ const config: IDAOConfig = {
   DELEGATION_CONVICTION_OPTIONS: moonriverConvictionOptions,
   TRACKS_DICTIONARY: moonriverTracksDictionary,
   ENABLE_PROXY_SUPPORT: true,
-
+  ECOSYSTEM: ECOSYSTEMS.moonbeam,
   CUSTOM_RPC: jsonRpcProvider({
     rpc: () => ({
       http: RPCS.moonbase,
