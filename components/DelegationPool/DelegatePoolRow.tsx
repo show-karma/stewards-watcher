@@ -62,7 +62,7 @@ export const DelegatePoolRow: FC<IDelegatePoolRowProps> = ({
         .typeError('Token amount must be a number.')
         .moreThan(0.1, 'You must delegate more than 0.1 tokens.')
         .max(
-          +votes - 0.1,
+          +(votes?.[0]?.value || 0) - 0.1,
           'You do not have the specified number of tokens in your wallet.'
         )
         .required('Amount is required.'),
