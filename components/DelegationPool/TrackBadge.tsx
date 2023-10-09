@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import {
   AlertDescription,
   Alert,
@@ -77,12 +78,11 @@ export const TrackBadge: React.FC<ITrackBadgeProps> = ({
       label={
         daoInfo.config.TRACKS_DICTIONARY &&
         daoInfo.config.TRACKS_DICTIONARY[track.name]
-          ? `${daoInfo.config.TRACKS_DICTIONARY[track.name].description}
-          ${
-            alreadyDelegated
-              ? ' - ⚠️Track already delegated, please undelegate before trying.'
-              : ''
-          }`
+          ? alreadyDelegated
+            ? `⚠️ You have already delegated to this ${
+                daoInfo.config.TRACKS_DICTIONARY[track.name].emoji
+              } ${track.name}. Undelegate before redelegating.`
+            : `${daoInfo.config.TRACKS_DICTIONARY[track.name].description}`
           : undefined
       }
       bg={theme.collapse.bg || theme.card.background}
@@ -100,10 +100,25 @@ export const TrackBadge: React.FC<ITrackBadgeProps> = ({
         align="center"
         fontSize="sm"
         key={track.id}
-        onClick={selected ? handleRemove : handleSelect}
         color={selected ? '#1DE9B6' : theme.text}
+        isDisabled={alreadyDelegated}
+        disabled={alreadyDelegated}
+        onClick={() => {
+          if (alreadyDelegated) return;
+          if (selected) {
+            handleRemove();
+          } else {
+            handleSelect();
+          }
+        }}
+        _disabled={{
+          opacity: 0.5,
+        }}
         {...styles}
         background={selected ? 'black' : 'transparent'}
+        style={{
+          cursor: alreadyDelegated ? 'not-allowed' : 'pointer',
+        }}
       >
         <Flex flexDir="row" gap="1">
           <Text>
