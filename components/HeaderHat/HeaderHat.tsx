@@ -11,6 +11,8 @@ import {
   ChakraLink,
   DelegateLoginButton,
   DelegateLoginModal,
+  EcosystemAccordion,
+  EcosystemDropdown,
   UserProfile,
 } from 'components';
 import { DelegateVotesModal } from 'components/Modals/DelegateToAnyone';
@@ -149,6 +151,8 @@ export const HeaderHat: FC<IHeaderHat> = ({
             mountingForDelegates={mountingForDelegates}
           >
             <Flex flexDir="column" gap="1">
+              {daoInfo.config.ECOSYSTEM && <EcosystemAccordion />}
+
               <NavMenu
                 title="For Tokenholders"
                 childrens={mountingForTokenholders()}
@@ -213,15 +217,18 @@ export const HeaderHat: FC<IHeaderHat> = ({
                 align={['flex-start', 'flex-start']}
                 gap="1"
               >
-                <ChakraLink href={`${rootPathname}/`}>
-                  <Img
-                    w="auto"
-                    maxW="36"
-                    h="10"
-                    objectFit="contain"
-                    src={config.DAO_LOGO}
-                  />
-                </ChakraLink>
+                <Flex flexDir="row" align="center" gap="2">
+                  <ChakraLink href={`${rootPathname}/`}>
+                    <Img
+                      w="auto"
+                      maxW="36"
+                      h="10"
+                      objectFit="contain"
+                      src={config.DAO_LOGO}
+                    />
+                  </ChakraLink>
+                  {daoInfo.config.ECOSYSTEM && <EcosystemDropdown />}
+                </Flex>
                 <Madeby />
               </Flex>
               <Flex
@@ -236,6 +243,7 @@ export const HeaderHat: FC<IHeaderHat> = ({
                   height="100%"
                   gap="4"
                 >
+                  {daoInfo.config.ECOSYSTEM && <EcosystemAccordion />}
                   <NavMenu
                     title="For Tokenholders"
                     childrens={mountingForTokenholders()}

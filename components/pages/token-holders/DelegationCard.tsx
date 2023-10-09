@@ -15,9 +15,15 @@ import moment from 'moment';
 import { FC, useEffect, useState } from 'react';
 import { IDelegatingHistories } from 'types';
 import { addressToENSName, formatNumber, truncateAddress } from 'utils';
+import { api } from 'helpers';
 import { PerformanceStats } from './PerformanceStats';
 import { VotingHistory } from './VotingHistory';
 
+type Id = {
+  ensName?: string;
+  realName?: string;
+  address: string;
+};
 interface IDelegationCardProps {
   userDelegating: {
     name?: string;
@@ -93,6 +99,34 @@ export const DelegationCard: FC<IDelegationCardProps> = ({
     if (!userDelegatedTo.name) checkENSName();
   }, [userDelegatedTo.address]);
 
+  const getIdentification = async (address: string) => {
+    const userData = await api.get(`/user/${address}`);
+    const { ensName, realName } = userData.data.data;
+    return { ensName, realName, address };
+  };
+
+  const [userDelegatingIds, setUserDelegatingIds] = useState<Id | undefined>(
+    undefined
+  );
+  const [userDelegatedToIds, setUserDelegatedToIds] = useState<Id | undefined>(
+    undefined
+  );
+
+  const getUserDelegatingIds = async () => {
+    const ids = await getIdentification(userDelegating.address);
+    setUserDelegatingIds(ids);
+  };
+
+  const getUserDelegatedToIds = async () => {
+    const ids = await getIdentification(userDelegatedTo.address);
+    setUserDelegatedToIds(ids);
+  };
+
+  useEffect(() => {
+    getUserDelegatingIds();
+    getUserDelegatedToIds();
+  }, [userDelegating.address, userDelegatedTo.address]);
+
   return (
     <AccordionItem borderRadius="md" borderBottomRadius="md" _hover={{}}>
       {({ isExpanded }) => (
@@ -145,7 +179,9 @@ export const DelegationCard: FC<IDelegationCardProps> = ({
                     whiteSpace="nowrap"
                     overflow="hidden"
                   >
-                    {userDelegating.name ||
+                    {userDelegatingIds?.realName ||
+                      userDelegatingIds?.ensName ||
+                      userDelegating.name ||
                       truncateAddress(userDelegating.address)}
                   </Text>
                 </Flex>
@@ -210,7 +246,10 @@ export const DelegationCard: FC<IDelegationCardProps> = ({
                       isExternal
                       href={`https://karmahq.xyz/dao/${daoInfo.config.DAO_KARMA_ID}/delegators/${userDelegatedTo.address}`}
                     >
-                      {userDelegatedTo.name || delegatedUserEnsName}
+                      {userDelegatedToIds?.realName ||
+                        userDelegatedToIds?.ensName ||
+                        userDelegatedTo.name ||
+                        delegatedUserEnsName}
                     </ChakraLink>
                   </Skeleton>
                 </Flex>
@@ -336,7 +375,10 @@ export const DelegationCard: FC<IDelegationCardProps> = ({
                     fontWeight="700"
                     fontSize={{ base: '14px', lg: '16px' }}
                   >
-                    {userDelegatedTo.name || delegatedUserEnsName}
+                    {userDelegatedToIds?.realName ||
+                      userDelegatedToIds?.ensName ||
+                      userDelegatedTo.name ||
+                      delegatedUserEnsName}
                   </Text>
                 </Skeleton>
               </Flex>

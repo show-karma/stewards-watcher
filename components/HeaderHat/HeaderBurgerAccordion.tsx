@@ -55,15 +55,17 @@ export const HeaderBurgerAccordion: FC<IHeaderBurgerAccordionProps> = ({
                 gap={{ base: '4', sm: '1' }}
                 flexDir={{ base: 'row', sm: 'column' }}
               >
-                <ChakraLink href={`${rootPathname}/`}>
-                  <Img
-                    w="auto"
-                    maxW="36"
-                    h="10"
-                    objectFit="contain"
-                    src={config.DAO_LOGO}
-                  />
-                </ChakraLink>
+                <Flex flexDir="row" align="center" gap="2">
+                  <ChakraLink href={`${rootPathname}/`}>
+                    <Img
+                      w="auto"
+                      maxW="36"
+                      h="10"
+                      objectFit="contain"
+                      src={config.DAO_LOGO}
+                    />
+                  </ChakraLink>
+                </Flex>
                 <Madeby />
               </Flex>
               {isMobile ? null : (
