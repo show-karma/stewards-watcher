@@ -26,6 +26,7 @@ const DAO_CUSTOM_DOMAIN: Record<string, string | string[]> = {
   'delegate.ssv.network': 'ssvnetwork',
   'delegate.connext.network': 'connext',
   'delegate.moonbeam.network': ['moonriver', 'moonbase'],
+  'delegate.arbitrum.io': 'arbitrum',
 };
 //
 export default function middleware(req: NextRequest) {

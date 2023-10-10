@@ -2,10 +2,10 @@ import axios from 'axios';
 
 const chainsDelegatesData = {
   1: 'https://api.thegraph.com/subgraphs/name/show-karma/dao-delegates',
-  10: 'https://api.thegraph.com/subgraphs/name/show-karma/dao-delegates-arbitrum',
+  10: 'https://api.thegraph.com/subgraphs/name/show-karma/dao-delegates-optimism',
   137: 'https://api.thegraph.com/subgraphs/name/show-karma/dao-delegates-polygon',
   42161:
-    'https://api.thegraph.com/subgraphs/name/show-karma/dao-delegates-optimism',
+    'https://api.thegraph.com/subgraphs/name/show-karma/dao-delegates-arbitrum',
   100: 'https://api.thegraph.com/subgraphs/name/show-karma/dao-delegates-gnosis',
   56: 'https://api.thegraph.com/subgraphs/name/show-karma/dao-delegates-bsc',
 };
