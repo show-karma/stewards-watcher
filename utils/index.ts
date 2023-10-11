@@ -1,4 +1,5 @@
 export * from './addressToENSName';
+export * from './arbitrum';
 export * from './checkDecision';
 export * from './checkExpirationStatus';
 export * from './checkRealAddress';

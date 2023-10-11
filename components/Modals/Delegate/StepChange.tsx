@@ -213,7 +213,8 @@ export const StepChange: React.FC<StepProps> = ({
                   whiteSpace="nowrap"
                   overflow="hidden"
                 >
-                  {delegatedUser.ensName || delegatedUser.address}
+                  {delegatedUser.ensName ||
+                    truncateAddress(delegatedUser.address)}
                 </Text>
               </Flex>
             </Flex>

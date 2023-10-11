@@ -1,4 +1,3 @@
-import humanFormat from 'human-format';
 import numbro from 'numbro';
 
 export const formatNumber = (numberToFormat: number | string) => {
@@ -18,14 +17,16 @@ export const formatNumber = (numberToFormat: number | string) => {
     });
   }
   if (typeof numberToFormat === 'string') {
-    return humanFormat(+numberToFormat, {
-      maxDecimals: 2,
-      separator: '',
+    return numbro(numberToFormat).format({
+      mantissa: 2,
+      trimMantissa: true,
+      average: true,
     });
   }
-  return humanFormat(numberToFormat, {
-    maxDecimals: 2,
-    separator: '',
+  return numbro(numberToFormat).format({
+    mantissa: 2,
+    trimMantissa: true,
+    average: true,
   });
 };
 

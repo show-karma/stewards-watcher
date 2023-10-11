@@ -19,4 +19,5 @@ export const daosDictionary: Record<string, string> = {
   moonbeam: 'moonbeam',
   compound: 'compound',
   moonbase: 'moonbase',
+  arbitrum: 'arbitrum',
 };
