@@ -16,17 +16,18 @@ export const formatNumber = (numberToFormat: number | string) => {
       trimMantissa: true,
     });
   }
+  const number = Number.isNaN(+numberToFormat) ? 0 : +numberToFormat;
   if (typeof numberToFormat === 'string') {
     return numbro(numberToFormat).format({
       mantissa: 2,
       trimMantissa: true,
-      average: true,
+      average: +number >= 1000,
     });
   }
   return numbro(numberToFormat).format({
     mantissa: 2,
     trimMantissa: true,
-    average: true,
+    average: +number >= 1000,
   });
 };
 

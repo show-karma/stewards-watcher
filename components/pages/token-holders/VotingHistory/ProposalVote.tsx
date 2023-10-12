@@ -277,7 +277,12 @@ export const ProposalVote: FC<IProposalVote> = ({
     track => track.id === vote?.trackId
   )?.displayName;
 
-  console.log(vote);
+  const dateText = () => {
+    if (+vote.executedTimestamp >= Date.now() / 1000) {
+      return `Ending on ${vote && formatDate(vote.executed, 'MMMM D, YYYY')}`;
+    }
+    return `Executed on ${vote && formatDate(vote.executed, 'MMMM D, YYYY')}`;
+  };
 
   return (
     <Flex
@@ -371,17 +376,12 @@ export const ProposalVote: FC<IProposalVote> = ({
                     .description
                 }
               >
-                Executed {vote && formatDate(vote.executed, 'MMMM D, YYYY')}
+                {dateText()}
               </Text>
             ) : (
               <Skeleton isLoaded={isLoaded} w="full" maxW="160" h="4" />
             )}
-            <Divider
-              orientation="vertical"
-              bgColor={theme.modal.votingHistory.proposal.verticalDivider}
-              w="1px"
-              h="4"
-            />
+
             {((daoInfo.config.PROPOSAL_LINK?.onChain &&
               vote.voteMethod === 'On-chain') ||
               (daoInfo.config.PROPOSAL_LINK?.offChain &&

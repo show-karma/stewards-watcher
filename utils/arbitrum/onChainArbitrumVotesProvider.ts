@@ -60,6 +60,7 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
       solution: vote?.solution,
       reason: vote?.reason,
       executed: moment.unix(proposal.timestamp).format('MMMM D, YYYY'),
+      executedTimestamp: proposal.timestamp,
       voteId: proposal?.id,
     });
   });
@@ -71,6 +72,7 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
       choice: -1,
       solution: null,
       executed: moment.unix(proposal.timestamp).format('MMMM D, YYYY'),
+      executedTimestamp: proposal.timestamp,
       voteId: proposal?.id,
       finished: proposal?.status?.toLowerCase() !== 'active',
     });
@@ -109,7 +111,7 @@ export async function onChainArbitrumVotesProvider(
       const { data: proposals } = await apolloClient.query({
         query: VOTING_HISTORY.onChainProposalsReq,
         variables: {
-          skipIds,
+          skipIds: skipIds.length ? skipIds : [''],
         },
       });
       return concatOnChainProposals(proposals.proposals, votes.votes);
