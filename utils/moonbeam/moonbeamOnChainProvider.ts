@@ -56,6 +56,7 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
       executed: moment
         .unix(original?.timestamp || Math.round(Date.now() / 1000))
         .format('MMMM D, YYYY'),
+      executedTimestamp: original?.timestamp || Math.round(Date.now() / 1000),
       voteId: proposal,
       trackId: Number(original?.trackId),
       version: original?.version,
@@ -70,6 +71,7 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
         choice: -1,
         solution: null,
         executed: moment.unix(proposal.timestamp).format('MMMM D, YYYY'),
+        executedTimestamp: proposal.timestamp,
         voteId: proposal.id.toString(),
         finished: proposal.finished,
         trackId: Number(proposal?.trackId),

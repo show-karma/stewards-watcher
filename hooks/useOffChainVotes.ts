@@ -28,6 +28,7 @@ const concatOffChainProposals = (proposals: any[], votes: any[]) => {
           : proposal.choices[vote.choice - 1],
       reason: vote?.reason,
       executed: moment.unix(proposal.end).format('MMMM D, YYYY'),
+      executedTimestamp: proposal.end,
       voteId: proposal?.id,
     });
   });
@@ -42,6 +43,7 @@ const concatOffChainProposals = (proposals: any[], votes: any[]) => {
             : 'Not voted yet',
         solution: null,
         executed: moment.unix(proposal.end).format('MMMM D, YYYY'),
+        executedTimestamp: proposal.end,
         voteId: proposal?.id,
         finished: proposal?.state?.toLowerCase() !== 'active',
       });

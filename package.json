@@ -64,7 +64,6 @@
   },
   "devDependencies": {
     "@types/dompurify": "^2.4.0",
-    "@types/human-format": "^1.0.0",
     "@types/lodash.debounce": "^4.0.7",
     "@types/lodash.startcase": "^4.4.7",
     "@types/markdown-it": "^12.2.3",

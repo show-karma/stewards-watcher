@@ -116,6 +116,13 @@ export const ProposalVote: FC<IProposalVote> = ({
     track => track.id === vote?.trackId
   )?.displayName;
 
+  const dateText = () => {
+    if (+vote.executedTimestamp >= Date.now() / 1000) {
+      return `Ending on ${vote && formatDate(vote.executed, 'MMMM D, YYYY')}`;
+    }
+    return `Executed on ${vote && formatDate(vote.executed, 'MMMM D, YYYY')}`;
+  };
+
   return (
     <Flex
       flexDir="column"
@@ -190,7 +197,7 @@ export const ProposalVote: FC<IProposalVote> = ({
                 fontWeight="medium"
                 color={theme.modal.votingHistory.proposal.type}
               >
-                Executed {vote && formatDate(vote.executed, 'MMMM D, YYYY')}
+                {dateText()}
               </Text>
             ) : (
               <Skeleton isLoaded={isLoaded} w="full" maxW="160" h="4" />
