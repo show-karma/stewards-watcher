@@ -54,6 +54,8 @@ export interface IDAOConfig {
   DAO_FORUM_URL?: string;
   DAO_DELEGATE_FUNCTION_ARGS?: string[];
   DAO_DELEGATE_FUNCTION?: string;
+  DAO_CHECK_DELEGATION_FUNCTION?: string;
+  DAO_CHECK_DELEGATION_ARGS?: string[];
   DAO_GTAG?: string;
   HEADER_MARGIN?: boolean;
   DAO_DISCORD_CHANNEL?: string;

@@ -39,6 +39,8 @@ const config: IDAOConfig = {
   ],
   DAO_DELEGATE_FUNCTION: 'setDelegate',
   DAO_DELEGATE_FUNCTION_ARGS: [getIdBySnapshotId('safe.eth')],
+  DAO_CHECK_DELEGATION_FUNCTION: 'delegation',
+  DAO_CHECK_DELEGATION_ARGS: [getIdBySnapshotId('safe.eth')],
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
   EXCLUDED_CARD_FIELDS: [],

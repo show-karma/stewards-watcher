@@ -38,6 +38,8 @@ const config: IDAOConfig = {
   ],
   DAO_DELEGATE_FUNCTION: 'setDelegate',
   DAO_DELEGATE_FUNCTION_ARGS: [getIdBySnapshotId('starknet.eth')],
+  DAO_CHECK_DELEGATION_FUNCTION: 'delegation',
+  DAO_CHECK_DELEGATION_ARGS: [getIdBySnapshotId('starknet.eth')],
   DAO_TOKEN_CONTRACT: [
     {
       contractAddress: '0xCa14007Eff0dB1f8135f4C25B34De49AB0d42766',
