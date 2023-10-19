@@ -130,9 +130,9 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
             abi: daoInfo.DELEGATE_ABI,
             functionName:
               daoInfo.config.DAO_CHECK_DELEGATION_FUNCTION || 'delegates',
-            args: [walletAddress].concat(
-              daoInfo.config.DAO_CHECK_DELEGATION_ARGS
-            ),
+            args: daoInfo.config.DAO_CHECK_DELEGATION_ARGS
+              ? [walletAddress].concat(daoInfo.config.DAO_CHECK_DELEGATION_ARGS)
+              : [walletAddress],
             chainId: contract.chain.id,
           });
           return { chain: contract.chain, value: result };
