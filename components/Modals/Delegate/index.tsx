@@ -6,9 +6,9 @@ import { Modal, ModalContent, ModalOverlay } from '@chakra-ui/react';
 import { ESteps } from './ESteps';
 import { Step1 } from './Step1';
 import { Step2 } from './Step2';
-import { StepChange } from './StepChange';
 import { TrackDelegation } from './TrackDelegation';
 import { MultiChain } from './Multichain';
+import { StepChange } from './StepChange';
 
 interface IModal {
   open: boolean;
@@ -58,9 +58,9 @@ export const DelegateModal: React.FC<IModal> = ({
     }
 
     if (
-      delegatedBefore[0].value !==
+      delegatedBefore[0]?.value !==
         '0x0000000000000000000000000000000000000000' &&
-      delegatedBefore[0].value
+      delegatedBefore[0]?.value
     )
       return (
         <StepChange

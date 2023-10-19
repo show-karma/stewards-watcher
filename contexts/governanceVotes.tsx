@@ -128,8 +128,11 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
           const result = await readContract({
             address: contract.contractAddress,
             abi: daoInfo.DELEGATE_ABI,
-            functionName: 'delegates',
-            args: [walletAddress],
+            functionName:
+              daoInfo.config.DAO_CHECK_DELEGATION_FUNCTION || 'delegates',
+            args: [walletAddress].concat(
+              daoInfo.config.DAO_CHECK_DELEGATION_ARGS
+            ),
             chainId: contract.chain.id,
           });
           return { chain: contract.chain, value: result };

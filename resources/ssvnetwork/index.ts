@@ -31,6 +31,8 @@ const config: IDAOConfig = {
   ],
   DAO_DELEGATE_FUNCTION: 'setDelegate',
   DAO_DELEGATE_FUNCTION_ARGS: [getIdBySnapshotId('mainnet.ssvnetwork.eth')],
+  DAO_CHECK_DELEGATION_FUNCTION: 'delegation',
+  DAO_CHECK_DELEGATION_ARGS: [getIdBySnapshotId('mainnet.ssvnetwork.eth')],
   DAO_TOKEN_CONTRACT: [
     {
       contractAddress: '0x9D65fF81a3c488d585bBfb0Bfe3c7707c7917f54',
