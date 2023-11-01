@@ -16,6 +16,7 @@
     "@chakra-ui/react": "^2.7.1",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@ethereum-attestation-service/eas-sdk": "^1.2.2-beta.0",
     "@gelatonetwork/relay-sdk": "^4.0.0",
     "@hookform/resolvers": "^3.1.1",
     "@polkadot/api": "^10.9.1",
