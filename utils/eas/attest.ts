@@ -1,11 +1,16 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-param-reassign */
 import {
   EAS,
+  OffChainAttestationVersion,
+  Offchain,
   OffchainAttestationParams,
   SchemaEncoder,
   SchemaItem,
 } from '@ethereum-attestation-service/eas-sdk';
+import ethers from 'ethers';
+import { getEASVersion } from './get-eas-version';
 
 const easContractAddr = '0x4200000000000000000000000000000000000021';
 
@@ -25,8 +30,9 @@ const setSchemaValues = (
   schema: SchemaItem[],
   values: Record<string, number | string>
 ): SchemaItem[] =>
-  Object.entries(schema).map(([key, item]) => {
+  Object.entries(schema).map(([, item]) => {
     if (typeof item === 'object') {
+      const key = item.name;
       const { type } = item;
       if (type.includes('uint') && !Number.isNaN(+values[key])) {
         item.value = BigInt(+values[key]) || 0n;
@@ -42,10 +48,30 @@ export interface ISchema {
   schema: SchemaItem[];
 }
 
+const getOffchain = async (
+  signer: ethers.providers.JsonRpcSigner
+): Promise<Offchain> => {
+  const eas = new EAS(easContractAddr);
+  eas.connect(signer as any);
+
+  return new Offchain(
+    {
+      address: easContractAddr,
+      version:
+        (await getEASVersion(eas.contract as any, easContractAddr)) || '1',
+      chainId: BigInt(await signer.getChainId()),
+    },
+    OffChainAttestationVersion.Version1,
+    eas
+  );
+};
+
 export async function attest(
   schema: ISchema,
   payload: Record<string, number | string>,
-  signer: any,
+  signer: ethers.providers.JsonRpcSigner & {
+    signTypedData: typeof ethers.providers.JsonRpcSigner.prototype._signTypedData;
+  },
   address: string
 ) {
   const encoder = new SchemaEncoder(schema.signature);
@@ -53,8 +79,9 @@ export async function attest(
     mountSchemaItems(schema.signature),
     payload
   );
-  const eas = new EAS(easContractAddr);
-  const offChain = await eas.getOffchain();
+  signer.signTypedData = signer._signTypedData;
+
+  const offChain = await getOffchain(signer);
 
   const attestation: OffchainAttestationParams = {
     data: encoder.encodeData(schemaData),
@@ -68,5 +95,5 @@ export async function attest(
     version: 1,
   };
 
-  return offChain.signOffchainAttestation(attestation, signer);
+  return offChain.signOffchainAttestation(attestation, signer as any);
 }

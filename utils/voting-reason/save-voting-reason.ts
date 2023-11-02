@@ -2,7 +2,7 @@ import { attest } from 'utils/eas/attest';
 import { api } from 'helpers';
 import { VotingReasonSchema } from './votign-reason-schema';
 
-interface VotingReasonPayload {
+export interface VotingReasonPayload {
   daoName: string;
   source: 'snapshot' | 'onchain' | 'tally' | 'offchain'; // find sources
   proposalId: string;
@@ -12,7 +12,7 @@ interface VotingReasonPayload {
   [key: string]: string;
 }
 
-class AssertError extends Error {
+export class AssertError extends Error {
   constructor(public readonly data: unknown, public readonly type?: string) {
     super('AssertError');
   }
@@ -32,18 +32,27 @@ function assert(
 
   if (!schema.uid) errors.push('Missing schemaUID');
 
-  if (errors.length > 0) throw new AssertError(errors, 'VotingReasonPayload');
+  if (errors.length > 0) throw new Error(errors.join(', '));
 }
 
 export async function saveVotingReason(
   payload: VotingReasonPayload,
   signer: any,
-  address: string
+  address: string,
+  daoName: string
 ) {
-  assert(payload, VotingReasonSchema);
+  if (typeof window === 'undefined')
+    throw new Error('This function can only be called on the client side');
+  // get cookies
 
-  const { uid } = VotingReasonSchema;
-  if (typeof uid !== 'undefined') throw new Error('Missing schema UID');
+  const cookie = document.cookie
+    .split(';')
+    .find(item => item.includes('karma_cookie-auth'));
+
+  const token = cookie?.split('=')[1];
+  if (!token) throw new Error('User not connected');
+
+  assert(payload, VotingReasonSchema);
 
   try {
     const attestation = await attest(
@@ -53,8 +62,22 @@ export async function saveVotingReason(
       address
     );
 
-    await api.post('/delegates/voting-reason', attestation);
+    console.log({ attestation });
+
+    await api.post(
+      `/dao/${daoName}/delegates/voting-reason`,
+      {
+        ...payload,
+        attestationUID: attestation.uid,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
   } catch (error) {
+    console.log({ error });
     throw new Error("Couldn't save voting reason");
   }
 }

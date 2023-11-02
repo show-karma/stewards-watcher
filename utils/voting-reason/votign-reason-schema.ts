@@ -47,5 +47,5 @@ export const VotingReasonSchema: ISchema = {
   /**
    * Schema UID
    */
-  uid: process.env.NEXT_APP_VOTING_REASON_SCHEMA_UID || '',
+  uid: process.env.NEXT_PUBLIC_VOTING_REASON_SCHEMA_UID || '',
 };
