@@ -202,7 +202,7 @@ export const Endorsements = () => {
 
       {isLoading ? (
         <Flex w="full" py="8" alignItems="center" justifyContent="center">
-          <Spinner />
+          <Spinner color="white" />
         </Flex>
       ) : endorsersCounter ? (
         <>
@@ -294,7 +294,7 @@ export const Endorsements = () => {
           px="4"
           py="4"
         >
-          <Text>No endorses found.</Text>
+          <Text color="white">No endorses found.</Text>
         </Flex>
       )}
     </Flex>

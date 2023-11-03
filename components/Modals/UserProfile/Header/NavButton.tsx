@@ -16,7 +16,9 @@ export const NavButton: FC<INavButton> = ({ children, isActive, ...props }) => {
       //   isActive ? theme.modal.buttons.navBg : `${theme.modal.buttons.navBg}80`
       // }
       bg="transparent"
-      color={isActive ? theme.branding : `${theme.modal.buttons.navText}40`}
+      color={
+        isActive ? theme.modal.header.title : `${theme.modal.header.title}40`
+      }
       borderBottomWidth="2px"
       borderBottomStyle="solid"
       borderBottomColor={isActive ? theme.branding : 'transparent'}
