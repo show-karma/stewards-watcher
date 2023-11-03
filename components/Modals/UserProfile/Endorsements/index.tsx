@@ -190,11 +190,11 @@ export const Endorsements = () => {
       flexDir="column"
     >
       <Flex px="6" flexDir="row" gap="1" alignItems="center">
-        <Text fontSize="18px" fontWeight="700">
+        <Text fontSize="18px" fontWeight="700" color="white">
           Endorsers
         </Text>
         {endorsersCounter ? (
-          <Text fontSize="14px" fontWeight="500">
+          <Text fontSize="14px" fontWeight="500" color="white">
             ({endorsersCounter})
           </Text>
         ) : null}
@@ -245,9 +245,13 @@ export const Endorsements = () => {
               <Tbody>
                 {currentItems.map((item, index) => (
                   <Tr key={item.date + +index}>
-                    <Td borderBottom="1px solid white">{item.addressOrENS}</Td>
-                    <Td borderBottom="1px solid white">{item.votingPower}</Td>
-                    <Td borderBottom="1px solid white">
+                    <Td borderBottom="1px solid white" color="white">
+                      {item.addressOrENS}
+                    </Td>
+                    <Td borderBottom="1px solid white" color="white">
+                      {item.votingPower}
+                    </Td>
+                    <Td borderBottom="1px solid white" color="white">
                       {getFormattedData(item.date)}
                     </Td>
                     <Td borderBottom="1px solid white">
