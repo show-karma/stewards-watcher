@@ -17,11 +17,11 @@ import { useDAO } from 'contexts';
 import { ethers } from 'ethers';
 import { api } from 'helpers';
 import { useToasty } from 'hooks';
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { attest, getEASChainInfo } from 'utils';
 import { useSigner } from 'utils/eas-wagmi-utils';
-import { useAccount, useConnect, useSwitchNetwork } from 'wagmi';
+import { useAccount, useConnect, useNetwork, useSwitchNetwork } from 'wagmi';
 
 interface EndorseModalProps {
   endorsingAddress: string;
@@ -53,6 +53,7 @@ export const EndorseModal: FC<EndorseModalProps> = ({
   const { openConnectModal } = useConnectModal();
   const { connector, isConnected } = useAccount();
   const { connectAsync } = useConnect();
+  const { chain } = useNetwork();
   const { switchNetworkAsync } = useSwitchNetwork();
   const [daoList, setDaoList] = useState<DaoProps>({});
 
@@ -80,7 +81,7 @@ export const EndorseModal: FC<EndorseModalProps> = ({
     [reason, endorsingAddress]
   );
 
-  const endorse = async () => {
+  const endorse = useCallback(async () => {
     setIsLoading(true);
     try {
       if (
@@ -117,7 +118,8 @@ export const EndorseModal: FC<EndorseModalProps> = ({
       }
 
       if (walletChainId !== chainId && switchNetworkAsync) {
-        await switchNetworkAsync(chainId);
+        await switchNetworkAsync(chainId).then(() => endorse());
+        return;
       }
 
       const attestationId = await attest(
@@ -141,7 +143,7 @@ export const EndorseModal: FC<EndorseModalProps> = ({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [chain, connector, isConnected]);
 
   const getDaoList = async (): Promise<DaoProps> => {
     const {
