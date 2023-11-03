@@ -174,7 +174,6 @@ export const Endorsements = () => {
 
   const handlePageClick = (event: { selected: number }) => {
     const newOffset = (event.selected * itemsPerPage) % data.length;
-
     setItemOffset(newOffset);
   };
 
