@@ -12,18 +12,21 @@ import {
 } from '@chakra-ui/react';
 import { SchemaItem } from '@ethereum-attestation-service/eas-sdk';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { ImgWithFallback } from 'components/ImgWithFallback';
 import { useDAO } from 'contexts';
 import { ethers } from 'ethers';
 import { api } from 'helpers';
 import { useToasty } from 'hooks';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
-import { attest, getEASChainInfo, truncateAddress } from 'utils';
+import { attest, getEASChainInfo } from 'utils';
 import { useSigner } from 'utils/eas-wagmi-utils';
 import { useAccount, useConnect, useSwitchNetwork } from 'wagmi';
 
 interface EndorseModalProps {
   endorsingAddress: string;
+  endorsingName: string;
+  endorsingImage?: string;
 }
 
 export interface GetDaoRes {
@@ -37,7 +40,11 @@ export interface GetDaoRes {
 
 export type DaoProps = Record<string, { name: string; token: string[] }>;
 
-export const EndorseModal: FC<EndorseModalProps> = ({ endorsingAddress }) => {
+export const EndorseModal: FC<EndorseModalProps> = ({
+  endorsingAddress,
+  endorsingName,
+  endorsingImage,
+}) => {
   const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
   const { daoInfo } = useDAO();
   const { config } = daoInfo;
@@ -241,9 +248,6 @@ export const EndorseModal: FC<EndorseModalProps> = ({ endorsingAddress }) => {
                   gap="4"
                   flex="2"
                 >
-                  <Text fontStyle="normal" fontSize="14px" color="black">
-                    to
-                  </Text>
                   <Flex
                     paddingX={2}
                     paddingY={1}
@@ -261,14 +265,12 @@ export const EndorseModal: FC<EndorseModalProps> = ({ endorsingAddress }) => {
                       gap="8px"
                       alignItems="center"
                     >
-                      {/* <ImgWithFallback
+                      <ImgWithFallback
                         fallback={endorsingAddress}
-                        src={makeBlockie(
-                          endorsingAddress || Math.random().toString()
-                        )}
+                        src={endorsingImage}
                         boxSize="20px"
                         borderRadius="full"
-                      /> */}
+                      />
                       <Text
                         fontStyle="normal"
                         fontWeight="500"
@@ -279,14 +281,14 @@ export const EndorseModal: FC<EndorseModalProps> = ({ endorsingAddress }) => {
                         whiteSpace="nowrap"
                         overflow="hidden"
                       >
-                        {truncateAddress(endorsingAddress)}
+                        {endorsingName}
                       </Text>
                     </Flex>
                   </Flex>
                 </Flex>
               </Flex>
               <Flex flexDir="column" gap="2" mb="6">
-                <Text color="black">Reason(optional)</Text>
+                <Text color="black">Additional comment</Text>
                 <Textarea
                   placeholder=""
                   bg="gray.100"

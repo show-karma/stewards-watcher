@@ -30,6 +30,7 @@ import { fetchENSNames } from 'utils/fetchENSName';
 import { getAddress } from 'viem';
 import ReactPaginate from 'react-paginate';
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
+import { CommentModal } from './CommentModal';
 
 export const Endorsements = () => {
   const { profileSelected } = useDelegates();
@@ -141,10 +142,13 @@ export const Endorsements = () => {
           ensName = fetched[0].name;
         }
 
+        const { comment } = item.decodedDataJson as any;
+
         return {
           addressOrENS: ensName || item.attester,
           date: item.timeCreated,
           votingPower: formatNumberPercentage(votingPower || 0),
+          reason: comment,
         };
       })
     );
@@ -230,6 +234,12 @@ export const Endorsements = () => {
                   >
                     Date
                   </Th>
+                  <Th
+                    borderBottom="1px solid white"
+                    fontSize="12px"
+                    fontWeight="500"
+                    color="#F2F4F7"
+                  />
                 </Tr>
               </Thead>
               <Tbody>
@@ -239,6 +249,11 @@ export const Endorsements = () => {
                     <Td borderBottom="1px solid white">{item.votingPower}</Td>
                     <Td borderBottom="1px solid white">
                       {getFormattedData(item.date)}
+                    </Td>
+                    <Td borderBottom="1px solid white">
+                      {item.reason ? (
+                        <CommentModal reason={item.reason} />
+                      ) : null}
                     </Td>
                   </Tr>
                 ))}

@@ -284,7 +284,15 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
             gap="2"
           >
             {isSamePerson ? null : (
-              <EndorseModal endorsingAddress={profile.address} />
+              <EndorseModal
+                endorsingAddress={profile.address}
+                endorsingName={
+                  profile.realName ||
+                  profile.ensName ||
+                  truncateAddress(profile.address)
+                }
+                endorsingImage={profile.avatar}
+              />
             )}
             {!isEditing && (compareProxy(profile.address) || isDaoAdmin) ? (
               <Button
