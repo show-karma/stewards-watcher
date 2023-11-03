@@ -96,7 +96,6 @@ export const ToA: FC = () => {
     <Flex
       flexDir="column"
       gap="1"
-      boxShadow={`0px 0px 18px 5px ${theme.modal.votingHistory.headline}0D`}
       px="4"
       py="4"
       mb="10"

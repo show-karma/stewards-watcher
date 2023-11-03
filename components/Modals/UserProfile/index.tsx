@@ -13,6 +13,7 @@ import { useMixpanel } from 'hooks';
 import dynamic from 'next/dynamic';
 import { Header } from './Header';
 import { VotingHistory } from './VotingHistory';
+import { Endorsements } from './Endorsements';
 
 const WithdrawDelegation = dynamic(() =>
   import('components/Modals/UserProfile/WithdrawDelegation').then(
@@ -60,6 +61,9 @@ const Tab: FC<ITab> = ({ activeTab, profile }) => {
   }
   if (activeTab === 'withdraw') {
     return <WithdrawDelegation />;
+  }
+  if (activeTab === 'endorsements') {
+    return <Endorsements />;
   }
   return <Statement />;
 };
@@ -146,7 +150,7 @@ export const UserProfile: FC<IUserProfileProps> = props => {
             profile={profile}
           />
           <ModalCloseButton />
-          <ModalBody px={{ base: '1.25rem', lg: '2.5rem' }} py="0">
+          <ModalBody px="6" py="0">
             <Tab activeTab={activeTab} profile={profile} />
           </ModalBody>
         </ModalContent>

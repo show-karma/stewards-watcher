@@ -12,21 +12,20 @@ export const NavButton: FC<INavButton> = ({ children, isActive, ...props }) => {
 
   return (
     <Button
-      bg={
-        isActive ? theme.modal.buttons.navBg : `${theme.modal.buttons.navBg}80`
-      }
-      color={theme.modal.buttons.navText}
-      borderBottomWidth="1px"
+      // bg={
+      //   isActive ? theme.modal.buttons.navBg : `${theme.modal.buttons.navBg}80`
+      // }
+      bg="transparent"
+      color={isActive ? theme.branding : `${theme.modal.buttons.navText}40`}
+      borderBottomWidth="2px"
       borderBottomStyle="solid"
-      borderBottomColor={
-        isActive ? 'transparent' : `${theme.modal.buttons.navBorder}0D`
-      }
+      borderBottomColor={isActive ? theme.branding : 'transparent'}
       borderRadius="0"
       px="5"
       py="4"
       _hover={{
-        bg: theme.modal.buttons.navBg,
-        color: theme.modal.buttons.navText,
+        color: theme.branding,
+        borderBottomColor: theme.branding,
       }}
       fontSize={{ base: 'sm', lg: '15px' }}
       _focus={{}}
