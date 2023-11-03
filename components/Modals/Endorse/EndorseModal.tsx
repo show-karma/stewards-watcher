@@ -134,8 +134,8 @@ export const EndorseModal: FC<EndorseModalProps> = ({
     } catch (error) {
       console.log(error);
       toast({
-        title: 'Error',
-        description: 'The transaction was cancelled. Please try again.',
+        title: 'Endorse failed',
+        description: `Transaction failed.`,
         status: 'error',
       });
     } finally {
