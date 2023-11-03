@@ -113,14 +113,6 @@ export const getEASChainInfo = (daoName: string) => {
   const formattedDaoName = daoName.toLowerCase().includes('arbitrum')
     ? 'arbitrum'
     : 'optimism';
-  console.log(
-    easDelegateEndorseDictionary,
-    projectEnvironment,
-    formattedDaoName
-  );
-  console.log(
-    'easDelegateEndorseDictionary',
-    easDelegateEndorseDictionary[projectEnvironment][formattedDaoName]
-  );
+
   return easDelegateEndorseDictionary[projectEnvironment][formattedDaoName];
 };

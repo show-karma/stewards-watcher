@@ -122,7 +122,7 @@ export const EndorseModal: FC<EndorseModalProps> = ({
         return;
       }
 
-      const attestationId = await attest(
+      await attest(
         signer as any,
         schema,
         endorsingAddress,
@@ -130,13 +130,13 @@ export const EndorseModal: FC<EndorseModalProps> = ({
         easContract
       );
       toast({
-        description: `Attestation id: ${attestationId}`,
+        description: `You successfully endorsed ${endorsingName}.`,
       });
       onClose();
     } catch (error) {
       console.log(error);
       toast({
-        title: 'Endorse failed',
+        title: 'Endorsement failed',
         description: `Transaction failed.`,
         status: 'error',
       });
@@ -213,7 +213,7 @@ export const EndorseModal: FC<EndorseModalProps> = ({
                   color="#000000"
                   width="100%"
                 >
-                  Endorse
+                  Endorse Delegate
                 </Text>
               </Flex>
               <IconButton
@@ -234,14 +234,9 @@ export const EndorseModal: FC<EndorseModalProps> = ({
               padding="16px 32px"
               boxShadow="0px 15px 10px rgba(0, 0, 0, 0.05)"
               paddingBottom={7}
+              gap="2"
             >
-              <Flex
-                flex="1"
-                alignItems="center"
-                flexWrap="wrap"
-                gap="2"
-                margin="0 0 23px 0"
-              >
+              <Flex flex="1" alignItems="center" flexWrap="wrap" gap="2">
                 <Text fontStyle="normal" fontSize="14px" color="black">
                   You are endorsing
                 </Text>
@@ -290,7 +285,11 @@ export const EndorseModal: FC<EndorseModalProps> = ({
                   </Flex>
                 </Flex>
               </Flex>
-              <Flex flexDir="column" gap="2" mb="6">
+              <Text color="black" fontWeight="normal">
+                If you believe {endorsingName} will be a good delegate, endorse
+                them onchain.
+              </Text>
+              <Flex flexDir="column" gap="2" mb="6" mt="2">
                 <Text color="black">Additional comment</Text>
                 <Textarea
                   placeholder=""
