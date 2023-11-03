@@ -17,7 +17,7 @@ import { useDAO } from 'contexts';
 import { ethers } from 'ethers';
 import { api } from 'helpers';
 import { useToasty } from 'hooks';
-import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { attest, getEASChainInfo } from 'utils';
 import { useSigner } from 'utils/eas-wagmi-utils';
@@ -81,7 +81,7 @@ export const EndorseModal: FC<EndorseModalProps> = ({
     [reason, endorsingAddress]
   );
 
-  const endorse = useCallback(async () => {
+  const endorse = async (newChainId?: number) => {
     setIsLoading(true);
     try {
       if (
@@ -117,8 +117,8 @@ export const EndorseModal: FC<EndorseModalProps> = ({
         return;
       }
 
-      if (walletChainId !== chainId && switchNetworkAsync) {
-        await switchNetworkAsync(chainId).then(() => endorse());
+      if ((newChainId || walletChainId) !== chainId && switchNetworkAsync) {
+        await switchNetworkAsync(chainId);
         return;
       }
 
@@ -143,7 +143,7 @@ export const EndorseModal: FC<EndorseModalProps> = ({
     } finally {
       setIsLoading(false);
     }
-  }, [chain, connector, isConnected]);
+  };
 
   const getDaoList = async (): Promise<DaoProps> => {
     const {
