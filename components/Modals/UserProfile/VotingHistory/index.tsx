@@ -8,6 +8,9 @@ import { VotingReasonModal } from 'components/VotingReason/VotingReasonModal';
 import { SelectedProposal } from 'types/voting-reason';
 import { VotingReasonPayload } from 'utils/voting-reason/save-voting-reason';
 import { useToasty, useVoteReason } from 'hooks';
+import { optimismGoerli, optimism } from 'viem/chains';
+import { useAccount, useSwitchNetwork } from 'wagmi';
+import { walletClientToSigner } from 'utils/eas/useSigner';
 import { ContrarionIndexComponent } from './ContrarionIndex';
 import { DelegatedVotesChanges } from './DelegatedVotesChanges';
 import { Navigation } from './Navigation';
@@ -30,7 +33,9 @@ export const VotingHistory: FC<IVotingHistory> = ({ profile }) => {
   const loadArray = Array.from({ length: 6 });
   const { isOpen: votingReasonModalOpen, onToggle: toggleModal } =
     useDisclosure();
-  const { address } = useWallet();
+  const { address, chain } = useWallet();
+
+  const { switchNetworkAsync } = useSwitchNetwork();
 
   const { toast } = useToasty();
 
@@ -38,16 +43,45 @@ export const VotingHistory: FC<IVotingHistory> = ({ profile }) => {
     address: profile.address,
   });
 
+  const { connector } = useAccount();
+
   const [selectedProposal, setSelectedProposal] = useState<SelectedProposal>({
     proposalId: '',
     proposalTitle: '',
     source: 'onchain',
   });
 
+  const handleOnSelectProposal = async (proposal: SelectedProposal) => {
+    const schemaChainId = +(
+      process.env.NEXT_PUBLIC_VOTING_REASON_CHAIN_ID || 420
+    );
+
+    if (chain?.id !== schemaChainId) {
+      await switchNetworkAsync?.(schemaChainId);
+    }
+
+    setSelectedProposal(proposal);
+
+    if (!votingReasonModalOpen) toggleModal();
+  };
+
   const handleSubmitVotingReason = async (payload: VotingReasonPayload) => {
     try {
+      const chainId = process.env.NEXT_PUBLIC_VOTING_REASON_CHAIN_ID || 420;
+
+      const client = await connector?.getWalletClient();
+      if (!client) throw new Error('Wallet client not found');
+
+      (client.chain as any) = [optimism, optimismGoerli].find(
+        ch => ch.id === +chainId
+      );
+
+      console.log({ client });
+      const signer = walletClientToSigner(client);
+      if (!signer) throw new Error('Signer not found');
+
       setIsSavingReason(true);
-      await setVotingReason(payload, daoInfo.config.DAO_KARMA_ID);
+      await setVotingReason(payload, daoInfo.config.DAO_KARMA_ID, signer);
       toggleModal();
       toast({
         status: 'success',
@@ -96,11 +130,7 @@ export const VotingHistory: FC<IVotingHistory> = ({ profile }) => {
         profile={profile}
         index={+index}
         isLast={index === showingVotes.length - 1}
-        onSelectProposal={(proposal: SelectedProposal) => {
-          setSelectedProposal(proposal);
-          console.log({ proposal, votingReasonModalOpen });
-          if (!votingReasonModalOpen) toggleModal();
-        }}
+        onSelectProposal={handleOnSelectProposal}
       />
     ));
   };

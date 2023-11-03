@@ -2,7 +2,6 @@ import { useQuery } from '@tanstack/react-query';
 import { useDAO } from 'contexts';
 import { api, KARMA_API } from 'helpers';
 import { useMemo } from 'react';
-import { useSigner } from 'utils/eas/useSigner';
 import {
   VotingReasonPayload,
   saveVotingReason,
@@ -24,7 +23,6 @@ interface IReason {
 export const useVoteReason = (args: IUseVoteReason) => {
   const { address } = args;
   const { address: connectedAddress, connector } = useAccount();
-  const signer = useSigner();
   const { daoInfo } = useDAO();
   const { data, error, isLoading } = useQuery({
     queryKey: ['voteReason', address, daoInfo.config.DAO_KARMA_ID],
@@ -35,7 +33,7 @@ export const useVoteReason = (args: IUseVoteReason) => {
   });
 
   const isVoteOwner = useMemo(
-    () => connectedAddress === address,
+    () => connectedAddress?.toLowerCase() === address.toLowerCase(),
     [connectedAddress, address]
   );
 
@@ -55,13 +53,22 @@ export const useVoteReason = (args: IUseVoteReason) => {
 
   const setVotingReason = async (
     payload: VotingReasonPayload,
-    daoName: string
+    daoName: string,
+    signer: any
   ) => {
     if (!connector || !connectedAddress || !signer)
       throw new Error('User not connected');
     if (!isVoteOwner) throw new Error('User not owner of vote');
 
-    await saveVotingReason(payload, signer, connectedAddress, daoName);
+    const easurl = await saveVotingReason(
+      payload,
+      signer,
+      connectedAddress,
+      daoName
+    );
+    if (typeof window !== 'undefined') {
+      window.open(easurl, '_blank');
+    }
     setTimeout(() => getVoteReason(payload.proposalId), 1000);
   };
 

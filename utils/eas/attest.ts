@@ -66,7 +66,10 @@ const getOffchain = async (
   );
 };
 
-export async function attest(
+const easStoreUrl =
+  'https://optimism-goerli-bedrock.easscan.org/offchain/store';
+
+export async function attestOffchain(
   schema: ISchema,
   payload: Record<string, number | string>,
   signer: ethers.providers.JsonRpcSigner & {
@@ -81,8 +84,8 @@ export async function attest(
   );
   signer.signTypedData = signer._signTypedData;
 
+  console.log({ signer });
   const offChain = await getOffchain(signer);
-
   const attestation: OffchainAttestationParams = {
     data: encoder.encodeData(schemaData),
     recipient: address,
@@ -95,5 +98,10 @@ export async function attest(
     version: 1,
   };
 
-  return offChain.signOffchainAttestation(attestation, signer as any);
+  const atts = await offChain.signOffchainAttestation(
+    attestation,
+    signer as any
+  );
+
+  return { attestation: atts };
 }

@@ -1,5 +1,6 @@
-import { attest } from 'utils/eas/attest';
+import { attestOffchain } from 'utils/eas/attest';
 import { api } from 'helpers';
+import { zipAndEncodeToBase64 } from '@ethereum-attestation-service/eas-sdk';
 import { VotingReasonSchema } from './votign-reason-schema';
 
 export interface VotingReasonPayload {
@@ -55,20 +56,25 @@ export async function saveVotingReason(
   assert(payload, VotingReasonSchema);
 
   try {
-    const attestation = await attest(
+    const { attestation } = await attestOffchain(
       VotingReasonSchema,
       payload,
       signer,
       address
     );
 
-    console.log({ attestation });
+    const shareableData = encodeURIComponent(
+      zipAndEncodeToBase64({
+        sig: attestation,
+        signer: address,
+      })
+    );
 
     await api.post(
       `/dao/${daoName}/delegates/voting-reason`,
       {
         ...payload,
-        attestationUID: attestation.uid,
+        attestationUID: shareableData,
       },
       {
         headers: {
@@ -76,6 +82,10 @@ export async function saveVotingReason(
         },
       }
     );
+
+    const easUrl = process.env.NEXT_PUBLIC_EAS_URL;
+
+    return `${easUrl}${shareableData}`;
   } catch (error) {
     console.log({ error });
     throw new Error("Couldn't save voting reason");

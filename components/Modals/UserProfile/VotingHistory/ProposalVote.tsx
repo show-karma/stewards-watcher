@@ -117,6 +117,7 @@ export const ProposalVote: FC<IProposalVote> = ({
   };
 
   const canAddReason = useMemo(() => {
+    return true;
     if (vote && isVoteOwner) {
       return ![-1, 'Did not vote', 'Not voted yet'].includes(vote.choice);
     }

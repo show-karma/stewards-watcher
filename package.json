@@ -61,7 +61,8 @@
     "universal-cookie": "^4.0.4",
     "viem": "^0.3.31",
     "wagmi": "^1.2.0",
-    "yup": "^1.2.0"
+    "yup": "^1.2.0",
+    "zlib": "^1.0.5"
   },
   "devDependencies": {
     "@types/dompurify": "^2.4.0",
