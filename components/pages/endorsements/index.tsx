@@ -34,7 +34,7 @@ import { GetDaoRes } from 'components/Modals/Endorse';
 export const EndorsementsComponent: FC = () => {
   const [data, setData] = useState<GeneralisticEndorsementData[]>([]);
 
-  const { daoInfo } = useDAO();
+  const { daoInfo, theme } = useDAO();
   const endorsersCounter = data.length;
 
   const [isLoading, setIsLoading] = useState(false);
@@ -227,11 +227,11 @@ export const EndorsementsComponent: FC = () => {
   return (
     <Flex mb="20" py="5" flexDir="column" w="full" alignItems="center">
       <Flex flexDir="row" gap="1" alignItems="center">
-        <Text fontSize="18px" fontWeight="700" color="white">
+        <Text fontSize="18px" fontWeight="700" color={theme.text}>
           Endorsers
         </Text>
         {endorsersCounter ? (
-          <Text fontSize="14px" fontWeight="500" color="white">
+          <Text fontSize="14px" fontWeight="500" color={theme.text}>
             ({endorsersCounter})
           </Text>
         ) : null}
@@ -239,7 +239,7 @@ export const EndorsementsComponent: FC = () => {
 
       {isLoading ? (
         <Flex w="full" py="8" alignItems="center" justifyContent="center">
-          <Spinner color="white" />
+          <Spinner color={theme.text} />
         </Flex>
       ) : endorsersCounter ? (
         <Flex
@@ -257,7 +257,7 @@ export const EndorsementsComponent: FC = () => {
                     borderBottom="1px solid white"
                     fontSize="12px"
                     fontWeight="500"
-                    color="#F2F4F7"
+                    color={theme.text}
                   >
                     Delegate
                   </Th>
@@ -265,7 +265,7 @@ export const EndorsementsComponent: FC = () => {
                     borderBottom="1px solid white"
                     fontSize="12px"
                     fontWeight="500"
-                    color="#F2F4F7"
+                    color={theme.text}
                   >
                     Endorsed by
                   </Th>
@@ -273,7 +273,7 @@ export const EndorsementsComponent: FC = () => {
                     borderBottom="1px solid white"
                     fontSize="12px"
                     fontWeight="500"
-                    color="#F2F4F7"
+                    color={theme.text}
                   >
                     Date
                   </Th>
@@ -282,13 +282,13 @@ export const EndorsementsComponent: FC = () => {
               <Tbody>
                 {currentItems.map((item, index) => (
                   <Tr key={item.date + +index}>
-                    <Td borderBottom="1px solid white" color="white">
+                    <Td borderBottom="1px solid white" color={theme.text}>
                       {item.delegate}
                     </Td>
-                    <Td borderBottom="1px solid white" color="white">
+                    <Td borderBottom="1px solid white" color={theme.text}>
                       {item.endorsedBy}
                     </Td>
-                    <Td borderBottom="1px solid white" color="white">
+                    <Td borderBottom="1px solid white" color={theme.text}>
                       {getFormattedData(item.date)}
                     </Td>
                   </Tr>
@@ -325,7 +325,7 @@ export const EndorsementsComponent: FC = () => {
           w="full"
           py="4"
         >
-          <Text color="white">No endorses found.</Text>
+          <Text color={theme.text}>No endorses found.</Text>
         </Flex>
       )}
     </Flex>
