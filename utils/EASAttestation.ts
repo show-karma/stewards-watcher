@@ -20,7 +20,7 @@ export interface AttestationSchema {
 export interface EndorseDelegateSchema {
   endorse: number;
   comment?: string;
-  tokenAddress: string;
+  tokenAddress: string | string[];
   tokenChainId: boolean;
 }
 

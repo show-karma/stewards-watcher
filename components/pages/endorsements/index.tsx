@@ -13,13 +13,13 @@ import {
   Tr,
 } from '@chakra-ui/react';
 import axios from 'axios';
-import { useDAO, useDelegates } from 'contexts';
-import { api, easQueryWithAddress } from 'helpers';
-import { useEffect, useState } from 'react';
-import { EndorsementData } from 'types';
+import { useDAO } from 'contexts';
+import { api, easQueryGeneralistic } from 'helpers';
+import { FC, useEffect, useState } from 'react';
+import { GeneralisticEndorsementData } from 'types';
 import { AttestationResponse } from 'types/eas';
 import {
-  AttestationSchema,
+  EndorseDelegateSchema,
   EASAttestation,
   easDelegateEndorseDictionary,
   formatDate,
@@ -27,14 +27,12 @@ import {
   getEASChainInfo,
 } from 'utils';
 import { fetchENSNames } from 'utils/fetchENSName';
-import { getAddress } from 'viem';
 import ReactPaginate from 'react-paginate';
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
-import { CommentModal } from './CommentModal';
+import { GetDaoRes } from 'components/Modals/Endorse';
 
-export const Endorsements = () => {
-  const { profileSelected } = useDelegates();
-  const [data, setData] = useState<EndorsementData[]>([]);
+export const EndorsementsComponent: FC = () => {
+  const [data, setData] = useState<GeneralisticEndorsementData[]>([]);
 
   const { daoInfo } = useDAO();
   const endorsersCounter = data.length;
@@ -50,28 +48,26 @@ export const Endorsements = () => {
       return;
     }
 
-    const results: EASAttestation<AttestationSchema>[] = [];
+    const results: EASAttestation<EndorseDelegateSchema>[] = [];
 
     const fetchAttestations = async (chain: string) => {
       try {
-        const checkSumAddress = getAddress(profileSelected?.address as string);
         const response = await axios.post<AttestationResponse>(
           chainsInfo[chain].easAPI,
           {
-            query: easQueryWithAddress(
-              getEASChainInfo(daoInfo.config.DAO_KARMA_ID).schemaId,
-              checkSumAddress
+            query: easQueryGeneralistic(
+              getEASChainInfo(daoInfo.config.DAO_KARMA_ID).schemaId
             ),
           }
         );
 
         const schema = response.data?.data?.schema;
         if (schema && schema.attestations) {
-          let uniqueAttestations: EASAttestation<AttestationSchema>[] = [];
+          let uniqueAttestations: EASAttestation<EndorseDelegateSchema>[] = [];
           const uniqueAttesters: string[] = [];
           schema.attestations.forEach(attestation => {
             try {
-              const easAttestation = new EASAttestation<AttestationSchema>(
+              const easAttestation = new EASAttestation<EndorseDelegateSchema>(
                 attestation
               );
               if (!uniqueAttesters.includes(easAttestation.attester)) {
@@ -95,9 +91,8 @@ export const Endorsements = () => {
                       item.attester.toLowerCase() !==
                       attestation.attester.toLowerCase()
                   );
-                  const newAttestation = new EASAttestation<AttestationSchema>(
-                    lastAttest
-                  );
+                  const newAttestation =
+                    new EASAttestation<EndorseDelegateSchema>(lastAttest);
                   filteredArray.push(newAttestation);
                   uniqueAttestations = filteredArray;
                 }
@@ -119,41 +114,89 @@ export const Endorsements = () => {
     );
     await Promise.all(chainPromises);
 
+    const {
+      data: { data: fetchedData },
+    } = await api.get<{ data: { daos: GetDaoRes[] } }>('/dao');
+
+    const daoData = fetchedData.daos.find(
+      item => item.name === daoInfo.config.DAO_KARMA_ID
+    );
+
+    const getInfo = async (addressToGetInfo: string) =>
+      api
+        .get(`/dao/find-delegate`, {
+          params: {
+            dao: daoInfo.config.DAO_KARMA_ID,
+            user: addressToGetInfo,
+          },
+        })
+        .catch(() => null);
+
     const filteredResults = await Promise.all(
       results.map(async item => {
         let votingPower = 0;
-        let ensName: string | undefined | null = '';
-        const axiosClient = await api
-          .get(`/dao/find-delegate`, {
-            params: {
-              dao: daoInfo.config.DAO_KARMA_ID,
-              user: item.attester,
-            },
-          })
-          .catch(() => null);
-        if (axiosClient) {
-          const { delegate: fetchedDelegate } = axiosClient.data.data;
+        let endorsedByENS: string | undefined | null = '';
+        let delegateENS: string | undefined | null = '';
 
+        const endorsedByInfo = await getInfo(item.attester);
+        const delegateInfo = await getInfo(item.recipient);
+
+        if (delegateInfo) {
+          const { delegate: fetchedDelegate } = delegateInfo.data.data;
           votingPower = fetchedDelegate.voteWeight;
-          ensName = fetchedDelegate.ensName;
+          if (fetchedDelegate.ensName) {
+            delegateENS = fetchedDelegate.ensName;
+          }
+        } else {
+          const fetched = await fetchENSNames([item.recipient]);
+          delegateENS = fetched[0].name;
         }
-        if (!ensName) {
+
+        if (endorsedByInfo) {
+          const { delegate: fetchedDelegate } = endorsedByInfo.data.data;
+          votingPower = fetchedDelegate.voteWeight;
+          if (fetchedDelegate.ensName) {
+            endorsedByENS = fetchedDelegate.ensName;
+          }
+        } else {
           const fetched = await fetchENSNames([item.attester]);
-          ensName = fetched[0].name;
+          endorsedByENS = fetched[0].name;
         }
 
         const { comment } = item.decodedDataJson as any;
 
         return {
-          addressOrENS: ensName || item.attester,
+          delegate: delegateENS || item.recipient,
+          endorsedBy: endorsedByENS || item.attester,
           date: item.timeCreated,
           votingPower: formatNumberPercentage(votingPower || 0),
           reason: comment,
+          tokenAdddress: item.decodedDataJson.tokenAddress,
         };
       })
     );
 
-    const orderedDate = filteredResults.sort(
+    const filteredToDAO = filteredResults.filter(item => {
+      const addresses = daoData?.tokenAddress?.map(address =>
+        address.toLowerCase()
+      );
+
+      if (!item?.tokenAdddress) {
+        return false;
+      }
+
+      if (typeof item.tokenAdddress === 'string') {
+        const hasMatch = addresses?.includes(item.tokenAdddress.toLowerCase());
+        return hasMatch;
+      }
+      const hasMatch = item?.tokenAdddress?.some(address =>
+        addresses?.includes(address.toLowerCase())
+      );
+
+      return hasMatch;
+    });
+
+    const orderedDate = filteredToDAO.sort(
       (itemA, itemB) => itemB.date - itemA.date
     );
     setData(orderedDate);
@@ -164,14 +207,14 @@ export const Endorsements = () => {
     formatDate(new Date(date * 1000).toUTCString(), 'MMM D, YYYY');
 
   useEffect(() => {
-    if (profileSelected) {
+    if (daoInfo) {
       getRecentAttestations();
     }
-  }, [profileSelected]);
+  }, [daoInfo]);
 
   const [itemOffset, setItemOffset] = useState(0);
 
-  const itemsPerPage = 10;
+  const itemsPerPage = 20;
   const endOffset = itemOffset + itemsPerPage;
   const currentItems = data.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(data.length / itemsPerPage);
@@ -182,14 +225,8 @@ export const Endorsements = () => {
   };
 
   return (
-    <Flex
-      mb="20"
-      py="5"
-      border="1px solid white"
-      borderRadius="12px"
-      flexDir="column"
-    >
-      <Flex px="6" flexDir="row" gap="1" alignItems="center">
+    <Flex mb="20" py="5" flexDir="column" w="full" alignItems="center">
+      <Flex flexDir="row" gap="1" alignItems="center">
         <Text fontSize="18px" fontWeight="700" color="white">
           Endorsers
         </Text>
@@ -205,7 +242,13 @@ export const Endorsements = () => {
           <Spinner color="white" />
         </Flex>
       ) : endorsersCounter ? (
-        <>
+        <Flex
+          flexDir="column"
+          border="1px solid white"
+          borderRadius="12px"
+          mt="4"
+          pb="4"
+        >
           <TableContainer>
             <Table variant="simple">
               <Thead>
@@ -216,7 +259,7 @@ export const Endorsements = () => {
                     fontWeight="500"
                     color="#F2F4F7"
                   >
-                    Address
+                    Delegate
                   </Th>
                   <Th
                     borderBottom="1px solid white"
@@ -224,7 +267,7 @@ export const Endorsements = () => {
                     fontWeight="500"
                     color="#F2F4F7"
                   >
-                    Voting Power
+                    Endorsed by
                   </Th>
                   <Th
                     borderBottom="1px solid white"
@@ -234,30 +277,19 @@ export const Endorsements = () => {
                   >
                     Date
                   </Th>
-                  <Th
-                    borderBottom="1px solid white"
-                    fontSize="12px"
-                    fontWeight="500"
-                    color="#F2F4F7"
-                  />
                 </Tr>
               </Thead>
               <Tbody>
                 {currentItems.map((item, index) => (
                   <Tr key={item.date + +index}>
                     <Td borderBottom="1px solid white" color="white">
-                      {item.addressOrENS}
+                      {item.delegate}
                     </Td>
                     <Td borderBottom="1px solid white" color="white">
-                      {item.votingPower}
+                      {item.endorsedBy}
                     </Td>
                     <Td borderBottom="1px solid white" color="white">
                       {getFormattedData(item.date)}
-                    </Td>
-                    <Td borderBottom="1px solid white">
-                      {item.reason ? (
-                        <CommentModal reason={item.reason} />
-                      ) : null}
                     </Td>
                   </Tr>
                 ))}
@@ -284,14 +316,13 @@ export const Endorsements = () => {
             className="navigator-active"
             renderOnZeroPageCount={null}
           />
-        </>
+        </Flex>
       ) : (
         <Flex
           flexDir="row"
-          alignItems="center"
+          alignItems="flex-start"
           justifyContent="center"
           w="full"
-          px="4"
           py="4"
         >
           <Text color="white">No endorses found.</Text>
