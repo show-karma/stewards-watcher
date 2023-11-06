@@ -70,40 +70,36 @@ export const Endorsements = () => {
           let uniqueAttestations: EASAttestation<AttestationSchema>[] = [];
           const uniqueAttesters: string[] = [];
           schema.attestations.forEach(attestation => {
-            try {
-              const easAttestation = new EASAttestation<AttestationSchema>(
-                attestation
-              );
-              if (!uniqueAttesters.includes(easAttestation.attester)) {
-                uniqueAttestations.push(easAttestation);
-                uniqueAttesters.push(easAttestation.attester);
-              } else {
-                const lastAttest = schema.attestations.reduce(
-                  (lastAttestation, searchAttestation) => {
-                    if (
-                      attestation.attester === searchAttestation.attester &&
-                      attestation.timeCreated >= searchAttestation.timeCreated
-                    ) {
-                      return searchAttestation;
-                    }
-                    return lastAttestation;
+            const easAttestation = new EASAttestation<AttestationSchema>(
+              attestation
+            );
+            if (!uniqueAttesters.includes(easAttestation.attester)) {
+              uniqueAttestations.push(easAttestation);
+              uniqueAttesters.push(easAttestation.attester);
+            } else {
+              const lastAttest = schema.attestations.reduce(
+                (lastAttestation, searchAttestation) => {
+                  if (
+                    attestation.attester === searchAttestation.attester &&
+                    attestation.timeCreated >= searchAttestation.timeCreated
+                  ) {
+                    return searchAttestation;
                   }
-                );
-                if (lastAttest) {
-                  const filteredArray = uniqueAttestations.filter(
-                    item =>
-                      item.attester.toLowerCase() !==
-                      attestation.attester.toLowerCase()
-                  );
-                  const newAttestation = new EASAttestation<AttestationSchema>(
-                    lastAttest
-                  );
-                  filteredArray.push(newAttestation);
-                  uniqueAttestations = filteredArray;
+                  return lastAttestation;
                 }
+              );
+              if (lastAttest) {
+                const filteredArray = uniqueAttestations.filter(
+                  item =>
+                    item.attester.toLowerCase() !==
+                    attestation.attester.toLowerCase()
+                );
+                const newAttestation = new EASAttestation<AttestationSchema>(
+                  lastAttest
+                );
+                filteredArray.push(newAttestation);
+                uniqueAttestations = filteredArray;
               }
-            } catch (error) {
-              console.error('Error processing attestation:', error);
             }
           });
 

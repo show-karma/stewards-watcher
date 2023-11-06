@@ -65,29 +65,25 @@ export const EndorsementsComponent: FC = () => {
         if (schema && schema.attestations) {
           let attestationsToPush: EASAttestation<EndorseDelegateSchema>[] = [];
           schema.attestations.forEach(attestation => {
-            try {
-              const easAttestation = new EASAttestation<EndorseDelegateSchema>(
-                attestation
-              );
-              const duplicate = attestationsToPush.find(
-                at =>
-                  at.attester.toLowerCase() ===
-                    easAttestation.attester.toLowerCase() &&
-                  at.recipient.toLowerCase() ===
-                    easAttestation.recipient.toLowerCase()
-              );
-              if (duplicate) {
-                if (duplicate.timeCreated < easAttestation.timeCreated) {
-                  const otherAttestations = attestationsToPush.filter(
-                    at => duplicate.id !== at.id
-                  );
-                  attestationsToPush = [...otherAttestations, easAttestation];
-                }
-              } else {
-                attestationsToPush.push(easAttestation);
+            const easAttestation = new EASAttestation<EndorseDelegateSchema>(
+              attestation
+            );
+            const duplicate = attestationsToPush.find(
+              at =>
+                at.attester.toLowerCase() ===
+                  easAttestation.attester.toLowerCase() &&
+                at.recipient.toLowerCase() ===
+                  easAttestation.recipient.toLowerCase()
+            );
+            if (duplicate) {
+              if (duplicate.timeCreated < easAttestation.timeCreated) {
+                const otherAttestations = attestationsToPush.filter(
+                  at => duplicate.id !== at.id
+                );
+                attestationsToPush = [...otherAttestations, easAttestation];
               }
-            } catch (error) {
-              console.error('Error processing attestation:', error);
+            } else {
+              attestationsToPush.push(easAttestation);
             }
           });
 
