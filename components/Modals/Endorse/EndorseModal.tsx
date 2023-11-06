@@ -18,6 +18,7 @@ import { api } from 'helpers';
 import { useToasty } from 'hooks';
 import { FC, useEffect, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
+import { IActiveTab } from 'types';
 import { attest, getEASChainInfo } from 'utils';
 import { useSigner } from 'utils/eas-wagmi-utils';
 import { useAccount, useConnect, useNetwork, useSwitchNetwork } from 'wagmi';
@@ -26,6 +27,7 @@ interface EndorseModalProps {
   endorsingAddress: string;
   endorsingName: string;
   endorsingImage?: string;
+  changeTab: (selectedTab: IActiveTab) => void;
 }
 
 export interface GetDaoRes {
@@ -43,6 +45,7 @@ export const EndorseModal: FC<EndorseModalProps> = ({
   endorsingAddress,
   endorsingName,
   endorsingImage,
+  changeTab,
 }) => {
   const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
   const { changeRefreshEndorsements } = useDelegates();
@@ -131,6 +134,7 @@ export const EndorseModal: FC<EndorseModalProps> = ({
       });
       changeRefreshEndorsements(true);
       onClose();
+      changeTab('endorsements');
     } catch (error) {
       console.log(error);
       toast({

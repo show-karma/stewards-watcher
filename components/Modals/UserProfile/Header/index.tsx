@@ -292,6 +292,7 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
                   truncateAddress(profile.address)
                 }
                 endorsingImage={profile.avatar}
+                changeTab={changeTab}
               />
             )}
             {!isEditing && (compareProxy(profile.address) || isDaoAdmin) ? (

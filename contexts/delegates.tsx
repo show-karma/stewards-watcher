@@ -520,6 +520,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         'statement',
         'handles',
         'withdraw',
+        'endorsements',
       ];
       const checkTab = tabs.includes(getTab[1] as IActiveTab);
       const shouldOpenTab = defaultTab || (getTab[1] as IActiveTab);
@@ -653,6 +654,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         'statement',
         'handles',
         'withdraw',
+        'endorsements',
       ];
       if (userFound.aboutMe) tabs.push('aboutme');
       if (daoInfo.config.DAO_SUPPORTS_TOA) tabs.push('toa');
