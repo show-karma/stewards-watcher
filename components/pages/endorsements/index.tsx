@@ -124,8 +124,8 @@ export const EndorsementsComponent: FC = () => {
     const filteredResults = await Promise.all(
       results.map(async item => {
         let votingPower = 0;
-        let endorsedByENS: string | undefined | null = '';
-        let delegateENS: string | undefined | null = '';
+        let endorsedByNameOrENS: string | undefined | null = '';
+        let delegateNameOrENS: string | undefined | null = '';
 
         const endorsedByInfo = await getInfo(item.attester);
         const delegateInfo = await getInfo(item.recipient);
@@ -133,30 +133,32 @@ export const EndorsementsComponent: FC = () => {
         if (delegateInfo) {
           const { delegate: fetchedDelegate } = delegateInfo.data.data;
           votingPower = fetchedDelegate.voteWeight;
-          if (fetchedDelegate.ensName) {
-            delegateENS = fetchedDelegate.ensName;
+          if (fetchedDelegate.ensName || fetchedDelegate.realName) {
+            delegateNameOrENS =
+              fetchedDelegate.realName || fetchedDelegate.ensName;
           }
         } else {
           const fetched = await fetchENSNames([item.recipient]);
-          delegateENS = fetched[0].name;
+          delegateNameOrENS = fetched[0].name;
         }
 
         if (endorsedByInfo) {
           const { delegate: fetchedDelegate } = endorsedByInfo.data.data;
           votingPower = fetchedDelegate.voteWeight;
-          if (fetchedDelegate.ensName) {
-            endorsedByENS = fetchedDelegate.ensName;
+          if (fetchedDelegate.realName || fetchedDelegate.ensName) {
+            endorsedByNameOrENS =
+              fetchedDelegate.realName || fetchedDelegate.ensName;
           }
         } else {
           const fetched = await fetchENSNames([item.attester]);
-          endorsedByENS = fetched[0].name;
+          endorsedByNameOrENS = fetched[0].name;
         }
 
         const { comment } = item.decodedDataJson as any;
 
         return {
-          delegate: delegateENS || item.recipient,
-          endorsedBy: endorsedByENS || item.attester,
+          delegate: delegateNameOrENS || item.recipient,
+          endorsedBy: endorsedByNameOrENS || item.attester,
           date: item.timeCreated,
           votingPower: formatNumberPercentage(votingPower || 0),
           reason: comment,
