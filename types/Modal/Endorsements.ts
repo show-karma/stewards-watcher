@@ -5,8 +5,14 @@ export type EndorsementData = {
   reason?: string;
 };
 export type GeneralisticEndorsementData = {
-  delegate: string;
-  endorsedBy: string;
+  delegate: {
+    nameOrAddress: string;
+    imageURL: string | null | undefined;
+  };
+  endorsedBy: {
+    nameOrAddress: string;
+    imageURL: string | null | undefined;
+  };
   votingPower: string;
   date: number;
   reason?: string;

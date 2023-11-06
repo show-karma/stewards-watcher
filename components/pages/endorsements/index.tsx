@@ -126,6 +126,8 @@ export const EndorsementsComponent: FC = () => {
         let votingPower = 0;
         let endorsedByNameOrENS: string | undefined | null = '';
         let delegateNameOrENS: string | undefined | null = '';
+        let endorsedByImageURL: string | undefined | null = '';
+        let delegateImageURL: string | undefined | null = '';
 
         const endorsedByInfo = await getInfo(item.attester);
         const delegateInfo = await getInfo(item.recipient);
@@ -137,6 +139,7 @@ export const EndorsementsComponent: FC = () => {
             delegateNameOrENS =
               fetchedDelegate.realName || fetchedDelegate.ensName;
           }
+          delegateImageURL = fetchedDelegate.profilePicture;
         } else {
           const fetched = await fetchENSNames([item.recipient]);
           delegateNameOrENS = fetched[0].name;
@@ -149,6 +152,7 @@ export const EndorsementsComponent: FC = () => {
             endorsedByNameOrENS =
               fetchedDelegate.realName || fetchedDelegate.ensName;
           }
+          endorsedByImageURL = fetchedDelegate.profilePicture;
         } else {
           const fetched = await fetchENSNames([item.attester]);
           endorsedByNameOrENS = fetched[0].name;
@@ -157,8 +161,14 @@ export const EndorsementsComponent: FC = () => {
         const { comment } = item.decodedDataJson as any;
 
         return {
-          delegate: delegateNameOrENS || item.recipient,
-          endorsedBy: endorsedByNameOrENS || item.attester,
+          delegate: {
+            nameOrAddress: delegateNameOrENS || item.recipient,
+            imageURL: delegateImageURL,
+          },
+          endorsedBy: {
+            nameOrAddress: endorsedByNameOrENS || item.attester,
+            imageURL: endorsedByImageURL,
+          },
           date: item.timeCreated,
           votingPower: formatNumberPercentage(votingPower || 0),
           reason: comment,
@@ -287,7 +297,18 @@ export const EndorsementsComponent: FC = () => {
                       borderBottomColor={theme.text}
                       color={theme.text}
                     >
-                      {item.delegate}
+                      <Flex flexDir="row" gap="2">
+                        {/* <ImgWithFallback
+                          fallback={item.delegate.nameOrAddress}
+                          src={
+                            item.delegate.imageURL ||
+                            makeBlockie(item.delegate.nameOrAddress)
+                          }
+                          boxSize="20px"
+                          borderRadius="full"
+                        /> */}
+                        {item.delegate.nameOrAddress}
+                      </Flex>
                     </Td>
                     <Td
                       borderBottomWidth="1px"
@@ -295,7 +316,18 @@ export const EndorsementsComponent: FC = () => {
                       borderBottomColor={theme.text}
                       color={theme.text}
                     >
-                      {item.endorsedBy}
+                      <Flex flexDir="row" gap="2">
+                        {/* <ImgWithFallback
+                          fallback={item.endorsedBy.nameOrAddress}
+                          src={
+                            item.endorsedBy.imageURL ||
+                            makeBlockie(item.endorsedBy.nameOrAddress)
+                          }
+                          boxSize="20px"
+                          borderRadius="full"
+                        /> */}
+                        {item.endorsedBy.nameOrAddress}
+                      </Flex>
                     </Td>
                     <Td
                       borderBottomWidth="1px"
