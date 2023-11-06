@@ -63,46 +63,35 @@ export const EndorsementsComponent: FC = () => {
 
         const schema = response.data?.data?.schema;
         if (schema && schema.attestations) {
-          let uniqueAttestations: EASAttestation<EndorseDelegateSchema>[] = [];
-          const uniqueAttesters: string[] = [];
+          let attestationsToPush: EASAttestation<EndorseDelegateSchema>[] = [];
           schema.attestations.forEach(attestation => {
             try {
               const easAttestation = new EASAttestation<EndorseDelegateSchema>(
                 attestation
               );
-              if (!uniqueAttesters.includes(easAttestation.attester)) {
-                uniqueAttestations.push(easAttestation);
-                uniqueAttesters.push(easAttestation.attester);
-              } else {
-                const lastAttest = schema.attestations.reduce(
-                  (lastAttestation, searchAttestation) => {
-                    if (
-                      attestation.attester === searchAttestation.attester &&
-                      attestation.timeCreated >= searchAttestation.timeCreated
-                    ) {
-                      return searchAttestation;
-                    }
-                    return lastAttestation;
-                  }
-                );
-                if (lastAttest) {
-                  const filteredArray = uniqueAttestations.filter(
-                    item =>
-                      item.attester.toLowerCase() !==
-                      attestation.attester.toLowerCase()
+              const duplicate = attestationsToPush.find(
+                at =>
+                  at.attester.toLowerCase() ===
+                    easAttestation.attester.toLowerCase() &&
+                  at.recipient.toLowerCase() ===
+                    easAttestation.recipient.toLowerCase()
+              );
+              if (duplicate) {
+                if (duplicate.timeCreated < easAttestation.timeCreated) {
+                  const otherAttestations = attestationsToPush.filter(
+                    at => duplicate.id !== at.id
                   );
-                  const newAttestation =
-                    new EASAttestation<EndorseDelegateSchema>(lastAttest);
-                  filteredArray.push(newAttestation);
-                  uniqueAttestations = filteredArray;
+                  attestationsToPush = [...otherAttestations, easAttestation];
                 }
+              } else {
+                attestationsToPush.push(easAttestation);
               }
             } catch (error) {
               console.error('Error processing attestation:', error);
             }
           });
 
-          results.push(...uniqueAttestations);
+          results.push(...attestationsToPush);
         }
       } catch (error) {
         console.error('Error fetching attestation data:', error);
@@ -195,6 +184,7 @@ export const EndorsementsComponent: FC = () => {
 
       return hasMatch;
     });
+    console.log('filteredToDAO', filteredToDAO);
 
     const orderedDate = filteredToDAO.sort(
       (itemA, itemB) => itemB.date - itemA.date

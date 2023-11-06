@@ -10,14 +10,13 @@ import {
   Textarea,
   useDisclosure,
 } from '@chakra-ui/react';
-import { SchemaItem } from '@ethereum-attestation-service/eas-sdk';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { ImgWithFallback } from 'components/ImgWithFallback';
 import { useDAO } from 'contexts';
 import { ethers } from 'ethers';
 import { api } from 'helpers';
 import { useToasty } from 'hooks';
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { attest, getEASChainInfo } from 'utils';
 import { useSigner } from 'utils/eas-wagmi-utils';
@@ -55,31 +54,11 @@ export const EndorseModal: FC<EndorseModalProps> = ({
   const { connectAsync } = useConnect();
   const { chain } = useNetwork();
   const { switchNetworkAsync } = useSwitchNetwork();
-  const [daoList, setDaoList] = useState<DaoProps>({});
+  const [daoTokens, setDaoTokens] = useState<string[]>([]);
 
   const [reason, setReason] = useState('');
 
   const signer = useSigner();
-
-  const schema = useMemo(
-    (): SchemaItem[] => [
-      { type: 'bool', name: 'endorse', value: true },
-      { type: 'string', name: 'comment', value: reason },
-      {
-        type: 'address',
-        name: 'tokenAddress',
-        value:
-          daoList[config.DAO_KARMA_ID.toLowerCase()]?.token?.flat()?.[0] ||
-          '0x0000000000000000000000000000000000000000',
-      },
-      {
-        type: 'uint24',
-        name: 'tokenChainId',
-        value: getEASChainInfo(config.DAO_KARMA_ID).chainId,
-      },
-    ],
-    [reason, endorsingAddress]
-  );
 
   const endorse = async (newChainId?: number) => {
     setIsLoading(true);
@@ -122,6 +101,23 @@ export const EndorseModal: FC<EndorseModalProps> = ({
         return;
       }
 
+      const schema = [
+        { type: 'bool', name: 'endorse', value: true },
+        { type: 'string', name: 'comment', value: reason },
+        {
+          type: 'address',
+          name: 'tokenAddress',
+          value:
+            daoTokens.flat()?.[0] ||
+            '0x0000000000000000000000000000000000000000',
+        },
+        {
+          type: 'uint24',
+          name: 'tokenChainId',
+          value: getEASChainInfo(config.DAO_KARMA_ID).chainId,
+        },
+      ];
+
       await attest(
         signer as any,
         schema,
@@ -145,25 +141,38 @@ export const EndorseModal: FC<EndorseModalProps> = ({
     }
   };
 
-  const getDaoList = async (): Promise<DaoProps> => {
-    const {
-      data: { data },
-    } = await api.get<{ data: { daos: GetDaoRes[] } }>('/dao');
+  const getDaoList = async () => {
+    try {
+      setIsLoading(true);
 
-    const list = data.daos
-      .sort((itemA, itemB) => (itemA.name > itemB.name ? 1 : -1))
-      .reduce(
-        (acc, curr) => ({
-          ...acc,
-          [curr.name]: { name: curr.fullName, token: curr.tokenAddress },
-        }),
-        {}
+      const {
+        data: { data },
+      } = await api.get<{ data: { daos: GetDaoRes[] } }>('/dao');
+
+      console.log(data.daos);
+
+      // const list = data.daos
+      //   .sort((itemA, itemB) => (itemA.name > itemB.name ? 1 : -1))
+      //   .reduce(
+      //     (acc, curr) => ({
+      //       ...acc,
+      //       [curr.name]: { name: curr.fullName, token: curr.tokenAddress },
+      //     }),
+      //     {}
+      //   );
+      const daoFound = data.daos.find(
+        item => item.name === daoInfo.config.DAO_KARMA_ID
       );
-    return list;
+      setDaoTokens(daoFound?.tokenAddress || []);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
-    getDaoList().then(setDaoList);
+    getDaoList();
   }, []);
 
   return (
