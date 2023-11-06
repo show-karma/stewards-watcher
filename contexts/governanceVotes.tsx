@@ -55,7 +55,9 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
     },
     {} as Record<string, any[]>
   );
-  const chainKeys = Object.keys(groupContractsByChain as object);
+  const chainKeys = groupContractsByChain
+    ? Object.keys(groupContractsByChain as object)
+    : null;
 
   const getVotes = async () => {
     setLoadedVotes(false);
@@ -63,6 +65,7 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
     try {
       if (!daoInfo.config.DAO_TOKEN_CONTRACT || !groupContractsByChain)
         throw new Error(`No Token contract found`);
+      if (!chainKeys) throw new Error(`No chain keys found`);
 
       const multiChainAmounts = await Promise.all(
         chainKeys.map(async key => {
