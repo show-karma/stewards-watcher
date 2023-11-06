@@ -121,8 +121,30 @@ export const EndorsementsComponent: FC = () => {
         })
         .catch(() => null);
 
+    const filteredToDAO = results.filter(item => {
+      const addresses = daoData?.tokenAddress?.map(address =>
+        address.toLowerCase()
+      );
+
+      if (!item.decodedDataJson.tokenAddress) {
+        return false;
+      }
+
+      if (typeof item.decodedDataJson.tokenAddress === 'string') {
+        const hasMatch = addresses?.includes(
+          item.decodedDataJson.tokenAddress.toLowerCase()
+        );
+        return hasMatch;
+      }
+      const hasMatch = item?.decodedDataJson.tokenAddress?.some(address =>
+        addresses?.includes(address.toLowerCase())
+      );
+
+      return hasMatch;
+    });
+
     const filteredResults = await Promise.all(
-      results.map(async item => {
+      filteredToDAO.map(async item => {
         let votingPower = 0;
         let endorsedByNameOrENS: string | undefined | null = '';
         let delegateNameOrENS: string | undefined | null = '';
@@ -177,27 +199,7 @@ export const EndorsementsComponent: FC = () => {
       })
     );
 
-    const filteredToDAO = filteredResults.filter(item => {
-      const addresses = daoData?.tokenAddress?.map(address =>
-        address.toLowerCase()
-      );
-
-      if (!item?.tokenAdddress) {
-        return false;
-      }
-
-      if (typeof item.tokenAdddress === 'string') {
-        const hasMatch = addresses?.includes(item.tokenAdddress.toLowerCase());
-        return hasMatch;
-      }
-      const hasMatch = item?.tokenAdddress?.some(address =>
-        addresses?.includes(address.toLowerCase())
-      );
-
-      return hasMatch;
-    });
-
-    const orderedDate = filteredToDAO.sort(
+    const orderedDate = filteredResults.sort(
       (itemA, itemB) => itemB.date - itemA.date
     );
     setData(orderedDate);
