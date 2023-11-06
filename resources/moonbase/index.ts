@@ -23,7 +23,7 @@ const delegateContractAddr = '0x0000000000000000000000000000000000000812';
 
 const config: IDAOConfig = {
   DAO: 'Moonbase',
-  DAO_DESCRIPTION: `The Delegates of Moonbeam DAO play a vital role in driving the Moonbeam ecosystem forward through their work in governance.`,
+  DAO_DESCRIPTION: `The Delegates of Moonbase DAO play a vital role in driving the Moonbase ecosystem forward through their work in governance.`,
   DAO_SUBDESCRIPTION: `This site will help boost transparency by displaying delegate contribution to indicate their involvement and engagement in the DAO.`,
   DAO_URL: 'https://moonbeam.network/',
   GOVERNANCE_FORUM: 'https://forum.moonbeam.foundation/',
@@ -31,8 +31,8 @@ const config: IDAOConfig = {
   IMAGE_PREFIX_URL: 'https://cdn.stamp.fyi/avatar/eth:',
   DAO_LOGO: '/daos/moonbase/logo.png',
   METATAGS: {
-    TITLE: `Delegates of Moonbeam DAO`,
-    DESCRIPTION: `Find all the active delegates in Moonbeam DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
+    TITLE: `Delegates of Moonbase DAO`,
+    DESCRIPTION: `Find all the active delegates in Moonbase DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
     IMAGE_DISCORD: '/daos/moonbeam/preview-discord.png',
     IMAGE_TWITTER: '/daos/moonbeam/preview-twitter.png',
     FAVICON: '/daos/moonbeam/favicon.png',

@@ -106,18 +106,19 @@ export const HeaderHat: FC<IHeaderHat> = ({
   }[] => {
     const array = [];
 
-    array.push(
-      {
+    if (!daoInfo.config.HIDE_FOR_DELEGATES?.includes('delegator-lookup')) {
+      array.push({
         title: 'Delegator Look Up',
         path: KARMA_WEBSITE.delegators(daoInfo.config.DAO_KARMA_ID),
         isExternal: true,
-      },
-      {
-        title: 'Endorsements',
-        path: `${rootPathname}/endorsements`,
-        isExternal: false,
-      }
-    );
+      });
+    }
+
+    array.push({
+      title: 'Endorsements',
+      path: `${rootPathname}/endorsements`,
+      isExternal: false,
+    });
 
     return array;
   };
@@ -173,7 +174,8 @@ export const HeaderHat: FC<IHeaderHat> = ({
                   />
                 )}
               </NavMenu>
-              {daoInfo.config.HIDE_FOR_DELEGATES?.length ? undefined : (
+              {daoInfo.config.HIDE_FOR_DELEGATES &&
+              daoInfo.config.HIDE_FOR_DELEGATES?.length >= 2 ? undefined : (
                 <NavMenu
                   title="For Delegates"
                   childrens={mountingForDelegates()}
@@ -257,7 +259,8 @@ export const HeaderHat: FC<IHeaderHat> = ({
                   >
                     {daoInfo.config?.ALLOW_UNDELEGATE && <UndelegateModal />}
                   </NavMenu>
-                  {daoInfo.config.HIDE_FOR_DELEGATES?.length ? undefined : (
+                  {daoInfo.config.HIDE_FOR_DELEGATES &&
+                  daoInfo.config.HIDE_FOR_DELEGATES?.length >= 2 ? undefined : (
                     <NavMenu
                       title="For Delegates"
                       childrens={mountingForDelegates()}
