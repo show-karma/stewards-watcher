@@ -149,17 +149,6 @@ export const EndorseModal: FC<EndorseModalProps> = ({
         data: { data },
       } = await api.get<{ data: { daos: GetDaoRes[] } }>('/dao');
 
-      console.log(data.daos);
-
-      // const list = data.daos
-      //   .sort((itemA, itemB) => (itemA.name > itemB.name ? 1 : -1))
-      //   .reduce(
-      //     (acc, curr) => ({
-      //       ...acc,
-      //       [curr.name]: { name: curr.fullName, token: curr.tokenAddress },
-      //     }),
-      //     {}
-      //   );
       const daoFound = data.daos.find(
         item => item.name === daoInfo.config.DAO_KARMA_ID
       );

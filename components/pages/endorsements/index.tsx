@@ -184,7 +184,6 @@ export const EndorsementsComponent: FC = () => {
 
       return hasMatch;
     });
-    console.log('filteredToDAO', filteredToDAO);
 
     const orderedDate = filteredToDAO.sort(
       (itemA, itemB) => itemB.date - itemA.date
@@ -204,7 +203,7 @@ export const EndorsementsComponent: FC = () => {
 
   const [itemOffset, setItemOffset] = useState(0);
 
-  const itemsPerPage = 2;
+  const itemsPerPage = 20;
   const endOffset = itemOffset + itemsPerPage;
   const currentItems = data.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(data.length / itemsPerPage);
