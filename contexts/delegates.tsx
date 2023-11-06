@@ -112,6 +112,8 @@ interface IDelegateProps {
   isOpenVoteToAnyone: boolean;
   onToggleVoteToAnyone: () => void;
   isFiltersDirty: () => boolean;
+  shouldRefreshEndorsements: boolean;
+  changeRefreshEndorsements: (choose: boolean) => void;
 }
 
 export const DelegatesContext = createContext({} as IDelegateProps);
@@ -1234,6 +1236,13 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     setDelegationWillHaveError(value);
   }, 300);
 
+  const [shouldRefreshEndorsements, setShouldRefreshEndorsements] =
+    useState(false);
+
+  const changeRefreshEndorsements = (choose: boolean) => {
+    setShouldRefreshEndorsements(choose);
+  };
+
   const providerValue = useMemo(
     () => ({
       delegates,
@@ -1297,6 +1306,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       isOpenVoteToAnyone,
       onToggleVoteToAnyone,
       isFiltersDirty,
+      shouldRefreshEndorsements,
+      changeRefreshEndorsements,
     }),
     [
       profileSelected,
@@ -1345,6 +1356,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       isOpenVoteToAnyone,
       onToggleVoteToAnyone,
       isFiltersDirty,
+      shouldRefreshEndorsements,
+      changeRefreshEndorsements,
     ]
   );
 

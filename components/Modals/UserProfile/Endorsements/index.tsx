@@ -33,7 +33,11 @@ import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
 import { CommentModal } from './CommentModal';
 
 export const Endorsements = () => {
-  const { profileSelected } = useDelegates();
+  const {
+    profileSelected,
+    shouldRefreshEndorsements,
+    changeRefreshEndorsements,
+  } = useDelegates();
   const [data, setData] = useState<EndorsementData[]>([]);
 
   const { daoInfo } = useDAO();
@@ -42,6 +46,7 @@ export const Endorsements = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const getRecentAttestations = async () => {
+    changeRefreshEndorsements(false);
     setIsLoading(true);
     const projectEnvironment = process.env.NEXT_PUBLIC_ENV || 'dev';
     const chainsInfo = easDelegateEndorseDictionary[projectEnvironment];
@@ -160,10 +165,10 @@ export const Endorsements = () => {
     formatDate(new Date(date * 1000).toUTCString(), 'MMM D, YYYY');
 
   useEffect(() => {
-    if (profileSelected) {
+    if (profileSelected || (profileSelected && shouldRefreshEndorsements)) {
       getRecentAttestations();
     }
-  }, [profileSelected]);
+  }, [profileSelected, shouldRefreshEndorsements]);
 
   const [itemOffset, setItemOffset] = useState(0);
 

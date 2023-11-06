@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { ImgWithFallback } from 'components/ImgWithFallback';
-import { useDAO } from 'contexts';
+import { useDAO, useDelegates } from 'contexts';
 import { ethers } from 'ethers';
 import { api } from 'helpers';
 import { useToasty } from 'hooks';
@@ -45,6 +45,7 @@ export const EndorseModal: FC<EndorseModalProps> = ({
   endorsingImage,
 }) => {
   const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
+  const { changeRefreshEndorsements } = useDelegates();
   const { daoInfo } = useDAO();
   const { config } = daoInfo;
   const [isLoading, setIsLoading] = useState(false);
@@ -128,6 +129,7 @@ export const EndorseModal: FC<EndorseModalProps> = ({
       toast({
         description: `You successfully endorsed ${endorsingName}.`,
       });
+      changeRefreshEndorsements(true);
       onClose();
     } catch (error) {
       console.log(error);
