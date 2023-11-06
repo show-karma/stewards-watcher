@@ -234,7 +234,9 @@ export const EndorsementsComponent: FC = () => {
       ) : endorsersCounter ? (
         <Flex
           flexDir="column"
-          border="1px solid white"
+          borderWidth="1px"
+          borderStyle="solid"
+          borderColor={theme.text}
           borderRadius="12px"
           mt="4"
           pb="4"
@@ -244,7 +246,9 @@ export const EndorsementsComponent: FC = () => {
               <Thead>
                 <Tr>
                   <Th
-                    borderBottom="1px solid white"
+                    borderBottomWidth="1px"
+                    borderBottomStyle="solid"
+                    borderBottomColor={theme.text}
                     fontSize="12px"
                     fontWeight="500"
                     color={theme.text}
@@ -252,7 +256,9 @@ export const EndorsementsComponent: FC = () => {
                     Delegate
                   </Th>
                   <Th
-                    borderBottom="1px solid white"
+                    borderBottomWidth="1px"
+                    borderBottomStyle="solid"
+                    borderBottomColor={theme.text}
                     fontSize="12px"
                     fontWeight="500"
                     color={theme.text}
@@ -260,7 +266,9 @@ export const EndorsementsComponent: FC = () => {
                     Endorsed by
                   </Th>
                   <Th
-                    borderBottom="1px solid white"
+                    borderBottomWidth="1px"
+                    borderBottomStyle="solid"
+                    borderBottomColor={theme.text}
                     fontSize="12px"
                     fontWeight="500"
                     color={theme.text}
@@ -272,13 +280,28 @@ export const EndorsementsComponent: FC = () => {
               <Tbody>
                 {currentItems.map((item, index) => (
                   <Tr key={item.date + +index}>
-                    <Td borderBottom="1px solid white" color={theme.text}>
+                    <Td
+                      borderBottomWidth="1px"
+                      borderBottomStyle="solid"
+                      borderBottomColor={theme.text}
+                      color={theme.text}
+                    >
                       {item.delegate}
                     </Td>
-                    <Td borderBottom="1px solid white" color={theme.text}>
+                    <Td
+                      borderBottomWidth="1px"
+                      borderBottomStyle="solid"
+                      borderBottomColor={theme.text}
+                      color={theme.text}
+                    >
                       {item.endorsedBy}
                     </Td>
-                    <Td borderBottom="1px solid white" color={theme.text}>
+                    <Td
+                      borderBottomWidth="1px"
+                      borderBottomStyle="solid"
+                      borderBottomColor={theme.text}
+                      color={theme.text}
+                    >
                       {getFormattedData(item.date)}
                     </Td>
                   </Tr>
@@ -290,12 +313,24 @@ export const EndorsementsComponent: FC = () => {
           <ReactPaginate
             breakLabel="..."
             nextLabel={
-              <Flex flexDir="row" w="max-content" gap="1" alignItems="center">
+              <Flex
+                flexDir="row"
+                w="max-content"
+                gap="1"
+                alignItems="center"
+                color={theme.text}
+              >
                 Next <Icon as={AiOutlineArrowRight} w="5" h="5" />
               </Flex>
             }
             previousLabel={
-              <Flex flexDir="row" w="max-content" gap="1" alignItems="center">
+              <Flex
+                flexDir="row"
+                w="max-content"
+                gap="1"
+                alignItems="center"
+                color={theme.text}
+              >
                 <Icon as={AiOutlineArrowLeft} w="5" h="5" /> Previous
               </Flex>
             }
