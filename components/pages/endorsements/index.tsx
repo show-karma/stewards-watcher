@@ -204,7 +204,7 @@ export const EndorsementsComponent: FC = () => {
 
   const [itemOffset, setItemOffset] = useState(0);
 
-  const itemsPerPage = 20;
+  const itemsPerPage = 2;
   const endOffset = itemOffset + itemsPerPage;
   const currentItems = data.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(data.length / itemsPerPage);
@@ -318,7 +318,8 @@ export const EndorsementsComponent: FC = () => {
                 w="max-content"
                 gap="1"
                 alignItems="center"
-                color={theme.text}
+                color="black"
+                backgroundColor="white"
               >
                 Next <Icon as={AiOutlineArrowRight} w="5" h="5" />
               </Flex>
@@ -329,7 +330,8 @@ export const EndorsementsComponent: FC = () => {
                 w="max-content"
                 gap="1"
                 alignItems="center"
-                color={theme.text}
+                color="black"
+                backgroundColor="white"
               >
                 <Icon as={AiOutlineArrowLeft} w="5" h="5" /> Previous
               </Flex>

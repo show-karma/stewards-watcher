@@ -106,11 +106,18 @@ export const HeaderHat: FC<IHeaderHat> = ({
   }[] => {
     const array = [];
 
-    array.push({
-      title: 'Delegator Look Up',
-      path: KARMA_WEBSITE.delegators(daoInfo.config.DAO_KARMA_ID),
-      isExternal: true,
-    });
+    array.push(
+      {
+        title: 'Delegator Look Up',
+        path: KARMA_WEBSITE.delegators(daoInfo.config.DAO_KARMA_ID),
+        isExternal: true,
+      },
+      {
+        title: 'Endorsements',
+        path: `${rootPathname}/endorsements`,
+        isExternal: false,
+      }
+    );
 
     return array;
   };
