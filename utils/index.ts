@@ -8,6 +8,8 @@ export * from './convertHexToRGBA';
 export * from './customChains';
 export * from './delegatedVotesBreakdown';
 export * from './dydx';
+export * from './eas';
+export * from './EASAttestation';
 export * from './ethers';
 export * from './fetchBlockTimestamp';
 export * from './fetchScoreBreakdown';

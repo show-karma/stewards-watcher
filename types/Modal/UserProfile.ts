@@ -4,6 +4,7 @@ export type IActiveTab =
   | 'aboutme'
   | 'handles'
   | 'toa'
+  | 'endorsements'
   | 'withdraw';
 
 export type IProfile = {
