@@ -306,6 +306,10 @@ export const EndorsementsComponent: FC = () => {
                         p="0"
                         bg="transparent"
                         _hover={{ bg: 'transparent' }}
+                        _active={{ bg: 'transparent' }}
+                        _focus={{ bg: 'transparent' }}
+                        _focusVisible={{ bg: 'transparent' }}
+                        _focusWithin={{ bg: 'transparent' }}
                         textDecoration="underline"
                       >
                         {/* <ImgWithFallback
