@@ -87,6 +87,8 @@ export const UserProfile: FC<IUserProfileProps> = props => {
     setActiveTab(selectedTab);
   }, [selectedTab]);
 
+  console.log(router);
+
   const changeTab = (hash: IActiveTab) => {
     mixpanel.reportEvent({
       event: 'viewActivity',
@@ -94,7 +96,7 @@ export const UserProfile: FC<IUserProfileProps> = props => {
         tab: hash,
       },
     });
-    if (router.asPath === '/') {
+    if (router.asPath === '/' || router.asPath.includes('profile')) {
       router
         .push(
           {
@@ -117,7 +119,7 @@ export const UserProfile: FC<IUserProfileProps> = props => {
   };
 
   const onCloseModal = () => {
-    if (router.asPath === '/') {
+    if (router.asPath === '/' || router.asPath.includes('profile')) {
       router
         .push(
           {
