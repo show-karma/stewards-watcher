@@ -7,6 +7,7 @@ export type IStats =
   | 'healthScore'
   | 'discordScore'
   | 'votingWeight'
+  | 'endorsements'
   | 'delegatorCount';
 
 export type IStatsID =

@@ -14,7 +14,7 @@ import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { useDAO } from 'contexts';
-import { talismanWallet } from 'utils';
+import { getEASChainInfo, talismanWallet } from 'utils';
 import { optimism } from 'wagmi/chains';
 
 interface ProviderProps {
@@ -35,9 +35,13 @@ export const RainbowWrapper: React.FC<ProviderProps> = ({ children }) => {
     config.CUSTOM_RPC ? config.CUSTOM_RPC : null,
   ].filter(item => item !== null);
 
+  const endorseChain = getEASChainInfo(config.DAO_KARMA_ID).chain;
+
+  const chainWithEndorsedChain = config.DAO_CHAINS.concat([endorseChain]);
+
   const setChains = config.DAO_CHAINS.find(item => item.id === optimism.id)
-    ? config.DAO_CHAINS
-    : config.DAO_CHAINS.concat([optimism]);
+    ? chainWithEndorsedChain
+    : chainWithEndorsedChain.concat([optimism]);
 
   const { chains, publicClient, webSocketPublicClient } = configureChains(
     setChains,

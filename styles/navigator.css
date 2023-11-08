@@ -1,0 +1,51 @@
+.navigator-active {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  list-style-type: none;
+  margin-top: 1rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  align-items: center;
+
+  li a {
+    border-radius: 7px;
+    padding: 10px 16px;
+    cursor: pointer;
+    height: max-content;
+  }
+  li.selected a {
+    background-color: white;
+    color: black;
+  }
+  li.previous a,
+  li.next a {
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    display: flex;
+    max-width: max-content;
+    width: max-content;
+    color: #0e101b;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  li.previous a,
+  li.next a,
+  li.break a {
+    border-color: transparent;
+  }
+  li.active a {
+    background-color: #0366d6;
+    border-color: transparent;
+    min-width: 32px;
+  }
+  li.disabled a {
+    color: grey;
+    opacity: 0;
+  }
+  li.disable,
+  li.disabled a {
+    cursor: default;
+  }
+}

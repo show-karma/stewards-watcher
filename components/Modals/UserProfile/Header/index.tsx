@@ -29,6 +29,7 @@ import { FC, useMemo, useState } from 'react';
 import { IoCopy } from 'react-icons/io5';
 import { IActiveTab, IProfile } from 'types';
 import { convertHexToRGBA, truncateAddress } from 'utils';
+import { EndorseModal } from 'components/Modals/Endorse';
 import { NameEditable, PictureEditable } from '../EditProfile';
 import { MediaIcon } from './MediaIcon';
 import { NavigatorRow } from './NavigatorRow';
@@ -280,7 +281,20 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
             display={{ base: 'none', lg: 'flex' }}
             w="max-content"
             align="center"
+            gap="2"
           >
+            {isSamePerson ? null : (
+              <EndorseModal
+                endorsingAddress={profile.address}
+                endorsingName={
+                  profile.realName ||
+                  profile.ensName ||
+                  truncateAddress(profile.address)
+                }
+                endorsingImage={profile.avatar}
+                changeTab={changeTab}
+              />
+            )}
             {!isEditing && (compareProxy(profile.address) || isDaoAdmin) ? (
               <Button
                 fontWeight="normal"
@@ -335,6 +349,7 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
         align="center"
         justify="center"
       >
+        {isSamePerson ? null : <Button>Endorse</Button>}
         <DelegateCases
           fullAddress={fullAddress}
           status={profileSelected?.status}

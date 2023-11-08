@@ -27,13 +27,18 @@ export const NavigatorRow: FC<INavigatorRow> = ({
       flexDir="column"
       gap="0"
       w="full"
+      mb="8"
     >
       <Flex
         w="full"
         justifyContent="flex-start"
         gap="1px"
         borderTopRadius="5px"
-        maxW="588px"
+        maxW="full"
+        borderBottomWidth="1px"
+        borderBottomStyle="solid"
+        borderBottomColor="gray.600"
+        flexWrap="wrap"
       >
         {profile.aboutMe && (
           <NavButton
@@ -68,6 +73,13 @@ export const NavigatorRow: FC<INavigatorRow> = ({
           borderTopRightRadius={isSamePerson || isDaoAdmin ? '0' : '5px'}
         >
           Voting History
+        </NavButton>
+        <NavButton
+          isActive={isActiveTab('endorsements')}
+          onClick={() => changeTab('endorsements')}
+          borderTopRightRadius={isSamePerson || isDaoAdmin ? '0' : '5px'}
+        >
+          Endorsements
         </NavButton>
 
         {isSamePerson && isAuthenticated && (
