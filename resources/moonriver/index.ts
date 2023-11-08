@@ -34,7 +34,7 @@ const config: IDAOConfig = {
     IMAGE_DISCORD: '/daos/moonriver/preview-discord.png',
     IMAGE_TWITTER: '/daos/moonriver/preview-twitter.png',
     FAVICON: '/daos/moonriver/favicon.png',
-    URL: `https://moonriver.karmahq.xyz`,
+    URL: `https://delegate.moonbeam.network/moonriver`,
   },
   DAO_DEFAULT_SETTINGS: {
     FAQ: true,

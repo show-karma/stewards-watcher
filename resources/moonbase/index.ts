@@ -33,10 +33,10 @@ const config: IDAOConfig = {
   METATAGS: {
     TITLE: `Delegates of Moonbase DAO`,
     DESCRIPTION: `Find all the active delegates in Moonbase DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
-    IMAGE_DISCORD: '/daos/moonbeam/preview-discord.png',
-    IMAGE_TWITTER: '/daos/moonbeam/preview-twitter.png',
-    FAVICON: '/daos/moonbeam/favicon.png',
-    URL: `https://moonbeam.karmahq.xyz`,
+    IMAGE_DISCORD: '/daos/moonbase/preview-discord.png',
+    IMAGE_TWITTER: '/daos/moonbase/preview-twitter.png',
+    FAVICON: '/daos/moonbase/favicon.png',
+    URL: `https://delegate.moonbeam.network/moonbase`,
   },
   DAO_DEFAULT_SETTINGS: {
     FAQ: true,
