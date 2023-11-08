@@ -469,7 +469,6 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         tab,
       },
     });
-    console.log('tab', tab);
     setSelectedTab(tab);
     setProfileSelected(profile);
     onOpenProfile();

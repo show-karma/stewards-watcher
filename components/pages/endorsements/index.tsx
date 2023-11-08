@@ -387,6 +387,7 @@ export const EndorsementsComponent: FC = () => {
                 <Icon as={AiOutlineArrowLeft} w="5" h="5" /> Previous
               </Flex>
             }
+            pageLabelBuilder={pageNumber => `Page ${pageNumber}`}
             onPageChange={handlePageClick}
             pageRangeDisplayed={2}
             marginPagesDisplayed={1}
