@@ -21,10 +21,15 @@ export const CommentModal: FC<CommentModalProps> = ({ reason }) => {
   return (
     <>
       <Button
-        bg="white"
-        color="gray.800"
+        color="white"
+        bg="transparent"
         onClick={onOpen}
         _hover={{ opacity: 0.8 }}
+        _active={{ opacity: 0.8 }}
+        _focus={{ opacity: 0.8 }}
+        _focusVisible={{ opacity: 0.8 }}
+        _focusWithin={{ opacity: 0.8 }}
+        textDecoration="underline"
       >
         Comment
       </Button>
