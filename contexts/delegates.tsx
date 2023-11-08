@@ -24,7 +24,7 @@ import {
   ITracks,
 } from 'types';
 import { useMixpanel, useToasty } from 'hooks';
-import { api } from 'helpers';
+import { api, LINKS } from 'helpers';
 import { useAccount } from 'wagmi';
 import { IBulkDelegatePayload } from 'utils/moonbeam/moonriverDelegateAction';
 import { ITrackBadgeProps } from 'components/DelegationPool/TrackBadge';
@@ -56,11 +56,16 @@ interface IDelegateProps {
   isOpenProfile: boolean;
   onCloseProfile: () => void;
   profileSelected?: IDelegate;
-  selectProfile: (profile: IDelegate, tab?: IActiveTab) => void;
+  selectProfile: (
+    profile: IDelegate,
+    tab?: IActiveTab,
+    shouldRouterPush?: boolean
+  ) => void;
   selectedTab: IActiveTab;
   searchProfileModal: (
     userToSearch: string,
-    defaultTab?: IActiveTab
+    defaultTab?: IActiveTab,
+    shouldRouterPush?: boolean
   ) => Promise<void>;
   interests: string[];
   interestFilter: string[];
@@ -114,6 +119,11 @@ interface IDelegateProps {
   isFiltersDirty: () => boolean;
   shouldRefreshEndorsements: boolean;
   changeRefreshEndorsements: (choose: boolean) => void;
+  openProfile: (
+    profileAddress: string,
+    tab?: IActiveTab,
+    shouldRouterPush?: boolean
+  ) => Promise<void>;
 }
 
 export const DelegatesContext = createContext({} as IDelegateProps);
@@ -448,32 +458,40 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     }
   };
 
-  const selectProfile = (profile: IDelegate, tab: IActiveTab = 'statement') => {
+  const selectProfile = (
+    profile: IDelegate,
+    tab: IActiveTab = 'statement',
+    shouldRouterPush = true
+  ) => {
     mixpanel.reportEvent({
       event: 'viewActivity',
       properties: {
         tab,
       },
     });
+    console.log('tab', tab);
     setSelectedTab(tab);
     setProfileSelected(profile);
     onOpenProfile();
-    router
-      .push(
-        {
-          pathname: `${rootPathname}/profile/${
-            profile.ensName || profile.address
-          }`,
-          hash: tab,
-        },
-        undefined,
-        { shallow: true }
-      )
-      .catch(error => {
-        if (!error.cancelled) {
-          throw error;
-        }
-      });
+    if (shouldRouterPush) {
+      router
+        .push(
+          {
+            pathname: LINKS.PROFILE(
+              rootPathname,
+              profile.ensName || profile.address
+            ),
+            hash: tab,
+          },
+          undefined,
+          { shallow: true }
+        )
+        .catch(error => {
+          if (!error.cancelled) {
+            throw error;
+          }
+        });
+    }
   };
 
   const { address: publicAddress, isConnected } = useAccount();
@@ -597,7 +615,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
 
   const searchProfileModal = async (
     userToSearch: string,
-    defaultTab?: IActiveTab
+    defaultTab?: IActiveTab,
+    shouldRouterPush = true
   ) => {
     try {
       const axiosClient = await api.get(`/dao/find-delegate`, {
@@ -661,7 +680,11 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       const checkTab = tabs.includes(getTab[1] as IActiveTab);
       const shouldOpenTab = defaultTab || (getTab[1] as IActiveTab);
 
-      selectProfile(userFound, checkTab ? shouldOpenTab : undefined);
+      selectProfile(
+        userFound,
+        checkTab ? shouldOpenTab : defaultTab || undefined,
+        shouldRouterPush
+      );
     } catch (error: any) {
       if (error?.response?.data && error?.response?.data.error) {
         await checkIfUserNotFound(
@@ -1245,6 +1268,17 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     setShouldRefreshEndorsements(choose);
   };
 
+  const openProfile = async (
+    profileAddress: string,
+    tab?: IActiveTab,
+    shouldRouterPush = true
+  ) => {
+    if (!profileAddress) return;
+    await searchProfileModal(profileAddress, tab, shouldRouterPush).then(() => {
+      onOpenProfile();
+    });
+  };
+
   const providerValue = useMemo(
     () => ({
       delegates,
@@ -1310,6 +1344,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       isFiltersDirty,
       shouldRefreshEndorsements,
       changeRefreshEndorsements,
+      openProfile,
     }),
     [
       profileSelected,
@@ -1360,6 +1395,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       isFiltersDirty,
       shouldRefreshEndorsements,
       changeRefreshEndorsements,
+      openProfile,
     ]
   );
 

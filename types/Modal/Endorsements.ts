@@ -6,12 +6,16 @@ export type EndorsementData = {
 };
 export type GeneralisticEndorsementData = {
   delegate: {
-    nameOrAddress: string;
-    imageURL: string | null | undefined;
+    realName?: string;
+    ensName?: string;
+    address: string;
+    imageURL?: string | null;
   };
   endorsedBy: {
-    nameOrAddress: string;
-    imageURL: string | null | undefined;
+    realName?: string;
+    ensName?: string;
+    address: string;
+    imageURL?: string | null;
   };
   votingPower: string;
   date: number;

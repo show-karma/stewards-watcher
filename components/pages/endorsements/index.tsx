@@ -1,5 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import {
+  Button,
   Flex,
   Icon,
   Spinner,
@@ -13,7 +14,7 @@ import {
   Tr,
 } from '@chakra-ui/react';
 import axios from 'axios';
-import { useDAO } from 'contexts';
+import { useDAO, useDelegates } from 'contexts';
 import { api, easQueryGeneralistic } from 'helpers';
 import { FC, useEffect, useState } from 'react';
 import { GeneralisticEndorsementData } from 'types';
@@ -33,6 +34,7 @@ import { GetDaoRes } from 'components/Modals/Endorse';
 
 export const EndorsementsComponent: FC = () => {
   const [data, setData] = useState<GeneralisticEndorsementData[]>([]);
+  const { openProfile } = useDelegates();
 
   const { daoInfo, theme } = useDAO();
   const endorsersCounter = data.length;
@@ -142,10 +144,12 @@ export const EndorsementsComponent: FC = () => {
     const filteredResults = await Promise.all(
       filteredToDAO.map(async item => {
         let votingPower = 0;
-        let endorsedByNameOrENS: string | undefined | null = '';
-        let delegateNameOrENS: string | undefined | null = '';
-        let endorsedByImageURL: string | undefined | null = '';
-        let delegateImageURL: string | undefined | null = '';
+        const endorsedBy: GeneralisticEndorsementData['endorsedBy'] = {
+          address: item.attester,
+        };
+        const delegate: GeneralisticEndorsementData['delegate'] = {
+          address: item.recipient,
+        };
 
         const endorsedByInfo = await getInfo(item.attester);
         const delegateInfo = await getInfo(item.recipient);
@@ -154,39 +158,33 @@ export const EndorsementsComponent: FC = () => {
           const { delegate: fetchedDelegate } = delegateInfo.data.data;
           votingPower = fetchedDelegate.voteWeight;
           if (fetchedDelegate.ensName || fetchedDelegate.realName) {
-            delegateNameOrENS =
-              fetchedDelegate.realName || fetchedDelegate.ensName;
+            delegate.ensName = fetchedDelegate.ensName;
+            delegate.realName = fetchedDelegate.realName;
           }
-          delegateImageURL = fetchedDelegate.profilePicture;
+          delegate.imageURL = fetchedDelegate.profilePicture;
         } else {
           const fetched = await fetchENSNames([item.recipient]);
-          delegateNameOrENS = fetched[0].name;
+          delegate.ensName = fetched[0].name || undefined;
         }
 
         if (endorsedByInfo) {
           const { delegate: fetchedDelegate } = endorsedByInfo.data.data;
           votingPower = fetchedDelegate.voteWeight;
           if (fetchedDelegate.realName || fetchedDelegate.ensName) {
-            endorsedByNameOrENS =
-              fetchedDelegate.realName || fetchedDelegate.ensName;
+            endorsedBy.ensName = fetchedDelegate.ensName;
+            endorsedBy.realName = fetchedDelegate.realName;
           }
-          endorsedByImageURL = fetchedDelegate.profilePicture;
+          endorsedBy.imageURL = fetchedDelegate.profilePicture;
         } else {
           const fetched = await fetchENSNames([item.attester]);
-          endorsedByNameOrENS = fetched[0].name;
+          endorsedBy.ensName = fetched[0].name || undefined;
         }
 
         const { comment } = item.decodedDataJson as any;
 
         return {
-          delegate: {
-            nameOrAddress: delegateNameOrENS || item.recipient,
-            imageURL: delegateImageURL,
-          },
-          endorsedBy: {
-            nameOrAddress: endorsedByNameOrENS || item.attester,
-            imageURL: endorsedByImageURL,
-          },
+          delegate,
+          endorsedBy,
           date: item.timeCreated,
           votingPower: formatNumberPercentage(votingPower || 0),
           reason: comment,
@@ -295,7 +293,21 @@ export const EndorsementsComponent: FC = () => {
                       borderBottomColor={theme.text}
                       color={theme.text}
                     >
-                      <Flex flexDir="row" gap="2">
+                      <Button
+                        flexDir="row"
+                        gap="2"
+                        onClick={() => {
+                          openProfile(
+                            item.delegate.address,
+                            'endorsements',
+                            false
+                          );
+                        }}
+                        p="0"
+                        bg="transparent"
+                        _hover={{ bg: 'transparent' }}
+                        textDecoration="underline"
+                      >
                         {/* <ImgWithFallback
                           fallback={item.delegate.nameOrAddress}
                           src={
@@ -305,8 +317,10 @@ export const EndorsementsComponent: FC = () => {
                           boxSize="20px"
                           borderRadius="full"
                         /> */}
-                        {item.delegate.nameOrAddress}
-                      </Flex>
+                        {item.delegate.realName ||
+                          item.delegate.ensName ||
+                          item.delegate.address}
+                      </Button>
                     </Td>
                     <Td
                       borderBottomWidth="1px"
@@ -324,7 +338,9 @@ export const EndorsementsComponent: FC = () => {
                           boxSize="20px"
                           borderRadius="full"
                         /> */}
-                        {item.endorsedBy.nameOrAddress}
+                        {item.endorsedBy.realName ||
+                          item.endorsedBy.ensName ||
+                          item.endorsedBy.address}
                       </Flex>
                     </Td>
                     <Td

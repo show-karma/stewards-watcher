@@ -11,6 +11,7 @@ import { FC, useMemo, useState } from 'react';
 import { IActiveTab, IProfile } from 'types';
 import { useMixpanel } from 'hooks';
 import dynamic from 'next/dynamic';
+import { LINKS } from 'helpers';
 import { Header } from './Header';
 import { VotingHistory } from './VotingHistory';
 import { Endorsements } from './Endorsements';
@@ -93,39 +94,44 @@ export const UserProfile: FC<IUserProfileProps> = props => {
         tab: hash,
       },
     });
-    router
-      .push(
-        {
-          pathname: `${rootPathname}/profile/${
-            profile.ensName || profile.address
-          }`,
-          hash,
-        },
-        undefined,
-        { shallow: true }
-      )
-      .catch(error => {
-        if (!error.cancelled) {
-          throw error;
-        }
-      });
+    if (router.asPath === '/') {
+      router
+        .push(
+          {
+            pathname: LINKS.PROFILE(
+              rootPathname,
+              profile.ensName || profile.address
+            ),
+            hash,
+          },
+          undefined,
+          { shallow: true }
+        )
+        .catch(error => {
+          if (!error.cancelled) {
+            throw error;
+          }
+        });
+    }
     setActiveTab(hash);
   };
 
   const onCloseModal = () => {
-    router
-      .push(
-        {
-          pathname: `/${rootPathname}`,
-        },
-        undefined,
-        { shallow: true }
-      )
-      .catch(error => {
-        if (!error.cancelled) {
-          throw error;
-        }
-      });
+    if (router.asPath === '/') {
+      router
+        .push(
+          {
+            pathname: `/${rootPathname}`,
+          },
+          undefined,
+          { shallow: true }
+        )
+        .catch(error => {
+          if (!error.cancelled) {
+            throw error;
+          }
+        });
+    }
     onClose();
   };
 
