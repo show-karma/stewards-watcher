@@ -404,7 +404,7 @@ export const EndorsementsComponent: FC = () => {
           w="full"
           py="4"
         >
-          <Text color={theme.text}>No endorses found.</Text>
+          <Text color={theme.text}>No endorsements found.</Text>
         </Flex>
       )}
     </Flex>

@@ -296,7 +296,7 @@ export const Endorsements = () => {
           px="4"
           py="4"
         >
-          <Text color="white">No endorses found.</Text>
+          <Text color="white">No endorsements found.</Text>
         </Flex>
       )}
     </Flex>
