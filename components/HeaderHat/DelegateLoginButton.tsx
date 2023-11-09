@@ -29,7 +29,7 @@ const LoginMenu = () => {
   const { hasProxy } = useProxy();
   const { realWallet } = useProxy();
 
-  const openProfile = () => address && searchProfileModal(address, 'statement');
+  const openProfile = () => address && searchProfileModal(address, 'overview');
 
   return (
     <Menu isLazy placement="bottom-end">
@@ -173,7 +173,7 @@ const LoginAccordion = () => {
   const { hasProxy } = useProxy();
   const { realWallet } = useProxy();
 
-  const openProfile = () => address && searchProfileModal(address, 'statement');
+  const openProfile = () => address && searchProfileModal(address, 'overview');
   return (
     <Accordion allowToggle>
       <AccordionItem>

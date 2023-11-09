@@ -51,8 +51,8 @@ export const NavigatorRow: FC<INavigatorRow> = ({
           </NavButton>
         )}
         <NavButton
-          isActive={isActiveTab('statement')}
-          onClick={() => changeTab('statement')}
+          isActive={isActiveTab('overview')}
+          onClick={() => changeTab('overview')}
           borderTopLeftRadius={profile.aboutMe ? '0' : '5px'}
         >
           Overview

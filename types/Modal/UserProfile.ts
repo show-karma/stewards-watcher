@@ -1,5 +1,5 @@
 export type IActiveTab =
-  | 'statement'
+  | 'overview'
   | 'votinghistory'
   | 'aboutme'
   | 'handles'

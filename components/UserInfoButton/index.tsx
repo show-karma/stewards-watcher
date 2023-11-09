@@ -57,7 +57,7 @@ export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen, profile }) => {
       h="10"
       px={{ base: '2', md: '3' }}
       py={['3', '6']}
-      onClick={() => redirectWithoutRefresh('statement')}
+      onClick={() => redirectWithoutRefresh('overview')}
       display="flex"
       alignItems="center"
       justifyContent="center"
