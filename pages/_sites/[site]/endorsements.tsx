@@ -45,7 +45,7 @@ interface IIndex {
 }
 
 const DynamicEndorsements = ({ dao }: IIndex) => (
-  <DAOProvider selectedDAO={dao} shouldFetchInfo={false} withPathname>
+  <DAOProvider selectedDAO={dao} shouldFetchInfo={false}>
     <EndorsementsContainer />
   </DAOProvider>
 );
