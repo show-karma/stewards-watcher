@@ -76,7 +76,7 @@ export interface IDAOConfig {
     url: string;
   }[];
   TOS_URL?: string;
-  SHOULD_NOT_SHOW?: 'statement' | 'stats' | 'handles';
+  SHOULD_NOT_SHOW?: 'overview' | 'stats' | 'handles';
   DAO_SUPPORTS_TOA?: boolean;
   DAO_SUPPORTS_TOS?: boolean;
   DAO_STATUSES?: string[];

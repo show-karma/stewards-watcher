@@ -382,7 +382,7 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
         (activeTab === 'handles' &&
           daoInfo.config.SHOULD_NOT_SHOW === 'handles'))
     ) {
-      changeTab('statement');
+      changeTab('overview');
     }
   }, [isSamePerson, activeTab]);
 

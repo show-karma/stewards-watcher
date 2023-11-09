@@ -19,7 +19,7 @@ import { useEffect, useState } from 'react';
 import { EndorsementData } from 'types';
 import { AttestationResponse } from 'types/eas';
 import {
-  AttestationSchema,
+  EndorseDelegateSchema,
   EASAttestation,
   easDelegateEndorseDictionary,
   formatDate,
@@ -30,9 +30,10 @@ import { fetchENSNames } from 'utils/fetchENSName';
 import { getAddress } from 'viem';
 import ReactPaginate from 'react-paginate';
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
+import { GetDaoRes } from 'types/api';
 import { CommentModal } from './CommentModal';
 
-export const Endorsements = () => {
+export const EndorsementsReceived = () => {
   const {
     profileSelected,
     shouldRefreshEndorsements,
@@ -55,7 +56,7 @@ export const Endorsements = () => {
       return;
     }
 
-    const results: EASAttestation<AttestationSchema>[] = [];
+    const results: EASAttestation<EndorseDelegateSchema>[] = [];
 
     const fetchAttestations = async (chain: string) => {
       try {
@@ -72,10 +73,10 @@ export const Endorsements = () => {
 
         const schema = response.data?.data?.schema;
         if (schema && schema.attestations) {
-          let uniqueAttestations: EASAttestation<AttestationSchema>[] = [];
+          let uniqueAttestations: EASAttestation<EndorseDelegateSchema>[] = [];
           const uniqueAttesters: string[] = [];
           schema.attestations.forEach(attestation => {
-            const easAttestation = new EASAttestation<AttestationSchema>(
+            const easAttestation = new EASAttestation<EndorseDelegateSchema>(
               attestation
             );
             if (!uniqueAttesters.includes(easAttestation.attester)) {
@@ -99,9 +100,8 @@ export const Endorsements = () => {
                     item.attester.toLowerCase() !==
                     attestation.attester.toLowerCase()
                 );
-                const newAttestation = new EASAttestation<AttestationSchema>(
-                  lastAttest
-                );
+                const newAttestation =
+                  new EASAttestation<EndorseDelegateSchema>(lastAttest);
                 filteredArray.push(newAttestation);
                 uniqueAttestations = filteredArray;
               }
@@ -120,8 +120,38 @@ export const Endorsements = () => {
     );
     await Promise.all(chainPromises);
 
+    const {
+      data: { data: fetchedData },
+    } = await api.get<{ data: { daos: GetDaoRes[] } }>('/dao');
+
+    const daoData = fetchedData.daos.find(
+      item => item.name === daoInfo.config.DAO_KARMA_ID
+    );
+
+    const filteredToDAO = results.filter(item => {
+      const addresses = daoData?.tokenAddress?.map(address =>
+        address.toLowerCase()
+      );
+
+      if (!item.decodedDataJson.tokenAddress) {
+        return false;
+      }
+
+      if (typeof item.decodedDataJson.tokenAddress === 'string') {
+        const hasMatch = addresses?.includes(
+          item.decodedDataJson.tokenAddress.toLowerCase()
+        );
+        return hasMatch;
+      }
+      const hasMatch = item?.decodedDataJson.tokenAddress?.some(address =>
+        addresses?.includes(address.toLowerCase())
+      );
+
+      return hasMatch;
+    });
+
     const filteredResults = await Promise.all(
-      results.map(async item => {
+      filteredToDAO.map(async item => {
         let votingPower = 0;
         let ensName: string | undefined | null = '';
         const axiosClient = await api
@@ -192,7 +222,7 @@ export const Endorsements = () => {
     >
       <Flex px="6" flexDir="row" gap="1" alignItems="center">
         <Text fontSize="18px" fontWeight="700" color="white">
-          Endorsers
+          Endorsements Received
         </Text>
         {endorsersCounter ? (
           <Text fontSize="14px" fontWeight="500" color="white">
@@ -217,7 +247,7 @@ export const Endorsements = () => {
                     fontWeight="500"
                     color="#F2F4F7"
                   >
-                    Address
+                    Received from
                   </Th>
                   <Th
                     borderBottom="1px solid white"

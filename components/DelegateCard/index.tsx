@@ -548,7 +548,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                 `${config.IMAGE_PREFIX_URL}${data.address}`
               }
               fallback={data.address}
-              onClick={() => selectProfile(data, 'statement')}
+              onClick={() => selectProfile(data, 'overview')}
               cursor="pointer"
             />
           </Flex>
@@ -592,7 +592,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   textOverflow="ellipsis"
                   overflow="hidden"
                   whiteSpace="nowrap"
-                  onClick={() => selectProfile(data, 'statement')}
+                  onClick={() => selectProfile(data, 'overview')}
                   cursor="pointer"
                 >
                   {data.realName || data.ensName || shortAddress}
@@ -782,13 +782,13 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                     text={userStatement}
                     isExpanded={isExpanded}
                     toggleIsExpanded={toggleIsExpanded}
-                    selectProfile={() => selectProfile(data, 'statement')}
+                    selectProfile={() => selectProfile(data, 'overview')}
                     color={theme.card.text.primary}
                   />
                 </Flex>
               ) : (
                 <>
-                  {!(config.SHOULD_NOT_SHOW === 'statement') && <Text>-</Text>}
+                  {!(config.SHOULD_NOT_SHOW === 'overview') && <Text>-</Text>}
                 </>
               )}
             </Flex>

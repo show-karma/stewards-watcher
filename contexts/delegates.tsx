@@ -212,7 +212,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
   const [interestFilter, setInterestFilter] = useState<string[]>([]);
   const [userToFind, setUserToFind] = useState<string>('');
   const [voteInfos, setVoteInfos] = useState({} as IVoteInfo);
-  const [selectedTab, setSelectedTab] = useState<IActiveTab>('statement');
+  const [selectedTab, setSelectedTab] = useState<IActiveTab>('overview');
   const [profileSelected, setProfileSelected] = useState<IDelegate | undefined>(
     {} as IDelegate
   );
@@ -460,7 +460,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
 
   const selectProfile = (
     profile: IDelegate,
-    tab: IActiveTab = 'statement',
+    tab: IActiveTab = 'overview',
     shouldRouterPush = true
   ) => {
     mixpanel.reportEvent({
@@ -534,10 +534,11 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       const getTab = asPath.split('#');
       const tabs: IActiveTab[] = [
         'votinghistory',
-        'statement',
+        'overview',
         'handles',
         'withdraw',
-        'endorsements',
+        'endorsements-received',
+        'endorsements-given',
       ];
       const checkTab = tabs.includes(getTab[1] as IActiveTab);
       const shouldOpenTab = defaultTab || (getTab[1] as IActiveTab);
@@ -669,10 +670,11 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
       const getTab = asPath.split('#');
       const tabs: IActiveTab[] = [
         'votinghistory',
-        'statement',
+        'overview',
         'handles',
         'withdraw',
-        'endorsements',
+        'endorsements-received',
+        'endorsements-given',
       ];
       if (userFound.aboutMe) tabs.push('aboutme');
       if (daoInfo.config.DAO_SUPPORTS_TOA) tabs.push('toa');

@@ -1,10 +1,11 @@
 export type IActiveTab =
-  | 'statement'
+  | 'overview'
   | 'votinghistory'
   | 'aboutme'
   | 'handles'
   | 'toa'
-  | 'endorsements'
+  | 'endorsements-received'
+  | 'endorsements-given'
   | 'withdraw';
 
 export type IProfile = {

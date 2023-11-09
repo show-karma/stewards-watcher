@@ -299,7 +299,7 @@ export const EndorsementsComponent: FC = () => {
                         onClick={() => {
                           openProfile(
                             item.delegate.address,
-                            'endorsements',
+                            'endorsements-received',
                             false
                           );
                         }}

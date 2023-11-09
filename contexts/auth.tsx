@@ -161,7 +161,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
       const token = await getAccountToken(address, signedMessage);
       if (token) saveToken(token);
       delegateLoginOnClose();
-      searchProfileModal(address, 'statement');
+      searchProfileModal(address, 'overview');
       return true;
     } catch (error) {
       // eslint-disable-next-line no-console
