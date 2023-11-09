@@ -55,7 +55,7 @@ export const NavigatorRow: FC<INavigatorRow> = ({
           onClick={() => changeTab('statement')}
           borderTopLeftRadius={profile.aboutMe ? '0' : '5px'}
         >
-          Statement
+          Overview
         </NavButton>
         {daoInfo.config.DAO_SUPPORTS_TOA ? (
           <NavButton
@@ -75,11 +75,18 @@ export const NavigatorRow: FC<INavigatorRow> = ({
           Voting History
         </NavButton>
         <NavButton
-          isActive={isActiveTab('endorsements')}
-          onClick={() => changeTab('endorsements')}
+          isActive={isActiveTab('endorsements-received')}
+          onClick={() => changeTab('endorsements-received')}
           borderTopRightRadius={isSamePerson || isDaoAdmin ? '0' : '5px'}
         >
-          Endorsements
+          Endorsements Received
+        </NavButton>
+        <NavButton
+          isActive={isActiveTab('endorsements-given')}
+          onClick={() => changeTab('endorsements-given')}
+          borderTopRightRadius={isSamePerson || isDaoAdmin ? '0' : '5px'}
+        >
+          Endorsements Given
         </NavButton>
 
         {isSamePerson && isAuthenticated && (

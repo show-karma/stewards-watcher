@@ -134,7 +134,7 @@ export const EndorseModal: FC<EndorseModalProps> = ({
       });
       changeRefreshEndorsements(true);
       onClose();
-      changeTab('endorsements');
+      changeTab('endorsements-received');
     } catch (error) {
       console.log(error);
       toast({

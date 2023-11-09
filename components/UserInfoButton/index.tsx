@@ -1,5 +1,4 @@
 import { Button, Text } from '@chakra-ui/react';
-import { HistoryIcon } from 'components/Icons';
 import { useDAO } from 'contexts';
 import { LINKS } from 'helpers';
 import { useRouter } from 'next/router';
@@ -58,13 +57,13 @@ export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen, profile }) => {
       h="10"
       px={{ base: '2', md: '3' }}
       py={['3', '6']}
-      onClick={() => redirectWithoutRefresh('votinghistory')}
+      onClick={() => redirectWithoutRefresh('statement')}
       display="flex"
       alignItems="center"
       justifyContent="center"
     >
-      <HistoryIcon boxSize="17px" />
-      <Text h="max-content">Activity</Text>
+      {/* <HistoryIcon boxSize="17px" /> */}
+      <Text h="max-content">Overview</Text>
     </Button>
   );
 };

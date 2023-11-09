@@ -14,7 +14,8 @@ import dynamic from 'next/dynamic';
 import { LINKS } from 'helpers';
 import { Header } from './Header';
 import { VotingHistory } from './VotingHistory';
-import { Endorsements } from './Endorsements';
+import { EndorsementsReceived } from './EndorsementsReceived';
+import { EndorsementsGiven } from './EndorsementsGiven';
 
 const WithdrawDelegation = dynamic(() =>
   import('components/Modals/UserProfile/WithdrawDelegation').then(
@@ -63,8 +64,11 @@ const Tab: FC<ITab> = ({ activeTab, profile }) => {
   if (activeTab === 'withdraw') {
     return <WithdrawDelegation />;
   }
-  if (activeTab === 'endorsements') {
-    return <Endorsements />;
+  if (activeTab === 'endorsements-received') {
+    return <EndorsementsReceived />;
+  }
+  if (activeTab === 'endorsements-given') {
+    return <EndorsementsGiven />;
   }
   return <Statement />;
 };
@@ -86,8 +90,6 @@ export const UserProfile: FC<IUserProfileProps> = props => {
   useMemo(() => {
     setActiveTab(selectedTab);
   }, [selectedTab]);
-
-  console.log(router);
 
   const changeTab = (hash: IActiveTab) => {
     mixpanel.reportEvent({
