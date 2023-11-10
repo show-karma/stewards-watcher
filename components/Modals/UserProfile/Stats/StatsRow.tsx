@@ -1,19 +1,12 @@
 import { Flex } from '@chakra-ui/react';
 import { useDAO, useDelegates } from 'contexts';
 import {
-  AttestationSchema,
-  EASAttestation,
-  easDelegateEndorseDictionary,
   formatNumber,
   formatNumberPercentage,
-  getEASChainInfo,
+  getEndorsementsOfAddress,
 } from 'utils';
 import { IStats } from 'types';
 import { useEffect, useState } from 'react';
-import { easQueryWithAddress } from 'helpers';
-import axios from 'axios';
-import { getAddress } from 'viem';
-import { AttestationResponse } from 'types/eas';
 import { StatCard } from './StatCard';
 
 interface Stats {
@@ -44,81 +37,13 @@ export const StatsRow = () => {
   };
 
   const getEndorsements = async () => {
-    const projectEnvironment = process.env.NEXT_PUBLIC_ENV || 'dev';
-    const chainsInfo = easDelegateEndorseDictionary[projectEnvironment];
-
-    if (!chainsInfo) {
-      return;
-    }
-
-    const results: EASAttestation<AttestationSchema>[] = [];
-
-    const fetchAttestations = async (chain: string) => {
-      try {
-        const checkSumAddress = getAddress(profileSelected?.address as string);
-        const response = await axios.post<AttestationResponse>(
-          chainsInfo[chain].easAPI,
-          {
-            query: easQueryWithAddress(
-              getEASChainInfo(daoInfo.config.DAO_KARMA_ID).schemaId,
-              checkSumAddress
-            ),
-          }
-        );
-
-        const schema = response.data?.data?.schema;
-        if (schema && schema.attestations) {
-          let uniqueAttestations: EASAttestation<AttestationSchema>[] = [];
-          const uniqueAttesters: string[] = [];
-          schema.attestations.forEach(attestation => {
-            const easAttestation = new EASAttestation<AttestationSchema>(
-              attestation
-            );
-            if (!uniqueAttesters.includes(easAttestation.attester)) {
-              uniqueAttestations.push(easAttestation);
-              uniqueAttesters.push(easAttestation.attester);
-            } else {
-              const lastAttest = schema.attestations.reduce(
-                (lastAttestation, searchAttestation) => {
-                  if (
-                    attestation.attester === searchAttestation.attester &&
-                    attestation.timeCreated >= searchAttestation.timeCreated
-                  ) {
-                    return searchAttestation;
-                  }
-                  return lastAttestation;
-                }
-              );
-              if (lastAttest) {
-                const filteredArray = uniqueAttestations.filter(
-                  item =>
-                    item.attester.toLowerCase() !==
-                    attestation.attester.toLowerCase()
-                );
-                const newAttestation = new EASAttestation<AttestationSchema>(
-                  lastAttest
-                );
-                filteredArray.push(newAttestation);
-                uniqueAttestations = filteredArray;
-              }
-            }
-          });
-
-          results.push(...uniqueAttestations);
-        }
-      } catch (error) {
-        console.error('Error fetching attestation data:', error);
-      }
-    };
-
-    const chainPromises = Object.keys(chainsInfo).map(chain =>
-      fetchAttestations(chain)
+    if (!profileSelected?.address) return;
+    const endorsements = await getEndorsementsOfAddress(
+      profileSelected?.address,
+      daoInfo.config.DAO_KARMA_ID
     );
-    await Promise.all(chainPromises);
 
-    const filteredResults = await Promise.all(results);
-
-    setEndorsementsNumber(filteredResults.length);
+    setEndorsementsNumber(endorsements.length);
   };
 
   const stats: Stats[] = [
