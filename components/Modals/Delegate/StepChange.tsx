@@ -165,7 +165,7 @@ export const StepChange: React.FC<StepProps> = ({
           <Flex
             display="flex"
             alignItems="center"
-            justifyContent="space-between"
+            justifyContent="flex-start"
             gap="2"
             margin="0 0 23px 0"
           >

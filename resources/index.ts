@@ -20,6 +20,7 @@ import moonbeam from './moonbeam';
 import moonbase from './moonbase';
 import connext from './connext';
 import arbitrum from './arbitrum';
+import cowswap from './cowswap';
 import snapshotABI from './contracts/snapshotABI.json';
 import ERC20ABI from './contracts/ERC20_ABI.json';
 
@@ -173,5 +174,11 @@ export const supportedDAOs: ISupportedDAOs = {
     dark: arbitrum.dark,
     DELEGATE_ABI: arbitrum.ABI,
     TOKEN_ABI: arbitrum.ABI,
+  },
+  cowswap: {
+    config: cowswap.config,
+    dark: cowswap.dark,
+    light: cowswap.light,
+    TOKEN_ABI: ERC20ABI,
   },
 };
