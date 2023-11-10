@@ -97,11 +97,15 @@ export const Step1: React.FC<StepProps> = ({
               >
                 <ImgWithFallback
                   fallback={daoName}
-                  src={makeBlockie(
-                    delegatedUser.ensName ||
-                      delegatedUser.address ||
-                      Math.random().toString()
-                  )}
+                  src={
+                    delegatedUser.profilePicture ||
+                    makeBlockie(
+                      delegatedUser.realName ||
+                        delegatedUser.ensName ||
+                        delegatedUser.address ||
+                        Math.random().toString()
+                    )
+                  }
                   boxSize="20px"
                   borderRadius="full"
                 />
@@ -115,7 +119,9 @@ export const Step1: React.FC<StepProps> = ({
                   whiteSpace="nowrap"
                   overflow="hidden"
                 >
-                  {delegatedUser.ensName || delegatedUser.address}
+                  {delegatedUser.realName ||
+                    delegatedUser.ensName ||
+                    delegatedUser.address}
                 </Text>
               </Flex>
             </Flex>
@@ -125,7 +131,8 @@ export const Step1: React.FC<StepProps> = ({
       </DelegateModalBody>
       <DelegateModalFooter
         flexProps={{ ...modalSpacing }}
-        delegateAddress={delegatedUser.address}
+        handleModal={handleModal}
+        delegateInfo={delegatedUser}
         publicAddress={walletAddress}
       />
     </Flex>
