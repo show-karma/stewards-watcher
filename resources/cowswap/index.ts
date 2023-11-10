@@ -33,7 +33,7 @@ const config: IDAOConfig = {
   ],
   DAO_DEFAULT_SETTINGS: {
     STATUS_FILTER: {
-      DEFAULT_STATUS_SELECTED: ['recognized'],
+      DEFAULT_STATUS_SELECTED: ['active'],
     },
   },
   ENABLE_DELEGATE_TRACKER: true,
