@@ -21,7 +21,7 @@ const config: IDAOConfig = {
   DAO_DELEGATE_CONTRACT: undefined,
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
-  SHOULD_NOT_SHOW: 'statement',
+  SHOULD_NOT_SHOW: 'overview',
   EXCLUDED_VOTING_HISTORY_COLUMN: ['onChainVoteBreakdown'],
   EXCLUDED_CARD_FIELDS: [
     'delegatorCount',
