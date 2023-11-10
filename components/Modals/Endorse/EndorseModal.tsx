@@ -135,13 +135,21 @@ export const EndorseModal: FC<EndorseModalProps> = ({
       changeRefreshEndorsements(true);
       onClose();
       changeTab('endorsements-received');
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
-      toast({
-        title: 'Endorsement failed',
-        description: `Transaction failed.`,
-        status: 'error',
-      });
+      if (error.message?.includes('ACTION_REJECTED')) {
+        toast({
+          title: 'Endorsement failed',
+          description: `User rejected the transaction.`,
+          status: 'error',
+        });
+      } else {
+        toast({
+          title: 'Endorsement failed',
+          description: `Transaction failed.`,
+          status: 'error',
+        });
+      }
     } finally {
       setIsLoading(false);
     }
