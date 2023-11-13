@@ -34,6 +34,7 @@ import { NameEditable, PictureEditable } from '../EditProfile';
 import { MediaIcon } from './MediaIcon';
 import { NavigatorRow } from './NavigatorRow';
 import { ProxySwitch } from './ProxySwitch';
+import { StatsRow } from '../Stats';
 
 const DelegateCases: FC<{ status?: string; fullAddress: string }> = ({
   status,
@@ -407,6 +408,10 @@ export const Header: FC<IHeader> = ({ activeTab, changeTab, profile }) => {
 
         <UserSection profile={profile} changeTab={changeTab} />
       </Flex>
+      <Flex px={{ base: '1.25rem', lg: '2.5rem' }}>
+        <StatsRow />
+      </Flex>
+
       <NavigatorRow
         activeTab={activeTab}
         changeTab={changeTab}
