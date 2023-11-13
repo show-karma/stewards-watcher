@@ -33,7 +33,10 @@ export const useVoteReason = (args: IUseVoteReason) => {
   });
 
   const isVoteOwner = useMemo(
-    () => connectedAddress?.toLowerCase() === address.toLowerCase(),
+    () =>
+      !connectedAddress
+        ? false
+        : connectedAddress.toLowerCase() === address.toLowerCase(),
     [connectedAddress, address]
   );
 

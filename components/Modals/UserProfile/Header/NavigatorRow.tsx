@@ -27,13 +27,18 @@ export const NavigatorRow: FC<INavigatorRow> = ({
       flexDir="column"
       gap="0"
       w="full"
+      mb="8"
     >
       <Flex
         w="full"
         justifyContent="flex-start"
         gap="1px"
         borderTopRadius="5px"
-        maxW="588px"
+        maxW="full"
+        borderBottomWidth="1px"
+        borderBottomStyle="solid"
+        borderBottomColor="gray.600"
+        flexWrap="wrap"
       >
         {profile.aboutMe && (
           <NavButton
@@ -46,11 +51,11 @@ export const NavigatorRow: FC<INavigatorRow> = ({
           </NavButton>
         )}
         <NavButton
-          isActive={isActiveTab('statement')}
-          onClick={() => changeTab('statement')}
+          isActive={isActiveTab('overview')}
+          onClick={() => changeTab('overview')}
           borderTopLeftRadius={profile.aboutMe ? '0' : '5px'}
         >
-          Statement
+          Overview
         </NavButton>
         {daoInfo.config.DAO_SUPPORTS_TOA ? (
           <NavButton
@@ -68,6 +73,20 @@ export const NavigatorRow: FC<INavigatorRow> = ({
           borderTopRightRadius={isSamePerson || isDaoAdmin ? '0' : '5px'}
         >
           Voting History
+        </NavButton>
+        <NavButton
+          isActive={isActiveTab('endorsements-received')}
+          onClick={() => changeTab('endorsements-received')}
+          borderTopRightRadius={isSamePerson || isDaoAdmin ? '0' : '5px'}
+        >
+          Endorsements Received
+        </NavButton>
+        <NavButton
+          isActive={isActiveTab('endorsements-given')}
+          onClick={() => changeTab('endorsements-given')}
+          borderTopRightRadius={isSamePerson || isDaoAdmin ? '0' : '5px'}
+        >
+          Endorsements Given
         </NavButton>
 
         {isSamePerson && isAuthenticated && (

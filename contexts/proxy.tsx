@@ -130,7 +130,7 @@ export const ProxyProvider: React.FC<ProviderProps> = ({ children }) => {
         title: 'Your proxy and real addresses have been successfully linked.',
         status: 'success',
       });
-      refreshProfileModal('statement', coldWalletAddress);
+      refreshProfileModal('overview', coldWalletAddress);
     } catch (error) {
       toast({
         title: `We could not link the addresses. Please make sure ${profileSelected?.address} is the proxy for ${coldWalletAddress}.`,

@@ -34,7 +34,7 @@ const config: IDAOConfig = {
     IMAGE_DISCORD: '/daos/moonbeam/preview-discord.png',
     IMAGE_TWITTER: '/daos/moonbeam/preview-twitter.png',
     FAVICON: '/daos/moonbeam/favicon.png',
-    URL: `https://moonbeam.karmahq.xyz`,
+    URL: `https://delegate.moonbeam.network/`,
   },
   DAO_DEFAULT_SETTINGS: {
     FAQ: true,

@@ -429,7 +429,8 @@ export const TrackDelegation: React.FC<StepProps> = ({
           </DelegateModalBody>
           <DelegateModalFooter
             flexProps={{ ...modalSpacing }}
-            delegateAddress={delegatedUser.address}
+            delegateInfo={delegatedUser}
+            handleModal={handleModal}
             publicAddress={walletAddress}
           />
         </Flex>

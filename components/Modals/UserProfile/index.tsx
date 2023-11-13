@@ -11,8 +11,11 @@ import { FC, useMemo, useState } from 'react';
 import { IActiveTab, IProfile } from 'types';
 import { useMixpanel } from 'hooks';
 import dynamic from 'next/dynamic';
+import { LINKS } from 'helpers';
 import { Header } from './Header';
 import { VotingHistory } from './VotingHistory';
+import { EndorsementsReceived } from './EndorsementsReceived';
+import { EndorsementsGiven } from './EndorsementsGiven';
 
 const WithdrawDelegation = dynamic(() =>
   import('components/Modals/UserProfile/WithdrawDelegation').then(
@@ -61,6 +64,12 @@ const Tab: FC<ITab> = ({ activeTab, profile }) => {
   if (activeTab === 'withdraw') {
     return <WithdrawDelegation />;
   }
+  if (activeTab === 'endorsements-received') {
+    return <EndorsementsReceived />;
+  }
+  if (activeTab === 'endorsements-given') {
+    return <EndorsementsGiven />;
+  }
   return <Statement />;
 };
 
@@ -89,39 +98,44 @@ export const UserProfile: FC<IUserProfileProps> = props => {
         tab: hash,
       },
     });
-    router
-      .push(
-        {
-          pathname: `${rootPathname}/profile/${
-            profile.ensName || profile.address
-          }`,
-          hash,
-        },
-        undefined,
-        { shallow: true }
-      )
-      .catch(error => {
-        if (!error.cancelled) {
-          throw error;
-        }
-      });
+    if (router.asPath === '/' || router.asPath.includes('profile')) {
+      router
+        .push(
+          {
+            pathname: LINKS.PROFILE(
+              rootPathname,
+              profile.ensName || profile.address
+            ),
+            hash,
+          },
+          undefined,
+          { shallow: true }
+        )
+        .catch(error => {
+          if (!error.cancelled) {
+            throw error;
+          }
+        });
+    }
     setActiveTab(hash);
   };
 
   const onCloseModal = () => {
-    router
-      .push(
-        {
-          pathname: `/${rootPathname}`,
-        },
-        undefined,
-        { shallow: true }
-      )
-      .catch(error => {
-        if (!error.cancelled) {
-          throw error;
-        }
-      });
+    if (router.asPath === '/' || router.asPath.includes('profile')) {
+      router
+        .push(
+          {
+            pathname: `/${rootPathname}`,
+          },
+          undefined,
+          { shallow: true }
+        )
+        .catch(error => {
+          if (!error.cancelled) {
+            throw error;
+          }
+        });
+    }
     onClose();
   };
 
@@ -146,7 +160,7 @@ export const UserProfile: FC<IUserProfileProps> = props => {
             profile={profile}
           />
           <ModalCloseButton />
-          <ModalBody px={{ base: '1.25rem', lg: '2.5rem' }} py="0">
+          <ModalBody px="6" py="0">
             <Tab activeTab={activeTab} profile={profile} />
           </ModalBody>
         </ModalContent>

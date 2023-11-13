@@ -53,6 +53,7 @@ export const Step1: React.FC<StepProps> = ({
           alignItems="center"
           flexWrap="wrap"
           gap="2"
+          justifyContent="flex-start"
           margin="0 0 23px 0"
         >
           <Text
@@ -63,7 +64,12 @@ export const Step1: React.FC<StepProps> = ({
           >
             You are delegating
           </Text>
-          <Flex alignItems="center" justifyContent="space-between" flex="2">
+          <Flex
+            alignItems="center"
+            justifyContent="flex-start"
+            gap="2"
+            flex="2"
+          >
             <VotesToDelegate
               logoUrl={logoUrl}
               daoName={daoName}
@@ -91,11 +97,15 @@ export const Step1: React.FC<StepProps> = ({
               >
                 <ImgWithFallback
                   fallback={daoName}
-                  src={makeBlockie(
-                    delegatedUser.ensName ||
-                      delegatedUser.address ||
-                      Math.random().toString()
-                  )}
+                  src={
+                    delegatedUser.profilePicture ||
+                    makeBlockie(
+                      delegatedUser.realName ||
+                        delegatedUser.ensName ||
+                        delegatedUser.address ||
+                        Math.random().toString()
+                    )
+                  }
                   boxSize="20px"
                   borderRadius="full"
                 />
@@ -109,7 +119,9 @@ export const Step1: React.FC<StepProps> = ({
                   whiteSpace="nowrap"
                   overflow="hidden"
                 >
-                  {delegatedUser.ensName || delegatedUser.address}
+                  {delegatedUser.realName ||
+                    delegatedUser.ensName ||
+                    delegatedUser.address}
                 </Text>
               </Flex>
             </Flex>
@@ -119,7 +131,8 @@ export const Step1: React.FC<StepProps> = ({
       </DelegateModalBody>
       <DelegateModalFooter
         flexProps={{ ...modalSpacing }}
-        delegateAddress={delegatedUser.address}
+        handleModal={handleModal}
+        delegateInfo={delegatedUser}
         publicAddress={walletAddress}
       />
     </Flex>

@@ -42,18 +42,14 @@ interface IStatement {
   profile: IProfile;
 }
 
-export const AboutMe: FC<IStatement> = ({ profile }) => {
-  const { theme } = useDAO();
-  return (
-    <Flex
-      py="4"
-      gap={{ base: '2rem', lg: '4rem' }}
-      flexDir={{ base: 'column', lg: 'row' }}
-      mb="10"
-      boxShadow={`0px 0px 18px 5px ${theme.modal.votingHistory.headline}0D`}
-      px="4"
-    >
-      <TextSection text={profile.aboutMe} />
-    </Flex>
-  );
-};
+export const AboutMe: FC<IStatement> = ({ profile }) => (
+  <Flex
+    py="4"
+    gap={{ base: '2rem', lg: '4rem' }}
+    flexDir={{ base: 'column', lg: 'row' }}
+    mb="10"
+    px="4"
+  >
+    <TextSection text={profile.aboutMe} />
+  </Flex>
+);

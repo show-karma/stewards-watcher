@@ -1,6 +1,6 @@
 import { Button, Text } from '@chakra-ui/react';
-import { HistoryIcon } from 'components/Icons';
 import { useDAO } from 'contexts';
+import { LINKS } from 'helpers';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { IActiveTab, IDelegate } from 'types';
@@ -21,9 +21,10 @@ export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen, profile }) => {
     router
       .push(
         {
-          pathname: `${rootPathname}/profile/${
+          pathname: LINKS.PROFILE(
+            rootPathname,
             profile.ensName || profile.address
-          }`,
+          ),
           hash,
         },
         undefined,
@@ -39,7 +40,7 @@ export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen, profile }) => {
   return (
     <Button
       as={Button}
-      fontSize="sm"
+      fontSize={['sm', 'md']}
       fontWeight="medium"
       color={theme.buttonTextSec}
       _hover={{
@@ -56,13 +57,13 @@ export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen, profile }) => {
       h="10"
       px={{ base: '2', md: '3' }}
       py={['3', '6']}
-      onClick={() => redirectWithoutRefresh('votinghistory')}
+      onClick={() => redirectWithoutRefresh('overview')}
       display="flex"
       alignItems="center"
       justifyContent="center"
     >
-      <HistoryIcon boxSize="17px" />
-      <Text h="max-content">Vote Activity</Text>
+      {/* <HistoryIcon boxSize="17px" /> */}
+      <Text h="max-content">Overview</Text>
     </Button>
   );
 };

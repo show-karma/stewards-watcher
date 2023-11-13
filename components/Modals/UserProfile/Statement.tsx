@@ -143,16 +143,7 @@ export const Statement: FC = () => {
   };
 
   return (
-    <Flex
-      flexDir="column"
-      gap="1"
-      boxShadow={`0px 0px 18px 5px ${theme.modal.votingHistory.headline}0D`}
-      px="4"
-      py="4"
-      mb="10"
-      borderRightRadius="lg"
-      borderBottomRadius="lg"
-    >
+    <Flex flexDir="column" gap="1" px="4" py="4" mb="10">
       {isEditing && (
         <Flex flexDir="column" gap="1.5" mb={{ base: '5', lg: '5' }}>
           <Text
