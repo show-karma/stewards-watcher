@@ -7,20 +7,28 @@
   margin-left: 1rem;
   margin-right: 1rem;
   align-items: center;
+  [aria-disabled='true'] {
+    display: none;
+  }
+  .navigator-active-link {
+    margin: 0 0.5rem;
+  }
+  .selected {
+    font-weight: 600;
+    text-decoration: underline;
+  }
 
   li a {
+    background-color: transparent;
     border-radius: 7px;
     padding: 10px 16px;
     cursor: pointer;
     height: max-content;
   }
-  li.selected a {
-    background-color: white;
-    color: black;
-  }
+
   li.previous a,
   li.next a {
-    background-color: white;
+    background-color: transparent;
     color: black;
     border: 1px solid black;
     display: flex;

@@ -299,15 +299,36 @@ export const EndorsementsReceived = () => {
           <ReactPaginate
             breakLabel="..."
             nextLabel={
-              <Flex flexDir="row" w="max-content" gap="1" alignItems="center">
+              <Flex
+                flexDir="row"
+                w="max-content"
+                gap="2"
+                alignItems="center"
+                color="#F2F4F7"
+                backgroundColor="transparent"
+                px="2"
+                py="1"
+                borderRadius="2px"
+              >
                 Next <Icon as={AiOutlineArrowRight} w="5" h="5" />
               </Flex>
             }
             previousLabel={
-              <Flex flexDir="row" w="max-content" gap="1" alignItems="center">
+              <Flex
+                flexDir="row"
+                w="max-content"
+                gap="2"
+                alignItems="center"
+                color="#F2F4F7"
+                backgroundColor="transparent"
+                px="2"
+                py="1"
+                borderRadius="2px"
+              >
                 <Icon as={AiOutlineArrowLeft} w="5" h="5" /> Previous
               </Flex>
             }
+            pageLinkClassName="navigator-active-link"
             pageLabelBuilder={pageNumber => `Page ${pageNumber}`}
             onPageChange={handlePageClick}
             pageRangeDisplayed={2}
