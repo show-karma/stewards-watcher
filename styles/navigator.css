@@ -9,7 +9,9 @@
   align-items: center;
   [aria-disabled='true'] {
     display: none;
+    width: 0;
   }
+
   .navigator-active-link {
     margin: 0 0.5rem;
   }
@@ -55,5 +57,6 @@
   li.disable,
   li.disabled a {
     cursor: default;
+    width: 0;
   }
 }

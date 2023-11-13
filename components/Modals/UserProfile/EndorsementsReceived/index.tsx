@@ -221,11 +221,19 @@ export const EndorsementsReceived = () => {
       flexDir="column"
     >
       <Flex px="6" flexDir="row" gap="1" alignItems="center">
-        <Text fontSize="18px" fontWeight="700" color="white">
+        <Text
+          fontSize={{ base: '14px', sm: '18px' }}
+          fontWeight="700"
+          color="white"
+        >
           Endorsements Received
         </Text>
         {endorsersCounter ? (
-          <Text fontSize="14px" fontWeight="500" color="white">
+          <Text
+            fontSize={{ base: '13px', sm: '14px' }}
+            fontWeight="500"
+            color="white"
+          >
             ({endorsersCounter})
           </Text>
         ) : null}
@@ -262,6 +270,7 @@ export const EndorsementsReceived = () => {
                     fontSize="12px"
                     fontWeight="500"
                     color="#F2F4F7"
+                    display={{ base: 'none', sm: 'table-cell' }}
                   >
                     Date
                   </Th>
@@ -270,22 +279,52 @@ export const EndorsementsReceived = () => {
                     fontSize="12px"
                     fontWeight="500"
                     color="#F2F4F7"
+                    display={{ base: 'none', sm: 'table-cell' }}
                   />
                 </Tr>
               </Thead>
               <Tbody>
                 {currentItems.map((item, index) => (
                   <Tr key={item.date + +index}>
-                    <Td borderBottom="1px solid white" color="white">
+                    <Td
+                      borderBottom="1px solid white"
+                      color="white"
+                      textDecoration="underline"
+                      textOverflow="ellipsis"
+                      whiteSpace="nowrap"
+                      overflow="hidden"
+                      fontSize={{ base: '13px', sm: '14px' }}
+                      maxW={{ base: '120px', md: 'none' }}
+                    >
                       {item.addressOrENS}
                     </Td>
-                    <Td borderBottom="1px solid white" color="white">
+                    <Td
+                      borderBottom="1px solid white"
+                      color="white"
+                      textOverflow="ellipsis"
+                      whiteSpace="nowrap"
+                      overflow="hidden"
+                      fontSize={{ base: '13px', sm: '14px' }}
+                      maxW={{ base: '120px', md: 'none' }}
+                    >
                       {item.votingPower}
                     </Td>
-                    <Td borderBottom="1px solid white" color="white">
+                    <Td
+                      borderBottom="1px solid white"
+                      color="white"
+                      textOverflow="ellipsis"
+                      whiteSpace="nowrap"
+                      overflow="hidden"
+                      fontSize={{ base: '13px', sm: '14px' }}
+                      maxW={{ base: '120px', md: 'none' }}
+                      display={{ base: 'none', sm: 'table-cell' }}
+                    >
                       {getFormattedData(item.date)}
                     </Td>
-                    <Td borderBottom="1px solid white">
+                    <Td
+                      borderBottom="1px solid white"
+                      display={{ base: 'none', sm: 'table-cell' }}
+                    >
                       {item.reason ? (
                         <CommentModal reason={item.reason} />
                       ) : null}
