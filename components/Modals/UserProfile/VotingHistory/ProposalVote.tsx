@@ -1,5 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import {
+  Button,
   Divider,
   Flex,
   Icon,
@@ -17,9 +18,10 @@ import {
 } from 'components/Icons';
 import { useDAO, useDelegates } from 'contexts';
 import { useVoteReason } from 'hooks';
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { IChainRow, IProfile } from 'types';
 import { formatDate } from 'utils';
+import { SelectedProposal } from 'types/voting-reason';
 import { ExpandableReason } from './ExpandableReason';
 import { ExpandableTitle } from './ExpandableTitle';
 
@@ -82,6 +84,7 @@ interface IProposalVote {
   profile: IProfile;
   isLast?: boolean;
   index: number;
+  onSelectProposal?: (proposal: SelectedProposal) => void;
 }
 
 export const ProposalVote: FC<IProposalVote> = ({
@@ -90,10 +93,17 @@ export const ProposalVote: FC<IProposalVote> = ({
   profile,
   isLast,
   index,
+  onSelectProposal,
 }) => {
   const { theme, daoInfo } = useDAO();
   const { tracks } = useDelegates();
-  const { getVoteReason } = useVoteReason({ address: profile.address });
+  const {
+    getVoteReason,
+    isVoteOwner,
+    data: reasons,
+  } = useVoteReason({
+    address: profile.address,
+  });
 
   const showChoice = () => {
     if (vote && typeof vote.choice === 'string') return vote.choice;
@@ -106,9 +116,19 @@ export const ProposalVote: FC<IProposalVote> = ({
     return 'Did not vote';
   };
 
+  const canAddReason = useMemo(() => {
+    if (vote && isVoteOwner) {
+      return ![-1, 'Did not vote', 'Not voted yet'].includes(vote.choice);
+    }
+    return false;
+  }, [vote]);
+
   const isLoaded = !isLoading && !!vote;
 
-  const voteReason = vote.voteId && getVoteReason(vote.voteId);
+  const voteReason = useMemo(
+    () => vote.voteId && getVoteReason(vote.voteId),
+    [reasons]
+  );
 
   const isPair = (index + 1) % 2 === 0;
 
@@ -253,23 +273,46 @@ export const ProposalVote: FC<IProposalVote> = ({
             <SkeletonCircle {...iconStyle} />
           )}
           {isLoaded ? (
-            <Text
-              w="fit-content"
-              h="max-content"
-              fontWeight="bold"
-              fontSize="sm"
-              color={theme.modal.votingHistory.proposal.result}
-              maxH="70px"
-              overflow="hidden"
-              textAlign="center"
-            >
-              {showChoice()}
-            </Text>
+            <>
+              <Text
+                w="fit-content"
+                h="max-content"
+                fontWeight="bold"
+                fontSize="sm"
+                color={theme.modal.votingHistory.proposal.result}
+                maxH="70px"
+                overflow="hidden"
+                textAlign="center"
+              >
+                {showChoice()}
+              </Text>
+              {canAddReason && (
+                <Button
+                  variant="link"
+                  color="blue.400"
+                  fontSize="sm"
+                  fontWeight="light"
+                  w="fit-content"
+                  type="button"
+                  onClick={() =>
+                    onSelectProposal?.({
+                      proposalId: vote.voteId || '',
+                      source:
+                        vote.voteMethod === 'on-chain' ? 'onchain' : 'offchain',
+                      proposalTitle: vote.proposal,
+                    })
+                  }
+                >
+                  {voteReason ? 'Update' : 'Add'} reason
+                </Button>
+              )}
+            </>
           ) : (
             <Skeleton w="32" h="4" />
           )}
         </Flex>
       </Flex>
+
       {!isLast && (
         <Divider
           bgColor={`${theme.modal.votingHistory.reason.divider}0D`}
@@ -279,7 +322,7 @@ export const ProposalVote: FC<IProposalVote> = ({
       )}
 
       {voteReason && (
-        <Flex flexDir="column" mt="1" mb="4">
+        <Flex flexDir="column" mt="1" p={4}>
           <ExpandableReason text={voteReason} />
 
           <Divider
