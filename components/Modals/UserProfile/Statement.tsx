@@ -15,7 +15,6 @@ import { convertHexToRGBA } from 'utils';
 import { Sidebar } from '../Sidebar';
 import { NoStatement } from './NoStatement';
 import { SelectSavingMethod } from './SelectSavingMethod';
-import { StatsRow } from './Stats';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 const MDPreview = dynamic(() => import('@uiw/react-markdown-preview'), {
@@ -145,7 +144,6 @@ export const Statement: FC = () => {
 
   return (
     <Flex flexDir="column" gap="1" px="4" py="4" mb="10">
-      <StatsRow />
       {isEditing && (
         <Flex flexDir="column" gap="1.5" mb={{ base: '5', lg: '5' }}>
           <Text

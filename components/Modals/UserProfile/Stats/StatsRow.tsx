@@ -134,7 +134,7 @@ export const StatsRow = () => {
   }, [profileSelected]);
 
   return (
-    <Flex flexDir="row" flexWrap="wrap" gap="4" mb="6">
+    <Flex flexDir="row" flexWrap="wrap" gap="4">
       {cardStats.map(
         item =>
           item.amount !== '-' &&
