@@ -349,8 +349,20 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
         w="full"
         align="center"
         justify="center"
+        gap="2"
       >
-        {isSamePerson ? null : <Button>Endorse</Button>}
+        {isSamePerson ? null : (
+          <EndorseModal
+            endorsingAddress={profile.address}
+            endorsingName={
+              profile.realName ||
+              profile.ensName ||
+              truncateAddress(profile.address)
+            }
+            endorsingImage={profile.avatar}
+            changeTab={changeTab}
+          />
+        )}
         <DelegateCases
           fullAddress={fullAddress}
           status={profileSelected?.status}

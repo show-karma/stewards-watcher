@@ -30,6 +30,7 @@ export const CommentModal: FC<CommentModalProps> = ({ reason }) => {
         _focusVisible={{ opacity: 0.8 }}
         _focusWithin={{ opacity: 0.8 }}
         textDecoration="underline"
+        fontSize={{ base: '12px', sm: '14px' }}
       >
         Comment
       </Button>
