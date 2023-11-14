@@ -117,7 +117,7 @@ export const EndorseModal: FC<EndorseModalProps> = ({
         {
           type: 'uint24',
           name: 'tokenChainId',
-          value: getEASChainInfo(config.DAO_KARMA_ID).chainId,
+          value: config.DAO_CHAINS[0].id || 1,
         },
       ];
 
