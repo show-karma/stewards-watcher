@@ -30,6 +30,7 @@ import { IoCopy } from 'react-icons/io5';
 import { IActiveTab, IProfile } from 'types';
 import { convertHexToRGBA, truncateAddress } from 'utils';
 import { EndorseModal } from 'components/Modals/Endorse';
+import { AddToRegistryButton } from 'components/DelegateRegistry/AddToRegistryButton';
 import { NameEditable, PictureEditable } from '../EditProfile';
 import { MediaIcon } from './MediaIcon';
 import { NavigatorRow } from './NavigatorRow';
@@ -284,6 +285,10 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
             align="center"
             gap="2"
           >
+            {profileSelected && (
+              <AddToRegistryButton profile={profileSelected} />
+            )}
+
             {isSamePerson ? null : (
               <EndorseModal
                 endorsingAddress={profile.address}

@@ -52,6 +52,23 @@ export interface IDelegateFromAPI {
     proposalsDiscussed: number;
     proposalsInitiated: number;
     updatedAt: string;
+    aragonVotesPct: number;
+    avgPostLength: number;
+    avgPostLikes: number;
+    avgTopicPostCount: number;
+    customScore: number;
+    daoName: number;
+    delegatedVotes: number;
+    discordMessagesCount: number;
+    discordMessagesPercentile: number;
+    forumLikesReceivedPercentile: number;
+    forumPostCountPercentile: number;
+    forumPostsReadCountPercentile: number;
+    forumTopicCountPercentile: number;
+    proposalsDiscussedPercentile: number;
+    proposalsInitiatedPercentile: number;
+    proposalsOnAragon: number;
+    proposalsOnSnapshot: number;
   }[];
   delegatePitch?: {
     threadId: number;
