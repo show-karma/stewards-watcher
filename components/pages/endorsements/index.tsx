@@ -26,11 +26,14 @@ import {
   formatDate,
   formatNumberPercentage,
   getEASChainInfo,
+  truncateAddress,
 } from 'utils';
 import { fetchENSNames } from 'utils/fetchENSName';
 import ReactPaginate from 'react-paginate';
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
 import { GetDaoRes } from 'components/Modals/Endorse';
+import { ImgWithFallback } from 'components/ImgWithFallback';
+import { blo } from 'blo';
 
 export const EndorsementsComponent: FC = () => {
   const [data, setData] = useState<GeneralisticEndorsementData[]>([]);
@@ -249,7 +252,7 @@ export const EndorsementsComponent: FC = () => {
           pb="4"
         >
           <TableContainer>
-            <Table variant="simple">
+            <Table variant="simple" px="4">
               <Thead>
                 <Tr>
                   <Th
@@ -279,6 +282,7 @@ export const EndorsementsComponent: FC = () => {
                     fontSize="12px"
                     fontWeight="500"
                     color={theme.text}
+                    display={{ base: 'none', sm: 'table-cell' }}
                   >
                     Date
                   </Th>
@@ -310,20 +314,29 @@ export const EndorsementsComponent: FC = () => {
                         _focus={{ bg: 'transparent' }}
                         _focusVisible={{ bg: 'transparent' }}
                         _focusWithin={{ bg: 'transparent' }}
-                        textDecoration="underline"
                       >
-                        {/* <ImgWithFallback
-                          fallback={item.delegate.nameOrAddress}
+                        <ImgWithFallback
+                          fallback={item.delegate.address}
                           src={
                             item.delegate.imageURL ||
-                            makeBlockie(item.delegate.nameOrAddress)
+                            blo(item.delegate.address as `0x${string}`)
                           }
                           boxSize="20px"
                           borderRadius="full"
-                        /> */}
-                        {item.delegate.realName ||
-                          item.delegate.ensName ||
-                          item.delegate.address}
+                        />
+                        <Text
+                          textDecoration="underline"
+                          textOverflow="ellipsis"
+                          whiteSpace="nowrap"
+                          overflow="hidden"
+                          color={theme.text}
+                          fontSize={{ base: '12px', sm: '14px' }}
+                          maxW={{ base: '120px', md: 'none' }}
+                        >
+                          {item.delegate.realName ||
+                            item.delegate.ensName ||
+                            truncateAddress(item.delegate.address)}
+                        </Text>
                       </Button>
                     </Td>
                     <Td
@@ -332,19 +345,29 @@ export const EndorsementsComponent: FC = () => {
                       borderBottomColor={theme.text}
                       color={theme.text}
                     >
-                      <Flex flexDir="row" gap="2">
-                        {/* <ImgWithFallback
-                          fallback={item.endorsedBy.nameOrAddress}
+                      <Flex flexDir="row" gap="2" textOverflow="ellipsis">
+                        <ImgWithFallback
+                          fallback={item.endorsedBy.address}
                           src={
                             item.endorsedBy.imageURL ||
-                            makeBlockie(item.endorsedBy.nameOrAddress)
+                            blo(item.endorsedBy.address as `0x${string}`)
                           }
                           boxSize="20px"
                           borderRadius="full"
-                        /> */}
-                        {item.endorsedBy.realName ||
-                          item.endorsedBy.ensName ||
-                          item.endorsedBy.address}
+                        />
+                        <Text
+                          textDecoration="underline"
+                          textOverflow="ellipsis"
+                          whiteSpace="nowrap"
+                          overflow="hidden"
+                          color={theme.text}
+                          fontSize={{ base: '12px', sm: '14px' }}
+                          maxW={{ base: '120px', md: 'none' }}
+                        >
+                          {item.endorsedBy.realName ||
+                            item.endorsedBy.ensName ||
+                            truncateAddress(item.endorsedBy.address)}
+                        </Text>
                       </Flex>
                     </Td>
                     <Td
@@ -352,6 +375,8 @@ export const EndorsementsComponent: FC = () => {
                       borderBottomStyle="solid"
                       borderBottomColor={theme.text}
                       color={theme.text}
+                      fontSize={{ base: '12px', sm: '14px' }}
+                      display={{ base: 'none', sm: 'table-cell' }}
                     >
                       {getFormattedData(item.date)}
                     </Td>
@@ -367,26 +392,33 @@ export const EndorsementsComponent: FC = () => {
               <Flex
                 flexDir="row"
                 w="max-content"
-                gap="1"
+                gap="2"
                 alignItems="center"
-                color="black"
-                backgroundColor="white"
+                color={theme.text}
+                backgroundColor="transparent"
+                px="2"
+                py="1"
+                borderRadius="2px"
               >
-                Next <Icon as={AiOutlineArrowRight} w="5" h="5" />
+                Next <Icon as={AiOutlineArrowRight} w="4" h="4" />
               </Flex>
             }
             previousLabel={
               <Flex
                 flexDir="row"
                 w="max-content"
-                gap="1"
+                gap="2"
                 alignItems="center"
-                color="black"
-                backgroundColor="white"
+                color={theme.text}
+                backgroundColor="transparent"
+                px="2"
+                py="1"
+                borderRadius="2px"
               >
-                <Icon as={AiOutlineArrowLeft} w="5" h="5" /> Previous
+                <Icon as={AiOutlineArrowLeft} w="4" h="4" /> Previous
               </Flex>
             }
+            pageLinkClassName="navigator-active-link"
             pageLabelBuilder={pageNumber => `Page ${pageNumber}`}
             onPageChange={handlePageClick}
             pageRangeDisplayed={2}
