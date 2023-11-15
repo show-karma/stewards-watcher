@@ -20,9 +20,10 @@ import {
 import { writeContract } from '@wagmi/core';
 import ABI from 'utils/delegate-registry/ABI-STATS.json';
 import { Hex, createPublicClient, http } from 'viem';
-import { goerli } from 'viem/chains';
+import { sepolia, optimism } from 'viem/chains';
 import { startCase } from 'lodash';
 import { useToasty } from 'hooks';
+import { useSwitchNetwork } from 'wagmi';
 
 const buttonStyle = {
   border: '1px solid #ccc',
@@ -40,6 +41,12 @@ const buttonStyle = {
 const registryContractAddr = process.env
   .NEXT_PUBLIC_STATS_REGISTRY_CONTRACT as Hex;
 
+const registryChainId = process.env.NEXT_PUBLIC_STATS_REGISTRY_CHAIN_ID;
+
+const currentChain = [sepolia, optimism].find(
+  item => item.id === +(registryChainId || 10)
+);
+
 interface Props {
   profile: IDelegate;
 }
@@ -48,7 +55,7 @@ const registryContractCfg = (fn: string) => ({
   abi: ABI,
   address: registryContractAddr,
   key: 'stats-registry',
-  chainId: 10,
+  chainId: currentChain?.id,
   functionName: fn,
 });
 
@@ -56,7 +63,7 @@ const web3 = createPublicClient({
   transport: http(
     'https://eth-sepolia.g.alchemy.com/v2/j_nkHYEl9FG8aBwK3PcqEbravPyCV3DE'
   ),
-  chain: goerli,
+  chain: currentChain,
 });
 
 export const AddToRegistryButton: React.FC<Props> = ({ profile }) => {
@@ -68,6 +75,7 @@ export const AddToRegistryButton: React.FC<Props> = ({ profile }) => {
   const { address: connectedAddress, chain } = useWallet();
   const { isOpen, onToggle } = useDisclosure();
   const { toast } = useToasty();
+  const { switchNetworkAsync } = useSwitchNetwork();
 
   const [isSenderWhitelisted, setIsSenderWhitelisted] = useState(false);
   const [isDelegateInRegistry, setIsDelegateInRegistry] = useState(false);
@@ -176,9 +184,19 @@ export const AddToRegistryButton: React.FC<Props> = ({ profile }) => {
     setIsSenderWhitelisted(!!whitelisted);
   };
 
+  const checkChain = async () => {
+    if (!registryChainId) return;
+    console.log('chains', currentChain, chain?.id, registryChainId);
+    if (chain?.id !== +registryChainId && currentChain) {
+      await switchNetworkAsync?.(currentChain.id);
+    }
+  };
+
   const sendToChain = async () => {
     if (!registryStats || isLoading) return;
+
     try {
+      await checkChain();
       setIsLoading(true);
       const args = [
         registryStats,
