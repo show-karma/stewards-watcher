@@ -444,6 +444,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           gitcoinHealthScore: fetchedPeriod?.gitcoinHealthScore || 0,
           updatedAt: fetchedPeriod?.updatedAt,
           karmaScore: fetchedPeriod?.karmaScore || 0,
+          rawStats: [fetchedPeriod],
         };
       });
       setDelegates(delegatesList);

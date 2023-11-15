@@ -32,4 +32,5 @@ export interface IDelegateRegistryStats {
   discordMessagesCount: bigint;
   discordMessagesPercentile: bigint;
   percentile: bigint;
+  [key: string]: bigint | string | ICustomScore[];
 }

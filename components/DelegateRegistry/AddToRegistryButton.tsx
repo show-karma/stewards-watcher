@@ -1,4 +1,14 @@
-import { useDisclosure } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  Spinner,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react';
 import { useDAO, useWallet } from 'contexts';
 import React, { useEffect, useMemo, useState } from 'react';
 import { IDelegate } from 'types';
@@ -12,9 +22,9 @@ import ABI from 'utils/delegate-registry/ABI-STATS.json';
 import { Hex, createPublicClient, http } from 'viem';
 import { goerli } from 'viem/chains';
 import { startCase } from 'lodash';
+import { useToasty } from 'hooks';
 
 const buttonStyle = {
-  backgroundColor: '#f5f5f5',
   border: '1px solid #ccc',
   borderRadius: '5px',
   color: '#333',
@@ -57,20 +67,14 @@ export const AddToRegistryButton: React.FC<Props> = ({ profile }) => {
   } = useDAO();
   const { address: connectedAddress, chain } = useWallet();
   const { isOpen, onToggle } = useDisclosure();
+  const { toast } = useToasty();
 
   const [isSenderWhitelisted, setIsSenderWhitelisted] = useState(false);
   const [isDelegateInRegistry, setIsDelegateInRegistry] = useState(false);
-
-  const isEnabled = useMemo(
-    () =>
-      DAO_TOKEN_CONTRACT &&
-      DAO_TOKEN_CONTRACT?.length > 0 &&
-      DAO_TOKEN_CONTRACT[0]?.contractAddress?.length > 0,
-    [DAO_TOKEN_CONTRACT]
-  );
+  const [isLoading, setIsLoading] = useState(false);
 
   const registryStats = useMemo((): IDelegateRegistryStats | null => {
-    const lifetime = profile?.rawStats.find(
+    const lifetime = profile?.rawStats?.find(
       stats => stats.period === 'lifetime'
     );
     if (!lifetime) return null;
@@ -135,8 +139,24 @@ export const AddToRegistryButton: React.FC<Props> = ({ profile }) => {
     };
   }, [profile]);
 
+  const isEnabled = useMemo(
+    () =>
+      isDelegateInRegistry &&
+      isSenderWhitelisted &&
+      DAO_TOKEN_CONTRACT &&
+      DAO_TOKEN_CONTRACT?.length > 0 &&
+      DAO_TOKEN_CONTRACT[0]?.contractAddress?.length > 0 &&
+      registryStats,
+    [
+      DAO_TOKEN_CONTRACT,
+      registryStats,
+      isDelegateInRegistry,
+      isSenderWhitelisted,
+    ]
+  );
+
   const loadUserInfo = async () => {
-    if (!isEnabled || !(connectedAddress && profile?.address)) return;
+    if (!(connectedAddress && profile?.address)) return;
     const [register, whitelisted] = await Promise.all([
       web3.readContract({
         ...registryContractCfg('isDelegateRegistered'),
@@ -151,91 +171,87 @@ export const AddToRegistryButton: React.FC<Props> = ({ profile }) => {
         args: [connectedAddress],
       }),
     ]);
+    console.log('register', register);
     setIsDelegateInRegistry(!!register);
     setIsSenderWhitelisted(!!whitelisted);
   };
 
   const sendToChain = async () => {
-    console.log('sendToChain');
-    const result = await writeContract({
-      abi: ABI,
-      address: registryContractAddr,
-      functionName: 'setStats',
-      args: [
+    if (!registryStats || isLoading) return;
+    try {
+      setIsLoading(true);
+      const args = [
         registryStats,
         profile.address,
         DAO_TOKEN_CONTRACT?.[0].contractAddress,
         DAO_TOKEN_CONTRACT?.[0].chain.id,
-      ],
-    });
+      ];
 
-    console.info('Sent!!!!!');
+      await writeContract({
+        abi: ABI,
+        address: registryContractAddr,
+        functionName: 'setStats',
+        args,
+      });
+      toast({
+        title: 'Success',
+        description: 'Stats were successfully sent to the registry',
+        status: 'success',
+      });
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: 'Error',
+        description: 'Something went wrong while sending stats to the registry',
+        status: 'error',
+      });
+    } finally {
+      onToggle();
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
-    loadUserInfo();
-  }, [connectedAddress, chain, isEnabled]);
+    try {
+      loadUserInfo();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [connectedAddress, chain]);
 
   return isEnabled ? (
     <div>
-      {isSenderWhitelisted && isDelegateInRegistry ? (
-        <button
-          type="button"
-          className="btn btn-primary"
-          disabled={!(connectedAddress && profile?.address)}
-          onClick={onToggle}
-        >
-          Add to Registry
-        </button>
-      ) : (
-        <>
-          {!isSenderWhitelisted && <>Current wallet is not whitelisted.</>}
-          <br />
-          {!isDelegateInRegistry && <>Delegate is not in delegate-registry.</>}
-        </>
-      )}
+      <Button
+        type="button"
+        py={6}
+        className="btn btn-primary"
+        disabled={
+          !(connectedAddress && profile?.address) ||
+          !(isSenderWhitelisted && isDelegateInRegistry)
+        }
+        onClick={onToggle}
+      >
+        Add to Registry
+      </Button>
 
-      {isOpen && (
-        <div
-          className="verify-modal"
-          style={{
-            position: 'fixed',
-            top: '50%',
-            left: '50%',
-            transform: 'translateY(-50%) translateX(-50%)',
-            backgroundColor: 'white',
-            padding: '0 20px 20px',
-            zIndex: 1050,
-            color: 'black',
-            boxShadow: '0 0 10px rgba(0,0,0,0.5)',
-            borderRadius: '5px',
-          }}
-        >
-          <div
-            style={{
-              textAlign: 'right',
-              fontSize: '2em',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              borderBottom: '1px solid #ccc',
-              marginBottom: 10,
-            }}
-          >
-            <h4
+      <Modal isOpen={isOpen} onClose={onToggle}>
+        <ModalContent position="relative">
+          <ModalHeader borderBottom="1px solid rgba(0,0,0,0.125)" pb={5} mb={5}>
+            <h3>Confirm lifetime stats</h3>
+            <button
+              type="button"
+              onClick={onToggle}
               style={{
-                marginTop: 10,
-                marginBottom: 10,
-                marginRight: 20,
-                fontSize: '0.8em',
+                fontSize: '2em',
+                position: 'absolute',
+                top: 0,
+                right: 10,
               }}
             >
-              Verify your stats
-            </h4>
-            <button type="button" onClick={onToggle}>
               &times;
             </button>
-          </div>
+          </ModalHeader>
+
           <table>
             <thead>
               <th style={{ textAlign: 'right' }}>Score</th>
@@ -248,7 +264,7 @@ export const AddToRegistryButton: React.FC<Props> = ({ profile }) => {
                     <td style={{ textAlign: 'right' }}>
                       <code
                         style={{
-                          backgroundColor: '#ccc',
+                          backgroundColor: 'rgba(0,0,0,0.125)',
                           padding: '0 5px',
                           borderRadius: '2px',
                         }}
@@ -275,19 +291,40 @@ export const AddToRegistryButton: React.FC<Props> = ({ profile }) => {
                 ))}
             </tbody>
           </table>
-          <div style={{ textAlign: 'right', marginTop: 20 }}>
-            <button
-              type="button"
-              onClick={sendToChain}
-              style={{
-                ...(buttonStyle as any),
-              }}
-            >
-              Send
-            </button>
-          </div>
-        </div>
-      )}
+          <Flex
+            textAlign="right"
+            pt={5}
+            my={5}
+            px={5}
+            justifyContent="space-between"
+            alignItems="center"
+            borderTop="1px solid rgba(0,0,0,0.125)"
+          >
+            <Box>
+              <Text textAlign="center">
+                <small>This action will replace existing on chain stats</small>
+              </Text>
+            </Box>
+            <Box>
+              <Button
+                type="button"
+                onClick={sendToChain}
+                isDisabled={!isEnabled || isLoading}
+                style={{
+                  ...(buttonStyle as any),
+                  background: isEnabled ? 'green' : '#ccc',
+                  border: 'none',
+                  color: 'white',
+                }}
+              >
+                <Flex alignItems="center" gap={3}>
+                  {isLoading && <Spinner />} Send
+                </Flex>
+              </Button>
+            </Box>
+          </Flex>
+        </ModalContent>
+      </Modal>
     </div>
   ) : (
     <div style={{ display: 'hidden' }} />
