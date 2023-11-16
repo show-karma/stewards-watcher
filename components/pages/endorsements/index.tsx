@@ -356,7 +356,6 @@ export const EndorsementsComponent: FC = () => {
                           borderRadius="full"
                         />
                         <Text
-                          textDecoration="underline"
                           textOverflow="ellipsis"
                           whiteSpace="nowrap"
                           overflow="hidden"

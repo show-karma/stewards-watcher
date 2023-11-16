@@ -21,7 +21,7 @@ export interface EndorseDelegateSchema {
   endorse: number;
   comment?: string;
   tokenAddress: string | string[];
-  tokenChainId: boolean;
+  tokenChainId: number;
 }
 
 export class EASAttestation<T = unknown> implements IAttestation<T> {
