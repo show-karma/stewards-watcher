@@ -37,7 +37,7 @@ export const EndorsementsContainer: React.FC = () => {
   const { config } = daoInfo;
 
   const title = `Delegates endorsed in ${daoInfo.config.DAO} DAO`;
-  const description = `View all the delegates endorsed by peers in ${daoInfo.config.DAO} DAO.  This is a powerful signal for token holders seeking new delegates.`;
+  const description = `View all the delegates endorsed by peers in ${daoInfo.config.DAO} DAO. This is a powerful signal for token holders seeking new delegates.`;
   const url = `${config.METATAGS.URL}${router.asPath}`;
 
   return (
