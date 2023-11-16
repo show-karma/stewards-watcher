@@ -25,6 +25,7 @@ const DAO_CUSTOM_DOMAIN: Record<string, string | string[]> = {
   'delegate.starknet.io': 'starknet',
   'delegate.ssv.network': 'ssvnetwork',
   'delegate.connext.network': 'connext',
+  'cow.karmahq.xyz': 'cowswap',
   'delegate.moonbeam.network': ['moonriver', 'moonbase'],
 };
 //
