@@ -133,19 +133,26 @@ export const EndorsementsReceived = () => {
         address.toLowerCase()
       );
 
-      if (!item.decodedDataJson.tokenAddress) {
+      if (
+        !item.decodedDataJson.tokenAddress ||
+        !item.decodedDataJson.tokenChainId
+      ) {
         return false;
       }
 
       if (typeof item.decodedDataJson.tokenAddress === 'string') {
-        const hasMatch = addresses?.includes(
-          item.decodedDataJson.tokenAddress.toLowerCase()
-        );
+        const hasMatch =
+          addresses?.includes(
+            item.decodedDataJson.tokenAddress.toLowerCase()
+          ) &&
+          item.decodedDataJson.tokenChainId === daoInfo.config.DAO_CHAINS[0].id;
         return hasMatch;
       }
-      const hasMatch = item?.decodedDataJson.tokenAddress?.some(address =>
-        addresses?.includes(address.toLowerCase())
-      );
+      const hasMatch =
+        item?.decodedDataJson.tokenAddress?.some(address =>
+          addresses?.includes(address.toLowerCase())
+        ) &&
+        item.decodedDataJson.tokenChainId === daoInfo.config.DAO_CHAINS[0].id;
 
       return hasMatch;
     });
@@ -289,7 +296,6 @@ export const EndorsementsReceived = () => {
                     <Td
                       borderBottom="1px solid white"
                       color="white"
-                      textDecoration="underline"
                       textOverflow="ellipsis"
                       whiteSpace="nowrap"
                       overflow="hidden"
@@ -323,6 +329,9 @@ export const EndorsementsReceived = () => {
                     </Td>
                     <Td
                       borderBottom="1px solid white"
+                      color="white"
+                      textDecoration="underline"
+                      fontSize={{ base: '13px', sm: '14px' }}
                       display={{ base: 'none', sm: 'table-cell' }}
                     >
                       {item.reason ? (

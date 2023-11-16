@@ -17,17 +17,28 @@ export const formatNumber = (numberToFormat: number | string) => {
     });
   }
   const number = Number.isNaN(+numberToFormat) ? 0 : +numberToFormat;
-  if (typeof numberToFormat === 'string') {
+
+  // as numbro doesn't support force category, we need to do it manually
+  const getForceAverage = (numberToForce: number) => {
+    if (numberToForce < 1000000) return 'thousand';
+    if (numberToForce < 1000000000) return 'million';
+    if (numberToForce < 1000000000000) return 'billion';
+    if (numberToForce < 1000000000000000) return 'trillion';
+    return 'thousand';
+  };
+
+  if (number < 1000) {
     return numbro(numberToFormat).format({
       mantissa: 2,
       trimMantissa: true,
-      average: +number >= 1000,
     });
   }
+
   return numbro(numberToFormat).format({
     mantissa: 2,
     trimMantissa: true,
     average: +number >= 1000,
+    forceAverage: getForceAverage(+number),
   });
 };
 
