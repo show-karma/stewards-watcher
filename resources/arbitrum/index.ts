@@ -23,6 +23,10 @@ const config: IDAOConfig = {
     URL: `https://arbitrum.karmahq.xyz`,
   },
   DAO_CHAINS: [arbitrum],
+  DAO_DEFAULT_SETTINGS: {
+    TIMEPERIOD: 'lifetime',
+    ORDERSTAT: 'karmaScore',
+  },
   DAO_TOKEN_CONTRACT: [
     {
       contractAddress: '0x912ce59144191c1204e64559fe8253a0e49e6548',
@@ -41,7 +45,7 @@ const config: IDAOConfig = {
   DAO_EXT_VOTES_PROVIDER: {
     onChain: onChainArbitrumVotesProvider,
   },
-  EXCLUDED_CARD_FIELDS: ['healthScore', 'karmaScore', 'discordScore'],
+  EXCLUDED_CARD_FIELDS: ['healthScore', 'discordScore'],
   EXCLUDED_VOTING_HISTORY_COLUMN: [],
   ENABLE_DELEGATE_TRACKER: true,
   DAO_CATEGORIES_TYPE: 'workstreams',
