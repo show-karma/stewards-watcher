@@ -45,6 +45,7 @@ export const ToDelegate: FC<IToDelegateProps> = ({
       },
       discordScore: 0,
       status: 'active',
+      rawStats: [],
     };
     try {
       const hasTracks = daoInfo.config.DAO_CATEGORIES_TYPE === 'tracks';
@@ -67,6 +68,7 @@ export const ToDelegate: FC<IToDelegateProps> = ({
         },
         discordScore: 0,
         status: 'active',
+        rawStats: [],
       });
     }
   };

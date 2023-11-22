@@ -21,7 +21,7 @@ import { IoClose } from 'react-icons/io5';
 import { IActiveTab } from 'types';
 import { attest, getEASChainInfo } from 'utils';
 import { useSigner } from 'utils/eas-wagmi-utils';
-import { useAccount, useConnect, useNetwork, useSwitchNetwork } from 'wagmi';
+import { useAccount, useConnect, useSwitchNetwork } from 'wagmi';
 
 interface EndorseModalProps {
   endorsingAddress: string;
@@ -56,7 +56,6 @@ export const EndorseModal: FC<EndorseModalProps> = ({
   const { openConnectModal } = useConnectModal();
   const { connector, isConnected } = useAccount();
   const { connectAsync } = useConnect();
-  const { chain } = useNetwork();
   const { switchNetworkAsync } = useSwitchNetwork();
   const [daoTokens, setDaoTokens] = useState<string[]>([]);
 
