@@ -2,7 +2,7 @@ import { IDAOConfig, IDAOTheme } from 'types';
 import { mainnet } from 'wagmi/chains';
 
 const config: IDAOConfig = {
-  DAO: 'CowSwap DAO',
+  DAO: 'CoW DAO',
   DAO_DESCRIPTION: `Better than the best prices.`,
   DAO_SUBDESCRIPTION: `CoW Protocol finds the lowest price for your trade across all exchanges and aggregators, such as Uniswap and 1inch – and protects you from MEV, unlike the others.`,
   DAO_URL: 'https://cow.fi/',
@@ -12,9 +12,9 @@ const config: IDAOConfig = {
   DAO_LOGO: '/daos/cowswap/logo.svg',
   METATAGS: {
     TITLE: `Delegates of CowSwap DAO`,
-    DESCRIPTION: `Find all the active delegates in CowSwap DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
+    DESCRIPTION: `Find all the active delegates in CoW DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
     FAVICON: '/daos/cowswap/favicon.png',
-    URL: `https://cowswap.karmahq.xyz`,
+    URL: `https://cow.karmahq.xyz`,
   },
   DAO_CHAINS: [mainnet],
   DAO_TOKEN_CONTRACT: undefined,
