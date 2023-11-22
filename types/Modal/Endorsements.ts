@@ -6,6 +6,7 @@ export type EndorsementData = {
   reason?: string;
 };
 export type GeneralisticEndorsementData = {
+  attestationUID: string;
   delegate: {
     realName?: string;
     ensName?: string;

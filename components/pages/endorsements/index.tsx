@@ -3,6 +3,7 @@ import {
   Button,
   Flex,
   Icon,
+  Link,
   Spinner,
   Table,
   TableContainer,
@@ -34,6 +35,7 @@ import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
 import { GetDaoRes } from 'components/Modals/Endorse';
 import { ImgWithFallback } from 'components/ImgWithFallback';
 import { blo } from 'blo';
+import { FaExternalLinkAlt } from 'react-icons/fa';
 
 export const EndorsementsComponent: FC = () => {
   const [data, setData] = useState<GeneralisticEndorsementData[]>([]);
@@ -287,6 +289,15 @@ export const EndorsementsComponent: FC = () => {
                   >
                     Date
                   </Th>
+                  <Th
+                    borderBottomWidth="1px"
+                    borderBottomStyle="solid"
+                    borderBottomColor={theme.text}
+                    fontSize="12px"
+                    fontWeight="500"
+                    color={theme.text}
+                    display={{ base: 'none', sm: 'table-cell' }}
+                  />
                 </Tr>
               </Thead>
               <Tbody>
@@ -379,6 +390,24 @@ export const EndorsementsComponent: FC = () => {
                       display={{ base: 'none', sm: 'table-cell' }}
                     >
                       {getFormattedData(item.date)}
+                    </Td>
+                    <Td
+                      borderBottomWidth="1px"
+                      borderBottomStyle="solid"
+                      borderBottomColor={theme.text}
+                      color="blue.400"
+                      fontSize={{ base: '12px', sm: '14px' }}
+                      display={{ base: 'none', sm: 'table-cell' }}
+                    >
+                      <Link
+                        isExternal
+                        href={
+                          getEASChainInfo(daoInfo.config.DAO_KARMA_ID)
+                            .explorerUrl + item.attestationUID
+                        }
+                      >
+                        <Icon as={FaExternalLinkAlt} w="4" h="4" />
+                      </Link>
                     </Td>
                   </Tr>
                 ))}
