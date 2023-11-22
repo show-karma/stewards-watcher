@@ -2,6 +2,7 @@
 import {
   Flex,
   Icon,
+  Link,
   Spinner,
   Table,
   TableContainer,
@@ -31,6 +32,7 @@ import { getAddress } from 'viem';
 import ReactPaginate from 'react-paginate';
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
 import { GetDaoRes } from 'types/api';
+import { FaExternalLinkAlt } from 'react-icons/fa';
 import { CommentModal } from './CommentModal';
 
 export const EndorsementsGiven = () => {
@@ -183,6 +185,7 @@ export const EndorsementsGiven = () => {
         const { comment } = item.decodedDataJson as any;
 
         return {
+          attestationUID: item.id,
           addressOrENS: name || item.recipient,
           date: item.timeCreated,
           votingPower: formatNumberPercentage(votingPower || 0),
@@ -280,6 +283,13 @@ export const EndorsementsGiven = () => {
                     color="#F2F4F7"
                     display={{ base: 'none', sm: 'table-cell' }}
                   />
+                  <Th
+                    borderBottom="1px solid white"
+                    fontSize="12px"
+                    fontWeight="500"
+                    color="#F2F4F7"
+                    display={{ base: 'none', sm: 'table-cell' }}
+                  />
                 </Tr>
               </Thead>
               <Tbody>
@@ -307,6 +317,23 @@ export const EndorsementsGiven = () => {
                       maxW={{ base: '120px', md: 'none' }}
                     >
                       {getFormattedData(item.date)}
+                    </Td>
+                    <Td
+                      borderBottom="1px solid white"
+                      color="blue.400"
+                      textDecoration="underline"
+                      fontSize={{ base: '13px', sm: '14px' }}
+                      display={{ base: 'none', sm: 'table-cell' }}
+                    >
+                      <Link
+                        isExternal
+                        href={
+                          getEASChainInfo(daoInfo.config.DAO_KARMA_ID)
+                            .explorerUrl + item.attestationUID
+                        }
+                      >
+                        <Icon as={FaExternalLinkAlt} w="4" h="4" />
+                      </Link>
                     </Td>
                     <Td
                       borderBottom="1px solid white"
