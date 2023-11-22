@@ -8,7 +8,8 @@ import { getAddress } from 'viem';
 
 export const getEndorsementsFromAddress = async (
   endorsedAddress: string,
-  karmaID: string
+  karmaID: string,
+  chainId: number
 ) => {
   const projectEnvironment = process.env.NEXT_PUBLIC_ENV || 'dev';
   const chainsInfo = easDelegateEndorseDictionary[projectEnvironment];
@@ -98,14 +99,15 @@ export const getEndorsementsFromAddress = async (
     }
 
     if (typeof item.decodedDataJson.tokenAddress === 'string') {
-      const hasMatch = addresses?.includes(
-        item.decodedDataJson.tokenAddress.toLowerCase()
-      );
+      const hasMatch =
+        addresses?.includes(item.decodedDataJson.tokenAddress.toLowerCase()) &&
+        item.decodedDataJson.tokenChainId === chainId;
       return hasMatch;
     }
-    const hasMatch = item?.decodedDataJson.tokenAddress?.some(address =>
-      addresses?.includes(address.toLowerCase())
-    );
+    const hasMatch =
+      item?.decodedDataJson.tokenAddress?.some(address =>
+        addresses?.includes(address.toLowerCase())
+      ) && item.decodedDataJson.tokenChainId === chainId;
 
     return hasMatch;
   });

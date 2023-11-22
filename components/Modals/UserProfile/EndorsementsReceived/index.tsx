@@ -109,7 +109,6 @@ export const EndorsementsReceived = () => {
               }
             }
           });
-
           results.push(...uniqueAttestations);
         }
       } catch (error) {

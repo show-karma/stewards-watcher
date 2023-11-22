@@ -40,7 +40,8 @@ export const StatsRow = () => {
     if (!profileSelected?.address) return;
     const endorsements = await getEndorsementsOfAddress(
       profileSelected?.address,
-      daoInfo.config.DAO_KARMA_ID
+      daoInfo.config.DAO_KARMA_ID,
+      daoInfo.config.DAO_CHAINS[0].id
     );
 
     setEndorsementsNumber(endorsements.length);
@@ -57,14 +58,14 @@ export const StatsRow = () => {
 
     {
       title: 'Snapshot Percentage',
-      amount: profileSelected?.voteParticipation.offChain
+      amount: profileSelected?.voteParticipation?.offChain
         ? `${profileSelected.voteParticipation.offChain}%`
         : '-',
       id: 'offChainVotesPct',
     },
     {
       title: 'On-chain votes',
-      amount: profileSelected?.voteParticipation.onChain
+      amount: profileSelected?.voteParticipation?.onChain
         ? `${profileSelected.voteParticipation.onChain}%`
         : '-',
       id: 'onChainVotesPct',

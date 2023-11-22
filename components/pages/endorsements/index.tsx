@@ -134,14 +134,18 @@ export const EndorsementsComponent: FC = () => {
       }
 
       if (typeof item.decodedDataJson.tokenAddress === 'string') {
-        const hasMatch = addresses?.includes(
-          item.decodedDataJson.tokenAddress.toLowerCase()
-        );
+        const hasMatch =
+          addresses?.includes(
+            item.decodedDataJson.tokenAddress.toLowerCase()
+          ) &&
+          item.decodedDataJson.tokenChainId === daoInfo.config.DAO_CHAINS[0].id;
         return hasMatch;
       }
-      const hasMatch = item?.decodedDataJson.tokenAddress?.some(address =>
-        addresses?.includes(address.toLowerCase())
-      );
+      const hasMatch =
+        item?.decodedDataJson.tokenAddress?.some(address =>
+          addresses?.includes(address.toLowerCase())
+        ) &&
+        item.decodedDataJson.tokenChainId === daoInfo.config.DAO_CHAINS[0].id;
 
       return hasMatch;
     });
