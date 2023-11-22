@@ -60,9 +60,7 @@ const registryContractCfg = (fn: string) => ({
 });
 
 const web3 = createPublicClient({
-  transport: http(
-    'https://eth-sepolia.g.alchemy.com/v2/j_nkHYEl9FG8aBwK3PcqEbravPyCV3DE'
-  ),
+  transport: http(process.env.NEXT_PUBLIC_REGISTRY_RPC_URL as string),
   chain: currentChain,
 });
 
