@@ -186,6 +186,7 @@ export const EndorsementsComponent: FC = () => {
         const { comment } = item.decodedDataJson as any;
 
         return {
+          attestationUID: item.id,
           delegate,
           endorsedBy,
           date: item.timeCreated,

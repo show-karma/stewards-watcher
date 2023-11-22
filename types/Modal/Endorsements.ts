@@ -1,4 +1,5 @@
 export type EndorsementData = {
+  attestationUID: string;
   addressOrENS: string;
   votingPower: string;
   date: number;
