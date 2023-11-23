@@ -384,6 +384,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           userCreatedAt: item.userCreatedAt,
           website: item.website,
           discussionThread: item.discussionThread,
+          rawStats: item.stats || [],
         };
       });
 
@@ -443,6 +444,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           gitcoinHealthScore: fetchedPeriod?.gitcoinHealthScore || 0,
           updatedAt: fetchedPeriod?.updatedAt,
           karmaScore: fetchedPeriod?.karmaScore || 0,
+          rawStats: [fetchedPeriod],
         };
       });
       setDelegates(delegatesList);
@@ -530,6 +532,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           offChain: 0,
         },
         status: 'active',
+        rawStats: [],
       };
       const getTab = asPath.split('#');
       const tabs: IActiveTab[] = [
@@ -606,6 +609,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         acceptedTOS: fetchedDelegate.acceptedTOS,
         website: fetchedDelegate.website,
         discussionThread: fetchedDelegate.discussionThread,
+        rawStats: fetchedDelegate.stats || [],
       };
       return userFound;
     } catch {
@@ -665,6 +669,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         acceptedTOS: fetchedDelegate.acceptedTOS,
         website: fetchedDelegate.website,
         discussionThread: fetchedDelegate.discussionThread,
+        rawStats: fetchedDelegate.stats || [],
       };
 
       const getTab = asPath.split('#');
@@ -748,6 +753,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         acceptedTOS: fetchedDelegate.acceptedTOS,
         website: fetchedDelegate.website,
         discussionThread: fetchedDelegate.discussionThread,
+        rawStats: fetchedDelegate.stats || [],
       };
 
       setProfileSelected(userFound);
@@ -833,6 +839,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
           status: item.status,
           website: item.website,
           discussionThread: item.discussionThread,
+          rawStats: item.stats || [],
         });
       });
     } catch (error) {

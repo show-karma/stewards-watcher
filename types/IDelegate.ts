@@ -1,5 +1,31 @@
 import { ICustomFields } from './ICustomFields';
 
+export interface IDelegateStats {
+  period?: string;
+  karmaScore?: number;
+  karmaRank?: number;
+  forumActivityScore?: number;
+  forumLikesReceived?: number;
+  forumPostsReadCount?: number;
+  proposalsInitiated?: number;
+  proposalsDiscussed?: number;
+  forumTopicCount?: number;
+  forumPostCount?: number;
+  offChainVotesPct?: number;
+  onChainVotesPct?: number;
+  updatedAt?: string;
+  createdAt?: string;
+  percentile?: number;
+  gitcoinHealthScore?: number;
+  deworkTasksCompleted?: number;
+  deworkPoints?: number;
+  proposalsOnSnapshot?: number;
+  discordScore?: number;
+  proposalsOnAragon?: number;
+  aragonVotesPct?: number;
+  [key: string]: any;
+}
+
 export interface IDelegate {
   address: string;
   ensName?: string;
@@ -39,4 +65,5 @@ export interface IDelegate {
     name: string;
   }[];
   acceptedTOS?: boolean;
+  rawStats: IDelegateStats[];
 }

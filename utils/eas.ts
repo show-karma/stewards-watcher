@@ -57,6 +57,7 @@ export const easDelegateEndorseDictionary: {
       chainId: number;
       easContract: string;
       schemaId: string;
+      explorerUrl: string;
       easAPI: string;
       chain: Chain;
     };
@@ -70,6 +71,7 @@ export const easDelegateEndorseDictionary: {
         .NEXT_PUBLIC_ARBITRUM_EAS_ENDORSE_DELEGATE_UID as string,
       easAPI: 'https://arbitrum.easscan.org/graphql',
       chain: arbitrum,
+      explorerUrl: 'https://arbitrum.easscan.org/attestation/view/',
     },
     // ARBITRUM GOERLI IS NOT READY YET
     // arbitrum: {
@@ -86,6 +88,8 @@ export const easDelegateEndorseDictionary: {
         .NEXT_PUBLIC_OPTIMISM_GOERLI_EAS_ENDORSE_DELEGATE_UID as string,
       easAPI: 'https://optimism-goerli-bedrock.easscan.org/graphql',
       chain: optimismGoerli,
+      explorerUrl:
+        'https://optimism-goerli-bedrock.easscan.org/attestation/view/',
     },
   },
   prod: {
@@ -96,6 +100,7 @@ export const easDelegateEndorseDictionary: {
         .NEXT_PUBLIC_ARBITRUM_EAS_ENDORSE_DELEGATE_UID as string,
       easAPI: 'https://arbitrum.easscan.org/graphql',
       chain: arbitrum,
+      explorerUrl: 'https://arbitrum.easscan.org/attestation/view/',
     },
     optimism: {
       chainId: 10,
@@ -104,6 +109,7 @@ export const easDelegateEndorseDictionary: {
         .NEXT_PUBLIC_OPTIMISM_EAS_ENDORSE_DELEGATE_UID as string,
       easAPI: 'https://optimism.easscan.org/graphql',
       chain: optimism,
+      explorerUrl: 'https://optimism.easscan.org/attestation/view/',
     },
   },
 };

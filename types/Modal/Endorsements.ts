@@ -1,10 +1,12 @@
 export type EndorsementData = {
+  attestationUID: string;
   addressOrENS: string;
   votingPower: string;
   date: number;
   reason?: string;
 };
 export type GeneralisticEndorsementData = {
+  attestationUID: string;
   delegate: {
     realName?: string;
     ensName?: string;

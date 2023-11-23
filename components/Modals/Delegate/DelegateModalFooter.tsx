@@ -19,7 +19,7 @@ export const DelegateModalFooter: React.FC<{
   const { toast } = useToasty();
   const {
     daoInfo: {
-      config: { DAO_KARMA_ID, DISABLE_EMAIL_INPUT },
+      config: { DAO_KARMA_ID, DISABLE_EMAIL_INPUT, DAO_CHAINS },
     },
   } = useDAO();
   const { selectProfile } = useDelegates();
@@ -47,7 +47,8 @@ export const DelegateModalFooter: React.FC<{
     try {
       const endorsements = await getEndorsementsFromAddress(
         delegateInfo?.address,
-        DAO_KARMA_ID
+        DAO_KARMA_ID,
+        DAO_CHAINS[0].id
       );
 
       setEndorsementsNumber(endorsements.length);
