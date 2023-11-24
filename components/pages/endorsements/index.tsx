@@ -1,6 +1,5 @@
 /* eslint-disable no-nested-ternary */
 import {
-  Button,
   Flex,
   Icon,
   Link,
@@ -33,9 +32,8 @@ import { fetchENSNames } from 'utils/fetchENSName';
 import ReactPaginate from 'react-paginate';
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
 import { GetDaoRes } from 'components/Modals/Endorse';
-import { ImgWithFallback } from 'components/ImgWithFallback';
-import { blo } from 'blo';
 import { FaExternalLinkAlt } from 'react-icons/fa';
+import { UserClickable, UserNotClickable } from 'components/Endorsements';
 
 export const EndorsementsComponent: FC = () => {
   const [data, setData] = useState<GeneralisticEndorsementData[]>([]);
@@ -304,7 +302,7 @@ export const EndorsementsComponent: FC = () => {
                   />
                 </Tr>
               </Thead>
-              <Tbody>
+              <Tbody display={['none', 'table-row-group']}>
                 {currentItems.map((item, index) => (
                   <Tr key={item.date + +index}>
                     <Td
@@ -313,47 +311,15 @@ export const EndorsementsComponent: FC = () => {
                       borderBottomColor={theme.text}
                       color={theme.text}
                     >
-                      <Button
-                        flexDir="row"
-                        gap="2"
-                        onClick={() => {
-                          openProfile(
-                            item.delegate.address,
-                            'endorsements-received',
-                            false
-                          );
-                        }}
-                        p="0"
-                        bg="transparent"
-                        _hover={{ bg: 'transparent' }}
-                        _active={{ bg: 'transparent' }}
-                        _focus={{ bg: 'transparent' }}
-                        _focusVisible={{ bg: 'transparent' }}
-                        _focusWithin={{ bg: 'transparent' }}
-                      >
-                        <ImgWithFallback
-                          fallback={item.delegate.address}
-                          src={
-                            item.delegate.imageURL ||
-                            blo(item.delegate.address as `0x${string}`)
-                          }
-                          boxSize="20px"
-                          borderRadius="full"
-                        />
-                        <Text
-                          textDecoration="underline"
-                          textOverflow="ellipsis"
-                          whiteSpace="nowrap"
-                          overflow="hidden"
-                          color={theme.text}
-                          fontSize={{ base: '12px', sm: '14px' }}
-                          maxW={{ base: '120px', md: 'none' }}
-                        >
-                          {item.delegate.realName ||
-                            item.delegate.ensName ||
-                            truncateAddress(item.delegate.address)}
-                        </Text>
-                      </Button>
+                      <UserClickable
+                        address={item.delegate.address}
+                        imageURL={item.delegate.imageURL as string | undefined}
+                        nameToShow={
+                          item.delegate.realName ||
+                          item.delegate.ensName ||
+                          truncateAddress(item.delegate.address)
+                        }
+                      />
                     </Td>
                     <Td
                       borderBottomWidth="1px"
@@ -361,29 +327,17 @@ export const EndorsementsComponent: FC = () => {
                       borderBottomColor={theme.text}
                       color={theme.text}
                     >
-                      <Flex flexDir="row" gap="2" textOverflow="ellipsis">
-                        <ImgWithFallback
-                          fallback={item.endorsedBy.address}
-                          src={
-                            item.endorsedBy.imageURL ||
-                            blo(item.endorsedBy.address as `0x${string}`)
-                          }
-                          boxSize="20px"
-                          borderRadius="full"
-                        />
-                        <Text
-                          textOverflow="ellipsis"
-                          whiteSpace="nowrap"
-                          overflow="hidden"
-                          color={theme.text}
-                          fontSize={{ base: '12px', sm: '14px' }}
-                          maxW={{ base: '120px', md: 'none' }}
-                        >
-                          {item.endorsedBy.realName ||
-                            item.endorsedBy.ensName ||
-                            truncateAddress(item.endorsedBy.address)}
-                        </Text>
-                      </Flex>
+                      <UserNotClickable
+                        address={item.endorsedBy.address}
+                        imageURL={
+                          item.endorsedBy.imageURL as string | undefined
+                        }
+                        nameToShow={
+                          item.endorsedBy.realName ||
+                          item.endorsedBy.ensName ||
+                          truncateAddress(item.endorsedBy.address)
+                        }
+                      />
                     </Td>
                     <Td
                       borderBottomWidth="1px"
@@ -417,6 +371,83 @@ export const EndorsementsComponent: FC = () => {
                 ))}
               </Tbody>
             </Table>
+            <Flex display={['flex', 'none']} flexDir="column">
+              {currentItems.map((item, index) => (
+                <Flex
+                  w="100%"
+                  key={item.date + +index}
+                  px="2"
+                  pt="2"
+                  pb="4"
+                  align="flex-start"
+                  justifyItems="center"
+                  gap="2"
+                  flexDir="column"
+                  borderBottomWidth="1px"
+                  borderBottomStyle="solid"
+                  borderBottomColor={theme.text}
+                >
+                  <Flex w="100%" align="center" flexDir="row" gap="4">
+                    <UserClickable
+                      address={item.delegate.address}
+                      imageURL={item.delegate.imageURL as string | undefined}
+                      nameToShow={
+                        item.delegate.realName ||
+                        item.delegate.ensName ||
+                        truncateAddress(item.delegate.address)
+                      }
+                    />
+                    <UserNotClickable
+                      address={item.endorsedBy.address}
+                      imageURL={item.endorsedBy.imageURL as string | undefined}
+                      nameToShow={
+                        item.endorsedBy.realName ||
+                        item.endorsedBy.ensName ||
+                        truncateAddress(item.endorsedBy.address)
+                      }
+                    />
+                  </Flex>
+                  <Flex
+                    flexDir="row"
+                    gap="2"
+                    justifyContent="flex-start"
+                    alignItems="center"
+                  >
+                    <Text
+                      color={theme.text}
+                      fontSize={{ base: '12px', sm: '14px' }}
+                      width="120px"
+                    >
+                      {getFormattedData(item.date)}
+                    </Text>
+                    <Link
+                      isExternal
+                      href={
+                        getEASChainInfo(daoInfo.config.DAO_KARMA_ID)
+                          .explorerUrl + item.attestationUID
+                      }
+                      display="flex"
+                      flexDirection="row"
+                      gap="1"
+                      alignItems="center"
+                      color="blue.400"
+                      borderBottomWidth="1px"
+                      borderBottomStyle="solid"
+                      borderBottomColor="blue.400"
+                      _hover={{
+                        color: 'blue.600',
+                        borderBottomColor: 'blue.600',
+                      }}
+                    >
+                      <Text fontSize={{ base: '12px', sm: '14px' }}>
+                        View details
+                      </Text>
+                      <Icon as={FaExternalLinkAlt} w="3" h="3" />
+                    </Link>
+                  </Flex>
+                </Flex>
+              ))}
+            </Flex>
           </TableContainer>
 
           <ReactPaginate
