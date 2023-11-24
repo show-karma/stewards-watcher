@@ -7,6 +7,7 @@ export * from './DelegatesList';
 export * from './DelegationPool';
 export * from './Dropdowns';
 export * from './EmptyState';
+export * from './Endorsements';
 export * from './Filters';
 export * from './GradientBall';
 export * from './HeaderHat';
