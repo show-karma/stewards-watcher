@@ -388,62 +388,73 @@ export const EndorsementsComponent: FC = () => {
                   borderBottomColor={theme.text}
                 >
                   <Flex w="100%" align="center" flexDir="row" gap="4">
-                    <UserClickable
-                      address={item.delegate.address}
-                      imageURL={item.delegate.imageURL as string | undefined}
-                      nameToShow={
-                        item.delegate.realName ||
-                        item.delegate.ensName ||
-                        truncateAddress(item.delegate.address)
-                      }
-                    />
-                    <UserNotClickable
-                      address={item.endorsedBy.address}
-                      imageURL={item.endorsedBy.imageURL as string | undefined}
-                      nameToShow={
-                        item.endorsedBy.realName ||
-                        item.endorsedBy.ensName ||
-                        truncateAddress(item.endorsedBy.address)
-                      }
-                    />
+                    <Flex flex="1">
+                      <UserClickable
+                        address={item.delegate.address}
+                        imageURL={item.delegate.imageURL as string | undefined}
+                        nameToShow={
+                          item.delegate.realName ||
+                          item.delegate.ensName ||
+                          truncateAddress(item.delegate.address)
+                        }
+                      />
+                    </Flex>
+                    <Flex flex="1">
+                      <UserNotClickable
+                        address={item.endorsedBy.address}
+                        imageURL={
+                          item.endorsedBy.imageURL as string | undefined
+                        }
+                        nameToShow={
+                          item.endorsedBy.realName ||
+                          item.endorsedBy.ensName ||
+                          truncateAddress(item.endorsedBy.address)
+                        }
+                      />
+                    </Flex>
                   </Flex>
                   <Flex
                     flexDir="row"
                     gap="2"
                     justifyContent="flex-start"
                     alignItems="center"
+                    width="100%"
                   >
-                    <Text
-                      color={theme.text}
-                      fontSize={{ base: '12px', sm: '14px' }}
-                      width="120px"
-                    >
-                      {getFormattedData(item.date)}
-                    </Text>
-                    <Link
-                      isExternal
-                      href={
-                        getEASChainInfo(daoInfo.config.DAO_KARMA_ID)
-                          .explorerUrl + item.attestationUID
-                      }
-                      display="flex"
-                      flexDirection="row"
-                      gap="1"
-                      alignItems="center"
-                      color="blue.400"
-                      borderBottomWidth="1px"
-                      borderBottomStyle="solid"
-                      borderBottomColor="blue.400"
-                      _hover={{
-                        color: 'blue.600',
-                        borderBottomColor: 'blue.600',
-                      }}
-                    >
-                      <Text fontSize={{ base: '12px', sm: '14px' }}>
-                        View details
+                    <Flex flex="1">
+                      <Text
+                        color={theme.text}
+                        fontSize={{ base: '12px', sm: '14px' }}
+                        width="120px"
+                      >
+                        {getFormattedData(item.date)}
                       </Text>
-                      <Icon as={FaExternalLinkAlt} w="3" h="3" />
-                    </Link>
+                    </Flex>
+                    <Flex flex="1">
+                      <Link
+                        isExternal
+                        href={
+                          getEASChainInfo(daoInfo.config.DAO_KARMA_ID)
+                            .explorerUrl + item.attestationUID
+                        }
+                        display="flex"
+                        flexDirection="row"
+                        gap="1"
+                        alignItems="center"
+                        color="blue.400"
+                        borderBottomWidth="1px"
+                        borderBottomStyle="solid"
+                        borderBottomColor="blue.400"
+                        _hover={{
+                          color: 'blue.600',
+                          borderBottomColor: 'blue.600',
+                        }}
+                      >
+                        <Text fontSize={{ base: '12px', sm: '14px' }}>
+                          View details
+                        </Text>
+                        <Icon as={FaExternalLinkAlt} w="3" h="3" />
+                      </Link>
+                    </Flex>
                   </Flex>
                 </Flex>
               ))}
