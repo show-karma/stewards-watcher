@@ -38,7 +38,7 @@ export class DelegateRegistryContract extends GelatoRelay {
   contract: ethers.Contract;
 
   private static readonly subgraphUrl =
-    'https://api.thegraph.com/subgraphs/name/andremury/governance-playground';
+    process.env.NEXT_PUBLIC_DELEGATE_REGISTRY_SUBGRAPH || '';
 
   constructor(readonly contractAddress: Hex) {
     super();
