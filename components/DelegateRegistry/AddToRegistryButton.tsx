@@ -75,7 +75,7 @@ export const AddToRegistryButton: React.FC<Props> = ({ profile }) => {
   const { toast } = useToasty();
   const { switchNetworkAsync } = useSwitchNetwork();
 
-  const [isSenderWhitelisted, setIsSenderWhitelisted] = useState(false);
+  const [isCurrentProfile, setIsCurrentProfile] = useState(false);
   const [isDelegateInRegistry, setIsDelegateInRegistry] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -148,22 +148,17 @@ export const AddToRegistryButton: React.FC<Props> = ({ profile }) => {
   const isEnabled = useMemo(
     () =>
       isDelegateInRegistry &&
-      isSenderWhitelisted &&
+      isCurrentProfile &&
       DAO_TOKEN_CONTRACT &&
       DAO_TOKEN_CONTRACT?.length > 0 &&
       DAO_TOKEN_CONTRACT[0]?.contractAddress?.length > 0 &&
       registryStats,
-    [
-      DAO_TOKEN_CONTRACT,
-      registryStats,
-      isDelegateInRegistry,
-      isSenderWhitelisted,
-    ]
+    [DAO_TOKEN_CONTRACT, registryStats, isDelegateInRegistry, isCurrentProfile]
   );
 
   const loadUserInfo = async () => {
     if (!(connectedAddress && profile?.address)) return;
-    const [register, whitelisted] = await Promise.all([
+    const [register] = await Promise.all([
       web3.readContract({
         ...registryContractCfg('isDelegateRegistered'),
         args: [
@@ -172,19 +167,15 @@ export const AddToRegistryButton: React.FC<Props> = ({ profile }) => {
           DAO_TOKEN_CONTRACT?.[0].chain.id,
         ],
       }),
-      web3.readContract({
-        ...registryContractCfg('getWhitelist'),
-        args: [connectedAddress],
-      }),
     ]);
-    console.log('register', register);
     setIsDelegateInRegistry(!!register);
-    setIsSenderWhitelisted(!!whitelisted);
+    setIsCurrentProfile(
+      connectedAddress.toLowerCase() === profile?.address.toLowerCase()
+    );
   };
 
   const checkChain = async () => {
     if (!registryChainId) return;
-    console.log('chains', currentChain, chain?.id, registryChainId);
     if (chain?.id !== +registryChainId && currentChain) {
       await switchNetworkAsync?.(currentChain.id);
     }
@@ -243,7 +234,7 @@ export const AddToRegistryButton: React.FC<Props> = ({ profile }) => {
         className="btn btn-primary"
         disabled={
           !(connectedAddress && profile?.address) ||
-          !(isSenderWhitelisted && isDelegateInRegistry)
+          !(isCurrentProfile && isDelegateInRegistry)
         }
         onClick={onToggle}
       >
