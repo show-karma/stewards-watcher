@@ -20,7 +20,7 @@ import {
 import { writeContract } from '@wagmi/core';
 import ABI from 'utils/delegate-registry/ABI-STATS.json';
 import { Hex, createPublicClient, http } from 'viem';
-import { sepolia, optimism } from 'viem/chains';
+import { optimism, optimismGoerli } from 'viem/chains';
 import { startCase } from 'lodash';
 import { useToasty } from 'hooks';
 import { useSwitchNetwork } from 'wagmi';
@@ -43,7 +43,9 @@ const registryContractAddr = process.env
 
 const registryChainId = process.env.NEXT_PUBLIC_STATS_REGISTRY_CHAIN_ID;
 
-const currentChain = [sepolia, optimism].find(
+const registryRpcUrl = process.env.NEXT_PUBLIC_REGISTRY_RPC_URL as string;
+
+const currentChain = [optimismGoerli, optimism].find(
   item => item.id === +(registryChainId || 10)
 );
 
@@ -60,7 +62,7 @@ const registryContractCfg = (fn: string) => ({
 });
 
 const web3 = createPublicClient({
-  transport: http(process.env.NEXT_PUBLIC_REGISTRY_RPC_URL as string),
+  transport: http(registryRpcUrl),
   chain: currentChain,
 });
 
@@ -75,7 +77,7 @@ export const AddToRegistryButton: React.FC<Props> = ({ profile }) => {
   const { toast } = useToasty();
   const { switchNetworkAsync } = useSwitchNetwork();
 
-  const [isSenderWhitelisted, setIsSenderWhitelisted] = useState(false);
+  const [isCurrentProfile, setIsCurrentProfile] = useState(false);
   const [isDelegateInRegistry, setIsDelegateInRegistry] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -148,43 +150,36 @@ export const AddToRegistryButton: React.FC<Props> = ({ profile }) => {
   const isEnabled = useMemo(
     () =>
       isDelegateInRegistry &&
-      isSenderWhitelisted &&
+      isCurrentProfile &&
       DAO_TOKEN_CONTRACT &&
       DAO_TOKEN_CONTRACT?.length > 0 &&
       DAO_TOKEN_CONTRACT[0]?.contractAddress?.length > 0 &&
       registryStats,
-    [
-      DAO_TOKEN_CONTRACT,
-      registryStats,
-      isDelegateInRegistry,
-      isSenderWhitelisted,
-    ]
+    [DAO_TOKEN_CONTRACT, registryStats, isDelegateInRegistry, isCurrentProfile]
   );
 
   const loadUserInfo = async () => {
     if (!(connectedAddress && profile?.address)) return;
-    const [register, whitelisted] = await Promise.all([
-      web3.readContract({
-        ...registryContractCfg('isDelegateRegistered'),
-        args: [
-          profile.address,
-          DAO_TOKEN_CONTRACT?.[0].contractAddress,
-          DAO_TOKEN_CONTRACT?.[0].chain.id,
-        ],
-      }),
-      web3.readContract({
-        ...registryContractCfg('getWhitelist'),
-        args: [connectedAddress],
-      }),
-    ]);
-    console.log('register', register);
+
+    const args = [
+      profile.address,
+      DAO_TOKEN_CONTRACT?.[0].contractAddress,
+      DAO_TOKEN_CONTRACT?.[0].chain.id,
+    ];
+
+    const register = await web3.readContract({
+      ...registryContractCfg('isDelegateRegistered'),
+      args,
+    });
+
     setIsDelegateInRegistry(!!register);
-    setIsSenderWhitelisted(!!whitelisted);
+    setIsCurrentProfile(
+      connectedAddress.toLowerCase() === profile?.address.toLowerCase()
+    );
   };
 
   const checkChain = async () => {
     if (!registryChainId) return;
-    console.log('chains', currentChain, chain?.id, registryChainId);
     if (chain?.id !== +registryChainId && currentChain) {
       await switchNetworkAsync?.(currentChain.id);
     }
@@ -198,7 +193,6 @@ export const AddToRegistryButton: React.FC<Props> = ({ profile }) => {
       setIsLoading(true);
       const args = [
         registryStats,
-        profile.address,
         DAO_TOKEN_CONTRACT?.[0].contractAddress,
         DAO_TOKEN_CONTRACT?.[0].chain.id,
       ];
@@ -243,14 +237,14 @@ export const AddToRegistryButton: React.FC<Props> = ({ profile }) => {
         className="btn btn-primary"
         disabled={
           !(connectedAddress && profile?.address) ||
-          !(isSenderWhitelisted && isDelegateInRegistry)
+          !(isCurrentProfile && isDelegateInRegistry)
         }
         onClick={onToggle}
       >
         Add to Registry
       </Button>
 
-      <Modal isOpen={isOpen} onClose={onToggle}>
+      <Modal isOpen={isOpen} onClose={onToggle} size="xl">
         <ModalContent position="relative">
           <ModalHeader borderBottom="1px solid rgba(0,0,0,0.125)" pb={5} mb={5}>
             <h3>Confirm lifetime stats</h3>
