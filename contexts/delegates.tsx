@@ -1276,15 +1276,89 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
     setShouldRefreshEndorsements(choose);
   };
 
-  const openProfile = async (
-    profileAddress: string,
-    tab?: IActiveTab,
-    shouldRouterPush = true
-  ) => {
+  const openProfile = async (profileAddress: string, tab?: IActiveTab) => {
     if (!profileAddress) return;
-    await searchProfileModal(profileAddress, tab, shouldRouterPush).then(() => {
-      onOpenProfile();
-    });
+
+    const axiosClient = await api
+      .get(`/dao/find-delegate`, {
+        params: {
+          dao: config.DAO_KARMA_ID,
+          user: profileAddress,
+        },
+      })
+      .then(data => data)
+      .catch(error => error);
+    const getRealWallet = await checkRealAddress(profileAddress);
+    let userData: IDelegate = {
+      address: getRealWallet || profileAddress,
+      forumActivity: 0,
+      karmaScore: 0,
+      discordScore: 0,
+      voteParticipation: {
+        onChain: 0,
+        offChain: 0,
+      },
+      status: 'active',
+      rawStats: [],
+    };
+    if (axiosClient?.data) {
+      const { data } = axiosClient.data;
+      const { delegate: fetchedDelegate } = data;
+      const fetchedPeriod = (fetchedDelegate as IDelegateFromAPI).stats.find(
+        fetchedStat => fetchedStat.period === period
+      );
+      userData = {
+        ...userData,
+        address: fetchedDelegate.publicAddress,
+        ensName: fetchedDelegate.ensName,
+        delegatorCount: fetchedDelegate.delegatorCount || 0,
+        forumActivity: fetchedPeriod?.forumActivityScore || 0,
+        discordScore: fetchedPeriod?.discordScore || 0,
+        delegateSince:
+          fetchedDelegate.joinDateAt || fetchedDelegate.firstTokenDelegatedAt,
+        voteParticipation: {
+          onChain: fetchedPeriod?.onChainVotesPct || 0,
+          offChain: fetchedPeriod?.offChainVotesPct || 0,
+        },
+        votingWeight: fetchedDelegate.voteWeight,
+        delegatedVotes:
+          fetchedDelegate.delegatedVotes ||
+          fetchedDelegate.snapshotDelegatedVotes,
+        gitcoinHealthScore: fetchedPeriod?.gitcoinHealthScore || 0,
+        twitterHandle: fetchedDelegate.twitterHandle,
+        discourseHandle: fetchedDelegate.discourseHandle,
+        discordHandle: fetchedDelegate.discordHandle,
+        discordUsername: fetchedDelegate.discordUsername,
+        updatedAt: fetchedPeriod?.updatedAt,
+        karmaScore: fetchedPeriod?.karmaScore || 0,
+        delegatePitch: fetchedDelegate.delegatePitch,
+        aboutMe: fetchedDelegate.aboutMe,
+        realName: fetchedDelegate.realName,
+        profilePicture: fetchedDelegate.profilePicture,
+        workstreams: fetchedDelegate.workstreams,
+        tracks: fetchedDelegate.tracks,
+        status: fetchedDelegate.status,
+        userCreatedAt: fetchedDelegate.userCreatedAt,
+        acceptedTOS: fetchedDelegate.acceptedTOS,
+        website: fetchedDelegate.website,
+        discussionThread: fetchedDelegate.discussionThread,
+        rawStats: fetchedDelegate.stats || [],
+      };
+    }
+    const getTab = asPath.split('#');
+    const tabs: IActiveTab[] = [
+      'votinghistory',
+      'overview',
+      'handles',
+      'withdraw',
+      'endorsements-received',
+      'endorsements-given',
+    ];
+    if (userData.aboutMe) tabs.push('aboutme');
+    if (daoInfo.config.DAO_SUPPORTS_TOA) tabs.push('toa');
+    const checkTab = tabs.includes(getTab[1] as IActiveTab);
+
+    selectProfile(userData, checkTab ? tab : undefined, false);
   };
 
   const providerValue = useMemo(
