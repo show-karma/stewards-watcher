@@ -8,6 +8,7 @@ export const handleError = (
   daoInfo: IDAOInfo,
   toast: Dispatch<SetStateAction<UseToastOptions>>
 ) => {
+  console.log(error);
   if (error.data?.message?.includes('message: ')) {
     // regex to get what is between Some(" and ")
     const regex = /(?<=Some\(")(.*)(?="\))/gm;

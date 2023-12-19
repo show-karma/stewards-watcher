@@ -46,6 +46,7 @@ export const DelegationPool: React.FC = () => {
       } catch (error: any) {
         let errorMessage = '';
 
+        console.log(error);
         if (error instanceof BaseError) {
           // Option 1: checking the instance of the error
           if (error.cause instanceof ContractFunctionRevertedError) {

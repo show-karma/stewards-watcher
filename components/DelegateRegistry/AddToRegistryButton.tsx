@@ -159,7 +159,7 @@ export const AddToRegistryButton: React.FC<Props> = ({ profile }) => {
   );
 
   const loadUserInfo = async () => {
-    if (!(connectedAddress && profile?.address)) return;
+    if (!(connectedAddress && profile?.address) || !isEnabled) return;
 
     const args = [
       profile.address,
@@ -222,12 +222,14 @@ export const AddToRegistryButton: React.FC<Props> = ({ profile }) => {
   };
 
   useEffect(() => {
-    try {
-      loadUserInfo();
-    } catch (error) {
-      console.log(error);
+    if (isEnabled) {
+      try {
+        loadUserInfo();
+      } catch (error) {
+        console.log(error);
+      }
     }
-  }, [connectedAddress, chain]);
+  }, [connectedAddress, chain, isEnabled]);
 
   return isEnabled ? (
     <div>

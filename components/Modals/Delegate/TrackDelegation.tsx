@@ -21,7 +21,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useToasty } from 'hooks';
-import { IActiveDelegatedTracks, moonriverActiveDelegatedTracks } from 'utils';
+import { IActiveDelegatedTracks } from 'utils';
 import { numberToWords } from 'utils/numberToWords';
 import { DelegateModalHeader } from './DelegateModalHeader';
 import { DelegateModalFooter } from './DelegateModalFooter';
@@ -56,10 +56,10 @@ export const TrackDelegation: React.FC<StepProps> = ({
   >([]);
 
   const getActiveDelegations = async () => {
-    if (delegator) {
+    if (delegator && daoInfo.config.GET_ACTIVE_DELEGATIONS_ACTION) {
       try {
         setIsLoading(true);
-        const foundTracks = await moonriverActiveDelegatedTracks(
+        const foundTracks = await daoInfo.config.GET_ACTIVE_DELEGATIONS_ACTION(
           delegator,
           daoInfo.config.DAO_KARMA_ID
         );

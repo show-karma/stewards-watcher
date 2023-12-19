@@ -1,7 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import { useDAO, useWallet } from 'contexts';
 import { useEffect, useState } from 'react';
-import { IActiveDelegatedTracks, moonriverActiveDelegatedTracks } from 'utils';
+import { IActiveDelegatedTracks } from 'utils';
 import { IBulkDelegatePayload } from 'utils/moonbeam/moonriverDelegateAction';
 import { DelegatePoolRow } from './DelegatePoolRow';
 
@@ -22,15 +22,15 @@ export const DelegatePoolList: React.FC<IDelegatePoolListProps> = ({
   >([]);
 
   const getActiveDelegations = async () => {
-    if (address) {
+    if (address && daoInfo.config.GET_ACTIVE_DELEGATIONS_ACTION) {
       try {
-        const foundTracks = await moonriverActiveDelegatedTracks(
+        const foundTracks = await daoInfo.config.GET_ACTIVE_DELEGATIONS_ACTION(
           address,
           daoInfo.config.DAO_KARMA_ID
         );
         setTracksDelegated(foundTracks);
       } catch (error) {
-        console.log(error);
+        console.log('error getActiveDelegations', error);
       }
     }
   };
