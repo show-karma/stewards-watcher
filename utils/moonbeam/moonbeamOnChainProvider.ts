@@ -132,7 +132,6 @@ async function getDaoProposals(
 
 const providerUrl =
   'https://thegraph.com/hosted-service/subgraph/show-karma/moonbeam-delegates';
-// 'https://api.thegraph.com/subgraphs/name/show-karma/moonbeam-dao-delegate-voting';
 
 async function fetchOnChainVotes(daoName: string | string[], address: string) {
   if (!daoName || !address) return [];
