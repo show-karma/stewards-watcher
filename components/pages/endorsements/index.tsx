@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable no-nested-ternary */
 import {
   Flex,
@@ -494,7 +495,9 @@ export const EndorsementsComponent: FC = () => {
               </Flex>
             }
             pageLinkClassName="navigator-active-link"
-            pageLabelBuilder={pageNumber => `Page ${pageNumber}`}
+            pageLabelBuilder={pageNumber => (
+              <Text color={theme.text}>{`Page ${pageNumber}`}</Text>
+            )}
             onPageChange={handlePageClick}
             pageRangeDisplayed={2}
             marginPagesDisplayed={1}

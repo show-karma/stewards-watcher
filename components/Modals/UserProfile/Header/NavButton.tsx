@@ -17,7 +17,7 @@ export const NavButton: FC<INavButton> = ({ children, isActive, ...props }) => {
       // }
       bg="transparent"
       color={
-        isActive ? theme.modal.header.title : `${theme.modal.header.title}40`
+        isActive ? theme.modal.header.title : `${theme.modal.header.title}70`
       }
       borderBottomWidth="2px"
       borderBottomStyle="solid"
@@ -26,8 +26,8 @@ export const NavButton: FC<INavButton> = ({ children, isActive, ...props }) => {
       px="5"
       py="4"
       _hover={{
-        color: theme.branding,
-        borderBottomColor: theme.branding,
+        color: theme.modal.header.hoverText || theme.branding,
+        borderBottomColor: theme.modal.header.hoverText || theme.branding,
       }}
       fontSize={{ base: 'sm', lg: '15px' }}
       _focus={{}}

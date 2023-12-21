@@ -182,6 +182,9 @@ export const BodyTitle: FC = () => {
                     py={{ base: '4', md: '6' }}
                     justifyContent={{ base: 'space-between', lg: 'center' }}
                     borderRadius="base"
+                    borderWidth="1px"
+                    borderColor={theme.branding}
+                    borderStyle="solid"
                     background={theme.branding}
                     fontSize={{ base: 'sm', md: 'md' }}
                     fontFamily="heading"
@@ -231,7 +234,7 @@ export const BodyTitle: FC = () => {
                   fontFamily="heading"
                   background="none"
                   borderWidth="1px"
-                  borderColor={theme.collapse.text}
+                  borderColor={theme.stroke || theme.collapse.text}
                   borderStyle="solid"
                   _hover={{
                     opacity: 0.8,

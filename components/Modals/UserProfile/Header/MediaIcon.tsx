@@ -85,7 +85,7 @@ export const MediaIcon: FC<IMediaIcon> = ({
 
   const labelTooltip = () => {
     if (media === 'discord' && chosenMedia.value) return chosenMedia.value;
-    if (disabledCondition) return '';
+    if (disabledCondition || (isConnected && !isSamePerson)) return '';
     if (isConnected) return `Update your ${media} handle now`;
     return `Login to update your ${media} handle`;
   };

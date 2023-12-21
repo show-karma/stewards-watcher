@@ -44,6 +44,7 @@ export const SearchFilter = () => {
           value={input}
           onChange={handleInput}
           boxShadow={theme.card.shadow}
+          color={theme.title}
           _placeholder={{
             color: theme.subtitle,
           }}

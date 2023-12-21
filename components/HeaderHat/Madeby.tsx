@@ -14,10 +14,12 @@ export const Madeby: FC<FlexProps> = () => {
   const { theme } = useDAO();
   const variantImg = useBreakpointValue({
     base: useColorModeValue(
-      theme.headerBg === '#FFFFFF'
+      theme.headerBg === '#FFFFFF' || theme.headerBg === '#F5F5F5'
         ? '/images/karma_logo_black.svg'
         : '/images/karma_logo_white.png',
-      '/images/karma_logo_white.png'
+      theme.headerBg === '#FFFFFF' || theme.headerBg === '#F5F5F5'
+        ? '/images/karma_logo_black.svg'
+        : '/images/karma_logo_white.png'
     ),
   });
   return (

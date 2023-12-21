@@ -15,7 +15,9 @@ export const StatCard: FC<StatCardProps> = ({ amount, title }) => {
       gap="1"
       w="140px"
       height="120px"
-      border="1px solid white"
+      borderWidth="1px"
+      borderStyle="solid"
+      borderColor={theme.modal.statement.sidebar.item.border}
       borderRadius="12px"
       px="6"
       py="4"

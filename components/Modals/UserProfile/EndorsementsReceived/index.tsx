@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable no-nested-ternary */
 import {
   Flex,
@@ -43,7 +44,7 @@ export const EndorsementsReceived = () => {
   } = useDelegates();
   const [data, setData] = useState<EndorsementData[]>([]);
 
-  const { daoInfo } = useDAO();
+  const { daoInfo, theme } = useDAO();
   const endorsersCounter = data.length;
 
   const [isLoading, setIsLoading] = useState(false);
@@ -225,7 +226,8 @@ export const EndorsementsReceived = () => {
     <Flex
       mb="20"
       py="5"
-      border="1px solid white"
+      border="1px solid"
+      borderColor={theme.modal.header.title}
       borderRadius="12px"
       flexDir="column"
     >
@@ -233,7 +235,7 @@ export const EndorsementsReceived = () => {
         <Text
           fontSize={{ base: '14px', sm: '18px' }}
           fontWeight="700"
-          color="white"
+          color={theme.modal.header.title}
         >
           Endorsements Received
         </Text>
@@ -241,7 +243,7 @@ export const EndorsementsReceived = () => {
           <Text
             fontSize={{ base: '13px', sm: '14px' }}
             fontWeight="500"
-            color="white"
+            color={theme.modal.header.title}
           >
             ({endorsersCounter})
           </Text>
@@ -250,7 +252,7 @@ export const EndorsementsReceived = () => {
 
       {isLoading ? (
         <Flex w="full" py="8" alignItems="center" justifyContent="center">
-          <Spinner color="white" />
+          <Spinner color={theme.modal.header.title} />
         </Flex>
       ) : endorsersCounter ? (
         <>
@@ -259,7 +261,8 @@ export const EndorsementsReceived = () => {
               <Thead>
                 <Tr>
                   <Th
-                    borderBottom="1px solid white"
+                    borderBottom="1px solid"
+                    borderBottomColor={theme.modal.header.title}
                     fontSize="12px"
                     fontWeight="500"
                     color="#F2F4F7"
@@ -267,7 +270,8 @@ export const EndorsementsReceived = () => {
                     Received from
                   </Th>
                   <Th
-                    borderBottom="1px solid white"
+                    borderBottom="1px solid"
+                    borderBottomColor={theme.modal.header.title}
                     fontSize="12px"
                     fontWeight="500"
                     color="#F2F4F7"
@@ -275,7 +279,8 @@ export const EndorsementsReceived = () => {
                     Voting Power
                   </Th>
                   <Th
-                    borderBottom="1px solid white"
+                    borderBottom="1px solid"
+                    borderBottomColor={theme.modal.header.title}
                     fontSize="12px"
                     fontWeight="500"
                     color="#F2F4F7"
@@ -284,14 +289,16 @@ export const EndorsementsReceived = () => {
                     Date
                   </Th>
                   <Th
-                    borderBottom="1px solid white"
+                    borderBottom="1px solid"
+                    borderBottomColor={theme.modal.header.title}
                     fontSize="12px"
                     fontWeight="500"
                     color="#F2F4F7"
                     display={{ base: 'none', sm: 'table-cell' }}
                   />
                   <Th
-                    borderBottom="1px solid white"
+                    borderBottom="1px solid"
+                    borderBottomColor={theme.modal.header.title}
                     fontSize="12px"
                     fontWeight="500"
                     color="#F2F4F7"
@@ -303,8 +310,9 @@ export const EndorsementsReceived = () => {
                 {currentItems.map((item, index) => (
                   <Tr key={item.date + +index}>
                     <Td
-                      borderBottom="1px solid white"
-                      color="white"
+                      borderBottom="1px solid"
+                      borderBottomColor={theme.modal.header.title}
+                      color={theme.modal.header.title}
                       textOverflow="ellipsis"
                       whiteSpace="nowrap"
                       overflow="hidden"
@@ -314,8 +322,9 @@ export const EndorsementsReceived = () => {
                       {item.addressOrENS}
                     </Td>
                     <Td
-                      borderBottom="1px solid white"
-                      color="white"
+                      borderBottom="1px solid"
+                      borderBottomColor={theme.modal.header.title}
+                      color={theme.modal.header.title}
                       textOverflow="ellipsis"
                       whiteSpace="nowrap"
                       overflow="hidden"
@@ -325,8 +334,9 @@ export const EndorsementsReceived = () => {
                       {item.votingPower}
                     </Td>
                     <Td
-                      borderBottom="1px solid white"
-                      color="white"
+                      borderBottom="1px solid"
+                      borderBottomColor={theme.modal.header.title}
+                      color={theme.modal.header.title}
                       textOverflow="ellipsis"
                       whiteSpace="nowrap"
                       overflow="hidden"
@@ -337,7 +347,8 @@ export const EndorsementsReceived = () => {
                       {getFormattedData(item.date)}
                     </Td>
                     <Td
-                      borderBottom="1px solid white"
+                      borderBottom="1px solid"
+                      borderBottomColor={theme.modal.header.title}
                       color="blue.400"
                       textOverflow="ellipsis"
                       whiteSpace="nowrap"
@@ -357,8 +368,9 @@ export const EndorsementsReceived = () => {
                       </Link>
                     </Td>
                     <Td
-                      borderBottom="1px solid white"
-                      color="white"
+                      borderBottom="1px solid"
+                      borderBottomColor={theme.modal.header.title}
+                      color={theme.modal.header.title}
                       textDecoration="underline"
                       fontSize={{ base: '13px', sm: '14px' }}
                       display={{ base: 'none', sm: 'table-cell' }}
@@ -381,7 +393,7 @@ export const EndorsementsReceived = () => {
                 w="max-content"
                 gap="2"
                 alignItems="center"
-                color="#F2F4F7"
+                color={theme.modal.header.title}
                 backgroundColor="transparent"
                 px="2"
                 py="1"
@@ -396,7 +408,7 @@ export const EndorsementsReceived = () => {
                 w="max-content"
                 gap="2"
                 alignItems="center"
-                color="#F2F4F7"
+                color={theme.modal.header.title}
                 backgroundColor="transparent"
                 px="2"
                 py="1"
@@ -406,7 +418,11 @@ export const EndorsementsReceived = () => {
               </Flex>
             }
             pageLinkClassName="navigator-active-link"
-            pageLabelBuilder={pageNumber => `Page ${pageNumber}`}
+            pageLabelBuilder={pageNumber => (
+              <Text
+                color={theme.modal.header.title}
+              >{`Page ${pageNumber}`}</Text>
+            )}
             onPageChange={handlePageClick}
             pageRangeDisplayed={2}
             marginPagesDisplayed={1}
@@ -424,7 +440,7 @@ export const EndorsementsReceived = () => {
           px="4"
           py="4"
         >
-          <Text color="white">No endorsements found.</Text>
+          <Text color={theme.modal.header.title}>No endorsements found.</Text>
         </Flex>
       )}
     </Flex>
