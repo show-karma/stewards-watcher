@@ -31,8 +31,9 @@ interface ISupportedDAOs {
 export const supportedDAOs: ISupportedDAOs = {
   gitcoin: {
     config: gitcoin.config,
-    light: gitcoin.light,
-    dark: gitcoin.dark,
+    // switched light and dark because gitcoin have main theme as light
+    light: gitcoin.dark,
+    dark: gitcoin.light,
     DELEGATE_ABI: gitcoin.ABI,
     TOKEN_ABI: gitcoin.ABI,
   },

@@ -5,6 +5,7 @@ export interface IDAOTheme {
   bodyBg: string;
   bodyShadow?: string;
   title: string;
+  stroke?: string;
   subtitle: string;
   text: string;
   branding: string;
@@ -64,6 +65,7 @@ export interface IDAOTheme {
       subtitle: string;
       twitter: string;
       divider: string;
+      hoverText?: string;
     };
     buttons: {
       selectBg: string;

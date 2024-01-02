@@ -57,15 +57,16 @@ const config: IDAOConfig = {
 };
 
 const dark: IDAOTheme = {
-  background: '#291555',
-  bodyBg: '#291555',
+  logo: '/daos/gitcoin/logo_white.svg',
+  background: '#000000',
+  bodyBg: '#000000',
   title: '#FFFFFF',
   subtitle: '#a0aec0',
   text: '#FFFFFF',
-  branding: '#02E2AC',
+  branding: '#D3F0ED',
   buttonText: '#0E0333',
   buttonTextSec: '#FFFFFF',
-  headerBg: '#321E5E',
+  headerBg: '#111111',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
   collapse: { text: '#FFFFFF', subtext: '#ADB8C0' },
@@ -81,34 +82,35 @@ const dark: IDAOTheme = {
     head: '#ADB8C0',
     border: '#ADB8C033',
     title: 'white',
-    bg: '#321E5E',
-    listBg: '#321E5E',
+    bg: '#111111',
+    listBg: '#111111',
     listText: 'white',
     activeBg: 'rgba(102, 102, 102, 0.15)',
   },
   card: {
     icon: '#ADB8C0',
-    background: '#321E5E',
+    background: '#2f3640',
     statBg: 'rgba(102, 102, 102, 0.15)',
     divider: 'rgba(173, 184, 192, 0.2)',
     text: { primary: '#FFFFFF', secondary: '#ADB8C0' },
     border: 'rgba(87, 93, 104, 0.25)',
     common: '#727B81',
     interests: { bg: 'rgba(255, 255, 255, 0.05)', text: '#ADB8C0' },
-    workstream: { bg: '#FFFFFF', text: '#222429' },
+    workstream: { bg: '#FFFFFF', text: '#00433B' },
     socialMedia: '#FFFFFF',
   },
   loginModal: {
-    background: '#321E5E',
+    logo: 'daos/gitcoin/logo_white.svg',
+    background: '#111111',
     text: '#FFFFFF',
     footer: { bg: 'rgba(102, 102, 102, 0.15)', text: '#FFFFFF' },
     button: {
-      bg: '#02E2AC',
+      bg: '#D3F0ED',
       text: '#0E0333',
     },
   },
   modal: {
-    background: '#321E5E',
+    background: '#111111',
     header: {
       border: '#ADB8C0',
       title: '#FFFFFF',
@@ -117,9 +119,9 @@ const dark: IDAOTheme = {
       divider: 'rgba(173, 184, 192, 0.2)',
     },
     buttons: {
-      selectBg: '#02E2AC',
+      selectBg: '#D3F0ED',
       selectText: '#FFFFFF',
-      navBg: '#291555',
+      navBg: '#000000',
       navText: '#FFFFFF',
       navUnselectedText: '#ADB8C0',
       navBorder: '#FFFFFF',
@@ -155,7 +157,7 @@ const dark: IDAOTheme = {
       },
       button: {
         disabled: {
-          bg: '#F2F4F9',
+          bg: '#FFFFFF',
           text: 'rgba(89, 90, 94, 0.5)',
         },
         normal: {
@@ -175,8 +177,8 @@ const dark: IDAOTheme = {
       modules: {
         chart: {
           point: '#B999FF',
-          openGradient: '#8E6ADC',
-          endGradient: '#291555',
+          endGradient: '#000000',
+          openGradient: '#2f3640',
         },
       },
       proposal: {
@@ -186,7 +188,7 @@ const dark: IDAOTheme = {
         result: '#FFFFFF',
         verticalDivider: 'rgba(173, 184, 192, 0.5)',
         divider: 'rgba(173, 184, 192, 0.2)',
-        bg: '#291555',
+        bg: '#000000',
       },
       reason: {
         title: '#FFFFFF',
@@ -196,7 +198,7 @@ const dark: IDAOTheme = {
       navigation: {
         color: '#FFFFFF',
         buttons: {
-          selectedBg: '#291555',
+          selectedBg: '#000000',
           selectedText: '#FFFFFF',
           unSelectedBg: 'transparent',
           unSelectedText: '#FFFFFF',
@@ -206,8 +208,8 @@ const dark: IDAOTheme = {
   },
   tokenHolders: {
     border: '#34383f',
-    bg: '#291555',
-    stepsColor: '#02E2AC',
+    bg: '#000000',
+    stepsColor: '#D3F0ED',
     list: {
       text: {
         primary: '#FFFFFF',
@@ -252,7 +254,7 @@ const dark: IDAOTheme = {
           text: '#F5F5F5',
           bg: '#3A295F',
           pillText: '#F5F5F5',
-          pillBg: '#291555',
+          pillBg: '#000000',
         },
         columns: {
           text: '#F5F5F5',
@@ -263,7 +265,7 @@ const dark: IDAOTheme = {
           stats: {
             primary: '#F5F5F5',
             secondary: '#ADB8C0',
-            leftBorder: '#02E2AC',
+            leftBorder: '#D3F0ED',
             border: '#DBDFE3',
           },
           voting: {
@@ -274,7 +276,7 @@ const dark: IDAOTheme = {
               hyperlink: '#b3a1dd',
               description: '#ADB8C0',
               sort: {
-                bg: '#291555',
+                bg: '#000000',
                 border: '#FFFFFF',
                 text: '#F5F5F5',
                 label: '#ADB8C0',
@@ -308,32 +310,33 @@ const dark: IDAOTheme = {
         },
       },
       bg: {
-        primary: '#321E5E',
+        primary: '#111111',
         secondary: '#1B2030',
-        tertiary: '#02E2AC',
+        tertiary: '#D3F0ED',
       },
     },
   },
 };
 
 const light: IDAOTheme = {
-  background: '#F2F4F9',
-  bodyBg: '#F2F4F9',
-  title: '#222429',
+  background: '#FFFFFF',
+  bodyBg: '#FFFFFF',
+  title: '#00433B',
   subtitle: '#666666',
-  text: '#222429',
-  branding: '#02E2AC',
-  buttonText: '#0E0333',
-  buttonTextSec: '#222429',
-  headerBg: '#321E5E',
+  text: '#00433B',
+  branding: '#D3F0ED',
+  stroke: '#C8CCCC',
+  buttonText: '#000000',
+  buttonTextSec: '#00433B',
+  headerBg: '#F5F5F5',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
-  collapse: { text: '#321E5E', subtext: '#222429', bg: '#FFFFFF' },
+  collapse: { text: '#000000', subtext: '#00433B', bg: '#F5F5F5' },
   hat: {
     text: {
-      primary: '#FFFFFF',
+      primary: '#000000',
       secondary: '#ADB8C0',
-      madeBy: '#FFFFFF',
+      madeBy: '#000000',
       lastUpdated: '#595A5E',
     },
   },
@@ -349,7 +352,7 @@ const light: IDAOTheme = {
   },
   card: {
     icon: '#ADB8C0',
-    background: '#FFFFFF',
+    background: '#F5F5F5',
     divider: 'rgba(102, 102, 102, 0.5)',
     text: { primary: '#212328', secondary: '#666666' },
     statBg: '#EBEDEF',
@@ -357,35 +360,36 @@ const light: IDAOTheme = {
     shadow: '0px 0px 4px rgba(0, 0, 0, 0.1)',
     common: '#727B81',
     interests: { bg: '#EBEDEF', text: '#2C2E32' },
-    workstream: { bg: '#595A5E', text: '#FFFFFF' },
+    workstream: { bg: '#595A5E', text: '#F5F5F5' },
     socialMedia: '#595A5E',
   },
   loginModal: {
-    logo: 'daos/gitcoin/logo_black.svg',
+    logo: 'daos/gitcoin/logo.svg',
     background: '#FFFFFF',
     text: '#212328',
     footer: { bg: '#EBEDEF', text: '#212328' },
     button: {
-      bg: '#02E2AC',
+      bg: '#D3F0ED',
       text: '#0E0333',
     },
   },
   modal: {
-    background: '#222429',
+    background: '#F5F5F5',
     header: {
-      border: '#ADB8C0',
-      title: '#FFFFFF',
-      subtitle: '#ADB8C0',
-      twitter: '#ADB8C0',
+      border: '#00433B',
+      title: '#000000',
+      subtitle: '#00433B',
+      twitter: '#00433B',
       divider: 'rgba(173, 184, 192, 0.2)',
+      hoverText: '#000000',
     },
     buttons: {
-      selectBg: '#02E2AC',
-      selectText: '#FFFFFF',
+      selectBg: '#D3F0ED',
+      selectText: '#000000',
       navBg: '#111214',
-      navText: '#FFFFFF',
-      navUnselectedText: '#ADB8C0',
-      navBorder: '#FFFFFF',
+      navText: '#000000',
+      navUnselectedText: '#00433B',
+      navBorder: '#000000',
     },
     delegateTo: {
       bg: '#FFFFFF',
@@ -404,12 +408,12 @@ const light: IDAOTheme = {
       },
       button: {
         disabled: {
-          bg: '#F2F4F9',
+          bg: '#FFFFFF',
           text: 'rgba(89, 90, 94, 0.5)',
         },
         normal: {
           bg: '#C80925',
-          text: '#FFFFFF',
+          text: '#000000',
         },
         alternative: {
           bg: 'transparent',
@@ -419,66 +423,66 @@ const light: IDAOTheme = {
       },
     },
     statement: {
-      headline: '#FFFFFF',
-      text: '#ADB8C0',
+      headline: '#000000',
+      text: '#00433B',
       sidebar: {
-        section: '#FFFFFF',
-        subsection: '#FFFFFF',
-        text: '#ADB8C0',
+        section: '#000000',
+        subsection: '#000000',
+        text: '#00433B',
         item: {
           bg: 'transparent',
-          text: '#FFFFFF',
-          border: '#ADB8C0',
+          text: '#000000',
+          border: '#00433B',
         },
       },
     },
     votingHistory: {
-      headline: '#FFFFFF',
+      headline: '#000000',
       divider: '#E6E6E6',
       modules: {
         chart: {
           point: '#B999FF',
-          openGradient: '#8E6ADC',
-          endGradient: '#291555',
+          openGradient: '#000000',
+          endGradient: '#FFFFFF',
         },
       },
       proposal: {
-        title: '#FFFFFF',
-        type: '#ADB8C0',
-        date: '#ADB8C0',
-        result: '#FFFFFF',
+        title: '#000000',
+        type: '#00433B',
+        date: '#00433B',
+        result: '#00433B',
         verticalDivider: 'rgba(173, 184, 192, 0.5)',
         divider: 'rgba(173, 184, 192, 0.2)',
-        bg: '#291555',
+        bg: '#bdc3c7',
       },
       reason: {
-        title: '#FFFFFF',
-        text: '#ADB8C0',
+        title: '#2e2a2a',
+        text: '#2e2a2a',
         divider: 'rgba(173, 184, 192, 0.2)',
       },
       navigation: {
-        color: '#ADB8C0',
+        color: '#00433B',
         buttons: {
-          selectedBg: '#ADB8C0',
-          selectedText: '#222429',
+          selectedBg: '#00433B',
+          selectedText: '#FFFFFF',
           unSelectedBg: 'transparent',
-          unSelectedText: '#ADB8C0',
+          unSelectedText: '#00433B',
         },
       },
     },
   },
   tokenHolders: {
-    border: '#321E5E',
-    bg: '#F2F4F9',
-    stepsColor: '#321E5E',
+    border: '#000000',
+    bg: '#FFFFFF',
+    stepsColor: '#000000',
     list: {
       text: {
-        primary: '#FFFFFF',
+        primary: '#000000',
         secondary: '#ADB8C0',
       },
       bg: {
         primary: '#FFFFFF',
-        secondary: '#321E5E',
+        secondary: '#000000',
       },
     },
     delegations: {
@@ -497,7 +501,7 @@ const light: IDAOTheme = {
           placeholder: '#88939F',
           text: '#080A0E',
         },
-        button: '#FFFFFF',
+        button: '#000000',
       },
       border: {
         input: '#88939F',
@@ -519,15 +523,15 @@ const light: IDAOTheme = {
           pillBg: '#88939F33',
         },
         columns: {
-          text: '#321E5E',
+          text: '#000000',
           icon: {
             bg: '#F0EBFA',
-            text: '#321E5E',
+            text: '#000000',
           },
           stats: {
-            primary: '#4A269B',
+            primary: '#000000',
             secondary: '#4F5D6C',
-            leftBorder: '#321E5E',
+            leftBorder: '#000000',
             border: '#DBDFE3',
           },
           voting: {
@@ -535,12 +539,12 @@ const light: IDAOTheme = {
             totalNumber: '#88939F',
             proposals: {
               title: '#080A0E',
-              hyperlink: '#4A269B',
+              hyperlink: '#000000',
               description: '#4F5D6C',
               sort: {
                 bg: '#FFFFFF',
                 border: '#88939F',
-                text: '#88939F',
+                text: '#00433B',
                 label: '#4F5D6C',
               },
               vote: {
@@ -555,10 +559,10 @@ const light: IDAOTheme = {
               navigation: {
                 color: '#291555',
                 buttons: {
-                  selectedBg: '#291555',
-                  selectedText: '#FFFFFF',
+                  selectedBg: '#D3F0ED',
+                  selectedText: '#000000',
                   unSelectedBg: 'transparent',
-                  unSelectedText: '#291555',
+                  unSelectedText: '#000000',
                 },
               },
             },
@@ -574,7 +578,7 @@ const light: IDAOTheme = {
       bg: {
         primary: '#FFFFFF',
         secondary: '#291555',
-        tertiary: '#24114F',
+        tertiary: '#d3f0ed',
       },
     },
   },
