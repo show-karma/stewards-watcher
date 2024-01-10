@@ -281,7 +281,7 @@ export const BodyTitle: FC = () => {
       ) : undefined}
       <Filters />
       <Flex
-        flexDir={{ base: 'column', md: 'row' }}
+        flexDir={{ base: 'column-reverse', md: 'row' }}
         w="full"
         gap="6"
         justify="space-between"
