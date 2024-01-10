@@ -298,8 +298,8 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
   };
 
   const getWorkstreams = () => {
-    if (workstreamsFilter.length === 0 && config.DAO_KARMA_ID === 'gitcoin')
-      return '6,4,3,7,1,2,5,12';
+    // if (workstreamsFilter.length === 0 && config.DAO_KARMA_ID === 'gitcoin')
+    //   return '6,4,3,7,1,2,5,12';
     if (workstreamsFilter.length) return workstreamsFilter.join(',');
     return undefined;
   };
