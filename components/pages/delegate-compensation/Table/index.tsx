@@ -3,9 +3,9 @@ import * as React from 'react';
 import { createColumnHelper } from '@tanstack/react-table';
 import { DelegateCompensationStats } from 'types';
 import {
-  Checkbox,
   Code,
   Flex,
+  Icon,
   List,
   ListItem,
   Text,
@@ -15,6 +15,7 @@ import { ImgWithFallback } from 'components/ImgWithFallback';
 import { isAddress } from 'ethers/lib/utils';
 import { formatNumberPercentage, truncateAddress } from 'utils';
 import { useDAO } from 'contexts';
+import { FaCheckCircle } from 'react-icons/fa';
 import { DataTable } from './DataTable';
 
 const columnHelper = createColumnHelper<DelegateCompensationStats>();
@@ -29,23 +30,6 @@ export const Table: React.FC<TableProps> = ({ delegates }) => {
     columnHelper.accessor('delegate', {
       cell: info => (
         <Flex flexDir="row" gap="3" alignItems="center" maxW="200px">
-          <Tooltip
-            shouldWrapChildren
-            label="Opted-in to Incentive Program"
-            fontSize="md"
-          >
-            {info.row.index % 2 === 0 ? (
-              <Checkbox
-                colorScheme="green"
-                defaultChecked
-                _hover={{
-                  cursor: 'normal',
-                }}
-              />
-            ) : (
-              <Flex w="16px" />
-            )}
-          </Tooltip>
           <ImgWithFallback
             borderRadius="full"
             boxSize="32px"
@@ -57,6 +41,17 @@ export const Table: React.FC<TableProps> = ({ delegates }) => {
               ? truncateAddress(info.getValue())
               : info.getValue()}
           </Text>
+          {info.row.index % 2 === 0 ? (
+            <Tooltip
+              shouldWrapChildren
+              label="Opted-in to Incentive Program"
+              fontSize="md"
+            >
+              <Icon as={FaCheckCircle} w="4" h="4" color="green.400" />
+            </Tooltip>
+          ) : (
+            <Flex w="16px" />
+          )}
         </Flex>
       ),
       header: 'Delegate',
@@ -110,7 +105,7 @@ export const Table: React.FC<TableProps> = ({ delegates }) => {
             </Flex>
           }
         >
-          PR(%)
+          Participation Rate (%)
         </Tooltip>
       ),
       meta: {
@@ -146,7 +141,7 @@ export const Table: React.FC<TableProps> = ({ delegates }) => {
             </Flex>
           }
         >
-          SV(%)
+          Snapshot Voting (%)
         </Tooltip>
       ),
       meta: {
@@ -161,10 +156,10 @@ export const Table: React.FC<TableProps> = ({ delegates }) => {
           color={theme.collapse.text}
           label={
             <Flex flexDir="column" py="1" gap="2">
-              <Text fontWeight={600}>Tally Voting (TV) - Weight 25</Text>
+              <Text fontWeight={600}>On-chain Voting (TV) - Weight 25</Text>
               <Text fontWeight="normal">
-                Percentage of delegate participation in on-chain voting in
-                Tally. This parameter is reset at the beginning of each month.
+                Percentage of delegate participation in on-chain voting. This
+                parameter is reset at the beginning of each month.
               </Text>
               <List fontWeight="normal">
                 <ListItem>
@@ -182,7 +177,7 @@ export const Table: React.FC<TableProps> = ({ delegates }) => {
             </Flex>
           }
         >
-          TV(%)
+          On-chain Voting(%)
         </Tooltip>
       ),
       meta: {
@@ -222,7 +217,7 @@ export const Table: React.FC<TableProps> = ({ delegates }) => {
             </Flex>
           }
         >
-          CR(%)
+          Communicating Rationale (%)
         </Tooltip>
       ),
       meta: {
@@ -261,7 +256,7 @@ export const Table: React.FC<TableProps> = ({ delegates }) => {
             </Flex>
           }
         >
-          CP(%)
+          Commenting Proposal (%)
         </Tooltip>
       ),
       meta: {
@@ -344,7 +339,7 @@ export const Table: React.FC<TableProps> = ({ delegates }) => {
             </Flex>
           }
         >
-          Payment(ARB)
+          Payment (ARB)
         </Tooltip>
       ),
       meta: {
