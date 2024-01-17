@@ -236,7 +236,36 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                       borderBottomColor={theme.modal.header.title}
                       color={theme.modal.header.title}
                     >
-                      {item.total}
+                      {item.total ? (
+                        <Flex flexDir="row" gap="4" alignItems="center">
+                          <Editable
+                            w="48px"
+                            defaultValue={item.total.toString()}
+                          >
+                            <EditablePreview
+                              cursor="pointer"
+                              _hover={{ opacity: 0.7 }}
+                            />
+                            <EditableInput
+                              w="full"
+                              bg="gray.900"
+                              _active={{}}
+                              _focus={{
+                                bg: 'gray.700',
+                                borderWidth: '1px',
+                                borderStyle: 'solid',
+                                borderColor: theme.modal.header.title,
+                                padding: '0 4px',
+                              }}
+                              _focusVisible={{}}
+                              _focusWithin={{}}
+                              onChange={() => {
+                                setIsChanged(true);
+                              }}
+                            />
+                          </Editable>
+                        </Flex>
+                      ) : null}
                     </Td>
                   </Tr>
                 ))}
