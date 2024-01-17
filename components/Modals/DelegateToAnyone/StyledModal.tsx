@@ -43,6 +43,7 @@ export const StyledModal: React.FC<
         borderTopRadius="12px"
         bgColor={theme.background}
         overflow="hidden"
+        color={theme.text}
       >
         <ModalCloseButton zIndex={10} id="cu" color={modalTheme.subtext} />
         <Flex

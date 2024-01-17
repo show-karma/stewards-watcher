@@ -3,6 +3,7 @@ import { Flex, Grid, Spinner, Text, useDisclosure } from '@chakra-ui/react';
 import {
   IBreakdownProps,
   ScoreBreakdownProvider,
+  useDAO,
   useDelegates,
   useWallet,
 } from 'contexts';
@@ -103,6 +104,7 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
     interestFilter,
     delegates,
   } = useDelegates();
+  const { theme } = useDAO();
 
   const [selectedBreakdownUser, setSelectedBreakdownUser] =
     useState<IBreakdownProps | null>(null);
@@ -208,7 +210,7 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
           isOpen={isOpen}
           title="Score Breakdown"
           description={
-            <>
+            <Flex flexDir="column" gap="2" color={theme.text}>
               <Text>
                 Below is a breakdown of the user’s activities and actions in the
                 DAO.
@@ -217,7 +219,7 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
                 The total score is calculated through a formula and represents
                 their total contributions to the DAO.
               </Text>
-            </>
+            </Flex>
           }
           headerLogo
           onClose={onClose}
