@@ -1,11 +1,11 @@
 import React from 'react';
-import makeBlockie from 'ethereum-blockies-base64';
 import { ImgWithFallback } from 'components';
 import { useSignMessage } from 'wagmi';
 import { IconButton, Icon, Flex, Text, Button } from '@chakra-ui/react';
 import { BsArrowLeft } from 'react-icons/bs';
 import { useWallet } from 'contexts';
 import { IoClose } from 'react-icons/io5';
+import { blo } from 'blo';
 import { ESteps } from './ESteps';
 
 interface IModal {
@@ -123,7 +123,7 @@ export const Step2: React.FC<IModal> = ({
             width="26px"
             height="26px"
             fallback={username}
-            src={makeBlockie(username)}
+            src={blo(`0x${username}`)}
           />
           <Text
             fontStyle="normal"

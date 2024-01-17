@@ -3,7 +3,6 @@ import { useDAO, useDelegates, useGovernanceVotes, useWallet } from 'contexts';
 import { Button, Flex, Icon, Image, Radio, Text } from '@chakra-ui/react';
 import { IDelegate, MultiChainResult } from 'types';
 import { ImgWithFallback } from 'components/ImgWithFallback';
-import makeBlockie from 'ethereum-blockies-base64';
 import { IoAlertCircleOutline } from 'react-icons/io5';
 import { formatNumber, truncateAddress } from 'utils';
 import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
@@ -205,12 +204,12 @@ export const MultiChain: React.FC<StepProps> = ({
                   alignItems="center"
                 >
                   <ImgWithFallback
-                    fallback={daoName}
-                    src={makeBlockie(
+                    fallback={
+                      delegatedUser.realName ||
                       delegatedUser.ensName ||
-                        delegatedUser.address ||
-                        Math.random().toString()
-                    )}
+                      delegatedUser.address
+                    }
+                    src={delegatedUser.profilePicture}
                     boxSize="20px"
                     borderRadius="full"
                   />

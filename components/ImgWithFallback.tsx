@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import makeBlockie from 'ethereum-blockies-base64';
+import { blo } from 'blo';
 import { Image, ImgProps } from '@chakra-ui/react';
 
 interface Props extends ImgProps {
@@ -16,7 +16,7 @@ export const ImgWithFallback = ({
   const [imgSrc, setImgSrc] = useState<string | undefined>(src);
   const [canLoad, setCanLoad] = useState(false);
 
-  const avatarIcon = makeBlockie(fallback);
+  const avatarIcon = blo(fallback as `0x${string}`);
 
   const onError = () => {
     setImgSrc(avatarIcon);

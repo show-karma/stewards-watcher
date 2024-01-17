@@ -12,7 +12,6 @@ import {
 } from '@chakra-ui/react';
 import { IDelegate, MultiChainResult } from 'types';
 import { ImgWithFallback } from 'components/ImgWithFallback';
-import makeBlockie from 'ethereum-blockies-base64';
 import {
   ITrackBadgeProps,
   TrackBadge,
@@ -322,12 +321,8 @@ export const TrackDelegation: React.FC<StepProps> = ({
                   alignItems="center"
                 >
                   <ImgWithFallback
-                    fallback={daoName}
-                    src={makeBlockie(
-                      delegatedUser.ensName ||
-                        delegatedUser.address ||
-                        Math.random().toString()
-                    )}
+                    fallback={delegatedUser.ensName || delegatedUser.address}
+                    src={delegatedUser.profilePicture}
                     boxSize="20px"
                     borderRadius="full"
                   />
