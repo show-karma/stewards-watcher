@@ -12,7 +12,6 @@ import {
   Tooltip,
 } from '@chakra-ui/react';
 import { ImgWithFallback } from 'components/ImgWithFallback';
-import { formatNumberPercentage } from 'utils';
 import { useDAO } from 'contexts';
 import { FaCheckCircle } from 'react-icons/fa';
 import { DataTable } from './DataTable';
@@ -89,7 +88,7 @@ export const Table: React.FC<TableProps> = ({ delegates }) => {
     columnHelper.accessor('participationRate', {
       cell: info => {
         if (info.getValue()) {
-          return formatNumberPercentage(info.getValue());
+          return info.getValue();
         }
         if (info.getValue() === '0') {
           return 0;
@@ -109,11 +108,11 @@ export const Table: React.FC<TableProps> = ({ delegates }) => {
                 transactions. This is the only parameter that is not reset
                 monthly.
               </Text>
-              <Code fontWeight="normal">PR% formula: (PR * 20) / 100</Code>
+              <Code fontWeight="normal">PR formula: (PR * 20) / 100</Code>
             </Flex>
           }
         >
-          Participation Rate (%)
+          Participation Rate
         </Tooltip>
       ),
       meta: {
@@ -123,7 +122,7 @@ export const Table: React.FC<TableProps> = ({ delegates }) => {
     columnHelper.accessor('snapshotVoting.score', {
       cell: info => {
         if (info.getValue()) {
-          return formatNumberPercentage(info.getValue());
+          return info.getValue();
         }
         if (info.getValue() === '0') {
           return 0;
@@ -152,12 +151,12 @@ export const Table: React.FC<TableProps> = ({ delegates }) => {
                 </ListItem>
               </List>
               <Code fontWeight="normal">
-                SV% formula: (SV(Rn) / SV(Tn)) * 15
+                SV formula: (SV(Rn) / SV(Tn)) * 15
               </Code>
             </Flex>
           }
         >
-          Snapshot Voting (%)
+          Snapshot Voting
         </Tooltip>
       ),
       meta: {
@@ -167,7 +166,7 @@ export const Table: React.FC<TableProps> = ({ delegates }) => {
     columnHelper.accessor('onChainVoting.score', {
       cell: info => {
         if (info.getValue()) {
-          return formatNumberPercentage(info.getValue());
+          return info.getValue();
         }
         if (info.getValue() === '0') {
           return 0;
@@ -196,12 +195,12 @@ export const Table: React.FC<TableProps> = ({ delegates }) => {
                 </ListItem>
               </List>
               <Code fontWeight="normal">
-                TV% formula: (TV(Rn) / TV(Tn)) * 25
+                TV formula: (TV(Rn) / TV(Tn)) * 25
               </Code>
             </Flex>
           }
         >
-          On-chain Voting(%)
+          On-chain Voting
         </Tooltip>
       ),
       meta: {
@@ -211,7 +210,7 @@ export const Table: React.FC<TableProps> = ({ delegates }) => {
     columnHelper.accessor('communicatingRationale.score', {
       cell: info => {
         if (info.getValue()) {
-          return formatNumberPercentage(info.getValue());
+          return info.getValue();
         }
         if (info.getValue() === '0') {
           return 0;
@@ -244,12 +243,12 @@ export const Table: React.FC<TableProps> = ({ delegates }) => {
                 </ListItem>
               </List>
               <Code fontWeight="normal">
-                CR% formula: (CR(Rn) / CR(Tn)) * 25
+                CR formula: (CR(Rn) / CR(Tn)) * 25
               </Code>
             </Flex>
           }
         >
-          Communicating Rationale (%)
+          Communicating Rationale
         </Tooltip>
       ),
       meta: {
@@ -259,7 +258,7 @@ export const Table: React.FC<TableProps> = ({ delegates }) => {
     columnHelper.accessor('commentingProposal.score', {
       cell: info => {
         if (info.getValue()) {
-          return formatNumberPercentage(info.getValue());
+          return info.getValue();
         }
         if (info.getValue() === '0') {
           return 0;
@@ -291,12 +290,12 @@ export const Table: React.FC<TableProps> = ({ delegates }) => {
                 </ListItem>
               </List>
               <Code fontWeight="normal">
-                CP% formula: (CP(Rn) / CP(Tn)) * 15
+                CP formula: (CP(Rn) / CP(Tn)) * 15
               </Code>
             </Flex>
           }
         >
-          Commenting Proposal (%)
+          Commenting Proposal
         </Tooltip>
       ),
       meta: {
@@ -304,8 +303,15 @@ export const Table: React.FC<TableProps> = ({ delegates }) => {
       },
     }),
     columnHelper.accessor('totalParticipation', {
-      cell: info =>
-        info.getValue() ? formatNumberPercentage(info.getValue()) : null,
+      cell: info => {
+        if (info.getValue()) {
+          return info.getValue();
+        }
+        if (info.getValue() === '0') {
+          return 0;
+        }
+        return null;
+      },
       header: () => (
         <Tooltip
           bg={theme.collapse.bg || theme.card.background}
@@ -319,12 +325,12 @@ export const Table: React.FC<TableProps> = ({ delegates }) => {
               </Text>
 
               <Code fontWeight="normal">
-                TP% formula: PR% + SV% + TV% + CR% + CP% + BP
+                TP% formula: PR + SV + TV + CR + CP + BP
               </Code>
             </Flex>
           }
         >
-          Total Participation(%)
+          Total Participation
         </Tooltip>
       ),
       meta: {
@@ -350,7 +356,7 @@ export const Table: React.FC<TableProps> = ({ delegates }) => {
             </Flex>
           }
         >
-          Bonus Points(%)
+          Bonus Points
         </Tooltip>
       ),
       meta: {
