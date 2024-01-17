@@ -122,6 +122,7 @@ export const ScoreBreakdown: React.FC = () => {
             boxShadow: '0 0 1em 0.3em rgba(255, 255, 255, 0.05)',
             borderRadius: '8px',
             overflow: 'hidden',
+            color: theme.text,
           }}
           sx={breakdownTableStyles}
         >
@@ -152,7 +153,9 @@ export const ScoreBreakdown: React.FC = () => {
               </Tooltip>
             </Td>
           </Tr>
+
           <InputTree address={address} />
+
           <Tr>
             <Td colSpan={2}>Total</Td>
             <Td textAlign="start">
@@ -163,6 +166,7 @@ export const ScoreBreakdown: React.FC = () => {
                   left={`${totalScoreLeftOffset}ch`}
                   w="4ch"
                   style={{ wordWrap: 'initial' }}
+                  color={theme.text}
                 >
                   {formatNumber(roundedResult)}
                 </Text>
@@ -180,6 +184,7 @@ export const ScoreBreakdown: React.FC = () => {
           borderRadius: '8px',
           overflow: 'hidden',
         }}
+        color={theme.text}
       >
         <Tr>
           <Td>Period</Td>
@@ -204,8 +209,8 @@ export const ScoreBreakdown: React.FC = () => {
           </Td>
         </Tr>
         <Tr>
-          <Td>Score:</Td>
-          <Td>
+          <Td color={theme.text}>Score:</Td>
+          <Td color={theme.text}>
             <SkeletonText isLoaded={!loading}>
               <Text fontWeight="light">{formula}</Text>= {roundType}({score}) ={' '}
               {roundedResult}
