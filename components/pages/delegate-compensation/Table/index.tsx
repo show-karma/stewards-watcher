@@ -12,8 +12,7 @@ import {
   Tooltip,
 } from '@chakra-ui/react';
 import { ImgWithFallback } from 'components/ImgWithFallback';
-import { isAddress } from 'ethers/lib/utils';
-import { formatNumberPercentage, truncateAddress } from 'utils';
+import { formatNumberPercentage } from 'utils';
 import { useDAO } from 'contexts';
 import { FaCheckCircle } from 'react-icons/fa';
 import { DataTable } from './DataTable';
@@ -37,9 +36,10 @@ export const Table: React.FC<TableProps> = ({ delegates }) => {
             src={info.row.original.delegateImage}
           />
           <Text textOverflow="ellipsis" overflow="hidden" whiteSpace="nowrap">
-            {isAddress(info.getValue().toLowerCase())
+            {/* {isAddress(info.getValue().toLowerCase())
               ? truncateAddress(info.getValue())
-              : info.getValue()}
+              : info.getValue()} */}
+            {info.getValue()}
           </Text>
           {info.row.index % 2 === 0 ? (
             <Tooltip
@@ -87,7 +87,15 @@ export const Table: React.FC<TableProps> = ({ delegates }) => {
     //   },
     // }),
     columnHelper.accessor('participationRate', {
-      cell: info => info.getValue() || null,
+      cell: info => {
+        if (info.getValue()) {
+          return formatNumberPercentage(info.getValue());
+        }
+        if (info.getValue() === '0') {
+          return 0;
+        }
+        return null;
+      },
       header: () => (
         <Tooltip
           bg={theme.collapse.bg || theme.card.background}
@@ -113,7 +121,15 @@ export const Table: React.FC<TableProps> = ({ delegates }) => {
       },
     }),
     columnHelper.accessor('snapshotVoting.score', {
-      cell: info => info.getValue() || null,
+      cell: info => {
+        if (info.getValue()) {
+          return formatNumberPercentage(info.getValue());
+        }
+        if (info.getValue() === '0') {
+          return 0;
+        }
+        return null;
+      },
       header: () => (
         <Tooltip
           bg={theme.collapse.bg || theme.card.background}
@@ -149,7 +165,15 @@ export const Table: React.FC<TableProps> = ({ delegates }) => {
       },
     }),
     columnHelper.accessor('onChainVoting.score', {
-      cell: info => info.getValue() || null,
+      cell: info => {
+        if (info.getValue()) {
+          return formatNumberPercentage(info.getValue());
+        }
+        if (info.getValue() === '0') {
+          return 0;
+        }
+        return null;
+      },
       header: () => (
         <Tooltip
           bg={theme.collapse.bg || theme.card.background}
@@ -185,7 +209,15 @@ export const Table: React.FC<TableProps> = ({ delegates }) => {
       },
     }),
     columnHelper.accessor('communicatingRationale.score', {
-      cell: info => info.getValue() || null,
+      cell: info => {
+        if (info.getValue()) {
+          return formatNumberPercentage(info.getValue());
+        }
+        if (info.getValue() === '0') {
+          return 0;
+        }
+        return null;
+      },
       header: () => (
         <Tooltip
           bg={theme.collapse.bg || theme.card.background}
@@ -225,7 +257,15 @@ export const Table: React.FC<TableProps> = ({ delegates }) => {
       },
     }),
     columnHelper.accessor('commentingProposal.score', {
-      cell: info => info.getValue() || null,
+      cell: info => {
+        if (info.getValue()) {
+          return formatNumberPercentage(info.getValue());
+        }
+        if (info.getValue() === '0') {
+          return 0;
+        }
+        return null;
+      },
       header: () => (
         <Tooltip
           bg={theme.collapse.bg || theme.card.background}

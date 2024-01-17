@@ -1,7 +1,22 @@
 export type CompensationStatBreakdown = {
   score: string;
-  tn: number;
-  rn: number;
+  tn: string;
+  rn: string;
+};
+
+export type DelegateStatsFromAPI = {
+  id: number;
+  enrollmentId: number;
+  stats: {
+    address: string;
+    participationRate: string;
+    snapshotVoting: CompensationStatBreakdown;
+    onChainVoting: CompensationStatBreakdown;
+    communicatingRationale: CompensationStatBreakdown;
+    commentingProposal: CompensationStatBreakdown;
+    bonusPoint: number;
+    totalParticipation: string;
+  };
 };
 
 export type DelegateCompensationStats = {
@@ -13,7 +28,7 @@ export type DelegateCompensationStats = {
   onChainVoting: CompensationStatBreakdown;
   communicatingRationale: CompensationStatBreakdown;
   commentingProposal: CompensationStatBreakdown;
-  bonusPoint: number;
+  bonusPoint: string;
   totalParticipation: string;
   payment: number;
 };

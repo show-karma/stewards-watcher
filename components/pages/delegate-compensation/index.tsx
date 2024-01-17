@@ -12,7 +12,8 @@ import {
 import { useDAO } from 'contexts';
 import { useEffect, useState } from 'react';
 import { api } from 'helpers';
-import { DelegateCompensationStats, IDelegateFromAPI } from 'types';
+import { DelegateCompensationStats, DelegateStatsFromAPI } from 'types';
+import { blo } from 'blo';
 import { Table } from './Table';
 
 export const DelegateCompensation = () => {
@@ -29,55 +30,65 @@ export const DelegateCompensation = () => {
         //   `/dao/delegates?name=${config.DAO_KARMA_ID}&pageSize=200&offset=0&order=desc&field=delegatedVotes&period=30d&statuses=active`
         // );
         const response = await api.get(
-          `/dao/delegates?name=${config.DAO_KARMA_ID}&pageSize=50&offset=0&order=desc&field=delegatedVotes&period=30d&statuses=active`
+          `/delegate/arbitrum/incentive-programs-stats`
         );
         if (!response.data.data.delegates)
           throw new Error('Error fetching delegates');
         const responseDelegates = response.data.data.delegates;
+        if (responseDelegates.length === 0) {
+          setDelegates([]);
+          return;
+        }
+        const orderDelegates = responseDelegates.sort(
+          (itemA: DelegateStatsFromAPI, itemB: DelegateStatsFromAPI) =>
+            +itemB.stats.totalParticipation - +itemA.stats.totalParticipation
+        );
 
-        const parsedDelegates: DelegateCompensationStats[] =
-          responseDelegates.map((delegate: IDelegateFromAPI, index: number) => {
-            const PR = '20';
-            const SV = {
-              tn: 12,
-              rn: 12,
-              score: '15',
+        const parsedDelegates: DelegateCompensationStats[] = orderDelegates.map(
+          (delegate: DelegateStatsFromAPI, index: number) => {
+            const snapshotVoting = {
+              rn: delegate.stats.snapshotVoting.rn.toString(),
+              tn: delegate.stats.snapshotVoting.tn.toString(),
+              score: delegate.stats.snapshotVoting.score.toString(),
             };
-            const TV = {
-              tn: 10,
-              rn: 10,
-              score: '25',
+            const onChainVoting = {
+              rn: delegate.stats.onChainVoting.rn.toString(),
+              tn: delegate.stats.onChainVoting.tn.toString(),
+              score: delegate.stats.onChainVoting.score.toString(),
             };
-            const CR = {
-              tn: 5,
-              rn: 5,
-              score: '25',
+            const communicatingRationale = {
+              rn: delegate.stats.communicatingRationale.rn.toString(),
+              tn: delegate.stats.communicatingRationale.tn.toString(),
+              score: delegate.stats.communicatingRationale.score.toString(),
             };
-            const CP = {
-              tn: 5,
-              rn: 5,
-              score: '15',
+
+            const commentingProposal = {
+              rn: delegate.stats.commentingProposal.rn.toString(),
+              tn: delegate.stats.commentingProposal.tn.toString(),
+              score: delegate.stats.commentingProposal.score.toString(),
             };
-            const totalParticipation = '100';
-            const paymentARB = 5000;
-            const bonusPoint = 40;
+            const paymentARB = Math.round(
+              +delegate.stats.totalParticipation >= 5000
+                ? 5000
+                : 5000 * (+delegate.stats.totalParticipation / 100)
+            );
 
             return {
-              delegate:
-                delegate.realName || delegate.ensName || delegate.publicAddress,
-              delegateImage: delegate.profilePicture,
-              ranking: index + 1,
+              delegate: delegate.stats.address,
+              delegateImage: blo(delegate.stats.address as `0x${string}`),
+              ranking: index + 1 <= 50 ? index + 1 : null,
               fundsARB: 5000,
-              participationRate: PR,
-              snapshotVoting: SV,
-              onChainVoting: TV,
-              communicatingRationale: CR,
-              commentingProposal: CP,
-              totalParticipation,
+              participationRate: delegate.stats.participationRate,
+              snapshotVoting,
+              onChainVoting,
+              communicatingRationale,
+              commentingProposal,
+              totalParticipation: delegate.stats.totalParticipation,
               payment: paymentARB,
-              bonusPoint,
+              bonusPoint: delegate.stats.bonusPoint.toString(),
             } as DelegateCompensationStats;
-          });
+          }
+        );
         setDelegates(parsedDelegates);
       } catch (error) {
         console.log(error);
