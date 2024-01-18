@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { blo } from 'blo';
-import { Image, ImgProps } from '@chakra-ui/react';
+import { Image, Img, ImgProps } from '@chakra-ui/react';
 
 interface Props extends ImgProps {
   fallback?: string;
@@ -39,6 +39,6 @@ export const ImgWithFallback = ({
     />
   ) : (
     // eslint-disable-next-line react/jsx-no-useless-fragment
-    <></>
+    <Img src={avatarIcon} onError={onError} alt="" {...props} />
   );
 };

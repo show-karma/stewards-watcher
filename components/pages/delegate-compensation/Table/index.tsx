@@ -20,27 +20,26 @@ const columnHelper = createColumnHelper<DelegateCompensationStats>();
 
 interface TableProps {
   delegates: DelegateCompensationStats[];
+  refreshFn: () => Promise<void>;
 }
 
-export const Table: React.FC<TableProps> = ({ delegates }) => {
+export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
   const { theme } = useDAO();
   const columns = [
-    columnHelper.accessor('delegate', {
+    columnHelper.accessor('delegate.shouldUse', {
       cell: info => (
         <Flex flexDir="row" gap="3" alignItems="center" maxW="200px">
           <ImgWithFallback
             borderRadius="full"
-            boxSize="32px"
+            width="32px"
+            height="32px"
             fallback={info.getValue()}
             src={info.row.original.delegateImage}
           />
           <Text textOverflow="ellipsis" overflow="hidden" whiteSpace="nowrap">
-            {/* {isAddress(info.getValue().toLowerCase())
-              ? truncateAddress(info.getValue())
-              : info.getValue()} */}
             {info.getValue()}
           </Text>
-          {info.row.index % 2 === 0 ? (
+          {info.row.original.incentiveOptedIn ? (
             <Tooltip
               shouldWrapChildren
               label="Opted-in to Incentive Program"
@@ -393,5 +392,5 @@ export const Table: React.FC<TableProps> = ({ delegates }) => {
       },
     }),
   ];
-  return <DataTable columns={columns} data={delegates} />;
+  return <DataTable refreshFn={refreshFn} columns={columns} data={delegates} />;
 };

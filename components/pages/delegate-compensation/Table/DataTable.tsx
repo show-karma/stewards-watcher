@@ -22,11 +22,13 @@ import { BreakdownModal } from './BreakdownModal';
 export type DataTableProps<Data extends object> = {
   data: Data[];
   columns: ColumnDef<Data, any>[];
+  refreshFn: () => Promise<void>;
 };
 
 export const DataTable = <Data extends object>({
   data,
   columns,
+  refreshFn,
 }: DataTableProps<Data>) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const table = useReactTable({
@@ -101,6 +103,7 @@ export const DataTable = <Data extends object>({
           delegate={selectedDelegate}
           isOpen={isOpen}
           onClose={onClose}
+          refreshFn={refreshFn}
         />
       )}
     </>

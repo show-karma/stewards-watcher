@@ -7,98 +7,122 @@ import {
   MenuList,
   Skeleton,
   Spinner,
+  Switch,
   Text,
 } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
 import { useEffect, useState } from 'react';
 import { api } from 'helpers';
 import { DelegateCompensationStats, DelegateStatsFromAPI } from 'types';
-import { blo } from 'blo';
+import { formatSimpleNumber } from 'utils';
 import { Table } from './Table';
 
 export const DelegateCompensation = () => {
-  const { theme, daoInfo } = useDAO();
-  const { config } = daoInfo;
+  const { theme } = useDAO();
   const [delegates, setDelegates] = useState<DelegateCompensationStats[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [onlyOptIn, setOnlyOptIn] = useState(true);
+
+  const fetchDelegates = async () => {
+    setIsLoading(true);
+    try {
+      const response = await api.get(
+        `/delegate/arbitrum/incentive-programs-stats`,
+        {
+          params: {
+            incentiveOptedIn: onlyOptIn || undefined,
+          },
+        }
+      );
+      if (!response.data.data.delegates)
+        throw new Error('Error fetching delegates');
+      const responseDelegates = response.data.data.delegates;
+
+      if (responseDelegates.length === 0) {
+        setDelegates([]);
+        return;
+      }
+      const orderDelegates = responseDelegates.sort(
+        (itemA: DelegateStatsFromAPI, itemB: DelegateStatsFromAPI) =>
+          +itemB.stats.totalParticipation - +itemA.stats.totalParticipation
+      );
+
+      const parsedDelegates: DelegateCompensationStats[] = orderDelegates.map(
+        (delegate: DelegateStatsFromAPI, index: number) => {
+          const snapshotVoting = {
+            rn: formatSimpleNumber(delegate.stats.snapshotVoting.rn.toString()),
+            tn: formatSimpleNumber(delegate.stats.snapshotVoting.tn.toString()),
+            score: formatSimpleNumber(
+              delegate.stats.snapshotVoting.score.toString()
+            ),
+          };
+          const onChainVoting = {
+            rn: formatSimpleNumber(delegate.stats.onChainVoting.rn.toString()),
+            tn: formatSimpleNumber(delegate.stats.onChainVoting.tn.toString()),
+            score: formatSimpleNumber(
+              delegate.stats.onChainVoting.score.toString()
+            ),
+          };
+          const communicatingRationale = {
+            rn: formatSimpleNumber(
+              delegate.stats.communicatingRationale.rn.toString()
+            ),
+            tn: formatSimpleNumber(
+              delegate.stats.communicatingRationale.tn.toString()
+            ),
+            score: formatSimpleNumber(
+              delegate.stats.communicatingRationale.score.toString()
+            ),
+          };
+
+          const commentingProposal = {
+            rn: formatSimpleNumber(
+              delegate.stats.commentingProposal.rn.toString()
+            ),
+            tn: formatSimpleNumber(
+              delegate.stats.commentingProposal.tn.toString()
+            ),
+            score: formatSimpleNumber(
+              delegate.stats.commentingProposal.score.toString()
+            ),
+          };
+
+          return {
+            id: delegate.id,
+            delegate: {
+              publicAddress: delegate.publicAddress as `0x${string}`,
+              name: delegate.name,
+              profilePicture: delegate.profilePicture,
+              shouldUse:
+                delegate.name || delegate.ensName || delegate.publicAddress,
+            },
+            incentiveOptedIn: delegate.incentiveOptedIn,
+            delegateImage: delegate.profilePicture,
+            ranking: index + 1 <= 50 ? index + 1 : null,
+            fundsARB: 5000,
+            participationRate: delegate.stats.participationRate,
+            snapshotVoting,
+            onChainVoting,
+            communicatingRationale,
+            commentingProposal,
+            totalParticipation: delegate.stats.totalParticipation,
+            payment: formatSimpleNumber(delegate.stats.payment),
+            bonusPoint: delegate.stats.bonusPoint.toString(),
+          } as DelegateCompensationStats;
+        }
+      );
+      setDelegates(parsedDelegates);
+    } catch (error) {
+      console.log(error);
+      setDelegates([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchDelegates = async () => {
-      setIsLoading(true);
-      try {
-        // const response = await api.get(
-        //   `/dao/delegates?name=${config.DAO_KARMA_ID}&pageSize=200&offset=0&order=desc&field=delegatedVotes&period=30d&statuses=active`
-        // );
-        const response = await api.get(
-          `/delegate/arbitrum/incentive-programs-stats`
-        );
-        if (!response.data.data.delegates)
-          throw new Error('Error fetching delegates');
-        const responseDelegates = response.data.data.delegates;
-        if (responseDelegates.length === 0) {
-          setDelegates([]);
-          return;
-        }
-        const orderDelegates = responseDelegates.sort(
-          (itemA: DelegateStatsFromAPI, itemB: DelegateStatsFromAPI) =>
-            +itemB.stats.totalParticipation - +itemA.stats.totalParticipation
-        );
-
-        const parsedDelegates: DelegateCompensationStats[] = orderDelegates.map(
-          (delegate: DelegateStatsFromAPI, index: number) => {
-            const snapshotVoting = {
-              rn: delegate.stats.snapshotVoting.rn.toString(),
-              tn: delegate.stats.snapshotVoting.tn.toString(),
-              score: delegate.stats.snapshotVoting.score.toString(),
-            };
-            const onChainVoting = {
-              rn: delegate.stats.onChainVoting.rn.toString(),
-              tn: delegate.stats.onChainVoting.tn.toString(),
-              score: delegate.stats.onChainVoting.score.toString(),
-            };
-            const communicatingRationale = {
-              rn: delegate.stats.communicatingRationale.rn.toString(),
-              tn: delegate.stats.communicatingRationale.tn.toString(),
-              score: delegate.stats.communicatingRationale.score.toString(),
-            };
-
-            const commentingProposal = {
-              rn: delegate.stats.commentingProposal.rn.toString(),
-              tn: delegate.stats.commentingProposal.tn.toString(),
-              score: delegate.stats.commentingProposal.score.toString(),
-            };
-            const paymentARB = Math.round(
-              +delegate.stats.totalParticipation >= 5000
-                ? 5000
-                : 5000 * (+delegate.stats.totalParticipation / 100)
-            );
-
-            return {
-              delegate: delegate.stats.address,
-              delegateImage: blo(delegate.stats.address as `0x${string}`),
-              ranking: index + 1 <= 50 ? index + 1 : null,
-              fundsARB: 5000,
-              participationRate: delegate.stats.participationRate,
-              snapshotVoting,
-              onChainVoting,
-              communicatingRationale,
-              commentingProposal,
-              totalParticipation: delegate.stats.totalParticipation,
-              payment: paymentARB,
-              bonusPoint: delegate.stats.bonusPoint.toString(),
-            } as DelegateCompensationStats;
-          }
-        );
-        setDelegates(parsedDelegates);
-      } catch (error) {
-        console.log(error);
-        setDelegates([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
     fetchDelegates();
-  }, []);
+  }, [onlyOptIn]);
 
   return (
     <Flex flexDir="row" w="full" gap="48px" py="10">
@@ -122,7 +146,7 @@ export const DelegateCompensation = () => {
           flexDirection="row"
           gap="4"
           alignItems="center"
-          justifyContent="space-between"
+          justifyContent="flex-start"
         >
           <Flex flexDirection="row" gap="4" alignItems="center">
             <Text color={theme.card.text} fontSize="lg">
@@ -183,13 +207,25 @@ export const DelegateCompensation = () => {
               </MenuList>
             </Menu>
           </Flex>
+          <Switch
+            display="flex"
+            defaultChecked={onlyOptIn}
+            onChange={event => {
+              setOnlyOptIn(event.target.checked);
+            }}
+            alignItems="center"
+            gap="1"
+            id="only-opt-in"
+          >
+            Show only opt-in
+          </Switch>
         </Flex>
         {isLoading ? (
           <Flex justifyContent="center" alignItems="center" w="full">
             <Spinner w="32px" h="32px" />
           </Flex>
         ) : (
-          <Table delegates={delegates} />
+          <Table delegates={delegates} refreshFn={fetchDelegates} />
         )}
       </Flex>
     </Flex>

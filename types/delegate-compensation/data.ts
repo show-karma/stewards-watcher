@@ -5,22 +5,33 @@ export type CompensationStatBreakdown = {
 };
 
 export type DelegateStatsFromAPI = {
+  ensName: string;
+  name: string;
+  profilePicture: string;
+  publicAddress: string;
   id: number;
-  enrollmentId: number;
+  incentiveOptedIn: boolean;
   stats: {
-    address: string;
-    participationRate: string;
-    snapshotVoting: CompensationStatBreakdown;
-    onChainVoting: CompensationStatBreakdown;
-    communicatingRationale: CompensationStatBreakdown;
-    commentingProposal: CompensationStatBreakdown;
     bonusPoint: number;
+    commentingProposal: CompensationStatBreakdown;
+    communicatingRationale: CompensationStatBreakdown;
+    onChainVoting: CompensationStatBreakdown;
+    participationRate: string;
+    payment: number;
+    snapshotVoting: CompensationStatBreakdown;
     totalParticipation: string;
   };
 };
 
 export type DelegateCompensationStats = {
-  delegate: string;
+  id: number;
+  delegate: {
+    name?: string;
+    ensName?: string;
+    publicAddress: string;
+    shouldUse: string;
+  };
+  incentiveOptedIn: boolean;
   delegateImage: string;
   ranking: number;
   participationRate: string;
@@ -30,5 +41,5 @@ export type DelegateCompensationStats = {
   commentingProposal: CompensationStatBreakdown;
   bonusPoint: string;
   totalParticipation: string;
-  payment: number;
+  payment: string;
 };
