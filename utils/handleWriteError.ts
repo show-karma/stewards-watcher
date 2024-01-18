@@ -6,16 +6,19 @@ export const handleError = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error: any,
   daoInfo: IDAOInfo,
-  toast: Dispatch<SetStateAction<UseToastOptions>>
+  toast: Dispatch<SetStateAction<UseToastOptions>>,
+  delegateOrUndelegate: 'delegate' | 'undelegate'
 ) => {
-  console.log(error);
   if (error.data?.message?.includes('message: ')) {
     // regex to get what is between Some(" and ")
     const regex = /(?<=Some\(")(.*)(?="\))/gm;
     const message = error.data.message.match(regex)[0];
     if (!message) {
       toast({
-        title: 'Delegation failed',
+        title:
+          delegateOrUndelegate === 'delegate'
+            ? 'Delegation failed'
+            : 'Undelegation failed',
         description: `Transaction failed.`,
         status: 'error',
       });
@@ -24,7 +27,10 @@ export const handleError = (
     const dictionary = daoInfo.config.DELEGATION_ERRORS_DICTIONARY;
     if (dictionary && dictionary[message]) {
       toast({
-        title: 'Delegation failed',
+        title:
+          delegateOrUndelegate === 'delegate'
+            ? 'Delegation failed'
+            : 'Undelegation failed',
         description: `${dictionary[message]}`,
         status: 'error',
       });
@@ -35,7 +41,10 @@ export const handleError = (
     const messageFormatted = message.replace(regex2, ' $1');
 
     toast({
-      title: 'Delegation failed',
+      title:
+        delegateOrUndelegate === 'delegate'
+          ? 'Delegation failed'
+          : 'Undelegation failed',
       description: `${messageFormatted} 22`,
       status: 'error',
     });
@@ -51,7 +60,10 @@ export const handleError = (
     });
   } else {
     toast({
-      title: 'Delegation failed',
+      title:
+        delegateOrUndelegate === 'delegate'
+          ? 'Delegation failed'
+          : 'Undelegation failed',
       description: `Transaction failed.`,
       status: 'error',
     });
