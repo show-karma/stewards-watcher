@@ -3,7 +3,6 @@ import { TrackBadge } from 'components/DelegationPool/TrackBadge';
 import { useDAO, useDelegates } from 'contexts';
 import { NumberIsh } from 'types';
 import { formatNumber, IActiveDelegatedTracks } from 'utils';
-import { convictionLockTime } from './UndelegateModal';
 
 interface IUndelegateItemProps {
   tracksDelegated: IActiveDelegatedTracks[];
@@ -40,11 +39,7 @@ export const UndelegateItems: React.FC<IUndelegateItemProps> = ({
             trackToFind => trackToFind.trackId === track.id
           );
 
-          const disabledCondition = trackFound
-            ? trackFound.timestamp * 1000 +
-                convictionLockTime[+trackFound.conviction] * 86400000 >
-              Date.now()
-            : false;
+          const disabledCondition = false;
 
           return (
             <Flex

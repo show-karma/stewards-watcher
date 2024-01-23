@@ -181,12 +181,7 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
   };
 
   const unlockableTracks = useMemo(
-    () =>
-      tracksDelegated.filter(
-        tr =>
-          tr.timestamp * 1000 + convictionLockTime[+tr.conviction] * 86400000 <=
-          Date.now()
-      ),
+    () => tracksDelegated.filter(tr => tr.timestamp),
     [tracksDelegated]
   );
 
@@ -194,7 +189,7 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
     () =>
       tracksDelegated.filter(
         tr =>
-          tr.timestamp * 1000 + convictionLockTime[+tr.conviction] * 86400000 >
+          tr.timestamp * 1000 + convictionLockTime[+tr.conviction] * 86400000 * 0 >
           Date.now()
       ),
     [tracksDelegated]
