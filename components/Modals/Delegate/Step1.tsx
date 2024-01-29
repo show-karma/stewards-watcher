@@ -3,7 +3,6 @@ import { useDAO } from 'contexts';
 import { Flex, Text } from '@chakra-ui/react';
 import { IDelegate } from 'types';
 import { ImgWithFallback } from 'components/ImgWithFallback';
-import makeBlockie from 'ethereum-blockies-base64';
 import { DelegateModalHeader } from './DelegateModalHeader';
 import { DelegateModalFooter } from './DelegateModalFooter';
 import { DelegateModalBody } from './DelegateModalBody';
@@ -96,16 +95,12 @@ export const Step1: React.FC<StepProps> = ({
                 alignItems="center"
               >
                 <ImgWithFallback
-                  fallback={daoName}
-                  src={
-                    delegatedUser.profilePicture ||
-                    makeBlockie(
-                      delegatedUser.realName ||
-                        delegatedUser.ensName ||
-                        delegatedUser.address ||
-                        Math.random().toString()
-                    )
+                  fallback={
+                    delegatedUser.realName ||
+                    delegatedUser.ensName ||
+                    delegatedUser.address
                   }
+                  src={delegatedUser.profilePicture}
                   boxSize="20px"
                   borderRadius="full"
                 />
