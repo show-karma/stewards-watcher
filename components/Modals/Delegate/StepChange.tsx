@@ -1,9 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
-import { Button, Flex, Img, Text, Icon, useClipboard } from '@chakra-ui/react';
+import { Button, Flex, Text, Icon, useClipboard } from '@chakra-ui/react';
 import { ImgWithFallback } from 'components';
 import { useDAO } from 'contexts';
 import { IoCopy } from 'react-icons/io5';
-import makeBlockie from 'ethereum-blockies-base64';
 import { api } from 'helpers';
 import React, { useEffect, useState } from 'react';
 import { IDelegate } from 'types';
@@ -32,9 +31,8 @@ export const StepChange: React.FC<StepProps> = ({
   walletAddress,
 }) => {
   const [beforeENSName, setBeforeEnsName] = useState('');
-  const [beforeImage, setBeforeImage] = useState(
-    makeBlockie(delegatedBefore || '0x0000000000000000000000000000000000000000')
-  );
+  const [beforeImage, setBeforeImage] = useState('');
+
   const { onCopy } = useClipboard(beforeENSName || delegatedBefore || '');
   const { toast } = useToasty();
   const { daoData, theme } = useDAO();
@@ -42,9 +40,9 @@ export const StepChange: React.FC<StepProps> = ({
   const getEnsName = async () => {
     try {
       const response = await api.get(`/user/${delegatedBefore}`);
-      const { ensName } = response.data.data;
+      const { ensName, profilePicture } = response.data.data;
       setBeforeEnsName(ensName);
-      setBeforeImage(makeBlockie(ensName));
+      setBeforeImage(profilePicture);
     } catch {
       setBeforeEnsName('');
     }
@@ -125,8 +123,8 @@ export const StepChange: React.FC<StepProps> = ({
               width="max-content"
               my="2"
             >
-              <Img
-                alt={beforeENSName}
+              <ImgWithFallback
+                alt={beforeENSName || delegatedBefore}
                 src={beforeImage}
                 boxSize="20px"
                 borderRadius="full"
@@ -195,16 +193,12 @@ export const StepChange: React.FC<StepProps> = ({
                 alignItems="center"
               >
                 <ImgWithFallback
-                  fallback={daoName}
-                  src={
-                    delegatedUser.profilePicture ||
-                    makeBlockie(
-                      delegatedUser.realName ||
-                        delegatedUser.ensName ||
-                        delegatedUser.address ||
-                        Math.random().toString()
-                    )
+                  fallback={
+                    delegatedUser.realName ||
+                    delegatedUser.ensName ||
+                    delegatedUser.address
                   }
+                  src={delegatedUser.profilePicture}
                   boxSize="20px"
                   borderRadius="full"
                 />

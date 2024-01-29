@@ -51,3 +51,13 @@ export const formatNumberPercentage = (numberToFormat: number | string) => {
 
   return numberToFormat > 0.01 ? `${+numberToFormat.toFixed(2)}%` : '< 0.01%';
 };
+
+export const formatSimpleNumber = (numberToFormat: number | string) => {
+  if (numberToFormat === '-') return '-';
+  if (numberToFormat === '0' || +numberToFormat === 0) return '0';
+
+  return numbro(numberToFormat).format({
+    mantissa: 2,
+    trimMantissa: true,
+  });
+};
