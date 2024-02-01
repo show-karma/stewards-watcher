@@ -23,6 +23,9 @@ export const DelegateCompensation = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [onlyOptIn, setOnlyOptIn] = useState(true);
 
+  const [optInCounter, setOptInCounter] = useState(0);
+  const [powerfulDelegates, setPowerfulDelegates] = useState(0);
+
   const fetchDelegates = async () => {
     setIsLoading(true);
     try {
@@ -37,6 +40,9 @@ export const DelegateCompensation = () => {
       if (!response.data.data.delegates)
         throw new Error('Error fetching delegates');
       const responseDelegates = response.data.data.delegates;
+      if (onlyOptIn) {
+        setOptInCounter(responseDelegates.length);
+      }
 
       if (responseDelegates.length === 0) {
         setDelegates([]);
@@ -119,14 +125,38 @@ export const DelegateCompensation = () => {
       setIsLoading(false);
     }
   };
-
   useEffect(() => {
     fetchDelegates();
   }, [onlyOptIn]);
 
+  useEffect(() => {
+    const getPowerfulDelegates = async () => {
+      try {
+        const response = await api.get(
+          `/delegate/arbitrum/incentive-programs-stats`,
+          {
+            params: {
+              incentiveOptedIn: false,
+            },
+          }
+        );
+        if (!response.data.data.delegates) {
+          setPowerfulDelegates(0);
+          return;
+        }
+        const responseDelegates = response.data.data.delegates;
+        setPowerfulDelegates(responseDelegates.length);
+      } catch (error) {
+        setPowerfulDelegates(0);
+        console.log(error);
+      }
+    };
+    getPowerfulDelegates();
+  }, []);
+
   return (
     <Flex flexDir="row" w="full" gap="48px" py="10">
-      <Flex flexDir="column" w="full" maxW="200px" gap="4">
+      <Flex flexDir="column" w="full" maxW="220px" gap="4">
         <Flex
           px="4"
           py="4"
@@ -137,7 +167,33 @@ export const DelegateCompensation = () => {
         >
           <Text>Delegates</Text>
           <Skeleton isLoaded={!isLoading}>
-            <Text>{delegates.length}</Text>
+            <Text>{formatSimpleNumber(delegates.length)}</Text>
+          </Skeleton>
+        </Flex>
+        <Flex
+          px="4"
+          py="4"
+          flexDir="column"
+          bg={theme.card.background}
+          borderRadius="2xl"
+          w="full"
+        >
+          <Text>Delegates opted-in</Text>
+          <Skeleton isLoaded={!!optInCounter}>
+            <Text>{formatSimpleNumber(optInCounter)}</Text>
+          </Skeleton>
+        </Flex>
+        <Flex
+          px="4"
+          py="4"
+          flexDir="column"
+          bg={theme.card.background}
+          borderRadius="2xl"
+          w="full"
+        >
+          <Text>{`Delegates with >50k VP`}</Text>
+          <Skeleton isLoaded={!!powerfulDelegates}>
+            <Text>{formatSimpleNumber(powerfulDelegates)}</Text>
           </Skeleton>
         </Flex>
       </Flex>

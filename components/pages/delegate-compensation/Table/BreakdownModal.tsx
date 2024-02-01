@@ -51,6 +51,16 @@ const schema = yup.object({
       .typeError('TN must be a number.')
       .required('TN is required'),
   }),
+  communicatingRationale: yup.object({
+    rn: yup
+      .number()
+      .typeError('RN must be a number.')
+      .required('RN is required'),
+    tn: yup
+      .number()
+      .typeError('TN must be a number.')
+      .required('TN is required'),
+  }),
   bonusPoint: yup.object({
     total: yup
       .number()
@@ -114,12 +124,12 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       canEdit: false,
     },
     {
-      name: 'Communicating Rationale (CR)',
+      name: 'Communication Rationale (CR)',
       TN: delegate.communicatingRationale.tn,
       RN: delegate.communicatingRationale.rn,
       total: delegate.communicatingRationale.score,
       formName: 'communicatingRationale',
-      canEdit: false,
+      canEdit: true,
     },
     {
       name: 'Commenting Proposal (CP)',
@@ -150,6 +160,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
   const onSave = async (data: {
     optedIn: boolean;
     commentingProposal: { rn: number; tn: number };
+    communicatingRationale: { rn: number; tn: number };
     bonusPoint: { total: number };
   }) => {
     setIsSaving(true);
@@ -163,7 +174,6 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
         },
       });
       await authorizedAPI.put(
-        // `${process.env.NEXT_PUBLIC_API_URL}/delegate/${delegate.delegate.publicAddress}/incentive-programs-stats`,
         API_ROUTES.DELEGATE.CHANGE_INCENTIVE_PROGRAM_STATS(
           daoInfo.config.DAO_KARMA_ID,
           delegate.id
@@ -171,8 +181,14 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
         {
           incentiveOptedIn: data.optedIn,
           stats: {
-            rn: data.commentingProposal.rn,
-            tn: data.commentingProposal.tn,
+            communicatingRationale: {
+              rn: data.communicatingRationale.rn,
+              tn: data.communicatingRationale.tn,
+            },
+            commentingProposal: {
+              rn: data.commentingProposal.rn,
+              tn: data.commentingProposal.tn,
+            },
             bonusPoints: data.bonusPoint.total,
           },
         }
@@ -218,14 +234,16 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
         <ModalBody w="max-content" maxW="max-content">
           <form onSubmit={handleSubmit(onSave)}>
             <FormControl isInvalid={isValid}>
-              <Flex flexDir="row" gap="2" alignItems="center">
-                <Switch
-                  defaultChecked={delegate.incentiveOptedIn}
-                  {...register('optedIn')}
-                >
-                  Opted-in to Incentive Program
-                </Switch>
-              </Flex>
+              {isDaoAdmin && (
+                <Flex flexDir="row" gap="2" alignItems="center">
+                  <Switch
+                    defaultChecked={delegate.incentiveOptedIn}
+                    {...register('optedIn')}
+                  >
+                    Opted-in to Incentive Program
+                  </Switch>
+                </Flex>
+              )}
               <TableContainer>
                 <Table variant="simple">
                   <Thead>
@@ -473,9 +491,9 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                     onClose();
                   }}
                 >
-                  Open delegate profile
+                  View Delegate Info
                 </Button>
-                {isDirty ? (
+                {isDirty && isDaoAdmin ? (
                   <Button
                     type="submit"
                     bg="blue.900"
