@@ -124,7 +124,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       canEdit: false,
     },
     {
-      name: 'Communicating Rationale (CR)',
+      name: 'Communication Rationale (CR)',
       TN: delegate.communicatingRationale.tn,
       RN: delegate.communicatingRationale.rn,
       total: delegate.communicatingRationale.score,
@@ -234,14 +234,16 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
         <ModalBody w="max-content" maxW="max-content">
           <form onSubmit={handleSubmit(onSave)}>
             <FormControl isInvalid={isValid}>
-              <Flex flexDir="row" gap="2" alignItems="center">
-                <Switch
-                  defaultChecked={delegate.incentiveOptedIn}
-                  {...register('optedIn')}
-                >
-                  Opted-in to Incentive Program
-                </Switch>
-              </Flex>
+              {isDaoAdmin && (
+                <Flex flexDir="row" gap="2" alignItems="center">
+                  <Switch
+                    defaultChecked={delegate.incentiveOptedIn}
+                    {...register('optedIn')}
+                  >
+                    Opted-in to Incentive Program
+                  </Switch>
+                </Flex>
+              )}
               <TableContainer>
                 <Table variant="simple">
                   <Thead>
@@ -489,9 +491,9 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                     onClose();
                   }}
                 >
-                  Open delegate profile
+                  View Delegate Info
                 </Button>
-                {isDirty ? (
+                {isDirty && isDaoAdmin ? (
                   <Button
                     type="submit"
                     bg="blue.900"
