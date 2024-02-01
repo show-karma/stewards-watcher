@@ -41,7 +41,7 @@ export const TwitterModal: React.FC<IModal> = ({
       request
         .post('/dao/link/twitter', {
           daoName,
-          message: username,
+          message: username.toLowerCase(),
         })
         .then(() => {
           setStep(ESteps.VERIFIED);
