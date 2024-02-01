@@ -43,7 +43,7 @@ export const DiscourseModal: React.FC<IModal> = ({
       request
         .post('/dao/link/forum', {
           daoName,
-          message: username,
+          message: username.toLowerCase(),
           address,
         })
         .then(() => {

@@ -35,7 +35,7 @@ export const Step2: React.FC<IModal> = ({
   const signUsername = async () => {
     if (!isConnected) openConnectModal?.();
     try {
-      const sign = await signMessageAsync({ message: username });
+      const sign = await signMessageAsync({ message: username.toLowerCase() });
       setSignature(sign);
       nextStep();
     } catch (error) {
