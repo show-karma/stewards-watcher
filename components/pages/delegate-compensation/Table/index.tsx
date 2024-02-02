@@ -412,50 +412,50 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
         isNumeric: true,
       },
     }),
-    columnHelper.accessor('payment', {
-      cell: info => {
-        if (info.getValue()) {
-          return formatSimpleNumber(info.getValue(), {
-            thousandSeparated: true,
-          });
-        }
-        if (info.getValue() === '0') {
-          return 0;
-        }
-        return null;
-      },
-      header: () => (
-        <Flex flexDir="row" gap="2" alignItems="center">
-          Payment (ARB)
-          <Tooltip
-            bg={theme.collapse.bg || theme.card.background}
-            color={theme.collapse.text}
-            label={
-              <Flex flexDir="column" py="1" gap="2">
-                <Text fontWeight={600}>Payment ARB (PARB)</Text>
-                <Text fontWeight="normal">
-                  Final amount of ARB that the delegate will receive based on
-                  his TP% and his position in the table.
-                </Text>
+    // columnHelper.accessor('payment', {
+    //   cell: info => {
+    //     if (info.getValue()) {
+    //       return formatSimpleNumber(info.getValue(), {
+    //         thousandSeparated: true,
+    //       });
+    //     }
+    //     if (info.getValue() === '0') {
+    //       return 0;
+    //     }
+    //     return null;
+    //   },
+    //   header: () => (
+    //     <Flex flexDir="row" gap="2" alignItems="center">
+    //       Payment (ARB)
+    //       <Tooltip
+    //         bg={theme.collapse.bg || theme.card.background}
+    //         color={theme.collapse.text}
+    //         label={
+    //           <Flex flexDir="column" py="1" gap="2">
+    //             <Text fontWeight={600}>Payment ARB (PARB)</Text>
+    //             <Text fontWeight="normal">
+    //               Final amount of ARB that the delegate will receive based on
+    //               his TP% and his position in the table.
+    //             </Text>
 
-                <Code fontWeight="normal">
-                  PARB formula:
-                  <br />
-                  {`IF(TP% >=100; 5000;(5000 * TP% / 100))`}
-                </Code>
-              </Flex>
-            }
-          >
-            <Flex w="5" h="5" cursor="pointer">
-              <Icon as={AiFillQuestionCircle} w="5" h="5" />
-            </Flex>
-          </Tooltip>
-        </Flex>
-      ),
-      meta: {
-        isNumeric: true,
-      },
-    }),
+    //             <Code fontWeight="normal">
+    //               PARB formula:
+    //               <br />
+    //               {`IF(TP% >=100; 5000;(5000 * TP% / 100))`}
+    //             </Code>
+    //           </Flex>
+    //         }
+    //       >
+    //         <Flex w="5" h="5" cursor="pointer">
+    //           <Icon as={AiFillQuestionCircle} w="5" h="5" />
+    //         </Flex>
+    //       </Tooltip>
+    //     </Flex>
+    //   ),
+    //   meta: {
+    //     isNumeric: true,
+    //   },
+    // }),
   ];
   return <DataTable refreshFn={refreshFn} columns={columns} data={delegates} />;
 };

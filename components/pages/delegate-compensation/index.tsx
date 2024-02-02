@@ -167,21 +167,8 @@ export const DelegateCompensation = () => {
           borderRadius="2xl"
           w="full"
         >
-          <Text>Delegates</Text>
-          <Skeleton isLoaded={!isLoading}>
-            <Text>{formatSimpleNumber(delegates.length)}</Text>
-          </Skeleton>
-        </Flex>
-        <Flex
-          px="4"
-          py="4"
-          flexDir="column"
-          bg={theme.card.background}
-          borderRadius="2xl"
-          w="full"
-        >
           <Text>Delegates opted-in</Text>
-          <Skeleton isLoaded={!!optInCounter && optInCounter !== 0}>
+          <Skeleton isLoaded={optInCounter !== undefined}>
             <Text>{formatSimpleNumber(optInCounter || 0)}</Text>
           </Skeleton>
         </Flex>
