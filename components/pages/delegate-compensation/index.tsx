@@ -23,7 +23,9 @@ export const DelegateCompensation = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [onlyOptIn, setOnlyOptIn] = useState(true);
 
-  const [optInCounter, setOptInCounter] = useState(0);
+  const [optInCounter, setOptInCounter] = useState<number | undefined>(
+    undefined
+  );
   const [powerfulDelegates, setPowerfulDelegates] = useState(0);
 
   const fetchDelegates = async () => {
@@ -179,8 +181,8 @@ export const DelegateCompensation = () => {
           w="full"
         >
           <Text>Delegates opted-in</Text>
-          <Skeleton isLoaded={!!optInCounter}>
-            <Text>{formatSimpleNumber(optInCounter)}</Text>
+          <Skeleton isLoaded={!!optInCounter && optInCounter !== 0}>
+            <Text>{formatSimpleNumber(optInCounter || 0)}</Text>
           </Skeleton>
         </Flex>
         <Flex
