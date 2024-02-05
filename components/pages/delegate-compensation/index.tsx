@@ -157,15 +157,27 @@ export const DelegateCompensation = () => {
   }, []);
 
   return (
-    <Flex flexDir="row" w="full" gap="48px" py="10">
-      <Flex flexDir="column" w="full" maxW="220px" gap="4">
+    <Flex
+      flexDir={{ base: 'column', lg: 'row' }}
+      w="full"
+      gap={{ base: '24px', '2xl': '48px' }}
+      py="10"
+    >
+      <Flex
+        flexDir={{ base: 'row', lg: 'column' }}
+        w="full"
+        maxW={{ base: 'full', lg: '220px' }}
+        gap="4"
+        paddingX={{ base: '2', lg: '0' }}
+        flexWrap={{ base: 'wrap', lg: 'nowrap' }}
+      >
         <Flex
           px="4"
           py="4"
           flexDir="column"
           bg={theme.card.background}
           borderRadius="2xl"
-          w="full"
+          w={{ base: 'full', sm: '220px', lg: 'full' }}
         >
           <Text>Delegates opted-in</Text>
           <Skeleton isLoaded={optInCounter !== undefined}>
@@ -178,7 +190,7 @@ export const DelegateCompensation = () => {
           flexDir="column"
           bg={theme.card.background}
           borderRadius="2xl"
-          w="full"
+          w={{ base: 'full', sm: '220px', lg: 'full' }}
         >
           <Text>{`Delegates with >50k VP`}</Text>
           <Skeleton isLoaded={!!powerfulDelegates}>
@@ -186,7 +198,14 @@ export const DelegateCompensation = () => {
           </Skeleton>
         </Flex>
       </Flex>
-      <Flex flex="1" w="full" flexDirection="column" gap="8">
+      <Flex
+        paddingX={{ base: '2', lg: '0' }}
+        flex="1"
+        w="full"
+        overflowX="auto"
+        flexDirection="column"
+        gap={{ base: '4', lg: '8' }}
+      >
         <Flex
           flexDirection="row"
           gap="4"
