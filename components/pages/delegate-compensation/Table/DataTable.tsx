@@ -60,6 +60,7 @@ export const DataTable = <Data extends object>({
                 const { meta } = header.column.columnDef;
                 return (
                   <Th
+                    paddingX={{ base: '4px', '2xl': '8px' }}
                     key={header.id}
                     onClick={header.column.getToggleSortingHandler()}
                     isNumeric={(meta as any)?.isNumeric}
@@ -89,7 +90,11 @@ export const DataTable = <Data extends object>({
               {row.getVisibleCells().map(cell => {
                 const { meta } = cell.column.columnDef;
                 return (
-                  <Td key={cell.id} isNumeric={(meta as any)?.isNumeric}>
+                  <Td
+                    paddingX={{ base: '4px', '2xl': '8px' }}
+                    key={cell.id}
+                    isNumeric={(meta as any)?.isNumeric}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </Td>
                 );
