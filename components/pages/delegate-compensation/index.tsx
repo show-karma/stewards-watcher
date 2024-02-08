@@ -108,6 +108,7 @@ export const DelegateCompensation = () => {
             delegateImage: delegate.profilePicture,
             ranking: index + 1 <= 50 ? index + 1 : null,
             fundsARB: 5000,
+            votingPower: +delegate.votingPower,
             participationRate: delegate.stats.participationRate,
             snapshotVoting,
             onChainVoting,
