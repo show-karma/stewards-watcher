@@ -11,6 +11,7 @@ export type DelegateStatsFromAPI = {
   publicAddress: string;
   id: number;
   incentiveOptedIn: boolean;
+  votingPower: string;
   stats: {
     bonusPoint: number;
     commentingProposal: CompensationStatBreakdown;
@@ -31,6 +32,7 @@ export type DelegateCompensationStats = {
     publicAddress: string;
     shouldUse: string;
   };
+  votingPower: number;
   incentiveOptedIn: boolean;
   delegateImage: string;
   ranking: number;

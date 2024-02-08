@@ -1,6 +1,17 @@
 import numbro from 'numbro';
 
 export const formatNumber = (numberToFormat: number | string) => {
+  const language = numbro.languageData('en-US');
+  language.abbreviations = {
+    ...language.abbreviations,
+    million: 'M',
+    billion: 'B',
+    trillion: 'T',
+  };
+
+  // Set the modified language
+  numbro.registerLanguage(language, true);
+
   if (numberToFormat === '-') return '-';
   if (numberToFormat === '0' || +numberToFormat === 0) return '0';
   if (+numberToFormat <= 1) {

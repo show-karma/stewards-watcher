@@ -20,6 +20,9 @@ import {
   TableContainer,
   Switch,
   FormControl,
+  Icon,
+  useClipboard,
+  Tooltip,
 } from '@chakra-ui/react';
 import { ImgWithFallback } from 'components/ImgWithFallback';
 import { useAuth, useDAO, useDelegates } from 'contexts';
@@ -31,6 +34,9 @@ import * as yup from 'yup';
 import axios from 'axios';
 import { useToasty } from 'hooks';
 import { API_ROUTES } from 'helpers';
+import { IoCopy } from 'react-icons/io5';
+import { truncateAddress } from 'utils';
+import { FaCheckCircle } from 'react-icons/fa';
 
 interface BreakdownModalProps {
   delegate: DelegateCompensationStats;
@@ -84,6 +90,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
 
   const [isSaving, setIsSaving] = useState(false);
   const { openProfile } = useDelegates();
+  const { onCopy } = useClipboard(delegate?.delegate?.publicAddress || '');
   const { toast } = useToasty();
   const {
     register,
@@ -97,6 +104,15 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
     reValidateMode: 'onChange',
     mode: 'onChange',
   });
+
+  const copyText = () => {
+    onCopy();
+    toast({
+      title: 'Copied to clipboard',
+      description: 'Address copied',
+      duration: 3000,
+    });
+  };
 
   const stats = [
     {
@@ -225,9 +241,49 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
               fallback={delegate.delegate.shouldUse}
               src={delegate.delegateImage}
             />
-            <Text w="full" color={theme.modal.header.title}>
+            <Text
+              textOverflow="ellipsis"
+              overflow="hidden"
+              whiteSpace="nowrap"
+              color={theme.modal.header.title}
+            >
               {delegate.delegate.shouldUse}
             </Text>
+            {delegate.incentiveOptedIn ? (
+              <Tooltip
+                shouldWrapChildren
+                label="Opted-in to Incentive Program"
+                fontSize="md"
+              >
+                <Icon as={FaCheckCircle} w="4" h="4" color="green.400" />
+              </Tooltip>
+            ) : (
+              <Flex w="16px" />
+            )}
+          </Flex>
+          <Flex flexDir="row" color={theme.subtitle} paddingLeft="44px" gap="3">
+            <Text fontSize="xs" fontWeight="medium">
+              {truncateAddress(delegate.delegate.publicAddress)}
+            </Text>
+            <Button
+              bg="transparent"
+              py="0"
+              px="0"
+              _hover={{
+                opacity: 0.7,
+              }}
+              _active={{}}
+              _focus={{}}
+              onClick={copyText}
+              h="max-content"
+              w="min-content"
+              minW="min-content"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Icon as={IoCopy} color={theme.subtitle} boxSize="4" />
+            </Button>
           </Flex>
         </ModalHeader>
         <ModalCloseButton />
