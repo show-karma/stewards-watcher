@@ -15,7 +15,7 @@ import { ImgWithFallback } from 'components/ImgWithFallback';
 import { useDAO } from 'contexts';
 import { FaCheckCircle } from 'react-icons/fa';
 import { AiFillQuestionCircle } from 'react-icons/ai';
-import { formatSimpleNumber } from 'utils';
+import { formatNumber, formatSimpleNumber, truncateAddress } from 'utils';
 import { DataTable } from './DataTable';
 
 const columnHelper = createColumnHelper<DelegateCompensationStats>();
@@ -30,29 +30,42 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
   const columns = [
     columnHelper.accessor('delegate.shouldUse', {
       cell: info => (
-        <Flex flexDir="row" gap="3" alignItems="center" maxW="200px">
-          <ImgWithFallback
-            borderRadius="full"
-            width="32px"
-            height="32px"
-            fallback={info.getValue()}
-            src={info.row.original.delegateImage}
-          />
-          <Text textOverflow="ellipsis" overflow="hidden" whiteSpace="nowrap">
-            {info.getValue()}
-          </Text>
-          {info.row.original.incentiveOptedIn ? (
-            <Tooltip
-              shouldWrapChildren
-              label="Opted-in to Incentive Program"
-              fontSize="md"
-            >
-              <Icon as={FaCheckCircle} w="4" h="4" color="green.400" />
-            </Tooltip>
-          ) : (
-            <Flex w="16px" />
-          )}
-        </Flex>
+        <>
+          <Flex flexDir="row" gap="3" alignItems="center" maxW="200px">
+            <ImgWithFallback
+              borderRadius="full"
+              width="32px"
+              height="32px"
+              fallback={info.getValue()}
+              src={info.row.original.delegateImage}
+            />
+            <Text textOverflow="ellipsis" overflow="hidden" whiteSpace="nowrap">
+              {info.getValue()}
+            </Text>
+            {info.row.original.incentiveOptedIn ? (
+              <Tooltip
+                shouldWrapChildren
+                label="Opted-in to Incentive Program"
+                fontSize="md"
+              >
+                <Icon as={FaCheckCircle} w="4" h="4" color="green.400" />
+              </Tooltip>
+            ) : (
+              <Flex w="16px" />
+            )}
+          </Flex>
+          <Flex
+            flexDir="row"
+            gap="3"
+            alignItems="center"
+            paddingLeft="40px"
+            maxW="200px"
+          >
+            <Text fontSize="xs" fontWeight="medium">
+              {truncateAddress(info.row.original.delegate.publicAddress)}
+            </Text>
+          </Flex>
+        </>
       ),
       header: 'Delegate',
     }),
@@ -86,6 +99,27 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
     //     isNumeric: true,
     //   },
     // }),
+    columnHelper.accessor('votingPower', {
+      cell: info => {
+        if (!info) {
+          return 0;
+        }
+
+        if (info.getValue()) {
+          return formatNumber(info?.getValue());
+        }
+
+        return null;
+      },
+      header: () => (
+        <Flex flexDir="row" gap="2" alignItems="center">
+          Voting Power
+        </Flex>
+      ),
+      meta: {
+        isNumeric: true,
+      },
+    }),
     columnHelper.accessor('participationRate', {
       cell: info => {
         if (info.getValue()) {
