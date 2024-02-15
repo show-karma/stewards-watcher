@@ -22,6 +22,14 @@ export const DelegateCompensation = () => {
   const [delegates, setDelegates] = useState<DelegateCompensationStats[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [onlyOptIn, setOnlyOptIn] = useState(true);
+  const [month, setMonth] = useState(() => {
+    const date = new Date();
+    const currentMonth = date.getMonth() + 1;
+    return {
+      name: date.toLocaleString('default', { month: 'long' }),
+      value: currentMonth,
+    };
+  });
 
   const [optInCounter, setOptInCounter] = useState<number | undefined>(
     undefined
@@ -36,6 +44,7 @@ export const DelegateCompensation = () => {
         {
           params: {
             incentiveOptedIn: onlyOptIn || undefined,
+            month: month?.value || undefined,
           },
         }
       );
@@ -130,7 +139,7 @@ export const DelegateCompensation = () => {
   };
   useEffect(() => {
     fetchDelegates();
-  }, [onlyOptIn]);
+  }, [onlyOptIn, month]);
 
   useEffect(() => {
     const getPowerfulDelegates = async () => {
@@ -156,6 +165,31 @@ export const DelegateCompensation = () => {
     };
     getPowerfulDelegates();
   }, []);
+
+  const renderMonthList = () => {
+    const allMonths = Array.from(
+      { length: +new Date().getMonth() + 1 },
+      (_, indx) => ({
+        name: new Date(2022, indx, 1).toLocaleString('default', {
+          month: 'long',
+        }),
+        value: indx + 1,
+      })
+    );
+
+    return allMonths.map(listMonth => (
+      <MenuItem
+        key={listMonth.value}
+        bg={theme.filters.bg}
+        _hover={{ opacity: 0.7 }}
+        onClick={() => {
+          setMonth(listMonth);
+        }}
+      >
+        {listMonth.name}
+      </MenuItem>
+    ));
+  };
 
   return (
     <Flex
@@ -223,53 +257,9 @@ export const DelegateCompensation = () => {
                 bg={theme.filters.activeBg}
                 as={Button}
               >
-                January
+                {month.name}
               </MenuButton>
-              <MenuList bg={theme.filters.bg}>
-                <MenuItem bg={theme.filters.bg} _hover={{ opacity: 0.7 }}>
-                  January
-                </MenuItem>
-                <MenuItem
-                  disabled
-                  isDisabled
-                  bg={theme.filters.bg}
-                  _disabled={{ opacity: 0.4 }}
-                >
-                  February
-                </MenuItem>
-                <MenuItem
-                  disabled
-                  isDisabled
-                  bg={theme.filters.bg}
-                  _disabled={{ opacity: 0.4 }}
-                >
-                  March
-                </MenuItem>
-                <MenuItem
-                  disabled
-                  isDisabled
-                  bg={theme.filters.bg}
-                  _disabled={{ opacity: 0.4 }}
-                >
-                  April
-                </MenuItem>
-                <MenuItem
-                  disabled
-                  isDisabled
-                  bg={theme.filters.bg}
-                  _disabled={{ opacity: 0.4 }}
-                >
-                  May
-                </MenuItem>
-                <MenuItem
-                  disabled
-                  isDisabled
-                  bg={theme.filters.bg}
-                  _disabled={{ opacity: 0.4 }}
-                >
-                  June
-                </MenuItem>
-              </MenuList>
+              <MenuList bg={theme.filters.bg}>{renderMonthList()}</MenuList>
             </Menu>
           </Flex>
           <Switch
