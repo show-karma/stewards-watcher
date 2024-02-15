@@ -149,6 +149,7 @@ export const DelegateCompensation = () => {
           {
             params: {
               incentiveOptedIn: false,
+              month: month?.value || undefined,
             },
           }
         );
@@ -168,13 +169,20 @@ export const DelegateCompensation = () => {
 
   const renderMonthList = () => {
     const allMonths = Array.from(
-      { length: +new Date().getMonth() + 1 },
-      (_, indx) => ({
-        name: new Date(2022, indx, 1).toLocaleString('default', {
+      { length: new Date().getMonth() + 1 },
+      (_, indx) => {
+        const monthName = new Date(2022, indx, 1).toLocaleString('en-US', {
           month: 'long',
-        }),
-        value: indx + 1,
-      })
+        });
+
+        const capitalizedMonthName =
+          monthName.charAt(0).toUpperCase() + monthName.slice(1);
+
+        return {
+          name: capitalizedMonthName,
+          value: indx + 1,
+        };
+      }
     );
 
     return allMonths.map(listMonth => (
