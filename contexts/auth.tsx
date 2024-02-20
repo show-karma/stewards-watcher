@@ -12,9 +12,11 @@ import { IExpirationStatus, ISession } from 'types';
 import Cookies from 'universal-cookie';
 import { checkExpirationStatus } from 'utils';
 import { useAccount, useDisconnect, useSignMessage } from 'wagmi';
+import { hexlify, toUtf8Bytes } from 'ethers/lib/utils';
 import { useDAO } from './dao';
 import { useDelegates } from './delegates';
 import { useWallet } from './wallet';
+import { useToasty } from 'hooks';
 
 interface IAuthProps {
   isAuthenticated: boolean;
@@ -46,6 +48,8 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
   const [authToken, setToken] = useState<string | null>(null);
   const { openConnectModal, delegateLoginOnClose } = useWallet();
   const { searchProfileModal } = useDelegates();
+
+  const { toast } = useToasty();
 
   const { disconnect: disconnectWallet } = useDisconnect();
 
@@ -156,10 +160,22 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
     }
     try {
       const nonceMessage = await getNonce(address);
-      const signedMessage = await signMessage(nonceMessage);
+      const hexMessage = hexlify(toUtf8Bytes(nonceMessage.toLowerCase()));
+
+      console.log('hexMessage', hexMessage);
+      const signedMessage = await signMessage(hexMessage);
+      console.log('signedMessage', signedMessage);
       if (!signedMessage) return false;
       const token = await getAccountToken(address, signedMessage);
+
       if (token) saveToken(token);
+      else
+        return toast({
+          status: 'error',
+          description: "Signature and address don't match",
+          title: 'Login failed',
+        });
+
       delegateLoginOnClose();
       searchProfileModal(address, 'overview');
       return true;
