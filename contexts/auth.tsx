@@ -12,6 +12,7 @@ import { IExpirationStatus, ISession } from 'types';
 import Cookies from 'universal-cookie';
 import { checkExpirationStatus } from 'utils';
 import { useAccount, useDisconnect, useSignMessage } from 'wagmi';
+import { useToasty } from 'hooks';
 import { useDAO } from './dao';
 import { useDelegates } from './delegates';
 import { useWallet } from './wallet';
@@ -44,8 +45,10 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isDaoAdmin, setIsDaoAdmin] = useState(false);
   const [authToken, setToken] = useState<string | null>(null);
-  const { openConnectModal, delegateLoginOnClose } = useWallet();
+  const { openConnectModal, delegateLoginOnClose, chain } = useWallet();
   const { searchProfileModal } = useDelegates();
+
+  const { toast } = useToasty();
 
   const { disconnect: disconnectWallet } = useDisconnect();
 
@@ -59,6 +62,8 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
     const rightPathname = rootPathname[0] === '/' ? rootPathname : '/';
     cookies.remove(cookieNames.cookieAuth, { path: rightPathname });
     cookies.remove(cookieNames.daoAdmin, { path: rightPathname });
+    localStorage?.clear();
+
     setToken(null);
     setIsAuthenticated(false);
     disconnectWallet();
@@ -121,11 +126,13 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
     signedMessage: string
   ) => {
     try {
+      const chainId = chain?.id;
       const response = await api.post<{
         data: { token: string; daosManaged?: string[] };
       }>('/auth/authentication', {
         publicAddress,
         signedMessage,
+        chainId,
       });
       const { token, daosManaged } = response.data.data;
       setToken(token);
@@ -148,7 +155,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
-  const authenticate = async () => {
+  const authenticate = async (): Promise<boolean> => {
     if (!isConnected || !address) {
       setIsAuthenticating(true);
       openConnectModal?.();
@@ -156,10 +163,21 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
     }
     try {
       const nonceMessage = await getNonce(address);
+
       const signedMessage = await signMessage(nonceMessage);
       if (!signedMessage) return false;
       const token = await getAccountToken(address, signedMessage);
+
       if (token) saveToken(token);
+      else {
+        toast({
+          status: 'error',
+          description: "Signature and address don't match",
+          title: 'Login failed',
+        });
+        return false;
+      }
+
       delegateLoginOnClose();
       searchProfileModal(address, 'overview');
       return true;
@@ -193,7 +211,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
   }, []);
 
   const providerValue = useMemo(
-    () => ({
+    (): IAuthProps => ({
       isAuthenticated,
       authenticate,
       authToken,
