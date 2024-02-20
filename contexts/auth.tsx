@@ -62,6 +62,8 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
     const rightPathname = rootPathname[0] === '/' ? rootPathname : '/';
     cookies.remove(cookieNames.cookieAuth, { path: rightPathname });
     cookies.remove(cookieNames.daoAdmin, { path: rightPathname });
+    localStorage?.clear();
+
     setToken(null);
     setIsAuthenticated(false);
     disconnectWallet();
