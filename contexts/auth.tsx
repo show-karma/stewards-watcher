@@ -12,11 +12,10 @@ import { IExpirationStatus, ISession } from 'types';
 import Cookies from 'universal-cookie';
 import { checkExpirationStatus } from 'utils';
 import { useAccount, useDisconnect, useSignMessage } from 'wagmi';
-import { hexlify, toUtf8Bytes } from 'ethers/lib/utils';
+import { useToasty } from 'hooks';
 import { useDAO } from './dao';
 import { useDelegates } from './delegates';
 import { useWallet } from './wallet';
-import { useToasty } from 'hooks';
 
 interface IAuthProps {
   isAuthenticated: boolean;
@@ -46,7 +45,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isDaoAdmin, setIsDaoAdmin] = useState(false);
   const [authToken, setToken] = useState<string | null>(null);
-  const { openConnectModal, delegateLoginOnClose } = useWallet();
+  const { openConnectModal, delegateLoginOnClose, chain } = useWallet();
   const { searchProfileModal } = useDelegates();
 
   const { toast } = useToasty();
@@ -125,11 +124,13 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
     signedMessage: string
   ) => {
     try {
+      const chainId = chain?.id;
       const response = await api.post<{
         data: { token: string; daosManaged?: string[] };
       }>('/auth/authentication', {
         publicAddress,
         signedMessage,
+        chainId,
       });
       const { token, daosManaged } = response.data.data;
       setToken(token);
@@ -152,7 +153,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
-  const authenticate = async () => {
+  const authenticate = async (): Promise<boolean> => {
     if (!isConnected || !address) {
       setIsAuthenticating(true);
       openConnectModal?.();
@@ -160,21 +161,20 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
     }
     try {
       const nonceMessage = await getNonce(address);
-      const hexMessage = hexlify(toUtf8Bytes(nonceMessage.toLowerCase()));
 
-      console.log('hexMessage', hexMessage);
-      const signedMessage = await signMessage(hexMessage);
-      console.log('signedMessage', signedMessage);
+      const signedMessage = await signMessage(nonceMessage);
       if (!signedMessage) return false;
       const token = await getAccountToken(address, signedMessage);
 
       if (token) saveToken(token);
-      else
-        return toast({
+      else {
+        toast({
           status: 'error',
           description: "Signature and address don't match",
           title: 'Login failed',
         });
+        return false;
+      }
 
       delegateLoginOnClose();
       searchProfileModal(address, 'overview');
@@ -209,7 +209,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
   }, []);
 
   const providerValue = useMemo(
-    () => ({
+    (): IAuthProps => ({
       isAuthenticated,
       authenticate,
       authToken,
