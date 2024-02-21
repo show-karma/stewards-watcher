@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import { api } from 'helpers';
 import { DelegateCompensationStats, DelegateStatsFromAPI } from 'types';
 import { formatSimpleNumber } from 'utils';
+import { DownChevron } from 'components/Icons';
 import { Table } from './Table';
 
 export const DelegateCompensation = () => {
@@ -22,6 +23,14 @@ export const DelegateCompensation = () => {
   const [delegates, setDelegates] = useState<DelegateCompensationStats[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [onlyOptIn, setOnlyOptIn] = useState(true);
+  const [month, setMonth] = useState(() => {
+    const date = new Date();
+    const currentMonth = date.getMonth() + 1;
+    return {
+      name: date.toLocaleString('default', { month: 'long' }),
+      value: currentMonth,
+    };
+  });
 
   const [optInCounter, setOptInCounter] = useState<number | undefined>(
     undefined
@@ -36,6 +45,7 @@ export const DelegateCompensation = () => {
         {
           params: {
             incentiveOptedIn: onlyOptIn || undefined,
+            month: month?.value || undefined,
           },
         }
       );
@@ -108,6 +118,7 @@ export const DelegateCompensation = () => {
             delegateImage: delegate.profilePicture,
             ranking: index + 1 <= 50 ? index + 1 : null,
             fundsARB: 5000,
+            votingPower: +delegate.votingPower,
             participationRate: delegate.stats.participationRate,
             snapshotVoting,
             onChainVoting,
@@ -129,7 +140,7 @@ export const DelegateCompensation = () => {
   };
   useEffect(() => {
     fetchDelegates();
-  }, [onlyOptIn]);
+  }, [onlyOptIn, month]);
 
   useEffect(() => {
     const getPowerfulDelegates = async () => {
@@ -139,6 +150,7 @@ export const DelegateCompensation = () => {
           {
             params: {
               incentiveOptedIn: false,
+              month: month?.value || undefined,
             },
           }
         );
@@ -155,6 +167,38 @@ export const DelegateCompensation = () => {
     };
     getPowerfulDelegates();
   }, []);
+
+  const renderMonthList = () => {
+    const allMonths = Array.from(
+      { length: new Date().getMonth() + 1 },
+      (_, indx) => {
+        const monthName = new Date(2022, indx, 1).toLocaleString('en-US', {
+          month: 'long',
+        });
+
+        const capitalizedMonthName =
+          monthName.charAt(0).toUpperCase() + monthName.slice(1);
+
+        return {
+          name: capitalizedMonthName,
+          value: indx + 1,
+        };
+      }
+    );
+
+    return allMonths.map(listMonth => (
+      <MenuItem
+        key={listMonth.value}
+        bg={theme.filters.bg}
+        _hover={{ opacity: 0.7 }}
+        onClick={() => {
+          setMonth(listMonth);
+        }}
+      >
+        {listMonth.name}
+      </MenuItem>
+    ));
+  };
 
   return (
     <Flex
@@ -178,10 +222,11 @@ export const DelegateCompensation = () => {
           bg={theme.card.background}
           borderRadius="2xl"
           w={{ base: 'full', sm: '220px', lg: 'full' }}
+          alignItems="center"
         >
           <Text>Delegates opted-in</Text>
           <Skeleton isLoaded={optInCounter !== undefined}>
-            <Text>{formatSimpleNumber(optInCounter || 0)}</Text>
+            <Text fontSize="40px">{formatSimpleNumber(optInCounter || 0)}</Text>
           </Skeleton>
         </Flex>
         <Flex
@@ -191,10 +236,11 @@ export const DelegateCompensation = () => {
           bg={theme.card.background}
           borderRadius="2xl"
           w={{ base: 'full', sm: '220px', lg: 'full' }}
+          alignItems="center"
         >
           <Text>{`Delegates with >50k VP`}</Text>
           <Skeleton isLoaded={!!powerfulDelegates}>
-            <Text>{formatSimpleNumber(powerfulDelegates)}</Text>
+            <Text fontSize="40px">{formatSimpleNumber(powerfulDelegates)}</Text>
           </Skeleton>
         </Flex>
       </Flex>
@@ -221,53 +267,27 @@ export const DelegateCompensation = () => {
                 w="max-content"
                 bg={theme.filters.activeBg}
                 as={Button}
+                borderWidth="1px"
+                borderStyle="solid"
+                borderColor={theme.card.interests.text}
+                rightIcon={
+                  <DownChevron
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    boxSize="4"
+                  />
+                }
               >
-                January
+                {month.name}
               </MenuButton>
-              <MenuList bg={theme.filters.bg}>
-                <MenuItem bg={theme.filters.bg} _hover={{ opacity: 0.7 }}>
-                  January
-                </MenuItem>
-                <MenuItem
-                  disabled
-                  isDisabled
-                  bg={theme.filters.bg}
-                  _disabled={{ opacity: 0.4 }}
-                >
-                  February
-                </MenuItem>
-                <MenuItem
-                  disabled
-                  isDisabled
-                  bg={theme.filters.bg}
-                  _disabled={{ opacity: 0.4 }}
-                >
-                  March
-                </MenuItem>
-                <MenuItem
-                  disabled
-                  isDisabled
-                  bg={theme.filters.bg}
-                  _disabled={{ opacity: 0.4 }}
-                >
-                  April
-                </MenuItem>
-                <MenuItem
-                  disabled
-                  isDisabled
-                  bg={theme.filters.bg}
-                  _disabled={{ opacity: 0.4 }}
-                >
-                  May
-                </MenuItem>
-                <MenuItem
-                  disabled
-                  isDisabled
-                  bg={theme.filters.bg}
-                  _disabled={{ opacity: 0.4 }}
-                >
-                  June
-                </MenuItem>
+              <MenuList
+                _hover={{
+                  opacity: 0.7,
+                }}
+                bg={theme.filters.bg}
+              >
+                {renderMonthList()}
               </MenuList>
             </Menu>
           </Flex>

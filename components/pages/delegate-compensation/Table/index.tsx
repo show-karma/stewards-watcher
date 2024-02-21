@@ -15,7 +15,7 @@ import { ImgWithFallback } from 'components/ImgWithFallback';
 import { useDAO } from 'contexts';
 import { FaCheckCircle } from 'react-icons/fa';
 import { AiFillQuestionCircle } from 'react-icons/ai';
-import { formatSimpleNumber } from 'utils';
+import { formatNumber, formatSimpleNumber, truncateAddress } from 'utils';
 import { DataTable } from './DataTable';
 
 const columnHelper = createColumnHelper<DelegateCompensationStats>();
@@ -30,29 +30,42 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
   const columns = [
     columnHelper.accessor('delegate.shouldUse', {
       cell: info => (
-        <Flex flexDir="row" gap="3" alignItems="center" maxW="200px">
-          <ImgWithFallback
-            borderRadius="full"
-            width="32px"
-            height="32px"
-            fallback={info.getValue()}
-            src={info.row.original.delegateImage}
-          />
-          <Text textOverflow="ellipsis" overflow="hidden" whiteSpace="nowrap">
-            {info.getValue()}
-          </Text>
-          {info.row.original.incentiveOptedIn ? (
-            <Tooltip
-              shouldWrapChildren
-              label="Opted-in to Incentive Program"
-              fontSize="md"
-            >
-              <Icon as={FaCheckCircle} w="4" h="4" color="green.400" />
-            </Tooltip>
-          ) : (
-            <Flex w="16px" />
-          )}
-        </Flex>
+        <>
+          <Flex flexDir="row" gap="3" alignItems="center" maxW="200px">
+            <ImgWithFallback
+              borderRadius="full"
+              width="32px"
+              height="32px"
+              fallback={info.getValue()}
+              src={info.row.original.delegateImage}
+            />
+            <Text textOverflow="ellipsis" overflow="hidden" whiteSpace="nowrap">
+              {info.getValue()}
+            </Text>
+            {info.row.original.incentiveOptedIn ? (
+              <Tooltip
+                shouldWrapChildren
+                label="Opted-in to Incentive Program"
+                fontSize="md"
+              >
+                <Icon as={FaCheckCircle} w="4" h="4" color="green.400" />
+              </Tooltip>
+            ) : (
+              <Flex w="16px" />
+            )}
+          </Flex>
+          <Flex
+            flexDir="row"
+            gap="3"
+            alignItems="center"
+            paddingLeft="40px"
+            maxW="200px"
+          >
+            <Text fontSize="xs" fontWeight="medium">
+              {truncateAddress(info.row.original.delegate.publicAddress)}
+            </Text>
+          </Flex>
+        </>
       ),
       header: 'Delegate',
     }),
@@ -86,6 +99,24 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
     //     isNumeric: true,
     //   },
     // }),
+    columnHelper.accessor('votingPower', {
+      cell: info => {
+        if (!info) {
+          return 0;
+        }
+
+        if (info.getValue()) {
+          return formatNumber(info?.getValue());
+        }
+
+        return null;
+      },
+      header: () => (
+        <Flex flexDir="row" gap="2" alignItems="center">
+          Voting Power
+        </Flex>
+      ),
+    }),
     columnHelper.accessor('participationRate', {
       cell: info => {
         if (info.getValue()) {
@@ -123,9 +154,6 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
           </Tooltip>
         </Flex>
       ),
-      meta: {
-        isNumeric: true,
-      },
     }),
     columnHelper.accessor('snapshotVoting.score', {
       cell: info => {
@@ -172,9 +200,6 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
           </Tooltip>
         </Flex>
       ),
-      meta: {
-        isNumeric: true,
-      },
     }),
     columnHelper.accessor('onChainVoting.score', {
       cell: info => {
@@ -188,25 +213,25 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
       },
       header: () => (
         <Flex flexDir="row" gap="2" alignItems="center" minW="100px">
-          On-chain Voting
+          Onchain Voting
           <Tooltip
             bg={theme.collapse.bg || theme.card.background}
             color={theme.collapse.text}
             label={
               <Flex flexDir="column" py="1" gap="2">
-                <Text fontWeight={600}>On-chain Voting (TV) - Weight 25</Text>
+                <Text fontWeight={600}>Onchain Voting (TV) - Weight 25</Text>
                 <Text fontWeight="normal">
-                  Percentage of delegate participation in on-chain voting. This
+                  Percentage of delegate participation in onchain voting. This
                   parameter is reset at the beginning of each month.
                 </Text>
                 <List fontWeight="normal">
                   <ListItem>
-                    <b>Tn</b>: Number of total proposals that were sent to Tally
+                    <b>Tn</b>: Number of total proposals that were sent onchain
                     for voting in the month.
                   </ListItem>
                   <ListItem>
-                    <b>Rn:</b> Number of proposals the delegate voted in Tally
-                    in the month.
+                    <b>Rn:</b> Number of proposals the delegate voted onchain in
+                    the month.
                   </ListItem>
                 </List>
                 <Code fontWeight="normal">
@@ -221,9 +246,6 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
           </Tooltip>
         </Flex>
       ),
-      meta: {
-        isNumeric: true,
-      },
     }),
     columnHelper.accessor('communicatingRationale.score', {
       cell: info => {
@@ -249,7 +271,7 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
                 <Text fontWeight="normal">
                   Percentage of communication threads with the justification of
                   the delegate’s vote on the proposals sent to snapshots and
-                  Tally (if necessary if the vote does not change). This
+                  onchain (if necessary if the vote does not change). This
                   parameter is reset at the beginning of each month.
                 </Text>
                 <List fontWeight="normal">
@@ -275,9 +297,6 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
           </Tooltip>
         </Flex>
       ),
-      meta: {
-        isNumeric: true,
-      },
     }),
     columnHelper.accessor('commentingProposal.score', {
       cell: info => {
@@ -329,9 +348,6 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
           </Tooltip>
         </Flex>
       ),
-      meta: {
-        isNumeric: true,
-      },
     }),
     columnHelper.accessor('totalParticipation', {
       cell: info => {
@@ -369,9 +385,6 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
           </Tooltip>
         </Flex>
       ),
-      meta: {
-        isNumeric: true,
-      },
     }),
     columnHelper.accessor('bonusPoint', {
       cell: info => {
@@ -408,9 +421,6 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
           </Tooltip>
         </Flex>
       ),
-      meta: {
-        isNumeric: true,
-      },
     }),
     // columnHelper.accessor('payment', {
     //   cell: info => {

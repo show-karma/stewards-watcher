@@ -48,6 +48,7 @@ const config: IDAOConfig = {
   EXCLUDED_CARD_FIELDS: ['healthScore', 'discordScore'],
   EXCLUDED_VOTING_HISTORY_COLUMN: [],
   ENABLE_DELEGATE_TRACKER: true,
+  DAO_HAS_COMPENSATION_PROGRAM: true,
   DAO_CATEGORIES_TYPE: 'workstreams',
 };
 

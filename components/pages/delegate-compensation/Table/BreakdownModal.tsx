@@ -20,6 +20,11 @@ import {
   TableContainer,
   Switch,
   FormControl,
+  Icon,
+  useClipboard,
+  Tooltip,
+  List,
+  ListItem,
 } from '@chakra-ui/react';
 import { ImgWithFallback } from 'components/ImgWithFallback';
 import { useAuth, useDAO, useDelegates } from 'contexts';
@@ -31,6 +36,10 @@ import * as yup from 'yup';
 import axios from 'axios';
 import { useToasty } from 'hooks';
 import { API_ROUTES } from 'helpers';
+import { IoCopy } from 'react-icons/io5';
+import { truncateAddress } from 'utils';
+import { FaCheckCircle } from 'react-icons/fa';
+import { AiFillQuestionCircle } from 'react-icons/ai';
 
 interface BreakdownModalProps {
   delegate: DelegateCompensationStats;
@@ -84,6 +93,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
 
   const [isSaving, setIsSaving] = useState(false);
   const { openProfile } = useDelegates();
+  const { onCopy } = useClipboard(delegate?.delegate?.publicAddress || '');
   const { toast } = useToasty();
   const {
     register,
@@ -97,6 +107,15 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
     reValidateMode: 'onChange',
     mode: 'onChange',
   });
+
+  const copyText = () => {
+    onCopy();
+    toast({
+      title: 'Copied to clipboard',
+      description: 'Address copied',
+      duration: 3000,
+    });
+  };
 
   const stats = [
     {
@@ -116,7 +135,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       canEdit: false,
     },
     {
-      name: 'Tally Voting (TV)',
+      name: 'Onchain Voting (TV)',
       TN: delegate.onChainVoting.tn,
       RN: delegate.onChainVoting.rn,
       total: delegate.onChainVoting.score,
@@ -148,7 +167,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       canEdit: true,
     },
     {
-      name: 'Total Particiaption (TP)',
+      name: 'Total Participation (TP)',
       TN: null,
       RN: null,
       total: delegate.totalParticipation,
@@ -225,9 +244,49 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
               fallback={delegate.delegate.shouldUse}
               src={delegate.delegateImage}
             />
-            <Text w="full" color={theme.modal.header.title}>
+            <Text
+              textOverflow="ellipsis"
+              overflow="hidden"
+              whiteSpace="nowrap"
+              color={theme.modal.header.title}
+            >
               {delegate.delegate.shouldUse}
             </Text>
+            {delegate.incentiveOptedIn ? (
+              <Tooltip
+                shouldWrapChildren
+                label="Opted-in to Incentive Program"
+                fontSize="md"
+              >
+                <Icon as={FaCheckCircle} w="4" h="4" color="green.400" />
+              </Tooltip>
+            ) : (
+              <Flex w="16px" />
+            )}
+          </Flex>
+          <Flex flexDir="row" color={theme.subtitle} paddingLeft="44px" gap="3">
+            <Text fontSize="xs" fontWeight="medium">
+              {truncateAddress(delegate.delegate.publicAddress)}
+            </Text>
+            <Button
+              bg="transparent"
+              py="0"
+              px="0"
+              _hover={{
+                opacity: 0.7,
+              }}
+              _active={{}}
+              _focus={{}}
+              onClick={copyText}
+              h="max-content"
+              w="min-content"
+              minW="min-content"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Icon as={IoCopy} color={theme.subtitle} boxSize="4" />
+            </Button>
           </Flex>
         </ModalHeader>
         <ModalCloseButton />
@@ -261,25 +320,96 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                         borderBottomStyle="solid"
                         borderBottomColor={theme.modal.header.title}
                         color={theme.modal.header.title}
-                        isNumeric
                       >
-                        Rn
+                        <Flex flexDir="row" gap="2" alignItems="center">
+                          Rn{' '}
+                          <Tooltip
+                            bg={theme.collapse.bg || theme.card.background}
+                            color={theme.collapse.text}
+                            label={
+                              <Flex flexDir="column" py="1" gap="2">
+                                <List fontWeight="normal">
+                                  <ListItem>
+                                    <b>Snapshot Voting (SV):</b> Number of
+                                    proposals the delegate voted on in the
+                                    month.
+                                  </ListItem>
+                                  <ListItem>
+                                    <b>Onchain Voting (TV):</b> Number of
+                                    proposals the delegate voted onchain in the
+                                    month.
+                                  </ListItem>
+                                  <ListItem>
+                                    <b>Communication Rationale (CR):</b> Number
+                                    of real communication rational threads where
+                                    the delegate communicated and justified
+                                    his/her decision.
+                                  </ListItem>
+                                  <ListItem>
+                                    <b>Commenting Proposal (CP):</b> Number of
+                                    actual proposals where the delegate made a
+                                    genuine and quality contribution. Spam
+                                    messages will not be considered.
+                                  </ListItem>
+                                </List>
+                              </Flex>
+                            }
+                          >
+                            <Flex w="5" h="5" cursor="pointer">
+                              <Icon as={AiFillQuestionCircle} w="5" h="5" />
+                            </Flex>
+                          </Tooltip>
+                        </Flex>
                       </Th>
                       <Th
                         borderBottomWidth="1px"
                         borderBottomStyle="solid"
                         borderBottomColor={theme.modal.header.title}
                         color={theme.modal.header.title}
-                        isNumeric
                       >
-                        Tn
+                        <Flex flexDir="row" gap="2" alignItems="center">
+                          Tn{' '}
+                          <Tooltip
+                            bg={theme.collapse.bg || theme.card.background}
+                            color={theme.collapse.text}
+                            label={
+                              <Flex flexDir="column" py="1" gap="2">
+                                <List fontWeight="normal">
+                                  <ListItem>
+                                    <b>Snapshot Voting (SV):</b> Number of total
+                                    proposals that were sent to snapshots for
+                                    voting in the month.
+                                  </ListItem>
+                                  <ListItem>
+                                    <b>Onchain Voting (TV):</b> Number of total
+                                    proposals that were sent onchain for voting
+                                    in the month.
+                                  </ListItem>
+                                  <ListItem>
+                                    <b>Communication Rationale (CR):</b> Total
+                                    number of proposals that were submitted to a
+                                    vote.
+                                  </ListItem>
+                                  <ListItem>
+                                    <b>Commenting Proposal (CP):</b> Total
+                                    number of formal proposals posted on the
+                                    forum.
+                                  </ListItem>
+                                </List>
+                              </Flex>
+                            }
+                          >
+                            <Flex w="5" h="5" cursor="pointer">
+                              <Icon as={AiFillQuestionCircle} w="5" h="5" />
+                            </Flex>
+                          </Tooltip>
+                        </Flex>
                       </Th>
                       <Th
                         borderBottomWidth="1px"
                         borderBottomStyle="solid"
                         borderBottomColor={theme.modal.header.title}
                         color={theme.modal.header.title}
-                        isNumeric
                       >
                         Total
                       </Th>
@@ -490,6 +620,8 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                     );
                     onClose();
                   }}
+                  bg={theme.branding}
+                  color={theme.buttonText}
                 >
                   View Delegate Info
                 </Button>

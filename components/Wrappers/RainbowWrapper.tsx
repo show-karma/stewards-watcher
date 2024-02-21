@@ -65,8 +65,17 @@ export const RainbowWrapper: React.FC<ProviderProps> = ({ children }) => {
           appName: `${config.DAO}'s Delegates Watcher`,
         }),
         walletConnectWallet({
+          version: '2',
           chains,
           projectId: process.env.NEXT_PUBLIC_PROJECT_ID || '',
+          options: {
+            qrModalOptions: {
+              themeVariables: {
+                '--wcm-z-index': '9999',
+              },
+            },
+            projectId: process.env.NEXT_PUBLIC_PROJECT_ID || '',
+          },
         }),
         talismanWallet({ chains }),
         injectedWallet({ chains }),

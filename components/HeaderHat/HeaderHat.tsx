@@ -114,6 +114,14 @@ export const HeaderHat: FC<IHeaderHat> = ({
       });
     }
 
+    if (daoInfo.config.DAO_HAS_COMPENSATION_PROGRAM) {
+      array.push({
+        title: 'Delegate Compensation',
+        path: `${rootPathname}/delegate-compensation`,
+        isExternal: false,
+      });
+    }
+
     array.push({
       title: 'Endorsements',
       path: `${rootPathname}/endorsements`,
@@ -190,6 +198,7 @@ export const HeaderHat: FC<IHeaderHat> = ({
                   <StyledButton w="full">FAQs</StyledButton>
                 </ChakraLink>
               )}
+
               {daoInfo.config.DAO_RESOURCES &&
                 daoInfo.config.DAO_RESOURCES.length > 0 && (
                   <NavMenu

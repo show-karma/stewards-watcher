@@ -106,6 +106,7 @@ export interface IDAOConfig {
   DELEGATED_VOTES_BREAKDOWN_BY_TRACKS?: boolean;
   DELEGATED_VOTES_BREAKDOWN_BY_NETWORK?: boolean;
   ENABLE_HANDLES_EDIT?: IMedias[];
+  DAO_HAS_COMPENSATION_PROGRAM?: boolean;
   ECOSYSTEM?: {
     name: string;
     icon: string;
