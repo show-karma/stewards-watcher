@@ -56,14 +56,14 @@ export const DataTable = <Data extends object>({
         <Thead>
           {table.getHeaderGroups().map(headerGroup => (
             <Tr key={headerGroup.id}>
-              {headerGroup.headers.map(header => {
+              {headerGroup.headers.map((header, index) => {
                 const { meta } = header.column.columnDef;
                 return (
                   <Th
                     paddingX={{ base: '4px', '2xl': '8px' }}
                     key={header.id}
                     onClick={header.column.getToggleSortingHandler()}
-                    isNumeric={(meta as any)?.isNumeric}
+                    textAlign={index === 0 ? 'left' : 'center'}
                   >
                     {flexRender(
                       header.column.columnDef.header,
@@ -93,7 +93,7 @@ export const DataTable = <Data extends object>({
                   <Td
                     paddingX={{ base: '4px', '2xl': '8px' }}
                     key={cell.id}
-                    isNumeric={(meta as any)?.isNumeric}
+                    textAlign="center"
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </Td>

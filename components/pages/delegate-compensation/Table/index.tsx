@@ -116,9 +116,6 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
           Voting Power
         </Flex>
       ),
-      meta: {
-        isNumeric: true,
-      },
     }),
     columnHelper.accessor('participationRate', {
       cell: info => {
@@ -157,9 +154,6 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
           </Tooltip>
         </Flex>
       ),
-      meta: {
-        isNumeric: true,
-      },
     }),
     columnHelper.accessor('snapshotVoting.score', {
       cell: info => {
@@ -206,9 +200,6 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
           </Tooltip>
         </Flex>
       ),
-      meta: {
-        isNumeric: true,
-      },
     }),
     columnHelper.accessor('onChainVoting.score', {
       cell: info => {
@@ -222,25 +213,25 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
       },
       header: () => (
         <Flex flexDir="row" gap="2" alignItems="center" minW="100px">
-          On-chain Voting
+          Onchain Voting
           <Tooltip
             bg={theme.collapse.bg || theme.card.background}
             color={theme.collapse.text}
             label={
               <Flex flexDir="column" py="1" gap="2">
-                <Text fontWeight={600}>On-chain Voting (TV) - Weight 25</Text>
+                <Text fontWeight={600}>Onchain Voting (TV) - Weight 25</Text>
                 <Text fontWeight="normal">
-                  Percentage of delegate participation in on-chain voting. This
+                  Percentage of delegate participation in onchain voting. This
                   parameter is reset at the beginning of each month.
                 </Text>
                 <List fontWeight="normal">
                   <ListItem>
-                    <b>Tn</b>: Number of total proposals that were sent to Tally
+                    <b>Tn</b>: Number of total proposals that were sent onchain
                     for voting in the month.
                   </ListItem>
                   <ListItem>
-                    <b>Rn:</b> Number of proposals the delegate voted in Tally
-                    in the month.
+                    <b>Rn:</b> Number of proposals the delegate voted onchain in
+                    the month.
                   </ListItem>
                 </List>
                 <Code fontWeight="normal">
@@ -255,9 +246,6 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
           </Tooltip>
         </Flex>
       ),
-      meta: {
-        isNumeric: true,
-      },
     }),
     columnHelper.accessor('communicatingRationale.score', {
       cell: info => {
@@ -283,7 +271,7 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
                 <Text fontWeight="normal">
                   Percentage of communication threads with the justification of
                   the delegate’s vote on the proposals sent to snapshots and
-                  Tally (if necessary if the vote does not change). This
+                  onchain (if necessary if the vote does not change). This
                   parameter is reset at the beginning of each month.
                 </Text>
                 <List fontWeight="normal">
@@ -309,9 +297,6 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
           </Tooltip>
         </Flex>
       ),
-      meta: {
-        isNumeric: true,
-      },
     }),
     columnHelper.accessor('commentingProposal.score', {
       cell: info => {
@@ -363,9 +348,6 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
           </Tooltip>
         </Flex>
       ),
-      meta: {
-        isNumeric: true,
-      },
     }),
     columnHelper.accessor('totalParticipation', {
       cell: info => {
@@ -403,9 +385,6 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
           </Tooltip>
         </Flex>
       ),
-      meta: {
-        isNumeric: true,
-      },
     }),
     columnHelper.accessor('bonusPoint', {
       cell: info => {
@@ -442,9 +421,6 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
           </Tooltip>
         </Flex>
       ),
-      meta: {
-        isNumeric: true,
-      },
     }),
     // columnHelper.accessor('payment', {
     //   cell: info => {

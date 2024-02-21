@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import { api } from 'helpers';
 import { DelegateCompensationStats, DelegateStatsFromAPI } from 'types';
 import { formatSimpleNumber } from 'utils';
+import { DownChevron } from 'components/Icons';
 import { Table } from './Table';
 
 export const DelegateCompensation = () => {
@@ -221,10 +222,11 @@ export const DelegateCompensation = () => {
           bg={theme.card.background}
           borderRadius="2xl"
           w={{ base: 'full', sm: '220px', lg: 'full' }}
+          alignItems="center"
         >
           <Text>Delegates opted-in</Text>
           <Skeleton isLoaded={optInCounter !== undefined}>
-            <Text>{formatSimpleNumber(optInCounter || 0)}</Text>
+            <Text fontSize="40px">{formatSimpleNumber(optInCounter || 0)}</Text>
           </Skeleton>
         </Flex>
         <Flex
@@ -234,10 +236,11 @@ export const DelegateCompensation = () => {
           bg={theme.card.background}
           borderRadius="2xl"
           w={{ base: 'full', sm: '220px', lg: 'full' }}
+          alignItems="center"
         >
           <Text>{`Delegates with >50k VP`}</Text>
           <Skeleton isLoaded={!!powerfulDelegates}>
-            <Text>{formatSimpleNumber(powerfulDelegates)}</Text>
+            <Text fontSize="40px">{formatSimpleNumber(powerfulDelegates)}</Text>
           </Skeleton>
         </Flex>
       </Flex>
@@ -264,10 +267,28 @@ export const DelegateCompensation = () => {
                 w="max-content"
                 bg={theme.filters.activeBg}
                 as={Button}
+                borderWidth="1px"
+                borderStyle="solid"
+                borderColor={theme.card.interests.text}
+                rightIcon={
+                  <DownChevron
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    boxSize="4"
+                  />
+                }
               >
                 {month.name}
               </MenuButton>
-              <MenuList bg={theme.filters.bg}>{renderMonthList()}</MenuList>
+              <MenuList
+                _hover={{
+                  opacity: 0.7,
+                }}
+                bg={theme.filters.bg}
+              >
+                {renderMonthList()}
+              </MenuList>
             </Menu>
           </Flex>
           <Switch
