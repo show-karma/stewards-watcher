@@ -22,7 +22,7 @@ export const DelegateCompensation = () => {
   const { theme } = useDAO();
   const [delegates, setDelegates] = useState<DelegateCompensationStats[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [onlyOptIn, setOnlyOptIn] = useState(true);
+  const [onlyOptIn, setOnlyOptIn] = useState(false);
   const [month, setMonth] = useState(() => {
     const date = new Date();
     const currentMonth = date.getMonth() + 1;
@@ -35,6 +35,7 @@ export const DelegateCompensation = () => {
   const [optInCounter, setOptInCounter] = useState<number | undefined>(
     undefined
   );
+  const [loadingOptInCounter, setLoadingOptInCounter] = useState(false);
   const [powerfulDelegates, setPowerfulDelegates] = useState(0);
 
   const fetchDelegates = async () => {
@@ -138,7 +139,35 @@ export const DelegateCompensation = () => {
       setIsLoading(false);
     }
   };
+
   useEffect(() => {
+    const getOptInCounter = async () => {
+      setLoadingOptInCounter(true);
+
+      try {
+        const response = await api.get(
+          `/delegate/arbitrum/incentive-programs-stats`,
+          {
+            params: {
+              incentiveOptedIn: true,
+              month: month?.value || undefined,
+            },
+          }
+        );
+        if (!response.data.data.delegates) {
+          setOptInCounter(0);
+          return;
+        }
+        const responseDelegates = response.data.data.delegates;
+        setOptInCounter(responseDelegates.length);
+      } catch (error) {
+        setOptInCounter(0);
+        console.log(error);
+      } finally {
+        setLoadingOptInCounter(false);
+      }
+    };
+    getOptInCounter();
     fetchDelegates();
   }, [onlyOptIn, month]);
 
@@ -225,7 +254,7 @@ export const DelegateCompensation = () => {
           alignItems="center"
         >
           <Text>Delegates opted-in</Text>
-          <Skeleton isLoaded={optInCounter !== undefined}>
+          <Skeleton isLoaded={!loadingOptInCounter}>
             <Text fontSize="40px">{formatSimpleNumber(optInCounter || 0)}</Text>
           </Skeleton>
         </Flex>
