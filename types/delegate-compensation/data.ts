@@ -21,6 +21,7 @@ export type DelegateStatsFromAPI = {
     payment: number;
     snapshotVoting: CompensationStatBreakdown;
     totalParticipation: string;
+    participationRatePercent: number;
   };
 };
 
@@ -37,6 +38,7 @@ export type DelegateCompensationStats = {
   delegateImage: string;
   ranking: number;
   participationRate: string;
+  participationRatePercent: number;
   snapshotVoting: CompensationStatBreakdown;
   onChainVoting: CompensationStatBreakdown;
   communicatingRationale: CompensationStatBreakdown;
