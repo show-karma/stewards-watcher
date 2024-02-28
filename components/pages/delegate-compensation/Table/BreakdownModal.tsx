@@ -37,7 +37,7 @@ import axios from 'axios';
 import { useToasty } from 'hooks';
 import { API_ROUTES } from 'helpers';
 import { IoCopy } from 'react-icons/io5';
-import { truncateAddress } from 'utils';
+import { formatNumberPercentage, truncateAddress } from 'utils';
 import { FaCheckCircle } from 'react-icons/fa';
 import { AiFillQuestionCircle } from 'react-icons/ai';
 
@@ -120,7 +120,9 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
   const stats = [
     {
       name: 'Participation Rate (PR)',
-      TN: null,
+      TN: delegate.participationRatePercent
+        ? formatNumberPercentage(delegate.participationRatePercent)
+        : null,
       RN: null,
       total: delegate.participationRate,
       formName: 'participationRate',
@@ -375,6 +377,10 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                             label={
                               <Flex flexDir="column" py="1" gap="2">
                                 <List fontWeight="normal">
+                                  <ListItem>
+                                    <b>Participation Rate (PR):</b>{' '}
+                                    Participation Rate percentage.
+                                  </ListItem>
                                   <ListItem>
                                     <b>Snapshot Voting (SV):</b> Number of total
                                     proposals that were sent to snapshots for
