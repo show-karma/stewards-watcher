@@ -1,6 +1,10 @@
 import {
+  Button,
   Flex,
+  Menu,
+  MenuButton,
   MenuItem,
+  MenuList,
   Skeleton,
   Spinner,
   Switch,
@@ -12,6 +16,7 @@ import { api } from 'helpers';
 import { DelegateCompensationStats, DelegateStatsFromAPI } from 'types';
 import { formatSimpleNumber } from 'utils';
 import { useRouter } from 'next/router';
+import { DownChevron } from 'components/Icons';
 import { Table } from './Table';
 
 const monthDictionary: Record<string, number> = {
@@ -35,11 +40,18 @@ export const DelegateCompensation = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [onlyOptIn, setOnlyOptIn] = useState(false);
   const router = useRouter();
-  const { asPath } = router;
   const [month, setMonth] = useState(() => {
     const queryString = router.asPath.split('?')[1];
     const queryMonth = queryString?.match(/(?<=month=)[^&]*/i)?.[0];
+    const date = new Date();
+    const currentMonth = date.getMonth() + 1;
     if (queryMonth) {
+      if (monthDictionary[queryMonth.toLowerCase()] > currentMonth) {
+        return {
+          name: date.toLocaleString('en-US', { month: 'long' }),
+          value: currentMonth,
+        };
+      }
       const monthFound = monthDictionary[queryMonth.toLowerCase()];
       return {
         name: new Date(2022, monthFound - 1, 1).toLocaleString('en-US', {
@@ -48,8 +60,6 @@ export const DelegateCompensation = () => {
         value: monthFound,
       };
     }
-    const date = new Date();
-    const currentMonth = date.getMonth() + 1;
     return {
       name: date.toLocaleString('en-US', { month: 'long' }),
       value: currentMonth,
@@ -212,7 +222,6 @@ export const DelegateCompensation = () => {
           setPowerfulDelegates(0);
           return;
         }
-        console.log(response.data.data.delegates, month?.value);
         const responseDelegates = response.data.data.delegates;
         setPowerfulDelegates(responseDelegates.length);
       } catch (error) {
@@ -222,6 +231,8 @@ export const DelegateCompensation = () => {
     };
     getPowerfulDelegates();
   }, [month]);
+
+  const { rootPathname } = useDAO();
 
   const renderMonthList = () => {
     const allMonths = Array.from(
@@ -241,13 +252,27 @@ export const DelegateCompensation = () => {
       }
     );
 
-    return allMonths.map(listMonth => (
+    const notUsedMonths = allMonths.filter(
+      monthItem => monthItem.value !== 1 && monthItem.value !== 2
+    );
+
+    return notUsedMonths.map(listMonth => (
       <MenuItem
         key={listMonth.value}
         bg={theme.filters.bg}
         _hover={{ opacity: 0.7 }}
         onClick={() => {
           setMonth(listMonth);
+          router.push(
+            {
+              pathname: `/${rootPathname}/delegate-compensation`,
+              query: {
+                month: listMonth.name.toLowerCase(),
+              },
+            },
+            undefined,
+            { shallow: true }
+          );
         }}
       >
         {listMonth.name}
@@ -313,7 +338,6 @@ export const DelegateCompensation = () => {
           alignItems="center"
           justifyContent="flex-start"
         >
-          {/*
           <Flex flexDirection="row" gap="4" alignItems="center">
             <Text color={theme.card.text} fontSize="lg">
               Month
@@ -347,7 +371,6 @@ export const DelegateCompensation = () => {
               </MenuList>
             </Menu>
           </Flex>
-          */}
           <Switch
             display="flex"
             defaultChecked={onlyOptIn}
