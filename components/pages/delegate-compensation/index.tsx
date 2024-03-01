@@ -1,10 +1,6 @@
 import {
-  Button,
   Flex,
-  Menu,
-  MenuButton,
   MenuItem,
-  MenuList,
   Skeleton,
   Spinner,
   Switch,
@@ -15,19 +11,47 @@ import { useEffect, useState } from 'react';
 import { api } from 'helpers';
 import { DelegateCompensationStats, DelegateStatsFromAPI } from 'types';
 import { formatSimpleNumber } from 'utils';
-import { DownChevron } from 'components/Icons';
+import { useRouter } from 'next/router';
 import { Table } from './Table';
+
+const monthDictionary: Record<string, number> = {
+  january: 1,
+  february: 2,
+  march: 3,
+  april: 4,
+  may: 5,
+  june: 6,
+  july: 7,
+  august: 8,
+  september: 9,
+  october: 10,
+  november: 11,
+  december: 12,
+};
 
 export const DelegateCompensation = () => {
   const { theme } = useDAO();
   const [delegates, setDelegates] = useState<DelegateCompensationStats[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [onlyOptIn, setOnlyOptIn] = useState(false);
+  const router = useRouter();
+  const { asPath } = router;
   const [month, setMonth] = useState(() => {
+    const queryString = router.asPath.split('?')[1];
+    const queryMonth = queryString?.match(/(?<=month=)[^&]*/i)?.[0];
+    if (queryMonth) {
+      const monthFound = monthDictionary[queryMonth.toLowerCase()];
+      return {
+        name: new Date(2022, monthFound - 1, 1).toLocaleString('en-US', {
+          month: 'long',
+        }),
+        value: monthFound,
+      };
+    }
     const date = new Date();
     const currentMonth = date.getMonth() + 1;
     return {
-      name: date.toLocaleString('default', { month: 'long' }),
+      name: date.toLocaleString('en-US', { month: 'long' }),
       value: currentMonth,
     };
   });
@@ -188,6 +212,7 @@ export const DelegateCompensation = () => {
           setPowerfulDelegates(0);
           return;
         }
+        console.log(response.data.data.delegates, month?.value);
         const responseDelegates = response.data.data.delegates;
         setPowerfulDelegates(responseDelegates.length);
       } catch (error) {
@@ -196,7 +221,7 @@ export const DelegateCompensation = () => {
       }
     };
     getPowerfulDelegates();
-  }, []);
+  }, [month]);
 
   const renderMonthList = () => {
     const allMonths = Array.from(
@@ -288,6 +313,7 @@ export const DelegateCompensation = () => {
           alignItems="center"
           justifyContent="flex-start"
         >
+          {/*
           <Flex flexDirection="row" gap="4" alignItems="center">
             <Text color={theme.card.text} fontSize="lg">
               Month
@@ -321,6 +347,7 @@ export const DelegateCompensation = () => {
               </MenuList>
             </Menu>
           </Flex>
+          */}
           <Switch
             display="flex"
             defaultChecked={onlyOptIn}
