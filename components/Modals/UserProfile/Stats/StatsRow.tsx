@@ -1,4 +1,4 @@
-import { Flex } from '@chakra-ui/react';
+import { Flex, Link } from '@chakra-ui/react';
 import { useDAO, useDelegates } from 'contexts';
 import {
   formatNumber,
@@ -7,6 +7,7 @@ import {
 } from 'utils';
 import { IStats } from 'types';
 import { useEffect, useState } from 'react';
+import { DELEGATOR_TRACKER_NOT_SUPPORTED_DAOS } from 'helpers';
 import { StatCard } from './StatCard';
 
 interface Stats {
@@ -134,19 +135,39 @@ export const StatsRow = () => {
     getEndorsements();
   }, [profileSelected]);
 
+  const daoNotSupportDelegatorPage = DELEGATOR_TRACKER_NOT_SUPPORTED_DAOS.find(
+    dao => dao === config.DAO_KARMA_ID
+  );
+
   return (
     <Flex flexDir="row" flexWrap="wrap" gap="4">
-      {cardStats.map(
-        item =>
-          item.amount !== '-' &&
-          item.amount && (
+      {cardStats.map(item => {
+        if (item.amount !== '-' && item.amount) {
+          if (item.id === 'delegatorCount' && !daoNotSupportDelegatorPage) {
+            return (
+              <Link
+                key={item.title}
+                background="transparent"
+                href={`https://karmahq.xyz/dao/${config.DAO_KARMA_ID}/delegators/${profileSelected?.address}`}
+                _hover={{}}
+                h="max-content"
+                isExternal
+                cursor="pointer"
+              >
+                <StatCard title={item.title} amount={item.amount} />
+              </Link>
+            );
+          }
+          return (
             <StatCard
               key={item.title}
               title={item.title}
               amount={item.amount}
             />
-          )
-      )}
+          );
+        }
+        return null;
+      })}
     </Flex>
   );
 };
