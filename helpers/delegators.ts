@@ -1,15 +1,8 @@
-export const DELEGATOR_TRACKER_DAOS: string[] = [
-  'aave',
-  'compound',
-  'dimo',
-  'connext',
-  'dydx',
-  'ens',
-  'feiprotocol',
-  'gitcoin',
-  'hop',
-  'indexed',
-  'inversefinance',
-  'optimism',
-  'uniswap',
+export const DELEGATOR_TRACKER_NOT_SUPPORTED_DAOS: string[] = [
+  'developer',
+  'moonbase',
+  'moonbeam',
+  'moonriver',
+  'safe',
+  'yamfinance',
 ];

@@ -37,7 +37,7 @@ import {
 import { useRouter } from 'next/router';
 import { useToasty } from 'hooks';
 import { IBreakdownProps } from 'contexts/scoreBreakdown';
-import { DELEGATOR_TRACKER_DAOS } from 'helpers';
+import { DELEGATOR_TRACKER_NOT_SUPPORTED_DAOS } from 'helpers';
 import { HiUserGroup } from 'react-icons/hi';
 import dynamic from 'next/dynamic';
 import { FaDiscord } from 'react-icons/fa';
@@ -80,10 +80,10 @@ const StatCases: FC<IStatCasesProps> = ({
   delegateAddress,
 }) => {
   const { daoInfo } = useDAO();
-  const daoSupportsDelegatorPage = DELEGATOR_TRACKER_DAOS.find(
+  const daoNotSupportDelegatorPage = DELEGATOR_TRACKER_NOT_SUPPORTED_DAOS.find(
     dao => dao === daoName
   );
-  if (statItem.id === 'delegatorCount' && daoSupportsDelegatorPage)
+  if (statItem.id === 'delegatorCount' && !daoNotSupportDelegatorPage)
     return (
       <Link
         background="transparent"

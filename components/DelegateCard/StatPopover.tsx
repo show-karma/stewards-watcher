@@ -14,7 +14,7 @@ import {
 import { LeftCircleArrowIcon } from 'components/Icons';
 import { useDAO } from 'contexts';
 import { AnimatePresence, motion } from 'framer-motion';
-import { DELEGATOR_TRACKER_DAOS } from 'helpers';
+import { DELEGATOR_TRACKER_NOT_SUPPORTED_DAOS } from 'helpers';
 import { FC } from 'react';
 import { ICardStat, IDelegate } from 'types';
 
@@ -36,12 +36,10 @@ const StatPopoverCases: FC<IStatPopoverCasesProps> = ({
   delegateAddress,
 }) => {
   const { theme } = useDAO();
-
-  const daoSupportsDelegatorPage = DELEGATOR_TRACKER_DAOS.find(
+  const daoNotSupportDelegatorPage = DELEGATOR_TRACKER_NOT_SUPPORTED_DAOS.find(
     dao => dao === daoName
   );
-
-  if (stat.id === 'delegatorCount' && daoSupportsDelegatorPage) {
+  if (stat.id === 'delegatorCount' && !daoNotSupportDelegatorPage) {
     return (
       <Link
         background="transparent"
