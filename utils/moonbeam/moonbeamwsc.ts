@@ -1,9 +1,10 @@
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { QueryableModuleConsts } from '@polkadot/api/types';
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import startCase from 'lodash.startcase';
 import {
   Hex,
+  IBalanceOverview,
   MoonbeamProposal,
   MoonbeamTrack,
   MoonbeamTrackRes,
@@ -100,6 +101,34 @@ export class MoonbeamWSC {
     }
 
     return [[], 0];
+  }
+
+  async getSubAccount(who: Hex, destroy?: boolean): Promise<IBalanceOverview> {
+    let result = <IBalanceOverview>{
+      free: '0',
+      reserved: '0',
+      locked: '0',
+      flags: '0',
+    };
+
+    return new Promise(resolve => {
+      this.client.query.system.account(
+        who,
+        (data: { data: Record<string, BigNumber> }) => {
+          try {
+            result = {
+              free: ethers.utils.formatEther(data.data.free.toString()),
+              reserved: ethers.utils.formatEther(data.data.reserved.toString()),
+              locked: ethers.utils.formatEther(data.data.frozen.toString()),
+              flags: ethers.utils.formatEther(data.data.flags.toString()),
+            };
+            resolve(result);
+          } finally {
+            if (destroy) this.destroy();
+          }
+        }
+      );
+    });
   }
 
   /**

@@ -11,6 +11,7 @@ import {
 import { moonriver } from 'wagmi/chains';
 import { ECOSYSTEMS, RPCS } from 'helpers';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
+import { moonbeamGetBalanceOverview } from 'utils/moonbeam/moonbeamGetBalanceOverview';
 import { moonriverUndelegateAction } from '../../utils/moonbeam/moonriverUndelegateAction';
 import { polkassemblyProposalUrl } from '../../utils/moonbeam/polkassembly';
 import ABI from './ABI.json';
@@ -70,6 +71,7 @@ const config: IDAOConfig = {
     false
   ),
   GET_LOCKED_TOKENS_ACTION: moonriverGetLockedTokensAction,
+  GET_BALANCE_OVERVIEW_ACTION: moonbeamGetBalanceOverview,
   DAO_EXT_VOTES_PROVIDER: {
     onChain: moonriverOnChainProvider,
   },

@@ -10,7 +10,7 @@ import {
   Text,
   Tooltip,
 } from '@chakra-ui/react';
-import { IDelegate, MultiChainResult } from 'types';
+import { IBalanceOverview, IDelegate, MultiChainResult } from 'types';
 import { ImgWithFallback } from 'components/ImgWithFallback';
 import {
   ITrackBadgeProps,
@@ -27,17 +27,21 @@ import { DelegateModalFooter } from './DelegateModalFooter';
 import { DelegateModalBody } from './DelegateModalBody';
 import { VotesToDelegate } from './VotesToDelegate';
 import { ConvictionMenu } from './ConvictionMenu';
+import { BiQuestionMark } from 'react-icons/bi';
+import { BalanceOverviewDisplay } from 'components/BalanceOverview';
 
 interface StepProps {
   handleModal: () => void;
   votes: MultiChainResult[];
   delegatedUser: IDelegate;
+  balanceOverview?: IBalanceOverview;
   walletAddress?: string;
 }
 
 export const TrackDelegation: React.FC<StepProps> = ({
   handleModal,
   votes,
+  balanceOverview,
   delegatedUser,
   walletAddress,
 }) => {
@@ -278,6 +282,16 @@ export const TrackDelegation: React.FC<StepProps> = ({
                     {...register('amount')}
                     type="text"
                   />
+                  {!!balanceOverview && (
+                    <Tooltip
+                      label={<BalanceOverviewDisplay data={balanceOverview} />}
+                      placement="top"
+                    >
+                      <div>
+                        <BiQuestionMark style={{ cursor: 'help' }} />
+                      </div>
+                    </Tooltip>
+                  )}
                   <Text
                     fontStyle="normal"
                     fontWeight="500"

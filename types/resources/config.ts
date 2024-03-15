@@ -4,7 +4,7 @@ import { writeContract } from '@wagmi/core';
 import { Chain } from 'wagmi';
 import { IChainRow } from 'types/IChainRow';
 import { IConvictionOption, Hex } from 'types/votes';
-import { IActiveDelegatedTracks } from 'utils';
+import { IActiveDelegatedTracks, MoonbeamWSC } from 'utils';
 import { IForumType } from './forum';
 import { IStats, IStatsID } from './stats';
 import { IVotingHistoryColumn } from './modal';
@@ -122,6 +122,9 @@ export interface IDAOConfig {
     address: string,
     daoName: string
   ) => Promise<IActiveDelegatedTracks[]>;
+  GET_BALANCE_OVERVIEW_ACTION?: (
+    address: Hex
+  ) => ReturnType<typeof MoonbeamWSC.prototype.getSubAccount>;
   /**
    * Defines a function to bulk delegate
    * @param payload

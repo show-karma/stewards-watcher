@@ -23,7 +23,8 @@ export const DelegateModal: React.FC<IModal> = ({
 }) => {
   const { daoData, daoInfo } = useDAO();
   const [step, setStep] = useState(ESteps.DELEGATE);
-  const { votes, delegatedBefore, walletAddress } = useGovernanceVotes();
+  const { votes, delegatedBefore, walletAddress, balanceOverview } =
+    useGovernanceVotes();
 
   const resetStep = () => setStep(ESteps.DELEGATE);
 
@@ -39,6 +40,7 @@ export const DelegateModal: React.FC<IModal> = ({
         <TrackDelegation
           handleModal={closeModal}
           votes={votes}
+          balanceOverview={balanceOverview}
           delegatedUser={delegateData}
           walletAddress={walletAddress}
         />
