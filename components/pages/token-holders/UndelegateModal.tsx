@@ -23,10 +23,8 @@ import { writeContract, waitForTransaction } from '@wagmi/core';
 import { IBulkUndelegatePayload } from 'utils/moonbeam/moonriverUndelegateAction';
 import { handleError } from 'utils/handleWriteError';
 import { useSwitchNetwork } from 'wagmi';
-import { UndelegateItems } from './UndelegateItems';
-import { BiQuestionMark } from 'react-icons/bi';
 import { BalanceOverviewDisplay } from 'components/BalanceOverview';
-import { BsQuestionCircle } from 'react-icons/bs';
+import { UndelegateItems } from './UndelegateItems';
 
 export const convictionLockTime: { [key: number]: number } = {
   0: 0,
@@ -302,15 +300,9 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
                       label={<BalanceOverviewDisplay data={balanceOverview} />}
                       placement="top"
                     >
-                      <Flex
-                        color="white"
-                        gap="2"
-                        align="center"
-                        userSelect="none"
-                        cursor="help"
-                      >
-                        <BsQuestionCircle /> <small>Balance Overview</small>
-                      </Flex>
+                      <small style={{ cursor: 'help' }}>
+                        View token balance breakdown
+                      </small>
                     </Tooltip>
                   )}
                   <Box textAlign="center" py={3}>

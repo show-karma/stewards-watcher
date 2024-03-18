@@ -6,13 +6,15 @@ import {
   moonriverTracksDictionary,
   moonbase,
 } from 'utils';
-import { ECOSYSTEMS, RPCS } from 'helpers';
+import { ECOSYSTEMS, RPCS, RPCS_WS } from 'helpers';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import {
   moonbaseActiveDelegatedTracks,
   moonbaseGetLockedTokensAction,
   moonbaseOnChainProvider,
 } from 'utils/moonbeam/moonbaseOnChainProvider';
+import { moonbeamGetBalanceOverview } from 'utils/moonbeam/moonbeamGetBalanceOverview';
+import { Hex } from 'viem';
 import { moonriverUndelegateAction } from '../../utils/moonbeam/moonriverUndelegateAction';
 import { polkassemblyProposalUrl } from '../../utils/moonbeam/polkassembly';
 import ABI from './ABI.json';
@@ -73,6 +75,8 @@ const config: IDAOConfig = {
   ),
   GET_ACTIVE_DELEGATIONS_ACTION: moonbaseActiveDelegatedTracks,
   GET_LOCKED_TOKENS_ACTION: moonbaseGetLockedTokensAction,
+  GET_BALANCE_OVERVIEW_ACTION: (address: Hex) =>
+    moonbeamGetBalanceOverview(address, RPCS_WS.moonbase),
   DAO_EXT_VOTES_PROVIDER: {
     onChain: moonbaseOnChainProvider,
   },

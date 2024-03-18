@@ -22,13 +22,12 @@ import * as yup from 'yup';
 import { useToasty } from 'hooks';
 import { IActiveDelegatedTracks } from 'utils';
 import { numberToWords } from 'utils/numberToWords';
+import { BalanceOverviewDisplay } from 'components/BalanceOverview';
 import { DelegateModalHeader } from './DelegateModalHeader';
 import { DelegateModalFooter } from './DelegateModalFooter';
 import { DelegateModalBody } from './DelegateModalBody';
 import { VotesToDelegate } from './VotesToDelegate';
 import { ConvictionMenu } from './ConvictionMenu';
-import { BiQuestionMark } from 'react-icons/bi';
-import { BalanceOverviewDisplay } from 'components/BalanceOverview';
 
 interface StepProps {
   handleModal: () => void;
@@ -282,16 +281,7 @@ export const TrackDelegation: React.FC<StepProps> = ({
                     {...register('amount')}
                     type="text"
                   />
-                  {!!balanceOverview && (
-                    <Tooltip
-                      label={<BalanceOverviewDisplay data={balanceOverview} />}
-                      placement="top"
-                    >
-                      <div>
-                        <BiQuestionMark style={{ cursor: 'help' }} />
-                      </div>
-                    </Tooltip>
-                  )}
+
                   <Text
                     fontStyle="normal"
                     fontWeight="500"
@@ -359,6 +349,16 @@ export const TrackDelegation: React.FC<StepProps> = ({
               {errors.amount?.message}
             </Text>
             <Flex gap="3" flexDir="column" mb="4">
+              {!!balanceOverview && (
+                <Tooltip
+                  label={<BalanceOverviewDisplay data={balanceOverview} />}
+                  placement="top"
+                >
+                  <small style={{ cursor: 'help' }}>
+                    View token balance breakdown
+                  </small>
+                </Tooltip>
+              )}
               <Text
                 fontStyle="normal"
                 fontWeight="700"
