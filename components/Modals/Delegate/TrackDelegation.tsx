@@ -51,6 +51,8 @@ export const TrackDelegation: React.FC<StepProps> = ({
   const { address: delegator } = useWallet();
   const { symbol, loadedVotes } = useGovernanceVotes();
 
+  const { theme } = useDAO();
+
   const [isLoading, setIsLoading] = useState(true);
   const [conviction, setConviction] = useState<number | undefined>(undefined);
   const [tracksDelegated, setTracksDelegated] = useState<
@@ -353,6 +355,8 @@ export const TrackDelegation: React.FC<StepProps> = ({
                 <Tooltip
                   label={<BalanceOverviewDisplay data={balanceOverview} />}
                   placement="top"
+                  bg={theme.collapse.bg || theme.card.background}
+                  color={theme.collapse.text}
                 >
                   <small style={{ cursor: 'help' }}>
                     View token balance breakdown

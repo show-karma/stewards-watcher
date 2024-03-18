@@ -299,6 +299,8 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
                     <Tooltip
                       label={<BalanceOverviewDisplay data={balanceOverview} />}
                       placement="top"
+                      bg={theme.collapse.bg || theme.card.background}
+                      color={theme.collapse.text}
                     >
                       <small style={{ cursor: 'help' }}>
                         View token balance breakdown

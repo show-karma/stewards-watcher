@@ -1,5 +1,5 @@
 /* eslint-disable no-shadow */
-import { Table, Text } from '@chakra-ui/react';
+import { Table, TableContainer, Text } from '@chakra-ui/react';
 import { useMemo } from 'react';
 import { IBalanceOverview } from 'types';
 
@@ -22,60 +22,62 @@ export const BalanceOverviewDisplay: React.FC<IBalanceOverviewDisplay> = ({
       <Text as="h4" textAlign="center">
         Balance Overview
       </Text>
-      <Table
-        background="white"
-        boxShadow="0 0 10px rgba(0,0,0,0.1)"
-        fontWeight="light"
-        __css={{
-          'tr td': {
-            padding: '3px 10px ',
-          },
-          'tr:nth-child(2n)': {
-            backgroundColor: 'rgba(0,0,0,0.1)',
-          },
-        }}
-      >
-        <tr>
-          <td>Free balance:</td>
-          <td>
-            <b>{Number(data.balance).toFixed(8)}</b>
-          </td>
-        </tr>
-        <tr>
-          <td>Locked:</td>
-          <td>
-            <b>{Number(data.locked).toFixed(8)}</b>
-          </td>
-        </tr>
-        <tr>
-          <td>Reserved:</td>
-          <td>
-            <b>{Number(data.reserved).toFixed(8)}</b>
-          </td>
-        </tr>
-        <tr>
-          <td>Deducted for fees:</td>
-          <td>
-            <b>0.1</b>
-          </td>
-        </tr>
-        <tr>
-          <td>Total:</td>
-          <td>
-            <b>{(+data.free + +data.reserved).toFixed(8)}</b>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Available to delegate:
-            <br />
-            <small>(free + locked - fee)</small>
-          </td>
-          <td>
-            <b>{availableToDelegate.toFixed(8)}</b>
-          </td>
-        </tr>
-      </Table>
+      <TableContainer>
+        <Table
+          boxShadow="0 0 10px rgba(0,0,0,0.1)"
+          fontWeight="light"
+          color="white"
+          __css={{
+            'tr td': {
+              padding: '3px 10px ',
+            },
+            'tr:nth-child(2n)': {
+              backgroundColor: 'rgba(0,0,0,0.1)',
+            },
+          }}
+        >
+          <tr>
+            <td>Free balance:</td>
+            <td>
+              <b>{Number(data.balance).toFixed(8)}</b>
+            </td>
+          </tr>
+          <tr>
+            <td>Locked:</td>
+            <td>
+              <b>{Number(data.locked).toFixed(8)}</b>
+            </td>
+          </tr>
+          <tr>
+            <td>Reserved:</td>
+            <td>
+              <b>{Number(data.reserved).toFixed(8)}</b>
+            </td>
+          </tr>
+          <tr>
+            <td>Deducted for fees:</td>
+            <td>
+              <b>0.1</b>
+            </td>
+          </tr>
+          <tr>
+            <td>Total:</td>
+            <td>
+              <b>{(+data.free + +data.reserved).toFixed(8)}</b>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Available to delegate:
+              <br />
+              <small>(free + locked - fee)</small>
+            </td>
+            <td>
+              <b>{availableToDelegate.toFixed(8)}</b>
+            </td>
+          </tr>
+        </Table>
+      </TableContainer>
     </div>
   );
 };
