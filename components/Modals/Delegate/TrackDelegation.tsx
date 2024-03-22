@@ -10,7 +10,7 @@ import {
   Text,
   Tooltip,
 } from '@chakra-ui/react';
-import { IDelegate, MultiChainResult } from 'types';
+import { IBalanceOverview, IDelegate, MultiChainResult } from 'types';
 import { ImgWithFallback } from 'components/ImgWithFallback';
 import {
   ITrackBadgeProps,
@@ -22,6 +22,7 @@ import * as yup from 'yup';
 import { useToasty } from 'hooks';
 import { IActiveDelegatedTracks } from 'utils';
 import { numberToWords } from 'utils/numberToWords';
+import { BalanceOverviewDisplay } from 'components/BalanceOverview';
 import { DelegateModalHeader } from './DelegateModalHeader';
 import { DelegateModalFooter } from './DelegateModalFooter';
 import { DelegateModalBody } from './DelegateModalBody';
@@ -32,12 +33,14 @@ interface StepProps {
   handleModal: () => void;
   votes: MultiChainResult[];
   delegatedUser: IDelegate;
+  balanceOverview?: IBalanceOverview;
   walletAddress?: string;
 }
 
 export const TrackDelegation: React.FC<StepProps> = ({
   handleModal,
   votes,
+  balanceOverview,
   delegatedUser,
   walletAddress,
 }) => {
@@ -47,6 +50,8 @@ export const TrackDelegation: React.FC<StepProps> = ({
   const { addToDelegatePool, tracks: daoTracks } = useDelegates();
   const { address: delegator } = useWallet();
   const { symbol, loadedVotes } = useGovernanceVotes();
+
+  const { theme } = useDAO();
 
   const [isLoading, setIsLoading] = useState(true);
   const [conviction, setConviction] = useState<number | undefined>(undefined);
@@ -278,6 +283,7 @@ export const TrackDelegation: React.FC<StepProps> = ({
                     {...register('amount')}
                     type="text"
                   />
+
                   <Text
                     fontStyle="normal"
                     fontWeight="500"
@@ -345,6 +351,18 @@ export const TrackDelegation: React.FC<StepProps> = ({
               {errors.amount?.message}
             </Text>
             <Flex gap="3" flexDir="column" mb="4">
+              {!!balanceOverview && (
+                <Tooltip
+                  label={<BalanceOverviewDisplay data={balanceOverview} />}
+                  placement="top"
+                  bg={theme.collapse.bg || theme.card.background}
+                  color={theme.collapse.text}
+                >
+                  <small style={{ cursor: 'help' }}>
+                    View token balance breakdown
+                  </small>
+                </Tooltip>
+              )}
               <Text
                 fontStyle="normal"
                 fontWeight="700"

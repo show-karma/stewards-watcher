@@ -121,3 +121,11 @@ export interface MoonbeamProposal {
     rejected?: ProposalStatusInfo;
   };
 }
+
+export interface IBalanceOverview {
+  free: string;
+  balance?: string;
+  reserved: string;
+  locked: string;
+  flags: string;
+}

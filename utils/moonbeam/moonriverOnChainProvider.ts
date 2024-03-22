@@ -3,7 +3,7 @@ import { Hex, IChainRow, MoonbeamProposal, NumberIsh } from 'types';
 import { ApolloClient, gql, InMemoryCache } from '@apollo/client';
 import moment from 'moment';
 import { ethers } from 'ethers';
-import { api } from 'helpers';
+import { RPCS_WS, api } from 'helpers';
 import axios from 'axios';
 import { MoonbeamWSC } from './moonbeamwsc';
 
@@ -304,9 +304,8 @@ export async function moonriverActiveDelegatedTracks(
 }
 
 export async function moonriverGetLockedTokensAction(address: Hex) {
-  const client = await MoonbeamWSC.createClient();
+  const client = await MoonbeamWSC.createClient(RPCS_WS.moonriver);
   const [, total] = await client.getLockedBalanceOf(address, true);
-
   return total;
 }
 

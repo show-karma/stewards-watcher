@@ -3,7 +3,7 @@ import { Hex, IChainRow, MoonbeamProposal, NumberIsh } from 'types';
 import { ApolloClient, gql, InMemoryCache } from '@apollo/client';
 import moment from 'moment';
 import { ethers } from 'ethers';
-import { api } from 'helpers';
+import { RPCS_WS, api } from 'helpers';
 import axios from 'axios';
 import { MoonbeamWSC } from './moonbeamwsc';
 
@@ -304,9 +304,7 @@ export async function moonbaseActiveDelegatedTracks(
 }
 
 export async function moonbaseGetLockedTokensAction(address: Hex) {
-  const client = await MoonbeamWSC.createClient(
-    'wss://moonbase-alpha.public.blastapi.io'
-  );
+  const client = await MoonbeamWSC.createClient(RPCS_WS.moonbase);
   const [, total] = await client.getLockedBalanceOf(address, true);
 
   return total;

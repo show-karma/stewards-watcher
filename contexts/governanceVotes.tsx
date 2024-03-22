@@ -10,12 +10,13 @@ import { Chain } from 'wagmi';
 import { readContracts, readContract } from '@wagmi/core';
 import { formatEther } from 'utils';
 import { BigNumber } from 'ethers';
-import { Hex, MultiChainResult } from 'types';
+import { Hex, IBalanceOverview, MultiChainResult } from 'types';
 import { useDAO } from './dao';
 import { useWallet } from './wallet';
 
 interface IGovernanceVotesProps {
   votes: MultiChainResult[];
+  balanceOverview?: IBalanceOverview;
   isLoadingVotes: boolean;
   delegatedBefore: MultiChainResult[];
   symbol: MultiChainResult[];
@@ -38,10 +39,13 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
   const { daoInfo } = useDAO();
   const { address: walletAddress, isConnected } = useWallet();
   const [votes, setVotes] = useState<MultiChainResult[]>([]);
-
+  const [tokenBalance, setTokenBalance] = useState<string>('0');
   const [symbol, setSymbol] = useState<MultiChainResult[]>([]);
   const [loadedVotes, setLoadedVotes] = useState(false);
   const [isLoadingVotes, setIsLoadingVotes] = useState(false);
+  const [balanceOverview, setBalanceOverview] = useState<
+    IBalanceOverview | undefined
+  >();
 
   const [delegatedBefore, setDelegatedBefore] = useState<MultiChainResult[]>(
     []
@@ -88,16 +92,14 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
             contract => contract.chain.id === +key
           )?.chain as Chain;
 
-          const onlyZeros = amountsBN.every(amount => amount === '0');
-          if (onlyZeros) {
-            return { chain, value: '0' };
-          }
           const sumBNs = amountsBN.reduce(
             (acc, amount) => acc.add(BigNumber.from(amount)),
             BigNumber.from('0')
           );
 
           const fromWeiAmount = formatEther(sumBNs.toString());
+          setTokenBalance(fromWeiAmount);
+
           if (daoInfo.config.GET_LOCKED_TOKENS_ACTION) {
             const { GET_LOCKED_TOKENS_ACTION: getLocked } = daoInfo.config;
             const lockedVotes = await getLocked(walletAddress as Hex);
@@ -117,9 +119,21 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
     }
   };
 
+  const getBalanceOverview = async () => {
+    if (walletAddress && daoInfo.config.GET_BALANCE_OVERVIEW_ACTION) {
+      const { GET_BALANCE_OVERVIEW_ACTION: fn } = daoInfo.config;
+      const overview = await fn(walletAddress as Hex);
+      setBalanceOverview({ ...overview, balance: tokenBalance });
+    }
+  };
+
   useEffect(() => {
     getVotes();
   }, [walletAddress, isConnected]);
+
+  useEffect(() => {
+    if (walletAddress && isConnected) getBalanceOverview();
+  }, [tokenBalance, walletAddress, isConnected]);
 
   const getDelegatedBefore = async () => {
     try {
@@ -183,6 +197,7 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
   const providerValue = useMemo(
     () => ({
       votes,
+      balanceOverview,
       isLoadingVotes,
       delegatedBefore,
       symbol,
@@ -193,6 +208,7 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
     }),
     [
       votes,
+      balanceOverview,
       isLoadingVotes,
       delegatedBefore,
       symbol,
