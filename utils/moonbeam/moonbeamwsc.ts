@@ -73,17 +73,6 @@ export class MoonbeamWSC {
     return proposals;
   }
 
-  async getBalanceOf(address: Hex, destroy?: boolean): Promise<string> {
-    const response = await this.client.query.balances.account(address);
-
-    console.log(this.client.query.balances.account);
-
-    if (destroy) this.destroy();
-    const readable = response.toJSON();
-    console.log('getBalanceOf', readable);
-    return '0';
-  }
-
   /**
    * Get all locked balances of one address
    * @param address - The address to get the locked balances of
