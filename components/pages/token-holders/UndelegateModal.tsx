@@ -302,7 +302,9 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
                       bg={theme.collapse.bg || theme.card.background}
                       color={theme.collapse.text}
                     >
-                      <small style={{ cursor: 'help' }}>
+                      <small
+                        style={{ cursor: 'help', textDecoration: 'underline' }}
+                      >
                         View token balance breakdown
                       </small>
                     </Tooltip>
