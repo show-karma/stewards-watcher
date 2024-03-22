@@ -358,8 +358,10 @@ export const TrackDelegation: React.FC<StepProps> = ({
                   bg={theme.collapse.bg || theme.card.background}
                   color={theme.collapse.text}
                 >
-                  <small style={{ cursor: 'help' }}>
-                    View token balance breakdown
+                  <small
+                    style={{ cursor: 'help', textDecoration: 'underline' }}
+                  >
+                    <u>View token balance breakdown</u>
                   </small>
                 </Tooltip>
               )}
