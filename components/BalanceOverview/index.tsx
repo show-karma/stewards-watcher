@@ -49,7 +49,7 @@ export const BalanceOverviewDisplay: React.FC<IBalanceOverviewDisplay> = ({
             </td>
           </tr>
           <tr>
-            <td>Delegated:</td>
+            <td>Reserved:</td>
             <td>
               <b>{Number(data.reserved).toFixed(8)}</b>
             </td>
