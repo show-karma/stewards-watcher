@@ -1,6 +1,6 @@
 import { DelegateModalBody } from 'components/Modals/Delegate/DelegateModalBody';
 import { DelegateModalHeader } from 'components/Modals/Delegate/DelegateModalHeader';
-import { useDAO, useDelegates, useWallet } from 'contexts';
+import { useDAO, useDelegates, useGovernanceVotes, useWallet } from 'contexts';
 import {
   Box,
   Button,
@@ -11,6 +11,7 @@ import {
   ModalContent,
   Spinner,
   Text,
+  Tooltip,
   useDisclosure,
 } from '@chakra-ui/react';
 import { useEffect, useMemo, useState } from 'react';
@@ -22,6 +23,7 @@ import { writeContract, waitForTransaction } from '@wagmi/core';
 import { IBulkUndelegatePayload } from 'utils/moonbeam/moonriverUndelegateAction';
 import { handleError } from 'utils/handleWriteError';
 import { useSwitchNetwork } from 'wagmi';
+import { BalanceOverviewDisplay } from 'components/BalanceOverview';
 import { UndelegateItems } from './UndelegateItems';
 
 export const convictionLockTime: { [key: number]: number } = {
@@ -58,6 +60,8 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTracks, setSelectedTracks] = useState<NumberIsh[]>([]);
   const [openModalAfterConnect, setOpenModalAfterConnect] = useState(false);
+
+  const { balanceOverview } = useGovernanceVotes();
 
   const handleSelectTrack = (trackId: NumberIsh) => {
     if (
@@ -266,7 +270,6 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
                       <Text color={theme.text} mb="10">
                         Select tracks you want to undelegate from:
                       </Text>
-
                       <UndelegateItems
                         tracksDelegated={unlockableTracks}
                         onRemoveTrack={handleRemoveTrack}
@@ -291,6 +294,18 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
                         selectedTracks={selectedTracks}
                       />
                     </Box>
+                  )}
+                  {!!balanceOverview && (
+                    <Tooltip
+                      label={<BalanceOverviewDisplay data={balanceOverview} />}
+                      placement="top"
+                      bg={theme.collapse.bg || theme.card.background}
+                      color={theme.collapse.text}
+                    >
+                      <small style={{ cursor: 'help' }}>
+                        View token balance breakdown
+                      </small>
+                    </Tooltip>
                   )}
                   <Box textAlign="center" py={3}>
                     <Button

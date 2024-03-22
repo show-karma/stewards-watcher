@@ -9,8 +9,10 @@ import {
   moonbeamActiveDelegatedTracks,
 } from 'utils';
 import { moonbeam } from 'utils/moonbeam/network';
-import { ECOSYSTEMS, RPCS } from 'helpers';
+import { ECOSYSTEMS, RPCS, RPCS_WS } from 'helpers';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
+import { moonbeamGetBalanceOverview } from 'utils/moonbeam/moonbeamGetBalanceOverview';
+import { Hex } from 'viem';
 import { moonriverUndelegateAction } from '../../utils/moonbeam/moonriverUndelegateAction';
 import { polkassemblyProposalUrl } from '../../utils/moonbeam/polkassembly';
 import ABI from './ABI.json';
@@ -70,6 +72,8 @@ const config: IDAOConfig = {
   ),
   GET_ACTIVE_DELEGATIONS_ACTION: moonbeamActiveDelegatedTracks,
   GET_LOCKED_TOKENS_ACTION: moonbeamGetLockedTokensAction,
+  GET_BALANCE_OVERVIEW_ACTION: (address: Hex) =>
+    moonbeamGetBalanceOverview(address, RPCS_WS.moonbeam),
   DAO_EXT_VOTES_PROVIDER: {
     onChain: moonbeamOnChainProvider,
   },
