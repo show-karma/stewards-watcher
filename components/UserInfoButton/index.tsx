@@ -55,8 +55,8 @@ export const UserInfoButton: FC<IUserInfoProps> = ({ onOpen, profile }) => {
       backgroundColor={theme.card.statBg}
       gap="6px"
       h="10"
-      px={{ base: '2', md: '3' }}
-      py={['3', '6']}
+      px="3"
+      py="6"
       onClick={() => redirectWithoutRefresh('overview')}
       display="flex"
       alignItems="center"

@@ -74,7 +74,7 @@ export const ToDelegate: FC<IToDelegateProps> = ({
   };
 
   return (
-    <Flex px="4" flexDir="column" align="center" maxW="368px" pb="6">
+    <Flex px="4" flexDir="column" align="center" w="full" maxW="368px" pb="6">
       <Text
         mb={1}
         color={modalTheme.text}

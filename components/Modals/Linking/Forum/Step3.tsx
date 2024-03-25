@@ -68,7 +68,8 @@ export const Step3: React.FC<IModal> = ({
   return (
     <Flex
       flexDir="column"
-      width="550px"
+      width="full"
+      maxWidth="550px"
       height="max-content"
       backgroundColor="white"
       padding="24px 32px"
@@ -79,9 +80,8 @@ export const Step3: React.FC<IModal> = ({
         display="flex"
         alignItems="center"
         justifyContent="space-between"
-        gap="100px"
+        gap="24px"
         width="100%"
-        minWidth="490px"
       >
         <Flex display="flex" flexDirection="row" alignItems="center" gap="15px">
           <IconButton aria-label="close" onClick={backStep} color="gray.500">

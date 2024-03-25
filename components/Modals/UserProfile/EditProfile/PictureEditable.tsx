@@ -139,16 +139,16 @@ export const PictureEditable: FC<{ src: string }> = () => {
     <PopoverImage src={picture} />
   ) : (
     <Flex
-      w={{ base: '5.5rem', lg: '8.125rem' }}
-      h={{ base: '5.5rem', lg: '8.125rem' }}
-      minW={{ base: '5.5rem', lg: '8.125rem' }}
-      minH={{ base: '5.5rem', lg: '8.125rem' }}
-      maxW={{ base: '5.5rem', lg: '8.125rem' }}
-      maxH={{ base: '5.5rem', lg: '8.125rem' }}
+      w={{ base: '3.5rem', lg: '8.125rem' }}
+      h={{ base: '3.5rem', lg: '8.125rem' }}
+      minW={{ base: '3.5rem', lg: '8.125rem' }}
+      minH={{ base: '3.5rem', lg: '8.125rem' }}
+      maxW={{ base: '3.5rem', lg: '8.125rem' }}
+      maxH={{ base: '3.5rem', lg: '8.125rem' }}
     >
       <Img
-        w={{ base: '5.5rem', lg: '8.125rem' }}
-        h={{ base: '5.5rem', lg: '8.125rem' }}
+        w={{ base: '3.5rem', lg: '8.125rem' }}
+        h={{ base: '3.5rem', lg: '8.125rem' }}
         borderRadius="full"
         borderWidth="2px"
         borderStyle="solid"

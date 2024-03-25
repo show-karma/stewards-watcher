@@ -30,7 +30,8 @@ export const Step1: React.FC<IModal> = ({
   return (
     <Flex
       flexDir="column"
-      width="550px"
+      width="full"
+      maxWidth="550px"
       height="max-content"
       backgroundColor="white"
       padding="24px 32px"
@@ -41,9 +42,8 @@ export const Step1: React.FC<IModal> = ({
         display="flex"
         alignItems="center"
         justifyContent="space-between"
-        gap="100px"
+        gap="24px"
         width="100%"
-        minWidth="490px"
       >
         <Text
           fontStyle="normal"

@@ -156,15 +156,15 @@ const HandleCases: FC<IHandleCasesProps> = ({
       <form onSubmit={handleSubmitWebsite(onSubmitWebsite)}>
         <FormControl isInvalid={!!errorsWebsite.handle}>
           <Flex flexDir="column" gap="1">
-            <Flex flexDir="row" gap="4">
+            <Flex flexDir={{ base: 'column', md: 'row' }} gap="4">
               <Input
                 px="4"
                 py="2"
                 borderWidth="1px"
                 borderColor={theme.modal.statement.sidebar.item}
-                minW="60"
+                minW="32"
                 maxW="60"
-                w="max-content"
+                w={{ base: 'full', md: 'max-content' }}
                 {...registerWebsite('handle')}
               />
               <Button
@@ -195,15 +195,15 @@ const HandleCases: FC<IHandleCasesProps> = ({
       <form onSubmit={handleSubmitDiscussionThread(onSubmitThread)}>
         <FormControl isInvalid={!!errorsDiscussionThread.handle}>
           <Flex flexDir="column" gap="1">
-            <Flex flexDir="row" gap="4">
+            <Flex flexDir={{ base: 'column', md: 'row' }} gap="4">
               <Input
                 px="4"
                 py="2"
                 borderWidth="1px"
                 borderColor={theme.modal.statement.sidebar.item}
-                minW="60"
+                minW="32"
                 maxW="60"
-                w="max-content"
+                w={{ base: 'full', md: 'max-content' }}
                 {...registerDiscussionThread('handle')}
               />
               <Button
@@ -229,15 +229,15 @@ const HandleCases: FC<IHandleCasesProps> = ({
       <form onSubmit={handleSubmitSimpleInput(onSubmitAdminEdit)}>
         <FormControl isInvalid={!!errorsSimpleInput.handle}>
           <Flex flexDir="column" gap="1">
-            <Flex flexDir="row" gap="4">
+            <Flex flexDir={{ base: 'column', md: 'row' }} gap="4">
               <Input
                 px="4"
                 py="2"
                 borderWidth="1px"
                 borderColor={theme.modal.statement.sidebar.item}
-                minW="60"
+                minW="32"
                 maxW="60"
-                w="max-content"
+                w={{ base: 'full', md: 'max-content' }}
                 {...registerSimpleInput('handle')}
               />
               <Button
@@ -322,7 +322,7 @@ const HandleCases: FC<IHandleCasesProps> = ({
       borderWidth="1px"
       borderColor={theme.modal.statement.sidebar.item}
       minW="60"
-      w="max-content"
+      w={{ base: 'full', md: 'max-content' }}
     >
       {currentHandle}
     </Text>
@@ -445,6 +445,7 @@ export const Handles: FC = () => {
               !media.hideCondition && (
                 <Flex
                   flexDir="row"
+                  flexWrap="wrap"
                   key={+index}
                   gap="2"
                   align="flex-start"

@@ -37,6 +37,63 @@ import { NavigatorRow } from './NavigatorRow';
 import { ProxySwitch } from './ProxySwitch';
 import { StatsRow } from '../Stats';
 
+const SocialMedias: FC<{
+  profile: IProfile;
+  changeTab: (selectedTab: IActiveTab) => void;
+  isSamePerson: boolean;
+  iconSize?: string;
+}> = ({ profile, changeTab, isSamePerson, iconSize = '6' }) => {
+  const { theme, daoData, daoInfo } = useDAO();
+  return (
+    <Flex flexDir="row" gap="4">
+      {daoInfo.config.SHOULD_NOT_SHOW !== 'handles' && (
+        <MediaIcon
+          profile={profile}
+          media="twitter"
+          changeTab={changeTab}
+          isSamePerson={isSamePerson}
+        >
+          <TwitterIcon boxSize={iconSize} color={theme.modal.header.title} />
+        </MediaIcon>
+      )}
+      {daoData?.forumTopicURL && (
+        <MediaIcon
+          profile={profile}
+          media="forum"
+          changeTab={changeTab}
+          isSamePerson={isSamePerson}
+        >
+          <ForumIcon boxSize={iconSize} color={theme.modal.header.title} />
+        </MediaIcon>
+      )}
+      <MediaIcon
+        profile={profile}
+        media="discord"
+        changeTab={changeTab}
+        isSamePerson={isSamePerson}
+      >
+        <DiscordIcon boxSize={iconSize} color={theme.modal.header.title} />
+      </MediaIcon>
+      <MediaIcon
+        profile={profile}
+        media="website"
+        changeTab={changeTab}
+        isSamePerson={isSamePerson}
+      >
+        <WebsiteIcon boxSize={iconSize} color={theme.modal.header.title} />
+      </MediaIcon>
+      <MediaIcon
+        profile={profile}
+        media="thread"
+        changeTab={changeTab}
+        isSamePerson={isSamePerson}
+      >
+        <ThreadIcon boxSize={iconSize} color={theme.modal.header.title} />
+      </MediaIcon>
+    </Flex>
+  );
+};
+
 const DelegateCases: FC<{ status?: string; fullAddress: string }> = ({
   status,
   fullAddress,
@@ -149,13 +206,15 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
       pt="5"
     >
       <Flex w="full" gap={{ base: '1rem', lg: '1.375rem' }}>
-        <PictureEditable
-          src={
-            profileSelected?.profilePicture ||
-            `${config.IMAGE_PREFIX_URL}${profileSelected?.address}` ||
-            ''
-          }
-        />
+        <Flex mt={{ base: '-4', lg: '0' }}>
+          <PictureEditable
+            src={
+              profileSelected?.profilePicture ||
+              `${config.IMAGE_PREFIX_URL}${profileSelected?.address}` ||
+              ''
+            }
+          />
+        </Flex>
         <Flex justifyContent="space-between" w="full" align="flex-end">
           <Flex flexDirection="column" gap="0.5" w="full">
             <Flex flexDir="row" gap="6" align="center" flex="1">
@@ -169,51 +228,19 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
               >
                 <NameEditable name={realName || ensName} />
               </Flex>
-              <Flex flexDir="row" gap="4" ml="4">
-                {daoInfo.config.SHOULD_NOT_SHOW !== 'handles' && (
-                  <MediaIcon
-                    profile={profile}
-                    media="twitter"
-                    changeTab={changeTab}
-                    isSamePerson={isSamePerson}
-                  >
-                    <TwitterIcon boxSize="6" color={theme.modal.header.title} />
-                  </MediaIcon>
-                )}
-                {daoData?.forumTopicURL && (
-                  <MediaIcon
-                    profile={profile}
-                    media="forum"
-                    changeTab={changeTab}
-                    isSamePerson={isSamePerson}
-                  >
-                    <ForumIcon boxSize="6" color={theme.modal.header.title} />
-                  </MediaIcon>
-                )}
-                <MediaIcon
-                  profile={profile}
-                  media="discord"
+              <Flex
+                display={{
+                  base: 'none',
+                  md: 'flex',
+                }}
+                flexDir="row"
+                ml="4"
+              >
+                <SocialMedias
                   changeTab={changeTab}
                   isSamePerson={isSamePerson}
-                >
-                  <DiscordIcon boxSize="6" color={theme.modal.header.title} />
-                </MediaIcon>
-                <MediaIcon
                   profile={profile}
-                  media="website"
-                  changeTab={changeTab}
-                  isSamePerson={isSamePerson}
-                >
-                  <WebsiteIcon boxSize="6" color={theme.modal.header.title} />
-                </MediaIcon>
-                <MediaIcon
-                  profile={profile}
-                  media="thread"
-                  changeTab={changeTab}
-                  isSamePerson={isSamePerson}
-                >
-                  <ThreadIcon boxSize="6" color={theme.modal.header.title} />
-                </MediaIcon>
+                />
               </Flex>
               {daoInfo.config.ENABLE_PROXY_SUPPORT && isSamePerson && (
                 <ProxySwitch />
@@ -279,6 +306,7 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
               )}
             </Flex>
           </Flex>
+
           <Flex
             display={{ base: 'none', lg: 'flex' }}
             w="max-content"
@@ -350,29 +378,48 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
         </Flex>
       </Flex>
       <Flex
-        display={{ base: 'flex', lg: 'none' }}
+        display={{
+          base: 'flex',
+          md: 'none',
+        }}
+        flexDir="row"
         w="full"
-        align="center"
         justify="center"
-        gap="2"
       >
-        {isSamePerson ? null : (
-          <EndorseModal
-            endorsingAddress={profile.address}
-            endorsingName={
-              profile.realName ||
-              profile.ensName ||
-              truncateAddress(profile.address)
-            }
-            endorsingImage={profile.avatar}
-            changeTab={changeTab}
-          />
-        )}
-        <DelegateCases
-          fullAddress={fullAddress}
-          status={profileSelected?.status}
+        <SocialMedias
+          changeTab={changeTab}
+          isSamePerson={isSamePerson}
+          profile={profile}
+          iconSize="7"
         />
       </Flex>
+      {isSamePerson ? null : (
+        <Flex
+          display={{ base: 'flex', lg: 'none' }}
+          flexWrap="wrap"
+          w="full"
+          align="center"
+          justify="center"
+          gap="2"
+        >
+          {isSamePerson || compareProxy(fullAddress) ? null : (
+            <EndorseModal
+              endorsingAddress={profile.address}
+              endorsingName={
+                profile.realName ||
+                profile.ensName ||
+                truncateAddress(profile.address)
+              }
+              endorsingImage={profile.avatar}
+              changeTab={changeTab}
+            />
+          )}
+          <DelegateCases
+            fullAddress={fullAddress}
+            status={profileSelected?.status}
+          />
+        </Flex>
+      )}
     </Flex>
   );
 };
