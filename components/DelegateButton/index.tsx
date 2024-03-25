@@ -91,7 +91,7 @@ export const DelegateButton: FC<IDelegateButton> = ({
     <Button
       background={theme.branding}
       px={{ base: '3', sm: '4', md: '6' }}
-      py={['3', '6']}
+      py={['6']}
       h="10"
       fontSize={['sm', 'md']}
       fontWeight="medium"
