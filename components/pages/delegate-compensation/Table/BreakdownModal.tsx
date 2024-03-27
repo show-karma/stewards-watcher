@@ -659,8 +659,8 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                                                 </Text>
                                                 <Icon
                                                   as={FaExternalLinkAlt}
-                                                  w="4"
-                                                  h="4"
+                                                  w="3"
+                                                  h="3"
                                                 />
                                               </Link>
                                             </Td>
