@@ -126,6 +126,7 @@ export const DelegateCompensation = () => {
             score: formatSimpleNumber(
               delegate.stats.communicatingRationale.score.toString()
             ),
+            breakdown: delegate.stats.communicatingRationale.breakdown,
           };
 
           const commentingProposal = {

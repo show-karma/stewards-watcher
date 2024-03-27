@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import {
   Modal,
   ModalOverlay,
@@ -25,6 +26,7 @@ import {
   Tooltip,
   List,
   ListItem,
+  Link,
 } from '@chakra-ui/react';
 import { ImgWithFallback } from 'components/ImgWithFallback';
 import { useAuth, useDAO, useDelegates } from 'contexts';
@@ -38,8 +40,9 @@ import { useToasty } from 'hooks';
 import { API_ROUTES } from 'helpers';
 import { IoCopy } from 'react-icons/io5';
 import { formatNumberPercentage, truncateAddress } from 'utils';
-import { FaCheckCircle } from 'react-icons/fa';
+import { FaCheckCircle, FaExternalLinkAlt } from 'react-icons/fa';
 import { AiFillQuestionCircle } from 'react-icons/ai';
+import { BiChevronDown } from 'react-icons/bi';
 
 interface BreakdownModalProps {
   delegate: DelegateCompensationStats;
@@ -151,6 +154,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       total: delegate.communicatingRationale.score,
       formName: 'communicatingRationale',
       canEdit: true,
+      breakdown: delegate.communicatingRationale.breakdown,
     },
     {
       name: 'Commenting Proposal (CP)',
@@ -229,8 +233,16 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
     }
   };
 
+  const [showBreakdown, setShowBreakdown] = useState(false);
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal
+      isOpen={isOpen}
+      onClose={() => {
+        onClose();
+        setShowBreakdown(false);
+      }}
+    >
       <ModalOverlay />
       <ModalContent
         w="max-content"
@@ -597,6 +609,87 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                                 />
                               </Editable>
                             </Flex>
+                          ) : item.formName === 'communicatingRationale' &&
+                            item.breakdown ? (
+                            showBreakdown ? (
+                              <Flex flexDir="column">
+                                <Button
+                                  bg="transparent"
+                                  color={theme.modal.header.title}
+                                  onClick={() => setShowBreakdown(false)}
+                                >
+                                  Hide breakdown
+                                </Button>
+                                <TableContainer>
+                                  <Table>
+                                    <Thead>
+                                      <Tr>
+                                        <Th>Proposal</Th>
+                                        <Th>Rationale Communicated?</Th>
+                                      </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                      {Object.keys(item.breakdown).map(key => {
+                                        const id = key.split('-')[0];
+                                        return (
+                                          <Tr key={key}>
+                                            <Td>
+                                              <Link
+                                                wordBreak="break-all"
+                                                href={`https://snapshot.org/#/arbitrumfoundation.eth/proposal/${id}`}
+                                                isExternal
+                                                h="max-content"
+                                                w="full"
+                                                display="flex"
+                                                flexDir="row"
+                                                gap="1"
+                                                alignItems="center"
+                                                justifyContent="flex-start"
+                                              >
+                                                <Text
+                                                  maxW="220px"
+                                                  wordBreak="break-all"
+                                                  whiteSpace="break-spaces"
+                                                  color={
+                                                    theme.modal.header.title
+                                                  }
+                                                  textDecoration="underline"
+                                                >
+                                                  {truncateAddress(id)}
+                                                </Text>
+                                                <Icon
+                                                  as={FaExternalLinkAlt}
+                                                  w="4"
+                                                  h="4"
+                                                />
+                                              </Link>
+                                            </Td>
+                                            <Td>
+                                              {item.breakdown?.[key] ===
+                                              'not_posted'
+                                                ? 'No'
+                                                : 'Yes'}
+                                            </Td>
+                                          </Tr>
+                                        );
+                                      })}
+                                    </Tbody>
+                                  </Table>
+                                </TableContainer>
+                              </Flex>
+                            ) : (
+                              <Button
+                                bg="transparent"
+                                px="1"
+                                py="1"
+                                h="max-content"
+                                color={theme.modal.header.title}
+                                fontWeight="normal"
+                                onClick={() => setShowBreakdown(true)}
+                              >
+                                {item.total} <BiChevronDown />
+                              </Button>
+                            )
                           ) : (
                             <Text px="1" color={theme.modal.header.title}>
                               {item.total}
