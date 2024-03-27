@@ -42,7 +42,6 @@ import { IoCopy } from 'react-icons/io5';
 import { formatNumberPercentage, truncateAddress } from 'utils';
 import { FaCheckCircle, FaExternalLinkAlt } from 'react-icons/fa';
 import { AiFillQuestionCircle } from 'react-icons/ai';
-import { BiChevronDown } from 'react-icons/bi';
 
 interface BreakdownModalProps {
   delegate: DelegateCompensationStats;
@@ -700,8 +699,12 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                                 }}
                                 _focus={{}}
                                 _focusWithin={{}}
+                                display="flex"
+                                flexDir="row"
+                                gap="2"
+                                textDecoration="underline"
                               >
-                                {item.total} <BiChevronDown />
+                                {item.total}
                               </Button>
                             )
                           ) : (
