@@ -38,7 +38,7 @@ export const DelegateCompensation = () => {
   const { theme } = useDAO();
   const [delegates, setDelegates] = useState<DelegateCompensationStats[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [onlyOptIn, setOnlyOptIn] = useState(false);
+  const [onlyOptIn, setOnlyOptIn] = useState(true);
   const router = useRouter();
   const [month, setMonth] = useState(() => {
     const queryString = router.asPath.split('?')[1];
