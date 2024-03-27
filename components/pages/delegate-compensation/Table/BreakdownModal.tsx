@@ -271,6 +271,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                 shouldWrapChildren
                 label="Opted-in to Incentive Program"
                 fontSize="md"
+                color="white"
               >
                 <Icon as={FaCheckCircle} w="4" h="4" color="green.400" />
               </Tooltip>
@@ -311,6 +312,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                 <Flex flexDir="row" gap="2" alignItems="center">
                   <Switch
                     defaultChecked={delegate.incentiveOptedIn}
+                    color="white"
                     {...register('optedIn')}
                   >
                     Opted-in to Incentive Program
@@ -617,6 +619,11 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                                   bg="transparent"
                                   color={theme.modal.header.title}
                                   onClick={() => setShowBreakdown(false)}
+                                  _hover={{
+                                    opacity: 0.8,
+                                  }}
+                                  _focus={{}}
+                                  _focusWithin={{}}
                                 >
                                   Hide breakdown
                                 </Button>
@@ -624,8 +631,10 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                                   <Table>
                                     <Thead>
                                       <Tr>
-                                        <Th>Proposal</Th>
-                                        <Th>Rationale Communicated?</Th>
+                                        <Th color="gray.400">Proposal</Th>
+                                        <Th color="gray.400">
+                                          Rationale Communicated?
+                                        </Th>
                                       </Tr>
                                     </Thead>
                                     <Tbody>
@@ -686,6 +695,11 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                                 color={theme.modal.header.title}
                                 fontWeight="normal"
                                 onClick={() => setShowBreakdown(true)}
+                                _hover={{
+                                  opacity: 0.8,
+                                }}
+                                _focus={{}}
+                                _focusWithin={{}}
                               >
                                 {item.total} <BiChevronDown />
                               </Button>
