@@ -164,7 +164,9 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
   };
 
   useEffect(() => {
-    getDelegatedBefore();
+    if (isConnected && walletAddress) {
+      getDelegatedBefore();
+    }
   }, [walletAddress, isConnected]);
 
   const getSymbol = async () => {

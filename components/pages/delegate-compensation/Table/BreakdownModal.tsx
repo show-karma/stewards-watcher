@@ -267,12 +267,13 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
             </Text>
             {delegate.incentiveOptedIn ? (
               <Tooltip
-                shouldWrapChildren
                 label="Opted-in to Incentive Program"
                 fontSize="md"
-                color="white"
+                color="black"
               >
-                <Icon as={FaCheckCircle} w="4" h="4" color="green.400" />
+                <Flex w="max-content" h="max-content">
+                  <Icon as={FaCheckCircle} w="4" h="4" color="green.400" />
+                </Flex>
               </Tooltip>
             ) : (
               <Flex w="16px" />
