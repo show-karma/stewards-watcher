@@ -278,7 +278,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
 
   const handleProposalTitle = (proposalId: string) => {
     const idHas0x = proposalId.slice(0, 2).includes('0x');
-    return idHas0x ? truncateAddress(proposalId) : proposalId;
+    return idHas0x ? truncateAddress(proposalId) : `${proposalId}...`;
   };
   return (
     <Modal
