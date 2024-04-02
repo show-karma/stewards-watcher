@@ -27,6 +27,10 @@ import {
   List,
   ListItem,
   Link,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from '@chakra-ui/react';
 import { ImgWithFallback } from 'components/ImgWithFallback';
 import { useAuth, useDAO, useDelegates } from 'contexts';
@@ -37,17 +41,23 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import axios from 'axios';
 import { useToasty } from 'hooks';
-import { API_ROUTES } from 'helpers';
 import { IoCopy } from 'react-icons/io5';
 import { formatNumberPercentage, truncateAddress } from 'utils';
 import { FaCheckCircle, FaExternalLinkAlt } from 'react-icons/fa';
 import { AiFillQuestionCircle } from 'react-icons/ai';
+import { DownChevron } from 'components/Icons';
+import { API_ROUTES } from 'helpers';
 
 interface BreakdownModalProps {
   delegate: DelegateCompensationStats;
   isOpen: boolean;
   onClose: () => void;
   refreshFn: () => Promise<void>;
+}
+
+interface Breakdown {
+  proposal: string;
+  communicated: string;
 }
 
 const schema = yup.object({
@@ -63,14 +73,20 @@ const schema = yup.object({
       .required('TN is required'),
   }),
   communicatingRationale: yup.object({
-    rn: yup
-      .number()
-      .typeError('RN must be a number.')
-      .required('RN is required'),
-    tn: yup
-      .number()
-      .typeError('TN must be a number.')
-      .required('TN is required'),
+    // rn: yup
+    //   .number()
+    //   .typeError('RN must be a number.')
+    //   .required('RN is required'),
+    // tn: yup
+    //   .number()
+    //   .typeError('TN must be a number.')
+    //   .required('TN is required'),
+    breakdown: yup.array(
+      yup.object({
+        proposal: yup.string().required(),
+        communicated: yup.string().required(),
+      })
+    ),
   }),
   bonusPoint: yup.object({
     total: yup
@@ -97,10 +113,14 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
   const { openProfile } = useDelegates();
   const { onCopy } = useClipboard(delegate?.delegate?.publicAddress || '');
   const { toast } = useToasty();
+
   const {
     register,
     formState: { errors, isValid, isDirty },
     handleSubmit,
+    setValue,
+    watch,
+    trigger,
   } = useForm<FormData>({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -152,7 +172,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       RN: delegate.communicatingRationale.rn,
       total: delegate.communicatingRationale.score,
       formName: 'communicatingRationale',
-      canEdit: true,
+      canEdit: false,
       breakdown: delegate.communicatingRationale.breakdown,
     },
     {
@@ -184,7 +204,9 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
   const onSave = async (data: {
     optedIn: boolean;
     commentingProposal: { rn: number; tn: number };
-    communicatingRationale: { rn: number; tn: number };
+    communicatingRationale: {
+      breakdown?: Breakdown[];
+    };
     bonusPoint: { total: number };
   }) => {
     setIsSaving(true);
@@ -197,6 +219,13 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
           Authorization: authToken ? `Bearer ${authToken}` : '',
         },
       });
+
+      const newBreakdown = delegate.communicatingRationale.breakdown;
+      data.communicatingRationale.breakdown?.forEach(item => {
+        if (newBreakdown && item.proposal && item.communicated) {
+          newBreakdown[item.proposal] = item.communicated;
+        }
+      });
       await authorizedAPI.put(
         API_ROUTES.DELEGATE.CHANGE_INCENTIVE_PROGRAM_STATS(
           daoInfo.config.DAO_KARMA_ID,
@@ -206,8 +235,9 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
           incentiveOptedIn: data.optedIn,
           stats: {
             communicatingRationale: {
-              rn: data.communicatingRationale.rn,
-              tn: data.communicatingRationale.tn,
+              rn: delegate.communicatingRationale.rn,
+              tn: delegate.communicatingRationale.tn,
+              breakdown: newBreakdown,
             },
             commentingProposal: {
               rn: data.commentingProposal.rn,
@@ -233,6 +263,13 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
   };
 
   const [showBreakdown, setShowBreakdown] = useState(false);
+
+  const handleProposalTitle = (proposalId: string) => {
+    const idHas0x = proposalId.slice(0, 2).includes('0x');
+    return idHas0x ? truncateAddress(proposalId) : `${proposalId}...`;
+  };
+
+  console.log(errors, isValid);
 
   return (
     <Modal
@@ -638,50 +675,209 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                                       </Tr>
                                     </Thead>
                                     <Tbody>
-                                      {Object.keys(item.breakdown).map(key => {
-                                        const id = key.split('-')[0];
-                                        return (
-                                          <Tr key={key}>
-                                            <Td>
-                                              <Link
-                                                wordBreak="break-all"
-                                                href={`https://snapshot.org/#/arbitrumfoundation.eth/proposal/${id}`}
-                                                isExternal
-                                                h="max-content"
-                                                w="full"
-                                                display="flex"
-                                                flexDir="row"
-                                                gap="1"
-                                                alignItems="center"
-                                                justifyContent="flex-start"
-                                              >
-                                                <Text
-                                                  maxW="220px"
-                                                  wordBreak="break-all"
-                                                  whiteSpace="break-spaces"
-                                                  color={
-                                                    theme.modal.header.title
-                                                  }
-                                                  textDecoration="underline"
-                                                >
-                                                  {truncateAddress(id)}
-                                                </Text>
-                                                <Icon
-                                                  as={FaExternalLinkAlt}
-                                                  w="3"
-                                                  h="3"
-                                                />
-                                              </Link>
-                                            </Td>
-                                            <Td>
-                                              {item.breakdown?.[key] ===
-                                              'not_posted'
-                                                ? 'No'
-                                                : 'Yes'}
-                                            </Td>
-                                          </Tr>
-                                        );
-                                      })}
+                                      {Object.keys(item.breakdown).map(
+                                        (key, index) => {
+                                          const hasProposalUrl = (
+                                            proposalTitle: string
+                                          ) =>
+                                            proposalTitle.includes(
+                                              'forum.arbitrum.foundation'
+                                            );
+                                          const id = hasProposalUrl(key)
+                                            ? key.split('-')[0]
+                                            : key;
+                                          const choice =
+                                            item.breakdown?.[key] ===
+                                            'not_posted'
+                                              ? 'No'
+                                              : 'Yes';
+                                          return (
+                                            <Tr key={key}>
+                                              <Td>
+                                                {hasProposalUrl(key) ? (
+                                                  <Link
+                                                    wordBreak="break-all"
+                                                    href={`https://snapshot.org/#/arbitrumfoundation.eth/proposal/${id}`}
+                                                    isExternal
+                                                    h="max-content"
+                                                    w="full"
+                                                    display="flex"
+                                                    flexDir="row"
+                                                    gap="1"
+                                                    alignItems="center"
+                                                    justifyContent="flex-start"
+                                                  >
+                                                    <Text
+                                                      maxW="220px"
+                                                      wordBreak="break-all"
+                                                      whiteSpace="break-spaces"
+                                                      color={
+                                                        theme.modal.header.title
+                                                      }
+                                                      textDecoration="underline"
+                                                    >
+                                                      {handleProposalTitle(id)}
+                                                    </Text>
+                                                    <Icon
+                                                      as={FaExternalLinkAlt}
+                                                      w="3"
+                                                      h="3"
+                                                    />
+                                                  </Link>
+                                                ) : (
+                                                  <Flex
+                                                    h="max-content"
+                                                    w="full"
+                                                    display="flex"
+                                                    flexDir="row"
+                                                    gap="1"
+                                                    alignItems="center"
+                                                    justifyContent="flex-start"
+                                                  >
+                                                    <Text
+                                                      maxW="220px"
+                                                      wordBreak="break-word"
+                                                      whiteSpace="break-spaces"
+                                                      color={
+                                                        theme.modal.header.title
+                                                      }
+                                                    >
+                                                      {handleProposalTitle(id)}
+                                                    </Text>
+                                                  </Flex>
+                                                )}
+                                              </Td>
+                                              <Td>
+                                                {isDaoAdmin ? (
+                                                  <Menu>
+                                                    <MenuButton
+                                                      as={Button}
+                                                      rightIcon={
+                                                        <DownChevron
+                                                          display="flex"
+                                                          alignItems="center"
+                                                          justifyContent="center"
+                                                          boxSize="5"
+                                                        />
+                                                      }
+                                                      bg={theme.filters.bg}
+                                                      color={
+                                                        theme.filters.title
+                                                      }
+                                                      borderWidth="1px"
+                                                      borderColor={
+                                                        theme.filters.border
+                                                      }
+                                                      borderStyle="solid"
+                                                      boxShadow={
+                                                        theme.filters.shadow
+                                                      }
+                                                      gap="4"
+                                                      fontFamily="heading"
+                                                      fontWeight="normal"
+                                                      textAlign="left"
+                                                      w={{
+                                                        base: 'full',
+                                                        md: 'max-content',
+                                                      }}
+                                                      maxW="full"
+                                                      _hover={{
+                                                        opacity: 0.8,
+                                                      }}
+                                                      _active={{
+                                                        opacity: 0.8,
+                                                      }}
+                                                      px="4"
+                                                      py="5"
+                                                      borderRadius="4px"
+                                                      _focus={{}}
+                                                      _focusWithin={{}}
+                                                    >
+                                                      {watch(
+                                                        `communicatingRationale.breakdown.${index}.communicated`
+                                                      )
+                                                        ? watch(
+                                                            `communicatingRationale.breakdown.${index}.communicated`
+                                                          ) === 'posted'
+                                                          ? 'Yes'
+                                                          : 'No'
+                                                        : choice}
+                                                    </MenuButton>
+                                                    <MenuList
+                                                      bgColor={
+                                                        theme.filters.listBg
+                                                      }
+                                                      color={
+                                                        theme.filters.listText
+                                                      }
+                                                      h={{
+                                                        base: 'max-content',
+                                                      }}
+                                                      w="32"
+                                                      minW="32"
+                                                    >
+                                                      <MenuItem
+                                                        value="posted"
+                                                        bgColor="transparent"
+                                                        onClick={() => {
+                                                          setValue(
+                                                            `communicatingRationale.breakdown.${index}`,
+                                                            {
+                                                              communicated:
+                                                                'posted',
+                                                              proposal: key,
+                                                            },
+                                                            {
+                                                              shouldDirty: true,
+                                                            }
+                                                          );
+                                                          trigger(
+                                                            `communicatingRationale.breakdown.${index}`
+                                                          );
+                                                        }}
+                                                        _hover={{
+                                                          bg: theme.filters
+                                                            .activeBg,
+                                                        }}
+                                                      >
+                                                        Yes
+                                                      </MenuItem>
+                                                      <MenuItem
+                                                        value="not_posted"
+                                                        bgColor="transparent"
+                                                        onClick={() => {
+                                                          setValue(
+                                                            `communicatingRationale.breakdown.${index}`,
+                                                            {
+                                                              communicated:
+                                                                'not_posted',
+                                                              proposal: key,
+                                                            },
+                                                            {
+                                                              shouldDirty: true,
+                                                            }
+                                                          );
+                                                          trigger(
+                                                            `communicatingRationale.breakdown.${index}`
+                                                          );
+                                                        }}
+                                                        _hover={{
+                                                          bg: theme.filters
+                                                            .activeBg,
+                                                        }}
+                                                      >
+                                                        No
+                                                      </MenuItem>
+                                                    </MenuList>
+                                                  </Menu>
+                                                ) : (
+                                                  choice
+                                                )}
+                                              </Td>
+                                            </Tr>
+                                          );
+                                        }
+                                      )}
                                     </Tbody>
                                   </Table>
                                 </TableContainer>

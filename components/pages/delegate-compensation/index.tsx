@@ -43,7 +43,7 @@ export const DelegateCompensation = () => {
   const [month, setMonth] = useState(() => {
     const queryString = router.asPath.split('?')[1];
     const queryMonth = queryString?.match(/(?<=month=)[^&]*/i)?.[0];
-    const date = new Date();
+    const date = new Date('2024-03-02');
     const currentMonth = date.getMonth() + 1;
     if (queryMonth) {
       if (monthDictionary[queryMonth.toLowerCase()] > currentMonth) {
