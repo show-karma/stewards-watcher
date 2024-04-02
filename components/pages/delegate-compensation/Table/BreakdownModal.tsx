@@ -77,10 +77,10 @@ const schema = yup.object({
     //   .number()
     //   .typeError('RN must be a number.')
     //   .required('RN is required'),
-    // tn: yup
-    //   .number()
-    //   .typeError('TN must be a number.')
-    //   .required('TN is required'),
+    tn: yup
+      .number()
+      .typeError('TN must be a number.')
+      .required('TN is required'),
     breakdown: yup.array(
       yup.object({
         proposal: yup.string().required(),
@@ -148,7 +148,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       RN: null,
       total: delegate.participationRate,
       formName: 'participationRate',
-      canEdit: false,
+      canEdit: [] as string[],
     },
     {
       name: 'Snapshot Voting (SV)',
@@ -156,7 +156,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       RN: delegate.snapshotVoting.rn,
       total: delegate.snapshotVoting.score,
       formName: 'snapshotVoting',
-      canEdit: false,
+      canEdit: [] as string[],
     },
     {
       name: 'Onchain Voting (TV)',
@@ -164,7 +164,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       RN: delegate.onChainVoting.rn,
       total: delegate.onChainVoting.score,
       formName: 'onChainVoting',
-      canEdit: false,
+      canEdit: [] as string[],
     },
     {
       name: 'Communication Rationale (CR)',
@@ -172,7 +172,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       RN: delegate.communicatingRationale.rn,
       total: delegate.communicatingRationale.score,
       formName: 'communicatingRationale',
-      canEdit: false,
+      canEdit: ['tn'] as string[],
       breakdown: delegate.communicatingRationale.breakdown,
     },
     {
@@ -181,7 +181,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       RN: delegate.commentingProposal.rn,
       total: delegate.commentingProposal.score,
       formName: 'commentingProposal',
-      canEdit: true,
+      canEdit: ['tn', 'rn', 'total'] as string[],
     },
     {
       name: 'Bonus Point (BP)',
@@ -189,7 +189,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       RN: null,
       total: delegate.bonusPoint,
       formName: 'bonusPoint',
-      canEdit: true,
+      canEdit: ['total'] as string[],
     },
     {
       name: 'Total Participation (TP)',
@@ -197,18 +197,11 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       RN: null,
       total: delegate.totalParticipation,
       formName: 'totalParticipation',
-      canEdit: false,
+      canEdit: [] as string[],
     },
   ];
 
-  const onSave = async (data: {
-    optedIn: boolean;
-    commentingProposal: { rn: number; tn: number };
-    communicatingRationale: {
-      breakdown?: Breakdown[];
-    };
-    bonusPoint: { total: number };
-  }) => {
+  const onSave = async (data: FormData) => {
     setIsSaving(true);
     try {
       const authorizedAPI = axios.create({
@@ -236,7 +229,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
           stats: {
             communicatingRationale: {
               rn: delegate.communicatingRationale.rn,
-              tn: delegate.communicatingRationale.tn,
+              tn: data.communicatingRationale.tn,
               breakdown: newBreakdown,
             },
             commentingProposal: {
@@ -268,8 +261,6 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
     const idHas0x = proposalId.slice(0, 2).includes('0x');
     return idHas0x ? truncateAddress(proposalId) : `${proposalId}...`;
   };
-
-  console.log(errors, isValid);
 
   return (
     <Modal
@@ -490,7 +481,9 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                           borderBottomColor={theme.modal.header.title}
                           color={theme.modal.header.title}
                         >
-                          {item.RN && item.canEdit && isDaoAdmin ? (
+                          {item.RN &&
+                          item.canEdit.includes('rn') &&
+                          isDaoAdmin ? (
                             <Flex flexDir="row" gap="4" alignItems="center">
                               <Editable
                                 w="48px"
@@ -544,7 +537,9 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                           borderBottomColor={theme.modal.header.title}
                           color={theme.modal.header.title}
                         >
-                          {item.TN && item.canEdit && isDaoAdmin ? (
+                          {item.TN &&
+                          item.canEdit.includes('tn') &&
+                          isDaoAdmin ? (
                             <Flex flexDir="row" gap="4" alignItems="center">
                               <Editable
                                 w="48px"
@@ -601,7 +596,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                           color={theme.modal.header.title}
                         >
                           {item.total &&
-                          item.canEdit &&
+                          item.canEdit.includes('total') &&
                           (!item.TN || !item.RN) &&
                           isDaoAdmin ? (
                             <Flex flexDir="row" gap="4" alignItems="center">
