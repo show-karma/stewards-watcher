@@ -73,14 +73,14 @@ const schema = yup.object({
       .required('TN is required'),
   }),
   communicatingRationale: yup.object({
-    rn: yup
-      .number()
-      .typeError('RN must be a number.')
-      .required('RN is required'),
-    tn: yup
-      .number()
-      .typeError('TN must be a number.')
-      .required('TN is required'),
+    // rn: yup
+    //   .number()
+    //   .typeError('RN must be a number.')
+    //   .required('RN is required'),
+    // tn: yup
+    //   .number()
+    //   .typeError('TN must be a number.')
+    //   .required('TN is required'),
     breakdown: yup.array(
       yup.object({
         proposal: yup.string().required(),
@@ -113,16 +113,6 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
   const { openProfile } = useDelegates();
   const { onCopy } = useClipboard(delegate?.delegate?.publicAddress || '');
   const { toast } = useToasty();
-
-  const turnBreakdownArray = (breakdown: Record<string, string>) => {
-    const keys = Object.keys(breakdown);
-    const values = Object.values(breakdown);
-    const returnArr = keys.map((key, index) => ({
-      proposal: key,
-      communicated: values[index],
-    }));
-    return returnArr;
-  };
 
   const {
     register,
@@ -215,8 +205,6 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
     optedIn: boolean;
     commentingProposal: { rn: number; tn: number };
     communicatingRationale: {
-      rn: number;
-      tn: number;
       breakdown?: Breakdown[];
     };
     bonusPoint: { total: number };
@@ -247,8 +235,8 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
           incentiveOptedIn: data.optedIn,
           stats: {
             communicatingRationale: {
-              rn: data.communicatingRationale.rn,
-              tn: data.communicatingRationale.tn,
+              rn: delegate.communicatingRationale.rn,
+              tn: delegate.communicatingRationale.tn,
               breakdown: newBreakdown,
             },
             commentingProposal: {
@@ -280,6 +268,9 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
     const idHas0x = proposalId.slice(0, 2).includes('0x');
     return idHas0x ? truncateAddress(proposalId) : `${proposalId}...`;
   };
+
+  console.log(errors, isValid);
+
   return (
     <Modal
       isOpen={isOpen}
