@@ -182,7 +182,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       RN: delegate.communicatingRationale.rn,
       total: delegate.communicatingRationale.score,
       formName: 'communicatingRationale',
-      canEdit: true,
+      canEdit: false,
       breakdown: delegate.communicatingRationale.breakdown,
     },
     {
