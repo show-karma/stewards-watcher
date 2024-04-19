@@ -6,7 +6,7 @@ export type CompensationStatBreakdown = {
     string,
     {
       status: string;
-      post: string;
+      post?: string | null;
     }
   >;
 };

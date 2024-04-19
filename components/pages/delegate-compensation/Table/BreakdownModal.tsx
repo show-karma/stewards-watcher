@@ -220,7 +220,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       data.communicatingRationale.breakdown?.forEach(item => {
         if (newBreakdown && item.proposal && item.communicated) {
           newBreakdown[item.proposal].status = item.communicated;
-          if (item.post) newBreakdown[item.proposal].post = item.post;
+          newBreakdown[item.proposal].post = item.post || null;
         }
       });
       await authorizedAPI.put(
@@ -895,7 +895,9 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                                                       defaultValue={
                                                         watch(
                                                           `communicatingRationale.breakdown.${index}.post`
-                                                        ) || post
+                                                        ) ||
+                                                        post ||
+                                                        ''
                                                       }
                                                     >
                                                       <EditablePreview
@@ -920,7 +922,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                                                       />
                                                       <EditableInput
                                                         w="full"
-                                                        px="1"
+                                                        px="2"
                                                         bg="gray.900"
                                                         disabled={isSaving}
                                                         _active={{}}
