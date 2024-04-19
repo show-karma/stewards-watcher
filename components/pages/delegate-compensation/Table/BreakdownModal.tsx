@@ -891,7 +891,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                                                     alignItems="flex-start"
                                                   >
                                                     <Editable
-                                                      w="260px"
+                                                      w="200px"
                                                       defaultValue={
                                                         watch(
                                                           `communicatingRationale.breakdown.${index}.post`
@@ -984,16 +984,33 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                                                       </Text>
                                                     ) : null}
                                                   </Flex>
-                                                ) : (
-                                                  <Text
-                                                    px="1"
-                                                    color={
-                                                      theme.modal.header.title
-                                                    }
+                                                ) : post ? (
+                                                  <a
+                                                    href={post}
+                                                    target="_blank"
+                                                    rel="noreferrer"
                                                   >
-                                                    {post}
-                                                  </Text>
-                                                )}
+                                                    <Flex
+                                                      flexDir="row"
+                                                      gap="1"
+                                                      color="blue.500"
+                                                      alignItems="center"
+                                                    >
+                                                      <Text
+                                                        px="1"
+                                                        color="blue.500"
+                                                      >
+                                                        Link
+                                                      </Text>
+                                                      <Icon
+                                                        as={FaExternalLinkAlt}
+                                                        w="3"
+                                                        color="blue.400"
+                                                        h="3"
+                                                      />
+                                                    </Flex>
+                                                  </a>
+                                                ) : null}
                                               </Td>
                                             </Tr>
                                           );
