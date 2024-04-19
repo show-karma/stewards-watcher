@@ -47,6 +47,7 @@ import { FaCheckCircle, FaExternalLinkAlt } from 'react-icons/fa';
 import { AiFillQuestionCircle } from 'react-icons/ai';
 import { DownChevron } from 'components/Icons';
 import { API_ROUTES } from 'helpers';
+import debounce from 'lodash.debounce';
 
 interface BreakdownModalProps {
   delegate: DelegateCompensationStats;
@@ -85,6 +86,7 @@ const schema = yup.object({
       yup.object({
         proposal: yup.string().required(),
         communicated: yup.string().required(),
+        post: yup.string().url().optional(),
       })
     ),
   }),
@@ -116,11 +118,12 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
 
   const {
     register,
-    formState: { errors, isValid, isDirty },
+    formState,
     handleSubmit,
     setValue,
     watch,
     trigger,
+    getValues,
   } = useForm<FormData>({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -129,7 +132,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
     reValidateMode: 'onChange',
     mode: 'onChange',
   });
-
+  const { errors, isValid, isDirty } = formState;
   const copyText = () => {
     onCopy();
     toast({
@@ -216,7 +219,8 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       const newBreakdown = delegate.communicatingRationale.breakdown;
       data.communicatingRationale.breakdown?.forEach(item => {
         if (newBreakdown && item.proposal && item.communicated) {
-          newBreakdown[item.proposal] = item.communicated;
+          newBreakdown[item.proposal].status = item.communicated;
+          if (item.post) newBreakdown[item.proposal].post = item.post;
         }
       });
       await authorizedAPI.put(
@@ -667,6 +671,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                                         <Th color="gray.400">
                                           Rationale Communicated?
                                         </Th>
+                                        <Th color="gray.400">Post</Th>
                                       </Tr>
                                     </Thead>
                                     <Tbody>
@@ -682,10 +687,12 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                                             ? key.split('-')[0]
                                             : key;
                                           const choice =
-                                            item.breakdown?.[key] ===
+                                            item.breakdown?.[key].status ===
                                             'not_posted'
                                               ? 'No'
                                               : 'Yes';
+                                          const post =
+                                            item.breakdown?.[key].post;
                                           return (
                                             <Tr key={key}>
                                               <Td>
@@ -816,12 +823,15 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                                                         bgColor="transparent"
                                                         onClick={() => {
                                                           setValue(
-                                                            `communicatingRationale.breakdown.${index}`,
+                                                            `communicatingRationale.breakdown.${index}.communicated`,
+                                                            'posted',
                                                             {
-                                                              communicated:
-                                                                'posted',
-                                                              proposal: key,
-                                                            },
+                                                              shouldDirty: true,
+                                                            }
+                                                          );
+                                                          setValue(
+                                                            `communicatingRationale.breakdown.${index}.proposal`,
+                                                            key,
                                                             {
                                                               shouldDirty: true,
                                                             }
@@ -842,16 +852,20 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                                                         bgColor="transparent"
                                                         onClick={() => {
                                                           setValue(
-                                                            `communicatingRationale.breakdown.${index}`,
-                                                            {
-                                                              communicated:
-                                                                'not_posted',
-                                                              proposal: key,
-                                                            },
+                                                            `communicatingRationale.breakdown.${index}.communicated`,
+                                                            'not_posted',
                                                             {
                                                               shouldDirty: true,
                                                             }
                                                           );
+                                                          setValue(
+                                                            `communicatingRationale.breakdown.${index}.proposal`,
+                                                            key,
+                                                            {
+                                                              shouldDirty: true,
+                                                            }
+                                                          );
+
                                                           trigger(
                                                             `communicatingRationale.breakdown.${index}`
                                                           );
@@ -867,6 +881,116 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                                                   </Menu>
                                                 ) : (
                                                   choice
+                                                )}
+                                              </Td>
+                                              <Td>
+                                                {isDaoAdmin ? (
+                                                  <Flex
+                                                    flexDir="column"
+                                                    gap="1"
+                                                    alignItems="flex-start"
+                                                  >
+                                                    <Editable
+                                                      w="260px"
+                                                      defaultValue={
+                                                        watch(
+                                                          `communicatingRationale.breakdown.${index}.post`
+                                                        ) || post
+                                                      }
+                                                    >
+                                                      <EditablePreview
+                                                        cursor="pointer"
+                                                        _hover={{
+                                                          opacity: 0.7,
+                                                        }}
+                                                        px="2"
+                                                        bg={
+                                                          errors &&
+                                                          (errors[
+                                                            `communicatingRationale.breakdown.${index}.post` as keyof typeof errors
+                                                          ] as any)
+                                                            ? 'red.900'
+                                                            : 'gray.700'
+                                                        }
+                                                        w="full"
+                                                        minH="24px"
+                                                        overflow="hidden"
+                                                        whiteSpace="none"
+                                                        textOverflow="ellipsis"
+                                                      />
+                                                      <EditableInput
+                                                        w="full"
+                                                        px="1"
+                                                        bg="gray.900"
+                                                        disabled={isSaving}
+                                                        _active={{}}
+                                                        _focus={{
+                                                          bg: 'gray.700',
+                                                          borderWidth: '1px',
+                                                          borderStyle: 'solid',
+                                                          borderColor:
+                                                            theme.modal.header
+                                                              .title,
+                                                          padding: '0 4px',
+                                                        }}
+                                                        _focusVisible={{}}
+                                                        _focusWithin={{}}
+                                                        // {...register(
+                                                        //   `communicatingRationale.breakdown.${index}.post` as any
+                                                        // )}
+                                                        onChange={input => {
+                                                          const { value } =
+                                                            input.target;
+                                                          const hasSelectedCommunicated =
+                                                            watch(
+                                                              `communicatingRationale.breakdown.${index}.communicated`
+                                                            );
+                                                          const changeValue =
+                                                            debounce(() => {
+                                                              setValue(
+                                                                `communicatingRationale.breakdown.${index}`,
+                                                                {
+                                                                  communicated:
+                                                                    hasSelectedCommunicated ||
+                                                                    item
+                                                                      .breakdown?.[
+                                                                      key
+                                                                    ].status ||
+                                                                    'not_posted',
+                                                                  post: value,
+                                                                  proposal: key,
+                                                                },
+                                                                {
+                                                                  shouldDirty:
+                                                                    true,
+                                                                }
+                                                              );
+                                                              trigger(
+                                                                `communicatingRationale.breakdown.${index}`
+                                                              );
+                                                            }, 400);
+                                                          changeValue();
+                                                        }}
+                                                      />
+                                                    </Editable>
+                                                    {errors
+                                                      ?.communicatingRationale
+                                                      ?.breakdown?.[index]
+                                                      ?.post ? (
+                                                      <Text color="red.500">
+                                                        URL is not valid.
+                                                      </Text>
+                                                    ) : null}
+                                                  </Flex>
+                                                ) : (
+                                                  <Text
+                                                    px="1"
+                                                    color={
+                                                      theme.modal.header.title
+                                                    }
+                                                  >
+                                                    {post}
+                                                  </Text>
                                                 )}
                                               </Td>
                                             </Tr>
