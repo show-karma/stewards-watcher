@@ -220,6 +220,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       data.communicatingRationale.breakdown?.forEach(item => {
         if (newBreakdown && item.proposal && item.communicated) {
           newBreakdown[item.proposal].status = item.communicated;
+          if (item.post) newBreakdown[item.proposal].status = 'posted';
           newBreakdown[item.proposal].post = item.post || null;
         }
       });
@@ -943,22 +944,13 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                                                         onChange={input => {
                                                           const { value } =
                                                             input.target;
-                                                          const hasSelectedCommunicated =
-                                                            watch(
-                                                              `communicatingRationale.breakdown.${index}.communicated`
-                                                            );
                                                           const changeValue =
                                                             debounce(() => {
                                                               setValue(
                                                                 `communicatingRationale.breakdown.${index}`,
                                                                 {
                                                                   communicated:
-                                                                    hasSelectedCommunicated ||
-                                                                    item
-                                                                      .breakdown?.[
-                                                                      key
-                                                                    ].status ||
-                                                                    'not_posted',
+                                                                    'posted',
                                                                   post: value,
                                                                   proposal: key,
                                                                 },
