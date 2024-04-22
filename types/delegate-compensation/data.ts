@@ -2,7 +2,13 @@ export type CompensationStatBreakdown = {
   score: string;
   tn: string;
   rn: string;
-  breakdown?: Record<string, string>;
+  breakdown?: Record<
+    string,
+    {
+      status: string;
+      post?: string | null;
+    }
+  >;
 };
 
 export type DelegateStatsFromAPI = {
