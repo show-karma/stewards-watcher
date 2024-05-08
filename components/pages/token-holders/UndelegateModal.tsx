@@ -177,6 +177,7 @@ export const UndelegateModal: React.FC<IUndelegateModalProps> = ({
         await waitForTransaction({ hash });
         clearSucessfullUndelegations();
       } catch (error) {
+        console.log(error);
         handleError(error, daoInfo, toast, 'undelegate');
       } finally {
         setIsLoading(false);
