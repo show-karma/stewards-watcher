@@ -270,19 +270,29 @@ export async function moonbeamActiveDelegatedTracks(
         (undelegationCount[delegatingHistory.trackId] || 0) <
           (delegationCount[delegatingHistory.trackId] || 0)
     )
-    .map(delegatingHistory => ({
-      trackId: delegatingHistory.trackId,
-      locked:
-        (delegationCount[delegatingHistory.trackId] || 0) -
-        (unlockedCount[delegatingHistory.trackId] || 0),
-      amount: ethers.utils.formatEther(delegatingHistory.amount),
-      active:
-        (undelegationCount[delegatingHistory.trackId] || 0) <
-        (delegationCount[delegatingHistory.trackId] || 0),
-      toDelegate: delegatingHistory.toDelegate,
-      timestamp: delegatingHistory.timestamp,
-      conviction: delegatingHistory.conviction,
-    }));
+    .map(delegatingHistory => {
+      console.log(
+        delegatingHistory.trackId,
+        delegationCount[delegatingHistory.trackId] || 0,
+        unlockedCount[delegatingHistory.trackId] || 0
+      );
+      const delegationCounter = delegationCount[delegatingHistory.trackId] || 0;
+      const unlockedCounter = unlockedCount[delegatingHistory.trackId] || 0;
+      const undelegationCounter =
+        undelegationCount[delegatingHistory.trackId] || 0;
+      return {
+        trackId: delegatingHistory.trackId,
+        locked:
+          delegationCounter - unlockedCounter < 0
+            ? 0
+            : delegationCounter - unlockedCounter,
+        amount: ethers.utils.formatEther(delegatingHistory.amount),
+        active: undelegationCounter < delegationCounter,
+        toDelegate: delegatingHistory.toDelegate,
+        timestamp: delegatingHistory.timestamp,
+        conviction: delegatingHistory.conviction,
+      };
+    });
 
   const unique = delegations.reduce((acc, cur) => {
     if (!acc[cur.trackId]) acc[cur.trackId] = cur;
