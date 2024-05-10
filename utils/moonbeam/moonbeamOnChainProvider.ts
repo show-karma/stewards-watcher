@@ -271,11 +271,6 @@ export async function moonbeamActiveDelegatedTracks(
           (delegationCount[delegatingHistory.trackId] || 0)
     )
     .map(delegatingHistory => {
-      console.log(
-        delegatingHistory.trackId,
-        delegationCount[delegatingHistory.trackId] || 0,
-        unlockedCount[delegatingHistory.trackId] || 0
-      );
       const delegationCounter = delegationCount[delegatingHistory.trackId] || 0;
       const unlockedCounter = unlockedCount[delegatingHistory.trackId] || 0;
       const undelegationCounter =
