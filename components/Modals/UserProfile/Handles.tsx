@@ -182,7 +182,7 @@ const HandleCases: FC<IHandleCasesProps> = ({
       </form>
     );
   }
-  if (mediaName === 'Thread') {
+  if (mediaName.includes('Thread')) {
     const onSubmitThread = (data: { handle: string }) => {
       const cleanNewHandle = data.handle;
       if (!cleanNewHandle) return;
