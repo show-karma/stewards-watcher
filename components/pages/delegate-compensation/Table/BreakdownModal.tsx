@@ -74,10 +74,10 @@ const schema = yup.object({
       .required('TN is required'),
   }),
   communicatingRationale: yup.object({
-    // rn: yup
-    //   .number()
-    //   .typeError('RN must be a number.')
-    //   .required('RN is required'),
+    rn: yup
+      .number()
+      .typeError('RN must be a number.')
+      .required('RN is required'),
     tn: yup
       .number()
       .typeError('TN must be a number.')
@@ -98,7 +98,7 @@ const schema = yup.object({
   }),
 });
 
-type StatKeys = 'commentingProposal' | 'bonusPoint';
+type StatKeys = 'commentingProposal' | 'bonusPoint' | 'communicatingRationale';
 
 type FormData = yup.InferType<typeof schema>;
 
@@ -126,13 +126,12 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
     getValues,
   } = useForm<FormData>({
     resolver: yupResolver(schema),
-    defaultValues: {
-      // amount: +payload.amount,
-    },
     reValidateMode: 'onChange',
     mode: 'onChange',
   });
+
   const { errors, isValid, isDirty } = formState;
+
   const copyText = () => {
     onCopy();
     toast({
@@ -175,7 +174,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       RN: delegate.communicatingRationale.rn,
       total: delegate.communicatingRationale.score,
       formName: 'communicatingRationale',
-      canEdit: ['tn'] as string[],
+      canEdit: ['rn', 'tn'] as string[],
       breakdown: delegate.communicatingRationale.breakdown,
     },
     {
@@ -233,7 +232,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
           incentiveOptedIn: data.optedIn,
           stats: {
             communicatingRationale: {
-              rn: delegate.communicatingRationale.rn,
+              rn: data.communicatingRationale.rn,
               tn: data.communicatingRationale.tn,
               breakdown: newBreakdown,
             },
@@ -680,10 +679,22 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                                         (key, index) => {
                                           const hasProposalUrl = (
                                             proposalTitle: string
-                                          ) =>
-                                            proposalTitle.includes(
-                                              'forum.arbitrum.foundation'
-                                            );
+                                          ) => {
+                                            if (
+                                              proposalTitle.includes(
+                                                'forum.arbitrum.foundation'
+                                              )
+                                            ) {
+                                              return true;
+                                            }
+                                            const idHas0x = proposalTitle
+                                              .slice(0, 2)
+                                              .includes('0x');
+                                            if (idHas0x) {
+                                              return true;
+                                            }
+                                            return false;
+                                          };
                                           const id = hasProposalUrl(key)
                                             ? key.split('-')[0]
                                             : key;
