@@ -130,7 +130,7 @@ async function getDaoProposals(
 }
 
 const providerUrl =
-  'https://api.thegraph.com/subgraphs/name/show-karma/moonriver-dao-delegate-voting';
+  'https://gateway-arbitrum.network.thegraph.com/api/e25da26d50f6fced18c2b28649290d0b/subgraphs/id/5NVEFzEfc7Zabjc33fT9EFGiDkqMQRdHDrSuhXDz6W6x?source=karma';
 
 async function fetchOnChainVotes(daoName: string | string[], address: string) {
   if (!daoName || !address) return [];
