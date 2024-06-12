@@ -93,7 +93,7 @@ export async function onChainArbitrumVotesProvider(
   if (!daoName || !address) return [];
   try {
     const apolloClient = new ApolloClient({
-      uri: 'https://api.thegraph.com/subgraphs/name/show-karma/onchain-voting-arbitrum',
+      uri: 'https://gateway-arbitrum.network.thegraph.com/api/e25da26d50f6fced18c2b28649290d0b/subgraphs/id/9h8p2gZykXrPCWNiWZacnwrdHVcqZGFM8iWV2TEBoNrz?source=karma',
       cache: new InMemoryCache(),
     });
     const { data: votes } = await apolloClient.query({
