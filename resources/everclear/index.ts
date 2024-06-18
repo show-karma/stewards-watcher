@@ -6,22 +6,22 @@ import { publicProvider } from 'wagmi/providers/public';
 import ABI from './ABI.json';
 
 const config: IDAOConfig = {
-  DAO: 'Connext',
-  DAO_DESCRIPTION: `Connext delegates and members play a vital role in driving the ecosystem forward through their contributions to the community.`,
-  DAO_SUBDESCRIPTION: `This dashboard will help scoring and tracking contributors by displaying community member engagements across the Connext DAO.`,
-  DAO_URL: 'https://connext.network/',
+  DAO: 'Everclear',
+  DAO_DESCRIPTION: `Everclear delegates and members play a vital role in driving the ecosystem forward through their contributions to the community.`,
+  DAO_SUBDESCRIPTION: `This dashboard will help scoring and tracking contributors by displaying community member engagements across the Everclear DAO.`,
+  DAO_URL: 'https://everclear.org/',
   GOVERNANCE_FORUM: 'https://forum.connext.network/',
-  DAO_KARMA_ID: 'connext',
+  DAO_KARMA_ID: 'everclear',
   IMAGE_PREFIX_URL: 'https://cdn.stamp.fyi/avatar/eth:',
-  DAO_LOGO: '/daos/connext/logo.png',
+  DAO_LOGO: '/daos/everclear/logo.png',
   METATAGS: {
-    TITLE: `Delegates of Connext DAO`,
-    DESCRIPTION: `Find all the active delegates in Connext DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
+    TITLE: `Delegates of Everclear DAO`,
+    DESCRIPTION: `Find all the active delegates in Everclear DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
     IMAGE_DISCORD:
-      'https://delegate.connext.network/daos/connext/preview-discord.png',
+      'https://delegate.connext.network/daos/everclear/preview-discord.png',
     IMAGE_TWITTER:
-      'https://delegate.connext.network/daos/connext/preview-twitter.png',
-    FAVICON: '/daos/connext/favicon.png',
+      'https://delegate.connext.network/daos/everclear/preview-twitter.png',
+    FAVICON: '/daos/everclear/favicon.png',
     URL: `https://delegate.connext.network`,
   },
   DAO_CHAINS: [mainnet, arbitrum, optimism, polygon, customGnosis, bsc],
@@ -84,7 +84,7 @@ const config: IDAOConfig = {
     },
   ],
   DAO_FORUM_TYPE: 'discourse',
-  DAO_FORUM_URL: 'https://forum.connext.network/',
+  DAO_FORUM_URL: 'https://forum.everclear.network/',
   DAO_GTAG: 'G-67LDHT697P',
   DAO_DEFAULT_SETTINGS: {
     STATUS_FILTER: {
@@ -122,11 +122,10 @@ const dark: IDAOTheme = {
   title: '#FFFFFF',
   subtitle: '#a0aec0',
   text: '#FFFFFF',
-  branding:
-    'linear-gradient(90deg,#d86292,#ab00ff 50%,#29c1fc 100%,#d86292 100%,#d86292 100%,rgba(216,98,146,0))',
+  branding: '#2b2fd4',
   buttonText: '#FFFFFF',
   buttonTextSec: '#FFFFFF',
-  headerBg: '#18191E',
+  headerBg: '#222222',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
   collapse: { text: '#FFFFFF', subtext: '#ADB8C0' },
@@ -142,14 +141,14 @@ const dark: IDAOTheme = {
     head: '#ADB8C0',
     border: '#ADB8C033',
     title: 'white',
-    bg: '#18191E',
-    listBg: '#18191E',
+    bg: '#222222',
+    listBg: '#222222',
     listText: 'white',
     activeBg: '#07080A',
   },
   card: {
     icon: '#ADB8C0',
-    background: '#18191E',
+    background: '#222222',
     statBg: 'rgba(102, 102, 102, 0.15)',
     divider: 'rgba(173, 184, 192, 0.2)',
     text: { primary: '#FFFFFF', secondary: '#ADB8C0' },
@@ -160,16 +159,16 @@ const dark: IDAOTheme = {
     socialMedia: '#FFFFFF',
   },
   loginModal: {
-    background: '#18191E',
+    background: '#222222',
     text: '#FFFFFF',
     footer: { bg: 'rgba(102, 102, 102, 0.15)', text: '#FFFFFF' },
     button: {
-      bg: 'linear-gradient(90deg,#d86292,#ab00ff 50%,#29c1fc 100%,#d86292 100%,#d86292 100%,rgba(216,98,146,0))',
+      bg: '#2b2fd4',
       text: '#FFFFFF',
     },
   },
   modal: {
-    background: '#18191E',
+    background: '#222222',
     delegateTo: {
       bg: '#FFFFFF',
       userBg: '#FFFFFF',
@@ -209,8 +208,7 @@ const dark: IDAOTheme = {
       divider: 'rgba(173, 184, 192, 0.2)',
     },
     buttons: {
-      selectBg:
-        'linear-gradient(90deg,#d86292,#ab00ff 50%,#29c1fc 100%,#d86292 100%,#d86292 100%,rgba(216,98,146,0))',
+      selectBg: '#2b2fd4',
       selectText: '#FFFFFF',
       navBg: '#34344c',
       navText: '#FFFFFF',
@@ -259,7 +257,7 @@ const dark: IDAOTheme = {
         color: '#ADB8C0',
         buttons: {
           selectedBg: '#ADB8C0',
-          selectedText: '#18191E',
+          selectedText: '#222222',
           unSelectedBg: 'transparent',
           unSelectedText: '#ADB8C0',
         },
@@ -314,7 +312,7 @@ const dark: IDAOTheme = {
           text: '#F5F5F5',
           bg: '#07080A',
           pillText: '#F5F5F5',
-          pillBg: '#18191E',
+          pillBg: '#222222',
         },
         columns: {
           text: '#F5F5F5',
@@ -336,7 +334,7 @@ const dark: IDAOTheme = {
               hyperlink: '#b3a1dd',
               description: '#ADB8C0',
               sort: {
-                bg: '#18191E',
+                bg: '#222222',
                 border: '#FFFFFF',
                 text: '#F5F5F5',
                 label: '#ADB8C0',
@@ -370,33 +368,31 @@ const dark: IDAOTheme = {
         },
       },
       bg: {
-        primary: '#18191E',
+        primary: '#222222',
         secondary: '#1B2030',
-        tertiary:
-          'linear-gradient(90deg,#d86292,#ab00ff 50%,#29c1fc 100%,#d86292 100%,#d86292 100%,rgba(216,98,146,0))',
+        tertiary: '#2b2fd4',
       },
     },
   },
 };
 
 const light: IDAOTheme = {
-  background: '#F2F4F9',
-  bodyBg: '#F2F4F9',
-  title: '#18191E',
+  background: '#ddd',
+  bodyBg: '#ddd',
+  title: '#222222',
   subtitle: '#666666',
-  text: '#18191E',
-  branding:
-    'linear-gradient(90deg,#d86292,#ab00ff 50%,#29c1fc 100%,#d86292 100%,#d86292 100%,rgba(216,98,146,0))',
+  text: '#222222',
+  branding: '#2b2fd4',
   buttonText: '#FFFFFF',
-  buttonTextSec: '#18191E',
-  headerBg: '#212328',
+  buttonTextSec: '#222222',
+  headerBg: '#27273f',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
   collapse: { text: '#212328', subtext: '#212328', bg: '#FFFFFF' },
   hat: {
     text: {
       primary: '#FFFFFF',
-      secondary: '#ADB8C0',
+      secondary: '#333',
       madeBy: '#ADB8C0',
       lastUpdated: '#666666',
     },
@@ -425,17 +421,17 @@ const light: IDAOTheme = {
     socialMedia: '#595A5E',
   },
   loginModal: {
-    logo: 'daos/connext/logo_black.svg',
+    logo: 'daos/everclear/logo_black.png',
     background: '#FFFFFF',
     text: '#212328',
     footer: { bg: '#EBEDEF', text: '#212328' },
     button: {
-      bg: 'linear-gradient(90deg,#d86292,#ab00ff 50%,#29c1fc 100%,#d86292 100%,#d86292 100%,rgba(216,98,146,0))',
+      bg: '#2b2fd4',
       text: '#FFFFFF',
     },
   },
   modal: {
-    background: '#18191E',
+    background: '#222222',
     header: {
       border: '#ADB8C0',
       title: '#FFFFFF',
@@ -475,8 +471,7 @@ const light: IDAOTheme = {
       },
     },
     buttons: {
-      selectBg:
-        'linear-gradient(90deg,#d86292,#ab00ff 50%,#29c1fc 100%,#d86292 100%,#d86292 100%,rgba(216,98,146,0))',
+      selectBg: '#2b2fd4',
       selectText: '#FFFFFF',
       navBg: '#34344c',
       navText: '#FFFFFF',
@@ -525,7 +520,7 @@ const light: IDAOTheme = {
         color: '#ADB8C0',
         buttons: {
           selectedBg: '#ADB8C0',
-          selectedText: '#18191E',
+          selectedText: '#222222',
           unSelectedBg: 'transparent',
           unSelectedText: '#ADB8C0',
         },

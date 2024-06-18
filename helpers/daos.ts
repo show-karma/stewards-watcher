@@ -7,6 +7,7 @@ export const daosDictionary: Record<string, string> = {
   ssvnetwork: 'ssvnetwork',
   dydx: 'dydx',
   connext: 'connext',
+  everclear: 'everclear',
   dimo: 'dimo',
   gitcoin: 'gitcoin',
   element: 'element',
