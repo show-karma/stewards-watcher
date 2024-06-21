@@ -18,7 +18,7 @@ import rocketpool from './rocketpool';
 import moonriver from './moonriver';
 import moonbeam from './moonbeam';
 import moonbase from './moonbase';
-import connext from './connext';
+import everclear from './everclear';
 import arbitrum from './arbitrum';
 import cowswap from './cowswap';
 import snapshotABI from './contracts/snapshotABI.json';
@@ -59,12 +59,12 @@ export const supportedDAOs: ISupportedDAOs = {
     DELEGATE_ABI: dydx.ABI,
     TOKEN_ABI: dydx.ABI,
   },
-  connext: {
-    config: connext.config,
-    light: connext.light,
-    dark: connext.dark,
-    DELEGATE_ABI: connext.ABI,
-    TOKEN_ABI: connext.ABI,
+  everclear: {
+    config: everclear.config,
+    light: everclear.light,
+    dark: everclear.dark,
+    DELEGATE_ABI: everclear.ABI,
+    TOKEN_ABI: everclear.ABI,
   },
   aave: {
     config: aave.config,

@@ -105,15 +105,15 @@ const config: IDAOConfig = {
 };
 
 const dark: IDAOTheme = {
-  background: 'linear-gradient(45deg,#0d1126 0%,#301748 100%)',
-  bodyBg: 'linear-gradient(45deg,#0d1126 0%,#301748 100%)',
+  background: 'linear-gradient(45deg,#000000 0%,#2B1D3C 100%)',
+  bodyBg: 'linear-gradient(45deg,#000000 0%,#2B1D3C 100%)',
   title: '#FFFFFF',
   subtitle: '#a0aec0',
   text: '#FFFFFF',
-  branding: '#e1147b',
-  buttonText: '#FFFFFF',
+  branding: '#07D3BA',
+  buttonText: '#000000',
   buttonTextSec: '#FFFFFF',
-  headerBg: '#0D1126',
+  headerBg: '#000000',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
   collapse: { text: '#FFFFFF', subtext: '#ADB8C0' },
@@ -136,7 +136,7 @@ const dark: IDAOTheme = {
   },
   card: {
     icon: '#ADB8C0',
-    background: '#0D1126',
+    background: '#000000',
     statBg: 'rgba(102, 102, 102, 0.15)',
     divider: 'rgba(173, 184, 192, 0.2)',
     text: { primary: '#FFFFFF', secondary: '#ADB8C0' },
@@ -147,7 +147,7 @@ const dark: IDAOTheme = {
     socialMedia: '#FFFFFF',
   },
   modal: {
-    background: '#0D1126',
+    background: '#000000',
     header: {
       border: '#ADB8C0',
       title: '#FFFFFF',
@@ -193,7 +193,7 @@ const dark: IDAOTheme = {
         chart: {
           point: '#FFFFFF',
           openGradient: '#c4136b',
-          endGradient: '#0D1126',
+          endGradient: '#000000',
         },
       },
       reason: {
@@ -205,7 +205,7 @@ const dark: IDAOTheme = {
         color: '#ADB8C0',
         buttons: {
           selectedBg: '#ADB8C0',
-          selectedText: '#0D1126',
+          selectedText: '#000000',
           unSelectedBg: 'transparent',
           unSelectedText: '#ADB8C0',
         },
@@ -244,9 +244,9 @@ const dark: IDAOTheme = {
     },
   },
   loginModal: {
-    background: '#0D1126',
+    background: '#000000',
     text: '#FFFFFF',
-    footer: { bg: '#FFFFFF', text: '#0D1126' },
+    footer: { bg: '#FFFFFF', text: '#000000' },
     button: {
       bg: '#c4136b',
       text: '#FFFFFF',
@@ -322,7 +322,7 @@ const dark: IDAOTheme = {
               hyperlink: '#b3a1dd',
               description: '#ADB8C0',
               sort: {
-                bg: '#0D1126',
+                bg: '#000000',
                 border: '#FFFFFF',
                 text: '#F5F5F5',
                 label: '#ADB8C0',
@@ -356,7 +356,7 @@ const dark: IDAOTheme = {
         },
       },
       bg: {
-        primary: '#0D1126',
+        primary: '#000000',
         secondary: '#1B2030',
         tertiary: 'linear-gradient(248.86deg, #B6509E 10.51%, #2EBAC6 93.41%)',
       },
@@ -367,12 +367,12 @@ const dark: IDAOTheme = {
 const light: IDAOTheme = {
   background: '#F2F4F9',
   bodyBg: '#F2F4F9',
-  title: '#0D1126',
+  title: '#000000',
   subtitle: '#666666',
-  text: '#0D1126',
-  branding: '#e1147b',
-  buttonText: '#FFFFFF',
-  buttonTextSec: '#0D1126',
+  text: '#000000',
+  branding: '#07D3BA',
+  buttonText: '#000000',
+  buttonTextSec: '#000000',
   headerBg: '#2F1747',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
@@ -409,7 +409,7 @@ const light: IDAOTheme = {
     socialMedia: '#595A5E',
   },
   modal: {
-    background: '#0D1126',
+    background: '#000000',
     header: {
       border: '#ADB8C0',
       title: '#FFFFFF',
@@ -486,7 +486,7 @@ const light: IDAOTheme = {
         chart: {
           point: '#5f6a8e',
           openGradient: '#c4136b',
-          endGradient: '#0D1126',
+          endGradient: '#000000',
         },
       },
       reason: {
@@ -498,7 +498,7 @@ const light: IDAOTheme = {
         color: '#ADB8C0',
         buttons: {
           selectedBg: '#ADB8C0',
-          selectedText: '#0D1126',
+          selectedText: '#000000',
           unSelectedBg: 'transparent',
           unSelectedText: '#ADB8C0',
         },
@@ -506,9 +506,9 @@ const light: IDAOTheme = {
     },
   },
   loginModal: {
-    background: '#0D1126',
+    background: '#000000',
     text: '#FFFFFF',
-    footer: { bg: '#FFFFFF', text: '#0D1126' },
+    footer: { bg: '#FFFFFF', text: '#000000' },
     button: {
       bg: '#c4136b',
       text: '#FFFFFF',
