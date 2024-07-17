@@ -103,14 +103,14 @@ export const DataTable = <Data extends object>({
           ))}
         </Tbody>
       </Table>
-      {selectedDelegate && (
+      {isOpen && selectedDelegate ? (
         <BreakdownModal
           delegate={selectedDelegate}
           isOpen={isOpen}
           onClose={onClose}
           refreshFn={refreshFn}
         />
-      )}
+      ) : null}
     </>
   );
 };

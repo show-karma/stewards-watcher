@@ -131,7 +131,7 @@ async function getDaoProposals(
 }
 
 const providerUrl =
-  'https://api.thegraph.com/subgraphs/name/show-karma/moonbeam-delegates';
+  'https://gateway-arbitrum.network.thegraph.com/api/e25da26d50f6fced18c2b28649290d0b/subgraphs/id/3K2FGkaQD4sAPupWkAHcjKzpWoomE5GAoDme6ujgDZ9h?source=karma';
 
 async function fetchOnChainVotes(daoName: string | string[], address: string) {
   if (!daoName || !address) return [];

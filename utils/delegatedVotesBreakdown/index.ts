@@ -1,13 +1,13 @@
 import axios from 'axios';
 
 const chainsDelegatesData = {
-  1: 'https://api.thegraph.com/subgraphs/name/show-karma/dao-delegates',
-  10: 'https://api.thegraph.com/subgraphs/name/show-karma/dao-delegates-optimism',
-  137: 'https://api.thegraph.com/subgraphs/name/show-karma/dao-delegates-polygon',
+  1: 'https://gateway-arbitrum.network.thegraph.com/api/e25da26d50f6fced18c2b28649290d0b/subgraphs/id/BaVcsEz8hxtxkKUstFJ9S6fWZzWGzPgsccm85vALi1x3?source=karma',
+  10: 'https://gateway-arbitrum.network.thegraph.com/api/e25da26d50f6fced18c2b28649290d0b/subgraphs/id/FbqvXdcPpy83YnvoKiQkZQFYWWapDqdJbU7DupMhqwd1?source=karma',
+  137: 'https://gateway-arbitrum.network.thegraph.com/api/e25da26d50f6fced18c2b28649290d0b/subgraphs/id/9HtFUEhLZuAC88d226RN4W3ywRhFcvNP5yTBE11HkE8T?source=karma',
   42161:
-    'https://api.thegraph.com/subgraphs/name/show-karma/dao-delegates-arbitrum',
-  100: 'https://api.thegraph.com/subgraphs/name/show-karma/dao-delegates-gnosis',
-  56: 'https://api.thegraph.com/subgraphs/name/show-karma/dao-delegates-bsc',
+    'https://gateway-arbitrum.network.thegraph.com/api/e25da26d50f6fced18c2b28649290d0b/subgraphs/id/F5aKKU4KhsqrVEQjaG4N6HFJrUrVv2wEzmgsJ3ZtWGQo?source=karma',
+  100: 'https://gateway-arbitrum.network.thegraph.com/api/e25da26d50f6fced18c2b28649290d0b/subgraphs/id/EhdmbHnYsC8mM7mzYz4kCADT6GKdgwqGHjZULUcYcnxw?source=karma',
+  56: 'https://gateway-arbitrum.network.thegraph.com/api/e25da26d50f6fced18c2b28649290d0b/subgraphs/id/F84LJ4zf8Cv9VRAp8Dc9FHcw9yYGJDADXRfdiqoR2izZ?source=karma',
 };
 
 type DelegatedVotes = { votes: number | string; chainId: number };

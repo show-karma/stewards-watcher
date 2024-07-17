@@ -93,7 +93,7 @@ export async function onChainOptimismVotesProvider(
   if (!daoName || !address) return [];
   try {
     const onChainClient = new ApolloClient({
-      uri: 'https://api.thegraph.com/subgraphs/name/show-karma/dao-onchain-voting-optimism',
+      uri: 'https://gateway-arbitrum.network.thegraph.com/api/e25da26d50f6fced18c2b28649290d0b/subgraphs/id/FyXcQKypyTZzvbQ2e4cwKtruyPatqUtmHJ8iHwyRaNmW?source=karma',
       cache: new InMemoryCache(),
     });
     const { data: votes } = await onChainClient.query({
