@@ -18,6 +18,11 @@ export const getDelegateVotesByNetwork = async (
 ): Promise<{ votes: number | string; chainId: number }[]> => {
   const delegatedVotes: DelegatedVotes[] = [];
 
+  if (name.toLowerCase() === 'everclear') {
+    // eslint-disable-next-line no-param-reassign
+    name = 'connext';
+  }
+
   const urls = Object.values(chainsDelegatesData);
   const entries = Object.entries(chainsDelegatesData);
   const queries = urls.map(url => ({
