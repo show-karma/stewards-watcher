@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable no-useless-catch */
 import { Hex, IChainRow, MoonbeamProposal, NumberIsh } from 'types';
 import { ApolloClient, gql, InMemoryCache } from '@apollo/client';
@@ -45,11 +46,15 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
   const array: IChainRow[] = [];
 
   votes.forEach((vote: any) => {
-    const { proposal } = vote;
-    const original = proposals.find(item => +item.id === +proposal);
+    const { proposal: voteProposal } = vote;
+    const isVoteV2 = vote.openGov ? 'V2' : 'V1';
+    const original = proposals.find(
+      proposalItem =>
+        +proposalItem.id === +voteProposal && proposalItem.version === isVoteV2
+    );
     array.push({
       voteMethod: 'On-chain',
-      proposal: original?.description || `Proposal ${proposal}`,
+      proposal: original?.description || `Proposal ${voteProposal}`,
       choice: getVoteReason(vote),
       solution: vote?.solution,
       reason: vote?.reason,
@@ -57,14 +62,20 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
         .unix(original?.timestamp || Math.round(Date.now() / 1000))
         .format('MMMM D, YYYY'),
       executedTimestamp: original?.timestamp || Math.round(Date.now() / 1000),
-      voteId: proposal,
+      voteId: voteProposal,
       trackId: Number(original?.trackId),
       version: original?.version,
     });
   });
-
   proposals.forEach(proposal => {
-    if (!array.find(item => item.voteId && +item.voteId === +proposal.id))
+    if (
+      !array.find(
+        item =>
+          item?.voteId &&
+          +item?.voteId === +proposal.id &&
+          item.version === proposal.version
+      )
+    )
       array.push({
         voteMethod: 'On-chain',
         proposal: proposal.description,
@@ -127,7 +138,8 @@ async function getDaoProposals(
   });
 
   // eslint-disable-next-line id-length
-  return proposalsMap.sort((a, b) => b.timestamp - a.timestamp);
+  const sortedMap = proposalsMap.sort((a, b) => b.timestamp - a.timestamp);
+  return sortedMap;
 }
 
 const providerUrl =
@@ -143,7 +155,6 @@ async function fetchOnChainVotes(daoName: string | string[], address: string) {
     } = await api.get<{ data: VoteResponse }>(
       `delegate/${[daoName].flat()[0]}/${address}/voting-history`
     );
-
     const voteList = votes.map(vote => ({
       proposal: vote.proposalId.split('-')[0],
       openGov: vote.proposalId.split('-')[1] === 'V2',
@@ -151,8 +162,8 @@ async function fetchOnChainVotes(daoName: string | string[], address: string) {
     }));
     if (voteList && Array.isArray(voteList)) {
       const proposals = await getDaoProposals(cachedProposals);
-
-      return concatOnChainProposals(proposals, voteList);
+      const concatenated = concatOnChainProposals(proposals, voteList);
+      return concatenated;
     }
   } catch (error) {
     return [];
