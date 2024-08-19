@@ -13,7 +13,8 @@ type VoteResponse = {
     id: number;
     version: string;
     startDate: number;
-    endDate: number;
+    end: number;
+    trackId?: number;
   }[];
   votes: {
     proposalId: string;
@@ -98,7 +99,7 @@ function concatOnChainProposals(proposals: any[], votes: any[]) {
 }
 
 async function proposalsWithMetadata(): Promise<
-  (MoonbeamProposal & { proposal: string; trackId: NumberIsh })[]
+  (MoonbeamProposal & { proposal: string; trackId: NumberIsh | number })[]
 > {
   const { data } = await axios.get(
     '/api/proposals?dao=moonbase&source=on-chain'
@@ -136,8 +137,30 @@ async function getDaoProposals(
     };
   });
 
+  // proposals that are not on proposalsMap but are on cachedProposals
+  cachedProposals
+    .filter(
+      proposal =>
+        !proposalsMap.find(
+          propItem =>
+            +propItem.id === +proposal.id &&
+            propItem.version === proposal.version
+        )
+    )
+    .forEach(prop => {
+      proposalsMap.push({
+        id: prop.id.toString(),
+        proposal: prop.id.toString(),
+        description: `Proposal ${prop.id.toString()}`,
+        timestamp: prop.startDate / 1000,
+        trackId: prop?.trackId as NumberIsh,
+        version: prop.version,
+        finished: false,
+      });
+    });
+
   // eslint-disable-next-line id-length
-  return proposalsMap.sort((a, b) => b.timestamp - a.timestamp);
+  return proposalsMap;
 }
 
 const providerUrl =
