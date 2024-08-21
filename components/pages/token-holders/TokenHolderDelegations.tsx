@@ -144,8 +144,8 @@ export const TokenHolderDelegation: FC = () => {
             fontSize={{ base: '16px', xl: '20px' }}
             color={theme.tokenHolders.delegations.text.primary}
           >
-            This address has not delegated any tokens. <br /> Find a
-            suitable candidate and delegate your tokens{' '}
+            This address has not delegated any tokens. <br /> Find a suitable
+            candidate and delegate your tokens{' '}
             <ChakraLink
               href={`${rootPathname}/`}
               isExternal
