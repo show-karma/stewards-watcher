@@ -9,12 +9,12 @@ export const ECOSYSTEMS: Record<
   moonbeam: [
     {
       name: 'Moonriver',
-      icon: '/daos/moonriver/favicon.png',
+      icon: '/daos/moonriver/favicon.svg',
       url: 'https://delegate.moonbeam.network/moonriver',
     },
     {
       name: 'Moonbase',
-      icon: '/daos/moonbase/favicon.png',
+      icon: '/daos/moonbase/favicon.svg',
       url: 'https://delegate.moonbeam.network/moonbase',
     },
     {

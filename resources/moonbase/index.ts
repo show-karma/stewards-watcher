@@ -31,13 +31,13 @@ const config: IDAOConfig = {
   GOVERNANCE_FORUM: 'https://forum.moonbeam.foundation/',
   DAO_KARMA_ID: 'moonbase',
   IMAGE_PREFIX_URL: 'https://cdn.stamp.fyi/avatar/eth:',
-  DAO_LOGO: '/daos/moonbase/logo.png',
+  DAO_LOGO: '/daos/moonbase/logo.svg',
   METATAGS: {
     TITLE: `Delegates of Moonbase DAO`,
     DESCRIPTION: `Find all the active delegates in Moonbase DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
     IMAGE_DISCORD: '/daos/moonbase/preview-discord.png',
     IMAGE_TWITTER: '/daos/moonbase/preview-twitter.png',
-    FAVICON: '/daos/moonbase/favicon.png',
+    FAVICON: '/daos/moonbase/favicon.svg',
     URL: `https://delegate.moonbeam.network/moonbase`,
   },
   DAO_DEFAULT_SETTINGS: {
