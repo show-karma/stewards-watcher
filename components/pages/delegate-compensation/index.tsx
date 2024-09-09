@@ -43,9 +43,7 @@ export const DelegateCompensation = () => {
   const [month, setMonth] = useState(() => {
     const queryString = router.asPath.split('?')[1];
     const queryMonth = queryString?.match(/(?<=month=)[^&]*/i)?.[0];
-    const date = new Date();
-
-    // get this current month
+    const date = new Date('2024-08-03');
     const currentMonth = date.getMonth() + 1;
     if (queryMonth) {
       if (monthDictionary[queryMonth.toLowerCase()] > currentMonth) {
@@ -56,20 +54,11 @@ export const DelegateCompensation = () => {
       }
       const monthFound = monthDictionary[queryMonth.toLowerCase()];
       return {
-        name: new Date(date.getFullYear(), monthFound - 1, 1).toLocaleString(
-          'en-US',
-          {
-            month: 'long',
-          }
-        ),
+        name: new Date(2024, monthFound - 1, 1).toLocaleString('en-US', {
+          month: 'long',
+        }),
         value: monthFound,
       };
-    }
-    const isDayMoreThan10 = date.getDate() >= 10;
-    if (isDayMoreThan10) {
-      date.setMonth(date.getMonth());
-    } else {
-      date.setMonth(date.getMonth() - 1);
     }
     return {
       name: date.toLocaleString('en-US', { month: 'long' }),
@@ -250,7 +239,7 @@ export const DelegateCompensation = () => {
     const allMonths = Array.from(
       { length: new Date().getMonth() + 1 },
       (_, indx) => {
-        const monthName = new Date(2024, indx, 1).toLocaleString('en-US', {
+        const monthName = new Date(2022, indx, 1).toLocaleString('en-US', {
           month: 'long',
         });
 
