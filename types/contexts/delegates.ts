@@ -1,7 +1,7 @@
 import { IStats, IStatsID } from 'types/resources';
 
 export type IFilterOrder = 'asc' | 'desc';
-export type IFilterPeriod = 'lifetime' | '30d' | '180d';
+export type IFilterPeriod = 'lifetime' | '30d' | '90d' | '180d';
 
 export interface IStatOptions {
   title: string;
