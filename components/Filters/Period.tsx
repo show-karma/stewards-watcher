@@ -11,6 +11,7 @@ interface IPeriodOptions {
 const periodOptions: IPeriodOptions[] = [
   { title: 'Lifetime', period: 'lifetime' },
   { title: '30 days', period: '30d' },
+  { title: '90 days', period: '90d' },
   { title: '180 days', period: '180d' },
 ];
 
