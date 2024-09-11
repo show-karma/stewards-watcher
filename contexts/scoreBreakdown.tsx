@@ -11,7 +11,7 @@ import { fetchScoreBreakdown } from 'utils/fetchScoreBreakdown';
 
 export interface IBreakdownProps {
   address: string;
-  period?: 'lifetime' | '180d' | '30d';
+  period?: 'lifetime' | '180d' | '30d' | '90d';
   type?: 'gitcoinHealthScore' | 'forumScore' | 'karmaScore';
 }
 

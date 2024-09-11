@@ -14,7 +14,7 @@ export async function fetchScoreBreakdown(
     | 'gitcoinHealthScore'
     | 'forumScore'
     | 'karmaScore' = 'gitcoinHealthScore',
-  period: 'lifetime' | '180d' | '30d' = 'lifetime'
+  period: 'lifetime' | '180d' | '30d' | '90d' = 'lifetime'
 ): Promise<ScoreBreakdownRes> {
   const { data: breakdown } = await api.get<{
     data: ScoreBreakdownRes;
