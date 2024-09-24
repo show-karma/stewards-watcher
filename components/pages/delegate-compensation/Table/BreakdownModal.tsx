@@ -155,7 +155,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       total: delegate.participationRate,
       formName: 'participationRate',
       canEdit: [] as string[],
-      description: 'Participation Rate percentage.',
+      description: 'Participation Rate percentage',
     },
     {
       name: 'Snapshot Voting (SV)',
@@ -164,7 +164,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       total: delegate.snapshotVoting.score,
       formName: 'snapshotVoting',
       canEdit: [] as string[],
-      description: 'Number of proposals the delegate voted on in the month.',
+      description: 'Number of proposals the delegate voted on in the month',
     },
     {
       name: 'Onchain Voting (TV)',
@@ -174,7 +174,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       formName: 'onChainVoting',
       canEdit: [] as string[],
       description:
-        'Number of proposals the delegate voted onchain in the month.',
+        'Number of proposals the delegate voted onchain in the month',
     },
     {
       name: 'Communication Rationale (CR)',
@@ -185,7 +185,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       canEdit: ['rn', 'tn'] as string[],
       breakdown: delegate.communicatingRationale.breakdown,
       description:
-        'Number of real communication rational threads where the delegate communicated and justified his/her decision.',
+        'Number of real communication rational threads where the delegate communicated and justified his/her decision',
     },
     {
       name: 'Commenting Proposal (CP)',
@@ -195,7 +195,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       formName: 'commentingProposal',
       canEdit: ['tn', 'rn', 'total'] as string[],
       description:
-        'Number of actual proposals where the delegate made a genuine and quality contribution. Spam messages will not be considered.',
+        'Number of actual proposals where the delegate made a genuine and quality contribution. Spam messages will not be considered',
     },
     {
       name: 'Bonus Point (BP)',
@@ -205,7 +205,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       formName: 'bonusPoint',
       canEdit: ['total'] as string[],
       description:
-        'This parameter is extra. If the delegate makes a significant contribution to the DAO, he/she is automatically granted +40% extra TP. This parameter is at the discretion of the program administrator. This parameter is reset at the beginning of each month.',
+        'This parameter is extra. If the delegate makes a significant contribution to the DAO, he/she is automatically granted +40% extra TP. This parameter is at the discretion of the program administrator. This parameter is reset at the beginning of each month',
     },
     {
       name: 'Total Participation (TP)',
@@ -215,7 +215,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       formName: 'totalParticipation',
       canEdit: [] as string[],
       description:
-        'Sum of the results of activities performed by the delegate. A TP% of 100 indicates full participation.',
+        'Sum of the results of activities performed by the delegate. A TP% of 100 indicates full participation',
     },
   ];
 
