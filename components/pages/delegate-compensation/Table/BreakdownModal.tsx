@@ -32,7 +32,7 @@ import {
 } from '@chakra-ui/react';
 import { ImgWithFallback } from 'components/ImgWithFallback';
 import { useAuth, useDAO, useDelegates } from 'contexts';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { DelegateCompensationStats } from 'types';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -46,6 +46,7 @@ import { DownChevron } from 'components/Icons';
 import { API_ROUTES } from 'helpers';
 import debounce from 'lodash.debounce';
 import { AiFillQuestionCircle } from 'react-icons/ai';
+import { ApolloClient, gql, InMemoryCache } from '@apollo/client';
 
 interface BreakdownModalProps {
   delegate: DelegateCompensationStats;
@@ -99,6 +100,11 @@ const schema = yup.object({
 type StatKeys = 'commentingProposal' | 'bonusPoint' | 'communicatingRationale';
 
 type FormData = yup.InferType<typeof schema>;
+
+const snapshotClient = new ApolloClient({
+  uri: 'https://hub.snapshot.org/graphql',
+  cache: new InMemoryCache(),
+});
 
 export const BreakdownModal: FC<BreakdownModalProps> = ({
   delegate,
@@ -270,10 +276,68 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
   };
 
   const [showBreakdown, setShowBreakdown] = useState(false);
+  const [proposalTitles, setProposalTitles] = useState<
+    {
+      title: string;
+      id: string;
+    }[]
+  >([]);
+
+  const getProposalTitles = async (proposalIds: string[]) => {
+    try {
+      const { data } = await snapshotClient.query({
+        query: gql`
+          query Proposals($proposalIds: [String]!) {
+            proposals(where: { id_in: $proposalIds }, first: 1000) {
+              title
+              id
+            }
+          }
+        `,
+        variables: {
+          proposalIds,
+        },
+      });
+      const proposals = data?.proposals;
+      if (proposals && proposals.length > 0) {
+        setProposalTitles(old => [...old, ...proposals]);
+      } else {
+        setProposalTitles([]);
+      }
+    } catch (error) {
+      console.log(error);
+      setProposalTitles([]);
+    }
+  };
+
+  useEffect(() => {
+    if (delegate.communicatingRationale.breakdown) {
+      const breakdownArray = Object.keys(
+        delegate.communicatingRationale.breakdown
+      )
+        .filter(key => key.startsWith('0x'))
+        .map(item => item.split('-')[0].toLowerCase());
+
+      const onlyTitles = proposalTitles.map(item => item.id.toLowerCase());
+      const newProposals = breakdownArray.filter(
+        item => !onlyTitles.includes(item)
+      );
+
+      if (newProposals.length > 0) {
+        getProposalTitles(newProposals);
+      }
+    }
+  }, [delegate.communicatingRationale.breakdown]); // Added proposalTitles to dependency array
 
   const handleProposalTitle = (proposalId: string) => {
     const idHas0x = proposalId.slice(0, 2).includes('0x');
-    return idHas0x ? truncateAddress(proposalId) : `${proposalId}...`;
+    if (idHas0x) {
+      return (
+        proposalTitles.find(item => item.id === proposalId)?.title ||
+        truncateAddress(proposalId)
+      );
+    }
+    return `${proposalId}...`;
   };
 
   return (
