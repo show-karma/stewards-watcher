@@ -24,8 +24,6 @@ import {
   Icon,
   useClipboard,
   Tooltip,
-  List,
-  ListItem,
   Link,
   Menu,
   MenuButton,
@@ -34,7 +32,7 @@ import {
 } from '@chakra-ui/react';
 import { ImgWithFallback } from 'components/ImgWithFallback';
 import { useAuth, useDAO, useDelegates } from 'contexts';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { DelegateCompensationStats } from 'types';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -44,10 +42,11 @@ import { useToasty } from 'hooks';
 import { IoCopy } from 'react-icons/io5';
 import { formatNumberPercentage, truncateAddress } from 'utils';
 import { FaCheckCircle, FaExternalLinkAlt } from 'react-icons/fa';
-import { AiFillQuestionCircle } from 'react-icons/ai';
 import { DownChevron } from 'components/Icons';
 import { API_ROUTES } from 'helpers';
 import debounce from 'lodash.debounce';
+import { AiFillQuestionCircle } from 'react-icons/ai';
+import { ApolloClient, gql, InMemoryCache } from '@apollo/client';
 
 interface BreakdownModalProps {
   delegate: DelegateCompensationStats;
@@ -102,6 +101,11 @@ type StatKeys = 'commentingProposal' | 'bonusPoint' | 'communicatingRationale';
 
 type FormData = yup.InferType<typeof schema>;
 
+const snapshotClient = new ApolloClient({
+  uri: 'https://hub.snapshot.org/graphql',
+  cache: new InMemoryCache(),
+});
+
 export const BreakdownModal: FC<BreakdownModalProps> = ({
   delegate,
   isOpen,
@@ -151,6 +155,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       total: delegate.participationRate,
       formName: 'participationRate',
       canEdit: [] as string[],
+      description: 'Participation Rate percentage',
     },
     {
       name: 'Snapshot Voting (SV)',
@@ -159,6 +164,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       total: delegate.snapshotVoting.score,
       formName: 'snapshotVoting',
       canEdit: [] as string[],
+      description: 'Number of proposals the delegate voted on in the month',
     },
     {
       name: 'Onchain Voting (TV)',
@@ -167,6 +173,8 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       total: delegate.onChainVoting.score,
       formName: 'onChainVoting',
       canEdit: [] as string[],
+      description:
+        'Number of proposals the delegate voted onchain in the month',
     },
     {
       name: 'Communication Rationale (CR)',
@@ -176,6 +184,8 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       formName: 'communicatingRationale',
       canEdit: ['rn', 'tn'] as string[],
       breakdown: delegate.communicatingRationale.breakdown,
+      description:
+        'Number of real communication rational threads where the delegate communicated and justified his/her decision',
     },
     {
       name: 'Commenting Proposal (CP)',
@@ -184,6 +194,8 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       total: delegate.commentingProposal.score,
       formName: 'commentingProposal',
       canEdit: ['tn', 'rn', 'total'] as string[],
+      description:
+        'Number of actual proposals where the delegate made a genuine and quality contribution. Spam messages will not be considered',
     },
     {
       name: 'Bonus Point (BP)',
@@ -192,6 +204,8 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       total: delegate.bonusPoint,
       formName: 'bonusPoint',
       canEdit: ['total'] as string[],
+      description:
+        'This parameter is extra. If the delegate makes a significant contribution to the DAO, he/she is automatically granted +40% extra TP. This parameter is at the discretion of the program administrator. This parameter is reset at the beginning of each month',
     },
     {
       name: 'Total Participation (TP)',
@@ -200,6 +214,8 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       total: delegate.totalParticipation,
       formName: 'totalParticipation',
       canEdit: [] as string[],
+      description:
+        'Sum of the results of activities performed by the delegate. A TP% of 100 indicates full participation',
     },
   ];
 
@@ -260,10 +276,68 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
   };
 
   const [showBreakdown, setShowBreakdown] = useState(false);
+  const [proposalTitles, setProposalTitles] = useState<
+    {
+      title: string;
+      id: string;
+    }[]
+  >([]);
+
+  const getProposalTitles = async (proposalIds: string[]) => {
+    try {
+      const { data } = await snapshotClient.query({
+        query: gql`
+          query Proposals($proposalIds: [String]!) {
+            proposals(where: { id_in: $proposalIds }, first: 1000) {
+              title
+              id
+            }
+          }
+        `,
+        variables: {
+          proposalIds,
+        },
+      });
+      const proposals = data?.proposals;
+      if (proposals && proposals.length > 0) {
+        setProposalTitles(old => [...old, ...proposals]);
+      } else {
+        setProposalTitles([]);
+      }
+    } catch (error) {
+      console.log(error);
+      setProposalTitles([]);
+    }
+  };
+
+  useEffect(() => {
+    if (delegate.communicatingRationale.breakdown) {
+      const breakdownArray = Object.keys(
+        delegate.communicatingRationale.breakdown
+      )
+        .filter(key => key.startsWith('0x'))
+        .map(item => item.split('-')[0].toLowerCase());
+
+      const onlyTitles = proposalTitles.map(item => item.id.toLowerCase());
+      const newProposals = breakdownArray.filter(
+        item => !onlyTitles.includes(item)
+      );
+
+      if (newProposals.length > 0) {
+        getProposalTitles(newProposals);
+      }
+    }
+  }, [delegate.communicatingRationale.breakdown]);
 
   const handleProposalTitle = (proposalId: string) => {
     const idHas0x = proposalId.slice(0, 2).includes('0x');
-    return idHas0x ? truncateAddress(proposalId) : `${proposalId}...`;
+    if (idHas0x) {
+      return (
+        proposalTitles.find(item => item.id === proposalId)?.title ||
+        truncateAddress(proposalId)
+      );
+    }
+    return `${proposalId}...`;
   };
 
   return (
@@ -370,43 +444,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                         color={theme.modal.header.title}
                       >
                         <Flex flexDir="row" gap="2" alignItems="center">
-                          Rn{' '}
-                          <Tooltip
-                            bg={theme.collapse.bg || theme.card.background}
-                            color={theme.collapse.text}
-                            label={
-                              <Flex flexDir="column" py="1" gap="2">
-                                <List fontWeight="normal">
-                                  <ListItem>
-                                    <b>Snapshot Voting (SV):</b> Number of
-                                    proposals the delegate voted on in the
-                                    month.
-                                  </ListItem>
-                                  <ListItem>
-                                    <b>Onchain Voting (TV):</b> Number of
-                                    proposals the delegate voted onchain in the
-                                    month.
-                                  </ListItem>
-                                  <ListItem>
-                                    <b>Communication Rationale (CR):</b> Number
-                                    of real communication rational threads where
-                                    the delegate communicated and justified
-                                    his/her decision.
-                                  </ListItem>
-                                  <ListItem>
-                                    <b>Commenting Proposal (CP):</b> Number of
-                                    actual proposals where the delegate made a
-                                    genuine and quality contribution. Spam
-                                    messages will not be considered.
-                                  </ListItem>
-                                </List>
-                              </Flex>
-                            }
-                          >
-                            <Flex w="5" h="5" cursor="pointer">
-                              <Icon as={AiFillQuestionCircle} w="5" h="5" />
-                            </Flex>
-                          </Tooltip>
+                          Rn
                         </Flex>
                       </Th>
                       <Th
@@ -416,45 +454,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                         color={theme.modal.header.title}
                       >
                         <Flex flexDir="row" gap="2" alignItems="center">
-                          Tn{' '}
-                          <Tooltip
-                            bg={theme.collapse.bg || theme.card.background}
-                            color={theme.collapse.text}
-                            label={
-                              <Flex flexDir="column" py="1" gap="2">
-                                <List fontWeight="normal">
-                                  <ListItem>
-                                    <b>Participation Rate (PR):</b>{' '}
-                                    Participation Rate percentage.
-                                  </ListItem>
-                                  <ListItem>
-                                    <b>Snapshot Voting (SV):</b> Number of total
-                                    proposals that were sent to snapshots for
-                                    voting in the month.
-                                  </ListItem>
-                                  <ListItem>
-                                    <b>Onchain Voting (TV):</b> Number of total
-                                    proposals that were sent onchain for voting
-                                    in the month.
-                                  </ListItem>
-                                  <ListItem>
-                                    <b>Communication Rationale (CR):</b> Total
-                                    number of proposals that were submitted to a
-                                    vote.
-                                  </ListItem>
-                                  <ListItem>
-                                    <b>Commenting Proposal (CP):</b> Total
-                                    number of formal proposals posted on the
-                                    forum.
-                                  </ListItem>
-                                </List>
-                              </Flex>
-                            }
-                          >
-                            <Flex w="5" h="5" cursor="pointer">
-                              <Icon as={AiFillQuestionCircle} w="5" h="5" />
-                            </Flex>
-                          </Tooltip>
+                          Tn
                         </Flex>
                       </Th>
                       <Th
@@ -477,7 +477,24 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                           borderBottomColor={theme.modal.header.title}
                           color={theme.modal.header.title}
                         >
-                          {item.name}
+                          <Flex flexDir="row" gap="2" alignItems="center">
+                            {item.name}
+                            {item.description ? (
+                              <Tooltip
+                                bg={theme.collapse.bg || theme.card.background}
+                                color={theme.collapse.text}
+                                label={
+                                  <Flex flexDir="column" py="1" gap="2">
+                                    {item.description}
+                                  </Flex>
+                                }
+                              >
+                                <Flex w="5" h="5" cursor="pointer">
+                                  <Icon as={AiFillQuestionCircle} w="5" h="5" />
+                                </Flex>
+                              </Tooltip>
+                            ) : null}
+                          </Flex>
                         </Td>
                         <Td
                           borderBottomWidth="1px"

@@ -19,50 +19,64 @@ import { useRouter } from 'next/router';
 import { DownChevron } from 'components/Icons';
 import { Table } from './Table';
 
-const monthDictionary: Record<string, number> = {
-  january: 1,
-  february: 2,
-  march: 3,
-  april: 4,
-  may: 5,
-  june: 6,
-  july: 7,
-  august: 8,
-  september: 9,
-  october: 10,
-  november: 11,
-  december: 12,
-};
-
 export const DelegateCompensation = () => {
   const { theme } = useDAO();
   const [delegates, setDelegates] = useState<DelegateCompensationStats[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [onlyOptIn, setOnlyOptIn] = useState(true);
   const router = useRouter();
-  const [month, setMonth] = useState(() => {
+  const [selectedDate, setSelectedDate] = useState(() => {
     const queryString = router.asPath.split('?')[1];
-    const queryMonth = queryString?.match(/(?<=month=)[^&]*/i)?.[0];
+    const monthQuery = queryString?.match(/(?<=month=)[^&]*/i)?.[0];
+    const yearQuery = Number(queryString?.match(/(?<=year=)[^&]*/i)?.[0]);
     const date = new Date('2024-09-03');
     const currentMonth = date.getMonth() + 1;
-    if (queryMonth) {
-      if (monthDictionary[queryMonth.toLowerCase()] > currentMonth) {
+    const currentYear = date.getFullYear();
+    const startYear = 2024;
+    if (monthQuery || yearQuery) {
+      const year = yearQuery || currentYear;
+      const month = monthQuery
+        ? new Date(`${monthQuery} 1, ${year}`).getMonth()
+        : currentMonth;
+      const correctMonth = month > currentMonth ? currentMonth : month + 1;
+      const correctYear =
+        year > currentYear || year < startYear ? currentYear : year;
+      if (year > currentYear || year < startYear) {
+        // get last available month of the year
+        const lastAvailableMonth = currentMonth === 12 ? 12 : currentMonth;
         return {
-          name: date.toLocaleString('en-US', { month: 'long' }),
-          value: currentMonth,
+          name: new Date(correctYear, lastAvailableMonth - 1, 1).toLocaleString(
+            'en-US',
+            {
+              month: 'long',
+            }
+          ),
+          value: {
+            month: lastAvailableMonth,
+            year: correctYear,
+          },
         };
       }
-      const monthFound = monthDictionary[queryMonth.toLowerCase()];
+
       return {
-        name: new Date(2024, monthFound - 1, 1).toLocaleString('en-US', {
-          month: 'long',
-        }),
-        value: monthFound,
+        name: new Date(correctYear, correctMonth - 1, 1).toLocaleString(
+          'en-US',
+          {
+            month: 'long',
+          }
+        ),
+        value: {
+          month: correctMonth,
+          year: correctYear,
+        },
       };
     }
     return {
       name: date.toLocaleString('en-US', { month: 'long' }),
-      value: currentMonth,
+      value: {
+        month: currentMonth,
+        year: currentYear,
+      },
     };
   });
 
@@ -80,7 +94,8 @@ export const DelegateCompensation = () => {
         {
           params: {
             incentiveOptedIn: onlyOptIn || undefined,
-            month: month?.value || undefined,
+            month: selectedDate?.value.month || undefined,
+            year: selectedDate?.value.year || undefined,
           },
         }
       );
@@ -186,7 +201,8 @@ export const DelegateCompensation = () => {
           {
             params: {
               incentiveOptedIn: true,
-              month: month?.value || undefined,
+              month: selectedDate?.value.month || undefined,
+              year: selectedDate?.value.year || undefined,
             },
           }
         );
@@ -205,7 +221,7 @@ export const DelegateCompensation = () => {
     };
     getOptInCounter();
     fetchDelegates();
-  }, [onlyOptIn, month]);
+  }, [onlyOptIn, selectedDate]);
 
   useEffect(() => {
     const getPowerfulDelegates = async () => {
@@ -215,7 +231,8 @@ export const DelegateCompensation = () => {
           {
             params: {
               incentiveOptedIn: false,
-              month: month?.value || undefined,
+              month: selectedDate?.value.month || undefined,
+              year: selectedDate?.value.year || undefined,
             },
           }
         );
@@ -231,44 +248,55 @@ export const DelegateCompensation = () => {
       }
     };
     getPowerfulDelegates();
-  }, [month]);
+  }, [selectedDate]);
 
   const { rootPathname } = useDAO();
 
   const renderMonthList = () => {
-    const allMonths = Array.from(
-      { length: new Date().getMonth() + 1 },
-      (_, indx) => {
-        const monthName = new Date(2022, indx, 1).toLocaleString('en-US', {
-          month: 'long',
+    const supportedDates = [];
+    const startYear = 2024;
+    const currentDate = new Date();
+
+    for (let year = startYear; year <= currentDate.getFullYear(); year += 1) {
+      for (let month = 0; month < 12; month += 1) {
+        if ((month === 0 && year === 2024) || (month === 1 && year === 2024)) {
+          // eslint-disable-next-line no-continue
+          continue;
+        }
+        if (
+          year === currentDate.getFullYear() &&
+          month > currentDate.getMonth()
+        ) {
+          break;
+        }
+        supportedDates.push({
+          name: new Date(year, month, 1).toLocaleString('en-US', {
+            month: 'long',
+          }),
+          value: {
+            month: month + 1,
+            year,
+          },
         });
-
-        const capitalizedMonthName =
-          monthName.charAt(0).toUpperCase() + monthName.slice(1);
-
-        return {
-          name: capitalizedMonthName,
-          value: indx + 1,
-        };
       }
-    );
+    }
 
-    const notUsedMonths = allMonths.filter(
-      monthItem => monthItem.value !== 1 && monthItem.value !== 2
-    );
-
-    return notUsedMonths.map(listMonth => (
+    return supportedDates.map(itemDate => (
       <MenuItem
-        key={listMonth.value}
+        key={itemDate.name}
         bg={theme.filters.bg}
         _hover={{ opacity: 0.7 }}
         onClick={() => {
-          setMonth(listMonth);
+          setSelectedDate({
+            name: itemDate.name,
+            value: itemDate.value,
+          });
           router.push(
             {
               pathname: `/${rootPathname}/delegate-compensation`,
               query: {
-                month: listMonth.name.toLowerCase(),
+                month: itemDate.name.toLowerCase(),
+                year: itemDate.value.year,
               },
             },
             undefined,
@@ -276,7 +304,7 @@ export const DelegateCompensation = () => {
           );
         }}
       >
-        {listMonth.name}
+        {itemDate.name} {itemDate.value.year}
       </MenuItem>
     ));
   };
@@ -360,13 +388,15 @@ export const DelegateCompensation = () => {
                   />
                 }
               >
-                {month.name}
+                {selectedDate?.name} {selectedDate?.value.year}
               </MenuButton>
               <MenuList
                 _hover={{
                   opacity: 0.7,
                 }}
                 bg={theme.filters.bg}
+                maxH={300}
+                overflowY="auto"
               >
                 {renderMonthList()}
               </MenuList>
