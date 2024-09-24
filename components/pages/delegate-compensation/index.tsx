@@ -32,26 +32,42 @@ export const DelegateCompensation = () => {
     const date = new Date('2024-09-03');
     const currentMonth = date.getMonth() + 1;
     const currentYear = date.getFullYear();
-    if (monthQuery) {
+    const startYear = 2024;
+    if (monthQuery || yearQuery) {
       const year = yearQuery || currentYear;
-      const queryDate = new Date(`${monthQuery} 1, ${year}`);
-      const queryMonth = queryDate.getMonth() + 1;
-      if (queryMonth > currentMonth) {
+      const month = monthQuery
+        ? new Date(`${monthQuery} 1, ${year}`).getMonth()
+        : currentMonth;
+      const correctMonth = month > currentMonth ? currentMonth : month + 1;
+      const correctYear =
+        year > currentYear || year < startYear ? currentYear : year;
+      if (year > currentYear || year < startYear) {
+        // get last available month of the year
+        const lastAvailableMonth = currentMonth === 12 ? 12 : currentMonth;
         return {
-          name: date.toLocaleString('en-US', { month: 'long' }),
+          name: new Date(correctYear, lastAvailableMonth - 1, 1).toLocaleString(
+            'en-US',
+            {
+              month: 'long',
+            }
+          ),
           value: {
-            month: currentMonth,
-            year: currentYear,
+            month: lastAvailableMonth,
+            year: correctYear,
           },
         };
       }
+
       return {
-        name: new Date(year, queryMonth - 1, 1).toLocaleString('en-US', {
-          month: 'long',
-        }),
+        name: new Date(correctYear, correctMonth - 1, 1).toLocaleString(
+          'en-US',
+          {
+            month: 'long',
+          }
+        ),
         value: {
-          month: queryMonth,
-          year,
+          month: correctMonth,
+          year: correctYear,
         },
       };
     }

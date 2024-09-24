@@ -327,7 +327,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
         getProposalTitles(newProposals);
       }
     }
-  }, [delegate.communicatingRationale.breakdown]); // Added proposalTitles to dependency array
+  }, [delegate.communicatingRationale.breakdown]);
 
   const handleProposalTitle = (proposalId: string) => {
     const idHas0x = proposalId.slice(0, 2).includes('0x');
