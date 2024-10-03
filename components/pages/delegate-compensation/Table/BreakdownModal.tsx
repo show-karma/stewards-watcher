@@ -1040,7 +1040,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                                   </Table>
                                 </TableContainer>
                               </Flex>
-                            ) : (
+                            ) : isDaoAdmin ? (
                               <Button
                                 bg="transparent"
                                 px="1"
@@ -1061,6 +1061,10 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                               >
                                 {item.total}
                               </Button>
+                            ) : (
+                              <Text px="1" color={theme.modal.header.title}>
+                                {item.total}
+                              </Text>
                             )
                           ) : (
                             <Text px="1" color={theme.modal.header.title}>
