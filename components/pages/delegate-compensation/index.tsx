@@ -29,7 +29,7 @@ export const DelegateCompensation = () => {
     const queryString = router.asPath.split('?')[1];
     const monthQuery = queryString?.match(/(?<=month=)[^&]*/i)?.[0];
     const yearQuery = Number(queryString?.match(/(?<=year=)[^&]*/i)?.[0]);
-    const date = new Date('2024-09-03');
+    const date = new Date('2024-10-03');
     const currentMonth = date.getMonth() + 1;
     const currentYear = date.getFullYear();
     const startYear = 2024;
