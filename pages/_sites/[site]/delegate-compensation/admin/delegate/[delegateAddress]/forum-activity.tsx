@@ -2,18 +2,21 @@ import { DAOProvider } from 'contexts/dao';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
 import { daosDictionary } from 'helpers';
-import { DelegateCompensationContainer } from 'containers/delegate-compensation';
+import { DelegateCompensationAdminContainer } from 'containers/delegate-compensation-admin';
+import { DelegateCompensationAdminForumActivity } from 'components/pages/delegate-compensation/Admin/ForumActivity';
 
 interface PathProps extends ParsedUrlQuery {
   site: string;
+  delegateAddress: string;
 }
 
 interface FAQProps {
   dao: string;
+  delegateAddress: string | null;
 }
 
 export const getStaticPaths: GetStaticPaths<PathProps> = async () => {
-  const paths = [{ params: { site: 'siteFAQ' } }];
+  const paths = [{ params: { site: 'arbitrum', delegateAddress: '' } }];
 
   return {
     paths,
@@ -26,7 +29,7 @@ export const getStaticProps: GetStaticProps<FAQProps, PathProps> = async ({
 }) => {
   if (!params) throw new Error('No path parameters found');
 
-  const { site } = params;
+  const { site, delegateAddress } = params;
 
   const dao = daosDictionary[site];
   const daosWithCompensation = ['arbitrum'];
@@ -37,18 +40,26 @@ export const getStaticProps: GetStaticProps<FAQProps, PathProps> = async ({
   }
 
   return {
-    props: { dao: site },
+    props: { dao: site, delegateAddress: delegateAddress || null },
   };
 };
 
 interface IFAQ {
   dao: string;
+  delegateAddress: string;
 }
 
-const DelegateCompesationPage = ({ dao }: IFAQ) => (
+const DelegateCompesationForumActivityPage = ({
+  dao,
+  delegateAddress,
+}: IFAQ) => (
   <DAOProvider selectedDAO={dao} shouldFetchInfo={false}>
-    <DelegateCompensationContainer />
+    <DelegateCompensationAdminContainer>
+      <DelegateCompensationAdminForumActivity
+        delegateAddress={delegateAddress}
+      />
+    </DelegateCompensationAdminContainer>
   </DAOProvider>
 );
 
-export default DelegateCompesationPage;
+export default DelegateCompesationForumActivityPage;

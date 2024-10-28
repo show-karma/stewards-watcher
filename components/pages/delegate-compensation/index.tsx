@@ -1,84 +1,19 @@
-import {
-  Button,
-  Flex,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Skeleton,
-  Spinner,
-  Switch,
-  Text,
-} from '@chakra-ui/react';
+import { Flex, Skeleton, Spinner, Switch, Text } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
 import { useEffect, useState } from 'react';
 import { api } from 'helpers';
 import { DelegateCompensationStats, DelegateStatsFromAPI } from 'types';
 import { formatSimpleNumber } from 'utils';
-import { useRouter } from 'next/router';
-import { DownChevron } from 'components/Icons';
+import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import { Table } from './Table';
+import { MonthDropdown } from './MonthDropdown';
 
 export const DelegateCompensation = () => {
   const { theme } = useDAO();
   const [delegates, setDelegates] = useState<DelegateCompensationStats[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [onlyOptIn, setOnlyOptIn] = useState(true);
-  const router = useRouter();
-  const [selectedDate, setSelectedDate] = useState(() => {
-    const queryString = router.asPath.split('?')[1];
-    const monthQuery = queryString?.match(/(?<=month=)[^&]*/i)?.[0];
-    const yearQuery = Number(queryString?.match(/(?<=year=)[^&]*/i)?.[0]);
-    const date = new Date('2024-10-03');
-    const currentMonth = date.getMonth() + 1;
-    const currentYear = date.getFullYear();
-    const startYear = 2024;
-    if (monthQuery || yearQuery) {
-      const year = yearQuery || currentYear;
-      const month = monthQuery
-        ? new Date(`${monthQuery} 1, ${year}`).getMonth()
-        : currentMonth;
-      const correctMonth = month > currentMonth ? currentMonth : month + 1;
-      const correctYear =
-        year > currentYear || year < startYear ? currentYear : year;
-      if (year > currentYear || year < startYear) {
-        // get last available month of the year
-        const lastAvailableMonth = currentMonth === 12 ? 12 : currentMonth;
-        return {
-          name: new Date(correctYear, lastAvailableMonth - 1, 1).toLocaleString(
-            'en-US',
-            {
-              month: 'long',
-            }
-          ),
-          value: {
-            month: lastAvailableMonth,
-            year: correctYear,
-          },
-        };
-      }
-
-      return {
-        name: new Date(correctYear, correctMonth - 1, 1).toLocaleString(
-          'en-US',
-          {
-            month: 'long',
-          }
-        ),
-        value: {
-          month: correctMonth,
-          year: correctYear,
-        },
-      };
-    }
-    return {
-      name: date.toLocaleString('en-US', { month: 'long' }),
-      value: {
-        month: currentMonth,
-        year: currentYear,
-      },
-    };
-  });
+  const { selectedDate } = useDelegateCompensation();
 
   const [optInCounter, setOptInCounter] = useState<number | undefined>(
     undefined
@@ -250,65 +185,6 @@ export const DelegateCompensation = () => {
     getPowerfulDelegates();
   }, [selectedDate]);
 
-  const { rootPathname } = useDAO();
-
-  const renderMonthList = () => {
-    const supportedDates = [];
-    const startYear = 2024;
-    const currentDate = new Date();
-
-    for (let year = startYear; year <= currentDate.getFullYear(); year += 1) {
-      for (let month = 0; month < 12; month += 1) {
-        if ((month === 0 && year === 2024) || (month === 1 && year === 2024)) {
-          // eslint-disable-next-line no-continue
-          continue;
-        }
-        if (
-          year === currentDate.getFullYear() &&
-          month > currentDate.getMonth()
-        ) {
-          break;
-        }
-        supportedDates.push({
-          name: new Date(year, month, 1).toLocaleString('en-US', {
-            month: 'long',
-          }),
-          value: {
-            month: month + 1,
-            year,
-          },
-        });
-      }
-    }
-
-    return supportedDates.map(itemDate => (
-      <MenuItem
-        key={itemDate.name}
-        bg={theme.filters.bg}
-        _hover={{ opacity: 0.7 }}
-        onClick={() => {
-          setSelectedDate({
-            name: itemDate.name,
-            value: itemDate.value,
-          });
-          router.push(
-            {
-              pathname: `/${rootPathname}/delegate-compensation`,
-              query: {
-                month: itemDate.name.toLowerCase(),
-                year: itemDate.value.year,
-              },
-            },
-            undefined,
-            { shallow: true }
-          );
-        }}
-      >
-        {itemDate.name} {itemDate.value.year}
-      </MenuItem>
-    ));
-  };
-
   return (
     <Flex
       flexDir={{ base: 'column', lg: 'row' }}
@@ -371,36 +247,7 @@ export const DelegateCompensation = () => {
             <Text color={theme.card.text} fontSize="lg">
               Month
             </Text>
-            <Menu>
-              <MenuButton
-                w="max-content"
-                bg={theme.filters.activeBg}
-                as={Button}
-                borderWidth="1px"
-                borderStyle="solid"
-                borderColor={theme.card.interests.text}
-                rightIcon={
-                  <DownChevron
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    boxSize="4"
-                  />
-                }
-              >
-                {selectedDate?.name} {selectedDate?.value.year}
-              </MenuButton>
-              <MenuList
-                _hover={{
-                  opacity: 0.7,
-                }}
-                bg={theme.filters.bg}
-                maxH={300}
-                overflowY="auto"
-              >
-                {renderMonthList()}
-              </MenuList>
-            </Menu>
+            <MonthDropdown />
           </Flex>
           <Switch
             display="flex"
