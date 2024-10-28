@@ -28,7 +28,15 @@ export type DelegateStatsFromAPI = {
     participationRate: string;
     payment: number;
     snapshotVoting: CompensationStatBreakdown;
-    delegateFeedback: CompensationStatBreakdown;
+    delegateFeedback: {
+      relevance: number;
+      depthAnalyses: number;
+      timing: number;
+      clarityAndCommunication: number;
+      impactOnDecision: number;
+      presenceInDiscussions: number;
+      score: number;
+    };
     totalParticipation: string;
     participationRatePercent: number;
   };

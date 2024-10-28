@@ -19,12 +19,11 @@ import { ChakraLink } from 'components/ChakraLink';
 import { TbExternalLink } from 'react-icons/tb';
 import { useAuth, useDAO } from 'contexts';
 import { useQuery } from '@tanstack/react-query';
-import { queryClient } from 'pages/_app';
 import { getProposals } from 'utils/delegate-compensation/getProposals';
 import axios from 'axios';
 
 export const DelegateCompensationAdmin = () => {
-  const { selectedDate } = useDelegateCompensation();
+  const { selectedDate, refreshDelegateInfo } = useDelegateCompensation();
   const { daoInfo, theme } = useDAO();
   const [actionsLoading, setActionsLoading] = useState<Record<string, boolean>>(
     {}
@@ -84,15 +83,8 @@ export const DelegateCompensationAdmin = () => {
           }
         )
         .then(() => {
-          queryClient
-            .invalidateQueries([
-              'delegate-compensation-proposals',
-              selectedDate?.value.month,
-              selectedDate?.value.year,
-            ])
-            .then(() => {
-              setActionsLoading({ [proposalId]: false });
-            });
+          refreshDelegateInfo();
+          setActionsLoading({ [proposalId]: false });
         });
     } catch (error) {
       console.log(error);

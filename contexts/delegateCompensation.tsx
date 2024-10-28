@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useQuery } from 'wagmi';
 import { getDelegateInfo } from 'utils/delegate-compensation/getDelegateInfo';
 import { DelegateStatsFromAPI } from 'types';
+import { queryClient } from 'pages/_app';
 import { useDAO } from './dao';
 
 interface DelegateCompensationContextType {
@@ -21,6 +22,7 @@ interface DelegateCompensationContextType {
   delegateInfo: DelegateStatsFromAPI | undefined;
   isFetchingDelegateInfo: boolean;
   isLoadingDelegateInfo: boolean;
+  refreshDelegateInfo: () => void;
 }
 
 const DelegateCompensationContext = createContext(
@@ -124,6 +126,7 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
     data: delegateInfo,
     isFetching: isFetchingDelegateInfo,
     isLoading: isLoadingDelegateInfo,
+    refetch: refetchDelegateInfo,
   } = useQuery(
     [
       'delegate-compensation-delegate-info',
@@ -143,6 +146,18 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
     }
   );
 
+  const refreshDelegateInfo = () => {
+    queryClient.invalidateQueries({
+      queryKey: [
+        'delegate-compensation-delegate-info',
+        delegateAddress,
+        selectedDate?.value.month,
+        selectedDate?.value.year,
+      ],
+    });
+    refetchDelegateInfo();
+  };
+
   const value = useMemo(
     () => ({
       selectedDate,
@@ -152,6 +167,7 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
       delegateInfo,
       isFetchingDelegateInfo,
       isLoadingDelegateInfo,
+      refreshDelegateInfo,
     }),
     [
       selectedDate,
@@ -161,6 +177,7 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
       delegateInfo,
       isFetchingDelegateInfo,
       isLoadingDelegateInfo,
+      refreshDelegateInfo,
     ]
   );
 

@@ -9,6 +9,7 @@ import { DelegatesDropdown } from './DelegatesDropdown';
 import { DelegateProposals } from './DelegateProposals';
 import { DelegateStatsBlock } from './DelegateStatsBlock';
 import { DelegateFeedback } from './DelegateFeedback';
+import { DelegateBP } from './DelegateBP';
 
 export const DelegateCompensationAdminDelegates = ({
   delegateAddress,
@@ -150,6 +151,7 @@ export const DelegateCompensationAdminDelegates = ({
                   />
                 </Flex>
                 <DelegateFeedback />
+                <DelegateBP />
                 <Box maxW="600px" w="full" mb="8">
                   <DelegateStatsBlock
                     blockName="Final Score"
@@ -195,10 +197,8 @@ export const DelegateCompensationAdminDelegates = ({
                         <Text>
                           {`DF - ${
                             delegateInfo?.stats.delegateFeedback?.score
-                              ? formatNumberPercentage(
-                                  delegateInfo?.stats.delegateFeedback?.score
-                                )
-                              : '0%'
+                              ? delegateInfo?.stats.delegateFeedback?.score
+                              : '0'
                           }`}
                         </Text>
                         <Text>

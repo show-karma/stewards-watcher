@@ -19,7 +19,6 @@ import { useAuth, useDAO } from 'contexts';
 import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import { API_ROUTES } from 'helpers';
 import { useToasty } from 'hooks';
-import { queryClient } from 'pages/_app';
 import { useState } from 'react';
 import { TbExternalLink } from 'react-icons/tb';
 import { DelegateStatsFromAPI } from 'types';
@@ -32,7 +31,7 @@ interface DelegateProposals {
 }
 
 export const DelegateProposals = ({ delegateVotes }: DelegateProposals) => {
-  const { selectedDate, delegateInfo, delegateAddress } =
+  const { selectedDate, delegateInfo, refreshDelegateInfo } =
     useDelegateCompensation();
   const { daoInfo, theme } = useDAO();
   const { authToken } = useAuth();
@@ -141,14 +140,7 @@ export const DelegateProposals = ({ delegateVotes }: DelegateProposals) => {
             title: 'Success',
             description: 'Posts saved successfully',
           });
-          queryClient.invalidateQueries({
-            queryKey: [
-              'delegate-compensation-delegate-info',
-              delegateAddress,
-              selectedDate?.value.month,
-              selectedDate?.value.year,
-            ],
-          });
+          refreshDelegateInfo();
         });
     } catch (error) {
       console.log(error);

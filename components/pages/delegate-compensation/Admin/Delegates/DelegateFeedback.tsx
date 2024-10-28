@@ -4,40 +4,84 @@ import {
   Flex,
   Text,
   Select,
-  Input,
   Button,
   Link,
   VStack,
   HStack,
 } from '@chakra-ui/react';
-import { useDAO } from 'contexts';
+import { useAuth, useDAO } from 'contexts';
 import { useDelegateCompensation } from 'contexts/delegateCompensation';
+import axios from 'axios';
+import { API_ROUTES } from 'helpers';
+import { useToasty } from 'hooks';
 
 export const DelegateFeedback = () => {
   const { theme, daoInfo, rootPathname } = useDAO();
-  const { delegateAddress } = useDelegateCompensation();
+  const { refreshDelegateInfo, delegateInfo, delegateAddress } =
+    useDelegateCompensation();
+  const { authToken } = useAuth();
+  const { toast } = useToasty();
   const [feedbackScores, setFeedbackScores] = useState({
-    relevance: '',
-    depthOfAnalysis: '',
-    timing: '',
-    clarityAndCommunication: '',
-    impact: '',
-    presence: '',
+    relevance: delegateInfo?.stats.delegateFeedback.relevance || 0,
+    depthAnalyses: delegateInfo?.stats.delegateFeedback.depthAnalyses || 0,
+    timing: delegateInfo?.stats.delegateFeedback.timing || 0,
+    clarityAndCommunication:
+      delegateInfo?.stats.delegateFeedback.clarityAndCommunication || 0,
+    impactOnDecision:
+      delegateInfo?.stats.delegateFeedback.impactOnDecision || 0,
+    presenceInDiscussions:
+      delegateInfo?.stats.delegateFeedback.presenceInDiscussions || 0,
   });
-  const [bonusPoints, setBonusPoints] = useState('');
+
+  const inputTitle = {
+    relevance: 'Relevance',
+    depthAnalyses: 'Depth of Analysis',
+    timing: 'Timing',
+    clarityAndCommunication: 'Clarity & Communication',
+    impactOnDecision: 'Impact',
+    presenceInDiscussions: 'Presence',
+  };
 
   const handleScoreChange = (field: string, value: string) => {
-    setFeedbackScores(prev => ({ ...prev, [field]: value }));
+    setFeedbackScores(prev => ({ ...prev, [field]: +(value || 0) }));
   };
 
-  const handleSaveFeedback = () => {
-    // TODO: Implement save functionality
-    console.log('Saving feedback:', feedbackScores);
-  };
+  const handleSaveFeedback = async () => {
+    try {
+      const authorizedAPI = axios.create({
+        timeout: 30000,
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: authToken ? `Bearer ${authToken}` : '',
+        },
+      });
 
-  const handleSaveBonusPoints = () => {
-    // TODO: Implement save functionality for bonus points
-    console.log('Saving bonus points:', bonusPoints);
+      await authorizedAPI
+        .put(
+          API_ROUTES.DELEGATE.CHANGE_INCENTIVE_PROGRAM_STATS(
+            daoInfo.config.DAO_KARMA_ID,
+            delegateInfo?.id || ''
+          ),
+          {
+            stats: {
+              delegateFeedback: {
+                ...delegateInfo?.stats.delegateFeedback,
+                ...feedbackScores,
+              },
+            },
+          }
+        )
+        .then(() => {
+          toast({
+            title: 'Success',
+            description: 'Delegate feedback saved successfully',
+          });
+          refreshDelegateInfo();
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -61,9 +105,7 @@ export const DelegateFeedback = () => {
           {Object.entries(feedbackScores).map(([key, value]) => (
             <Box key={key} flex="1" minW="150px">
               <Text color={theme.text} mb={1}>
-                {key
-                  .replace(/([A-Z])/g, ' $1')
-                  .replace(/^./, str => str.toUpperCase())}
+                {inputTitle[key as keyof typeof inputTitle]}
               </Text>
               <Select
                 value={value}
@@ -71,6 +113,7 @@ export const DelegateFeedback = () => {
                 placeholder="Select score"
                 bg={theme.card.background}
                 color={theme.text}
+                defaultValue={value}
               >
                 {[1, 2, 3, 4].map(score => (
                   <option
@@ -91,36 +134,6 @@ export const DelegateFeedback = () => {
         <Button onClick={handleSaveFeedback} alignSelf="flex-end">
           Save
         </Button>
-
-        <Box>
-          <Text color={theme.text} mb={1}>
-            Bonus Points
-          </Text>
-          <Flex>
-            <Input
-              type="number"
-              value={bonusPoints}
-              onChange={event => {
-                // doesn't change the value if it's not a number
-                if (event?.target?.value === '') {
-                  setBonusPoints('');
-                  return;
-                }
-                if (
-                  !event?.target?.value ||
-                  Number.isNaN(Number(event.target.value))
-                )
-                  return;
-                setBonusPoints(event.target.value);
-              }}
-              placeholder="Enter bonus points"
-              mr={2}
-              bg={theme.card.background}
-              color={theme.text}
-            />
-            <Button onClick={handleSaveBonusPoints}>Save</Button>
-          </Flex>
-        </Box>
       </VStack>
     </Box>
   );
