@@ -7,14 +7,16 @@ import { DelegateCompensationAdminDelegates } from 'components/pages/delegate-co
 
 interface PathProps extends ParsedUrlQuery {
   site: string;
+  delegateAddress: string;
 }
 
 interface FAQProps {
   dao: string;
+  delegateAddress: string | null;
 }
 
 export const getStaticPaths: GetStaticPaths<PathProps> = async () => {
-  const paths = [{ params: { site: 'arbitrum', delegateAddress: '' } }];
+  const paths = [{ params: { site: 'arbitrum', delegateAddress: '0x' } }];
 
   return {
     paths,
@@ -27,7 +29,7 @@ export const getStaticProps: GetStaticProps<FAQProps, PathProps> = async ({
 }) => {
   if (!params) throw new Error('No path parameters found');
 
-  const { site } = params;
+  const { site, delegateAddress } = params;
 
   const dao = daosDictionary[site];
   const daosWithCompensation = ['arbitrum'];
@@ -38,15 +40,19 @@ export const getStaticProps: GetStaticProps<FAQProps, PathProps> = async ({
   }
 
   return {
-    props: { dao: site },
+    props: {
+      dao: site,
+      delegateAddress: delegateAddress || null,
+    },
   };
 };
 
 interface IFAQ {
   dao: string;
+  delegateAddress: string | null;
 }
 
-const DelegateCompesationAdminPage = ({ dao }: IFAQ) => (
+const DelegateCompesationAdminPage = ({ dao, delegateAddress }: IFAQ) => (
   <DAOProvider selectedDAO={dao} shouldFetchInfo={false}>
     <DelegateCompensationAdminContainer>
       <DelegateCompensationAdminDelegates />

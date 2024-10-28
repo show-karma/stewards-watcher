@@ -128,7 +128,9 @@ export const DelegateProposals = ({ delegateVotes }: DelegateProposals) => {
           ),
           {
             stats: {
+              ...delegateInfo?.stats,
               communicatingRationale: {
+                ...delegateInfo?.stats.communicatingRationale,
                 breakdown: newBreakdown,
               },
             },
@@ -180,7 +182,7 @@ export const DelegateProposals = ({ delegateVotes }: DelegateProposals) => {
                   Type
                 </Th>
                 <Th borderColor={theme.card.border} color={theme.text}>
-                  Posted
+                  Voted
                 </Th>
                 <Th borderColor={theme.card.border} color={theme.text}>
                   CR

@@ -16,7 +16,7 @@ interface FAQProps {
 }
 
 export const getStaticPaths: GetStaticPaths<PathProps> = async () => {
-  const paths = [{ params: { site: 'arbitrum', delegateAddress: '' } }];
+  const paths = [{ params: { site: 'arbitrum', delegateAddress: '0x' } }];
 
   return {
     paths,

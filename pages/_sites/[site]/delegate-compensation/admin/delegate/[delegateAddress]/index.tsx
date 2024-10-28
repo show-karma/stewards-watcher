@@ -16,7 +16,7 @@ interface FAQProps {
 }
 
 export const getStaticPaths: GetStaticPaths<PathProps> = async () => {
-  const paths = [{ params: { site: 'arbitrum', delegateAddress: '' } }];
+  const paths = [{ params: { site: 'arbitrum', delegateAddress: '0x' } }];
 
   return {
     paths,
@@ -46,13 +46,12 @@ export const getStaticProps: GetStaticProps<FAQProps, PathProps> = async ({
 
 interface IFAQ {
   dao: string;
-  delegateAddress: string;
 }
 
-const DelegateCompesationAdminPage = ({ dao, delegateAddress }: IFAQ) => (
+const DelegateCompesationAdminPage = ({ dao }: IFAQ) => (
   <DAOProvider selectedDAO={dao} shouldFetchInfo={false}>
     <DelegateCompensationAdminContainer>
-      <DelegateCompensationAdminDelegates delegateAddress={delegateAddress} />
+      <DelegateCompensationAdminDelegates />
     </DelegateCompensationAdminContainer>
   </DAOProvider>
 );
