@@ -17,7 +17,7 @@ import axios from 'axios';
 import { ChakraLink } from 'components/ChakraLink';
 import { useAuth, useDAO } from 'contexts';
 import { useDelegateCompensation } from 'contexts/delegateCompensation';
-import { API_ROUTES } from 'helpers';
+import { API_ROUTES, KARMA_API } from 'helpers';
 import { useToasty } from 'hooks';
 import { useState } from 'react';
 import { TbExternalLink } from 'react-icons/tb';
@@ -100,6 +100,7 @@ export const DelegateProposals = ({ delegateVotes }: DelegateProposals) => {
     try {
       const authorizedAPI = axios.create({
         timeout: 30000,
+        baseURL: KARMA_API.base_url,
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',

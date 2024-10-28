@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import { useIsMounted } from 'hooks/useIsMounted';
 import { useToasty } from 'hooks';
-import { api, API_ROUTES } from 'helpers';
+import { api, API_ROUTES, KARMA_API } from 'helpers';
 import { useAccount } from 'wagmi';
 import axios from 'axios';
 import { checkRealAddress } from 'utils';
@@ -81,6 +81,7 @@ export const ProxyProvider: React.FC<ProviderProps> = ({ children }) => {
     if (!profileSelected?.address) return;
     const authorizedAPI = axios.create({
       timeout: 30000,
+      baseURL: KARMA_API.base_url,
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -111,6 +112,7 @@ export const ProxyProvider: React.FC<ProviderProps> = ({ children }) => {
     if (!profileSelected?.address) return;
     const authorizedAPI = axios.create({
       timeout: 30000,
+      baseURL: KARMA_API.base_url,
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',

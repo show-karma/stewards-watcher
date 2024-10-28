@@ -43,7 +43,7 @@ import { IoCopy } from 'react-icons/io5';
 import { formatNumberPercentage, truncateAddress } from 'utils';
 import { FaCheckCircle, FaExternalLinkAlt } from 'react-icons/fa';
 import { DownChevron } from 'components/Icons';
-import { API_ROUTES } from 'helpers';
+import { API_ROUTES, KARMA_API } from 'helpers';
 import debounce from 'lodash.debounce';
 import { AiFillQuestionCircle } from 'react-icons/ai';
 import { ApolloClient, gql, InMemoryCache } from '@apollo/client';
@@ -224,6 +224,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
     try {
       const authorizedAPI = axios.create({
         timeout: 30000,
+        baseURL: KARMA_API.base_url,
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',

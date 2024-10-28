@@ -12,7 +12,7 @@ import {
 import { useAuth, useDAO } from 'contexts';
 import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import axios from 'axios';
-import { API_ROUTES } from 'helpers';
+import { API_ROUTES, KARMA_API } from 'helpers';
 import { useToasty } from 'hooks';
 
 export const DelegateFeedback = () => {
@@ -50,6 +50,7 @@ export const DelegateFeedback = () => {
     try {
       const authorizedAPI = axios.create({
         timeout: 30000,
+        baseURL: KARMA_API.base_url,
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',

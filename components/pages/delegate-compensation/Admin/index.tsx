@@ -21,6 +21,7 @@ import { useAuth, useDAO } from 'contexts';
 import { useQuery } from '@tanstack/react-query';
 import { getProposals } from 'utils/delegate-compensation/getProposals';
 import axios from 'axios';
+import { KARMA_API } from 'helpers';
 
 export const DelegateCompensationAdmin = () => {
   const { selectedDate, refreshDelegateInfo } = useDelegateCompensation();
@@ -69,6 +70,7 @@ export const DelegateCompensationAdmin = () => {
       setActionsLoading({ [proposalId]: true });
       const authorizedAPI = axios.create({
         timeout: 30000,
+        baseURL: KARMA_API.base_url,
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
