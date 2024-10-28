@@ -22,6 +22,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getProposals } from 'utils/delegate-compensation/getProposals';
 import axios from 'axios';
 import { KARMA_API } from 'helpers';
+import { queryClient } from 'pages/_app';
 
 export const DelegateCompensationAdmin = () => {
   const { selectedDate, refreshDelegateInfo } = useDelegateCompensation();
@@ -35,6 +36,7 @@ export const DelegateCompensationAdmin = () => {
     data: proposals,
     isLoading,
     isFetching,
+    refetch,
   } = useQuery(
     [
       'delegate-compensation-proposals',
@@ -85,8 +87,15 @@ export const DelegateCompensationAdmin = () => {
           }
         )
         .then(() => {
-          refreshDelegateInfo();
-          setActionsLoading({ [proposalId]: false });
+          queryClient
+            .invalidateQueries([
+              'delegate-compensation-proposals',
+              selectedDate?.value.month,
+              selectedDate?.value.year,
+            ])
+            .then(() => {
+              setActionsLoading({ [proposalId]: false });
+            });
         });
     } catch (error) {
       console.log(error);
