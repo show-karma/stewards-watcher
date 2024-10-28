@@ -1,22 +1,23 @@
+export type DelegateStatsBreakdown = {
+  status: string;
+  post?: string | null;
+};
+
 export type CompensationStatBreakdown = {
   score: string;
   tn: string;
   rn: string;
-  breakdown?: Record<
-    string,
-    {
-      status: string;
-      post?: string | null;
-    }
-  >;
+  breakdown?: Record<string, DelegateStatsBreakdown>;
 };
 
 export type DelegateStatsFromAPI = {
+  id: number;
+  publicAddress: string;
   ensName: string;
+  discourseHandle: string;
+  discussionThread: string;
   name: string;
   profilePicture: string;
-  publicAddress: string;
-  id: number;
   incentiveOptedIn: boolean;
   votingPower: string;
   stats: {
@@ -27,6 +28,7 @@ export type DelegateStatsFromAPI = {
     participationRate: string;
     payment: number;
     snapshotVoting: CompensationStatBreakdown;
+    delegateFeedback: CompensationStatBreakdown;
     totalParticipation: string;
     participationRatePercent: number;
   };

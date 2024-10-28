@@ -5,7 +5,7 @@ import '@rainbow-me/rainbowkit/styles.css';
 import { Analytics } from '@vercel/analytics/react';
 import 'styles/navigator.css';
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
 const MyApp = ({ Component, pageProps }: AppProps) => (
   <QueryClientProvider client={queryClient}>
