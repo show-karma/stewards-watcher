@@ -3,6 +3,7 @@ import { ChakraLink } from 'components';
 import { AdminGuard } from 'components/pages/delegate-compensation/Admin/AdminGuard';
 import { MonthDropdown } from 'components/pages/delegate-compensation/MonthDropdown';
 import { useDAO } from 'contexts';
+import { useRouter } from 'next/router';
 
 export const DelegateCompensationAdminLayout = ({
   children,
@@ -10,6 +11,7 @@ export const DelegateCompensationAdminLayout = ({
   children: React.ReactNode;
 }) => {
   const { theme } = useDAO();
+  const { pathname } = useRouter();
 
   return (
     <AdminGuard>

@@ -26,6 +26,7 @@ import { KARMA_API } from 'helpers';
 import { queryClient } from 'pages/_app';
 import { useToasty } from 'hooks';
 import { AiFillQuestionCircle } from 'react-icons/ai';
+import { formatDate } from 'utils';
 
 export const DelegateCompensationAdmin = () => {
   const { selectedDate, refreshDelegateInfo } = useDelegateCompensation();
@@ -128,7 +129,14 @@ export const DelegateCompensationAdmin = () => {
           proposals?.map((category, categoryIndex) => (
             <Box key={categoryIndex} maxH="320px" overflowY="auto">
               <Heading size="md" mb={2} color={theme.text}>
-                {category.name} ({category.items.length})
+                {category.name}
+                {category.items.length
+                  ? ` - Total Proposals (${
+                      category.items.length
+                    }), Included Proposals (${
+                      category.items.filter(item => item.isValid).length
+                    })`
+                  : ' - No proposals'}
               </Heading>
               <Table variant="simple">
                 <Thead>
@@ -141,7 +149,14 @@ export const DelegateCompensationAdmin = () => {
                       Proposal Name
                     </Th>
                     <Th
-                      w="40%"
+                      w="20%"
+                      borderColor={theme.card.border}
+                      color={theme.text}
+                    >
+                      End Date
+                    </Th>
+                    <Th
+                      w="20%"
                       borderColor={theme.card.border}
                       color={theme.text}
                     >
@@ -185,7 +200,16 @@ export const DelegateCompensationAdmin = () => {
                         {item.name[0] === '#' ? '...' : ''}
                       </Td>
                       <Td
-                        w="40%"
+                        w="20%"
+                        color={theme.text}
+                        borderColor={theme.card.border}
+                      >
+                        <Text w="max-content">
+                          {formatDate(item.endDate as string, 'MMM D, YYYY')}
+                        </Text>
+                      </Td>
+                      <Td
+                        w="20%"
                         color={theme.text}
                         borderColor={theme.card.border}
                       >
