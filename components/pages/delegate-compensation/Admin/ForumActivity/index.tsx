@@ -3,6 +3,12 @@ import {
   Box,
   Flex,
   Heading,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
   Table,
   Tbody,
   Td,
@@ -19,6 +25,7 @@ import { DelegateCompensationAdminLayout } from 'layouts/delegateCompensationAdm
 import { TbExternalLink } from 'react-icons/tb';
 import { getForumActivity } from 'utils/delegate-compensation/getForumActivity';
 import dynamic from 'next/dynamic';
+import { useState } from 'react';
 import { DelegatesDropdown } from '../Delegates/DelegatesDropdown';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -33,6 +40,12 @@ export const DelegateCompensationAdminForumActivity = ({
   const { delegateInfo } = useDelegateCompensation();
   const { selectedDate } = useDelegateCompensation();
   const { theme } = useDAO();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPost, setSelectedPost] = useState<any | null>(null);
+
+  const onOpen = () => setIsModalOpen(true);
+  const onClose = () => setIsModalOpen(false);
 
   const {
     data: posts,
@@ -56,6 +69,48 @@ export const DelegateCompensationAdminForumActivity = ({
 
   return (
     <DelegateCompensationAdminLayout>
+      {isModalOpen ? (
+        <Modal isOpen={isModalOpen} onClose={onClose} size="xl">
+          <ModalOverlay />
+          <ModalContent rounded="lg">
+            <ModalHeader
+              bg={theme.modal.background}
+              textColor={theme.modal.statement.headline}
+            >
+              {selectedPost?.topic}
+            </ModalHeader>
+            <ModalCloseButton textColor={theme.modal.statement.headline} />
+            <ModalBody
+              bg={theme.modal.background}
+              textColor={theme.modal.statement.text}
+              maxH="80vh"
+              overflowY="auto"
+            >
+              <MDPreview source={selectedPost?.comment || ''} />
+              <Flex
+                flexDir="row"
+                gap="2"
+                alignItems="center"
+                borderBottom="1px solid"
+                borderColor="blue.500"
+                w="max-content"
+                mt="8"
+              >
+                <Text fontWeight="bold" color="blue.500">
+                  Link to post
+                </Text>
+                <ChakraLink
+                  isExternal
+                  href={selectedPost?.link}
+                  color="blue.500"
+                >
+                  <TbExternalLink />
+                </ChakraLink>
+              </Flex>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      ) : null}
       <Box w="full">
         <Flex flexDir="column" gap="4">
           <Heading fontSize="xl" fontWeight="bold" color={theme.text} mb="4">
@@ -85,7 +140,22 @@ export const DelegateCompensationAdminForumActivity = ({
               {posts?.map((post, index) => (
                 <Tr key={index} w="full">
                   <Td w="25%" minW="25%">
-                    <MDPreview source={post.comment} />
+                    <Box
+                      w="full"
+                      maxW="full"
+                      onClick={() => {
+                        onOpen();
+                        setSelectedPost(post);
+                      }}
+                      cursor="pointer"
+                      color="blue.500"
+                      textDecoration="underline"
+                      userSelect="none"
+                    >
+                      <MDPreview
+                        source={post.comment.split('\n').slice(0, 4).join('\n')}
+                      />
+                    </Box>
                   </Td>
                   <Td w="max-content">
                     <ChakraLink

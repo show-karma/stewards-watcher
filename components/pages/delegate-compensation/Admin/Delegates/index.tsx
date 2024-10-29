@@ -67,7 +67,7 @@ export const DelegateCompensationAdminDelegates = ({
               <Flex flexDir="row" alignItems="center" gap="4">
                 {/* do a dropdown */}
                 <DelegatesDropdown />
-                {delegateAddress ? (
+                {delegateInfo ? (
                   <Text>
                     Delegate stats -{' '}
                     {delegateInfo?.name

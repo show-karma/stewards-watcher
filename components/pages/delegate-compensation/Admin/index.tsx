@@ -12,6 +12,7 @@ import {
   Td,
   Flex,
   Spinner,
+  Tooltip,
 } from '@chakra-ui/react';
 import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import { DelegateCompensationAdminLayout } from 'layouts/delegateCompensationAdmin';
@@ -23,6 +24,8 @@ import { getProposals } from 'utils/delegate-compensation/getProposals';
 import axios from 'axios';
 import { KARMA_API } from 'helpers';
 import { queryClient } from 'pages/_app';
+import { useToasty } from 'hooks';
+import { AiFillQuestionCircle } from 'react-icons/ai';
 
 export const DelegateCompensationAdmin = () => {
   const { selectedDate, refreshDelegateInfo } = useDelegateCompensation();
@@ -31,6 +34,7 @@ export const DelegateCompensationAdmin = () => {
     {}
   );
   const { authToken } = useAuth();
+  const { toast } = useToasty();
 
   const {
     data: proposals,
@@ -87,6 +91,12 @@ export const DelegateCompensationAdmin = () => {
           }
         )
         .then(() => {
+          toast({
+            title: `This proposal will be ${
+              proposalChoice ? 'included' : 'excluded'
+            } from calculation`,
+            status: 'success',
+          });
           queryClient
             .invalidateQueries([
               'delegate-compensation-proposals',
@@ -118,7 +128,7 @@ export const DelegateCompensationAdmin = () => {
           proposals?.map((category, categoryIndex) => (
             <Box key={categoryIndex} maxH="320px" overflowY="auto">
               <Heading size="md" mb={2} color={theme.text}>
-                {category.name}
+                {category.name} ({category.items.length})
               </Heading>
               <Table variant="simple">
                 <Thead>
@@ -142,7 +152,24 @@ export const DelegateCompensationAdmin = () => {
                       borderColor={theme.card.border}
                       color={theme.text}
                     >
-                      Actions
+                      <Flex flexDir="row" gap="2" alignItems="center">
+                        Actions
+                        <Tooltip
+                          placement="top"
+                          label="Enable or Disable proposals to consider in the calculations for this month"
+                          hasArrow
+                          bgColor="white"
+                          color="rgba(0,0,0,0.7)"
+                          fontWeight="normal"
+                          fontSize="sm"
+                          borderRadius={10}
+                          p="3"
+                        >
+                          <Text as="span">
+                            <AiFillQuestionCircle cursor="help" />
+                          </Text>
+                        </Tooltip>
+                      </Flex>
                     </Th>
                   </Tr>
                 </Thead>
@@ -155,6 +182,7 @@ export const DelegateCompensationAdmin = () => {
                         borderColor={theme.card.border}
                       >
                         {item.name}
+                        {item.name[0] === '#' ? '...' : ''}
                       </Td>
                       <Td
                         w="40%"

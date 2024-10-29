@@ -139,7 +139,7 @@ export const DelegateProposals = ({ delegateVotes }: DelegateProposals) => {
         .then(() => {
           toast({
             title: 'Success',
-            description: 'Posts saved successfully',
+            description: 'Successfully saved the Communication Rationale',
           });
           refreshDelegateInfo();
         });
@@ -151,7 +151,8 @@ export const DelegateProposals = ({ delegateVotes }: DelegateProposals) => {
   return (
     <Flex w="full" flexDir="column" gap="8">
       <Heading size="md" color={theme.text}>
-        Proposals - {selectedDate?.name} {selectedDate?.value.year}
+        Proposals - {selectedDate?.name} {selectedDate?.value.year} (
+        {proposalsAndVotes?.length})
       </Heading>
       {proposalsFetching || proposalsLoading ? (
         <Flex w="full" justify="center" align="center">
@@ -187,6 +188,7 @@ export const DelegateProposals = ({ delegateVotes }: DelegateProposals) => {
                 <Tr opacity={!item.isValid ? 0.5 : 1} key={itemIndex}>
                   <Td color={theme.text} borderColor={theme.card.border}>
                     {item.name}
+                    {item.name[0] === '#' ? '...' : ''}
                   </Td>
                   <Td color={theme.text} borderColor={theme.card.border}>
                     <Text w="max-content">
@@ -243,7 +245,7 @@ export const DelegateProposals = ({ delegateVotes }: DelegateProposals) => {
                       ) => {
                         const newProposals = [...proposalsAndVotes];
                         const findProposal = newProposals?.find(
-                          proposal => proposal.postId === item.postId
+                          proposal => proposal.id === item.id
                         );
                         if (findProposal) {
                           findProposal.post =
