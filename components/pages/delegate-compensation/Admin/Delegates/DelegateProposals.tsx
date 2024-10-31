@@ -18,7 +18,6 @@ import {
   ModalContent,
   ModalHeader,
   ModalCloseButton,
-  Icon,
   ModalBody,
 } from '@chakra-ui/react';
 import axios from 'axios';
@@ -37,7 +36,6 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import debounce from 'lodash.debounce';
-import { IoEyeSharp } from 'react-icons/io5';
 import { ProposalItem } from 'types/proposals';
 import dynamic from 'next/dynamic';
 
@@ -417,23 +415,42 @@ export const DelegateProposals = ({
                           }}
                         />
                         {item.rationale ? (
-                          <Tooltip label="See post content">
-                            <Flex
-                              bg={theme.card.background}
-                              px="1"
-                              py="1"
-                              rounded="full"
-                              width="24px"
-                              height="24px"
-                              alignItems="center"
-                              justifyContent="center"
-                              onClick={() => setRationaleSelected(item)}
-                              cursor="pointer"
-                            >
-                              <Icon as={IoEyeSharp} w="12px" h="12px" />
-                            </Flex>
-                          </Tooltip>
+                          <Flex
+                            display="flex"
+                            flexDir="row"
+                            gap="1"
+                            alignItems="center"
+                            onClick={() => setRationaleSelected(item)}
+                            cursor="pointer"
+                            color="blue.500"
+                            borderBottom="1px solid"
+                            borderColor="blue.500"
+                            w="max-content"
+                            _hover={{
+                              textDecoration: 'none',
+                              color: 'blue.400',
+                              borderColor: 'blue.400',
+                            }}
+                          >
+                            See
+                          </Flex>
                         ) : (
+                          // <Tooltip label="See post content">
+                          //   <Flex
+                          //     bg={theme.card.background}
+                          //     px="1"
+                          //     py="1"
+                          //     rounded="full"
+                          //     width="24px"
+                          //     height="24px"
+                          //     alignItems="center"
+                          //     justifyContent="center"
+                          //     onClick={() => setRationaleSelected(item)}
+                          //     cursor="pointer"
+                          //   >
+                          //     <Icon as={IoEyeSharp} w="12px" h="12px" />
+                          //   </Flex>
+                          // </Tooltip>
                           <Flex width="24px" height="24px" />
                         )}
                       </Flex>
