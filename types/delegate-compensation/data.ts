@@ -1,6 +1,10 @@
 export type DelegateStatsBreakdown = {
-  status: string;
   post?: string | null;
+  updated?: 'manually';
+  validRationale?: boolean;
+  voted?: boolean;
+  proposalTopic?: string;
+  rationale?: string;
 };
 
 export type CompensationStatBreakdown = {

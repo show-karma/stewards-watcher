@@ -126,139 +126,141 @@ export const DelegateCompensationAdmin = () => {
             <Spinner size="xl" />
           </Flex>
         ) : (
-          proposals?.map((category, categoryIndex) => (
-            <Box key={categoryIndex} maxH="320px" overflowY="auto">
-              <Heading size="md" mb={2} color={theme.text}>
-                {category.name}
-                {category.items.length
-                  ? ` - Total Proposals (${
-                      category.items.length
-                    }), Included Proposals (${
-                      category.items.filter(item => item.isValid).length
-                    })`
-                  : ' - No proposals'}
-              </Heading>
-              <Table variant="simple">
-                <Thead>
-                  <Tr>
-                    <Th
-                      w="40%"
-                      borderColor={theme.card.border}
-                      color={theme.text}
-                    >
-                      Proposal Name
-                    </Th>
-                    <Th
-                      w="20%"
-                      borderColor={theme.card.border}
-                      color={theme.text}
-                    >
-                      End Date
-                    </Th>
-                    <Th
-                      w="20%"
-                      borderColor={theme.card.border}
-                      color={theme.text}
-                    >
-                      Link
-                    </Th>
-                    <Th
-                      w="20%"
-                      borderColor={theme.card.border}
-                      color={theme.text}
-                    >
-                      <Flex flexDir="row" gap="2" alignItems="center">
-                        Actions
-                        <Tooltip
-                          placement="top"
-                          label="Enable or Disable proposals to consider in the calculations for this month"
-                          hasArrow
-                          bgColor="white"
-                          color="rgba(0,0,0,0.7)"
-                          fontWeight="normal"
-                          fontSize="sm"
-                          borderRadius={10}
-                          p="3"
-                        >
-                          <Text as="span">
-                            <AiFillQuestionCircle cursor="help" />
-                          </Text>
-                        </Tooltip>
-                      </Flex>
-                    </Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {category.items.map((item, itemIndex) => (
-                    <Tr opacity={!item.isValid ? 0.5 : 1} key={itemIndex}>
-                      <Td
+          <Flex flexDir="column" gap="20">
+            {proposals?.map((category, categoryIndex) => (
+              <Box key={categoryIndex} maxH="320px" overflowY="auto">
+                <Heading size="md" mb={2} color={theme.text}>
+                  {category.name}
+                  {category.items.length
+                    ? ` - Total Proposals (${
+                        category.items.length
+                      }), Included Proposals (${
+                        category.items.filter(item => item.isValid).length
+                      })`
+                    : ' - No proposals'}
+                </Heading>
+                <Table variant="simple">
+                  <Thead>
+                    <Tr>
+                      <Th
                         w="40%"
-                        color={theme.text}
                         borderColor={theme.card.border}
+                        color={theme.text}
                       >
-                        {item.name}
-                        {item.name[0] === '#' ? '...' : ''}
-                      </Td>
-                      <Td
+                        Proposal Name
+                      </Th>
+                      <Th
                         w="20%"
-                        color={theme.text}
                         borderColor={theme.card.border}
+                        color={theme.text}
                       >
-                        <Text w="max-content">
-                          {formatDate(item.endDate as string, 'MMM D, YYYY')}
-                        </Text>
-                      </Td>
-                      <Td
+                        End Date
+                      </Th>
+                      <Th
                         w="20%"
-                        color={theme.text}
                         borderColor={theme.card.border}
+                        color={theme.text}
                       >
-                        {item.link ? (
-                          <ChakraLink
-                            display="flex"
-                            flexDir="row"
-                            gap="1"
-                            alignItems="center"
-                            href={item.link}
-                            isExternal
-                            color="blue.500"
-                            borderBottom="1px solid"
-                            borderColor="blue.500"
-                            w="fit-content"
-                            _hover={{
-                              textDecoration: 'none',
-                              color: 'blue.400',
-                              borderColor: 'blue.400',
-                            }}
-                          >
-                            See proposal
-                            <TbExternalLink />
-                          </ChakraLink>
-                        ) : null}
-                      </Td>
-                      <Td
+                        Link
+                      </Th>
+                      <Th
                         w="20%"
-                        color={theme.text}
                         borderColor={theme.card.border}
+                        color={theme.text}
                       >
                         <Flex flexDir="row" gap="2" alignItems="center">
-                          <Switch
-                            isChecked={item.isValid}
-                            onChange={() =>
-                              toggleInclude(item.id, !item.isValid)
-                            }
-                            isDisabled={actionsLoading[item.id]}
-                            disabled={actionsLoading[item.id]}
-                          />
-                          {actionsLoading[item.id] && <Spinner size="xs" />}
+                          Actions
+                          <Tooltip
+                            placement="top"
+                            label="Enable or Disable proposals to consider in the calculations for this month"
+                            hasArrow
+                            bgColor="white"
+                            color="rgba(0,0,0,0.7)"
+                            fontWeight="normal"
+                            fontSize="sm"
+                            borderRadius={10}
+                            p="3"
+                          >
+                            <Text as="span">
+                              <AiFillQuestionCircle cursor="help" />
+                            </Text>
+                          </Tooltip>
                         </Flex>
-                      </Td>
+                      </Th>
                     </Tr>
-                  ))}
-                </Tbody>
-              </Table>
-            </Box>
-          ))
+                  </Thead>
+                  <Tbody>
+                    {category.items.map((item, itemIndex) => (
+                      <Tr opacity={!item.isValid ? 0.5 : 1} key={itemIndex}>
+                        <Td
+                          w="40%"
+                          color={theme.text}
+                          borderColor={theme.card.border}
+                        >
+                          {item.name}
+                          {item.name[0] === '#' ? '...' : ''}
+                        </Td>
+                        <Td
+                          w="20%"
+                          color={theme.text}
+                          borderColor={theme.card.border}
+                        >
+                          <Text w="max-content">
+                            {formatDate(item.endDate as string, 'MMM D, YYYY')}
+                          </Text>
+                        </Td>
+                        <Td
+                          w="20%"
+                          color={theme.text}
+                          borderColor={theme.card.border}
+                        >
+                          {item.link ? (
+                            <ChakraLink
+                              display="flex"
+                              flexDir="row"
+                              gap="1"
+                              alignItems="center"
+                              href={item.link}
+                              isExternal
+                              color="blue.500"
+                              borderBottom="1px solid"
+                              borderColor="blue.500"
+                              w="fit-content"
+                              _hover={{
+                                textDecoration: 'none',
+                                color: 'blue.400',
+                                borderColor: 'blue.400',
+                              }}
+                            >
+                              See proposal
+                              <TbExternalLink />
+                            </ChakraLink>
+                          ) : null}
+                        </Td>
+                        <Td
+                          w="20%"
+                          color={theme.text}
+                          borderColor={theme.card.border}
+                        >
+                          <Flex flexDir="row" gap="2" alignItems="center">
+                            <Switch
+                              isChecked={item.isValid}
+                              onChange={() =>
+                                toggleInclude(item.id, !item.isValid)
+                              }
+                              isDisabled={actionsLoading[item.id]}
+                              disabled={actionsLoading[item.id]}
+                            />
+                            {actionsLoading[item.id] && <Spinner size="xs" />}
+                          </Flex>
+                        </Td>
+                      </Tr>
+                    ))}
+                  </Tbody>
+                </Table>
+              </Box>
+            ))}
+          </Flex>
         )}
       </Flex>
     </DelegateCompensationAdminLayout>

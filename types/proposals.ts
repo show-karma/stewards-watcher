@@ -14,14 +14,17 @@ export interface ProposalsFromAPI {
   >;
 }
 
+export interface ProposalItem {
+  id: string;
+  name: string;
+  link: string;
+  isValid: boolean;
+  endDate?: string;
+  proposalTopic?: string;
+  type: 'snapshot' | 'onChain';
+}
+
 export interface Proposal {
   name: string;
-  items: {
-    id: string;
-    name: string;
-    link: string;
-    isValid: boolean;
-    endDate?: string;
-    type: 'snapshot' | 'onChain';
-  }[];
+  items: ProposalItem[];
 }

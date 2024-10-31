@@ -235,8 +235,6 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       const newBreakdown = delegate.communicatingRationale.breakdown;
       data.communicatingRationale.breakdown?.forEach(item => {
         if (newBreakdown && item.proposal && item.communicated) {
-          newBreakdown[item.proposal].status = item.communicated;
-          if (item.post) newBreakdown[item.proposal].status = 'posted';
           newBreakdown[item.proposal].post = item.post || null;
         }
       });
@@ -716,11 +714,10 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                                           const id = hasProposalUrl(key)
                                             ? key.split('-')[0]
                                             : key;
-                                          const choice =
-                                            item.breakdown?.[key].status ===
-                                            'not_posted'
-                                              ? 'No'
-                                              : 'Yes';
+                                          const choice = item.breakdown?.[key]
+                                            ?.post
+                                            ? 'Yes'
+                                            : 'No';
                                           const post =
                                             item.breakdown?.[key].post;
                                           return (
