@@ -33,6 +33,7 @@ export const WithdrawPopover: FC = () => {
       setLoading(true);
       const authorizedAPI = axios.create({
         timeout: 30000,
+        baseURL: KARMA_API.base_url,
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',

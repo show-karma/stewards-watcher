@@ -1,22 +1,27 @@
+export type DelegateStatsBreakdown = {
+  post?: string | null;
+  updated?: 'manually';
+  validRationale?: boolean;
+  voted?: boolean;
+  proposalTopic?: string;
+  rationale?: string;
+};
+
 export type CompensationStatBreakdown = {
   score: string;
   tn: string;
   rn: string;
-  breakdown?: Record<
-    string,
-    {
-      status: string;
-      post?: string | null;
-    }
-  >;
+  breakdown?: Record<string, DelegateStatsBreakdown>;
 };
 
 export type DelegateStatsFromAPI = {
+  id: number;
+  publicAddress: string;
   ensName: string;
+  discourseHandle: string;
+  discussionThread: string;
   name: string;
   profilePicture: string;
-  publicAddress: string;
-  id: number;
   incentiveOptedIn: boolean;
   votingPower: string;
   stats: {
@@ -27,6 +32,15 @@ export type DelegateStatsFromAPI = {
     participationRate: string;
     payment: number;
     snapshotVoting: CompensationStatBreakdown;
+    delegateFeedback: {
+      relevance: number;
+      depthAnalyses: number;
+      timing: number;
+      clarityAndCommunication: number;
+      impactOnDecision: number;
+      presenceInDiscussions: number;
+      score: number;
+    };
     totalParticipation: string;
     participationRatePercent: number;
   };

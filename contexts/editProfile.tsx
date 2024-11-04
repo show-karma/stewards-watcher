@@ -255,6 +255,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
   const sendAcceptedTerms = async () => {
     const authorizedAPI = axios.create({
       timeout: 30000,
+      baseURL: KARMA_API.base_url,
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -319,6 +320,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       try {
         const authorizedAPI = axios.create({
           timeout: 30000,
+          baseURL: KARMA_API.base_url,
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
@@ -369,6 +371,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       try {
         const authorizedAPI = axios.create({
           timeout: 30000,
+          baseURL: KARMA_API.base_url,
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
@@ -397,6 +400,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
         try {
           const authorizedAPI = axios.create({
             timeout: 30000,
+            baseURL: KARMA_API.base_url,
             headers: {
               Accept: 'application/json',
               'Content-Type': 'application/json',
@@ -451,6 +455,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       try {
         const authorizedAPI = axios.create({
           timeout: 30000,
+          baseURL: KARMA_API.base_url,
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
@@ -514,6 +519,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
     try {
       const authorizedAPI = axios.create({
         timeout: 30000,
+        baseURL: KARMA_API.base_url,
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',

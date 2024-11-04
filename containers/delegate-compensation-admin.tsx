@@ -12,15 +12,11 @@ import React from 'react';
 import { Flex } from '@chakra-ui/react';
 import Script from 'next/script';
 import dynamic from 'next/dynamic';
-import { DelegateCompensation, HeaderHat } from 'components';
+import { HeaderHat } from 'components';
 import { DelegateCompensationProvider } from 'contexts/delegateCompensation';
 
 const RainbowWrapper = dynamic(() =>
   import('components').then(module => module.RainbowWrapper)
-);
-
-const DelegatesList = dynamic(() =>
-  import('components').then(module => module.DelegatesList)
 );
 
 const AuthProvider = dynamic(() =>
@@ -31,14 +27,15 @@ const HandlesProvider = dynamic(() =>
   import('contexts/handles').then(module => module.HandlesProvider)
 );
 
-interface IDelegateCompensationContainer {
+interface IDelegateCompensationAdminContainer {
   user?: string;
   shouldOpenDelegateToAnyone?: boolean;
+  children: React.ReactNode;
 }
 
-export const DelegateCompensationContainer: React.FC<
-  IDelegateCompensationContainer
-> = ({ user, shouldOpenDelegateToAnyone }) => {
+export const DelegateCompensationAdminContainer: React.FC<
+  IDelegateCompensationAdminContainer
+> = ({ user, shouldOpenDelegateToAnyone, children }) => {
   const { daoInfo, theme } = useDAO();
   const { config } = daoInfo;
 
@@ -95,10 +92,10 @@ export const DelegateCompensationContainer: React.FC<
         onLoad={() => console.log('Google-Analytics code setup')}
       >
         {`window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-  
-                gtag('config', '${config.DAO_GTAG}');`}
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+    
+                  gtag('config', '${config.DAO_GTAG}');`}
       </Script>
       <RainbowWrapper>
         <DelegatesProvider>
@@ -119,9 +116,7 @@ export const DelegateCompensationContainer: React.FC<
                             shouldOpenDelegateToAnyone
                           }
                         />
-                        <MainLayout w="full">
-                          <DelegateCompensation />
-                        </MainLayout>
+                        <MainLayout w="full">{children}</MainLayout>
                       </Flex>
                     </DelegateCompensationProvider>
                   </HandlesProvider>
