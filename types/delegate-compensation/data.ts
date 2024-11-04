@@ -64,6 +64,9 @@ export type DelegateCompensationStats = {
   onChainVoting: CompensationStatBreakdown;
   communicatingRationale: CompensationStatBreakdown;
   commentingProposal: CompensationStatBreakdown;
+  delegateFeedback?: {
+    score: string;
+  };
   bonusPoint: string;
   totalParticipation: string;
   payment: string;

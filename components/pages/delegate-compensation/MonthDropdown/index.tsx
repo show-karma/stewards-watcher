@@ -14,22 +14,20 @@ export const MonthDropdown: FC = () => {
     const supportedDates = [];
     const startYear = 2024;
     const currentDate = new Date();
-
     for (let year = startYear; year <= currentDate.getFullYear(); year += 1) {
       for (let month = 0; month < 12; month += 1) {
         if ((month === 0 && year === 2024) || (month === 1 && year === 2024)) {
           // eslint-disable-next-line no-continue
           continue;
         }
+
         if (
           year === currentDate.getFullYear() &&
           month > currentDate.getMonth()
         ) {
           break;
         }
-        if (year > 2024 || (month >= 10 && year === 2024)) {
-          break;
-        }
+
         supportedDates.push({
           name: new Date(year, month, 1).toLocaleString('en-US', {
             month: 'long',
@@ -58,19 +56,50 @@ export const MonthDropdown: FC = () => {
             name: itemDate.name,
             value: itemDate.value,
           });
-          router.push(
-            {
-              pathname: router.pathname.includes('/admin')
-                ? `/${rootPathname}/delegate-compensation/admin`
-                : `/${rootPathname}/delegate-compensation`,
-              query: {
-                month: itemDate.name.toLowerCase(),
-                year: itemDate.value.year,
+          const isAdminPage = router.pathname.includes('/admin');
+          if (isAdminPage) {
+            router.push(
+              {
+                pathname: `/${rootPathname}/delegate-compensation/admin`,
+                query: {
+                  month: itemDate.name.toLowerCase(),
+                  year: itemDate.value.year,
+                },
               },
-            },
-            undefined,
-            { shallow: true }
-          );
+              undefined,
+              { shallow: true }
+            );
+          } else {
+            const isOldVersion = router.pathname.includes('-old');
+            if (
+              (itemDate.value.month >= 11 && itemDate.value.year === 2024) ||
+              itemDate.value.year > 2024
+            ) {
+              router.push(
+                {
+                  pathname: `/${rootPathname}/delegate-compensation`,
+                  query: {
+                    month: itemDate.name.toLowerCase(),
+                    year: itemDate.value.year,
+                  },
+                },
+                undefined,
+                { shallow: !isOldVersion }
+              );
+            } else {
+              router.push(
+                {
+                  pathname: `/${rootPathname}/delegate-compensation-old`,
+                  query: {
+                    month: itemDate.name.toLowerCase(),
+                    year: itemDate.value.year,
+                  },
+                },
+                undefined,
+                { shallow: !!isOldVersion }
+              );
+            }
+          }
         }}
       >
         {itemDate.name} {itemDate.value.year}

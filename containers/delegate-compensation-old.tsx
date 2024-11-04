@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import { Flex } from '@chakra-ui/react';
-import { HeaderHat } from 'components';
-import { DelegateCompensation } from 'components/pages/delegate-compensation';
+import { DelegateCompensationOld, HeaderHat } from 'components';
 import {
   DelegatesProvider,
   GovernanceVotesProvider,
@@ -32,13 +31,13 @@ const HandlesProvider = dynamic(() =>
   import('contexts/handles').then(module => module.HandlesProvider)
 );
 
-interface IDelegateCompensationContainer {
+interface IDelegateCompensationOldContainer {
   user?: string;
   shouldOpenDelegateToAnyone?: boolean;
 }
 
-export const DelegateCompensationContainer: React.FC<
-  IDelegateCompensationContainer
+export const DelegateCompensationOldContainer: React.FC<
+  IDelegateCompensationOldContainer
 > = ({ user, shouldOpenDelegateToAnyone }) => {
   const { daoInfo, theme } = useDAO();
   const { config } = daoInfo;
@@ -121,7 +120,7 @@ export const DelegateCompensationContainer: React.FC<
                           }
                         />
                         <MainLayout w="full">
-                          <DelegateCompensation />
+                          <DelegateCompensationOld />
                         </MainLayout>
                       </Flex>
                     </DelegateCompensationProvider>

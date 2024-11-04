@@ -1,4 +1,4 @@
-import { DelegateCompensationContainer } from 'containers/delegate-compensation';
+import { DelegateCompensationOldContainer } from 'containers/delegate-compensation-old';
 import { DAOProvider } from 'contexts/dao';
 import { daosDictionary } from 'helpers';
 import { GetStaticPaths, GetStaticProps } from 'next';
@@ -45,10 +45,10 @@ interface IFAQ {
   dao: string;
 }
 
-const DelegateCompensationPage = ({ dao }: IFAQ) => (
+const DelegateCompensationOldPage = ({ dao }: IFAQ) => (
   <DAOProvider selectedDAO={dao} shouldFetchInfo={false}>
-    <DelegateCompensationContainer />
+    <DelegateCompensationOldContainer />
   </DAOProvider>
 );
 
-export default DelegateCompensationPage;
+export default DelegateCompensationOldPage;

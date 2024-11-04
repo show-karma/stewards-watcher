@@ -5,10 +5,10 @@ import { api } from 'helpers';
 import { useEffect, useState } from 'react';
 import { DelegateCompensationStats, DelegateStatsFromAPI } from 'types';
 import { formatSimpleNumber } from 'utils';
-import { MonthDropdown } from './MonthDropdown';
+import { MonthDropdown } from '../MonthDropdown';
 import { Table } from './Table';
 
-export const DelegateCompensation = () => {
+export const DelegateCompensationOld = () => {
   const { theme } = useDAO();
   const [delegates, setDelegates] = useState<DelegateCompensationStats[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -91,12 +91,6 @@ export const DelegateCompensation = () => {
             ),
           };
 
-          const delegateFeedback = {
-            score: formatSimpleNumber(
-              delegate.stats?.delegateFeedback?.score?.toString() || '0'
-            ),
-          };
-
           return {
             id: delegate.id,
             delegate: {
@@ -117,7 +111,6 @@ export const DelegateCompensation = () => {
             onChainVoting,
             communicatingRationale,
             commentingProposal,
-            delegateFeedback,
             totalParticipation: delegate.stats.totalParticipation,
             payment: formatSimpleNumber(delegate.stats.payment),
             bonusPoint: delegate.stats.bonusPoint.toString(),

@@ -43,13 +43,18 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
     const yearQuery = Number(queryString?.match(/(?<=year=)[^&]*/i)?.[0]);
     const currentDate = new Date();
     const currentDay = currentDate.getDate();
+    const isOldVersion = router.asPath.includes('delegate-compensation-old');
     let date = new Date(
       currentDate.getFullYear(),
       currentDay >= 10 ? currentDate.getMonth() : currentDate.getMonth() - 1,
       10
     );
-    if (date >= new Date('2024-10-10')) {
-      date = new Date('2024-10-10');
+    if (isOldVersion) {
+      if (date >= new Date('2024-10-10')) {
+        date = new Date('2024-10-10');
+      }
+    } else if (date <= new Date('2024-11-11')) {
+      date = new Date('2024-11-11');
     }
     const currentMonth = date.getMonth() + 1;
     const currentYear = date.getFullYear();
@@ -59,7 +64,7 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
       let month = monthQuery
         ? new Date(`${monthQuery} 1, ${year}`).getMonth()
         : currentMonth;
-      if (year > 2024 || (year === 2024 && month >= 10)) {
+      if ((year > 2024 || (year === 2024 && month >= 10)) && isOldVersion) {
         month = 9;
         year = 2024;
       }
