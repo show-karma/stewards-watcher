@@ -1,9 +1,9 @@
-import React, { createContext, useContext, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useQuery } from 'wagmi';
-import { getDelegateInfo } from 'utils/delegate-compensation/getDelegateInfo';
-import { DelegateStatsFromAPI } from 'types';
 import { queryClient } from 'pages/_app';
+import React, { createContext, useContext, useMemo, useState } from 'react';
+import { DelegateStatsFromAPI } from 'types';
+import { getDelegateInfo } from 'utils/delegate-compensation/getDelegateInfo';
+import { useQuery } from 'wagmi';
 import { useDAO } from './dao';
 
 interface DelegateCompensationContextType {
@@ -43,19 +43,26 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
     const yearQuery = Number(queryString?.match(/(?<=year=)[^&]*/i)?.[0]);
     const currentDate = new Date();
     const currentDay = currentDate.getDate();
-    const date = new Date(
+    let date = new Date(
       currentDate.getFullYear(),
       currentDay >= 10 ? currentDate.getMonth() : currentDate.getMonth() - 1,
       10
     );
+    if (date >= new Date('2024-10-10')) {
+      date = new Date('2024-10-10');
+    }
     const currentMonth = date.getMonth() + 1;
     const currentYear = date.getFullYear();
     const startYear = 2024;
     if (monthQuery || yearQuery) {
-      const year = yearQuery || currentYear;
-      const month = monthQuery
+      let year = yearQuery || currentYear;
+      let month = monthQuery
         ? new Date(`${monthQuery} 1, ${year}`).getMonth()
         : currentMonth;
+      if (year > 2024 || (year === 2024 && month >= 10)) {
+        month = 9;
+        year = 2024;
+      }
       const correctMonth = month > currentMonth ? currentMonth : month + 1;
       const correctYear =
         year > currentYear || year < startYear ? currentYear : year;

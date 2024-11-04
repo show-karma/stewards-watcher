@@ -1,4 +1,4 @@
-import { Button, Menu, MenuList, MenuItem, MenuButton } from '@chakra-ui/react';
+import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { DownChevron } from 'components/Icons';
 import { useDAO } from 'contexts';
 import { useDelegateCompensation } from 'contexts/delegateCompensation';
@@ -25,6 +25,9 @@ export const MonthDropdown: FC = () => {
           year === currentDate.getFullYear() &&
           month > currentDate.getMonth()
         ) {
+          break;
+        }
+        if (year > 2024 || (month >= 10 && year === 2024)) {
           break;
         }
         supportedDates.push({

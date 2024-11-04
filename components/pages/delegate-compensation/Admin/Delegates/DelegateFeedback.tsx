@@ -22,15 +22,15 @@ export const DelegateFeedback = () => {
   const { authToken } = useAuth();
   const { toast } = useToasty();
   const [feedbackScores, setFeedbackScores] = useState({
-    relevance: delegateInfo?.stats.delegateFeedback.relevance || 0,
-    depthAnalyses: delegateInfo?.stats.delegateFeedback.depthAnalyses || 0,
-    timing: delegateInfo?.stats.delegateFeedback.timing || 0,
+    relevance: delegateInfo?.stats?.delegateFeedback?.relevance || 0,
+    depthAnalyses: delegateInfo?.stats?.delegateFeedback?.depthAnalyses || 0,
+    timing: delegateInfo?.stats?.delegateFeedback?.timing || 0,
     clarityAndCommunication:
-      delegateInfo?.stats.delegateFeedback.clarityAndCommunication || 0,
+      delegateInfo?.stats?.delegateFeedback?.clarityAndCommunication || 0,
     impactOnDecision:
-      delegateInfo?.stats.delegateFeedback.impactOnDecision || 0,
+      delegateInfo?.stats?.delegateFeedback?.impactOnDecision || 0,
     presenceInDiscussions:
-      delegateInfo?.stats.delegateFeedback.presenceInDiscussions || 0,
+      delegateInfo?.stats?.delegateFeedback?.presenceInDiscussions || 0,
   });
 
   const inputTitle = {
