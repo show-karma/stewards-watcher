@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
 import {
   Box,
-  Flex,
-  Text,
-  Select,
   Button,
-  Link,
-  VStack,
+  Flex,
   HStack,
+  Link,
+  Select,
+  Text,
+  VStack,
 } from '@chakra-ui/react';
+import axios from 'axios';
 import { useAuth, useDAO } from 'contexts';
 import { useDelegateCompensation } from 'contexts/delegateCompensation';
-import axios from 'axios';
 import { API_ROUTES, KARMA_API } from 'helpers';
 import { useToasty } from 'hooks';
+import { useState } from 'react';
 
 export const DelegateFeedback = () => {
   const { theme, daoInfo, rootPathname } = useDAO();
@@ -109,7 +109,6 @@ export const DelegateFeedback = () => {
                 {inputTitle[key as keyof typeof inputTitle]}
               </Text>
               <Select
-                value={value}
                 onChange={event => handleScoreChange(key, event.target.value)}
                 placeholder="Select score"
                 bg={theme.card.background}

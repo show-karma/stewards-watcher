@@ -68,7 +68,6 @@ export const DelegateBP = () => {
         <NumberInput w="full" defaultValue={bonusPoints}>
           <NumberInputField
             type="number"
-            defaultValue={bonusPoints}
             min={0}
             max={25}
             onChange={event => {

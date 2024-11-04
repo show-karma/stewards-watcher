@@ -1,43 +1,43 @@
 import {
-  Flex,
-  Th,
-  Table,
-  Thead,
-  Tr,
-  Tbody,
-  Td,
-  Heading,
   Button,
-  Spinner,
+  Flex,
+  Heading,
   Input,
-  Text,
-  Tooltip,
-  Switch,
   Modal,
-  ModalOverlay,
+  ModalBody,
+  ModalCloseButton,
   ModalContent,
   ModalHeader,
-  ModalCloseButton,
-  ModalBody,
+  ModalOverlay,
+  Spinner,
+  Switch,
+  Table,
+  Tbody,
+  Td,
+  Text,
+  Th,
+  Thead,
+  Tooltip,
+  Tr,
 } from '@chakra-ui/react';
+import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 import { ChakraLink } from 'components/ChakraLink';
 import { useAuth, useDAO } from 'contexts';
 import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import { API_ROUTES, KARMA_API } from 'helpers';
 import { useToasty } from 'hooks';
+import debounce from 'lodash.debounce';
+import dynamic from 'next/dynamic';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { TbExternalLink } from 'react-icons/tb';
 import { DelegateStatsBreakdown, DelegateStatsFromAPI } from 'types';
+import { ProposalItem } from 'types/proposals';
 import { formatDate } from 'utils';
 import { getProposals } from 'utils/delegate-compensation/getProposals';
 import { useQuery } from 'wagmi';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import debounce from 'lodash.debounce';
-import { ProposalItem } from 'types/proposals';
-import dynamic from 'next/dynamic';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 const MDPreview = dynamic(() => import('@uiw/react-markdown-preview'), {
@@ -193,6 +193,7 @@ export const DelegateProposals = ({
         data.communicatingRationale?.breakdown?.filter(
           item => item.modified && item.proposal
         ) || [];
+      console.log(data.communicatingRationale?.breakdown);
       if (!modifiedRows.length) {
         return;
       }
@@ -435,22 +436,6 @@ export const DelegateProposals = ({
                             See
                           </Flex>
                         ) : (
-                          // <Tooltip label="See post content">
-                          //   <Flex
-                          //     bg={theme.card.background}
-                          //     px="1"
-                          //     py="1"
-                          //     rounded="full"
-                          //     width="24px"
-                          //     height="24px"
-                          //     alignItems="center"
-                          //     justifyContent="center"
-                          //     onClick={() => setRationaleSelected(item)}
-                          //     cursor="pointer"
-                          //   >
-                          //     <Icon as={IoEyeSharp} w="12px" h="12px" />
-                          //   </Flex>
-                          // </Tooltip>
                           <Flex width="24px" height="24px" />
                         )}
                       </Flex>
