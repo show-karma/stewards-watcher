@@ -46,6 +46,7 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
     const currentDate = new Date();
     const currentDay = currentDate.getDate();
     const isOldVersion = router.asPath.includes('delegate-compensation-old');
+    const isAdmin = router.asPath.includes('/admin');
     let date = new Date(
       currentDate.getFullYear(),
       currentDay >= 10 ? currentDate.getMonth() : currentDate.getMonth() - 1,
@@ -80,7 +81,7 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
           month = 9;
           year = 2024;
         }
-      } else if (!isOldVersion) {
+      } else if (!isOldVersion && !isAdmin) {
         router.push({
           pathname: `${rootPathname}/delegate-compensation`,
           query: {
