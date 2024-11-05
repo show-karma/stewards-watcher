@@ -58,9 +58,10 @@ export const MonthDropdown: FC = () => {
           });
           const isAdminPage = router.pathname.includes('/admin');
           if (isAdminPage) {
+            const removeQueryParams = router.asPath.split('?')[0];
             router.push(
               {
-                pathname: `/${rootPathname}/delegate-compensation/admin`,
+                pathname: `${rootPathname}${removeQueryParams}`,
                 query: {
                   month: itemDate.name.toLowerCase(),
                   year: itemDate.value.year,
@@ -77,7 +78,7 @@ export const MonthDropdown: FC = () => {
             ) {
               router.push(
                 {
-                  pathname: `/${rootPathname}/delegate-compensation`,
+                  pathname: `${rootPathname}/delegate-compensation`,
                   query: {
                     month: itemDate.name.toLowerCase(),
                     year: itemDate.value.year,
@@ -89,7 +90,7 @@ export const MonthDropdown: FC = () => {
             } else {
               router.push(
                 {
-                  pathname: `/${rootPathname}/delegate-compensation-old`,
+                  pathname: `${rootPathname}/delegate-compensation-old`,
                   query: {
                     month: itemDate.name.toLowerCase(),
                     year: itemDate.value.year,

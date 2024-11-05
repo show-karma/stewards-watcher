@@ -121,7 +121,7 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
     setDelegateAddress(address);
     router.push(
       {
-        pathname: `/${rootPathname}/delegate-compensation/admin/delegate/${address}${
+        pathname: `${rootPathname}/delegate-compensation/admin/delegate/${address}${
           router.pathname.includes('forum-activity') ? '/forum-activity' : ''
         }`,
         query: {
