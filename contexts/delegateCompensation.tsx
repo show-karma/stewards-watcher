@@ -37,6 +37,8 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
   children,
 }) => {
   const router = useRouter();
+  const { daoInfo, rootPathname } = useDAO();
+
   const [selectedDate, setSelectedDate] = useState(() => {
     const queryString = router.asPath.split('?')[1];
     const monthQuery = queryString?.match(/(?<=month=)[^&]*/i)?.[0];
@@ -49,6 +51,7 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
       currentDay >= 10 ? currentDate.getMonth() : currentDate.getMonth() - 1,
       10
     );
+
     if (isOldVersion) {
       if (date >= new Date('2024-10-10')) {
         date = new Date('2024-10-10');
@@ -56,6 +59,7 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
     } else if (date <= new Date('2024-11-11')) {
       date = new Date('2024-11-11');
     }
+
     const currentMonth = date.getMonth() + 1;
     const currentYear = date.getFullYear();
     const startYear = 2024;
@@ -64,8 +68,27 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
       let month = monthQuery
         ? new Date(`${monthQuery} 1, ${year}`).getMonth()
         : currentMonth;
-      if ((year > 2024 || (year === 2024 && month >= 10)) && isOldVersion) {
-        month = 9;
+      if (year > 2024 || (year === 2024 && month >= 10)) {
+        if (isOldVersion) {
+          router.push({
+            pathname: `${rootPathname}/delegate-compensation-old`,
+            query: {
+              month: 'october',
+              year: 2024,
+            },
+          });
+          month = 9;
+          year = 2024;
+        }
+      } else if (!isOldVersion) {
+        router.push({
+          pathname: `${rootPathname}/delegate-compensation`,
+          query: {
+            month: 'november',
+            year: 2024,
+          },
+        });
+        month = 10;
         year = 2024;
       }
       const correctMonth = month > currentMonth ? currentMonth : month + 1;
@@ -115,7 +138,6 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
       return queryString || undefined;
     }
   );
-  const { daoInfo, rootPathname } = useDAO();
 
   const changeDelegateAddress = (address: string) => {
     setDelegateAddress(address);
