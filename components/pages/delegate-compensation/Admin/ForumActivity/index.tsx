@@ -22,10 +22,10 @@ import { ChakraLink } from 'components/ChakraLink';
 import { useDAO } from 'contexts';
 import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import { DelegateCompensationAdminLayout } from 'layouts/delegateCompensationAdmin';
-import { TbExternalLink } from 'react-icons/tb';
-import { getForumActivity } from 'utils/delegate-compensation/getForumActivity';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
+import { TbExternalLink } from 'react-icons/tb';
+import { getForumActivity } from 'utils/delegate-compensation/getForumActivity';
 import { DelegatesDropdown } from '../Delegates/DelegatesDropdown';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -55,7 +55,7 @@ export const DelegateCompensationAdminForumActivity = ({
     ['delegate-compensation-forum-activity', delegateInfo?.discourseHandle],
     () =>
       getForumActivity(
-        selectedDate?.name,
+        selectedDate?.value.month,
         selectedDate?.value.year,
         delegateInfo?.discourseHandle
       ),
@@ -63,7 +63,7 @@ export const DelegateCompensationAdminForumActivity = ({
       enabled:
         !!delegateInfo?.discourseHandle &&
         !!selectedDate?.value.year &&
-        !!selectedDate?.name,
+        !!selectedDate?.value.month,
     }
   );
 
