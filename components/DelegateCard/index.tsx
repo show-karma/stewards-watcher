@@ -187,11 +187,11 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
       // tooltipText: 'Total of delegators for this delegate',
     },
     {
-      title: 'Delegated Tokens',
+      title: 'Voting Power',
       icon: IoIosCheckboxOutline,
       value: data?.delegatedVotes ? formatNumber(data?.delegatedVotes) : '-',
       id: 'delegatedVotes',
-      tooltipText: `Total votes delegated`,
+      tooltipText: `Total voting power`,
     },
     {
       title: 'Snapshot pct.',
