@@ -18,6 +18,36 @@ export interface IDAOTheme {
     bg: string;
     text: string;
   };
+  compensation?: {
+    bg: string;
+    card: {
+      bg: string;
+      text: string;
+      secondaryText: string;
+      success: string;
+      error: string;
+      link: string;
+      divider: string;
+      input: {
+        bg: string;
+        text: string;
+      };
+      dropdown: {
+        bg: string;
+        text: string;
+        border: string;
+      };
+    };
+    icons: {
+      snapshot: string;
+      onchain: string;
+      delegateFeedback: string;
+      rationale: string;
+      bonusPoint: string;
+      participationRate: string;
+      finalScore: string;
+    };
+  };
   collapse: {
     bg?: string;
     text: string;

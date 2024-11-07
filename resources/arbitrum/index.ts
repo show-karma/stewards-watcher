@@ -1,6 +1,6 @@
 import { IDAOConfig, IDAOTheme } from 'types';
-import { arbitrum } from 'wagmi/chains';
 import { onChainArbitrumVotesProvider } from 'utils';
+import { arbitrum } from 'wagmi/chains';
 import ABI from './ABI.json';
 
 const config: IDAOConfig = {
@@ -65,6 +65,36 @@ const dark: IDAOTheme = {
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
   collapse: { text: '#FFFFFF', subtext: '#ADB8C0' },
+  compensation: {
+    bg: '#1A1C1D',
+    card: {
+      bg: '#222429',
+      text: '#FFFFFF',
+      secondaryText: '#ADB8C0',
+      success: '#079455',
+      error: '#B42318',
+      link: '#0E88CC',
+      divider: '#EAECF0',
+      input: {
+        bg: '#1A1C1D',
+        text: '#FFFFFF',
+      },
+      dropdown: {
+        bg: '#1A1C1D',
+        text: '#FFFFFF',
+        border: '#98A2B3',
+      },
+    },
+    icons: {
+      snapshot: '#cabf88',
+      onchain: '#1E2833',
+      delegateFeedback: '#2A2433',
+      rationale: '#332620',
+      bonusPoint: '#1F2D28',
+      participationRate: '#332831',
+      finalScore: '#393d3b',
+    },
+  },
   hat: {
     text: {
       primary: '#FFFFFF',
@@ -325,6 +355,36 @@ const light: IDAOTheme = {
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
   collapse: { text: '#1A1C1D', subtext: '#222429', bg: '#FFFFFF' },
+  compensation: {
+    bg: '#F2F4F7',
+    card: {
+      bg: '#FFF',
+      text: '#1D2939',
+      secondaryText: '#667085',
+      success: '#079455',
+      error: '#B42318',
+      link: '#0E88CC',
+      divider: '#EAECF0',
+      input: {
+        bg: '#F2F4F7',
+        text: '#1D2939',
+      },
+      dropdown: {
+        bg: '#FFF',
+        text: '#667085',
+        border: '#98A2B3',
+      },
+    },
+    icons: {
+      snapshot: '#FFF3D4',
+      onchain: '#E1F1FF',
+      delegateFeedback: '#F4EFFF',
+      rationale: '#FFE6D5',
+      bonusPoint: '#DDF9F2',
+      participationRate: '#FFEDFA',
+      finalScore: '#EFFFF5',
+    },
+  },
   hat: {
     text: {
       primary: '#FFFFFF',

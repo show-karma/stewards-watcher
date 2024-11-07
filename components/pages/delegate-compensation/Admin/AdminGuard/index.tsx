@@ -4,11 +4,18 @@ import { FC, ReactNode } from 'react';
 
 interface AdminGuardProps {
   children: ReactNode;
+  disableGuard?: boolean;
 }
 
-export const AdminGuard: FC<AdminGuardProps> = ({ children }) => {
+export const AdminGuard: FC<AdminGuardProps> = ({
+  children,
+  disableGuard = false,
+}) => {
   const { isConnected } = useWallet();
   const { isAuthenticated, isDaoAdmin } = useAuth();
+  if (disableGuard) {
+    return <>{children}</>;
+  }
   if (!isAuthenticated || !isConnected) {
     return (
       <Flex

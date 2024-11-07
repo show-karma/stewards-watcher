@@ -56,21 +56,10 @@ export const MonthDropdown: FC = () => {
             name: itemDate.name,
             value: itemDate.value,
           });
-          const isAdminPage = router.pathname.includes('/admin');
-          if (isAdminPage) {
-            const removeQueryParams = router.asPath.split('?')[0];
-            router.push(
-              {
-                pathname: `${rootPathname}${removeQueryParams}`,
-                query: {
-                  month: itemDate.name.toLowerCase(),
-                  year: itemDate.value.year,
-                },
-              },
-              undefined,
-              { shallow: true }
-            );
-          } else {
+
+          const lastPath = router.asPath.split('/')?.at(-1);
+
+          if (lastPath?.includes('delegate-compensation')) {
             const isOldVersion = router.pathname.includes('-old');
             if (
               (itemDate.value.month >= 11 && itemDate.value.year === 2024) ||
@@ -100,6 +89,19 @@ export const MonthDropdown: FC = () => {
                 { shallow: !!isOldVersion }
               );
             }
+          } else {
+            const removeQueryParams = router.asPath.split('?')[0];
+            router.push(
+              {
+                pathname: `${rootPathname}${removeQueryParams}`,
+                query: {
+                  month: itemDate.name.toLowerCase(),
+                  year: itemDate.value.year,
+                },
+              },
+              undefined,
+              { shallow: true }
+            );
           }
         }}
       >
@@ -111,11 +113,12 @@ export const MonthDropdown: FC = () => {
     <Menu>
       <MenuButton
         w="max-content"
-        bg={theme.filters.activeBg}
         as={Button}
         borderWidth="1px"
         borderStyle="solid"
-        borderColor={theme.card.interests.text}
+        bg={theme.compensation?.card.dropdown.bg}
+        borderColor={theme.compensation?.card.dropdown.border}
+        color={theme.compensation?.card.dropdown.text}
         rightIcon={
           <DownChevron
             display="flex"
@@ -124,6 +127,11 @@ export const MonthDropdown: FC = () => {
             boxSize="4"
           />
         }
+        fontSize="14px"
+        fontWeight={400}
+        maxW="full"
+        px="3"
+        py="3"
       >
         {selectedDate?.name} {selectedDate?.value.year}
       </MenuButton>

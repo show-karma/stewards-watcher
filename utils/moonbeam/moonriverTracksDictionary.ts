@@ -18,7 +18,7 @@ export const moonriverTracksDictionary = {
     emoji: '⛔️',
     description: 'For cancellation of wrong referendum',
   },
-  'Referendum Killer': { 
+  'Referendum Killer': {
     emoji: '❌',
     description: 'For killing of harmful referendum',
   },

@@ -1,9 +1,9 @@
 import {
-  Box,
   Button,
+  Editable,
+  EditableInput,
+  EditablePreview,
   Flex,
-  NumberInput,
-  NumberInputField,
   Text,
 } from '@chakra-ui/react';
 import axios from 'axios';
@@ -60,12 +60,44 @@ export const DelegateBP = () => {
   };
 
   return (
-    <Box bg={theme.card.background} borderRadius="lg" p={4} width="full">
-      <Text color={theme.text} mb={1}>
+    <Flex flexDir="column" gap="0" justify="center" align="flex-start" w="full">
+      <Text
+        fontSize="16px"
+        fontWeight="600"
+        color={theme.compensation?.card.text}
+        lineHeight="24px"
+      >
         Bonus Points
       </Text>
-      <Flex gap="4">
-        <NumberInput w="full" defaultValue={bonusPoints}>
+      <Flex gap="4" justify="space-between" flexDir="row" w="full">
+        <Editable defaultValue={bonusPoints.toString()}>
+          <EditablePreview
+            fontSize="24px"
+            fontWeight={700}
+            color={theme.compensation?.card.secondaryText}
+            lineHeight="32px"
+            cursor="pointer"
+            textDecor="underline"
+          />
+          <EditableInput
+            type="number"
+            min={0}
+            max={25}
+            onChange={event => {
+              setBonusPoints(+event.target.value);
+            }}
+            placeholder="Enter bonus points"
+            mr={2}
+            bg={theme.card.background}
+            w="full"
+            fontSize="24px"
+            fontWeight={700}
+            color={theme.compensation?.card.secondaryText}
+            lineHeight="32px"
+            px="2"
+          />
+        </Editable>
+        {/* <NumberInput w="full" defaultValue={bonusPoints}>
           <NumberInputField
             type="number"
             min={0}
@@ -79,10 +111,10 @@ export const DelegateBP = () => {
             color={theme.text}
             w="full"
           />
-        </NumberInput>
+        </NumberInput> */}
 
         <Button onClick={handleSaveBonusPoints}>Save</Button>
       </Flex>
-    </Box>
+    </Flex>
   );
 };

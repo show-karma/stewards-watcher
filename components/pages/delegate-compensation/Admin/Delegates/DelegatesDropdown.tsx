@@ -7,7 +7,9 @@ import {
   MenuList,
   Spinner,
 } from '@chakra-ui/react';
+import { blo } from 'blo';
 import { DownChevron } from 'components/Icons';
+import { ImgWithFallback } from 'components/ImgWithFallback';
 import { useDAO } from 'contexts';
 import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import { useMemo } from 'react';
@@ -65,11 +67,14 @@ export const DelegatesDropdown = () => {
             display="flex"
             alignItems="center"
             justifyContent="center"
-            boxSize="5"
+            boxSize="4"
           />
         }
-        bg={theme.filters.bg}
-        color={theme.filters.title}
+        borderWidth="1px"
+        borderStyle="solid"
+        bg={theme.compensation?.card.dropdown.bg}
+        borderColor={theme.compensation?.card.dropdown.border}
+        color={theme.compensation?.card.dropdown.text}
         _hover={{
           opacity: 0.8,
         }}
@@ -90,10 +95,23 @@ export const DelegatesDropdown = () => {
         _focus={{}}
         _focusWithin={{}}
       >
-        {delegateInfo?.name ||
-          delegateInfo?.ensName ||
-          delegateInfo?.publicAddress ||
-          'Select a Delegate'}
+        <Flex flexDir="row" gap="3" align="center">
+          {delegateInfo ? (
+            <ImgWithFallback
+              fallback={delegateInfo?.publicAddress}
+              src={
+                delegateInfo?.profilePicture ||
+                blo(delegateInfo?.publicAddress as `0x${string}`)
+              }
+              boxSize="24px"
+              borderRadius="full"
+            />
+          ) : null}
+          {delegateInfo?.name ||
+            delegateInfo?.ensName ||
+            delegateInfo?.publicAddress ||
+            'Select a Delegate'}
+        </Flex>
       </MenuButton>
       <MenuList
         bgColor={theme.filters.listBg}
@@ -122,7 +140,18 @@ export const DelegatesDropdown = () => {
               bg: theme.filters.activeBg,
             }}
           >
-            {option.name || option.ensName || option.publicAddress}
+            <Flex flexDir="row" gap="3" align="center">
+              <ImgWithFallback
+                fallback={option?.publicAddress}
+                src={
+                  option?.profilePicture ||
+                  blo(option?.publicAddress as `0x${string}`)
+                }
+                boxSize="24px"
+                borderRadius="full"
+              />
+              {option.name || option.ensName || option.publicAddress}
+            </Flex>
           </MenuItem>
         ))}
       </MenuList>

@@ -64,33 +64,36 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
     const currentMonth = date.getMonth() + 1;
     const currentYear = date.getFullYear();
     const startYear = 2024;
+    const lastPath = router.asPath.split('/')?.at(-1);
     if (monthQuery || yearQuery) {
       let year = yearQuery || currentYear;
       let month = monthQuery
         ? new Date(`${monthQuery} 1, ${year}`).getMonth()
         : currentMonth;
-      if (year > 2024 || (year === 2024 && month >= 10)) {
-        if (isOldVersion) {
+      if (lastPath?.includes('delegate-compensation')) {
+        if (year > 2024 || (year === 2024 && month >= 10)) {
+          if (isOldVersion) {
+            router.push({
+              pathname: `${rootPathname}/delegate-compensation-old`,
+              query: {
+                month: 'october',
+                year: 2024,
+              },
+            });
+            month = 9;
+            year = 2024;
+          }
+        } else if (!isOldVersion && !isAdmin) {
           router.push({
-            pathname: `${rootPathname}/delegate-compensation-old`,
+            pathname: `${rootPathname}/delegate-compensation`,
             query: {
-              month: 'october',
+              month: 'november',
               year: 2024,
             },
           });
-          month = 9;
+          month = 10;
           year = 2024;
         }
-      } else if (!isOldVersion && !isAdmin) {
-        router.push({
-          pathname: `${rootPathname}/delegate-compensation`,
-          query: {
-            month: 'november',
-            year: 2024,
-          },
-        });
-        month = 10;
-        year = 2024;
       }
       const correctMonth = month > currentMonth ? currentMonth : month + 1;
       const correctYear =
@@ -144,7 +147,9 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
     setDelegateAddress(address);
     router.push(
       {
-        pathname: `${rootPathname}/delegate-compensation/admin/delegate/${address}${
+        pathname: `${rootPathname}/delegate-compensation/${
+          router.pathname.includes('admin') ? 'admin/delegate' : 'delegate'
+        }/${address}${
           router.pathname.includes('forum-activity') ? '/forum-activity' : ''
         }`,
         query: {

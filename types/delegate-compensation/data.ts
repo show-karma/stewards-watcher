@@ -32,7 +32,7 @@ export type DelegateStatsFromAPI = {
     participationRate: string;
     payment: number;
     snapshotVoting: CompensationStatBreakdown;
-    delegateFeedback: {
+    delegateFeedback?: {
       relevance: number;
       depthAnalyses: number;
       timing: number;

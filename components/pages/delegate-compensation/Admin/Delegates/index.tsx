@@ -1,15 +1,12 @@
 /* eslint-disable no-nested-ternary */
-import { Box, Flex, Spinner, Text } from '@chakra-ui/react';
+import { Flex, Spinner } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
 import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import { DelegateCompensationAdminLayout } from 'layouts/delegateCompensationAdmin';
-import { formatNumberPercentage } from 'utils';
 import { useEffect } from 'react';
-import { DelegatesDropdown } from './DelegatesDropdown';
+import { DelegatePeriod } from '../DelegatePeriod';
 import { DelegateProposals } from './DelegateProposals';
-import { DelegateStatsBlock } from './DelegateStatsBlock';
-import { DelegateFeedback } from './DelegateFeedback';
-import { DelegateBP } from './DelegateBP';
+import { DelegateStats } from './DelegateStats';
 
 export const DelegateCompensationAdminDelegates = ({
   delegateAddress,
@@ -38,10 +35,7 @@ export const DelegateCompensationAdminDelegates = ({
   return (
     <DelegateCompensationAdminLayout>
       <Flex align="stretch" flex={1} w="full" flexDirection="column" gap="8">
-        <Text fontSize="xl" fontWeight="bold" color={theme.text}>
-          Delegate stats for month of {selectedDate?.name}{' '}
-          {selectedDate?.value.year}
-        </Text>
+        <DelegatePeriod />
         {isFetchingDelegateInfo || isLoadingDelegateInfo ? (
           <Flex w="full" h="20" align="center" justify="center">
             <Spinner />
@@ -54,57 +48,11 @@ export const DelegateCompensationAdminDelegates = ({
             gap="4"
             w="full"
           >
-            <Flex
-              flexDir="row"
-              alignItems="center"
-              justifyContent="space-between"
-              gap="4"
-              w="full"
-              borderBottom="1px solid"
-              borderColor={theme.card.border}
-              pb="2"
-            >
-              <Flex flexDir="row" alignItems="center" gap="4">
-                {/* do a dropdown */}
-                <DelegatesDropdown />
-                {delegateInfo ? (
-                  <Text>
-                    Delegate stats -{' '}
-                    {delegateInfo?.name
-                      ? `${delegateInfo?.name} (${
-                          delegateInfo?.ensName || delegateInfo?.publicAddress
-                        })`
-                      : delegateInfo?.ensName
-                      ? `${delegateInfo?.ensName} (${delegateInfo?.publicAddress})`
-                      : delegateInfo?.publicAddress}
-                  </Text>
-                ) : null}
-              </Flex>
-              {delegateInfo?.stats ? (
-                <Flex
-                  flexDir="column"
-                  alignItems="center"
-                  gap="0"
-                  bg={theme.card.background}
-                  py="2"
-                  px="4"
-                  borderRadius="lg"
-                >
-                  <Text fontSize="2xl" color={theme.text}>
-                    {formatNumberPercentage(
-                      delegateInfo?.stats?.participationRatePercent || 0
-                    )}
-                  </Text>
-                  <Text fontSize="sm" color={theme.text}>
-                    Participation Rate
-                  </Text>
-                </Flex>
-              ) : null}
-            </Flex>
+            <DelegateStats />
             {delegateInfo?.stats ? (
               <>
                 <DelegateProposals delegateVotes={delegateVotes} />
-                <Flex
+                {/* <Flex
                   flexDir="row"
                   gap="4"
                   justify="space-between"
@@ -151,8 +99,8 @@ export const DelegateCompensationAdminDelegates = ({
                   />
                 </Flex>
                 <DelegateFeedback />
-                <DelegateBP />
-                <Box maxW="600px" w="full" mb="8">
+                <DelegateBP /> */}
+                {/* <Box maxW="600px" w="full" mb="8">
                   <DelegateStatsBlock
                     blockName="Final Score"
                     formula={
@@ -216,7 +164,7 @@ export const DelegateCompensationAdminDelegates = ({
                         : 0
                     }
                   />
-                </Box>
+                </Box> */}
               </>
             ) : null}
           </Flex>

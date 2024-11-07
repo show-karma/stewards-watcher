@@ -40,15 +40,19 @@ export const getStaticProps: GetStaticProps<FAQProps, PathProps> = async ({
   }
 
   return {
-    props: { dao: site, delegateAddress: delegateAddress || null },
+    props: {
+      dao: site,
+      delegateAddress: delegateAddress || null,
+    },
   };
 };
 
 interface IFAQ {
   dao: string;
+  delegateAddress: string | null;
 }
 
-const DelegateCompesationAdminPage = ({ dao }: IFAQ) => (
+const DelegateCompesationAdminPage = ({ dao, delegateAddress }: IFAQ) => (
   <DAOProvider selectedDAO={dao} shouldFetchInfo={false}>
     <DelegateCompensationAdminContainer>
       <DelegateCompensationAdminDelegates />

@@ -1,32 +1,33 @@
-import React, { useState } from 'react';
 import {
   Box,
+  Flex,
   Heading,
-  Text,
+  Spinner,
   Switch,
   Table,
-  Thead,
   Tbody,
-  Tr,
-  Th,
   Td,
-  Flex,
-  Spinner,
+  Text,
+  Th,
+  Thead,
   Tooltip,
+  Tr,
 } from '@chakra-ui/react';
-import { useDelegateCompensation } from 'contexts/delegateCompensation';
-import { DelegateCompensationAdminLayout } from 'layouts/delegateCompensationAdmin';
-import { ChakraLink } from 'components/ChakraLink';
-import { TbExternalLink } from 'react-icons/tb';
-import { useAuth, useDAO } from 'contexts';
 import { useQuery } from '@tanstack/react-query';
-import { getProposals } from 'utils/delegate-compensation/getProposals';
 import axios from 'axios';
+import { ChakraLink } from 'components/ChakraLink';
+import { useAuth, useDAO } from 'contexts';
+import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import { KARMA_API } from 'helpers';
-import { queryClient } from 'pages/_app';
 import { useToasty } from 'hooks';
+import { DelegateCompensationAdminLayout } from 'layouts/delegateCompensationAdmin';
+import { queryClient } from 'pages/_app';
+import { useState } from 'react';
 import { AiFillQuestionCircle } from 'react-icons/ai';
+import { TbExternalLink } from 'react-icons/tb';
 import { formatDate } from 'utils';
+import { getProposals } from 'utils/delegate-compensation/getProposals';
+import { DelegatePeriod } from './DelegatePeriod';
 
 export const DelegateCompensationAdmin = () => {
   const { selectedDate, refreshDelegateInfo } = useDelegateCompensation();
@@ -116,11 +117,15 @@ export const DelegateCompensationAdmin = () => {
 
   return (
     <DelegateCompensationAdminLayout>
-      <Flex align="stretch" flex={1} w="full" flexDirection="column" gap="8">
-        <Text fontSize="xl" fontWeight="bold" color={theme.text}>
-          Delegate stats for month of {selectedDate?.name}{' '}
-          {selectedDate?.value.year}
-        </Text>
+      <DelegatePeriod delegate={false} period />
+      <Flex
+        mt="8"
+        align="stretch"
+        flex={1}
+        w="full"
+        flexDirection="column"
+        gap="8"
+      >
         {(isLoading || isFetching) && proposals.length === 0 ? (
           <Flex w="full" justify="center" align="center">
             <Spinner size="xl" />

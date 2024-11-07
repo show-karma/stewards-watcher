@@ -26,7 +26,7 @@ import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { TbExternalLink } from 'react-icons/tb';
 import { getForumActivity } from 'utils/delegate-compensation/getForumActivity';
-import { DelegatesDropdown } from '../Delegates/DelegatesDropdown';
+import { DelegatePeriod } from '../DelegatePeriod';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 const MDPreview = dynamic(() => import('@uiw/react-markdown-preview'), {
@@ -114,12 +114,10 @@ export const DelegateCompensationAdminForumActivity = ({
       <Box w="full">
         <Flex flexDir="column" gap="4">
           <Heading fontSize="xl" fontWeight="bold" color={theme.text} mb="4">
-            Forum activity of{' '}
-            {delegateInfo?.name || delegateInfo?.ensName || delegateAddress} -{' '}
-            {selectedDate?.name} {selectedDate?.value.year}
+            Forum activity
           </Heading>
-          <DelegatesDropdown />
         </Flex>
+        <DelegatePeriod delegate period />
         {posts?.length ? (
           <Table variant="simple" w="full">
             <Thead w="full">
@@ -186,7 +184,7 @@ export const DelegateCompensationAdminForumActivity = ({
           </Table>
         ) : (
           <Flex py="4">
-            <Text>{`This delegate doesn't have forum posts.`}</Text>
+            <Text>{`This delegate doesn't have forum posts for this period.`}</Text>
           </Flex>
         )}
       </Box>
