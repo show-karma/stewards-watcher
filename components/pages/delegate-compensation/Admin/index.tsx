@@ -16,6 +16,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { ChakraLink } from 'components/ChakraLink';
+import { LinkIcon } from 'components/Icons/Compensation/LinkIcon';
 import { useAuth, useDAO } from 'contexts';
 import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import { KARMA_API } from 'helpers';
@@ -24,7 +25,6 @@ import { DelegateCompensationAdminLayout } from 'layouts/delegateCompensationAdm
 import { queryClient } from 'pages/_app';
 import { useState } from 'react';
 import { AiFillQuestionCircle } from 'react-icons/ai';
-import { TbExternalLink } from 'react-icons/tb';
 import { formatDate } from 'utils';
 import { getProposals } from 'utils/delegate-compensation/getProposals';
 import { DelegatePeriod } from './DelegatePeriod';
@@ -165,13 +165,7 @@ export const DelegateCompensationAdmin = () => {
                       >
                         End Date
                       </Th>
-                      <Th
-                        w="20%"
-                        borderColor={theme.card.border}
-                        color={theme.text}
-                      >
-                        Link
-                      </Th>
+
                       <Th
                         w="20%"
                         borderColor={theme.card.border}
@@ -206,8 +200,44 @@ export const DelegateCompensationAdmin = () => {
                           color={theme.text}
                           borderColor={theme.card.border}
                         >
-                          {item.name}
-                          {item.name[0] === '#' ? '...' : ''}
+                          <Flex
+                            flexDirection="column"
+                            justify="flex-start"
+                            align="flex-start"
+                            gap="2"
+                          >
+                            <Text color={theme.text} lineHeight="14px">
+                              {item.name}
+                              {item.name[0] === '#' ? '...' : ''}
+                            </Text>
+                            <Flex flexDir="row" gap="2" alignItems="center">
+                              {item.link ? (
+                                <ChakraLink
+                                  display="flex"
+                                  flexDir="row"
+                                  gap="3"
+                                  alignItems="center"
+                                  justifyContent="center"
+                                  href={item.link}
+                                  isExternal
+                                  color="blue.500"
+                                  w="fit-content"
+                                  _hover={{
+                                    textDecoration: 'none',
+                                    color: 'blue.400',
+                                    borderColor: 'blue.400',
+                                  }}
+                                >
+                                  See proposal
+                                  <LinkIcon
+                                    w="14px"
+                                    h="14px"
+                                    viewBox="0 0 18 18"
+                                  />
+                                </ChakraLink>
+                              ) : null}
+                            </Flex>
+                          </Flex>
                         </Td>
                         <Td
                           w="20%"
@@ -218,34 +248,7 @@ export const DelegateCompensationAdmin = () => {
                             {formatDate(item.endDate as string, 'MMM D, YYYY')}
                           </Text>
                         </Td>
-                        <Td
-                          w="20%"
-                          color={theme.text}
-                          borderColor={theme.card.border}
-                        >
-                          {item.link ? (
-                            <ChakraLink
-                              display="flex"
-                              flexDir="row"
-                              gap="1"
-                              alignItems="center"
-                              href={item.link}
-                              isExternal
-                              color="blue.500"
-                              borderBottom="1px solid"
-                              borderColor="blue.500"
-                              w="fit-content"
-                              _hover={{
-                                textDecoration: 'none',
-                                color: 'blue.400',
-                                borderColor: 'blue.400',
-                              }}
-                            >
-                              See proposal
-                              <TbExternalLink />
-                            </ChakraLink>
-                          ) : null}
-                        </Td>
+
                         <Td
                           w="20%"
                           color={theme.text}

@@ -25,6 +25,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 import { ChakraLink } from 'components/ChakraLink';
 import { FalseIcon } from 'components/Icons/Compensation/FalseIcon';
+import { LinkIcon } from 'components/Icons/Compensation/LinkIcon';
 import { TrueIcon } from 'components/Icons/Compensation/TrueIcon';
 import { useAuth, useDAO } from 'contexts';
 import { useDelegateCompensation } from 'contexts/delegateCompensation';
@@ -35,7 +36,6 @@ import dynamic from 'next/dynamic';
 import pluralize from 'pluralize';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { TbExternalLink } from 'react-icons/tb';
 import { DelegateStatsBreakdown, DelegateStatsFromAPI } from 'types';
 import { ProposalItem } from 'types/proposals';
 import { formatDate } from 'utils';
@@ -339,15 +339,7 @@ export const DelegateProposals = ({
                     >
                       Proposal Name
                     </Th>
-                    <Th
-                      borderColor={theme.compensation?.card.divider}
-                      color={theme.compensation?.card.text}
-                      textTransform="none"
-                      fontSize="14px"
-                      fontWeight="700"
-                    >
-                      Forum Link
-                    </Th>
+
                     <Th
                       borderColor={theme.compensation?.card.divider}
                       color={theme.compensation?.card.text}
@@ -356,15 +348,6 @@ export const DelegateProposals = ({
                       fontWeight="700"
                     >
                       Date
-                    </Th>
-                    <Th
-                      borderColor={theme.compensation?.card.divider}
-                      color={theme.compensation?.card.text}
-                      textTransform="none"
-                      fontSize="14px"
-                      fontWeight="700"
-                    >
-                      Link
                     </Th>
 
                     <Th
@@ -427,36 +410,73 @@ export const DelegateProposals = ({
                           color={theme.compensation?.card.text}
                           borderColor={theme.compensation?.card.divider}
                         >
-                          {item.name}
-                          {item.name[0] === '#' ? '...' : ''}
+                          <Flex
+                            flexDirection="column"
+                            justify="flex-start"
+                            align="flex-start"
+                            gap="2"
+                          >
+                            <Text color={theme.text} lineHeight="14px">
+                              {item.name}
+                              {item.name[0] === '#' ? '...' : ''}
+                            </Text>
+                            <Flex flexDir="row" gap="4" alignItems="center">
+                              {item.link ? (
+                                <ChakraLink
+                                  display="flex"
+                                  flexDir="row"
+                                  gap="2"
+                                  alignItems="center"
+                                  justifyContent="center"
+                                  href={item.link}
+                                  isExternal
+                                  color="blue.500"
+                                  w="fit-content"
+                                  _hover={{
+                                    textDecoration: 'none',
+                                    color: 'blue.400',
+                                    borderColor: 'blue.400',
+                                  }}
+                                >
+                                  See proposal
+                                  <LinkIcon
+                                    w="14px"
+                                    h="14px"
+                                    viewBox="0 0 18 18"
+                                    mt="0.5"
+                                  />
+                                </ChakraLink>
+                              ) : null}
+                              {item.proposalTopic ? (
+                                <ChakraLink
+                                  display="flex"
+                                  flexDir="row"
+                                  gap="2"
+                                  alignItems="center"
+                                  justifyContent="center"
+                                  href={item.proposalTopic}
+                                  isExternal
+                                  color="blue.500"
+                                  w="fit-content"
+                                  _hover={{
+                                    textDecoration: 'none',
+                                    color: 'blue.400',
+                                    borderColor: 'blue.400',
+                                  }}
+                                >
+                                  See Forum Link
+                                  <LinkIcon
+                                    w="14px"
+                                    h="14px"
+                                    viewBox="0 0 18 18"
+                                    mt="0.5"
+                                  />
+                                </ChakraLink>
+                              ) : null}
+                            </Flex>
+                          </Flex>
                         </Td>
-                        <Td
-                          color={theme.compensation?.card.text}
-                          borderColor={theme.compensation?.card.divider}
-                        >
-                          {item.proposalTopic ? (
-                            <ChakraLink
-                              display="flex"
-                              flexDir="row"
-                              gap="1"
-                              alignItems="center"
-                              href={item.proposalTopic}
-                              isExternal
-                              color="blue.500"
-                              borderBottom="1px solid"
-                              borderColor="blue.500"
-                              w="max-content"
-                              _hover={{
-                                textDecoration: 'none',
-                                color: 'blue.400',
-                                borderColor: 'blue.400',
-                              }}
-                            >
-                              See proposal
-                              <TbExternalLink />
-                            </ChakraLink>
-                          ) : null}
-                        </Td>
+
                         <Td
                           color={theme.compensation?.card.text}
                           borderColor={theme.compensation?.card.divider}
@@ -464,33 +484,6 @@ export const DelegateProposals = ({
                           <Text w="max-content">
                             {formatDate(item.endDate as string, 'MMM D, YYYY')}
                           </Text>
-                        </Td>
-                        <Td
-                          color={theme.compensation?.card.text}
-                          borderColor={theme.compensation?.card.divider}
-                        >
-                          {item.link ? (
-                            <ChakraLink
-                              display="flex"
-                              flexDir="row"
-                              gap="1"
-                              alignItems="center"
-                              href={item.link}
-                              isExternal
-                              color="blue.500"
-                              borderBottom="1px solid"
-                              borderColor="blue.500"
-                              w="max-content"
-                              _hover={{
-                                textDecoration: 'none',
-                                color: 'blue.400',
-                                borderColor: 'blue.400',
-                              }}
-                            >
-                              See proposal
-                              <TbExternalLink />
-                            </ChakraLink>
-                          ) : null}
                         </Td>
 
                         <Td
@@ -729,15 +722,7 @@ export const DelegateProposals = ({
                     >
                       Proposal Name
                     </Th>
-                    <Th
-                      borderColor={theme.compensation?.card.divider}
-                      color={theme.compensation?.card.text}
-                      textTransform="none"
-                      fontSize="14px"
-                      fontWeight="700"
-                    >
-                      Forum Link
-                    </Th>
+
                     <Th
                       borderColor={theme.compensation?.card.divider}
                       color={theme.compensation?.card.text}
@@ -746,15 +731,6 @@ export const DelegateProposals = ({
                       fontWeight="700"
                     >
                       Date
-                    </Th>
-                    <Th
-                      borderColor={theme.compensation?.card.divider}
-                      color={theme.compensation?.card.text}
-                      textTransform="none"
-                      fontSize="14px"
-                      fontWeight="700"
-                    >
-                      Link
                     </Th>
 
                     <Th
@@ -815,36 +791,73 @@ export const DelegateProposals = ({
                           color={theme.compensation?.card.text}
                           borderColor={theme.compensation?.card.divider}
                         >
-                          {item.name}
-                          {item.name[0] === '#' ? '...' : ''}
+                          <Flex
+                            flexDirection="column"
+                            justify="flex-start"
+                            align="flex-start"
+                            gap="2"
+                          >
+                            <Text color={theme.text} lineHeight="14px">
+                              {item.name}
+                              {item.name[0] === '#' ? '...' : ''}
+                            </Text>
+                            <Flex flexDir="row" gap="4" alignItems="center">
+                              {item.link ? (
+                                <ChakraLink
+                                  display="flex"
+                                  flexDir="row"
+                                  gap="2"
+                                  alignItems="center"
+                                  justifyContent="center"
+                                  href={item.link}
+                                  isExternal
+                                  color="blue.500"
+                                  w="fit-content"
+                                  _hover={{
+                                    textDecoration: 'none',
+                                    color: 'blue.400',
+                                    borderColor: 'blue.400',
+                                  }}
+                                >
+                                  See proposal
+                                  <LinkIcon
+                                    w="14px"
+                                    h="14px"
+                                    viewBox="0 0 18 18"
+                                    mt="0.5"
+                                  />
+                                </ChakraLink>
+                              ) : null}
+                              {item.proposalTopic ? (
+                                <ChakraLink
+                                  display="flex"
+                                  flexDir="row"
+                                  gap="2"
+                                  alignItems="center"
+                                  justifyContent="center"
+                                  href={item.proposalTopic}
+                                  isExternal
+                                  color="blue.500"
+                                  w="fit-content"
+                                  _hover={{
+                                    textDecoration: 'none',
+                                    color: 'blue.400',
+                                    borderColor: 'blue.400',
+                                  }}
+                                >
+                                  See Forum Link
+                                  <LinkIcon
+                                    w="14px"
+                                    h="14px"
+                                    viewBox="0 0 18 18"
+                                    mt="0.5"
+                                  />
+                                </ChakraLink>
+                              ) : null}
+                            </Flex>
+                          </Flex>
                         </Td>
-                        <Td
-                          color={theme.compensation?.card.text}
-                          borderColor={theme.compensation?.card.divider}
-                        >
-                          {item.proposalTopic ? (
-                            <ChakraLink
-                              display="flex"
-                              flexDir="row"
-                              gap="1"
-                              alignItems="center"
-                              href={item.proposalTopic}
-                              isExternal
-                              color="blue.500"
-                              borderBottom="1px solid"
-                              borderColor="blue.500"
-                              w="max-content"
-                              _hover={{
-                                textDecoration: 'none',
-                                color: 'blue.400',
-                                borderColor: 'blue.400',
-                              }}
-                            >
-                              See proposal
-                              <TbExternalLink />
-                            </ChakraLink>
-                          ) : null}
-                        </Td>
+
                         <Td
                           color={theme.compensation?.card.text}
                           borderColor={theme.compensation?.card.divider}
@@ -852,33 +865,6 @@ export const DelegateProposals = ({
                           <Text w="max-content">
                             {formatDate(item.endDate as string, 'MMM D, YYYY')}
                           </Text>
-                        </Td>
-                        <Td
-                          color={theme.compensation?.card.text}
-                          borderColor={theme.compensation?.card.divider}
-                        >
-                          {item.link ? (
-                            <ChakraLink
-                              display="flex"
-                              flexDir="row"
-                              gap="1"
-                              alignItems="center"
-                              href={item.link}
-                              isExternal
-                              color="blue.500"
-                              borderBottom="1px solid"
-                              borderColor="blue.500"
-                              w="max-content"
-                              _hover={{
-                                textDecoration: 'none',
-                                color: 'blue.400',
-                                borderColor: 'blue.400',
-                              }}
-                            >
-                              See proposal
-                              <TbExternalLink />
-                            </ChakraLink>
-                          ) : null}
                         </Td>
 
                         <Td
