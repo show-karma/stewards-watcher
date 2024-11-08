@@ -7,6 +7,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import { useState } from 'react';
 import { DelegateCompensationStats } from 'types';
 
@@ -32,6 +33,7 @@ export const DataTable = <Data extends object>({
       sorting,
     },
   });
+  const { selectedDate } = useDelegateCompensation();
   return (
     <>
       <Table>
@@ -68,6 +70,8 @@ export const DataTable = <Data extends object>({
                   `/delegate-compensation/delegate/${
                     (row.original as DelegateCompensationStats).delegate
                       .publicAddress
+                  }?month=${selectedDate?.name}&year=${
+                    selectedDate?.value.year
                   }`,
                   '_blank'
                 );
