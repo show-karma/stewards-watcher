@@ -35,7 +35,7 @@ export const DelegateCompensationAdminDelegates = ({
   return (
     <DelegateCompensationAdminLayout>
       <Flex align="stretch" flex={1} w="full" flexDirection="column" gap="8">
-        <DelegatePeriod />
+        <DelegatePeriod minimumPeriod={new Date('2024-11-01')} />
         {isFetchingDelegateInfo || isLoadingDelegateInfo ? (
           <Flex w="full" h="20" align="center" justify="center">
             <Spinner />

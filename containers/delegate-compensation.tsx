@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { Flex } from '@chakra-ui/react';
-import { HeaderHat } from 'components';
+import { DelegateCompensationOld, HeaderHat } from 'components';
 import { DelegateCompensation } from 'components/pages/delegate-compensation';
 import {
   DelegatesProvider,
@@ -9,7 +9,10 @@ import {
   useDAO,
   WalletProvider,
 } from 'contexts';
-import { DelegateCompensationProvider } from 'contexts/delegateCompensation';
+import {
+  DelegateCompensationProvider,
+  useDelegateCompensation,
+} from 'contexts/delegateCompensation';
 import { MainLayout } from 'layouts';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -36,6 +39,21 @@ interface IDelegateCompensationContainer {
   user?: string;
   shouldOpenDelegateToAnyone?: boolean;
 }
+
+export const DelegateCompensationSwitch = () => {
+  const { selectedDate } = useDelegateCompensation();
+
+  const year = selectedDate?.value.year;
+  const month = selectedDate?.value.month;
+
+  if (!year || !month) return null;
+
+  const shouldBeOldVersion = year < 2024 || (year === 2024 && month <= 10);
+
+  if (shouldBeOldVersion) return <DelegateCompensationOld />;
+
+  return <DelegateCompensation />;
+};
 
 export const DelegateCompensationContainer: React.FC<
   IDelegateCompensationContainer
@@ -121,7 +139,7 @@ export const DelegateCompensationContainer: React.FC<
                           }
                         />
                         <MainLayout w="full">
-                          <DelegateCompensation />
+                          <DelegateCompensationSwitch />
                         </MainLayout>
                       </Flex>
                     </DelegateCompensationProvider>

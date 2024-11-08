@@ -10,6 +10,8 @@ interface PathProps extends ParsedUrlQuery {
 
 interface FAQProps {
   dao: string;
+  month?: string | null;
+  year?: string | null;
 }
 
 export const getStaticPaths: GetStaticPaths<PathProps> = async () => {
@@ -37,7 +39,9 @@ export const getStaticProps: GetStaticProps<FAQProps, PathProps> = async ({
   }
 
   return {
-    props: { dao: site },
+    props: {
+      dao: site,
+    },
   };
 };
 

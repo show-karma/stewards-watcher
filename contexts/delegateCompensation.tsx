@@ -73,30 +73,39 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
       if (lastPath?.includes('delegate-compensation')) {
         if (year > 2024 || (year === 2024 && month >= 10)) {
           if (isOldVersion) {
-            router.push({
-              pathname: `${rootPathname}/delegate-compensation-old`,
-              query: {
-                month: 'october',
-                year: 2024,
+            router.push(
+              {
+                pathname: `${rootPathname}/delegate-compensation-old`,
+                query: {
+                  month: 'october',
+                  year: 2024,
+                },
               },
-            });
+              undefined,
+              { shallow: true }
+            );
             month = 9;
             year = 2024;
           }
         } else if (!isOldVersion && !isAdmin) {
-          router.push({
-            pathname: `${rootPathname}/delegate-compensation`,
-            query: {
-              month: 'november',
-              year: 2024,
+          router.push(
+            {
+              pathname: `${rootPathname}/delegate-compensation`,
+              query: {
+                month: 'november',
+                year: 2024,
+              },
             },
-          });
+            undefined,
+            { shallow: true }
+          );
           month = 10;
           year = 2024;
         }
       }
-      const correctMonth = month > currentMonth ? currentMonth : month + 1;
-      const correctYear =
+
+      let correctMonth = month > currentMonth ? currentMonth : month + 1;
+      let correctYear =
         year > currentYear || year < startYear ? currentYear : year;
       if (year > currentYear || year < startYear) {
         // get last available month of the year
@@ -113,6 +122,13 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
             year: correctYear,
           },
         };
+      }
+
+      if (isAdmin) {
+        if ((correctMonth < 11 && correctYear === 2024) || correctYear < 2024) {
+          correctYear = 2024;
+          correctMonth = 11;
+        }
       }
 
       return {

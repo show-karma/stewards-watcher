@@ -5,7 +5,13 @@ import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 
-export const MonthDropdown: FC = () => {
+interface IMonthDropdown {
+  minimumPeriod?: Date;
+}
+
+export const MonthDropdown: FC<IMonthDropdown> = ({
+  minimumPeriod = new Date('2024-02-11'),
+}) => {
   const router = useRouter();
   const { rootPathname } = useDAO();
   const { theme } = useDAO();
@@ -16,7 +22,7 @@ export const MonthDropdown: FC = () => {
     const currentDate = new Date();
     for (let year = startYear; year <= currentDate.getFullYear(); year += 1) {
       for (let month = 0; month < 12; month += 1) {
-        if ((month === 0 && year === 2024) || (month === 1 && year === 2024)) {
+        if (new Date(year, month, 1) < minimumPeriod) {
           // eslint-disable-next-line no-continue
           continue;
         }

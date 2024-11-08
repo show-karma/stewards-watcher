@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { Flex } from '@chakra-ui/react';
-import { DelegateCompensationOld, HeaderHat } from 'components';
+import { HeaderHat } from 'components';
 import {
   DelegatesProvider,
   GovernanceVotesProvider,
@@ -14,6 +14,7 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Script from 'next/script';
 import React from 'react';
+import { DelegateCompensationSwitch } from './delegate-compensation';
 
 const RainbowWrapper = dynamic(() =>
   import('components').then(module => module.RainbowWrapper)
@@ -120,7 +121,7 @@ export const DelegateCompensationOldContainer: React.FC<
                           }
                         />
                         <MainLayout w="full">
-                          <DelegateCompensationOld />
+                          <DelegateCompensationSwitch />
                         </MainLayout>
                       </Flex>
                     </DelegateCompensationProvider>

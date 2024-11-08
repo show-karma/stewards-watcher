@@ -117,7 +117,11 @@ export const DelegateCompensationAdmin = () => {
 
   return (
     <DelegateCompensationAdminLayout>
-      <DelegatePeriod delegate={false} period />
+      <DelegatePeriod
+        delegate={false}
+        period
+        minimumPeriod={new Date('2024-11-01')}
+      />
       <Flex
         mt="8"
         align="stretch"

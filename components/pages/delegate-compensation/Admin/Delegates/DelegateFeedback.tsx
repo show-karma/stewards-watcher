@@ -56,7 +56,11 @@ export const DelegateFeedback = ({
   };
 
   const handleScoreChange = (field: string, value: string) => {
-    setFeedbackScores(prev => ({ ...prev, [field]: +(value || 0) }));
+    if (feedbackScores[field as keyof typeof feedbackScores] === +value) {
+      setFeedbackScores(prev => ({ ...prev, [field]: 0 }));
+    } else {
+      setFeedbackScores(prev => ({ ...prev, [field]: +(value || 0) }));
+    }
   };
 
   const handleSaveFeedback = async () => {
@@ -127,6 +131,7 @@ export const DelegateFeedback = ({
           overflowY="auto"
           rounded="4px"
           px="10"
+          py="8"
         >
           <Box bg={theme.card.background} borderRadius="lg" p={4} width="full">
             <VStack spacing={4} align="stretch">

@@ -6,9 +6,11 @@ import { DelegatesDropdown } from '../Delegates/DelegatesDropdown';
 export const DelegatePeriod = ({
   delegate = true,
   period = true,
+  minimumPeriod,
 }: {
   delegate?: boolean;
   period?: boolean;
+  minimumPeriod?: Date;
 }) => {
   const { theme } = useDAO();
   return (
@@ -58,7 +60,7 @@ export const DelegatePeriod = ({
           >
             Period
           </Text>
-          <MonthDropdown />
+          <MonthDropdown minimumPeriod={minimumPeriod} />
         </Flex>
       ) : null}
     </Flex>
