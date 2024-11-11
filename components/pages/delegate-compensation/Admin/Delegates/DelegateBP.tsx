@@ -70,7 +70,10 @@ export const DelegateBP = () => {
         Bonus Points
       </Text>
       <Flex gap="4" justify="space-between" flexDir="row" w="full">
-        <Editable defaultValue={bonusPoints.toString()}>
+        <Editable
+          defaultValue={bonusPoints.toString()}
+          value={bonusPoints.toString() || '0'}
+        >
           <EditablePreview
             fontSize="24px"
             fontWeight={700}
@@ -82,13 +85,17 @@ export const DelegateBP = () => {
           <EditableInput
             type="number"
             min={0}
-            max={25}
+            max={30}
             onChange={event => {
-              setBonusPoints(+event.target.value);
+              if (+event.target.value >= 30) {
+                setBonusPoints(30);
+              } else {
+                setBonusPoints(+event.target.value);
+              }
             }}
             placeholder="Enter bonus points"
             mr={2}
-            bg={theme.card.background}
+            bg={theme.compensation?.card.bg}
             w="full"
             fontSize="24px"
             fontWeight={700}
@@ -97,21 +104,6 @@ export const DelegateBP = () => {
             px="2"
           />
         </Editable>
-        {/* <NumberInput w="full" defaultValue={bonusPoints}>
-          <NumberInputField
-            type="number"
-            min={0}
-            max={25}
-            onChange={event => {
-              setBonusPoints(+event.target.value);
-            }}
-            placeholder="Enter bonus points"
-            mr={2}
-            bg={theme.card.background}
-            color={theme.text}
-            w="full"
-          />
-        </NumberInput> */}
 
         <Button onClick={handleSaveBonusPoints}>Save</Button>
       </Flex>

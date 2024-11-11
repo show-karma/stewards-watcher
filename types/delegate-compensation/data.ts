@@ -34,12 +34,21 @@ export type DelegateStatsFromAPI = {
     snapshotVoting: CompensationStatBreakdown;
     delegateFeedback?: {
       relevance: number;
-      depthAnalyses: number;
+      depthOfAnalysis: number;
       timing: number;
       clarityAndCommunication: number;
-      impactOnDecision: number;
-      presenceInDiscussions: number;
-      score: number;
+      impactOnDecisionMaking: number;
+      presenceMultiplier: number;
+      initialScore: number;
+      finalScore: number;
+      justification: {
+        relevance: string;
+        depthOfAnalysis: string;
+        timing: string;
+        clarityAndCommunication: string;
+        impactOnDecisionMaking: string;
+        presence: string;
+      };
     };
     totalParticipation: string;
     participationRatePercent: number;

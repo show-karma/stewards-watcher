@@ -254,7 +254,7 @@ export const DelegateStats = () => {
                   <Text>
                     DF -{' '}
                     {formatSimpleNumber(
-                      delegateInfo?.stats?.delegateFeedback?.score || 0
+                      delegateInfo?.stats?.delegateFeedback?.finalScore || 0
                     )}
                     %
                   </Text>
@@ -342,9 +342,8 @@ export const DelegateStats = () => {
               lineHeight="32px"
             >
               {formatSimpleNumber(
-                delegateInfo?.stats?.delegateFeedback?.score || 0
+                delegateInfo?.stats?.delegateFeedback?.finalScore || 0
               )}
-              %
             </Text>
           </Flex>
         </Flex>
@@ -470,10 +469,7 @@ export const DelegateStats = () => {
               color={theme.compensation?.card.secondaryText}
               lineHeight="32px"
             >
-              {formatSimpleNumber(
-                delegateInfo?.stats?.participationRatePercent || 0
-              )}
-              %
+              {formatSimpleNumber(delegateInfo?.stats?.participationRate || 0)}
             </Text>
           </Flex>
         </Flex>

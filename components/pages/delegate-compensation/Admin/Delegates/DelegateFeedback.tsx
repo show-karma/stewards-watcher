@@ -2,6 +2,9 @@
 import {
   Box,
   Button,
+  Editable,
+  EditableInput,
+  EditablePreview,
   Flex,
   Img,
   Link,
@@ -36,23 +39,24 @@ export const DelegateFeedback = ({
   const { toast } = useToasty();
   const [feedbackScores, setFeedbackScores] = useState({
     relevance: delegateInfo?.stats?.delegateFeedback?.relevance || 0,
-    depthAnalyses: delegateInfo?.stats?.delegateFeedback?.depthAnalyses || 0,
+    depthOfAnalysis:
+      delegateInfo?.stats?.delegateFeedback?.depthOfAnalysis || 0,
     timing: delegateInfo?.stats?.delegateFeedback?.timing || 0,
     clarityAndCommunication:
       delegateInfo?.stats?.delegateFeedback?.clarityAndCommunication || 0,
-    impactOnDecision:
-      delegateInfo?.stats?.delegateFeedback?.impactOnDecision || 0,
-    presenceInDiscussions:
-      delegateInfo?.stats?.delegateFeedback?.presenceInDiscussions || 0,
+    impactOnDecisionMaking:
+      delegateInfo?.stats?.delegateFeedback?.impactOnDecisionMaking || 0,
+    presenceMultiplier:
+      delegateInfo?.stats?.delegateFeedback?.presenceMultiplier || 0,
   });
   const [isSavingFeedback, setIsSavingFeedback] = useState(false);
   const inputTitle = {
     relevance: 'Relevance',
-    depthAnalyses: 'Depth of Analysis',
+    depthOfAnalysis: 'Depth of Analysis',
     timing: 'Timing',
     clarityAndCommunication: 'Clarity & Communication',
-    impactOnDecision: 'Impact',
-    presenceInDiscussions: 'Presence',
+    impactOnDecisionMaking: 'Impact',
+    presenceMultiplier: 'Presence Multiplier',
   };
 
   const handleScoreChange = (field: string, value: string) => {
@@ -103,6 +107,28 @@ export const DelegateFeedback = ({
     } finally {
       setIsSavingFeedback(false);
     }
+  };
+
+  const numberInputs = ['presenceMultiplier'];
+
+  const calculateFinalScore = () => {
+    const currentScores = feedbackScores;
+
+    // Calculate final scores
+    const initialScore = Number(
+      (
+        currentScores.relevance +
+        currentScores.depthOfAnalysis +
+        currentScores.timing +
+        currentScores.clarityAndCommunication +
+        currentScores.impactOnDecisionMaking
+      ).toFixed(1)
+    );
+    const percentageScore = initialScore / 20; // Convert to percentage
+    const percentageWithMultiplier =
+      percentageScore * currentScores.presenceMultiplier;
+    const finalScore = Number((percentageWithMultiplier * 30).toFixed(1));
+    return finalScore > 30 ? 30 : finalScore;
   };
 
   return (
@@ -173,60 +199,95 @@ export const DelegateFeedback = ({
                       >
                         {inputTitle[key as keyof typeof inputTitle]}
                       </Text>
-                      <Flex flexDir="row" gap="1">
-                        {[1, 2, 3, 4].map(score => (
-                          <Button
-                            key={score}
-                            variant="unstyled"
-                            onClick={() => {
-                              if (!isAuthorized) {
-                                return;
+                      {!numberInputs.includes(key) ? (
+                        <Flex flexDir="row" gap="1">
+                          {[1, 2, 3, 4].map(score => (
+                            <Button
+                              key={score}
+                              variant="unstyled"
+                              onClick={() => {
+                                if (!isAuthorized) {
+                                  return;
+                                }
+                                handleScoreChange(key, score.toString());
+                              }}
+                              color={
+                                score <= Number(value)
+                                  ? 'yellow.400'
+                                  : theme.compensation?.card.text
                               }
-                              handleScoreChange(key, score.toString());
-                            }}
-                            color={
-                              score <= Number(value)
-                                ? 'yellow.400'
-                                : theme.compensation?.card.text
-                            }
-                            opacity={score > Number(value) ? 0.3 : 1}
-                            _hover={
-                              isAuthorized
-                                ? {
-                                    color: 'yellow.300',
-                                    opacity: 1,
+                              opacity={score > Number(value) ? 0.3 : 1}
+                              _hover={
+                                isAuthorized
+                                  ? {
+                                      color: 'yellow.300',
+                                      opacity: 1,
+                                    }
+                                  : undefined
+                              }
+                              onMouseEnter={() => {
+                                if (!isAuthorized) return;
+                                const buttons = document.querySelectorAll(
+                                  `button[data-key="${key}"]`
+                                );
+                                buttons.forEach((btn, index) => {
+                                  if (index < score) {
+                                    (btn as any).style.opacity = '1';
                                   }
-                                : undefined
-                            }
-                            onMouseEnter={() => {
-                              if (!isAuthorized) return;
-                              const buttons = document.querySelectorAll(
-                                `button[data-key="${key}"]`
-                              );
-                              buttons.forEach((btn, index) => {
-                                if (index < score) {
-                                  (btn as any).style.opacity = '1';
-                                }
-                              });
+                                });
+                              }}
+                              onMouseLeave={() => {
+                                if (!isAuthorized) return;
+                                const buttons = document.querySelectorAll(
+                                  `button[data-key="${key}"]`
+                                );
+                                buttons.forEach((btn, index) => {
+                                  if (index >= Number(value)) {
+                                    (btn as any).style.opacity = '0.3';
+                                  }
+                                });
+                              }}
+                              data-key={key}
+                              cursor={isAuthorized ? 'pointer' : 'default'}
+                            >
+                              <StarIcon w="28px" h="28px" />
+                            </Button>
+                          ))}
+                        </Flex>
+                      ) : (
+                        <Editable defaultValue={value.toString()}>
+                          <EditablePreview
+                            fontSize="20px"
+                            fontWeight={700}
+                            color={theme.compensation?.card.secondaryText}
+                            lineHeight="32px"
+                            cursor="pointer"
+                            textDecor="underline"
+                            minW="60px"
+                            minH="32px"
+                            bg={theme.compensation?.bg}
+                            textAlign="end"
+                            px="1"
+                          />
+                          <EditableInput
+                            onChange={event => {
+                              handleScoreChange(key, event.target.value);
                             }}
-                            onMouseLeave={() => {
-                              if (!isAuthorized) return;
-                              const buttons = document.querySelectorAll(
-                                `button[data-key="${key}"]`
-                              );
-                              buttons.forEach((btn, index) => {
-                                if (index >= Number(value)) {
-                                  (btn as any).style.opacity = '0.3';
-                                }
-                              });
-                            }}
-                            data-key={key}
-                            cursor={isAuthorized ? 'pointer' : 'default'}
-                          >
-                            <StarIcon w="28px" h="28px" />
-                          </Button>
-                        ))}
-                      </Flex>
+                            type="number"
+                            min={0}
+                            max={2}
+                            mr={2}
+                            bg={theme.compensation?.card.bg}
+                            w="full"
+                            fontSize="20px"
+                            fontWeight={700}
+                            color={theme.compensation?.card.secondaryText}
+                            lineHeight="32px"
+                            px="2"
+                            textAlign="end"
+                          />
+                        </Editable>
+                      )}
                     </Flex>
                   ))}
                 </Flex>
@@ -270,7 +331,7 @@ export const DelegateFeedback = ({
                       fontWeight={600}
                       color={theme.compensation?.card.secondaryText}
                     >
-                      {delegateInfo?.stats.delegateFeedback?.score || '0'}%
+                      {calculateFinalScore() || '0'}%
                     </Text>
                   </Flex>
                 </Flex>

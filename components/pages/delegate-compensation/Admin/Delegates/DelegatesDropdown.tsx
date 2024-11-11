@@ -141,7 +141,7 @@ export const DelegatesDropdown = () => {
             }}
           >
             <Flex flexDir="row" gap="3" align="center">
-              <ImgWithFallback
+              {/* <ImgWithFallback
                 fallback={option?.publicAddress}
                 src={
                   option?.profilePicture ||
@@ -149,7 +149,7 @@ export const DelegatesDropdown = () => {
                 }
                 boxSize="24px"
                 borderRadius="full"
-              />
+              /> */}
               {option.name || option.ensName || option.publicAddress}
             </Flex>
           </MenuItem>

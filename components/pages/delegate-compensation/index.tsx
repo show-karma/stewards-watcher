@@ -93,7 +93,7 @@ export const DelegateCompensation = () => {
 
           const delegateFeedback = {
             score: formatSimpleNumber(
-              delegate.stats?.delegateFeedback?.score?.toString() || '0'
+              delegate.stats?.delegateFeedback?.finalScore?.toString() || '0'
             ),
           };
 
