@@ -262,8 +262,6 @@ export const DelegateProposals = ({
     }
   });
 
-  console.log(proposalsAndVotes, watch(`communicatingRationale.breakdown`));
-
   return (
     <Flex w="full" flexDir="column" gap="8">
       {/* do a modal for the rationale selected */}
