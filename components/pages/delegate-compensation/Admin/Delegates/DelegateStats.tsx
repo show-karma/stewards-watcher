@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { formatSimpleNumber } from 'utils';
 import { DelegateBP } from './DelegateBP';
 import { DelegateFeedback } from './DelegateFeedback';
+import { DelegatePeriodIndicator } from './DelegatePeriodIndicator';
 
 export const DelegateStats = () => {
   const {
@@ -34,6 +35,7 @@ export const DelegateStats = () => {
         w="full"
         gap="5"
       >
+        <DelegatePeriodIndicator />
         <Flex
           flexDir="column"
           bg={theme.compensation?.card.bg}

@@ -51,7 +51,7 @@ interface IFAQ {
 const DelegateCompesationAdminPage = ({ dao }: IFAQ) => (
   <DAOProvider selectedDAO={dao} shouldFetchInfo={false}>
     <DelegateCompensationAdminContainer>
-      <DelegateCompensationAdminDelegates />
+      <DelegateCompensationAdminDelegates shouldShowDelegate="block" />
     </DelegateCompensationAdminContainer>
   </DAOProvider>
 );

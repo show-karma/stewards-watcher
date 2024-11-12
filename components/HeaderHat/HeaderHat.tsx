@@ -16,13 +16,13 @@ import {
   UserProfile,
 } from 'components';
 import { DelegateVotesModal } from 'components/Modals/DelegateToAnyone';
-import { useDAO, useDelegates, useWallet } from 'contexts';
-import { FC, useEffect } from 'react';
-import { KARMA_WEBSITE } from 'helpers';
 import { UndelegateModal } from 'components/pages/token-holders/UndelegateModal';
-import { NavMenu } from './NavMenu';
+import { useAuth, useDAO, useDelegates, useWallet } from 'contexts';
+import { KARMA_WEBSITE } from 'helpers';
+import { FC, useEffect } from 'react';
 import { HeaderBurgerAccordion } from './HeaderBurgerAccordion';
 import { Madeby } from './Madeby';
+import { NavMenu } from './NavMenu';
 import { ThemeButton } from './ThemeButton';
 
 export const StyledButton: FC<ButtonProps> = ({ children, ...rest }) => {
@@ -69,6 +69,7 @@ export const HeaderHat: FC<IHeaderHat> = ({
   } = useDelegates();
   const { delegateLoginIsOpen, delegateLoginOnClose, delegateLoginOnOpen } =
     useWallet();
+  const { isDaoAdmin } = useAuth();
 
   const [isMobile] = useMediaQuery('(max-width: 768px)');
   const [isSmallScreen] = useMediaQuery('(max-width: 1280px)');
@@ -120,6 +121,13 @@ export const HeaderHat: FC<IHeaderHat> = ({
         path: `${rootPathname}/delegate-compensation`,
         isExternal: false,
       });
+      if (isDaoAdmin) {
+        array.push({
+          title: 'Delegate Compensation Admin',
+          path: `${rootPathname}/delegate-compensation/admin`,
+          isExternal: false,
+        });
+      }
     }
 
     array.push({

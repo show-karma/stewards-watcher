@@ -117,7 +117,7 @@ export const DelegateCompensationAdminForumActivity = ({
             Forum activity
           </Heading>
         </Flex>
-        <DelegatePeriod delegate period />
+        <DelegatePeriod delegate="block" period />
         {posts?.length ? (
           <Table variant="simple" w="full">
             <Thead w="full">

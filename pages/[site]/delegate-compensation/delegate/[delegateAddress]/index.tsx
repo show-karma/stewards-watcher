@@ -1,9 +1,9 @@
+import { DelegateCompensationAdminDelegates } from 'components/pages/delegate-compensation/Admin/Delegates';
+import { DelegateCompensationAdminContainer } from 'containers/delegate-compensation-admin';
 import { DAOProvider } from 'contexts/dao';
+import { daosDictionary } from 'helpers';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
-import { daosDictionary } from 'helpers';
-import { DelegateCompensationAdminContainer } from 'containers/delegate-compensation-admin';
-import { DelegateCompensationAdminDelegates } from 'components/pages/delegate-compensation/Admin/Delegates';
 
 interface PathProps extends ParsedUrlQuery {
   site: string;
@@ -55,7 +55,7 @@ const DelegateCompensationAdminDelegatesPage = ({
 }: IFAQ) => (
   <DAOProvider selectedDAO={dao} shouldFetchInfo={false}>
     <DelegateCompensationAdminContainer>
-      <DelegateCompensationAdminDelegates />
+      <DelegateCompensationAdminDelegates shouldShowDelegate="block" />
     </DelegateCompensationAdminContainer>
   </DAOProvider>
 );

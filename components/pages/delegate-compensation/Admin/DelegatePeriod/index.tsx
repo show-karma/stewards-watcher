@@ -1,30 +1,23 @@
 import { Flex, Text } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
 import { MonthDropdown } from '../../MonthDropdown';
+import { DelegateBlock } from '../Delegates/DelegateBlock';
 import { DelegatesDropdown } from '../Delegates/DelegatesDropdown';
 
 export const DelegatePeriod = ({
-  delegate = true,
+  delegate = 'dropdown',
   period = true,
   minimumPeriod,
 }: {
-  delegate?: boolean;
+  delegate?: 'block' | 'dropdown' | 'none';
   period?: boolean;
   minimumPeriod?: Date;
 }) => {
   const { theme } = useDAO();
-  return (
-    <Flex
-      flexDir="row"
-      gap="10"
-      justify="flex-start"
-      bg={theme.compensation?.card.bg}
-      borderRadius="8px"
-      px="4"
-      py="6"
-      flexWrap="wrap"
-    >
-      {delegate ? (
+  const renderDelegate = () => {
+    if (delegate === 'block') return <DelegateBlock />;
+    if (delegate === 'dropdown')
+      return (
         <Flex
           flexDir="row"
           gap="4"
@@ -42,7 +35,12 @@ export const DelegatePeriod = ({
           </Text>
           <DelegatesDropdown />
         </Flex>
-      ) : null}
+      );
+    return null;
+  };
+  return (
+    <Flex flexDir="row" gap="10" justify="space-between" flexWrap="wrap">
+      {renderDelegate()}
       {period ? (
         <Flex
           flexDir="row"
@@ -51,6 +49,9 @@ export const DelegatePeriod = ({
           align="center"
           bg={theme.compensation?.card.bg}
           w="full"
+          px="4"
+          py="4"
+          borderRadius="8px"
           maxW="max-content"
         >
           <Text
