@@ -33,7 +33,7 @@ export const DelegatePeriodIndicator = () => {
         stats for
       </Text>
       <Text fontSize="2xl" fontWeight="bold" mt={1}>
-        November <br /> 2024
+        {selectedDate?.name} <br /> {selectedDate?.value.year}
       </Text>
     </Flex>
   );

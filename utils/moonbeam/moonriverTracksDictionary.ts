@@ -22,7 +22,7 @@ export const moonriverTracksDictionary = {
     emoji: '❌',
     description: 'For killing of harmful referendum',
   },
-  'Fast General Admin': { 
+  'Fast General Admin': {
     emoji: '🚀',
     description: 'For faster general on-chain decisions',
   },
