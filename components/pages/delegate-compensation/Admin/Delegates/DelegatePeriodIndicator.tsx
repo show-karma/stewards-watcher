@@ -12,7 +12,7 @@ export const DelegatePeriodIndicator = () => {
       p={4}
       borderRadius="lg"
       boxShadow="sm"
-      maxW="300px"
+      maxW={['full', 'full', '300px']}
       w="full"
     >
       <Flex align="center" gap={2}>

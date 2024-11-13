@@ -96,14 +96,22 @@ export const DelegateCompensationAdminForumActivity = ({
                 w="max-content"
                 mt="8"
               >
-                <Text fontWeight="bold" color="blue.500">
-                  Link to post
-                </Text>
                 <ChakraLink
                   isExternal
                   href={selectedPost?.link}
                   color="blue.500"
+                  display="flex"
+                  flexDir="row"
+                  alignItems="center"
+                  gap="2"
+                  _hover={{
+                    textDecoration: 'none',
+                    borderColor: 'blue.400',
+                  }}
                 >
+                  <Text fontWeight="bold" color="blue.500">
+                    Link to post
+                  </Text>
                   <TbExternalLink />
                 </ChakraLink>
               </Flex>
@@ -152,6 +160,11 @@ export const DelegateCompensationAdminForumActivity = ({
                     >
                       <MDPreview
                         source={post.comment.split('\n').slice(0, 4).join('\n')}
+                        // disallowedElements={['a']}
+                        components={{
+                          // eslint-disable-next-line id-length, react/no-unstable-nested-components
+                          a: ({ children }) => <Text>{children}</Text>,
+                        }}
                       />
                     </Box>
                   </Td>
@@ -167,6 +180,10 @@ export const DelegateCompensationAdminForumActivity = ({
                       flexDir="row"
                       alignItems="center"
                       gap="2"
+                      _hover={{
+                        textDecoration: 'none',
+                        borderColor: 'blue.400',
+                      }}
                     >
                       Link to post
                       <TbExternalLink />
