@@ -1,7 +1,4 @@
 /* eslint-disable react/no-unstable-nested-components */
-import * as React from 'react';
-import { createColumnHelper } from '@tanstack/react-table';
-import { DelegateCompensationStats } from 'types';
 import {
   Code,
   Flex,
@@ -11,10 +8,13 @@ import {
   Text,
   Tooltip,
 } from '@chakra-ui/react';
+import { createColumnHelper } from '@tanstack/react-table';
 import { ImgWithFallback } from 'components/ImgWithFallback';
 import { useDAO } from 'contexts';
-import { FaCheckCircle } from 'react-icons/fa';
+import * as React from 'react';
 import { AiFillQuestionCircle } from 'react-icons/ai';
+import { FaCheckCircle } from 'react-icons/fa';
+import { DelegateCompensationStats } from 'types';
 import { formatNumber, formatSimpleNumber, truncateAddress } from 'utils';
 import { DataTable } from './DataTable';
 
@@ -136,15 +136,15 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
             label={
               <Flex flexDir="column" py="1" gap="2">
                 <Text fontWeight={600}>
-                  Participation Rate (PR) - Weight 20
+                  Participation Rate (PR) - Weight 15
                 </Text>
                 <Text fontWeight="normal">
-                  Percentage of the total participation of the member in votes.
-                  Karma pulls the participation activity directly from onchain
-                  transactions. This is the only parameter that is not reset
-                  monthly.
+                  Percentage of the total participation of the member in votes
+                  in the last 90 days. Karma pulls the participation activity
+                  directly from onchain transactions. This parameter will be
+                  calculated at the end of each month.
                 </Text>
-                <Code fontWeight="normal">PR formula: (PR * 20) / 100</Code>
+                <Code fontWeight="normal">PR90 formula: (PR90 * 15) / 100</Code>
               </Flex>
             }
           >
@@ -173,7 +173,7 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
             color={theme.collapse.text}
             label={
               <Flex flexDir="column" py="1" gap="2">
-                <Text fontWeight={600}>Snapshot Voting (SV) - Weight 15</Text>
+                <Text fontWeight={600}>Snapshot Voting (SV) - Weight 20</Text>
                 <Text fontWeight="normal">
                   Percentage of delegate participation in snapshot voting. This
                   parameter is reset at the beginning of each month.
@@ -189,7 +189,7 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
                   </ListItem>
                 </List>
                 <Code fontWeight="normal">
-                  SV formula: (SV(Rn) / SV(Tn)) * 15
+                  SV formula: (SV(Rn) / SV(Tn)) * 20
                 </Code>
               </Flex>
             }
@@ -266,7 +266,7 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
             label={
               <Flex flexDir="column" py="1" gap="2">
                 <Text fontWeight={600}>
-                  Communication Rationale (CR) - Weight 25
+                  Communication Rationale (CR) - Weight 10
                 </Text>
                 <Text fontWeight="normal">
                   Percentage of communication threads with the justification of
@@ -286,7 +286,7 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
                   </ListItem>
                 </List>
                 <Code fontWeight="normal">
-                  CR formula: (CR(Rn) / CR(Tn)) * 25
+                  CR formula: (CR(Rn) / CR(Tn)) * 10
                 </Code>
               </Flex>
             }
@@ -298,7 +298,7 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
         </Flex>
       ),
     }),
-    columnHelper.accessor('commentingProposal.score', {
+    columnHelper.accessor('delegateFeedback.score', {
       cell: info => {
         if (info.getValue()) {
           return formatSimpleNumber(info.getValue());
@@ -310,34 +310,25 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
       },
       header: () => (
         <Flex flexDir="row" gap="2" alignItems="center">
-          Commenting Proposal
+          Delegates Feedback
           <Tooltip
             bg={theme.collapse.bg || theme.card.background}
             color={theme.collapse.text}
             label={
               <Flex flexDir="column" py="1" gap="2">
                 <Text fontWeight={600}>
-                  Commenting Proposal (CP) - Weight 15
+                  Delegates Feedback (DF) - Weight 30
                 </Text>
                 <Text fontWeight="normal">
-                  Percentage of proposals where the delegate asked questions or
-                  generated important discussion for the advancement of the
-                  proposal. This parameter is reset at the beginning of each
-                  month.
+                  This is the score given by the program administrator regarding
+                  the feedback provided by the delegate during the month. This
+                  new iteration (v1.5) will use a rubric with a scoring system
+                  detailed above.
                 </Text>
-                <List fontWeight="normal">
-                  <ListItem>
-                    <b>Tn</b>: Total number of formal proposals posted on the
-                    forum.
-                  </ListItem>
-                  <ListItem>
-                    <b>Rn:</b> Number of actual proposals where the delegate
-                    made a genuine and quality contribution. Spam messages will
-                    not be considered.
-                  </ListItem>
-                </List>
+
                 <Code fontWeight="normal">
-                  CP formula: (CP(Rn) / CP(Tn)) * 15
+                  DF formula: (Σ qualitative criteria) / 20 * 100 * Presence in
+                  discussions multiplier * 30 (DF weight)
                 </Code>
               </Flex>
             }
@@ -374,7 +365,7 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
                 </Text>
 
                 <Code fontWeight="normal">
-                  TP% formula: PR + SV + TV + CR + CP + BP
+                  TP% formula: PR + SV + TV + CR + DF + BP
                 </Code>
               </Flex>
             }
@@ -407,7 +398,7 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
                 <Text fontWeight={600}>Bonus Point (BP) - Extra +30% TP</Text>
                 <Text fontWeight="normal">
                   This parameter is extra. If the delegate makes a significant
-                  contribution to the DAO, he/she is automatically granted +40%
+                  contribution to the DAO, he/she is automatically granted +30%
                   extra TP. This parameter is at the discretion of the program
                   administrator. This parameter is reset at the beginning of
                   each month

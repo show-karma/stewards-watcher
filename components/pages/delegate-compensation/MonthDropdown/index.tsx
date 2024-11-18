@@ -5,7 +5,13 @@ import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 
-export const MonthDropdown: FC = () => {
+interface IMonthDropdown {
+  minimumPeriod?: Date;
+}
+
+export const MonthDropdown: FC<IMonthDropdown> = ({
+  minimumPeriod = new Date('2024-02-11'),
+}) => {
   const router = useRouter();
   const { rootPathname } = useDAO();
   const { theme } = useDAO();
@@ -14,22 +20,20 @@ export const MonthDropdown: FC = () => {
     const supportedDates = [];
     const startYear = 2024;
     const currentDate = new Date();
-
     for (let year = startYear; year <= currentDate.getFullYear(); year += 1) {
       for (let month = 0; month < 12; month += 1) {
-        if ((month === 0 && year === 2024) || (month === 1 && year === 2024)) {
+        if (new Date(year, month, 1) < minimumPeriod) {
           // eslint-disable-next-line no-continue
           continue;
         }
+
         if (
           year === currentDate.getFullYear() &&
           month > currentDate.getMonth()
         ) {
           break;
         }
-        if (year > 2024 || (month >= 10 && year === 2024)) {
-          break;
-        }
+
         supportedDates.push({
           name: new Date(year, month, 1).toLocaleString('en-US', {
             month: 'long',
@@ -58,19 +62,53 @@ export const MonthDropdown: FC = () => {
             name: itemDate.name,
             value: itemDate.value,
           });
-          router.push(
-            {
-              pathname: router.pathname.includes('/admin')
-                ? `/${rootPathname}/delegate-compensation/admin`
-                : `/${rootPathname}/delegate-compensation`,
-              query: {
-                month: itemDate.name.toLowerCase(),
-                year: itemDate.value.year,
+
+          const lastPath = router.asPath.split('/')?.at(-1);
+
+          if (lastPath?.includes('delegate-compensation')) {
+            const isOldVersion = router.pathname.includes('-old');
+            if (
+              (itemDate.value.month >= 11 && itemDate.value.year === 2024) ||
+              itemDate.value.year > 2024
+            ) {
+              router.push(
+                {
+                  pathname: `${rootPathname}/delegate-compensation`,
+                  query: {
+                    month: itemDate.name.toLowerCase(),
+                    year: itemDate.value.year,
+                  },
+                },
+                undefined,
+                { shallow: !isOldVersion }
+              );
+            } else {
+              router.push(
+                {
+                  pathname: `${rootPathname}/delegate-compensation-old`,
+                  query: {
+                    month: itemDate.name.toLowerCase(),
+                    year: itemDate.value.year,
+                  },
+                },
+                undefined,
+                { shallow: !!isOldVersion }
+              );
+            }
+          } else {
+            const removeQueryParams = router.asPath.split('?')[0];
+            router.push(
+              {
+                pathname: `${rootPathname}${removeQueryParams}`,
+                query: {
+                  month: itemDate.name.toLowerCase(),
+                  year: itemDate.value.year,
+                },
               },
-            },
-            undefined,
-            { shallow: true }
-          );
+              undefined,
+              { shallow: true }
+            );
+          }
         }}
       >
         {itemDate.name} {itemDate.value.year}
@@ -81,11 +119,12 @@ export const MonthDropdown: FC = () => {
     <Menu>
       <MenuButton
         w="max-content"
-        bg={theme.filters.activeBg}
         as={Button}
         borderWidth="1px"
         borderStyle="solid"
-        borderColor={theme.card.interests.text}
+        bg={theme.compensation?.card.dropdown.bg}
+        borderColor={theme.compensation?.card.dropdown.border}
+        color={theme.compensation?.card.dropdown.text}
         rightIcon={
           <DownChevron
             display="flex"
@@ -94,6 +133,11 @@ export const MonthDropdown: FC = () => {
             boxSize="4"
           />
         }
+        fontSize="14px"
+        fontWeight={400}
+        maxW="full"
+        px="3"
+        py="3"
       >
         {selectedDate?.name} {selectedDate?.value.year}
       </MenuButton>

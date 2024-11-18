@@ -1,4 +1,7 @@
 /* eslint-disable no-console */
+import { Flex } from '@chakra-ui/react';
+import { DelegateCompensationOld, HeaderHat } from 'components';
+import { DelegateCompensation } from 'components/pages/delegate-compensation';
 import {
   DelegatesProvider,
   GovernanceVotesProvider,
@@ -6,14 +9,15 @@ import {
   useDAO,
   WalletProvider,
 } from 'contexts';
+import {
+  DelegateCompensationProvider,
+  useDelegateCompensation,
+} from 'contexts/delegateCompensation';
 import { MainLayout } from 'layouts';
-import Head from 'next/head';
-import React from 'react';
-import { Flex } from '@chakra-ui/react';
-import Script from 'next/script';
 import dynamic from 'next/dynamic';
-import { DelegateCompensation, HeaderHat } from 'components';
-import { DelegateCompensationProvider } from 'contexts/delegateCompensation';
+import Head from 'next/head';
+import Script from 'next/script';
+import React from 'react';
 
 const RainbowWrapper = dynamic(() =>
   import('components').then(module => module.RainbowWrapper)
@@ -35,6 +39,21 @@ interface IDelegateCompensationContainer {
   user?: string;
   shouldOpenDelegateToAnyone?: boolean;
 }
+
+export const DelegateCompensationSwitch = () => {
+  const { selectedDate } = useDelegateCompensation();
+
+  const year = selectedDate?.value.year;
+  const month = selectedDate?.value.month;
+
+  if (!year || !month) return null;
+
+  const shouldBeOldVersion = year < 2024 || (year === 2024 && month <= 10);
+
+  if (shouldBeOldVersion) return <DelegateCompensationOld />;
+
+  return <DelegateCompensation />;
+};
 
 export const DelegateCompensationContainer: React.FC<
   IDelegateCompensationContainer
@@ -120,7 +139,7 @@ export const DelegateCompensationContainer: React.FC<
                           }
                         />
                         <MainLayout w="full">
-                          <DelegateCompensation />
+                          <DelegateCompensationSwitch />
                         </MainLayout>
                       </Flex>
                     </DelegateCompensationProvider>

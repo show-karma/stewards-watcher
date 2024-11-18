@@ -11,12 +11,7 @@ export const getForumActivity = async (
   try {
     const response: AxiosResponse<{
       data: { posts: ForumPosts[] };
-    }> = await api.get(`/delegate/${forumHandle}/forum-posts`, {
-      params: {
-        month: month || undefined,
-        year: year || undefined,
-      },
-    });
+    }> = await api.get(`/delegate/${forumHandle}/forum-posts/${month}/${year}`);
     const posts = response?.data?.data?.posts;
     if (!posts) throw new Error('No posts');
     posts.forEach(post => {

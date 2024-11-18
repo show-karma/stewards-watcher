@@ -1,23 +1,15 @@
+import { Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
 import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  useDisclosure,
-} from '@chakra-ui/react';
-import {
-  useReactTable,
-  flexRender,
-  getCoreRowModel,
   ColumnDef,
   SortingState,
+  flexRender,
+  getCoreRowModel,
   getSortedRowModel,
+  useReactTable,
 } from '@tanstack/react-table';
+import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import { useState } from 'react';
 import { DelegateCompensationStats } from 'types';
-import { BreakdownModal } from './BreakdownModal';
 
 export type DataTableProps<Data extends object> = {
   data: Data[];
@@ -41,15 +33,7 @@ export const DataTable = <Data extends object>({
       sorting,
     },
   });
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [selectedDelegate, setSelectedDelegate] =
-    useState<DelegateCompensationStats | null>(null);
-
-  const openBreakdownModal = (delegate: DelegateCompensationStats) => {
-    setSelectedDelegate(delegate);
-    onOpen();
-  };
-
+  const { selectedDate } = useDelegateCompensation();
   return (
     <>
       <Table>
@@ -80,7 +64,17 @@ export const DataTable = <Data extends object>({
             <Tr
               key={row.id}
               onClick={() => {
-                openBreakdownModal(row.original as DelegateCompensationStats);
+                // open a new tab with link
+                if (!window) return;
+                window.open(
+                  `/delegate-compensation/delegate/${
+                    (row.original as DelegateCompensationStats).delegate
+                      .publicAddress
+                  }?month=${selectedDate?.name}&year=${
+                    selectedDate?.value.year
+                  }`,
+                  '_blank'
+                );
               }}
               cursor="pointer"
               _hover={{
@@ -103,14 +97,6 @@ export const DataTable = <Data extends object>({
           ))}
         </Tbody>
       </Table>
-      {isOpen && selectedDelegate ? (
-        <BreakdownModal
-          delegate={selectedDelegate}
-          isOpen={isOpen}
-          onClose={onClose}
-          refreshFn={refreshFn}
-        />
-      ) : null}
     </>
   );
 };

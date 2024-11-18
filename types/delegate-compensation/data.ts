@@ -32,14 +32,23 @@ export type DelegateStatsFromAPI = {
     participationRate: string;
     payment: number;
     snapshotVoting: CompensationStatBreakdown;
-    delegateFeedback: {
+    delegateFeedback?: {
       relevance: number;
-      depthAnalyses: number;
+      depthOfAnalysis: number;
       timing: number;
       clarityAndCommunication: number;
-      impactOnDecision: number;
-      presenceInDiscussions: number;
-      score: number;
+      impactOnDecisionMaking: number;
+      presenceMultiplier: number;
+      initialScore: number;
+      finalScore: number;
+      justification: {
+        relevance: string;
+        depthOfAnalysis: string;
+        timing: string;
+        clarityAndCommunication: string;
+        impactOnDecisionMaking: string;
+        presence: string;
+      };
     };
     totalParticipation: string;
     participationRatePercent: number;
@@ -64,6 +73,9 @@ export type DelegateCompensationStats = {
   onChainVoting: CompensationStatBreakdown;
   communicatingRationale: CompensationStatBreakdown;
   commentingProposal: CompensationStatBreakdown;
+  delegateFeedback?: {
+    score: string;
+  };
   bonusPoint: string;
   totalParticipation: string;
   payment: string;

@@ -1,12 +1,12 @@
 import { Flex, Skeleton, Spinner, Switch, Text } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
-import { useEffect, useState } from 'react';
+import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import { api } from 'helpers';
+import { useEffect, useState } from 'react';
 import { DelegateCompensationStats, DelegateStatsFromAPI } from 'types';
 import { formatSimpleNumber } from 'utils';
-import { useDelegateCompensation } from 'contexts/delegateCompensation';
-import { Table } from './Table';
 import { MonthDropdown } from './MonthDropdown';
+import { Table } from './Table';
 
 export const DelegateCompensation = () => {
   const { theme } = useDAO();
@@ -91,6 +91,12 @@ export const DelegateCompensation = () => {
             ),
           };
 
+          const delegateFeedback = {
+            score: formatSimpleNumber(
+              delegate.stats?.delegateFeedback?.finalScore?.toString() || '0'
+            ),
+          };
+
           return {
             id: delegate.id,
             delegate: {
@@ -111,6 +117,7 @@ export const DelegateCompensation = () => {
             onChainVoting,
             communicatingRationale,
             commentingProposal,
+            delegateFeedback,
             totalParticipation: delegate.stats.totalParticipation,
             payment: formatSimpleNumber(delegate.stats.payment),
             bonusPoint: delegate.stats.bonusPoint.toString(),

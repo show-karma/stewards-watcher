@@ -1,7 +1,6 @@
-import { Flex, Heading } from '@chakra-ui/react';
+import { Flex, Heading, Image } from '@chakra-ui/react';
 import { ChakraLink } from 'components';
 import { AdminGuard } from 'components/pages/delegate-compensation/Admin/AdminGuard';
-import { MonthDropdown } from 'components/pages/delegate-compensation/MonthDropdown';
 import { useDAO } from 'contexts';
 import { useRouter } from 'next/router';
 
@@ -13,51 +12,77 @@ export const DelegateCompensationAdminLayout = ({
   const { theme } = useDAO();
   const { pathname } = useRouter();
 
+  const isPublic = !!pathname.includes('/admin');
+
   return (
-    <AdminGuard>
+    <AdminGuard disableGuard={!isPublic}>
       <Flex flexDir="column" w="full" p={5}>
-        <Heading mb={10} color={theme.text}>
-          Admin Dashboard
-        </Heading>
-        <Flex
-          flexDirection={['column', 'row']}
-          justifyContent="flex-start"
-          gap="10"
-        >
-          <Flex flexDirection="column" gap="4" maxW="200px" w="full">
-            <MonthDropdown />
-            <Flex
-              flexDir="column"
-              gap={2}
-              px="2"
-              py="3"
-              bgColor={theme.card.background}
-              rounded="lg"
-            >
+        {isPublic ? (
+          <Flex flexDirection={['row']} justifyContent="space-between" gap="10">
+            <Heading mb={10} color={theme.text} fontSize="32px">
+              <Flex flexDir="row" gap="6">
+                <Image
+                  src="/icons/delegate-compensation/hi.png"
+                  alt="hi"
+                  w="40px"
+                  h="40px"
+                />
+                Hi, Admin!
+              </Flex>
+            </Heading>
+            <Flex flexDir="row" gap={2} rounded="lg" h="max-content">
               <ChakraLink
-                px="4"
-                py="3"
-                bgColor={theme.card.statBg}
+                px="2.5"
+                py="2.5"
+                bgColor="transparent"
                 href="/delegate-compensation/admin"
-                rounded="lg"
                 color={theme.text}
+                h="max-content"
+                _hover={{}}
+                style={{
+                  borderBottom: '2px solid',
+                  borderBottomColor: !pathname.includes(
+                    '/delegate-compensation/admin/delegate'
+                  )
+                    ? '#155EEF'
+                    : 'transparent',
+                  fontWeight: !pathname.includes(
+                    '/delegate-compensation/admin/delegate'
+                  )
+                    ? 'bold'
+                    : 'normal',
+                }}
               >
                 Proposals
               </ChakraLink>
               <ChakraLink
-                px="4"
-                py="3"
-                bgColor={theme.card.statBg}
-                rounded="lg"
+                px="2.5"
+                py="2.5"
+                bgColor="transparent"
                 href="/delegate-compensation/admin/delegate"
                 color={theme.text}
+                h="max-content"
+                _hover={{}}
+                style={{
+                  borderBottom: '2px solid',
+                  borderBottomColor: pathname.includes(
+                    '/delegate-compensation/admin/delegate'
+                  )
+                    ? '#155EEF'
+                    : 'transparent',
+                  fontWeight: pathname.includes(
+                    '/delegate-compensation/admin/delegate'
+                  )
+                    ? 'bold'
+                    : 'normal',
+                }}
               >
                 Delegates
               </ChakraLink>
             </Flex>
           </Flex>
-          {children}
-        </Flex>
+        ) : null}
+        {children}
       </Flex>
     </AdminGuard>
   );

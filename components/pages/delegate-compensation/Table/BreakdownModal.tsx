@@ -1,52 +1,42 @@
 /* eslint-disable no-nested-ternary */
+import { ApolloClient, gql, InMemoryCache } from '@apollo/client';
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalCloseButton,
-  Flex,
-  Text,
   Button,
-  Editable,
-  EditablePreview,
-  EditableInput,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  TableContainer,
-  Switch,
+  Flex,
   FormControl,
   Icon,
-  useClipboard,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  Switch,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Text,
+  Th,
+  Thead,
   Tooltip,
-  Link,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
+  Tr,
+  useClipboard,
 } from '@chakra-ui/react';
+import { yupResolver } from '@hookform/resolvers/yup';
+import axios from 'axios';
 import { ImgWithFallback } from 'components/ImgWithFallback';
 import { useAuth, useDAO, useDelegates } from 'contexts';
-import { FC, useEffect, useState } from 'react';
-import { DelegateCompensationStats } from 'types';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import axios from 'axios';
-import { useToasty } from 'hooks';
-import { IoCopy } from 'react-icons/io5';
-import { formatNumberPercentage, truncateAddress } from 'utils';
-import { FaCheckCircle, FaExternalLinkAlt } from 'react-icons/fa';
-import { DownChevron } from 'components/Icons';
 import { API_ROUTES, KARMA_API } from 'helpers';
-import debounce from 'lodash.debounce';
+import { useToasty } from 'hooks';
+import { FC, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { AiFillQuestionCircle } from 'react-icons/ai';
-import { ApolloClient, gql, InMemoryCache } from '@apollo/client';
+import { FaCheckCircle } from 'react-icons/fa';
+import { IoCopy } from 'react-icons/io5';
+import { DelegateCompensationStats } from 'types';
+import { formatNumberPercentage, truncateAddress } from 'utils';
+import * as yup from 'yup';
 
 interface BreakdownModalProps {
   delegate: DelegateCompensationStats;
@@ -188,14 +178,14 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
         'Number of real communication rational threads where the delegate communicated and justified his/her decision',
     },
     {
-      name: 'Commenting Proposal (CP)',
-      TN: delegate.commentingProposal.tn,
-      RN: delegate.commentingProposal.rn,
-      total: delegate.commentingProposal.score,
-      formName: 'commentingProposal',
+      name: 'Delegates Feedback (DF)',
+      TN: null,
+      RN: null,
+      total: delegate.delegateFeedback?.score,
+      formName: 'delegateFeedback',
       canEdit: ['tn', 'rn', 'total'] as string[],
       description:
-        'Number of actual proposals where the delegate made a genuine and quality contribution. Spam messages will not be considered',
+        'This is the score given by the program administrator regarding the feedback provided by the delegate during the month. This new iteration (v1.5) will use a rubric with a scoring system detailed above.',
     },
     {
       name: 'Bonus Point (BP)',
@@ -205,7 +195,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
       formName: 'bonusPoint',
       canEdit: ['total'] as string[],
       description:
-        'This parameter is extra. If the delegate makes a significant contribution to the DAO, he/she is automatically granted +40% extra TP. This parameter is at the discretion of the program administrator. This parameter is reset at the beginning of each month',
+        'This parameter is extra. If the delegate makes a significant contribution to the DAO, he/she is automatically granted +30% extra TP. This parameter is at the discretion of the program administrator. This parameter is reset at the beginning of each month',
     },
     {
       name: 'Total Participation (TP)',
@@ -501,7 +491,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                           borderBottomColor={theme.modal.header.title}
                           color={theme.modal.header.title}
                         >
-                          {item.RN &&
+                          {/* {item.RN &&
                           item.canEdit.includes('rn') &&
                           isDaoAdmin ? (
                             <Flex flexDir="row" gap="4" alignItems="center">
@@ -549,7 +539,11 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                             <Text px="1" color={theme.modal.header.title}>
                               {item.RN}
                             </Text>
-                          )}
+                          )} */}
+
+                          <Text px="1" color={theme.modal.header.title}>
+                            {item.RN}
+                          </Text>
                         </Td>
                         <Td
                           borderBottomWidth="1px"
@@ -557,7 +551,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                           borderBottomColor={theme.modal.header.title}
                           color={theme.modal.header.title}
                         >
-                          {item.TN &&
+                          {/* {item.TN &&
                           item.canEdit.includes('tn') &&
                           isDaoAdmin ? (
                             <Flex flexDir="row" gap="4" alignItems="center">
@@ -602,11 +596,11 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                                 />
                               </Editable>
                             </Flex>
-                          ) : (
-                            <Text px="1" color={theme.modal.header.title}>
-                              {item.TN}
-                            </Text>
-                          )}
+                          ) : ( */}
+                          <Text px="1" color={theme.modal.header.title}>
+                            {item.TN}
+                          </Text>
+                          {/* )} */}
                         </Td>
 
                         <Td
@@ -615,7 +609,7 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                           borderBottomColor={theme.modal.header.title}
                           color={theme.modal.header.title}
                         >
-                          {item.total &&
+                          {/* {item.total &&
                           item.canEdit.includes('total') &&
                           (!item.TN || !item.RN) &&
                           isDaoAdmin ? (
@@ -1064,11 +1058,11 @@ export const BreakdownModal: FC<BreakdownModalProps> = ({
                                 {item.total}
                               </Text>
                             )
-                          ) : (
-                            <Text px="1" color={theme.modal.header.title}>
-                              {item.total}
-                            </Text>
-                          )}
+                          ) : ( */}
+                          <Text px="1" color={theme.modal.header.title}>
+                            {item.total}
+                          </Text>
+                          {/* )} */}
                         </Td>
                       </Tr>
                     ))}

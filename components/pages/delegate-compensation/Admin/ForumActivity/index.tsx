@@ -22,11 +22,11 @@ import { ChakraLink } from 'components/ChakraLink';
 import { useDAO } from 'contexts';
 import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import { DelegateCompensationAdminLayout } from 'layouts/delegateCompensationAdmin';
-import { TbExternalLink } from 'react-icons/tb';
-import { getForumActivity } from 'utils/delegate-compensation/getForumActivity';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
-import { DelegatesDropdown } from '../Delegates/DelegatesDropdown';
+import { TbExternalLink } from 'react-icons/tb';
+import { getForumActivity } from 'utils/delegate-compensation/getForumActivity';
+import { DelegatePeriod } from '../DelegatePeriod';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 const MDPreview = dynamic(() => import('@uiw/react-markdown-preview'), {
@@ -55,7 +55,7 @@ export const DelegateCompensationAdminForumActivity = ({
     ['delegate-compensation-forum-activity', delegateInfo?.discourseHandle],
     () =>
       getForumActivity(
-        selectedDate?.name,
+        selectedDate?.value.month,
         selectedDate?.value.year,
         delegateInfo?.discourseHandle
       ),
@@ -63,7 +63,7 @@ export const DelegateCompensationAdminForumActivity = ({
       enabled:
         !!delegateInfo?.discourseHandle &&
         !!selectedDate?.value.year &&
-        !!selectedDate?.name,
+        !!selectedDate?.value.month,
     }
   );
 
@@ -96,14 +96,22 @@ export const DelegateCompensationAdminForumActivity = ({
                 w="max-content"
                 mt="8"
               >
-                <Text fontWeight="bold" color="blue.500">
-                  Link to post
-                </Text>
                 <ChakraLink
                   isExternal
                   href={selectedPost?.link}
                   color="blue.500"
+                  display="flex"
+                  flexDir="row"
+                  alignItems="center"
+                  gap="2"
+                  _hover={{
+                    textDecoration: 'none',
+                    borderColor: 'blue.400',
+                  }}
                 >
+                  <Text fontWeight="bold" color="blue.500">
+                    Link to post
+                  </Text>
                   <TbExternalLink />
                 </ChakraLink>
               </Flex>
@@ -114,12 +122,10 @@ export const DelegateCompensationAdminForumActivity = ({
       <Box w="full">
         <Flex flexDir="column" gap="4">
           <Heading fontSize="xl" fontWeight="bold" color={theme.text} mb="4">
-            Forum activity of{' '}
-            {delegateInfo?.name || delegateInfo?.ensName || delegateAddress} -{' '}
-            {selectedDate?.name} {selectedDate?.value.year}
+            Forum activity
           </Heading>
-          <DelegatesDropdown />
         </Flex>
+        <DelegatePeriod delegate="block" period />
         {posts?.length ? (
           <Table variant="simple" w="full">
             <Thead w="full">
@@ -154,6 +160,11 @@ export const DelegateCompensationAdminForumActivity = ({
                     >
                       <MDPreview
                         source={post.comment.split('\n').slice(0, 4).join('\n')}
+                        // disallowedElements={['a']}
+                        components={{
+                          // eslint-disable-next-line id-length, react/no-unstable-nested-components
+                          a: ({ children }) => <Text>{children}</Text>,
+                        }}
                       />
                     </Box>
                   </Td>
@@ -169,6 +180,10 @@ export const DelegateCompensationAdminForumActivity = ({
                       flexDir="row"
                       alignItems="center"
                       gap="2"
+                      _hover={{
+                        textDecoration: 'none',
+                        borderColor: 'blue.400',
+                      }}
                     >
                       Link to post
                       <TbExternalLink />
@@ -186,7 +201,7 @@ export const DelegateCompensationAdminForumActivity = ({
           </Table>
         ) : (
           <Flex py="4">
-            <Text>{`This delegate doesn't have forum posts.`}</Text>
+            <Text>{`This delegate doesn't have forum posts for this period.`}</Text>
           </Flex>
         )}
       </Box>
