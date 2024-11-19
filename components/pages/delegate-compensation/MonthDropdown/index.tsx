@@ -21,7 +21,7 @@ export const MonthDropdown: FC<IMonthDropdown> = ({
     const startYear = 2024;
     const currentDate = new Date();
     for (let year = startYear; year <= currentDate.getFullYear(); year += 1) {
-      for (let month = 0; month < 12; month += 1) {
+      for (let month = 0; month < 10; month += 1) {
         if (new Date(year, month, 1) < minimumPeriod) {
           // eslint-disable-next-line no-continue
           continue;
