@@ -63,7 +63,7 @@ export const DelegateCompensationAdminForumActivity = ({
 
   return (
     <DelegateCompensationAdminLayout>
-      <Box w="full">
+      <Box w="full" overflowX="auto">
         <Flex flexDir="column" gap="4">
           <Heading fontSize="xl" fontWeight="bold" color={theme.text} mb="4">
             Forum activity
@@ -102,6 +102,7 @@ export const DelegateCompensationAdminForumActivity = ({
                   .split('/')
                   .slice(0, -1)
                   .join('/')}/`;
+
                 return (
                   <Tr key={index} w="full">
                     <Td
@@ -115,16 +116,17 @@ export const DelegateCompensationAdminForumActivity = ({
                         href={topicLink}
                         w="max-content"
                         color="blue.500"
-                        borderBottom="1px solid"
-                        borderColor="blue.500"
+                        textDecor="underline"
                         display="flex"
                         flexDir="row"
                         alignItems="center"
                         gap="2"
+                        maxW={['240px', '480px', 'full']}
                         _hover={{
                           textDecoration: 'none',
                           borderColor: 'blue.400',
                         }}
+                        noOfLines={2}
                       >
                         {post.topic}
                       </ChakraLink>
@@ -136,14 +138,16 @@ export const DelegateCompensationAdminForumActivity = ({
                       borderBottomColor={theme.compensation?.card.dropdown}
                     >
                       <Flex flexDir="row" gap="2">
-                        <MDPreview
-                          source={post.comment}
-                          // disallowedElements={['a']}
-                          components={{
-                            // eslint-disable-next-line id-length, react/no-unstable-nested-components
-                            a: ({ children }) => <Text>{children}</Text>,
-                          }}
-                        />
+                        <Flex noOfLines={2} w="full">
+                          <MDPreview
+                            source={post.comment}
+                            // disallowedElements={['a']}
+                            components={{
+                              // eslint-disable-next-line id-length, react/no-unstable-nested-components
+                              a: ({ children }) => <Text>{children}</Text>,
+                            }}
+                          />
+                        </Flex>
                         <ChakraLink
                           isExternal
                           href={post.link}
