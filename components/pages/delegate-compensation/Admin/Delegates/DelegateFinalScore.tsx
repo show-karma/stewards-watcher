@@ -168,7 +168,7 @@ export const DelegateFinalScoreModal = ({
             fontWeight="bold"
             color={theme.compensation?.card.text}
           >
-            Delegate Feedback
+            Final Score
           </Text>
         </ModalHeader>
         <ModalCloseButton textColor={theme.compensation?.card.text} />
