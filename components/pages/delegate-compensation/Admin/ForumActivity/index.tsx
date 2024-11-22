@@ -3,6 +3,7 @@ import {
   Box,
   Flex,
   Heading,
+  Icon,
   Table,
   Tbody,
   Td,
@@ -153,7 +154,7 @@ export const DelegateCompensationAdminForumActivity = ({
                           w="max-content"
                           maxW="max-content"
                         >
-                          <HiExternalLink />
+                          <Icon as={HiExternalLink} boxSize="16px" />
                         </ChakraLink>
                       </Flex>
                     </Td>
