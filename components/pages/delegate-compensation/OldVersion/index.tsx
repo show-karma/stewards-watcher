@@ -247,7 +247,7 @@ export const DelegateCompensationOld = () => {
             <Text color={theme.card.text} fontSize="lg">
               Month
             </Text>
-            <MonthDropdown />
+            <MonthDropdown maximumPeriod={new Date('2024-10-15')} />
           </Flex>
           <Switch
             display="flex"
