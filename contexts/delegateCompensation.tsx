@@ -53,20 +53,14 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
       10
     );
 
-    if (isOldVersion) {
-      if (!monthQuery) {
-        if (date >= new Date('2024-10-10')) {
-          date = new Date('2024-10-10');
-        }
+    if (isOldVersion || !monthQuery) {
+      if (date >= new Date('2024-10-10')) {
+        date = new Date('2024-10-10');
       }
     }
     if (isAdmin && date <= new Date('2024-11-11')) {
       date = new Date('2024-11-11');
     }
-    // if (isOldVersion) {
-    // if (date >= new Date('2024-10-10')) {
-    //   date = new Date('2024-10-10');
-    // }
 
     const currentMonth = date.getMonth() + 1;
     const currentYear = date.getFullYear();
