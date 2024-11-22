@@ -249,6 +249,7 @@ export const DelegateCompensation = () => {
           gap="4"
           alignItems="center"
           justifyContent="flex-start"
+          flexWrap="wrap"
         >
           <Flex flexDirection="row" gap="4" alignItems="center">
             <Text color={theme.card.text} fontSize="lg">

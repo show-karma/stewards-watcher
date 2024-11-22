@@ -387,7 +387,7 @@ export const DelegateStats = () => {
                 color={theme.compensation?.card.secondaryText}
                 lineHeight="32px"
               >
-                +{formatSimpleNumber(delegateInfo?.stats?.bonusPoint || 0)}
+                {formatSimpleNumber(delegateInfo?.stats?.bonusPoint || 0)}
               </Text>
             </Flex>
           ) : (
