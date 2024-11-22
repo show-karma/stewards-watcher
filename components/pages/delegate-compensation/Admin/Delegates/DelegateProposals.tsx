@@ -146,11 +146,14 @@ export const DelegateProposals = ({
     setupProposalsAndVotes() || [];
 
   const defaultValueBreakdown = proposalsAndVotes?.map(item => ({
-    proposal: item.postId || (item.type === 'onChain' ? item.name : item.id),
-    voted: item.voted,
+    proposal:
+      item.postId ||
+      (item.type === 'onChain' ? item.name : item.id) ||
+      undefined,
+    voted: item.voted || undefined,
     modified: false,
     post: item.post || undefined,
-    validRationale: item.validRationale,
+    validRationale: item.validRationale || undefined,
   }));
 
   const {
@@ -204,7 +207,7 @@ export const DelegateProposals = ({
       modifiedRows?.forEach(item => {
         breakdown[item.proposal as string] = {
           post: item.post,
-          validRationale: item.validRationale,
+          validRationale: item.validRationale || undefined,
         };
       });
       await authorizedAPI
