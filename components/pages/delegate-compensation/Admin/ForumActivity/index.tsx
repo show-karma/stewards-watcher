@@ -4,6 +4,7 @@ import {
   Flex,
   Heading,
   Icon,
+  Spinner,
   Table,
   Tbody,
   Td,
@@ -69,7 +70,11 @@ export const DelegateCompensationAdminForumActivity = ({
           </Heading>
         </Flex>
         <DelegatePeriod delegate="block" period />
-        {posts?.length ? (
+        {isLoading ? (
+          <Flex py="4">
+            <Spinner />
+          </Flex>
+        ) : posts?.length ? (
           <Table variant="simple" w="full">
             <Thead w="full">
               <Tr w="full">
