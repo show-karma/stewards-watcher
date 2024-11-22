@@ -71,47 +71,35 @@ export const MonthDropdown: FC<IMonthDropdown> = ({
           const lastPath = router.asPath.split('/')?.at(-1);
 
           if (lastPath?.includes('delegate-compensation')) {
-            // const isOldVersion = router.pathname.includes('-old');
-            // if (
-            //   (itemDate.value.month >= 11 && itemDate.value.year === 2024) ||
-            //   itemDate.value.year > 2024
-            // ) {
-            // router.push(
-            //   {
-            //     pathname: `${rootPathname}/delegate-compensation`,
-            //     query: {
-            //       month: itemDate.name.toLowerCase(),
-            //       year: itemDate.value.year,
-            //     },
-            //   },
-            //   undefined,
-            //   { shallow: !isOldVersion }
-            // );
-
-            // } else {
-            //   router.push(
-            //     {
-            //       pathname: `${rootPathname}/delegate-compensation-old`,
-            //       query: {
-            //         month: itemDate.name.toLowerCase(),
-            //         year: itemDate.value.year,
-            //       },
-            //     },
-            //     undefined,
-            //     { shallow: !!isOldVersion }
-            //   );
-            // }
-            router.push(
-              {
-                pathname: `${rootPathname}/delegate-compensation`,
-                query: {
-                  month: itemDate.name.toLowerCase(),
-                  year: itemDate.value.year,
+            const isOldVersion = router.pathname.includes('-old');
+            if (
+              (itemDate.value.month >= 11 && itemDate.value.year === 2024) ||
+              itemDate.value.year > 2024
+            ) {
+              router.push(
+                {
+                  pathname: `${rootPathname}/delegate-compensation`,
+                  query: {
+                    month: itemDate.name.toLowerCase(),
+                    year: itemDate.value.year,
+                  },
                 },
-              },
-              undefined,
-              { shallow: true }
-            );
+                undefined,
+                { shallow: !isOldVersion }
+              );
+            } else {
+              router.push(
+                {
+                  pathname: `${rootPathname}/delegate-compensation-old`,
+                  query: {
+                    month: itemDate.name.toLowerCase(),
+                    year: itemDate.value.year,
+                  },
+                },
+                undefined,
+                { shallow: !!isOldVersion }
+              );
+            }
           } else {
             const removeQueryParams = router.asPath.split('?')[0];
             router.push(
