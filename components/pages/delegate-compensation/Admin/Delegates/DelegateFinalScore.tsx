@@ -254,7 +254,7 @@ export const DelegateFinalScoreModal = ({
                         textAlign="end"
                         px="1"
                       >
-                        {formatSimpleNumber(value) || '0'}%
+                        {formatSimpleNumber(value) || '0'}
                       </Text>
                     </Flex>
                   ))}
