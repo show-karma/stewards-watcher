@@ -5,7 +5,6 @@ import {
   Flex,
   Icon,
   Img,
-  Link,
   List,
   ListItem,
   Modal,
@@ -30,17 +29,17 @@ export const DelegateFinalScoreModal = ({
   isModalOpen: boolean;
   setIsModalOpen: (value: boolean) => void;
 }) => {
-  const { theme, rootPathname } = useDAO();
-  const { delegateInfo, delegateAddress } = useDelegateCompensation();
+  const { theme } = useDAO();
+  const { delegateInfo } = useDelegateCompensation();
 
   const stats = {
     participationRate: delegateInfo?.stats?.participationRate || 0,
     snapshotVoting: delegateInfo?.stats?.snapshotVoting.score || 0,
     onChainVoting: delegateInfo?.stats?.onChainVoting.score || 0,
-    bonusPoint: delegateInfo?.stats?.bonusPoint || 0,
     communicatingRationale:
       delegateInfo?.stats?.communicatingRationale.score || 0,
     delegateFeedback: delegateInfo?.stats?.delegateFeedback?.finalScore || 0,
+    bonusPoint: delegateInfo?.stats?.bonusPoint || 0,
   };
 
   const statsLabel = {
@@ -168,7 +167,7 @@ export const DelegateFinalScoreModal = ({
             fontWeight="bold"
             color={theme.compensation?.card.text}
           >
-            Delegate Feedback
+            Final Score
           </Text>
         </ModalHeader>
         <ModalCloseButton textColor={theme.compensation?.card.text} />
@@ -183,17 +182,6 @@ export const DelegateFinalScoreModal = ({
         >
           <Box bg={theme.card.background} borderRadius="lg" p={4} width="full">
             <VStack spacing={4} align="stretch">
-              <Flex justifyContent="flex-end" gap="4" alignItems="center">
-                <Link
-                  color={theme.compensation?.card.text}
-                  href={`${rootPathname}/delegate-compensation/delegate/${delegateAddress}/forum-activity`}
-                  isExternal
-                  textDecoration="underline"
-                >
-                  View Forum activity
-                </Link>
-              </Flex>
-
               <Flex
                 flexDir="row"
                 gap="8"
@@ -254,7 +242,7 @@ export const DelegateFinalScoreModal = ({
                         textAlign="end"
                         px="1"
                       >
-                        {formatSimpleNumber(value) || '0'}%
+                        {formatSimpleNumber(value) || '0'}
                       </Text>
                     </Flex>
                   ))}
@@ -284,16 +272,50 @@ export const DelegateFinalScoreModal = ({
                     align="center"
                     justify="center"
                   >
-                    <Text
-                      fontSize="16px"
-                      fontWeight={600}
-                      color={theme.compensation?.card.text}
-                      textAlign="center"
-                    >
-                      Final
-                      <br />
-                      Score
-                    </Text>
+                    <Flex flexDir="row" gap="1" align="center" justify="center">
+                      <Text
+                        fontSize="16px"
+                        fontWeight={600}
+                        color={theme.compensation?.card.text}
+                        textAlign="center"
+                      >
+                        Final Score
+                      </Text>
+                      <Tooltip
+                        placement="top"
+                        label={
+                          <Flex flexDir="column" py="1" gap="2">
+                            <Text fontWeight={600}>
+                              Total Participation (TP)
+                            </Text>
+                            <Text fontWeight="normal">
+                              Sum of the results of activities performed by the
+                              delegate. A TP% of 100 indicates full
+                              participation.
+                            </Text>
+
+                            <Code fontWeight="normal">
+                              TP% formula: PR + SV + TV + CR + DF + BP
+                            </Code>
+                          </Flex>
+                        }
+                        hasArrow
+                        bgColor={theme.compensation?.card.bg}
+                        color={theme.compensation?.card.text}
+                        fontWeight="normal"
+                        fontSize="sm"
+                        borderRadius={10}
+                        p="3"
+                      >
+                        <Text as="span">
+                          <Icon
+                            boxSize="12px"
+                            as={BsFillInfoCircleFill}
+                            cursor="help"
+                          />
+                        </Text>
+                      </Tooltip>
+                    </Flex>
                     <Text
                       fontSize="36px"
                       fontWeight={600}
