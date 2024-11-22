@@ -63,7 +63,10 @@ export const DelegatePeriod = ({
           >
             Period
           </Text>
-          <MonthDropdown minimumPeriod={minimumPeriod} />
+          <MonthDropdown
+            minimumPeriod={minimumPeriod}
+            maximumPeriod={maximumPeriod}
+          />
         </Flex>
       ) : null}
     </Flex>

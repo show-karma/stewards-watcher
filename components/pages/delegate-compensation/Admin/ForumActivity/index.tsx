@@ -18,6 +18,7 @@ import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import { DelegateCompensationAdminLayout } from 'layouts/delegateCompensationAdmin';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
+import { HiExternalLink } from 'react-icons/hi';
 import { getForumActivity } from 'utils/delegate-compensation/getForumActivity';
 import { DelegatePeriod } from '../DelegatePeriod';
 
@@ -128,21 +129,7 @@ export const DelegateCompensationAdminForumActivity = ({
                       borderBottom="1px solid"
                       borderBottomColor={theme.compensation?.card.dropdown}
                     >
-                      <ChakraLink
-                        isExternal
-                        href={post.link}
-                        color="blue.500"
-                        display="flex"
-                        flexDir="row"
-                        alignItems="center"
-                        textDecor="underline"
-                        gap="2"
-                        _hover={{
-                          borderColor: 'blue.300',
-                        }}
-                        w="full"
-                        maxW="full"
-                      >
+                      <Flex flexDir="row" gap="2">
                         <MDPreview
                           source={post.comment}
                           // disallowedElements={['a']}
@@ -151,7 +138,24 @@ export const DelegateCompensationAdminForumActivity = ({
                             a: ({ children }) => <Text>{children}</Text>,
                           }}
                         />
-                      </ChakraLink>
+                        <ChakraLink
+                          isExternal
+                          href={post.link}
+                          color="blue.500"
+                          display="flex"
+                          flexDir="row"
+                          alignItems="center"
+                          textDecor="underline"
+                          gap="2"
+                          _hover={{
+                            borderColor: 'blue.300',
+                          }}
+                          w="max-content"
+                          maxW="max-content"
+                        >
+                          <HiExternalLink />
+                        </ChakraLink>
+                      </Flex>
                     </Td>
                   </Tr>
                 );
