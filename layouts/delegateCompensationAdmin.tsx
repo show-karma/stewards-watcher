@@ -18,8 +18,17 @@ export const DelegateCompensationAdminLayout = ({
     <AdminGuard disableGuard={!isPublic}>
       <Flex flexDir="column" w="full" p={5}>
         {isPublic ? (
-          <Flex flexDirection={['row']} justifyContent="space-between" gap="10">
-            <Heading mb={10} color={theme.text} fontSize="32px">
+          <Flex
+            flexDirection={['column', 'row']}
+            justifyContent="space-between"
+            gap={['4', '10']}
+            mb={{ base: 4, md: 0 }}
+          >
+            <Heading
+              mb={{ base: 0, md: 10 }}
+              color={theme.text}
+              fontSize="32px"
+            >
               <Flex flexDir="row" gap="6">
                 <Image
                   src="/icons/delegate-compensation/hi.png"
