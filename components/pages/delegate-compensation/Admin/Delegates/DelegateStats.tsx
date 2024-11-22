@@ -212,6 +212,7 @@ export const DelegateStats = () => {
           align="center"
           justify="center"
           py="4"
+          display={['none', 'flex']}
         >
           <Img
             src="/icons/delegate-compensation/finalScore.png"
@@ -387,7 +388,7 @@ export const DelegateStats = () => {
                 color={theme.compensation?.card.secondaryText}
                 lineHeight="32px"
               >
-                {formatSimpleNumber(delegateInfo?.stats?.bonusPoint || 0)}
+                +{formatSimpleNumber(delegateInfo?.stats?.bonusPoint || 0)}
               </Text>
             </Flex>
           ) : (
@@ -434,6 +435,43 @@ export const DelegateStats = () => {
             </Text>
           </Flex>
         </Flex>
+      </Flex>
+      <Flex
+        flexDir="column"
+        bg={theme.compensation?.icons.finalScore}
+        flex="1"
+        borderRadius="8px"
+        align="center"
+        justify="center"
+        py="4"
+        display={['flex', 'none']}
+      >
+        <Img
+          src="/icons/delegate-compensation/finalScore.png"
+          w="40px"
+          h="40px"
+          borderRadius="4px"
+        />
+
+        <Text
+          fontSize="16px"
+          fontWeight="600"
+          color={theme.compensation?.card.text}
+        >
+          Final Score
+        </Text>
+
+        <Text
+          fontSize="36px"
+          fontWeight={600}
+          color={theme.compensation?.card.success}
+          textDecoration="underline"
+          onClick={() => setIsFinalScoreModalOpen(true)}
+          cursor="pointer"
+        >
+          {formatSimpleNumber(delegateInfo?.stats?.totalParticipation || 0)}
+        </Text>
+        {/* </Tooltip> */}
       </Flex>
     </Flex>
   );

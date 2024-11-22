@@ -22,11 +22,12 @@ export const DelegatePeriod = ({
       return (
         <Flex
           flexDir="row"
-          gap="4"
+          gap={['2', '4']}
           justify="flex-start"
           align="center"
           w="full"
           maxW="max-content"
+          flexWrap="wrap"
         >
           <Text
             fontSize="16px"
@@ -41,7 +42,13 @@ export const DelegatePeriod = ({
     return null;
   };
   return (
-    <Flex flexDir="row" gap="10" justify="space-between" flexWrap="wrap">
+    <Flex
+      flexDir="row"
+      gap={['2', '10']}
+      justify="space-between"
+      flexWrap="wrap"
+      maxW="full"
+    >
       {renderDelegate()}
       {period ? (
         <Flex

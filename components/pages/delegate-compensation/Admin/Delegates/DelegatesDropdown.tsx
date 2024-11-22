@@ -6,6 +6,7 @@ import {
   MenuItem,
   MenuList,
   Spinner,
+  Text,
 } from '@chakra-ui/react';
 import { blo } from 'blo';
 import { DownChevron } from 'components/Icons';
@@ -130,6 +131,8 @@ export const DelegatesDropdown = () => {
             bgColor: theme.filters.activeBg,
           },
         }}
+        maxW={['240px', 'max-content']}
+        minW={['auto']}
       >
         {allDelegates?.map((option, index) => (
           <MenuItem
@@ -139,8 +142,16 @@ export const DelegatesDropdown = () => {
             _hover={{
               bg: theme.filters.activeBg,
             }}
+            maxW={['full', 'max-content']}
           >
-            <Flex flexDir="row" gap="3" align="center">
+            <Text
+              textOverflow="ellipsis"
+              overflow="hidden"
+              whiteSpace="nowrap"
+              flexDir="row"
+              gap="3"
+              align="center"
+            >
               {/* <ImgWithFallback
                 fallback={option?.publicAddress}
                 src={
@@ -151,7 +162,7 @@ export const DelegatesDropdown = () => {
                 borderRadius="full"
               /> */}
               {option.name || option.ensName || option.publicAddress}
-            </Flex>
+            </Text>
           </MenuItem>
         ))}
       </MenuList>

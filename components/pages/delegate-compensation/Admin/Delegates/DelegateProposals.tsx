@@ -308,7 +308,13 @@ export const DelegateProposals = ({
             w="full"
             py="4"
           >
-            <Flex flexDir="row" px="4" gap="4" alignItems="center" w="full">
+            <Flex
+              flexDir={['column', 'row']}
+              px="4"
+              gap={['1', '4']}
+              alignItems={['flex-start', 'center']}
+              w="full"
+            >
               <Heading
                 lineHeight="30px"
                 size="md"
@@ -450,6 +456,7 @@ export const DelegateProposals = ({
                                   color: 'blue.400',
                                   borderColor: 'blue.400',
                                 }}
+                                fontSize={['14px', '16px']}
                               >
                                 See proposal
                                 <LinkIcon
@@ -476,6 +483,7 @@ export const DelegateProposals = ({
                                   color: 'blue.400',
                                   borderColor: 'blue.400',
                                 }}
+                                fontSize={['14px', '16px']}
                               >
                                 See Forum Link
                                 <LinkIcon
@@ -682,7 +690,13 @@ export const DelegateProposals = ({
             mt="4"
             py="4"
           >
-            <Flex flexDir="row" gap="4" alignItems="center" px="4" w="full">
+            <Flex
+              flexDir={['column', 'row']}
+              gap={['1', '4']}
+              alignItems={['flex-start', 'center']}
+              px="4"
+              w="full"
+            >
               <Heading
                 lineHeight="30px"
                 size="md"
@@ -824,6 +838,7 @@ export const DelegateProposals = ({
                                   color: 'blue.400',
                                   borderColor: 'blue.400',
                                 }}
+                                fontSize={['14px', '16px']}
                               >
                                 See proposal
                                 <LinkIcon
@@ -850,6 +865,7 @@ export const DelegateProposals = ({
                                   color: 'blue.400',
                                   borderColor: 'blue.400',
                                 }}
+                                fontSize={['14px', '16px']}
                               >
                                 See Forum Link
                                 <LinkIcon
