@@ -536,6 +536,7 @@ export const DelegateProposals = ({
                           gap="3"
                           alignItems="center"
                           justify="flex-start"
+                          minW="200px"
                         >
                           {isAuthorized ? (
                             <Input
@@ -572,11 +573,13 @@ export const DelegateProposals = ({
                               href={item.post}
                               isExternal
                               color="blue.500"
-                              maxW="180px"
+                              maxW="240px"
                               wordBreak="break-all"
+                              w="full"
+                              noOfLines={2}
                             >
-                              {item.post.length > 32
-                                ? `${item.post.slice(0, 32)}...`
+                              {item.post.length > 40
+                                ? `${item.post.slice(0, 40)}...`
                                 : item.post}
                             </ChakraLink>
                           ) : null}
