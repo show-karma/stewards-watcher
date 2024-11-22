@@ -53,13 +53,22 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
       10
     );
 
-    if (isOldVersion) {
+    // UNDO AFTER THE APPROVAL
+    // if (isOldVersion) {
+    //   if (date >= new Date('2024-10-10')) {
+    //     date = new Date('2024-10-10');
+    //   }
+    // } else if (date <= new Date('2024-11-11')) {
+    //   date = new Date('2024-11-11');
+    // }
+    if (!isAdmin) {
       if (date >= new Date('2024-10-10')) {
         date = new Date('2024-10-10');
       }
-    } else if (date <= new Date('2024-11-11')) {
-      date = new Date('2024-11-11');
     }
+    // else if (date <= new Date('2024-11-11')) {
+    //     date = new Date('2024-11-11');
+    //   }
 
     const currentMonth = date.getMonth() + 1;
     const currentYear = date.getFullYear();

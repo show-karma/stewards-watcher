@@ -8,10 +8,12 @@ export const DelegatePeriod = ({
   delegate = 'dropdown',
   period = true,
   minimumPeriod,
+  maximumPeriod,
 }: {
   delegate?: 'block' | 'dropdown' | 'none';
   period?: boolean;
   minimumPeriod?: Date;
+  maximumPeriod?: Date;
 }) => {
   const { theme } = useDAO();
   const renderDelegate = () => {

@@ -1,4 +1,4 @@
-import { Button, Flex, Img, Text, Tooltip } from '@chakra-ui/react';
+import { Button, Flex, Img, Text } from '@chakra-ui/react';
 import { useAuth, useDAO } from 'contexts';
 import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import pluralize from 'pluralize';
@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { formatSimpleNumber } from 'utils';
 import { DelegateBP } from './DelegateBP';
 import { DelegateFeedback } from './DelegateFeedback';
+import { DelegateFinalScoreModal } from './DelegateFinalScore';
 import { DelegatePeriodIndicator } from './DelegatePeriodIndicator';
 
 export const DelegateStats = () => {
@@ -16,7 +17,7 @@ export const DelegateStats = () => {
     changeDelegateAddress,
   } = useDelegateCompensation();
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
-
+  const [isFinalScoreModalOpen, setIsFinalScoreModalOpen] = useState(false);
   const { theme } = useDAO();
   const { isDaoAdmin: isAuthorized } = useAuth();
   return (
@@ -26,6 +27,13 @@ export const DelegateStats = () => {
         <DelegateFeedback
           isModalOpen={isFeedbackModalOpen}
           setIsModalOpen={setIsFeedbackModalOpen}
+        />
+      ) : null}
+      {/* Delegate Feedback Modal */}
+      {isFinalScoreModalOpen ? (
+        <DelegateFinalScoreModal
+          isModalOpen={isFinalScoreModalOpen}
+          setIsModalOpen={setIsFinalScoreModalOpen}
         />
       ) : null}
       {/* 3 blocks */}
@@ -220,72 +228,17 @@ export const DelegateStats = () => {
             Final Score
           </Text>
 
-          <Tooltip
-            label={
-              <Flex flexDir="column" gap="2" bg="#1D2939">
-                <Text color="white">Final Score Fomula:</Text>
-                <Flex flexDir="column" gap="1" color="white">
-                  <Text>
-                    PR -{' '}
-                    {formatSimpleNumber(
-                      delegateInfo?.stats?.participationRate || 0
-                    )}
-                    %
-                  </Text>
-                  <Text>
-                    SV -{' '}
-                    {formatSimpleNumber(
-                      delegateInfo?.stats?.snapshotVoting.score || 0
-                    )}
-                    %
-                  </Text>
-                  <Text>
-                    TV -{' '}
-                    {formatSimpleNumber(
-                      delegateInfo?.stats?.onChainVoting.score || 0
-                    )}
-                    %
-                  </Text>
-                  <Text>
-                    CR -{' '}
-                    {formatSimpleNumber(
-                      delegateInfo?.stats?.communicatingRationale.score || 0
-                    )}
-                    %
-                  </Text>
-                  <Text>
-                    DF -{' '}
-                    {formatSimpleNumber(
-                      delegateInfo?.stats?.delegateFeedback?.finalScore || 0
-                    )}
-                    %
-                  </Text>
-                  <Text>
-                    BP -{' '}
-                    {formatSimpleNumber(delegateInfo?.stats?.bonusPoint || 0)}%
-                  </Text>
-                  <Text>
-                    TP -{' '}
-                    {formatSimpleNumber(
-                      delegateInfo?.stats?.totalParticipation || 0
-                    )}
-                    %
-                  </Text>
-                </Flex>
-              </Flex>
-            }
-            bg="#1D2939"
-            color="white"
-            borderRadius="4px"
+          <Text
+            fontSize="36px"
+            fontWeight={600}
+            color={theme.compensation?.card.success}
+            textDecoration="underline"
+            onClick={() => setIsFinalScoreModalOpen(true)}
+            cursor="pointer"
           >
-            <Text
-              fontSize="36px"
-              fontWeight={600}
-              color={theme.compensation?.card.success}
-            >
-              {formatSimpleNumber(delegateInfo?.stats?.totalParticipation || 0)}
-            </Text>
-          </Tooltip>
+            {formatSimpleNumber(delegateInfo?.stats?.totalParticipation || 0)}
+          </Text>
+          {/* </Tooltip> */}
         </Flex>
       </Flex>
       {/* 4 blocks */}
@@ -318,7 +271,13 @@ export const DelegateStats = () => {
               h="24px"
             />
           </Flex>
-          <Flex flexDir="column" gap="2" justify="center" align="flex-start">
+          <Flex
+            flexDir="column"
+            gap="2"
+            justify="center"
+            align="flex-start"
+            minW="120px"
+          >
             <Button
               p="0"
               bg="transparent"

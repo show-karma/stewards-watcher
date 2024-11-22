@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import { Flex } from '@chakra-ui/react';
 import { DelegateCompensationOld, HeaderHat } from 'components';
-import { DelegateCompensation } from 'components/pages/delegate-compensation';
 import {
   DelegatesProvider,
   GovernanceVotesProvider,
@@ -50,9 +49,11 @@ export const DelegateCompensationSwitch = () => {
 
   const shouldBeOldVersion = year < 2024 || (year === 2024 && month <= 10);
 
-  if (shouldBeOldVersion) return <DelegateCompensationOld />;
+  // if (shouldBeOldVersion) return <DelegateCompensationOld />;
+  // return <DelegateCompensation />;
 
-  return <DelegateCompensation />;
+  // UNDO THIS LATER
+  return <DelegateCompensationOld />;
 };
 
 export const DelegateCompensationContainer: React.FC<

@@ -6,6 +6,7 @@ import {
   EditableInput,
   EditablePreview,
   Flex,
+  Icon,
   Img,
   Link,
   Modal,
@@ -15,6 +16,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  Tooltip,
   VStack,
 } from '@chakra-ui/react';
 import axios from 'axios';
@@ -24,6 +26,7 @@ import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import { API_ROUTES, KARMA_API } from 'helpers';
 import { useToasty } from 'hooks';
 import { useState } from 'react';
+import { BsFillInfoCircleFill } from 'react-icons/bs';
 
 export const DelegateFeedback = ({
   isModalOpen,
@@ -57,6 +60,20 @@ export const DelegateFeedback = ({
     clarityAndCommunication: 'Clarity & Communication',
     impactOnDecisionMaking: 'Impact',
     presenceMultiplier: 'Presence Multiplier',
+  };
+  const inputLabel = {
+    relevance:
+      'Analyzes whether the delegate’s feedback throughout the month is relevant to the discussion.',
+    depthOfAnalysis:
+      'It evaluates the depth of analysis provided by the delegate concerning the proposals or discussions. This serves as a metric to assess whether the delegate takes the time to thoroughly meditate on the discussion and demonstrates attention to the details. Key elements include solid arguments, relevant questions, and thorough reasoning.',
+    timing:
+      'Considers when the delegate provides feedback, rewarding those who provide feedback earlier, as long as they meet the above criteria. Note that feedback will be considered as provided before on-chain/off-chain voting if it was published before the day voting starts at 00:00 UTC.',
+    clarityAndCommunication:
+      'This is a review of the clarity, structured communication, and overall readability of the delegate’s feedback. Clear and well-written feedback is rewarded.',
+    impactOnDecisionMaking:
+      'While the proposer ultimately decides whether to incorporate feedback, high-quality feedback from a delegate often influences the final proposal that goes to vote. This criterion evaluates whether the delegate’s feedback tends to drive changes in proposals/discussions.',
+    presenceMultiplier:
+      'This is a more quantitative analysis, intended to reflect the effort of delegates who participate in most discussions. This parameter serves as a multiplier to the score obtained across the previous five criteria. Note that the percentage of participation in monthly discussions could be not linear across all DAO’s discussions. Some proposals may carry more weight in the overall discussions (special cases such as LTIPP/STIP, gaming, treasury, etc.).',
   };
 
   const handleScoreChange = (field: string, value: string) => {
@@ -134,7 +151,7 @@ export const DelegateFeedback = ({
   return (
     <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
       <ModalOverlay />
-      <ModalContent rounded="4px" w="full" maxW="660px">
+      <ModalContent rounded="4px" w="full" maxW="860px">
         <ModalHeader
           bg={theme.compensation?.card.bg}
           textColor={theme.compensation?.card.text}
@@ -191,14 +208,35 @@ export const DelegateFeedback = ({
                       minW="150px"
                       gap="8"
                     >
-                      <Text
-                        color={theme.compensation?.card.text}
-                        fontWeight="600"
-                        fontSize="16px"
-                        mb={1}
-                      >
-                        {inputTitle[key as keyof typeof inputTitle]}
-                      </Text>
+                      <Flex flexDir="row" align="center" gap="2">
+                        <Text
+                          color={theme.compensation?.card.text}
+                          fontWeight="600"
+                          fontSize="16px"
+                          mb={1}
+                        >
+                          {inputTitle[key as keyof typeof inputTitle]}
+                        </Text>
+                        <Tooltip
+                          placement="top"
+                          label={inputLabel[key as keyof typeof inputLabel]}
+                          hasArrow
+                          bgColor={theme.compensation?.card.bg}
+                          color={theme.compensation?.card.text}
+                          fontWeight="normal"
+                          fontSize="sm"
+                          borderRadius={10}
+                          p="3"
+                        >
+                          <Text as="span">
+                            <Icon
+                              boxSize="12px"
+                              as={BsFillInfoCircleFill}
+                              cursor="help"
+                            />
+                          </Text>
+                        </Tooltip>
+                      </Flex>
                       {!numberInputs.includes(key) ? (
                         <Flex flexDir="row" gap="1">
                           {[1, 2, 3, 4].map(score => (
@@ -330,6 +368,8 @@ export const DelegateFeedback = ({
                       fontSize="36px"
                       fontWeight={600}
                       color={theme.compensation?.card.secondaryText}
+                      w="120px"
+                      textAlign="center"
                     >
                       {calculateFinalScore() || '0'}%
                     </Text>

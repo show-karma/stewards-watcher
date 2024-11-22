@@ -3,12 +3,6 @@ import {
   Box,
   Flex,
   Heading,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
   Table,
   Tbody,
   Td,
@@ -24,7 +18,6 @@ import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import { DelegateCompensationAdminLayout } from 'layouts/delegateCompensationAdmin';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
-import { TbExternalLink } from 'react-icons/tb';
 import { getForumActivity } from 'utils/delegate-compensation/getForumActivity';
 import { DelegatePeriod } from '../DelegatePeriod';
 
@@ -42,9 +35,7 @@ export const DelegateCompensationAdminForumActivity = ({
   const { theme } = useDAO();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedPost, setSelectedPost] = useState<any | null>(null);
 
-  const onOpen = () => setIsModalOpen(true);
   const onClose = () => setIsModalOpen(false);
 
   const {
@@ -69,56 +60,6 @@ export const DelegateCompensationAdminForumActivity = ({
 
   return (
     <DelegateCompensationAdminLayout>
-      {isModalOpen ? (
-        <Modal isOpen={isModalOpen} onClose={onClose} size="xl">
-          <ModalOverlay />
-          <ModalContent rounded="lg">
-            <ModalHeader
-              bg={theme.modal.background}
-              textColor={theme.modal.statement.headline}
-            >
-              {selectedPost?.topic}
-            </ModalHeader>
-            <ModalCloseButton textColor={theme.modal.statement.headline} />
-            <ModalBody
-              bg={theme.modal.background}
-              textColor={theme.modal.statement.text}
-              maxH="80vh"
-              overflowY="auto"
-            >
-              <MDPreview source={selectedPost?.comment || ''} />
-              <Flex
-                flexDir="row"
-                gap="2"
-                alignItems="center"
-                borderBottom="1px solid"
-                borderColor="blue.500"
-                w="max-content"
-                mt="8"
-              >
-                <ChakraLink
-                  isExternal
-                  href={selectedPost?.link}
-                  color="blue.500"
-                  display="flex"
-                  flexDir="row"
-                  alignItems="center"
-                  gap="2"
-                  _hover={{
-                    textDecoration: 'none',
-                    borderColor: 'blue.400',
-                  }}
-                >
-                  <Text fontWeight="bold" color="blue.500">
-                    Link to post
-                  </Text>
-                  <TbExternalLink />
-                </ChakraLink>
-              </Flex>
-            </ModalBody>
-          </ModalContent>
-        </Modal>
-      ) : null}
       <Box w="full">
         <Flex flexDir="column" gap="4">
           <Heading fontSize="xl" fontWeight="bold" color={theme.text} mb="4">
@@ -130,73 +71,91 @@ export const DelegateCompensationAdminForumActivity = ({
           <Table variant="simple" w="full">
             <Thead w="full">
               <Tr w="full">
-                <Th w="25%" minW="25%">
-                  Comment
-                </Th>
-                <Th w="max-content">Link</Th>
-                <Th w="25%" minW="25%">
+                <Th
+                  w="50%"
+                  minW="50%"
+                  borderBottom="1px solid"
+                  borderBottomColor={theme.compensation?.card.dropdown}
+                >
                   Topic
                 </Th>
-                <Th w="25%" minW="25%">
-                  Insight
+                <Th
+                  w="50%"
+                  minW="50%"
+                  borderBottom="1px solid"
+                  borderBottomColor={theme.compensation?.card.dropdown}
+                >
+                  Comment
                 </Th>
               </Tr>
             </Thead>
             <Tbody w="full">
-              {posts?.map((post, index) => (
-                <Tr key={index} w="full">
-                  <Td w="25%" minW="25%">
-                    <Box
-                      w="full"
-                      maxW="full"
-                      onClick={() => {
-                        onOpen();
-                        setSelectedPost(post);
-                      }}
-                      cursor="pointer"
-                      color="blue.500"
-                      textDecoration="underline"
-                      userSelect="none"
-                    >
-                      <MDPreview
-                        source={post.comment.split('\n').slice(0, 4).join('\n')}
-                        // disallowedElements={['a']}
-                        components={{
-                          // eslint-disable-next-line id-length, react/no-unstable-nested-components
-                          a: ({ children }) => <Text>{children}</Text>,
-                        }}
-                      />
-                    </Box>
-                  </Td>
-                  <Td w="max-content">
-                    <ChakraLink
-                      isExternal
-                      href={post.link}
-                      w="max-content"
-                      color="blue.500"
+              {posts?.map((post, index) => {
+                const topicLink = `${post.link
+                  .split('/')
+                  .slice(0, -1)
+                  .join('/')}/`;
+                return (
+                  <Tr key={index} w="full">
+                    <Td
+                      w="50%"
+                      minW="50%"
                       borderBottom="1px solid"
-                      borderColor="blue.500"
-                      display="flex"
-                      flexDir="row"
-                      alignItems="center"
-                      gap="2"
-                      _hover={{
-                        textDecoration: 'none',
-                        borderColor: 'blue.400',
-                      }}
+                      borderBottomColor={theme.compensation?.card.dropdown}
                     >
-                      Link to post
-                      <TbExternalLink />
-                    </ChakraLink>
-                  </Td>
-                  <Td w="25%" minW="25%">
-                    <Text w="max-content">{post.topic}</Text>
-                  </Td>
-                  <Td w="25%" minW="25%">
-                    {post.insight}
-                  </Td>
-                </Tr>
-              ))}
+                      <ChakraLink
+                        isExternal
+                        href={topicLink}
+                        w="max-content"
+                        color="blue.500"
+                        borderBottom="1px solid"
+                        borderColor="blue.500"
+                        display="flex"
+                        flexDir="row"
+                        alignItems="center"
+                        gap="2"
+                        _hover={{
+                          textDecoration: 'none',
+                          borderColor: 'blue.400',
+                        }}
+                      >
+                        {post.topic}
+                      </ChakraLink>
+                    </Td>
+                    <Td
+                      w="50%"
+                      minW="50%"
+                      borderBottom="1px solid"
+                      borderBottomColor={theme.compensation?.card.dropdown}
+                    >
+                      <ChakraLink
+                        isExternal
+                        href={post.link}
+                        color="blue.500"
+                        display="flex"
+                        flexDir="row"
+                        alignItems="center"
+                        textDecor="underline"
+                        gap="2"
+                        _hover={{
+                          borderColor: 'blue.300',
+                        }}
+                        w="full"
+                        maxW="full"
+                      >
+                        <MDPreview
+                          source={post.comment}
+                          // disallowedElements={['a']}
+                          components={{
+                            // eslint-disable-next-line id-length, react/no-unstable-nested-components
+                            a: ({ children }) => <Text>{children}</Text>,
+                          }}
+                        />
+                      </ChakraLink>
+                    </Td>
+                  </Tr>
+                );
+              })}
             </Tbody>
           </Table>
         ) : (

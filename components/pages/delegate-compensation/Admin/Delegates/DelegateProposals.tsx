@@ -271,19 +271,20 @@ export const DelegateProposals = ({
           onClose={() => setRationaleSelected(undefined)}
         >
           <ModalOverlay />
-          <ModalContent rounded="lg">
+          <ModalContent bg="transparent">
             <ModalHeader
-              bg={theme.modal.background}
-              textColor={theme.modal.statement.headline}
+              bg={theme.compensation?.card.bg}
+              textColor={theme.compensation?.card.text}
             >
               {rationaleSelected?.name}
             </ModalHeader>
-            <ModalCloseButton textColor={theme.modal.statement.headline} />
+            <ModalCloseButton textColor={theme.compensation?.card.text} />
             <ModalBody
-              bg={theme.modal.background}
-              textColor={theme.modal.statement.text}
+              bg={theme.compensation?.card.bg}
+              textColor={theme.compensation?.card.text}
               maxH="80vh"
               overflowY="auto"
+              pb="4"
             >
               <MDPreview source={rationaleSelected?.rationale || ''} />
             </ModalBody>

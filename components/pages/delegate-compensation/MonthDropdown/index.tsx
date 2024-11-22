@@ -7,10 +7,12 @@ import { FC } from 'react';
 
 interface IMonthDropdown {
   minimumPeriod?: Date;
+  maximumPeriod?: Date;
 }
 
 export const MonthDropdown: FC<IMonthDropdown> = ({
   minimumPeriod = new Date('2024-02-11'),
+  maximumPeriod,
 }) => {
   const router = useRouter();
   const { rootPathname } = useDAO();
@@ -19,9 +21,12 @@ export const MonthDropdown: FC<IMonthDropdown> = ({
   const renderMonthList = () => {
     const supportedDates = [];
     const startYear = 2024;
-    const currentDate = new Date();
+    const currentDate = maximumPeriod || new Date();
     for (let year = startYear; year <= currentDate.getFullYear(); year += 1) {
       for (let month = 0; month < 12; month += 1) {
+        if (maximumPeriod && new Date(year, month, 1) > maximumPeriod) {
+          break;
+        }
         if (new Date(year, month, 1) < minimumPeriod) {
           // eslint-disable-next-line no-continue
           continue;
@@ -66,35 +71,47 @@ export const MonthDropdown: FC<IMonthDropdown> = ({
           const lastPath = router.asPath.split('/')?.at(-1);
 
           if (lastPath?.includes('delegate-compensation')) {
-            const isOldVersion = router.pathname.includes('-old');
-            if (
-              (itemDate.value.month >= 11 && itemDate.value.year === 2024) ||
-              itemDate.value.year > 2024
-            ) {
-              router.push(
-                {
-                  pathname: `${rootPathname}/delegate-compensation`,
-                  query: {
-                    month: itemDate.name.toLowerCase(),
-                    year: itemDate.value.year,
-                  },
+            // const isOldVersion = router.pathname.includes('-old');
+            // if (
+            //   (itemDate.value.month >= 11 && itemDate.value.year === 2024) ||
+            //   itemDate.value.year > 2024
+            // ) {
+            // router.push(
+            //   {
+            //     pathname: `${rootPathname}/delegate-compensation`,
+            //     query: {
+            //       month: itemDate.name.toLowerCase(),
+            //       year: itemDate.value.year,
+            //     },
+            //   },
+            //   undefined,
+            //   { shallow: !isOldVersion }
+            // );
+
+            // } else {
+            //   router.push(
+            //     {
+            //       pathname: `${rootPathname}/delegate-compensation-old`,
+            //       query: {
+            //         month: itemDate.name.toLowerCase(),
+            //         year: itemDate.value.year,
+            //       },
+            //     },
+            //     undefined,
+            //     { shallow: !!isOldVersion }
+            //   );
+            // }
+            router.push(
+              {
+                pathname: `${rootPathname}/delegate-compensation`,
+                query: {
+                  month: itemDate.name.toLowerCase(),
+                  year: itemDate.value.year,
                 },
-                undefined,
-                { shallow: !isOldVersion }
-              );
-            } else {
-              router.push(
-                {
-                  pathname: `${rootPathname}/delegate-compensation-old`,
-                  query: {
-                    month: itemDate.name.toLowerCase(),
-                    year: itemDate.value.year,
-                  },
-                },
-                undefined,
-                { shallow: !!isOldVersion }
-              );
-            }
+              },
+              undefined,
+              { shallow: true }
+            );
           } else {
             const removeQueryParams = router.asPath.split('?')[0];
             router.push(
