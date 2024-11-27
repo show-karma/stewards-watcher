@@ -371,7 +371,7 @@ export const DelegateFeedback = ({
                       w="120px"
                       textAlign="center"
                     >
-                      {calculateFinalScore() || '0'}%
+                      {calculateFinalScore() || '0'}
                     </Text>
                   </Flex>
                 </Flex>

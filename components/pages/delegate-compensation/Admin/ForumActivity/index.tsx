@@ -70,7 +70,7 @@ export const DelegateCompensationAdminForumActivity = ({
           </Heading>
         </Flex>
         <DelegatePeriod delegate="block" period />
-        {isLoading ? (
+        {isLoading || isFetching ? (
           <Flex py="4">
             <Spinner />
           </Flex>

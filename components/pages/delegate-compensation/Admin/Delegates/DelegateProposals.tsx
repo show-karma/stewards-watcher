@@ -76,85 +76,31 @@ const schema = yup.object({
 
 type FormData = yup.InferType<typeof schema>;
 
-export const DelegateProposals = ({
-  delegateVotes,
-}: DelegateProposalsProps) => {
-  const { selectedDate, delegateInfo, refreshDelegateInfo } =
-    useDelegateCompensation();
+interface DefaultValueBreakdown {
+  proposal: string | undefined;
+  voted: true | undefined;
+  modified: boolean;
+  post: string | undefined;
+  validRationale: true | undefined;
+}
+
+const DelegateProposalsWrapped = ({
+  defaultValueBreakdown,
+  snapshotProposals,
+  onChainProposals,
+  selectRationale,
+}: {
+  defaultValueBreakdown: DefaultValueBreakdown[];
+  snapshotProposals: ProposalAndBreakdownRow[];
+  onChainProposals: ProposalAndBreakdownRow[];
+  selectRationale: (rationale: ProposalAndBreakdownRow) => void;
+}) => {
+  const { delegateInfo, refreshDelegateInfo } = useDelegateCompensation();
   const { daoInfo, theme } = useDAO();
   const { authToken, isDaoAdmin: isAuthorized } = useAuth();
 
   const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToasty();
-
-  const [rationaleSelected, setRationaleSelected] = useState<
-    ProposalAndBreakdownRow | undefined
-  >(undefined);
-
-  const {
-    data: proposals,
-    isLoading: proposalsLoading,
-    isFetching: proposalsFetching,
-  } = useQuery(
-    [
-      'delegate-compensation-proposals',
-      selectedDate?.value.month,
-      selectedDate?.value.year,
-    ],
-    () =>
-      getProposals(
-        daoInfo.config.DAO_KARMA_ID,
-        selectedDate?.value.month as string | number,
-        selectedDate?.value.year as string | number
-      ).then(res =>
-        res?.flatMap(category => category.items).filter(item => item.isValid)
-      ),
-    {
-      enabled:
-        !!selectedDate?.value.month &&
-        !!selectedDate?.value.year &&
-        !!daoInfo.config.DAO_KARMA_ID,
-    }
-  );
-
-  const setupProposalsAndVotes = () => {
-    if (!proposals) return [];
-    return proposals?.map(proposal => {
-      const getVote = () => {
-        if (!delegateVotes) return undefined;
-        const votesArray = Object.entries(delegateVotes);
-        const findProposal = votesArray.find(([key]) =>
-          proposal.type === 'snapshot'
-            ? key.includes(proposal.id)
-            : key.includes(proposal.name)
-        );
-        return {
-          ...findProposal?.[1],
-          proposal: findProposal?.[0],
-        };
-      };
-      const delegateVote = getVote();
-      return {
-        ...proposal,
-        ...delegateVote,
-        postId: delegateVote?.proposal,
-      } as ProposalAndBreakdownRow;
-    });
-  };
-
-  const proposalsAndVotes: ProposalAndBreakdownRow[] =
-    setupProposalsAndVotes() || [];
-
-  const defaultValueBreakdown = proposalsAndVotes?.map(item => ({
-    proposal:
-      item.postId ||
-      (item.type === 'onChain' ? item.name : item.id) ||
-      undefined,
-    voted: item.voted || undefined,
-    modified: false,
-    post: item.post || undefined,
-    validRationale: item.validRationale || undefined,
-  }));
 
   const {
     register,
@@ -242,12 +188,842 @@ export const DelegateProposals = ({
     }
   };
 
-  // const onChainProposals = proposalsAndVotes?.filter(
-  //   item => item.type === 'onChain'
-  // );
-  // const snapshotProposals = proposalsAndVotes?.filter(
-  //   item => item.type === 'snapshot'
-  // );
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Flex flexDir="column" gap="4" alignItems="flex-start" w="full" py="4">
+        <Flex
+          flexDir={['column', 'row']}
+          px="4"
+          gap={['1', '4']}
+          alignItems={['flex-start', 'center']}
+          w="full"
+        >
+          <Heading
+            lineHeight="30px"
+            size="md"
+            color={theme.compensation?.card.text}
+          >
+            Snapshot Proposals
+          </Heading>
+          <Flex flexDir="row" gap="2" alignItems="center">
+            <Text
+              fontSize="14px"
+              fontWeight={500}
+              color={theme.compensation?.card.text}
+            >
+              {snapshotProposals?.length} Total{' '}
+              {pluralize('Proposal', snapshotProposals?.length || 0)}
+              {', '}
+              <Text
+                as="span"
+                fontSize="14px"
+                fontWeight={500}
+                color={theme.compensation?.card.success}
+              >
+                {snapshotProposals.filter(item => item.voted)?.length} Voted On
+              </Text>
+            </Text>
+          </Flex>
+        </Flex>
+        <Flex flexDir="column" gap="4" maxH="320px" overflowY="auto" w="full">
+          <Table
+            variant="simple"
+            bg={theme.compensation?.card.bg}
+            borderRadius="8px"
+          >
+            <Thead>
+              <Tr>
+                <Th
+                  borderColor={theme.compensation?.card.divider}
+                  color={theme.compensation?.card.text}
+                  textTransform="none"
+                  fontSize="14px"
+                  fontWeight="700"
+                >
+                  Proposal Name
+                </Th>
+
+                <Th
+                  borderColor={theme.compensation?.card.divider}
+                  color={theme.compensation?.card.text}
+                  textTransform="none"
+                  fontSize="14px"
+                  fontWeight="700"
+                >
+                  Date
+                </Th>
+
+                <Th
+                  borderColor={theme.compensation?.card.divider}
+                  color={theme.compensation?.card.text}
+                  textTransform="none"
+                  fontSize="14px"
+                  fontWeight="700"
+                >
+                  Voted
+                </Th>
+                <Th
+                  borderColor={theme.compensation?.card.divider}
+                  color={theme.compensation?.card.text}
+                  textTransform="none"
+                  fontSize="14px"
+                  fontWeight="700"
+                >
+                  CR
+                </Th>
+                <Th
+                  borderColor={theme.compensation?.card.divider}
+                  color={theme.compensation?.card.text}
+                  textTransform="none"
+                  fontSize="14px"
+                  fontWeight="700"
+                >
+                  Valid Rationale
+                </Th>
+                <Th
+                  borderColor={theme.compensation?.card.divider}
+                  color={theme.compensation?.card.text}
+                  textTransform="none"
+                  fontSize="14px"
+                  fontWeight="700"
+                />
+              </Tr>
+            </Thead>
+            <Tbody>
+              {snapshotProposals?.map(item => (
+                <Tr
+                  opacity={
+                    !watch(
+                      `communicatingRationale.breakdown.${item.index}.validRationale`
+                    )
+                      ? 0.7
+                      : 1
+                  }
+                  key={item.index}
+                >
+                  <Td
+                    color={theme.compensation?.card.text}
+                    borderColor={theme.compensation?.card.divider}
+                  >
+                    <Flex
+                      flexDirection="column"
+                      justify="flex-start"
+                      align="flex-start"
+                      gap="2"
+                    >
+                      <Text color={theme.text} lineHeight="14px">
+                        {item.name}
+                        {item.name[0] === '#' ? '...' : ''}
+                      </Text>
+                      <Flex flexDir="row" gap="4" alignItems="center">
+                        {item.link ? (
+                          <ChakraLink
+                            display="flex"
+                            flexDir="row"
+                            gap="2"
+                            alignItems="center"
+                            justifyContent="center"
+                            href={item.link}
+                            isExternal
+                            color="blue.500"
+                            w="fit-content"
+                            _hover={{
+                              textDecoration: 'none',
+                              color: 'blue.400',
+                              borderColor: 'blue.400',
+                            }}
+                            fontSize={['14px', '16px']}
+                          >
+                            See proposal
+                            <LinkIcon
+                              w="14px"
+                              h="14px"
+                              viewBox="0 0 18 18"
+                              mt="0.5"
+                            />
+                          </ChakraLink>
+                        ) : null}
+                        {item.proposalTopic ? (
+                          <ChakraLink
+                            display="flex"
+                            flexDir="row"
+                            gap="2"
+                            alignItems="center"
+                            justifyContent="center"
+                            href={item.proposalTopic}
+                            isExternal
+                            color="blue.500"
+                            w="fit-content"
+                            _hover={{
+                              textDecoration: 'none',
+                              color: 'blue.400',
+                              borderColor: 'blue.400',
+                            }}
+                            fontSize={['14px', '16px']}
+                          >
+                            See Forum Link
+                            <LinkIcon
+                              w="14px"
+                              h="14px"
+                              viewBox="0 0 18 18"
+                              mt="0.5"
+                            />
+                          </ChakraLink>
+                        ) : null}
+                      </Flex>
+                    </Flex>
+                  </Td>
+
+                  <Td
+                    color={theme.compensation?.card.text}
+                    borderColor={theme.compensation?.card.divider}
+                  >
+                    <Text w="max-content">
+                      {formatDate(item.endDate as string, 'MMM D, YYYY')}
+                    </Text>
+                  </Td>
+
+                  <Td
+                    color={theme.compensation?.card.text}
+                    borderColor={theme.compensation?.card.divider}
+                  >
+                    {watch(
+                      `communicatingRationale.breakdown.${item.index}.voted`
+                    ) === true ? (
+                      <TrueIcon
+                        w="24px"
+                        h="24px"
+                        color={theme.compensation?.card.success}
+                      />
+                    ) : (
+                      <FalseIcon
+                        w="24px"
+                        h="24px"
+                        color={theme.compensation?.card.error}
+                      />
+                    )}
+                  </Td>
+                  <Td
+                    color={theme.compensation?.card.text}
+                    borderColor={theme.compensation?.card.divider}
+                  >
+                    <Flex
+                      flexDir="row"
+                      gap="3"
+                      alignItems="center"
+                      justify="flex-start"
+                      minW="200px"
+                    >
+                      {isAuthorized ? (
+                        <Input
+                          defaultValue={item.post || ''}
+                          bg={theme.compensation?.card.input.bg}
+                          color={theme.compensation?.card.input.text}
+                          disabled={isSaving}
+                          _active={{}}
+                          _focus={{
+                            bg: theme.compensation?.card.input.bg,
+                          }}
+                          _focusVisible={{}}
+                          _focusWithin={{}}
+                          w="180px"
+                          h="32px"
+                          px="1"
+                          border={
+                            formState.errors.communicatingRationale
+                              ?.breakdown?.[item.index]?.post
+                              ? '1px solid red'
+                              : 'none'
+                          }
+                          onChange={(
+                            event: React.ChangeEvent<HTMLInputElement>
+                          ) => {
+                            onChangeDebounce(event.target.value, item.index);
+                          }}
+                        />
+                      ) : item.post ? (
+                        <ChakraLink
+                          href={item.post}
+                          isExternal
+                          color="blue.500"
+                          maxW="240px"
+                          wordBreak="break-all"
+                          w="full"
+                          noOfLines={2}
+                        >
+                          {item.post.length > 40
+                            ? `${item.post.slice(0, 40)}...`
+                            : item.post}
+                        </ChakraLink>
+                      ) : null}
+                      {item.rationale ? (
+                        <Flex
+                          display="flex"
+                          flexDir="row"
+                          gap="1"
+                          alignItems="center"
+                          onClick={() => selectRationale(item)}
+                          cursor="pointer"
+                          color="blue.500"
+                          borderBottom="1px solid"
+                          borderColor="blue.500"
+                          w="max-content"
+                          _hover={{
+                            textDecoration: 'none',
+                            color: 'blue.400',
+                            borderColor: 'blue.400',
+                          }}
+                        >
+                          See
+                        </Flex>
+                      ) : (
+                        <Flex width="24px" height="24px" />
+                      )}
+                    </Flex>
+                  </Td>
+                  <Td
+                    color={theme.compensation?.card.text}
+                    borderColor={theme.compensation?.card.divider}
+                  >
+                    {isAuthorized ? (
+                      <Switch
+                        isChecked={watch(
+                          `communicatingRationale.breakdown.${item.index}.validRationale`
+                        )}
+                        onChange={() => {
+                          setValue(
+                            `communicatingRationale.breakdown.${item.index}.validRationale`,
+                            !watch(
+                              `communicatingRationale.breakdown.${item.index}.validRationale`
+                            ),
+                            {
+                              shouldDirty: true,
+                              shouldValidate: true,
+                            }
+                          );
+                          setValue(
+                            `communicatingRationale.breakdown.${item.index}.modified`,
+                            true
+                          );
+                        }}
+                        isDisabled={isSaving}
+                        disabled={isSaving}
+                      />
+                    ) : watch(
+                        `communicatingRationale.breakdown.${item.index}.validRationale`
+                      ) ? (
+                      <TrueIcon
+                        w="24px"
+                        h="24px"
+                        color={theme.compensation?.card.success}
+                      />
+                    ) : (
+                      <FalseIcon
+                        w="24px"
+                        h="24px"
+                        color={theme.compensation?.card.error}
+                      />
+                    )}
+                  </Td>
+                  <Td
+                    color={theme.compensation?.card.text}
+                    borderColor={theme.compensation?.card.divider}
+                  >
+                    {item?.updated === 'manually' ? (
+                      <Tooltip label="Manually updated">
+                        <Flex
+                          bg={theme.compensation?.card.input.bg}
+                          p="1"
+                          rounded="full"
+                          width="24px"
+                          height="24px"
+                          alignItems="center"
+                          justify="center"
+                        >
+                          <Text
+                            fontSize="small"
+                            color={theme.compensation?.card.text}
+                          >
+                            M
+                          </Text>
+                        </Flex>
+                      </Tooltip>
+                    ) : (
+                      <Flex width="24px" height="24px" />
+                    )}
+                  </Td>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        </Flex>
+      </Flex>
+      <Flex
+        flexDir="column"
+        gap="4"
+        alignItems="flex-start"
+        w="full"
+        mt="4"
+        py="4"
+      >
+        <Flex
+          flexDir={['column', 'row']}
+          gap={['1', '4']}
+          alignItems={['flex-start', 'center']}
+          px="4"
+          w="full"
+        >
+          <Heading
+            lineHeight="30px"
+            size="md"
+            color={theme.compensation?.card.text}
+          >
+            Onchain Proposals
+          </Heading>
+          <Flex flexDir="row" gap="2" alignItems="center">
+            <Text
+              fontSize="14px"
+              fontWeight={500}
+              color={theme.compensation?.card.text}
+            >
+              {onChainProposals?.length} Total{' '}
+              {pluralize('Proposal', onChainProposals?.length || 0)}
+              {', '}
+              <Text
+                as="span"
+                fontSize="14px"
+                fontWeight={500}
+                color={theme.compensation?.card.success}
+              >
+                {onChainProposals.filter(item => item.voted)?.length} Voted On
+              </Text>
+            </Text>
+          </Flex>
+        </Flex>
+        <Flex flexDir="column" gap="4" maxH="320px" overflowY="auto" w="full">
+          <Table
+            variant="simple"
+            bg={theme.compensation?.card.bg}
+            borderRadius="8px"
+          >
+            <Thead>
+              <Tr>
+                <Th
+                  borderColor={theme.compensation?.card.divider}
+                  color={theme.compensation?.card.text}
+                  textTransform="none"
+                  fontSize="14px"
+                  fontWeight="700"
+                >
+                  Proposal Name
+                </Th>
+
+                <Th
+                  borderColor={theme.compensation?.card.divider}
+                  color={theme.compensation?.card.text}
+                  textTransform="none"
+                  fontSize="14px"
+                  fontWeight="700"
+                >
+                  Date
+                </Th>
+
+                <Th
+                  borderColor={theme.compensation?.card.divider}
+                  color={theme.compensation?.card.text}
+                  textTransform="none"
+                  fontSize="14px"
+                  fontWeight="700"
+                >
+                  Voted
+                </Th>
+                <Th
+                  borderColor={theme.compensation?.card.divider}
+                  color={theme.compensation?.card.text}
+                  textTransform="none"
+                  fontSize="14px"
+                  fontWeight="700"
+                >
+                  CR
+                </Th>
+                <Th
+                  borderColor={theme.compensation?.card.divider}
+                  color={theme.compensation?.card.text}
+                  textTransform="none"
+                  fontSize="14px"
+                  fontWeight="700"
+                >
+                  Valid Rationale
+                </Th>
+                <Th
+                  borderColor={theme.compensation?.card.divider}
+                  color={theme.compensation?.card.text}
+                  textTransform="none"
+                  fontSize="14px"
+                  fontWeight="700"
+                />
+              </Tr>
+            </Thead>
+            <Tbody>
+              {onChainProposals?.map(item => (
+                <Tr
+                  opacity={
+                    !watch(
+                      `communicatingRationale.breakdown.${item.index}.validRationale`
+                    )
+                      ? 0.7
+                      : 1
+                  }
+                  key={item.index}
+                >
+                  <Td
+                    color={theme.compensation?.card.text}
+                    borderColor={theme.compensation?.card.divider}
+                  >
+                    <Flex
+                      flexDirection="column"
+                      justify="flex-start"
+                      align="flex-start"
+                      gap="2"
+                    >
+                      <Text color={theme.text} lineHeight="14px">
+                        {item.name}
+                        {item.name[0] === '#' ? '...' : ''}
+                      </Text>
+                      <Flex flexDir="row" gap="4" alignItems="center">
+                        {item.link ? (
+                          <ChakraLink
+                            display="flex"
+                            flexDir="row"
+                            gap="2"
+                            alignItems="center"
+                            justifyContent="center"
+                            href={item.link}
+                            isExternal
+                            color="blue.500"
+                            w="fit-content"
+                            _hover={{
+                              textDecoration: 'none',
+                              color: 'blue.400',
+                              borderColor: 'blue.400',
+                            }}
+                            fontSize={['14px', '16px']}
+                          >
+                            See proposal
+                            <LinkIcon
+                              w="14px"
+                              h="14px"
+                              viewBox="0 0 18 18"
+                              mt="0.5"
+                            />
+                          </ChakraLink>
+                        ) : null}
+                        {item.proposalTopic ? (
+                          <ChakraLink
+                            display="flex"
+                            flexDir="row"
+                            gap="2"
+                            alignItems="center"
+                            justifyContent="center"
+                            href={item.proposalTopic}
+                            isExternal
+                            color="blue.500"
+                            w="fit-content"
+                            _hover={{
+                              textDecoration: 'none',
+                              color: 'blue.400',
+                              borderColor: 'blue.400',
+                            }}
+                            fontSize={['14px', '16px']}
+                          >
+                            See Forum Link
+                            <LinkIcon
+                              w="14px"
+                              h="14px"
+                              viewBox="0 0 18 18"
+                              mt="0.5"
+                            />
+                          </ChakraLink>
+                        ) : null}
+                      </Flex>
+                    </Flex>
+                  </Td>
+
+                  <Td
+                    color={theme.compensation?.card.text}
+                    borderColor={theme.compensation?.card.divider}
+                  >
+                    <Text w="max-content">
+                      {formatDate(item.endDate as string, 'MMM D, YYYY')}
+                    </Text>
+                  </Td>
+
+                  <Td
+                    color={theme.compensation?.card.text}
+                    borderColor={theme.compensation?.card.divider}
+                  >
+                    {watch(
+                      `communicatingRationale.breakdown.${item.index}.voted`
+                    ) === true ? (
+                      <TrueIcon
+                        w="24px"
+                        h="24px"
+                        color={theme.compensation?.card.success}
+                      />
+                    ) : (
+                      <FalseIcon
+                        w="24px"
+                        h="24px"
+                        color={theme.compensation?.card.error}
+                      />
+                    )}
+                  </Td>
+                  <Td
+                    color={theme.compensation?.card.text}
+                    borderColor={theme.compensation?.card.divider}
+                  >
+                    <Flex
+                      flexDir="row"
+                      gap="3"
+                      alignItems="center"
+                      justify="flex-start"
+                    >
+                      {isAuthorized ? (
+                        <Input
+                          defaultValue={item.post || ''}
+                          bg={theme.compensation?.card.input.bg}
+                          color={theme.compensation?.card.input.text}
+                          disabled={isSaving}
+                          _active={{}}
+                          _focus={{
+                            bg: theme.compensation?.card.input.bg,
+                          }}
+                          _focusVisible={{}}
+                          _focusWithin={{}}
+                          w="180px"
+                          h="32px"
+                          px="1"
+                          border={
+                            formState.errors.communicatingRationale
+                              ?.breakdown?.[item.index]?.post
+                              ? '1px solid red'
+                              : 'none'
+                          }
+                          onChange={(
+                            event: React.ChangeEvent<HTMLInputElement>
+                          ) => {
+                            onChangeDebounce(event.target.value, item.index);
+                          }}
+                        />
+                      ) : item.post ? (
+                        <ChakraLink
+                          href={item.post}
+                          isExternal
+                          color="blue.500"
+                          maxW="180px"
+                          wordBreak="break-all"
+                        >
+                          {item.post.length > 32
+                            ? `${item.post.slice(0, 32)}...`
+                            : item.post}
+                        </ChakraLink>
+                      ) : null}
+                      {item.rationale ? (
+                        <Flex
+                          display="flex"
+                          flexDir="row"
+                          gap="1"
+                          alignItems="center"
+                          onClick={() => selectRationale(item)}
+                          cursor="pointer"
+                          color="blue.500"
+                          borderBottom="1px solid"
+                          borderColor="blue.500"
+                          w="max-content"
+                          _hover={{
+                            textDecoration: 'none',
+                            color: 'blue.400',
+                            borderColor: 'blue.400',
+                          }}
+                        >
+                          See
+                        </Flex>
+                      ) : (
+                        <Flex width="24px" height="24px" />
+                      )}
+                    </Flex>
+                  </Td>
+                  <Td
+                    color={theme.compensation?.card.text}
+                    borderColor={theme.compensation?.card.divider}
+                  >
+                    {isAuthorized ? (
+                      <Switch
+                        isChecked={watch(
+                          `communicatingRationale.breakdown.${item.index}.validRationale`
+                        )}
+                        onChange={() => {
+                          setValue(
+                            `communicatingRationale.breakdown.${item.index}.validRationale`,
+                            !watch(
+                              `communicatingRationale.breakdown.${item.index}.validRationale`
+                            ),
+                            {
+                              shouldDirty: true,
+                              shouldValidate: true,
+                            }
+                          );
+                          setValue(
+                            `communicatingRationale.breakdown.${item.index}.modified`,
+                            true
+                          );
+                        }}
+                        isDisabled={isSaving}
+                        disabled={isSaving}
+                      />
+                    ) : watch(
+                        `communicatingRationale.breakdown.${item.index}.validRationale`
+                      ) ? (
+                      <TrueIcon
+                        w="24px"
+                        h="24px"
+                        color={theme.compensation?.card.success}
+                      />
+                    ) : (
+                      <FalseIcon
+                        w="24px"
+                        h="24px"
+                        color={theme.compensation?.card.error}
+                      />
+                    )}
+                  </Td>
+                  <Td
+                    color={theme.compensation?.card.text}
+                    borderColor={theme.compensation?.card.divider}
+                  >
+                    {item?.updated === 'manually' ? (
+                      <Tooltip label="Manually updated">
+                        <Flex
+                          bg={theme.compensation?.card.input.bg}
+                          p="1"
+                          rounded="full"
+                          width="24px"
+                          height="24px"
+                          alignItems="center"
+                          justify="center"
+                        >
+                          <Text
+                            fontSize="small"
+                            color={theme.compensation?.card.text}
+                          >
+                            M
+                          </Text>
+                        </Flex>
+                      </Tooltip>
+                    ) : (
+                      <Flex width="24px" height="24px" />
+                    )}
+                  </Td>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        </Flex>
+      </Flex>
+
+      {formState.isDirty && isAuthorized ? (
+        <Flex flexDir="row" gap="2" justify="flex-end" mt="4">
+          <Button
+            isDisabled={isSaving || !formState.isValid}
+            disabled={isSaving || !formState.isValid}
+            isLoading={isSaving}
+            w="max-content"
+            alignSelf="flex-end"
+            type="submit"
+            bgColor={theme.compensation?.card.bg}
+            color={theme.compensation?.card.text}
+          >
+            Save
+          </Button>
+        </Flex>
+      ) : null}
+    </form>
+  );
+};
+
+export const DelegateProposals = ({
+  delegateVotes,
+}: DelegateProposalsProps) => {
+  const { selectedDate } = useDelegateCompensation();
+  const { daoInfo, theme } = useDAO();
+  const [rationaleSelected, setRationaleSelected] = useState<
+    ProposalAndBreakdownRow | undefined
+  >(undefined);
+  const {
+    data: proposals,
+    isLoading: proposalsLoading,
+    isFetching: proposalsFetching,
+  } = useQuery(
+    [
+      'delegate-compensation-proposals',
+      selectedDate?.value.month,
+      selectedDate?.value.year,
+    ],
+    () =>
+      getProposals(
+        daoInfo.config.DAO_KARMA_ID,
+        selectedDate?.value.month as string | number,
+        selectedDate?.value.year as string | number
+      ).then(res =>
+        res?.flatMap(category => category.items).filter(item => item.isValid)
+      ),
+    {
+      enabled:
+        !!selectedDate?.value.month &&
+        !!selectedDate?.value.year &&
+        !!daoInfo.config.DAO_KARMA_ID,
+    }
+  );
+
+  const setupProposalsAndVotes = () => {
+    if (!proposals) return [];
+    return proposals?.map(proposal => {
+      const getVote = () => {
+        if (!delegateVotes) return undefined;
+        const votesArray = Object.entries(delegateVotes);
+        const findProposal = votesArray.find(([key]) =>
+          proposal.type === 'snapshot'
+            ? key.includes(proposal.id)
+            : key.includes(proposal.name)
+        );
+        return {
+          ...findProposal?.[1],
+          proposal: findProposal?.[0],
+        };
+      };
+      const delegateVote = getVote();
+      return {
+        ...proposal,
+        ...delegateVote,
+        postId: delegateVote?.proposal,
+      } as ProposalAndBreakdownRow;
+    });
+  };
+
+  const proposalsAndVotes: ProposalAndBreakdownRow[] =
+    setupProposalsAndVotes() || [];
+
+  const defaultValueBreakdown = proposalsAndVotes?.map(item => ({
+    proposal:
+      item.postId ||
+      (item.type === 'onChain' ? item.name : item.id) ||
+      undefined,
+    voted: item.voted || undefined,
+    modified: false,
+    post: item.post || undefined,
+    validRationale: item.validRationale || undefined,
+  }));
+
   const onChainProposals: ProposalAndBreakdownRow[] = [];
   const snapshotProposals: ProposalAndBreakdownRow[] = [];
 
@@ -300,791 +1076,12 @@ export const DelegateProposals = ({
           <Spinner />
         </Flex>
       ) : (
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Flex
-            flexDir="column"
-            gap="4"
-            alignItems="flex-start"
-            w="full"
-            py="4"
-          >
-            <Flex
-              flexDir={['column', 'row']}
-              px="4"
-              gap={['1', '4']}
-              alignItems={['flex-start', 'center']}
-              w="full"
-            >
-              <Heading
-                lineHeight="30px"
-                size="md"
-                color={theme.compensation?.card.text}
-              >
-                Snapshot Proposals
-              </Heading>
-              <Flex flexDir="row" gap="2" alignItems="center">
-                <Text
-                  fontSize="14px"
-                  fontWeight={500}
-                  color={theme.compensation?.card.text}
-                >
-                  {snapshotProposals?.length} Total{' '}
-                  {pluralize('Proposal', snapshotProposals?.length || 0)}
-                  {', '}
-                  <Text
-                    as="span"
-                    fontSize="14px"
-                    fontWeight={500}
-                    color={theme.compensation?.card.success}
-                  >
-                    {snapshotProposals.filter(item => item.voted)?.length} Voted
-                    On
-                  </Text>
-                </Text>
-              </Flex>
-            </Flex>
-            <Flex
-              flexDir="column"
-              gap="4"
-              maxH="320px"
-              overflowY="auto"
-              w="full"
-            >
-              <Table
-                variant="simple"
-                bg={theme.compensation?.card.bg}
-                borderRadius="8px"
-              >
-                <Thead>
-                  <Tr>
-                    <Th
-                      borderColor={theme.compensation?.card.divider}
-                      color={theme.compensation?.card.text}
-                      textTransform="none"
-                      fontSize="14px"
-                      fontWeight="700"
-                    >
-                      Proposal Name
-                    </Th>
-
-                    <Th
-                      borderColor={theme.compensation?.card.divider}
-                      color={theme.compensation?.card.text}
-                      textTransform="none"
-                      fontSize="14px"
-                      fontWeight="700"
-                    >
-                      Date
-                    </Th>
-
-                    <Th
-                      borderColor={theme.compensation?.card.divider}
-                      color={theme.compensation?.card.text}
-                      textTransform="none"
-                      fontSize="14px"
-                      fontWeight="700"
-                    >
-                      Voted
-                    </Th>
-                    <Th
-                      borderColor={theme.compensation?.card.divider}
-                      color={theme.compensation?.card.text}
-                      textTransform="none"
-                      fontSize="14px"
-                      fontWeight="700"
-                    >
-                      CR
-                    </Th>
-                    <Th
-                      borderColor={theme.compensation?.card.divider}
-                      color={theme.compensation?.card.text}
-                      textTransform="none"
-                      fontSize="14px"
-                      fontWeight="700"
-                    >
-                      Valid Rationale
-                    </Th>
-                    <Th
-                      borderColor={theme.compensation?.card.divider}
-                      color={theme.compensation?.card.text}
-                      textTransform="none"
-                      fontSize="14px"
-                      fontWeight="700"
-                    />
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {snapshotProposals?.map(item => (
-                    <Tr
-                      opacity={
-                        !watch(
-                          `communicatingRationale.breakdown.${item.index}.validRationale`
-                        )
-                          ? 0.7
-                          : 1
-                      }
-                      key={item.index}
-                    >
-                      <Td
-                        color={theme.compensation?.card.text}
-                        borderColor={theme.compensation?.card.divider}
-                      >
-                        <Flex
-                          flexDirection="column"
-                          justify="flex-start"
-                          align="flex-start"
-                          gap="2"
-                        >
-                          <Text color={theme.text} lineHeight="14px">
-                            {item.name}
-                            {item.name[0] === '#' ? '...' : ''}
-                          </Text>
-                          <Flex flexDir="row" gap="4" alignItems="center">
-                            {item.link ? (
-                              <ChakraLink
-                                display="flex"
-                                flexDir="row"
-                                gap="2"
-                                alignItems="center"
-                                justifyContent="center"
-                                href={item.link}
-                                isExternal
-                                color="blue.500"
-                                w="fit-content"
-                                _hover={{
-                                  textDecoration: 'none',
-                                  color: 'blue.400',
-                                  borderColor: 'blue.400',
-                                }}
-                                fontSize={['14px', '16px']}
-                              >
-                                See proposal
-                                <LinkIcon
-                                  w="14px"
-                                  h="14px"
-                                  viewBox="0 0 18 18"
-                                  mt="0.5"
-                                />
-                              </ChakraLink>
-                            ) : null}
-                            {item.proposalTopic ? (
-                              <ChakraLink
-                                display="flex"
-                                flexDir="row"
-                                gap="2"
-                                alignItems="center"
-                                justifyContent="center"
-                                href={item.proposalTopic}
-                                isExternal
-                                color="blue.500"
-                                w="fit-content"
-                                _hover={{
-                                  textDecoration: 'none',
-                                  color: 'blue.400',
-                                  borderColor: 'blue.400',
-                                }}
-                                fontSize={['14px', '16px']}
-                              >
-                                See Forum Link
-                                <LinkIcon
-                                  w="14px"
-                                  h="14px"
-                                  viewBox="0 0 18 18"
-                                  mt="0.5"
-                                />
-                              </ChakraLink>
-                            ) : null}
-                          </Flex>
-                        </Flex>
-                      </Td>
-
-                      <Td
-                        color={theme.compensation?.card.text}
-                        borderColor={theme.compensation?.card.divider}
-                      >
-                        <Text w="max-content">
-                          {formatDate(item.endDate as string, 'MMM D, YYYY')}
-                        </Text>
-                      </Td>
-
-                      <Td
-                        color={theme.compensation?.card.text}
-                        borderColor={theme.compensation?.card.divider}
-                      >
-                        {watch(
-                          `communicatingRationale.breakdown.${item.index}.voted`
-                        ) === true ? (
-                          <TrueIcon
-                            w="24px"
-                            h="24px"
-                            color={theme.compensation?.card.success}
-                          />
-                        ) : (
-                          <FalseIcon
-                            w="24px"
-                            h="24px"
-                            color={theme.compensation?.card.error}
-                          />
-                        )}
-                      </Td>
-                      <Td
-                        color={theme.compensation?.card.text}
-                        borderColor={theme.compensation?.card.divider}
-                      >
-                        <Flex
-                          flexDir="row"
-                          gap="3"
-                          alignItems="center"
-                          justify="flex-start"
-                          minW="200px"
-                        >
-                          {isAuthorized ? (
-                            <Input
-                              defaultValue={item.post || ''}
-                              bg={theme.compensation?.card.input.bg}
-                              color={theme.compensation?.card.input.text}
-                              disabled={isSaving}
-                              _active={{}}
-                              _focus={{
-                                bg: theme.compensation?.card.input.bg,
-                              }}
-                              _focusVisible={{}}
-                              _focusWithin={{}}
-                              w="180px"
-                              h="32px"
-                              px="1"
-                              border={
-                                formState.errors.communicatingRationale
-                                  ?.breakdown?.[item.index]?.post
-                                  ? '1px solid red'
-                                  : 'none'
-                              }
-                              onChange={(
-                                event: React.ChangeEvent<HTMLInputElement>
-                              ) => {
-                                onChangeDebounce(
-                                  event.target.value,
-                                  item.index
-                                );
-                              }}
-                            />
-                          ) : item.post ? (
-                            <ChakraLink
-                              href={item.post}
-                              isExternal
-                              color="blue.500"
-                              maxW="240px"
-                              wordBreak="break-all"
-                              w="full"
-                              noOfLines={2}
-                            >
-                              {item.post.length > 40
-                                ? `${item.post.slice(0, 40)}...`
-                                : item.post}
-                            </ChakraLink>
-                          ) : null}
-                          {item.rationale ? (
-                            <Flex
-                              display="flex"
-                              flexDir="row"
-                              gap="1"
-                              alignItems="center"
-                              onClick={() => setRationaleSelected(item)}
-                              cursor="pointer"
-                              color="blue.500"
-                              borderBottom="1px solid"
-                              borderColor="blue.500"
-                              w="max-content"
-                              _hover={{
-                                textDecoration: 'none',
-                                color: 'blue.400',
-                                borderColor: 'blue.400',
-                              }}
-                            >
-                              See
-                            </Flex>
-                          ) : (
-                            <Flex width="24px" height="24px" />
-                          )}
-                        </Flex>
-                      </Td>
-                      <Td
-                        color={theme.compensation?.card.text}
-                        borderColor={theme.compensation?.card.divider}
-                      >
-                        {isAuthorized ? (
-                          <Switch
-                            isChecked={watch(
-                              `communicatingRationale.breakdown.${item.index}.validRationale`
-                            )}
-                            onChange={() => {
-                              setValue(
-                                `communicatingRationale.breakdown.${item.index}.validRationale`,
-                                !watch(
-                                  `communicatingRationale.breakdown.${item.index}.validRationale`
-                                ),
-                                {
-                                  shouldDirty: true,
-                                  shouldValidate: true,
-                                }
-                              );
-                              setValue(
-                                `communicatingRationale.breakdown.${item.index}.modified`,
-                                true
-                              );
-                            }}
-                            isDisabled={isSaving}
-                            disabled={isSaving}
-                          />
-                        ) : watch(
-                            `communicatingRationale.breakdown.${item.index}.validRationale`
-                          ) ? (
-                          <TrueIcon
-                            w="24px"
-                            h="24px"
-                            color={theme.compensation?.card.success}
-                          />
-                        ) : (
-                          <FalseIcon
-                            w="24px"
-                            h="24px"
-                            color={theme.compensation?.card.error}
-                          />
-                        )}
-                      </Td>
-                      <Td
-                        color={theme.compensation?.card.text}
-                        borderColor={theme.compensation?.card.divider}
-                      >
-                        {item?.updated === 'manually' ? (
-                          <Tooltip label="Manually updated">
-                            <Flex
-                              bg={theme.compensation?.card.input.bg}
-                              p="1"
-                              rounded="full"
-                              width="24px"
-                              height="24px"
-                              alignItems="center"
-                              justify="center"
-                            >
-                              <Text
-                                fontSize="small"
-                                color={theme.compensation?.card.text}
-                              >
-                                M
-                              </Text>
-                            </Flex>
-                          </Tooltip>
-                        ) : (
-                          <Flex width="24px" height="24px" />
-                        )}
-                      </Td>
-                    </Tr>
-                  ))}
-                </Tbody>
-              </Table>
-            </Flex>
-          </Flex>
-          <Flex
-            flexDir="column"
-            gap="4"
-            alignItems="flex-start"
-            w="full"
-            mt="4"
-            py="4"
-          >
-            <Flex
-              flexDir={['column', 'row']}
-              gap={['1', '4']}
-              alignItems={['flex-start', 'center']}
-              px="4"
-              w="full"
-            >
-              <Heading
-                lineHeight="30px"
-                size="md"
-                color={theme.compensation?.card.text}
-              >
-                Onchain Proposals
-              </Heading>
-              <Flex flexDir="row" gap="2" alignItems="center">
-                <Text
-                  fontSize="14px"
-                  fontWeight={500}
-                  color={theme.compensation?.card.text}
-                >
-                  {onChainProposals?.length} Total{' '}
-                  {pluralize('Proposal', onChainProposals?.length || 0)}
-                  {', '}
-                  <Text
-                    as="span"
-                    fontSize="14px"
-                    fontWeight={500}
-                    color={theme.compensation?.card.success}
-                  >
-                    {onChainProposals.filter(item => item.voted)?.length} Voted
-                    On
-                  </Text>
-                </Text>
-              </Flex>
-            </Flex>
-            <Flex
-              flexDir="column"
-              gap="4"
-              maxH="320px"
-              overflowY="auto"
-              w="full"
-            >
-              <Table
-                variant="simple"
-                bg={theme.compensation?.card.bg}
-                borderRadius="8px"
-              >
-                <Thead>
-                  <Tr>
-                    <Th
-                      borderColor={theme.compensation?.card.divider}
-                      color={theme.compensation?.card.text}
-                      textTransform="none"
-                      fontSize="14px"
-                      fontWeight="700"
-                    >
-                      Proposal Name
-                    </Th>
-
-                    <Th
-                      borderColor={theme.compensation?.card.divider}
-                      color={theme.compensation?.card.text}
-                      textTransform="none"
-                      fontSize="14px"
-                      fontWeight="700"
-                    >
-                      Date
-                    </Th>
-
-                    <Th
-                      borderColor={theme.compensation?.card.divider}
-                      color={theme.compensation?.card.text}
-                      textTransform="none"
-                      fontSize="14px"
-                      fontWeight="700"
-                    >
-                      Voted
-                    </Th>
-                    <Th
-                      borderColor={theme.compensation?.card.divider}
-                      color={theme.compensation?.card.text}
-                      textTransform="none"
-                      fontSize="14px"
-                      fontWeight="700"
-                    >
-                      CR
-                    </Th>
-                    <Th
-                      borderColor={theme.compensation?.card.divider}
-                      color={theme.compensation?.card.text}
-                      textTransform="none"
-                      fontSize="14px"
-                      fontWeight="700"
-                    >
-                      Valid Rationale
-                    </Th>
-                    <Th
-                      borderColor={theme.compensation?.card.divider}
-                      color={theme.compensation?.card.text}
-                      textTransform="none"
-                      fontSize="14px"
-                      fontWeight="700"
-                    />
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {onChainProposals?.map(item => (
-                    <Tr
-                      opacity={
-                        !watch(
-                          `communicatingRationale.breakdown.${item.index}.validRationale`
-                        )
-                          ? 0.7
-                          : 1
-                      }
-                      key={item.index}
-                    >
-                      <Td
-                        color={theme.compensation?.card.text}
-                        borderColor={theme.compensation?.card.divider}
-                      >
-                        <Flex
-                          flexDirection="column"
-                          justify="flex-start"
-                          align="flex-start"
-                          gap="2"
-                        >
-                          <Text color={theme.text} lineHeight="14px">
-                            {item.name}
-                            {item.name[0] === '#' ? '...' : ''}
-                          </Text>
-                          <Flex flexDir="row" gap="4" alignItems="center">
-                            {item.link ? (
-                              <ChakraLink
-                                display="flex"
-                                flexDir="row"
-                                gap="2"
-                                alignItems="center"
-                                justifyContent="center"
-                                href={item.link}
-                                isExternal
-                                color="blue.500"
-                                w="fit-content"
-                                _hover={{
-                                  textDecoration: 'none',
-                                  color: 'blue.400',
-                                  borderColor: 'blue.400',
-                                }}
-                                fontSize={['14px', '16px']}
-                              >
-                                See proposal
-                                <LinkIcon
-                                  w="14px"
-                                  h="14px"
-                                  viewBox="0 0 18 18"
-                                  mt="0.5"
-                                />
-                              </ChakraLink>
-                            ) : null}
-                            {item.proposalTopic ? (
-                              <ChakraLink
-                                display="flex"
-                                flexDir="row"
-                                gap="2"
-                                alignItems="center"
-                                justifyContent="center"
-                                href={item.proposalTopic}
-                                isExternal
-                                color="blue.500"
-                                w="fit-content"
-                                _hover={{
-                                  textDecoration: 'none',
-                                  color: 'blue.400',
-                                  borderColor: 'blue.400',
-                                }}
-                                fontSize={['14px', '16px']}
-                              >
-                                See Forum Link
-                                <LinkIcon
-                                  w="14px"
-                                  h="14px"
-                                  viewBox="0 0 18 18"
-                                  mt="0.5"
-                                />
-                              </ChakraLink>
-                            ) : null}
-                          </Flex>
-                        </Flex>
-                      </Td>
-
-                      <Td
-                        color={theme.compensation?.card.text}
-                        borderColor={theme.compensation?.card.divider}
-                      >
-                        <Text w="max-content">
-                          {formatDate(item.endDate as string, 'MMM D, YYYY')}
-                        </Text>
-                      </Td>
-
-                      <Td
-                        color={theme.compensation?.card.text}
-                        borderColor={theme.compensation?.card.divider}
-                      >
-                        {watch(
-                          `communicatingRationale.breakdown.${item.index}.voted`
-                        ) === true ? (
-                          <TrueIcon
-                            w="24px"
-                            h="24px"
-                            color={theme.compensation?.card.success}
-                          />
-                        ) : (
-                          <FalseIcon
-                            w="24px"
-                            h="24px"
-                            color={theme.compensation?.card.error}
-                          />
-                        )}
-                      </Td>
-                      <Td
-                        color={theme.compensation?.card.text}
-                        borderColor={theme.compensation?.card.divider}
-                      >
-                        <Flex
-                          flexDir="row"
-                          gap="3"
-                          alignItems="center"
-                          justify="flex-start"
-                        >
-                          {isAuthorized ? (
-                            <Input
-                              defaultValue={item.post || ''}
-                              bg={theme.compensation?.card.input.bg}
-                              color={theme.compensation?.card.input.text}
-                              disabled={isSaving}
-                              _active={{}}
-                              _focus={{
-                                bg: theme.compensation?.card.input.bg,
-                              }}
-                              _focusVisible={{}}
-                              _focusWithin={{}}
-                              w="180px"
-                              h="32px"
-                              px="1"
-                              border={
-                                formState.errors.communicatingRationale
-                                  ?.breakdown?.[item.index]?.post
-                                  ? '1px solid red'
-                                  : 'none'
-                              }
-                              onChange={(
-                                event: React.ChangeEvent<HTMLInputElement>
-                              ) => {
-                                onChangeDebounce(
-                                  event.target.value,
-                                  item.index
-                                );
-                              }}
-                            />
-                          ) : item.post ? (
-                            <ChakraLink
-                              href={item.post}
-                              isExternal
-                              color="blue.500"
-                              maxW="180px"
-                              wordBreak="break-all"
-                            >
-                              {item.post.length > 32
-                                ? `${item.post.slice(0, 32)}...`
-                                : item.post}
-                            </ChakraLink>
-                          ) : null}
-                          {item.rationale ? (
-                            <Flex
-                              display="flex"
-                              flexDir="row"
-                              gap="1"
-                              alignItems="center"
-                              onClick={() => setRationaleSelected(item)}
-                              cursor="pointer"
-                              color="blue.500"
-                              borderBottom="1px solid"
-                              borderColor="blue.500"
-                              w="max-content"
-                              _hover={{
-                                textDecoration: 'none',
-                                color: 'blue.400',
-                                borderColor: 'blue.400',
-                              }}
-                            >
-                              See
-                            </Flex>
-                          ) : (
-                            <Flex width="24px" height="24px" />
-                          )}
-                        </Flex>
-                      </Td>
-                      <Td
-                        color={theme.compensation?.card.text}
-                        borderColor={theme.compensation?.card.divider}
-                      >
-                        {isAuthorized ? (
-                          <Switch
-                            isChecked={watch(
-                              `communicatingRationale.breakdown.${item.index}.validRationale`
-                            )}
-                            onChange={() => {
-                              setValue(
-                                `communicatingRationale.breakdown.${item.index}.validRationale`,
-                                !watch(
-                                  `communicatingRationale.breakdown.${item.index}.validRationale`
-                                ),
-                                {
-                                  shouldDirty: true,
-                                  shouldValidate: true,
-                                }
-                              );
-                              setValue(
-                                `communicatingRationale.breakdown.${item.index}.modified`,
-                                true
-                              );
-                            }}
-                            isDisabled={isSaving}
-                            disabled={isSaving}
-                          />
-                        ) : watch(
-                            `communicatingRationale.breakdown.${item.index}.validRationale`
-                          ) ? (
-                          <TrueIcon
-                            w="24px"
-                            h="24px"
-                            color={theme.compensation?.card.success}
-                          />
-                        ) : (
-                          <FalseIcon
-                            w="24px"
-                            h="24px"
-                            color={theme.compensation?.card.error}
-                          />
-                        )}
-                      </Td>
-                      <Td
-                        color={theme.compensation?.card.text}
-                        borderColor={theme.compensation?.card.divider}
-                      >
-                        {item?.updated === 'manually' ? (
-                          <Tooltip label="Manually updated">
-                            <Flex
-                              bg={theme.compensation?.card.input.bg}
-                              p="1"
-                              rounded="full"
-                              width="24px"
-                              height="24px"
-                              alignItems="center"
-                              justify="center"
-                            >
-                              <Text
-                                fontSize="small"
-                                color={theme.compensation?.card.text}
-                              >
-                                M
-                              </Text>
-                            </Flex>
-                          </Tooltip>
-                        ) : (
-                          <Flex width="24px" height="24px" />
-                        )}
-                      </Td>
-                    </Tr>
-                  ))}
-                </Tbody>
-              </Table>
-            </Flex>
-          </Flex>
-
-          {formState.isDirty && isAuthorized ? (
-            <Flex flexDir="row" gap="2" justify="flex-end" mt="4">
-              <Button
-                isDisabled={isSaving || !formState.isValid}
-                disabled={isSaving || !formState.isValid}
-                isLoading={isSaving}
-                w="max-content"
-                alignSelf="flex-end"
-                type="submit"
-                bgColor={theme.compensation?.card.bg}
-                color={theme.compensation?.card.text}
-              >
-                Save
-              </Button>
-            </Flex>
-          ) : null}
-        </form>
+        <DelegateProposalsWrapped
+          defaultValueBreakdown={defaultValueBreakdown}
+          snapshotProposals={snapshotProposals}
+          onChainProposals={onChainProposals}
+          selectRationale={setRationaleSelected}
+        />
       )}
     </Flex>
   );
