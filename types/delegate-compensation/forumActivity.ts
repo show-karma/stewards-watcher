@@ -3,4 +3,5 @@ export type ForumPosts = {
   link: string;
   topic: string;
   insight: string;
+  date: string;
 };

@@ -19,7 +19,6 @@ import { useDAO } from 'contexts';
 import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import { DelegateCompensationAdminLayout } from 'layouts/delegateCompensationAdmin';
 import dynamic from 'next/dynamic';
-import { useState } from 'react';
 import { HiExternalLink } from 'react-icons/hi';
 import { getForumActivity } from 'utils/delegate-compensation/getForumActivity';
 import { DelegatePeriod } from '../DelegatePeriod';
@@ -37,16 +36,17 @@ export const DelegateCompensationAdminForumActivity = ({
   const { selectedDate } = useDelegateCompensation();
   const { theme } = useDAO();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const onClose = () => setIsModalOpen(false);
-
   const {
     data: posts,
     isLoading,
     isFetching,
   } = useQuery(
-    ['delegate-compensation-forum-activity', delegateInfo?.discourseHandle],
+    [
+      'delegate-compensation-forum-activity',
+      delegateInfo?.discourseHandle,
+      selectedDate?.value.month,
+      selectedDate?.value.year,
+    ],
     () =>
       getForumActivity(
         selectedDate?.value.month,
@@ -58,6 +58,7 @@ export const DelegateCompensationAdminForumActivity = ({
         !!delegateInfo?.discourseHandle &&
         !!selectedDate?.value.year &&
         !!selectedDate?.value.month,
+      refetchOnWindowFocus: false,
     }
   );
 
@@ -79,20 +80,28 @@ export const DelegateCompensationAdminForumActivity = ({
             <Thead w="full">
               <Tr w="full">
                 <Th
-                  w="50%"
-                  minW="50%"
+                  w="40%"
+                  minW="40%"
                   borderBottom="1px solid"
                   borderBottomColor={theme.compensation?.card.dropdown}
                 >
                   Topic
                 </Th>
                 <Th
-                  w="50%"
-                  minW="50%"
+                  w="40%"
+                  minW="40%"
                   borderBottom="1px solid"
                   borderBottomColor={theme.compensation?.card.dropdown}
                 >
                   Comment
+                </Th>
+                <Th
+                  w="20%"
+                  minW="20%"
+                  borderBottom="1px solid"
+                  borderBottomColor={theme.compensation?.card.dropdown}
+                >
+                  Date
                 </Th>
               </Tr>
             </Thead>
@@ -106,8 +115,8 @@ export const DelegateCompensationAdminForumActivity = ({
                 return (
                   <Tr key={index} w="full">
                     <Td
-                      w="50%"
-                      minW="50%"
+                      w="40%"
+                      minW="40%"
                       borderBottom="1px solid"
                       borderBottomColor={theme.compensation?.card.dropdown}
                     >
@@ -132,8 +141,8 @@ export const DelegateCompensationAdminForumActivity = ({
                       </ChakraLink>
                     </Td>
                     <Td
-                      w="50%"
-                      minW="50%"
+                      w="40%"
+                      minW="40%"
                       borderBottom="1px solid"
                       borderBottomColor={theme.compensation?.card.dropdown}
                     >
@@ -166,6 +175,14 @@ export const DelegateCompensationAdminForumActivity = ({
                           <Icon as={HiExternalLink} boxSize="16px" />
                         </ChakraLink>
                       </Flex>
+                    </Td>
+                    <Td
+                      w="20%"
+                      minW="20%"
+                      borderBottom="1px solid"
+                      borderBottomColor={theme.compensation?.card.dropdown}
+                    >
+                      {post?.date}
                     </Td>
                   </Tr>
                 );
