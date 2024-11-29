@@ -5,6 +5,7 @@ import { api } from 'helpers';
 import { useEffect, useState } from 'react';
 import { DelegateCompensationStats, DelegateStatsFromAPI } from 'types';
 import { formatSimpleNumber } from 'utils';
+import { ContactUs } from './ContactUs';
 import { MonthDropdown } from './MonthDropdown';
 import { Table } from './Table';
 
@@ -235,6 +236,7 @@ export const DelegateCompensation = () => {
             <Text fontSize="40px">{formatSimpleNumber(powerfulDelegates)}</Text>
           </Skeleton>
         </Flex>
+        <ContactUs />
       </Flex>
       <Flex
         paddingX={{ base: '2', lg: '0' }}
@@ -255,7 +257,7 @@ export const DelegateCompensation = () => {
             <Text color={theme.card.text} fontSize="lg">
               Month
             </Text>
-            <MonthDropdown maximumPeriod={new Date('2024-10-15')} />
+            <MonthDropdown />
           </Flex>
           <Switch
             display="flex"

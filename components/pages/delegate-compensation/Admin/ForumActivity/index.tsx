@@ -17,6 +17,7 @@ import {
   Text,
   Th,
   Thead,
+  Tooltip,
   Tr,
 } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
@@ -37,7 +38,7 @@ import {
   ForumActivityBreakdown,
   ForumPosts,
 } from 'types/delegate-compensation/forumActivity';
-import { formatDate } from 'utils';
+import { formatDate, formatNumber } from 'utils';
 import { getForumActivity } from 'utils/delegate-compensation/getForumActivity';
 import { DelegatePeriod } from '../DelegatePeriod';
 
@@ -129,12 +130,11 @@ export const DelegateCompensationAdminForumActivity = ({
     { title: 'Timing', id: 'timing' },
     { title: 'Clarity & Communication', id: 'clarityAndCommunication' },
     { title: 'Impact', id: 'impactOnDecisionMaking' },
-    { title: 'Total Score', id: 'totalScore', type: 'read-only' },
     { title: 'Valid', id: 'status', type: 'boolean' },
   ];
 
   const calculateFinalScore = (
-    currentScores: ForumActivityBreakdown,
+    currentScores: Omit<ForumActivityBreakdown, 'id' | 'status' | 'totalScore'>,
     multiplier = presenceMultiplier
   ) => {
     // Calculate final scores
@@ -147,9 +147,7 @@ export const DelegateCompensationAdminForumActivity = ({
         currentScores.impactOnDecisionMaking
       ).toFixed(1)
     );
-    const percentageScore = initialScore / (5 * 4); // Convert to percentage using 5 stats that can have a max of 4
-    const percentageWithMultiplier = percentageScore * multiplier;
-    const finalScore = Number((percentageWithMultiplier * 30).toFixed(1));
+    const finalScore = Number((1.5 * multiplier * initialScore).toFixed(1));
     return finalScore > 30 ? 30 : finalScore;
   };
 
@@ -264,6 +262,40 @@ export const DelegateCompensationAdminForumActivity = ({
       setIsSaving(false);
     }
   };
+
+  const validRows = rows.filter(row => row.status === 'valid');
+
+  const averages = {
+    relevance:
+      +formatNumber(
+        validRows.reduce((acc, curr) => acc + curr.relevance, 0) /
+          validRows.length
+      ) || 0,
+    depthOfAnalysis:
+      +formatNumber(
+        validRows.reduce((acc, curr) => acc + curr.depthOfAnalysis, 0) /
+          validRows.length
+      ) || 0,
+    timing:
+      +formatNumber(
+        validRows.reduce((acc, curr) => acc + curr.timing, 0) / validRows.length
+      ) || 0,
+    clarityAndCommunication:
+      +formatNumber(
+        validRows.reduce((acc, curr) => acc + curr.clarityAndCommunication, 0) /
+          validRows.length
+      ) || 0,
+    impactOnDecisionMaking:
+      +formatNumber(
+        validRows.reduce((acc, curr) => acc + curr.impactOnDecisionMaking, 0) /
+          validRows.length
+      ) || 0,
+  };
+
+  const sumAverages = Object.values(averages).reduce(
+    (acc, curr) => acc + curr,
+    0
+  );
 
   return (
     <DelegateCompensationAdminLayout>
@@ -540,49 +572,242 @@ export const DelegateCompensationAdminForumActivity = ({
                       </Tr>
                     );
                   })}
+                  <Tr key="averages" w="full">
+                    <Td border="none" />
+                    <Td border="none" />
+                    <Td border="none" />
+                    {columns.map(item => {
+                      const stat = averages[item.id as keyof typeof averages];
+                      if (item.id === 'status') {
+                        return (
+                          <Td key={`${item.id}-total`} border="none">
+                            <Flex flexDir="column" gap="0" alignItems="center">
+                              <Text
+                                fontSize="20px"
+                                fontWeight={700}
+                                color={theme.compensation?.card.secondaryText}
+                                lineHeight="32px"
+                                minH="32px"
+                                bg="transparent"
+                                textAlign="end"
+                                px="1"
+                              >
+                                Total
+                              </Text>
+                              <Text
+                                fontSize="20px"
+                                fontWeight={700}
+                                color={theme.compensation?.card.secondaryText}
+                                lineHeight="32px"
+                                minH="32px"
+                                bg="transparent"
+                                textAlign="end"
+                                px="1"
+                              >
+                                {sumAverages}
+                              </Text>
+                            </Flex>
+                          </Td>
+                        );
+                      }
+                      return (
+                        <Td key={`${item.id}-average`} border="none">
+                          <Text
+                            fontSize="20px"
+                            fontWeight={700}
+                            color={theme.compensation?.card.secondaryText}
+                            lineHeight="32px"
+                            w="60px"
+                            minH="32px"
+                            bg="transparent"
+                            textAlign="end"
+                            px="1"
+                          >
+                            {stat || '-'}
+                          </Text>
+                        </Td>
+                      );
+                    })}
+                  </Tr>
                 </Tbody>
               </Table>
             </Flex>
-            {isAuthorized ? (
-              <Flex flexDir="row" gap="8" justify="flex-end" mt="4">
-                <Flex flexDir="row" gap="2" alignItems="center">
+            <Flex flexDir="column" gap="2" justify="center" alignItems="end">
+              <Flex w="full" justify="flex-end" align="flex-end">
+                <Text fontSize="medium" color={theme.compensation?.card.text}>
+                  ⚠️ These scores are subject to change and not finalized yet.
+                </Text>
+              </Flex>
+              <Flex flexDir="column" gap="1" alignItems="flex-end">
+                <Flex flexDir="row" gap="1" justify="flex-end">
+                  <Tooltip
+                    placement="top"
+                    label={
+                      <Text
+                        fontSize="16px"
+                        fontWeight={600}
+                        color={theme.compensation?.card.secondaryText}
+                      >
+                        Final Score formula: Total * 30/20 * Presence Multiplier
+                      </Text>
+                    }
+                    hasArrow
+                    bgColor={theme.compensation?.card.bg}
+                    color={theme.compensation?.card.text}
+                    fontWeight="normal"
+                    fontSize="sm"
+                    borderRadius={10}
+                    p="3"
+                  >
+                    <Text
+                      fontSize="16px"
+                      fontWeight={600}
+                      color={theme.compensation?.card.secondaryText}
+                    >
+                      Final score formula:
+                    </Text>
+                  </Tooltip>
+                  <Tooltip
+                    placement="top"
+                    label="Total"
+                    hasArrow
+                    bgColor={theme.compensation?.card.bg}
+                    color={theme.compensation?.card.text}
+                    fontWeight="normal"
+                    fontSize="sm"
+                    borderRadius={10}
+                    p="3"
+                  >
+                    <Text
+                      fontSize="16px"
+                      fontWeight={600}
+                      color={theme.compensation?.card.secondaryText}
+                    >
+                      {sumAverages}
+                    </Text>
+                  </Tooltip>
                   <Text
-                    fontSize="14px"
+                    fontSize="16px"
                     fontWeight={600}
                     color={theme.compensation?.card.secondaryText}
                   >
-                    Presence Multiplier
+                    *
                   </Text>
-                  <Input
-                    value={presenceMultiplier}
-                    onChange={event => {
-                      changePresenceMultiplier(event.target.value);
-                    }}
-                    type="number"
-                    min={0}
-                    max={2}
-                    w="80px"
+                  <Tooltip
+                    placement="top"
+                    label={
+                      <Flex flexDir="column" gap="2">
+                        <Text
+                          fontSize="16px"
+                          fontWeight={600}
+                          color={theme.compensation?.card.secondaryText}
+                        >
+                          Delegates Feedback (DF) - Weight 30
+                        </Text>
+                        <Text
+                          fontSize="16px"
+                          fontWeight={600}
+                          color={theme.compensation?.card.secondaryText}
+                        >
+                          Max Initial Score - Weight 20
+                        </Text>
+                      </Flex>
+                    }
+                    hasArrow
                     bgColor={theme.compensation?.card.bg}
                     color={theme.compensation?.card.text}
-                    textAlign="center"
-                  />
+                    fontWeight="normal"
+                    fontSize="sm"
+                    borderRadius={10}
+                    p="3"
+                  >
+                    <Text
+                      fontSize="16px"
+                      fontWeight={600}
+                      color={theme.compensation?.card.secondaryText}
+                    >
+                      30/20
+                    </Text>
+                  </Tooltip>
+                  <Text
+                    fontSize="16px"
+                    fontWeight={600}
+                    color={theme.compensation?.card.secondaryText}
+                  >
+                    *
+                  </Text>
+                  <Tooltip
+                    placement="top"
+                    label="Presence Multiplier"
+                    hasArrow
+                    bgColor={theme.compensation?.card.bg}
+                    color={theme.compensation?.card.text}
+                    fontWeight="normal"
+                    fontSize="sm"
+                    borderRadius={10}
+                    p="3"
+                  >
+                    <Text
+                      fontSize="16px"
+                      fontWeight={600}
+                      color={theme.compensation?.card.secondaryText}
+                    >
+                      {presenceMultiplier}
+                    </Text>
+                  </Tooltip>
                 </Flex>
-                <Button
-                  isDisabled={!isModified || isSaving}
-                  disabled={!isModified || isSaving}
-                  isLoading={isSaving}
-                  w="max-content"
-                  alignSelf="flex-end"
-                  onClick={() => {
-                    saveFeedback();
-                  }}
-                  bgColor={theme.compensation?.card.bg}
-                  color={theme.compensation?.card.text}
+                <Text
+                  fontSize="16px"
+                  fontWeight={700}
+                  color={theme.compensation?.card.secondaryText}
                 >
-                  Save
-                </Button>
+                  Final Score: {` `}
+                  {calculateFinalScore({
+                    ...averages,
+                  })}
+                </Text>
               </Flex>
-            ) : null}
+              {isAuthorized ? (
+                <Flex flexDir="row" gap="8" justify="flex-end" mt="4">
+                  <Flex flexDir="row" gap="2" alignItems="center">
+                    <Text
+                      fontSize="14px"
+                      fontWeight={600}
+                      color={theme.compensation?.card.secondaryText}
+                    >
+                      Presence Multiplier
+                    </Text>
+                    <Input
+                      value={presenceMultiplier}
+                      onChange={event => {
+                        changePresenceMultiplier(event.target.value);
+                      }}
+                      type="number"
+                      min={0}
+                      max={2}
+                      w="80px"
+                      bgColor={theme.compensation?.card.bg}
+                      color={theme.compensation?.card.text}
+                      textAlign="center"
+                    />
+                  </Flex>
+                  <Button
+                    isDisabled={!isModified || isSaving}
+                    disabled={!isModified || isSaving}
+                    isLoading={isSaving}
+                    w="max-content"
+                    alignSelf="flex-end"
+                    onClick={() => {
+                      saveFeedback();
+                    }}
+                    bgColor={theme.compensation?.card.bg}
+                    color={theme.compensation?.card.text}
+                  >
+                    Save
+                  </Button>
+                </Flex>
+              ) : null}
+            </Flex>
           </Flex>
         ) : (
           <Flex py="4">

@@ -113,8 +113,6 @@ const DelegateProposalsWrapped = ({
     },
   });
 
-  console.log(watch('communicatingRationale.breakdown'));
-
   const onChangeDebounce = debounce((value: string, index: number) => {
     setValue(`communicatingRationale.breakdown.${index}.post`, value, {
       shouldDirty: true,

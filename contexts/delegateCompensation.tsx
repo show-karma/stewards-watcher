@@ -53,7 +53,7 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
       10
     );
 
-    if (isOldVersion || !monthQuery) {
+    if (isOldVersion) {
       if (date >= new Date('2024-10-10')) {
         date = new Date('2024-10-10');
       }

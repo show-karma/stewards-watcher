@@ -8,6 +8,7 @@ import {
   ModalBody,
   ModalCloseButton,
   ModalContent,
+  ModalFooter,
   ModalHeader,
   ModalOverlay,
   Text,
@@ -230,7 +231,6 @@ export const DelegateFeedback = ({
                           lineHeight="32px"
                           minW="60px"
                           minH="32px"
-                          bg={theme.compensation?.bg}
                           textAlign="end"
                           px="1"
                         >
@@ -302,6 +302,20 @@ export const DelegateFeedback = ({
             </VStack>
           </Box>
         </ModalBody>
+        <ModalFooter bg={theme.compensation?.card.bg}>
+          <Flex
+            flexDir="row"
+            gap="2"
+            align="flex-start"
+            justify="flex-start"
+            w="full"
+            px="4"
+          >
+            <Text fontSize="medium" color={theme.compensation?.card.text}>
+              ⚠️ These scores are subject to change and not finalized yet.
+            </Text>
+          </Flex>
+        </ModalFooter>
       </ModalContent>
     </Modal>
   );
