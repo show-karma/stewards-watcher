@@ -27,7 +27,7 @@ export const MonthDropdown: FC<IMonthDropdown> = ({
         if (maximumPeriod && new Date(year, month, 1) > maximumPeriod) {
           break;
         }
-        if (new Date(year, month, 1) < minimumPeriod) {
+        if (new Date(year, month, 1) <= minimumPeriod) {
           // eslint-disable-next-line no-continue
           continue;
         }

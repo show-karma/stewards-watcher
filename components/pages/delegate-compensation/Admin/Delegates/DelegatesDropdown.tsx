@@ -131,7 +131,8 @@ export const DelegatesDropdown = () => {
             bgColor: theme.filters.activeBg,
           },
         }}
-        maxW={['240px', 'max-content']}
+        maxW={['240px', 'full']}
+        w="full"
         minW={['auto']}
       >
         {allDelegates?.map((option, index) => (
@@ -142,7 +143,7 @@ export const DelegatesDropdown = () => {
             _hover={{
               bg: theme.filters.activeBg,
             }}
-            maxW={['full', 'max-content']}
+            maxW={['full']}
           >
             <Text
               textOverflow="ellipsis"

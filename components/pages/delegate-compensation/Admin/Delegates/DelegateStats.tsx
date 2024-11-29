@@ -1,8 +1,10 @@
-import { Button, Flex, Img, Text } from '@chakra-ui/react';
+import { Button, Flex, Icon, Img, Text } from '@chakra-ui/react';
+import { ChakraLink } from 'components/ChakraLink';
 import { useAuth, useDAO } from 'contexts';
 import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import pluralize from 'pluralize';
 import { useState } from 'react';
+import { FaExternalLinkAlt } from 'react-icons/fa';
 import { formatSimpleNumber } from 'utils';
 import { DelegateBP } from './DelegateBP';
 import { DelegateFeedback } from './DelegateFeedback';
@@ -10,15 +12,10 @@ import { DelegateFinalScoreModal } from './DelegateFinalScore';
 import { DelegatePeriodIndicator } from './DelegatePeriodIndicator';
 
 export const DelegateStats = () => {
-  const {
-    delegateInfo,
-    isFetchingDelegateInfo,
-    isLoadingDelegateInfo,
-    changeDelegateAddress,
-  } = useDelegateCompensation();
+  const { delegateInfo } = useDelegateCompensation();
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [isFinalScoreModalOpen, setIsFinalScoreModalOpen] = useState(false);
-  const { theme } = useDAO();
+  const { theme, daoInfo } = useDAO();
   const { isDaoAdmin: isAuthorized } = useAuth();
   return (
     <Flex flexDir="column" w="full" gap="5">
@@ -52,34 +49,50 @@ export const DelegateStats = () => {
         >
           <Flex
             flexDir="row"
+            gap="4"
+            alignItems="center"
+            justifyContent="space-between"
             w="full"
+            p="3"
             borderBottom="1px solid"
             borderBottomColor={theme.compensation?.card.divider}
-            gap="3"
-            align="center"
-            p="3"
           >
-            <Flex
-              borderRadius="4px"
-              bg={theme.compensation?.icons.snapshot}
-              w="40px"
-              h="40px"
-            >
-              <Img
-                src="/icons/delegate-compensation/snapshot.jpg"
+            <Flex flexDir="row" w="full" gap="3" align="center">
+              <Flex
+                borderRadius="4px"
+                bg={theme.compensation?.icons.snapshot}
                 w="40px"
                 h="40px"
-                mixBlendMode="multiply"
-                borderRadius="4px"
-              />
+              >
+                <Img
+                  src="/icons/delegate-compensation/snapshot.jpg"
+                  w="40px"
+                  h="40px"
+                  mixBlendMode="multiply"
+                  borderRadius="4px"
+                />
+              </Flex>
+              <Text
+                fontSize="16px"
+                fontWeight="600"
+                color={theme.compensation?.card.text}
+              >
+                Snapshot Stats
+              </Text>
             </Flex>
-            <Text
-              fontSize="16px"
-              fontWeight="600"
-              color={theme.compensation?.card.text}
+
+            <ChakraLink
+              href={`https://snapshot.org/#/profile/${delegateInfo?.publicAddress}`}
+              isExternal
+              _hover={{ opacity: 0.8 }}
             >
-              Snapshot Stats
-            </Text>
+              <Icon
+                as={FaExternalLinkAlt}
+                w="20px"
+                h="20px"
+                color={theme.compensation?.card.secondaryText}
+              />
+            </ChakraLink>
           </Flex>
           <Flex flexDir="column" p="4" justify="center" align="flex-start">
             <Text
@@ -106,10 +119,10 @@ export const DelegateStats = () => {
                 color={theme.compensation?.card.secondaryText}
                 as="span"
               >
-                {delegateInfo?.stats?.snapshotVoting.rn} Total{' '}
+                {delegateInfo?.stats?.snapshotVoting.tn} Total{' '}
                 {pluralize(
                   'Proposals',
-                  +(delegateInfo?.stats?.snapshotVoting.rn || 0)
+                  +(delegateInfo?.stats?.snapshotVoting.tn || 0)
                 )}
                 ,
               </Text>
@@ -119,7 +132,7 @@ export const DelegateStats = () => {
                 color={theme.compensation?.card.success}
                 as="span"
               >
-                {delegateInfo?.stats?.snapshotVoting.tn} Voted On
+                {delegateInfo?.stats?.snapshotVoting.rn} Voted On
               </Text>
             </Flex>
           </Flex>
@@ -132,34 +145,49 @@ export const DelegateStats = () => {
         >
           <Flex
             flexDir="row"
+            gap="4"
+            alignItems="center"
+            justifyContent="space-between"
             w="full"
+            p="3"
             borderBottom="1px solid"
             borderBottomColor={theme.compensation?.card.divider}
-            gap="3"
-            align="center"
-            p="3"
           >
-            <Flex
-              borderRadius="4px"
-              bg={theme.compensation?.icons.onchain}
-              w="40px"
-              h="40px"
-              justify="center"
-              align="center"
-            >
-              <Img
-                src="/icons/delegate-compensation/onchain.png"
-                w="24px"
-                h="24px"
-              />
+            <Flex flexDir="row" w="full" gap="3" align="center">
+              <Flex
+                borderRadius="4px"
+                bg={theme.compensation?.icons.onchain}
+                w="40px"
+                h="40px"
+                justify="center"
+                align="center"
+              >
+                <Img
+                  src="/icons/delegate-compensation/onchain.png"
+                  w="24px"
+                  h="24px"
+                />
+              </Flex>
+              <Text
+                fontSize="16px"
+                fontWeight="600"
+                color={theme.compensation?.card.text}
+              >
+                Onchain Stats
+              </Text>
             </Flex>
-            <Text
-              fontSize="16px"
-              fontWeight="600"
-              color={theme.compensation?.card.text}
+            <ChakraLink
+              href={`https://www.tally.xyz/gov/${daoInfo.config.DAO_KARMA_ID}/delegate/${delegateInfo?.publicAddress}`}
+              isExternal
+              _hover={{ opacity: 0.8 }}
             >
-              Onchain Stats
-            </Text>
+              <Icon
+                as={FaExternalLinkAlt}
+                w="20px"
+                h="20px"
+                color={theme.compensation?.card.secondaryText}
+              />
+            </ChakraLink>
           </Flex>
           <Flex flexDir="column" p="4" justify="center" align="flex-start">
             <Text
@@ -186,10 +214,10 @@ export const DelegateStats = () => {
                 color={theme.compensation?.card.secondaryText}
                 as="span"
               >
-                {delegateInfo?.stats?.onChainVoting.rn} Total{' '}
+                {delegateInfo?.stats?.onChainVoting.tn} Total{' '}
                 {pluralize(
                   'Proposals',
-                  +(delegateInfo?.stats?.onChainVoting.rn || 0)
+                  +(delegateInfo?.stats?.onChainVoting.tn || 0)
                 )}
                 ,
               </Text>
@@ -199,7 +227,7 @@ export const DelegateStats = () => {
                 color={theme.compensation?.card.success}
                 as="span"
               >
-                {delegateInfo?.stats?.onChainVoting.tn} Voted On
+                {delegateInfo?.stats?.onChainVoting.rn} Voted On
               </Text>
             </Flex>
           </Flex>
