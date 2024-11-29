@@ -145,10 +145,9 @@ export const DelegateCompensationAdminForumActivity = ({
         currentScores.timing +
         currentScores.clarityAndCommunication +
         currentScores.impactOnDecisionMaking
-      ).toFixed(2)
+      ).toFixed(1)
     );
-
-    const finalScore = Number((1.5 * multiplier * initialScore).toFixed(2));
+    const finalScore = 1.5 * multiplier * initialScore;
     return finalScore > 30 ? 30 : finalScore;
   };
 
