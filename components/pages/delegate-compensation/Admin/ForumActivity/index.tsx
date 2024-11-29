@@ -22,6 +22,8 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { ChakraLink } from 'components/ChakraLink';
+import { FalseIcon } from 'components/Icons/Compensation/FalseIcon';
+import { TrueIcon } from 'components/Icons/Compensation/TrueIcon';
 import { useAuth, useDAO } from 'contexts';
 import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import { API_ROUTES, KARMA_API } from 'helpers';
@@ -91,6 +93,7 @@ export const DelegateCompensationAdminForumActivity = ({
   );
 
   useEffect(() => {
+    if (!posts?.length) return;
     const setupRows = () => {
       const newRows =
         posts?.map(item => {
@@ -114,7 +117,7 @@ export const DelegateCompensationAdminForumActivity = ({
       setRows(newRows);
     };
     setupRows();
-  }, [posts, forumPosts]);
+  }, [posts, delegateInfo]);
 
   const [presenceMultiplier, setPresenceMultiplier] = useState(
     delegateFeedback?.presenceMultiplier || 1
@@ -170,6 +173,7 @@ export const DelegateCompensationAdminForumActivity = ({
       newArray[index][numericField] = newValue;
     }
     newArray[index].totalScore = calculateFinalScore(newArray[index]);
+
     setRows(newArray);
     setIsModified(true);
   };
@@ -263,7 +267,7 @@ export const DelegateCompensationAdminForumActivity = ({
 
   return (
     <DelegateCompensationAdminLayout>
-      <Box w="full" overflowX="auto">
+      <Box w="full">
         <Flex flexDir="column" gap="4">
           <Heading fontSize="xl" fontWeight="bold" color={theme.text} mb="4">
             Forum activity
@@ -280,124 +284,176 @@ export const DelegateCompensationAdminForumActivity = ({
           </Flex>
         ) : rows?.length ? (
           <Flex flexDir="column" gap="4" w="full">
-            <Table variant="simple" w="full">
-              <Thead w="full">
-                <Tr
-                  w="full"
-                  borderBottom="1px solid"
-                  borderBottomColor={theme.compensation?.card.dropdown}
-                >
-                  <Th
+            <Flex w="full" overflowX="auto">
+              <Table variant="simple" w="full">
+                <Thead w="full">
+                  <Tr
+                    w="full"
                     borderBottom="1px solid"
                     borderBottomColor={theme.compensation?.card.dropdown}
                   >
-                    Topic
-                  </Th>
-                  <Th
-                    borderBottom="1px solid"
-                    borderBottomColor={theme.compensation?.card.dropdown}
-                  >
-                    Comment
-                  </Th>
-                  <Th
-                    borderBottom="1px solid"
-                    borderBottomColor={theme.compensation?.card.dropdown}
-                  >
-                    Date
-                  </Th>
-                  {columns.map(item => (
                     <Th
                       borderBottom="1px solid"
                       borderBottomColor={theme.compensation?.card.dropdown}
-                      key={item.id}
                     >
-                      {item.title}
+                      Topic
                     </Th>
-                  ))}
-                </Tr>
-              </Thead>
-
-              <Tbody w="full">
-                {rows?.map((post, index) => {
-                  const topicLink = `${post.link
-                    .split('/')
-                    .slice(0, -1)
-                    .join('/')}/`;
-
-                  return (
-                    <Tr
-                      key={index}
-                      w="full"
-                      opacity={post.status === 'valid' ? 1 : 0.75}
+                    <Th
+                      borderBottom="1px solid"
+                      borderBottomColor={theme.compensation?.card.dropdown}
                     >
-                      <Td
+                      Comment
+                    </Th>
+                    <Th
+                      borderBottom="1px solid"
+                      borderBottomColor={theme.compensation?.card.dropdown}
+                    >
+                      Date
+                    </Th>
+                    {columns.map(item => (
+                      <Th
                         borderBottom="1px solid"
                         borderBottomColor={theme.compensation?.card.dropdown}
+                        key={item.id}
                       >
-                        <ChakraLink
-                          isExternal
-                          href={topicLink}
-                          w="max-content"
-                          color="blue.500"
-                          textDecor="underline"
-                          display="flex"
-                          flexDir="row"
-                          alignItems="center"
-                          gap="2"
-                          maxW={['240px', '480px', 'full']}
-                          _hover={{
-                            textDecoration: 'none',
-                            borderColor: 'blue.400',
-                          }}
-                          noOfLines={2}
+                        {item.title}
+                      </Th>
+                    ))}
+                  </Tr>
+                </Thead>
+
+                <Tbody w="full">
+                  {rows?.map((post, index) => {
+                    const topicLink = `${post.link
+                      .split('/')
+                      .slice(0, -1)
+                      .join('/')}/`;
+
+                    return (
+                      <Tr
+                        key={index}
+                        w="full"
+                        opacity={post.status === 'valid' ? 1 : 0.75}
+                      >
+                        <Td
+                          borderBottom="1px solid"
+                          borderBottomColor={theme.compensation?.card.dropdown}
                         >
-                          {post.topic}
-                        </ChakraLink>
-                      </Td>
-                      <Td
-                        borderBottom="1px solid"
-                        borderBottomColor={theme.compensation?.card.dropdown}
-                      >
-                        <Flex flexDir="row" gap="2">
-                          <Flex noOfLines={2} w="full">
-                            <MDPreview
-                              source={post.comment}
-                              // disallowedElements={['a']}
-                              components={{
-                                // eslint-disable-next-line id-length, react/no-unstable-nested-components
-                                a: ({ children }) => <Text>{children}</Text>,
-                              }}
-                            />
-                          </Flex>
                           <ChakraLink
                             isExternal
-                            href={post.link}
+                            href={topicLink}
+                            w="max-content"
                             color="blue.500"
+                            textDecor="underline"
                             display="flex"
                             flexDir="row"
                             alignItems="center"
-                            textDecor="underline"
                             gap="2"
+                            maxW={['240px', '400px']}
                             _hover={{
-                              borderColor: 'blue.300',
+                              textDecoration: 'none',
+                              borderColor: 'blue.400',
                             }}
-                            w="max-content"
-                            maxW="max-content"
+                            noOfLines={2}
                           >
-                            <Icon as={HiExternalLink} boxSize="16px" />
+                            {post.topic}
                           </ChakraLink>
-                        </Flex>
-                      </Td>
-                      <Td
-                        w="200px"
-                        minW="200px"
-                        borderBottom="1px solid"
-                        borderBottomColor={theme.compensation?.card.dropdown}
-                      >
-                        {formatDate(post?.createdAt, 'MMM D, YYYY')}
-                      </Td>
-                      {columns.map(item => {
-                        if (item.type === 'read-only' || !isAuthorized) {
+                        </Td>
+                        <Td
+                          borderBottom="1px solid"
+                          borderBottomColor={theme.compensation?.card.dropdown}
+                        >
+                          <Flex flexDir="row" gap="2">
+                            <Flex noOfLines={2} w="full">
+                              <MDPreview
+                                source={post.comment}
+                                // disallowedElements={['a']}
+                                components={{
+                                  // eslint-disable-next-line id-length, react/no-unstable-nested-components
+                                  a: ({ children }) => <Text>{children}</Text>,
+                                }}
+                              />
+                            </Flex>
+                            <ChakraLink
+                              isExternal
+                              href={post.link}
+                              color="blue.500"
+                              display="flex"
+                              flexDir="row"
+                              alignItems="center"
+                              textDecor="underline"
+                              gap="2"
+                              _hover={{
+                                borderColor: 'blue.300',
+                              }}
+                              w="max-content"
+                              maxW="max-content"
+                            >
+                              <Icon as={HiExternalLink} boxSize="16px" />
+                            </ChakraLink>
+                          </Flex>
+                        </Td>
+                        <Td
+                          w="200px"
+                          minW="200px"
+                          borderBottom="1px solid"
+                          borderBottomColor={theme.compensation?.card.dropdown}
+                        >
+                          {formatDate(post?.createdAt, 'MMM D, YYYY')}
+                        </Td>
+                        {columns.map(item => {
+                          if (item.type === 'read-only' || !isAuthorized) {
+                            if (item.id === 'status') {
+                              return (
+                                <Td
+                                  key={item.id + post.id}
+                                  borderBottom="1px solid"
+                                  borderBottomColor={
+                                    theme.compensation?.card.dropdown
+                                  }
+                                >
+                                  {post.status === 'valid' ? (
+                                    <TrueIcon
+                                      w="24px"
+                                      h="24px"
+                                      color={theme.compensation?.card.success}
+                                    />
+                                  ) : (
+                                    <FalseIcon
+                                      w="24px"
+                                      h="24px"
+                                      color={theme.compensation?.card.error}
+                                    />
+                                  )}
+                                </Td>
+                              );
+                            }
+                            const stat =
+                              post?.[item.id as keyof ForumActivityBreakdown];
+                            return (
+                              <Td
+                                key={item.id + post.id}
+                                borderBottom="1px solid"
+                                borderBottomColor={
+                                  theme.compensation?.card.dropdown
+                                }
+                              >
+                                <Text
+                                  fontSize="20px"
+                                  fontWeight={700}
+                                  color={theme.compensation?.card.secondaryText}
+                                  lineHeight="32px"
+                                  minW="60px"
+                                  minH="32px"
+                                  bg="transparent"
+                                  textAlign="end"
+                                  px="1"
+                                >
+                                  {post.status === 'invalid' ? '-' : stat}
+                                </Text>
+                              </Td>
+                            );
+                          }
                           if (item.id === 'status') {
                             return (
                               <Td
@@ -410,6 +466,18 @@ export const DelegateCompensationAdminForumActivity = ({
                                 <Switch
                                   isChecked={post.status === 'valid'}
                                   defaultChecked={post.status === 'valid'}
+                                  onChange={() => {
+                                    const newArray = [...rows];
+                                    newArray[index].status =
+                                      newArray[index].status === 'valid'
+                                        ? 'invalid'
+                                        : 'valid';
+                                    newArray[index].totalScore = 0;
+                                    setRows(newArray);
+                                    setIsModified(true);
+                                  }}
+                                  isDisabled={isSaving}
+                                  disabled={isSaving}
                                 />
                               </Td>
                             );
@@ -422,110 +490,59 @@ export const DelegateCompensationAdminForumActivity = ({
                                 theme.compensation?.card.dropdown
                               }
                             >
-                              <Text
-                                fontSize="20px"
-                                fontWeight={700}
-                                color={theme.compensation?.card.secondaryText}
-                                lineHeight="32px"
-                                minW="60px"
-                                minH="32px"
-                                bg="transparent"
-                                textAlign="end"
-                                px="1"
-                              >
-                                {
+                              <Editable
+                                defaultValue={String(
                                   post?.[
                                     item.id as keyof ForumActivityBreakdown
                                   ]
-                                }
-                              </Text>
+                                )}
+                                maxW="60px"
+                                w="60px"
+                              >
+                                <EditablePreview
+                                  fontSize="20px"
+                                  fontWeight={700}
+                                  color={theme.compensation?.card.secondaryText}
+                                  lineHeight="32px"
+                                  cursor="pointer"
+                                  textDecor="underline"
+                                  minW="60px"
+                                  minH="32px"
+                                  bg="transparent"
+                                  textAlign="end"
+                                  px="1"
+                                />
+                                <EditableInput
+                                  onChange={event => {
+                                    handleInputChange(
+                                      index,
+                                      item.id,
+                                      event.target.value
+                                    );
+                                  }}
+                                  type="number"
+                                  min={0}
+                                  max={4}
+                                  mr={2}
+                                  bg={theme.compensation?.card.bg}
+                                  w="full"
+                                  fontSize="20px"
+                                  fontWeight={700}
+                                  color={theme.compensation?.card.secondaryText}
+                                  lineHeight="32px"
+                                  px="2"
+                                  textAlign="end"
+                                />
+                              </Editable>
                             </Td>
                           );
-                        }
-                        if (item.id === 'status') {
-                          return (
-                            <Td
-                              key={item.id + post.id}
-                              borderBottom="1px solid"
-                              borderBottomColor={
-                                theme.compensation?.card.dropdown
-                              }
-                            >
-                              <Switch
-                                isChecked={post.status === 'valid'}
-                                defaultChecked={post.status === 'valid'}
-                                onChange={() => {
-                                  const newArray = [...rows];
-                                  newArray[index].status =
-                                    newArray[index].status === 'valid'
-                                      ? 'invalid'
-                                      : 'valid';
-                                  setRows(newArray);
-                                }}
-                                isDisabled={isSaving}
-                                disabled={isSaving}
-                              />
-                            </Td>
-                          );
-                        }
-                        return (
-                          <Td
-                            key={item.id + post.id}
-                            borderBottom="1px solid"
-                            borderBottomColor={
-                              theme.compensation?.card.dropdown
-                            }
-                          >
-                            <Editable
-                              defaultValue={String(
-                                post?.[item.id as keyof ForumActivityBreakdown]
-                              )}
-                              maxW="60px"
-                              w="60px"
-                            >
-                              <EditablePreview
-                                fontSize="20px"
-                                fontWeight={700}
-                                color={theme.compensation?.card.secondaryText}
-                                lineHeight="32px"
-                                cursor="pointer"
-                                textDecor="underline"
-                                minW="60px"
-                                minH="32px"
-                                bg="transparent"
-                                textAlign="end"
-                                px="1"
-                              />
-                              <EditableInput
-                                onChange={event => {
-                                  handleInputChange(
-                                    index,
-                                    item.id,
-                                    event.target.value
-                                  );
-                                }}
-                                type="number"
-                                min={0}
-                                max={4}
-                                mr={2}
-                                bg={theme.compensation?.card.bg}
-                                w="full"
-                                fontSize="20px"
-                                fontWeight={700}
-                                color={theme.compensation?.card.secondaryText}
-                                lineHeight="32px"
-                                px="2"
-                                textAlign="end"
-                              />
-                            </Editable>
-                          </Td>
-                        );
-                      })}
-                    </Tr>
-                  );
-                })}
-              </Tbody>
-            </Table>
+                        })}
+                      </Tr>
+                    );
+                  })}
+                </Tbody>
+              </Table>
+            </Flex>
             {isAuthorized ? (
               <Flex flexDir="row" gap="8" justify="flex-end" mt="4">
                 <Flex flexDir="row" gap="2" alignItems="center">
@@ -556,7 +573,9 @@ export const DelegateCompensationAdminForumActivity = ({
                   isLoading={isSaving}
                   w="max-content"
                   alignSelf="flex-end"
-                  onClick={saveFeedback}
+                  onClick={() => {
+                    saveFeedback();
+                  }}
                   bgColor={theme.compensation?.card.bg}
                   color={theme.compensation?.card.text}
                 >

@@ -78,10 +78,10 @@ type FormData = yup.InferType<typeof schema>;
 
 interface DefaultValueBreakdown {
   proposal: string | undefined;
-  voted: true | undefined;
+  voted: boolean | undefined;
   modified: boolean;
   post: string | undefined;
-  validRationale: true | undefined;
+  validRationale: boolean | undefined;
 }
 
 const DelegateProposalsWrapped = ({
@@ -112,6 +112,8 @@ const DelegateProposalsWrapped = ({
       },
     },
   });
+
+  console.log(watch('communicatingRationale.breakdown'));
 
   const onChangeDebounce = debounce((value: string, index: number) => {
     setValue(`communicatingRationale.breakdown.${index}.post`, value, {
@@ -192,18 +194,15 @@ const DelegateProposalsWrapped = ({
     },
   ];
 
-  const renderVoteIcon = (vote?: boolean) => {
-    if (vote === true) {
+  const renderValidIcon = (valid?: boolean) => {
+    if (valid === true) {
       return (
         <TrueIcon w="24px" h="24px" color={theme.compensation?.card.success} />
       );
     }
-    if (vote === false) {
-      return (
-        <FalseIcon w="24px" h="24px" color={theme.compensation?.card.error} />
-      );
-    }
-    return null;
+    return (
+      <FalseIcon w="24px" h="24px" color={theme.compensation?.card.error} />
+    );
   };
 
   return (
@@ -404,12 +403,15 @@ const DelegateProposalsWrapped = ({
                         borderColor={theme.compensation?.card.divider}
                       >
                         <Text w="max-content">
-                          {item.createdAt
-                            ? formatDate(
-                                item.createdAt as string,
-                                'MMM D, YYYY'
-                              )
-                            : null}
+                          {item.createdAt ? (
+                            formatDate(item.createdAt as string, 'MMM D, YYYY')
+                          ) : (
+                            <FalseIcon
+                              w="24px"
+                              h="24px"
+                              color={theme.compensation?.card.error}
+                            />
+                          )}
                         </Text>
                       </Td>
 
@@ -468,7 +470,9 @@ const DelegateProposalsWrapped = ({
                                 ? `${item.post.slice(0, 40)}...`
                                 : item.post}
                             </ChakraLink>
-                          ) : null}
+                          ) : (
+                            <Text color={theme.compensation?.card.text}>-</Text>
+                          )}
                           {item.rationale ? (
                             <Flex
                               display="flex"
@@ -523,7 +527,7 @@ const DelegateProposalsWrapped = ({
                             disabled={isSaving}
                           />
                         ) : (
-                          renderVoteIcon(
+                          renderValidIcon(
                             watch(
                               `communicatingRationale.breakdown.${item.index}.validRationale`
                             )
@@ -656,7 +660,11 @@ export const DelegateProposals = ({
     voted: item.voted || undefined,
     modified: false,
     post: item.post || undefined,
-    validRationale: item.validRationale || undefined,
+    validRationale: item.validRationale
+      ? item.validRationale
+      : item.validRationale === false
+      ? false
+      : undefined,
   }));
 
   const onChainProposals: ProposalAndBreakdownRow[] = [];
