@@ -1,3 +1,5 @@
+import { ForumActivityBreakdown } from './forumActivity';
+
 export type DelegateStatsBreakdown = {
   post?: string | null;
   updated?: 'manually';
@@ -5,6 +7,7 @@ export type DelegateStatsBreakdown = {
   voted?: boolean;
   proposalTopic?: string;
   rationale?: string;
+  createdAt?: string;
 };
 
 export type CompensationStatBreakdown = {
@@ -49,6 +52,7 @@ export type DelegateStatsFromAPI = {
         impactOnDecisionMaking: string;
         presence: string;
       };
+      posts: ForumActivityBreakdown[];
     };
     totalParticipation: string;
     participationRatePercent: number;

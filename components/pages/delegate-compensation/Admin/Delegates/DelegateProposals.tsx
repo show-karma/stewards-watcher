@@ -38,6 +38,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { DelegateStatsBreakdown, DelegateStatsFromAPI } from 'types';
 import { ProposalItem } from 'types/proposals';
+import { formatDate } from 'utils';
 import { getProposals } from 'utils/delegate-compensation/getProposals';
 import { useQuery } from 'wagmi';
 import * as yup from 'yup';
@@ -403,7 +404,12 @@ const DelegateProposalsWrapped = ({
                         borderColor={theme.compensation?.card.divider}
                       >
                         <Text w="max-content">
-                          {/* {formatDate(item.endDate as string, 'MMM D, YYYY')} */}
+                          {item.createdAt
+                            ? formatDate(
+                                item.createdAt as string,
+                                'MMM D, YYYY'
+                              )
+                            : null}
                         </Text>
                       </Td>
 

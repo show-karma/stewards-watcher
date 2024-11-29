@@ -58,7 +58,11 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
         date = new Date('2024-10-10');
       }
     }
-    if (isAdmin && date <= new Date('2024-11-11')) {
+    const isDelegateIndividualPages = router.asPath.includes('delegate/');
+    if (
+      (isAdmin || isDelegateIndividualPages) &&
+      date <= new Date('2024-11-11')
+    ) {
       date = new Date('2024-11-11');
     }
 
