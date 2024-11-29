@@ -698,16 +698,16 @@ export const DelegateCompensationAdminForumActivity = ({
                     label={
                       <Flex flexDir="column" gap="2">
                         <Text
-                          fontSize="16px"
-                          fontWeight={600}
-                          color={theme.compensation?.card.secondaryText}
+                          fontSize="14px"
+                          fontWeight={400}
+                          color={theme.compensation?.card.text}
                         >
                           Delegates Feedback (DF) - Weight 30
                         </Text>
                         <Text
-                          fontSize="16px"
-                          fontWeight={600}
-                          color={theme.compensation?.card.secondaryText}
+                          fontSize="14px"
+                          fontWeight={400}
+                          color={theme.compensation?.card.text}
                         >
                           Max Initial Score - Weight 20
                         </Text>
@@ -749,8 +749,8 @@ export const DelegateCompensationAdminForumActivity = ({
                   >
                     <Text
                       fontSize="16px"
-                      fontWeight={600}
-                      color={theme.compensation?.card.secondaryText}
+                      fontWeight={400}
+                      color={theme.compensation?.card.text}
                     >
                       {presenceMultiplier}
                     </Text>
