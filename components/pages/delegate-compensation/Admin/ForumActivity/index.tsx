@@ -113,9 +113,7 @@ export const DelegateCompensationAdminForumActivity = ({
         }) || [];
       setRows(newRows);
     };
-    if (posts?.length && forumPosts?.length) {
-      setupRows();
-    }
+    setupRows();
   }, [posts, forumPosts]);
 
   const [presenceMultiplier, setPresenceMultiplier] = useState(
@@ -129,7 +127,7 @@ export const DelegateCompensationAdminForumActivity = ({
     { title: 'Clarity & Communication', id: 'clarityAndCommunication' },
     { title: 'Impact', id: 'impactOnDecisionMaking' },
     { title: 'Total Score', id: 'totalScore', type: 'read-only' },
-    { title: 'Valid', id: 'status' },
+    { title: 'Valid', id: 'status', type: 'boolean' },
   ];
 
   const calculateFinalScore = (
@@ -400,6 +398,22 @@ export const DelegateCompensationAdminForumActivity = ({
                       </Td>
                       {columns.map(item => {
                         if (item.type === 'read-only' || !isAuthorized) {
+                          if (item.id === 'status') {
+                            return (
+                              <Td
+                                key={item.id + post.id}
+                                borderBottom="1px solid"
+                                borderBottomColor={
+                                  theme.compensation?.card.dropdown
+                                }
+                              >
+                                <Switch
+                                  isChecked={post.status === 'valid'}
+                                  defaultChecked={post.status === 'valid'}
+                                />
+                              </Td>
+                            );
+                          }
                           return (
                             <Td
                               key={item.id + post.id}
