@@ -538,7 +538,7 @@ const DelegateProposalsWrapped = ({
                         color={theme.compensation?.card.text}
                         borderColor={theme.compensation?.card.divider}
                       >
-                        {item?.updated === 'manually' ? (
+                        {item?.updated === 'manually' && isAuthorized ? (
                           <Tooltip label="Manually updated">
                             <Flex
                               bg={theme.compensation?.card.input.bg}

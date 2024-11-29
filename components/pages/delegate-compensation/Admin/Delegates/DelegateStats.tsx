@@ -119,10 +119,10 @@ export const DelegateStats = () => {
                 color={theme.compensation?.card.secondaryText}
                 as="span"
               >
-                {delegateInfo?.stats?.snapshotVoting.rn} Total{' '}
+                {delegateInfo?.stats?.snapshotVoting.tn} Total{' '}
                 {pluralize(
                   'Proposals',
-                  +(delegateInfo?.stats?.snapshotVoting.rn || 0)
+                  +(delegateInfo?.stats?.snapshotVoting.tn || 0)
                 )}
                 ,
               </Text>
@@ -132,7 +132,7 @@ export const DelegateStats = () => {
                 color={theme.compensation?.card.success}
                 as="span"
               >
-                {delegateInfo?.stats?.snapshotVoting.tn} Voted On
+                {delegateInfo?.stats?.snapshotVoting.rn} Voted On
               </Text>
             </Flex>
           </Flex>
@@ -214,10 +214,10 @@ export const DelegateStats = () => {
                 color={theme.compensation?.card.secondaryText}
                 as="span"
               >
-                {delegateInfo?.stats?.onChainVoting.rn} Total{' '}
+                {delegateInfo?.stats?.onChainVoting.tn} Total{' '}
                 {pluralize(
                   'Proposals',
-                  +(delegateInfo?.stats?.onChainVoting.rn || 0)
+                  +(delegateInfo?.stats?.onChainVoting.tn || 0)
                 )}
                 ,
               </Text>
@@ -227,7 +227,7 @@ export const DelegateStats = () => {
                 color={theme.compensation?.card.success}
                 as="span"
               >
-                {delegateInfo?.stats?.onChainVoting.tn} Voted On
+                {delegateInfo?.stats?.onChainVoting.rn} Voted On
               </Text>
             </Flex>
           </Flex>
