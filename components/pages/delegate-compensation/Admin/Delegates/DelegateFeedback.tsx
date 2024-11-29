@@ -146,17 +146,6 @@ export const DelegateFeedback = ({
         >
           <Box bg={theme.card.background} borderRadius="lg" p={4} width="full">
             <VStack spacing={4} align="stretch">
-              <Flex justifyContent="flex-end" gap="4" alignItems="center">
-                <ChakraLink
-                  color={theme.compensation?.card.text}
-                  href={`${rootPathname}/delegate-compensation/delegate/${delegateAddress}/forum-activity?month=${selectedDate?.name}&year=${selectedDate?.value.year}`}
-                  isExternal
-                  textDecoration="underline"
-                >
-                  View Forum activity
-                </ChakraLink>
-              </Flex>
-
               <Flex
                 flexDir="row"
                 gap="8"
@@ -250,6 +239,16 @@ export const DelegateFeedback = ({
                       )}
                     </Flex>
                   ))}
+                  <Flex justifyContent="flex-start" gap="4" alignItems="center">
+                    <ChakraLink
+                      color={theme.compensation?.card.text}
+                      href={`${rootPathname}/delegate-compensation/delegate/${delegateAddress}/forum-activity?month=${selectedDate?.name}&year=${selectedDate?.value.year}`}
+                      isExternal
+                      textDecoration="underline"
+                    >
+                      View details
+                    </ChakraLink>
+                  </Flex>
                 </Flex>
                 <Flex
                   flexDir="column"
