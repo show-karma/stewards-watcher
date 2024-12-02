@@ -12,7 +12,7 @@ interface IMonthDropdown {
 
 export const MonthDropdown: FC<IMonthDropdown> = ({
   minimumPeriod = new Date('2024-02-11'),
-  maximumPeriod,
+  maximumPeriod = new Date('2024-11-20'),
 }) => {
   const router = useRouter();
   const { rootPathname } = useDAO();

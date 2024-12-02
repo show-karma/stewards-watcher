@@ -11,9 +11,11 @@ import { DelegateStats } from './DelegateStats';
 export const DelegateCompensationAdminDelegates = ({
   delegateAddress,
   shouldShowDelegate = 'dropdown',
+  isPublic = false,
 }: {
   delegateAddress?: string;
   shouldShowDelegate?: 'block' | 'dropdown' | 'none';
+  isPublic?: boolean;
 }) => {
   const { selectedDate } = useDelegateCompensation();
   const { theme } = useDAO();
@@ -40,6 +42,7 @@ export const DelegateCompensationAdminDelegates = ({
         <DelegatePeriod
           delegate={shouldShowDelegate}
           minimumPeriod={new Date('2024-11-01')}
+          maximumPeriod={isPublic ? undefined : new Date()}
         />
         {isFetchingDelegateInfo || isLoadingDelegateInfo ? (
           <Flex w="full" h="20" align="center" justify="center">
