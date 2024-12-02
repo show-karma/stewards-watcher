@@ -15,6 +15,7 @@ import {
   Tooltip,
   VStack,
 } from '@chakra-ui/react';
+import { useQuery } from '@tanstack/react-query';
 import { ChakraLink } from 'components/ChakraLink';
 import { StarIcon } from 'components/Icons/Compensation/StarIcon';
 import { useAuth, useDAO } from 'contexts';
@@ -23,6 +24,7 @@ import { useToasty } from 'hooks';
 import { useState } from 'react';
 import { BsFillInfoCircleFill } from 'react-icons/bs';
 import { formatNumber } from 'utils';
+import { getProposals } from 'utils/delegate-compensation/getProposals';
 
 export const DelegateFeedback = ({
   isModalOpen,
@@ -72,6 +74,30 @@ export const DelegateFeedback = ({
     presenceMultiplier:
       'This is a more quantitative analysis, intended to reflect the effort of delegates who participate in most discussions. This parameter serves as a multiplier to the score obtained across the previous five criteria. Note that the percentage of participation in monthly discussions could be not linear across all DAO’s discussions. Some proposals may carry more weight in the overall discussions (special cases such as LTIPP/STIP, gaming, treasury, etc.).',
   };
+
+  const { data: proposalsData } = useQuery(
+    [
+      'delegate-compensation-proposals',
+      selectedDate?.value.month,
+      selectedDate?.value.year,
+    ],
+    () =>
+      getProposals(
+        daoInfo.config.DAO_KARMA_ID,
+        selectedDate?.value.month as string | number,
+        selectedDate?.value.year as string | number
+      ),
+    {
+      initialData: {
+        proposals: [],
+        finished: false,
+      },
+      enabled:
+        !!selectedDate?.value.month &&
+        !!selectedDate?.value.year &&
+        !!daoInfo.config.DAO_KARMA_ID,
+    }
+  );
 
   // const handleSaveFeedback = async () => {
   //   setIsSavingFeedback(true);
@@ -317,18 +343,20 @@ export const DelegateFeedback = ({
           </Box>
         </ModalBody>
         <ModalFooter bg={theme.compensation?.card.bg} pt="0">
-          <Flex
-            flexDir="row"
-            gap="2"
-            align="flex-start"
-            justify="flex-start"
-            w="full"
-            px="4"
-          >
-            <Text fontSize="medium" color={theme.compensation?.card.text}>
-              ⚠️ These scores are subject to change and not finalized yet.
-            </Text>
-          </Flex>
+          {proposalsData.finished ? null : (
+            <Flex
+              flexDir="row"
+              gap="2"
+              align="flex-start"
+              justify="flex-start"
+              w="full"
+              px="4"
+            >
+              <Text fontSize="medium" color={theme.compensation?.card.text}>
+                ⚠️ These scores are subject to change and not finalized yet.
+              </Text>
+            </Flex>
+          )}
         </ModalFooter>
       </ModalContent>
     </Modal>

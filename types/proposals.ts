@@ -12,6 +12,7 @@ export interface ProposalsFromAPI {
       endDate?: string;
     }
   >;
+  finished?: boolean;
 }
 
 export interface ProposalItem {

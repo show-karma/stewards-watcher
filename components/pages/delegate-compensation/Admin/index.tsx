@@ -38,12 +38,7 @@ export const DelegateCompensationAdmin = () => {
   const { authToken } = useAuth();
   const { toast } = useToasty();
 
-  const {
-    data: proposals,
-    isLoading,
-    isFetching,
-    refetch,
-  } = useQuery(
+  const { data, isLoading, isFetching } = useQuery(
     [
       'delegate-compensation-proposals',
       selectedDate?.value.month,
@@ -56,22 +51,26 @@ export const DelegateCompensationAdmin = () => {
         selectedDate?.value.year as string | number
       ),
     {
-      initialData: [
-        {
-          name: 'Onchain Proposals',
-          items: [],
-        },
-        {
-          name: 'Snapshot Proposals',
-          items: [],
-        },
-      ],
+      initialData: {
+        proposals: [
+          {
+            name: 'Onchain Proposals',
+            items: [],
+          },
+          {
+            name: 'Snapshot Proposals',
+            items: [],
+          },
+        ],
+        finished: false,
+      },
       enabled:
         !!selectedDate?.value.month &&
         !!selectedDate?.value.year &&
         !!daoInfo.config.DAO_KARMA_ID,
     }
   );
+  const { proposals, finished } = data;
 
   const toggleInclude = async (proposalId: string, proposalChoice: boolean) => {
     try {
@@ -115,6 +114,54 @@ export const DelegateCompensationAdmin = () => {
     }
   };
 
+  const finishPeriod = async (checked: boolean) => {
+    try {
+      setActionsLoading({ finished: true });
+      const authorizedAPI = axios.create({
+        timeout: 30000,
+        baseURL: KARMA_API.base_url,
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: authToken ? `Bearer ${authToken}` : '',
+        },
+      });
+      await authorizedAPI
+        .put(
+          `/incentive-settings/${daoInfo.config.DAO_KARMA_ID}/${selectedDate?.value.month}/${selectedDate?.value.year}`,
+          {
+            finished: checked,
+          }
+        )
+        .then(() => {
+          setTimeout(() => {
+            toast({
+              title: `The scores for ${selectedDate?.name} ${
+                selectedDate?.value.year
+              } is ${
+                checked
+                  ? 'have been marked as finalized.'
+                  : 'are marked as pending finalization.'
+              }`,
+              status: 'success',
+            });
+            queryClient
+              .invalidateQueries([
+                'delegate-compensation-proposals',
+                selectedDate?.value.month,
+                selectedDate?.value.year,
+              ])
+              .then(() => {
+                setActionsLoading({ finished: false });
+              });
+          }, 250);
+        });
+    } catch (error) {
+      console.log(error);
+      setActionsLoading({ finished: false });
+    }
+  };
+
   return (
     <DelegateCompensationAdminLayout>
       <DelegatePeriod
@@ -123,14 +170,18 @@ export const DelegateCompensationAdmin = () => {
         minimumPeriod={new Date('2024-11-01')}
         maximumPeriod={new Date()}
       />
-      <Flex
-        mt="8"
-        align="stretch"
-        flex={1}
-        w="full"
-        flexDirection="column"
-        gap="8"
-      >
+      <Flex my="8" flexDir="row" align="center" gap="4">
+        <Switch
+          isChecked={finished}
+          onChange={() => finishPeriod(!finished)}
+          isDisabled={actionsLoading.finished}
+        />
+        <Text color={theme.compensation?.card.text}>
+          The scores for this month has been finalized.
+        </Text>
+        {actionsLoading.finished && <Spinner size="xs" />}
+      </Flex>
+      <Flex align="stretch" flex={1} w="full" flexDirection="column" gap="8">
         {(isLoading || isFetching) && proposals.length === 0 ? (
           <Flex w="full" justify="center" align="center">
             <Spinner size="xl" />
