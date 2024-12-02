@@ -50,8 +50,10 @@ const MDPreview = dynamic(() => import('@uiw/react-markdown-preview'), {
 });
 export const DelegateCompensationAdminForumActivity = ({
   delegateAddress,
+  isPublic = false,
 }: {
   delegateAddress: string;
+  isPublic?: boolean;
 }) => {
   const { delegateInfo, refreshDelegateInfo } = useDelegateCompensation();
   const { selectedDate } = useDelegateCompensation();
@@ -309,6 +311,7 @@ export const DelegateCompensationAdminForumActivity = ({
           delegate="block"
           period
           minimumPeriod={new Date('2024-10-30')}
+          maximumPeriod={isPublic ? undefined : new Date()}
         />
         {isLoading || isFetching ? (
           <Flex py="4">

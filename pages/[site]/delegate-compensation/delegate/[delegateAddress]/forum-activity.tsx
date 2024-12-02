@@ -1,9 +1,9 @@
+import { DelegateCompensationAdminForumActivity } from 'components/pages/delegate-compensation/Admin/ForumActivity';
+import { DelegateCompensationAdminContainer } from 'containers/delegate-compensation-admin';
 import { DAOProvider } from 'contexts/dao';
+import { daosDictionary } from 'helpers';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
-import { daosDictionary } from 'helpers';
-import { DelegateCompensationAdminContainer } from 'containers/delegate-compensation-admin';
-import { DelegateCompensationAdminForumActivity } from 'components/pages/delegate-compensation/Admin/ForumActivity';
 
 interface PathProps extends ParsedUrlQuery {
   site: string;
@@ -57,6 +57,7 @@ const DelegateCompesationForumActivityPage = ({
     <DelegateCompensationAdminContainer>
       <DelegateCompensationAdminForumActivity
         delegateAddress={delegateAddress}
+        isPublic
       />
     </DelegateCompensationAdminContainer>
   </DAOProvider>

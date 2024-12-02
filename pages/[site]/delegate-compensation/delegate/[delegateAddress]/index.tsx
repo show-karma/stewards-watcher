@@ -55,7 +55,7 @@ const DelegateCompensationAdminDelegatesPage = ({
 }: IFAQ) => (
   <DAOProvider selectedDAO={dao} shouldFetchInfo={false}>
     <DelegateCompensationAdminContainer>
-      <DelegateCompensationAdminDelegates shouldShowDelegate="block" />
+      <DelegateCompensationAdminDelegates isPublic shouldShowDelegate="block" />
     </DelegateCompensationAdminContainer>
   </DAOProvider>
 );
