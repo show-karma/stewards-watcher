@@ -239,17 +239,8 @@ export const DelegateFeedback = ({
                       )}
                     </Flex>
                   ))}
-                  <Flex justifyContent="flex-start" gap="4" alignItems="center">
-                    <ChakraLink
-                      color={theme.compensation?.card.text}
-                      href={`${rootPathname}/delegate-compensation/delegate/${delegateAddress}/forum-activity?month=${selectedDate?.name}&year=${selectedDate?.value.year}`}
-                      isExternal
-                      textDecoration="underline"
-                    >
-                      View details
-                    </ChakraLink>
-                  </Flex>
                 </Flex>
+
                 <Flex
                   flexDir="column"
                   gap="3"
@@ -300,9 +291,32 @@ export const DelegateFeedback = ({
                 </Flex>
               </Flex>
             </VStack>
+            <Flex
+              justifyContent="flex-start"
+              w="full"
+              gap="4"
+              mt="4"
+              alignItems="center"
+            >
+              <ChakraLink
+                color={theme.compensation?.card.text}
+                href={`${rootPathname}/delegate-compensation/delegate/${delegateAddress}/forum-activity?month=${selectedDate?.name}&year=${selectedDate?.value.year}`}
+                isExternal
+                bg={theme.compensation?.icons.delegateFeedback}
+                borderRadius="8px"
+                px="3"
+                py="2"
+                fontWeight="500"
+                _hover={{
+                  opacity: 0.7,
+                }}
+              >
+                View forum activity
+              </ChakraLink>
+            </Flex>
           </Box>
         </ModalBody>
-        <ModalFooter bg={theme.compensation?.card.bg}>
+        <ModalFooter bg={theme.compensation?.card.bg} pt="0">
           <Flex
             flexDir="row"
             gap="2"
