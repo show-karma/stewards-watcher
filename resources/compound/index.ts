@@ -55,6 +55,7 @@ const config: IDAOConfig = {
   EXCLUDED_VOTING_HISTORY_COLUMN: ['offChainVoteBreakdown'],
   DAO_CATEGORIES_TYPE: 'workstreams',
   ENABLE_ONCHAIN_REGISTRY: false,
+  ENABLE_HANDLES_EDIT: ['github'],
 };
 
 const dark: IDAOTheme = {

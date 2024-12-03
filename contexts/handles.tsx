@@ -1,5 +1,5 @@
 import { useDisclosure } from '@chakra-ui/react';
-import React, { useContext, createContext, useMemo } from 'react';
+import React, { createContext, useContext, useMemo } from 'react';
 
 interface IHandlesProps {
   twitterIsOpen: boolean;
@@ -10,6 +10,10 @@ interface IHandlesProps {
   forumOnOpen: () => void;
   twitterOnToggle: () => void;
   forumOnToggle: () => void;
+  githubIsOpen: boolean;
+  githubOnClose: () => void;
+  githubOnOpen: () => void;
+  githubOnToggle: () => void;
 }
 
 export const HandlesContext = createContext({} as IHandlesProps);
@@ -31,6 +35,12 @@ export const HandlesProvider: React.FC<IProviderProps> = ({ children }) => {
     onOpen: forumOnOpen,
     onToggle: forumOnToggle,
   } = useDisclosure();
+  const {
+    isOpen: githubIsOpen,
+    onClose: githubOnClose,
+    onOpen: githubOnOpen,
+    onToggle: githubOnToggle,
+  } = useDisclosure();
 
   const providerValue = useMemo(
     () => ({
@@ -42,6 +52,10 @@ export const HandlesProvider: React.FC<IProviderProps> = ({ children }) => {
       forumOnClose,
       forumOnOpen,
       forumOnToggle,
+      githubIsOpen,
+      githubOnClose,
+      githubOnOpen,
+      githubOnToggle,
     }),
     [
       twitterIsOpen,
@@ -52,6 +66,10 @@ export const HandlesProvider: React.FC<IProviderProps> = ({ children }) => {
       forumOnClose,
       forumOnOpen,
       forumOnToggle,
+      githubIsOpen,
+      githubOnClose,
+      githubOnOpen,
+      githubOnToggle,
     ]
   );
 

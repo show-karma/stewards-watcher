@@ -1,20 +1,20 @@
+import { ECOSYSTEMS, RPCS, RPCS_WS } from 'helpers';
 import { IDAOConfig, IDAOTheme } from 'types';
-import { moonriverDelegateAction } from 'utils/moonbeam/moonriverDelegateAction';
 import {
+  moonbase,
   moonriverConvictionOptions,
   moonriverDelegateErrors,
   moonriverTracksDictionary,
-  moonbase,
 } from 'utils';
-import { ECOSYSTEMS, RPCS, RPCS_WS } from 'helpers';
-import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import {
   moonbaseActiveDelegatedTracks,
   moonbaseGetLockedTokensAction,
   moonbaseOnChainProvider,
 } from 'utils/moonbeam/moonbaseOnChainProvider';
 import { moonbeamGetBalanceOverview } from 'utils/moonbeam/moonbeamGetBalanceOverview';
+import { moonriverDelegateAction } from 'utils/moonbeam/moonriverDelegateAction';
 import { Hex } from 'viem';
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { moonriverUndelegateAction } from '../../utils/moonbeam/moonriverUndelegateAction';
 import { polkassemblyProposalUrl } from '../../utils/moonbeam/polkassembly';
 import ABI from './ABI.json';
@@ -102,6 +102,7 @@ const config: IDAOConfig = {
       http: RPCS.moonbase,
     }),
   }),
+  ENABLE_HANDLES_EDIT: ['github'],
 };
 
 const dark: IDAOTheme = {

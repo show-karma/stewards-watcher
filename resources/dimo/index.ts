@@ -44,6 +44,7 @@ const config: IDAOConfig = {
   EXCLUDED_VOTING_HISTORY_COLUMN: ['onChainVoteBreakdown'],
   ENABLE_DELEGATE_TRACKER: true,
   DAO_CATEGORIES_TYPE: 'workstreams',
+  ENABLE_HANDLES_EDIT: ['github'],
 };
 
 const dark: IDAOTheme = {

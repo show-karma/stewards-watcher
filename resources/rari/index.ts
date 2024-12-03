@@ -45,6 +45,7 @@ const config: IDAOConfig = {
   DAO_GTAG: 'G-67LDHT697P',
   DAO_CATEGORIES_TYPE: 'workstreams',
   EXCLUDED_VOTING_HISTORY_COLUMN: ['offChainVoteBreakdown'],
+  ENABLE_HANDLES_EDIT: ['github'],
   EXCLUDED_CARD_FIELDS: ['healthScore', 'discordScore', 'offChainVotesPct'],
 };
 

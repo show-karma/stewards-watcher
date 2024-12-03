@@ -1,6 +1,6 @@
 import { IDAOConfig, IDAOTheme } from 'types';
-import { arbitrum, bsc, mainnet, optimism, polygon } from 'wagmi/chains';
 import { customGnosis } from 'utils/customChains';
+import { arbitrum, bsc, mainnet, optimism, polygon } from 'wagmi/chains';
 // import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { publicProvider } from 'wagmi/providers/public';
 import ABI from './ABI.json';
@@ -114,6 +114,7 @@ const config: IDAOConfig = {
     NETWORK: 10,
   },
   CUSTOM_RPC: publicProvider(),
+  ENABLE_HANDLES_EDIT: ['github'],
 };
 
 const dark: IDAOTheme = {
