@@ -5,7 +5,7 @@ import ABI from './ABI.json';
 
 const config: IDAOConfig = {
   DAO: 'arbitrum',
-  DAO_DESCRIPTION: `The Delegates of DAO play a vital role in driving the Arbitrum ecosystem forward through their work in governance and workstreams.`,
+  DAO_DESCRIPTION: `The Delegates of Arbitrum DAO play a vital role in driving the Arbitrum ecosystem forward through their work in governance and workstreams.`,
   DAO_SUBDESCRIPTION: `This site will help boost transparency with health cards for each Delegate that display metrics and links on their involvement and engagement in the DAO.`,
   DAO_URL: 'https://arbitrum.io',
   GOVERNANCE_FORUM: 'https://forum.arbitrum.foundation/',
