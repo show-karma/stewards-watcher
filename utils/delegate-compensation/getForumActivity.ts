@@ -8,6 +8,7 @@ export const getForumActivity = async (
   year?: string | number,
   forumHandle?: string
 ) => {
+  if (!forumHandle) return [];
   try {
     const response: AxiosResponse<{
       data: { posts: ForumPosts[] };
