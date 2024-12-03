@@ -112,10 +112,7 @@ export const DelegateCompensationAdminForumActivity = ({
         delegateInfo?.discourseHandle
       ),
     {
-      enabled:
-        !!delegateInfo?.discourseHandle &&
-        !!selectedDate?.value.year &&
-        !!selectedDate?.value.month,
+      enabled: !!selectedDate?.value.year && !!selectedDate?.value.month,
       refetchOnWindowFocus: false,
     }
   );
@@ -124,7 +121,7 @@ export const DelegateCompensationAdminForumActivity = ({
     if (!posts?.length) return;
     const setupRows = () => {
       const newRows =
-        posts?.map(item => {
+        posts?.map((item: ForumPosts) => {
           const post = forumPosts.find(forumPost => forumPost.id === item.id);
           return {
             id: item.id,
