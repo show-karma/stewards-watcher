@@ -1,4 +1,5 @@
 import { Button, Flex, Icon, Img, Text } from '@chakra-ui/react';
+import { useQuery } from '@tanstack/react-query';
 import { ChakraLink } from 'components/ChakraLink';
 import { useAuth, useDAO } from 'contexts';
 import { useDelegateCompensation } from 'contexts/delegateCompensation';
@@ -6,6 +7,7 @@ import pluralize from 'pluralize';
 import { useState } from 'react';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 import { formatSimpleNumber } from 'utils';
+import { getPRBreakdown } from 'utils/delegate-compensation/getPRBreakdown';
 import { DelegateBP } from './DelegateBP';
 import { DelegateFeedback } from './DelegateFeedback';
 import { DelegateFinalScoreModal } from './DelegateFinalScore';
@@ -17,6 +19,18 @@ export const DelegateStats = () => {
   const [isFinalScoreModalOpen, setIsFinalScoreModalOpen] = useState(false);
   const { theme, daoInfo } = useDAO();
   const { isDaoAdmin: isAuthorized } = useAuth();
+
+  const { data: prBreakdown } = useQuery({
+    queryKey: [
+      'participation-rate-breakdown',
+      delegateInfo?.publicAddress,
+      daoInfo.config.DAO_KARMA_ID,
+    ],
+    queryFn: () =>
+      getPRBreakdown(delegateInfo?.publicAddress, daoInfo.config.DAO_KARMA_ID),
+    enabled: !!delegateInfo?.publicAddress && !!daoInfo.config.DAO_KARMA_ID,
+  });
+
   return (
     <Flex flexDir="column" w="full" gap="5">
       {/* Delegate Feedback Modal */}
@@ -285,6 +299,8 @@ export const DelegateStats = () => {
           borderRadius="8px"
           p="3"
           gap="3"
+          justify="flex-start"
+          align="flex-start"
         >
           <Flex
             borderRadius="4px"
@@ -311,7 +327,7 @@ export const DelegateStats = () => {
               p="0"
               bg="transparent"
               borderRadius="0"
-              h="max-content"
+              h="24px"
               _hover={{ opacity: 0.8 }}
               _focus={{ opacity: 0.8 }}
               _focusVisible={{ opacity: 0.8 }}
@@ -344,6 +360,8 @@ export const DelegateStats = () => {
           borderRadius="8px"
           p="3"
           gap="3"
+          justify="flex-start"
+          align="flex-start"
         >
           <Flex
             borderRadius="4px"
@@ -367,11 +385,11 @@ export const DelegateStats = () => {
             >
               Communication Rationale
             </Text>
+
             <Text
               fontSize="24px"
               fontWeight={700}
               color={theme.compensation?.card.secondaryText}
-              lineHeight="32px"
             >
               {formatSimpleNumber(
                 delegateInfo?.stats?.communicatingRationale.score || 0
@@ -386,6 +404,8 @@ export const DelegateStats = () => {
           borderRadius="8px"
           p="3"
           gap="3"
+          justify="flex-start"
+          align="flex-start"
         >
           <Flex
             borderRadius="4px"
@@ -423,6 +443,7 @@ export const DelegateStats = () => {
             <DelegateBP />
           )}
         </Flex>
+
         <Flex
           flexDir="row"
           bg={theme.compensation?.card.bg}
@@ -430,6 +451,8 @@ export const DelegateStats = () => {
           borderRadius="8px"
           p="3"
           gap="3"
+          justify="flex-start"
+          align="flex-start"
         >
           <Flex
             borderRadius="4px"
@@ -445,7 +468,7 @@ export const DelegateStats = () => {
               h="24px"
             />
           </Flex>
-          <Flex flexDir="column" gap="2" justify="center" align="flex-start">
+          <Flex flexDir="column" gap="0" justify="center" align="flex-start">
             <Text
               fontSize="16px"
               fontWeight="600"
@@ -453,14 +476,40 @@ export const DelegateStats = () => {
             >
               Participation Rate
             </Text>
-            <Text
-              fontSize="24px"
-              fontWeight={700}
-              color={theme.compensation?.card.secondaryText}
-              lineHeight="32px"
-            >
-              {formatSimpleNumber(delegateInfo?.stats?.participationRate || 0)}
-            </Text>
+            <Flex flexDir="column" gap="0" justify="center" align="flex-start">
+              <Text
+                fontSize="24px"
+                fontWeight={700}
+                color={theme.compensation?.card.secondaryText}
+              >
+                {formatSimpleNumber(
+                  delegateInfo?.stats?.participationRate || 0
+                )}
+              </Text>
+              <Flex flexDir="row" gap="2">
+                <Text
+                  fontSize="14px"
+                  fontWeight={400}
+                  color={theme.compensation?.card.secondaryText}
+                  as="span"
+                >
+                  {prBreakdown?.proposals.length} Total{' '}
+                  {pluralize(
+                    'Proposals',
+                    +(prBreakdown?.proposals.length || 0)
+                  )}
+                  ,
+                </Text>
+                <Text
+                  fontSize="14px"
+                  fontWeight={400}
+                  color={theme.compensation?.card.success}
+                  as="span"
+                >
+                  {prBreakdown?.votes.length} Voted On
+                </Text>
+              </Flex>
+            </Flex>
           </Flex>
         </Flex>
       </Flex>

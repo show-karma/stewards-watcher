@@ -70,6 +70,7 @@ export const DelegateCompensationAdmin = () => {
         !!daoInfo.config.DAO_KARMA_ID,
     }
   );
+
   const { proposals, finished } = data;
 
   const toggleInclude = async (proposalId: string, proposalChoice: boolean) => {

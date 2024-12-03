@@ -22,6 +22,7 @@ import {
   Tr,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { ChakraLink } from 'components/ChakraLink';
 import { FalseIcon } from 'components/Icons/Compensation/FalseIcon';
@@ -39,9 +40,10 @@ import { useForm } from 'react-hook-form';
 import { DelegateStatsBreakdown, DelegateStatsFromAPI } from 'types';
 import { ProposalItem } from 'types/proposals';
 import { formatDate } from 'utils';
+import { getPRBreakdown } from 'utils/delegate-compensation/getPRBreakdown';
 import { getProposals } from 'utils/delegate-compensation/getProposals';
-import { useQuery } from 'wagmi';
 import * as yup from 'yup';
+import { Expandable } from './Expandable';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 const MDPreview = dynamic(() => import('@uiw/react-markdown-preview'), {
@@ -50,7 +52,7 @@ const MDPreview = dynamic(() => import('@uiw/react-markdown-preview'), {
 type Breakdown =
   DelegateStatsFromAPI['stats']['communicatingRationale']['breakdown'];
 
-type ProposalAndBreakdownRow = ProposalItem &
+export type ProposalAndBreakdownRow = ProposalItem &
   DelegateStatsBreakdown & {
     postId: string | undefined;
     index: number;
@@ -101,6 +103,19 @@ const DelegateProposalsWrapped = ({
 
   const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToasty();
+
+  const { data: prBreakdown } = useQuery({
+    queryKey: [
+      'participation-rate-breakdown',
+      delegateInfo?.publicAddress,
+      daoInfo.config.DAO_KARMA_ID,
+    ],
+    initialData: { proposals: [], votes: [], rows: [] },
+    queryFn: () =>
+      getPRBreakdown(delegateInfo?.publicAddress, daoInfo.config.DAO_KARMA_ID),
+    enabled: !!delegateInfo?.publicAddress && !!daoInfo.config.DAO_KARMA_ID,
+    refetchOnWindowFocus: false,
+  });
 
   const { formState, handleSubmit, setValue, watch } = useForm<FormData>({
     resolver: yupResolver(schema),
@@ -566,6 +581,147 @@ const DelegateProposalsWrapped = ({
             </Flex>
           </Flex>
         ))}
+        <Flex
+          key="participation-rate-proposals-and-votes"
+          flexDir="column"
+          gap="4"
+          alignItems="flex-start"
+          w="full"
+          py="4"
+        >
+          <Flex
+            flexDir={['column', 'row']}
+            px="4"
+            gap={['1', '4']}
+            alignItems={['flex-start', 'center']}
+            w="full"
+          >
+            <Heading
+              lineHeight="30px"
+              size="md"
+              color={theme.compensation?.card.text}
+            >
+              Your Last 90 Days
+            </Heading>
+            <Flex flexDir="row" gap="2" alignItems="center">
+              <Text
+                fontSize="14px"
+                fontWeight={500}
+                color={theme.compensation?.card.text}
+              >
+                {prBreakdown?.proposals?.length} Total{' '}
+                {pluralize('Proposal', prBreakdown?.proposals?.length || 0)}
+                {', '}
+                <Text
+                  as="span"
+                  fontSize="14px"
+                  fontWeight={500}
+                  color={theme.compensation?.card.success}
+                >
+                  {prBreakdown?.votes?.length} Voted On
+                </Text>
+              </Text>
+            </Flex>
+          </Flex>
+          <Flex flexDir="column" gap="4" maxH="320px" overflowY="auto" w="full">
+            <Table
+              variant="simple"
+              bg={theme.compensation?.card.bg}
+              borderRadius="8px"
+            >
+              <Thead>
+                <Tr>
+                  <Th
+                    borderColor={theme.compensation?.card.divider}
+                    color={theme.compensation?.card.text}
+                    textTransform="none"
+                    fontSize="14px"
+                    fontWeight="700"
+                  >
+                    Proposal Name
+                  </Th>
+
+                  <Th
+                    borderColor={theme.compensation?.card.divider}
+                    color={theme.compensation?.card.text}
+                    textTransform="none"
+                    fontSize="14px"
+                    fontWeight="700"
+                  >
+                    Voted On
+                  </Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {prBreakdown?.rows?.map(item => (
+                  <Tr key={item.id}>
+                    <Td
+                      color={theme.compensation?.card.text}
+                      borderColor={theme.compensation?.card.divider}
+                    >
+                      <Flex
+                        flexDirection="column"
+                        justify="flex-start"
+                        align="flex-start"
+                        gap="2"
+                      >
+                        <Text color={theme.text} lineHeight="14px">
+                          <Expandable text={item.discussion} />
+                        </Text>
+                        <Flex flexDir="row" gap="4" alignItems="center">
+                          {item.link ? (
+                            <ChakraLink
+                              display="flex"
+                              flexDir="row"
+                              gap="2"
+                              alignItems="center"
+                              justifyContent="center"
+                              href={item.link}
+                              isExternal
+                              color="blue.500"
+                              w="fit-content"
+                              _hover={{
+                                textDecoration: 'none',
+                                color: 'blue.400',
+                                borderColor: 'blue.400',
+                              }}
+                              fontSize={['14px', '16px']}
+                            >
+                              See proposal
+                              <LinkIcon
+                                w="14px"
+                                h="14px"
+                                viewBox="0 0 18 18"
+                                mt="0.5"
+                              />
+                            </ChakraLink>
+                          ) : null}
+                        </Flex>
+                      </Flex>
+                    </Td>
+
+                    <Td
+                      color={theme.compensation?.card.text}
+                      borderColor={theme.compensation?.card.divider}
+                    >
+                      <Text w="max-content">
+                        {item.votedOn ? (
+                          formatDate(item.votedOn as string, 'MMM D, YYYY')
+                        ) : (
+                          <FalseIcon
+                            w="24px"
+                            h="24px"
+                            color={theme.compensation?.card.error}
+                          />
+                        )}
+                      </Text>
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </Flex>
+        </Flex>
       </Flex>
 
       {formState.isDirty && isAuthorized ? (
@@ -600,13 +756,13 @@ export const DelegateProposals = ({
     data: proposals,
     isLoading: proposalsLoading,
     isFetching: proposalsFetching,
-  } = useQuery(
-    [
+  } = useQuery({
+    queryKey: [
       'delegate-compensation-proposals',
       selectedDate?.value.month,
       selectedDate?.value.year,
     ],
-    () =>
+    queryFn: () =>
       getProposals(
         daoInfo.config.DAO_KARMA_ID,
         selectedDate?.value.month as string | number,
@@ -618,13 +774,12 @@ export const DelegateProposals = ({
           .filter(item => item.isValid);
         return mappedProposals;
       }),
-    {
-      enabled:
-        !!selectedDate?.value.month &&
-        !!selectedDate?.value.year &&
-        !!daoInfo.config.DAO_KARMA_ID,
-    }
-  );
+    enabled:
+      !!selectedDate?.value.month &&
+      !!selectedDate?.value.year &&
+      !!daoInfo.config.DAO_KARMA_ID,
+    refetchOnWindowFocus: false,
+  });
 
   const setupProposalsAndVotes = () => {
     if (!proposals) return [];

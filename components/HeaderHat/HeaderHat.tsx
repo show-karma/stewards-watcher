@@ -91,11 +91,20 @@ export const HeaderHat: FC<IHeaderHat> = ({
     if (
       daoInfo.config.DAO_DELEGATE_CONTRACT ||
       daoInfo.config.ALLOW_BULK_DELEGATE
-    )
-      array.push({
-        title: 'Delegate Tokens',
-        action: onToggleVoteToAnyone,
-      });
+    ) {
+      if (daoInfo.config.DAO_DELEGATION_URL) {
+        array.push({
+          title: 'Delegate Tokens',
+          path: daoInfo.config.DAO_DELEGATION_URL,
+          isExternal: true,
+        });
+      } else {
+        array.push({
+          title: 'Delegate Tokens',
+          action: onToggleVoteToAnyone,
+        });
+      }
+    }
 
     return array;
   };
