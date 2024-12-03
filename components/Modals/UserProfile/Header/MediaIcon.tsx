@@ -8,10 +8,12 @@ import {
   PopoverTrigger,
   Tooltip,
 } from '@chakra-ui/react';
+import { useQuery } from '@tanstack/react-query';
 import { useDAO, useHandles, useWallet } from 'contexts';
 import { FC, ReactNode } from 'react';
 import { IActiveTab, IMedias, IProfile } from 'types';
 import { getUserForumUrl } from 'utils';
+import { getProfile } from 'utils/getProfile';
 
 interface IMediaIcon {
   profile: IProfile;
@@ -42,6 +44,17 @@ export const MediaIcon: FC<IMediaIcon> = ({
   const { config } = daoInfo;
   const { forumOnOpen, twitterOnOpen } = useHandles();
 
+  const { address } = useWallet();
+
+  const { data: fetchedProfile } = useQuery(
+    ['profile', address?.toLowerCase() as string],
+    {
+      queryFn: () => getProfile(address as string),
+      enabled: !!address,
+      refetchOnWindowFocus: true,
+    }
+  );
+
   const medias: IMediasObj = {
     twitter: {
       url: `https://twitter.com/${profile.twitter}`,
@@ -52,6 +65,12 @@ export const MediaIcon: FC<IMediaIcon> = ({
     thread: {
       url: profile.discussionThread || '',
       value: profile.discussionThread,
+    },
+    github: {
+      url: `https://github.com/${fetchedProfile?.githubHandle}`,
+      value: fetchedProfile?.githubHandle,
+      disabledCondition:
+        !daoInfo.config.ENABLE_HANDLES_EDIT?.includes('github'),
     },
     forum: {
       url:

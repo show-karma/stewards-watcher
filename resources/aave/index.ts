@@ -41,6 +41,7 @@ const config: IDAOConfig = {
   DAO_CATEGORIES_TYPE: 'workstreams',
   EXCLUDED_VOTING_HISTORY_COLUMN: [],
   EXCLUDED_CARD_FIELDS: ['healthScore', 'karmaScore', 'discordScore'],
+  ENABLE_HANDLES_EDIT: ['github'],
 };
 
 const dark: IDAOTheme = {

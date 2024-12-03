@@ -1,34 +1,39 @@
 import {
-  Flex,
-  Text,
-  Icon,
   Button,
-  Tooltip,
-  Input,
+  Flex,
   FormControl,
+  Icon,
+  Input,
+  Text,
+  Tooltip,
 } from '@chakra-ui/react';
+import { yupResolver } from '@hookform/resolvers/yup';
 import {
+  ChakraLink,
   DiscordIcon,
   ForumIcon,
   TwitterIcon,
-  ChakraLink,
   WebsiteIcon,
 } from 'components';
+import { GithubIcon } from 'components/Icons/GithubIcon';
 import {
   useAuth,
   useDAO,
   useDelegates,
   useEditProfile,
   useHandles,
+  useWallet,
 } from 'contexts';
-import { FC, useState } from 'react';
-import { GoCommentDiscussion } from 'react-icons/go';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import dynamic from 'next/dynamic';
 import { YOUTUBE_LINKS } from 'helpers';
+import dynamic from 'next/dynamic';
+import { FC, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { GoCommentDiscussion } from 'react-icons/go';
 import { lessThanDays } from 'utils';
+import { getProfile } from 'utils/getProfile';
+import { useQuery } from 'wagmi';
+import * as yup from 'yup';
+import { GithubModal } from '../Linking/Github';
 
 const TwitterModal = dynamic(() =>
   import('../Linking/Twitter').then(module => module.TwitterModal)
@@ -335,13 +340,27 @@ export const Handles: FC = () => {
     twitterIsOpen,
     twitterOnOpen,
     twitterOnToggle,
+    twitterOnClose,
     forumIsOpen,
     forumOnToggle,
     forumOnOpen,
-    twitterOnClose,
     forumOnClose,
+    githubIsOpen,
+    githubOnToggle,
+    githubOnClose,
+    githubOnOpen,
   } = useHandles();
   const { profileSelected } = useDelegates();
+  const { address } = useWallet();
+
+  const { data: profile, refetch } = useQuery(
+    ['profile', address?.toLowerCase() as string],
+    {
+      queryFn: () => getProfile(address as string),
+      enabled: !!address,
+      refetchOnWindowFocus: true,
+    }
+  );
 
   const notShowCondition =
     daoInfo.config.DAO_KARMA_ID === 'starknet' &&
@@ -367,6 +386,19 @@ export const Handles: FC = () => {
         !daoInfo.config.ENABLE_HANDLES_EDIT?.includes('twitter') ||
         (!daoInfo.config.ENABLE_HANDLES_EDIT?.includes('twitter') &&
           !profileSelected?.twitterHandle),
+    },
+    {
+      icon: GithubIcon,
+      name: 'Github',
+      actionType: 'button',
+      disabledCondition:
+        daoInfo.config.ENABLE_HANDLES_EDIT?.includes('github') === false,
+      action: () => {
+        githubOnOpen();
+      },
+      handle: profile?.githubHandle,
+      canAdminEdit: true,
+      hideCondition: !daoInfo.config.ENABLE_HANDLES_EDIT?.includes('github'),
     },
     {
       icon: ForumIcon,
@@ -470,7 +502,14 @@ export const Handles: FC = () => {
           )}
         </Flex>
       </Flex>
-
+      <GithubModal
+        open={githubIsOpen}
+        handleModal={() => {
+          refetch();
+          githubOnToggle();
+        }}
+        onClose={githubOnClose}
+      />
       <TwitterModal
         open={twitterIsOpen}
         handleModal={twitterOnToggle}

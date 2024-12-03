@@ -54,6 +54,7 @@ const config: IDAOConfig = {
     ADDRESS: '0xd17206EC4D268D0E55bb08A369b6864f1178B81d',
     NETWORK: 10,
   },
+  ENABLE_HANDLES_EDIT: ['github'],
 };
 
 const dark: IDAOTheme = {

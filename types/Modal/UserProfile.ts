@@ -12,6 +12,7 @@ export type IProfile = {
   address: string;
   ensName?: string;
   twitter?: string;
+  githubHandle?: string;
   avatar?: string;
   aboutMe?: string;
   realName?: string;

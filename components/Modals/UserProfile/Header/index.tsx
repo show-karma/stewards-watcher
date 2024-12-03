@@ -1,7 +1,7 @@
 import {
   Button,
-  Icon,
   Flex,
+  Icon,
   Img,
   Spinner,
   Text,
@@ -10,12 +10,15 @@ import {
 } from '@chakra-ui/react';
 import {
   DelegateButton,
-  ForumIcon,
-  TwitterIcon,
   DiscordIcon,
-  WebsiteIcon,
+  ForumIcon,
   ThreadIcon,
+  TwitterIcon,
+  WebsiteIcon,
 } from 'components';
+import { AddToRegistryButton } from 'components/DelegateRegistry/AddToRegistryButton';
+import { GithubIcon } from 'components/Icons/GithubIcon';
+import { EndorseModal } from 'components/Modals/Endorse';
 import {
   useDAO,
   useDelegates,
@@ -29,13 +32,11 @@ import { FC, useMemo, useState } from 'react';
 import { IoCopy } from 'react-icons/io5';
 import { IActiveTab, IProfile } from 'types';
 import { convertHexToRGBA, truncateAddress } from 'utils';
-import { EndorseModal } from 'components/Modals/Endorse';
-import { AddToRegistryButton } from 'components/DelegateRegistry/AddToRegistryButton';
 import { NameEditable, PictureEditable } from '../EditProfile';
+import { StatsRow } from '../Stats';
 import { MediaIcon } from './MediaIcon';
 import { NavigatorRow } from './NavigatorRow';
 import { ProxySwitch } from './ProxySwitch';
-import { StatsRow } from '../Stats';
 
 const SocialMedias: FC<{
   profile: IProfile;
@@ -66,6 +67,14 @@ const SocialMedias: FC<{
           <ForumIcon boxSize={iconSize} color={theme.modal.header.title} />
         </MediaIcon>
       )}
+      <MediaIcon
+        profile={profile}
+        media="github"
+        changeTab={changeTab}
+        isSamePerson={isSamePerson}
+      >
+        <GithubIcon boxSize={iconSize} color={theme.modal.header.title} />
+      </MediaIcon>
       <MediaIcon
         profile={profile}
         media="discord"

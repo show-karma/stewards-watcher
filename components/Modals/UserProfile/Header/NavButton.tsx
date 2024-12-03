@@ -21,13 +21,14 @@ export const NavButton: FC<INavButton> = ({ children, isActive, ...props }) => {
       }
       borderBottomWidth="2px"
       borderBottomStyle="solid"
-      borderBottomColor={isActive ? theme.branding : 'transparent'}
+      borderBottomColor={isActive ? theme.modal.header.title : 'transparent'}
       borderRadius="0"
       px="5"
       py="4"
       _hover={{
-        color: theme.modal.header.hoverText || theme.branding,
-        borderBottomColor: theme.modal.header.hoverText || theme.branding,
+        color: theme.modal.header.hoverText || theme.modal.header.title,
+        borderBottomColor:
+          theme.modal.header.hoverText || theme.modal.header.title,
       }}
       fontSize={{ base: 'sm', lg: '15px' }}
       _focus={{}}
