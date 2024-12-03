@@ -6,13 +6,17 @@ export const getProposals = async (
   daoName: string,
   month: string | number,
   year: string | number
-): Promise<Proposal[]> => {
+): Promise<{
+  proposals: Proposal[];
+  finished?: boolean;
+}> => {
   try {
     const axiosClient: AxiosResponse<{ data: ProposalsFromAPI }> =
       await api.get(`/incentive-settings/${daoName}/${month}/${year}`);
-    const data = axiosClient?.data?.data?.proposals;
+    const data = axiosClient?.data?.data;
     if (!data) throw new Error('No data');
-    const fetchedProposalsArray = Object.entries(data);
+    const { proposals } = data;
+    const fetchedProposalsArray = Object.entries(proposals);
     const onChainProposals = fetchedProposalsArray
       .filter(([key, value]) => value.type === 'onChain')
       .map(([key, value]) => ({
@@ -34,18 +38,24 @@ export const getProposals = async (
         type: 'snapshot',
       }));
 
-    return [
-      {
-        name: 'Onchain Proposals',
-        items: onChainProposals,
-      },
-      {
-        name: 'Snapshot Proposals',
-        items: snapshotProposals,
-      },
-    ] as Proposal[];
+    return {
+      proposals: [
+        {
+          name: 'Onchain Proposals',
+          items: onChainProposals,
+        },
+        {
+          name: 'Snapshot Proposals',
+          items: snapshotProposals,
+        },
+      ] as Proposal[],
+      finished: data.finished,
+    };
   } catch (error) {
     console.log(error);
-    return [];
+    return {
+      proposals: [],
+      finished: false,
+    };
   }
 };

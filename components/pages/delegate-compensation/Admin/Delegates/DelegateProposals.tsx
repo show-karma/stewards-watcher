@@ -611,9 +611,13 @@ export const DelegateProposals = ({
         daoInfo.config.DAO_KARMA_ID,
         selectedDate?.value.month as string | number,
         selectedDate?.value.year as string | number
-      ).then(res =>
-        res?.flatMap(category => category.items).filter(item => item.isValid)
-      ),
+      ).then(res => {
+        const { proposals: proposalsFromAPI } = res;
+        const mappedProposals = proposalsFromAPI
+          ?.flatMap(category => category.items)
+          .filter(item => item.isValid);
+        return mappedProposals;
+      }),
     {
       enabled:
         !!selectedDate?.value.month &&

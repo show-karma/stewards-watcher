@@ -40,6 +40,7 @@ import {
 } from 'types/delegate-compensation/forumActivity';
 import { formatDate, formatNumber } from 'utils';
 import { getForumActivity } from 'utils/delegate-compensation/getForumActivity';
+import { getProposals } from 'utils/delegate-compensation/getProposals';
 import { DelegatePeriod } from '../DelegatePeriod';
 
 type FeedbackRow = ForumActivityBreakdown & ForumPosts;
@@ -67,6 +68,30 @@ export const DelegateCompensationAdminForumActivity = ({
 
   const delegateFeedback = delegateInfo?.stats?.delegateFeedback;
   const forumPosts = delegateFeedback?.posts || [];
+
+  const { data: proposalsData } = useQuery(
+    [
+      'delegate-compensation-proposals',
+      selectedDate?.value.month,
+      selectedDate?.value.year,
+    ],
+    () =>
+      getProposals(
+        daoInfo.config.DAO_KARMA_ID,
+        selectedDate?.value.month as string | number,
+        selectedDate?.value.year as string | number
+      ),
+    {
+      initialData: {
+        proposals: [],
+        finished: false,
+      },
+      enabled:
+        !!selectedDate?.value.month &&
+        !!selectedDate?.value.year &&
+        !!daoInfo.config.DAO_KARMA_ID,
+    }
+  );
 
   const {
     data: posts,
@@ -636,11 +661,13 @@ export const DelegateCompensationAdminForumActivity = ({
               </Table>
             </Flex>
             <Flex flexDir="column" gap="2" justify="center" alignItems="end">
-              <Flex w="full" justify="flex-end" align="flex-end">
-                <Text fontSize="medium" color={theme.compensation?.card.text}>
-                  ⚠️ These scores are subject to change and not finalized yet.
-                </Text>
-              </Flex>
+              {proposalsData.finished ? null : (
+                <Flex w="full" justify="flex-end" align="flex-end">
+                  <Text fontSize="medium" color={theme.compensation?.card.text}>
+                    ⚠️ These scores are subject to change and not finalized yet.
+                  </Text>
+                </Flex>
+              )}
               <Flex flexDir="column" gap="1" alignItems="flex-end">
                 <Flex flexDir="row" gap="1" justify="flex-end">
                   <Tooltip

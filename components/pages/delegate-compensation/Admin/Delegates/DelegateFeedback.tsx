@@ -15,6 +15,7 @@ import {
   Tooltip,
   VStack,
 } from '@chakra-ui/react';
+import { useQuery } from '@tanstack/react-query';
 import { ChakraLink } from 'components/ChakraLink';
 import { StarIcon } from 'components/Icons/Compensation/StarIcon';
 import { useAuth, useDAO } from 'contexts';
@@ -23,6 +24,7 @@ import { useToasty } from 'hooks';
 import { useState } from 'react';
 import { BsFillInfoCircleFill } from 'react-icons/bs';
 import { formatNumber } from 'utils';
+import { getProposals } from 'utils/delegate-compensation/getProposals';
 
 export const DelegateFeedback = ({
   isModalOpen,
@@ -72,6 +74,30 @@ export const DelegateFeedback = ({
     presenceMultiplier:
       'This is a more quantitative analysis, intended to reflect the effort of delegates who participate in most discussions. This parameter serves as a multiplier to the score obtained across the previous five criteria. Note that the percentage of participation in monthly discussions could be not linear across all DAO’s discussions. Some proposals may carry more weight in the overall discussions (special cases such as LTIPP/STIP, gaming, treasury, etc.).',
   };
+
+  const { data: proposalsData } = useQuery(
+    [
+      'delegate-compensation-proposals',
+      selectedDate?.value.month,
+      selectedDate?.value.year,
+    ],
+    () =>
+      getProposals(
+        daoInfo.config.DAO_KARMA_ID,
+        selectedDate?.value.month as string | number,
+        selectedDate?.value.year as string | number
+      ),
+    {
+      initialData: {
+        proposals: [],
+        finished: false,
+      },
+      enabled:
+        !!selectedDate?.value.month &&
+        !!selectedDate?.value.year &&
+        !!daoInfo.config.DAO_KARMA_ID,
+    }
+  );
 
   // const handleSaveFeedback = async () => {
   //   setIsSavingFeedback(true);
@@ -239,17 +265,8 @@ export const DelegateFeedback = ({
                       )}
                     </Flex>
                   ))}
-                  <Flex justifyContent="flex-start" gap="4" alignItems="center">
-                    <ChakraLink
-                      color={theme.compensation?.card.text}
-                      href={`${rootPathname}/delegate-compensation/delegate/${delegateAddress}/forum-activity?month=${selectedDate?.name}&year=${selectedDate?.value.year}`}
-                      isExternal
-                      textDecoration="underline"
-                    >
-                      View details
-                    </ChakraLink>
-                  </Flex>
                 </Flex>
+
                 <Flex
                   flexDir="column"
                   gap="3"
@@ -300,21 +317,46 @@ export const DelegateFeedback = ({
                 </Flex>
               </Flex>
             </VStack>
+            <Flex
+              justifyContent="flex-start"
+              w="full"
+              gap="4"
+              mt="4"
+              alignItems="center"
+            >
+              <ChakraLink
+                color={theme.compensation?.card.text}
+                href={`${rootPathname}/delegate-compensation/delegate/${delegateAddress}/forum-activity?month=${selectedDate?.name}&year=${selectedDate?.value.year}`}
+                isExternal
+                bg={theme.compensation?.icons.delegateFeedback}
+                borderRadius="8px"
+                px="3"
+                py="2"
+                fontWeight="500"
+                _hover={{
+                  opacity: 0.7,
+                }}
+              >
+                View forum activity
+              </ChakraLink>
+            </Flex>
           </Box>
         </ModalBody>
-        <ModalFooter bg={theme.compensation?.card.bg}>
-          <Flex
-            flexDir="row"
-            gap="2"
-            align="flex-start"
-            justify="flex-start"
-            w="full"
-            px="4"
-          >
-            <Text fontSize="medium" color={theme.compensation?.card.text}>
-              ⚠️ These scores are subject to change and not finalized yet.
-            </Text>
-          </Flex>
+        <ModalFooter bg={theme.compensation?.card.bg} pt="0">
+          {proposalsData.finished ? null : (
+            <Flex
+              flexDir="row"
+              gap="2"
+              align="flex-start"
+              justify="flex-start"
+              w="full"
+              px="4"
+            >
+              <Text fontSize="medium" color={theme.compensation?.card.text}>
+                ⚠️ These scores are subject to change and not finalized yet.
+              </Text>
+            </Flex>
+          )}
         </ModalFooter>
       </ModalContent>
     </Modal>
