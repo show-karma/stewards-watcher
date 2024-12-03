@@ -17,7 +17,13 @@ type JsonRpcProviderConfig = {
   } | null;
 };
 
-export type IMedias = 'twitter' | 'forum' | 'discord' | 'website' | 'thread';
+export type IMedias =
+  | 'twitter'
+  | 'forum'
+  | 'discord'
+  | 'website'
+  | 'thread'
+  | 'github';
 
 export interface IDAOConfig {
   DAO: string;

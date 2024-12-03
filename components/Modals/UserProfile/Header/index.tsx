@@ -17,6 +17,7 @@ import {
   WebsiteIcon,
 } from 'components';
 import { AddToRegistryButton } from 'components/DelegateRegistry/AddToRegistryButton';
+import { GithubIcon } from 'components/Icons/GithubIcon';
 import { EndorseModal } from 'components/Modals/Endorse';
 import {
   useDAO,
@@ -66,6 +67,14 @@ const SocialMedias: FC<{
           <ForumIcon boxSize={iconSize} color={theme.modal.header.title} />
         </MediaIcon>
       )}
+      <MediaIcon
+        profile={profile}
+        media="github"
+        changeTab={changeTab}
+        isSamePerson={isSamePerson}
+      >
+        <GithubIcon boxSize={iconSize} color={theme.modal.header.title} />
+      </MediaIcon>
       <MediaIcon
         profile={profile}
         media="discord"

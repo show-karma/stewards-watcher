@@ -1,18 +1,18 @@
+import { ECOSYSTEMS, RPCS, RPCS_WS } from 'helpers';
 import { IDAOConfig, IDAOTheme } from 'types';
-import { moonriverDelegateAction } from 'utils/moonbeam/moonriverDelegateAction';
 import {
+  moonbeamActiveDelegatedTracks,
+  moonbeamGetLockedTokensAction,
+  moonbeamOnChainProvider,
   moonriverConvictionOptions,
   moonriverDelegateErrors,
-  moonbeamOnChainProvider,
   moonriverTracksDictionary,
-  moonbeamGetLockedTokensAction,
-  moonbeamActiveDelegatedTracks,
 } from 'utils';
-import { moonbeam } from 'utils/moonbeam/network';
-import { ECOSYSTEMS, RPCS, RPCS_WS } from 'helpers';
-import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { moonbeamGetBalanceOverview } from 'utils/moonbeam/moonbeamGetBalanceOverview';
+import { moonriverDelegateAction } from 'utils/moonbeam/moonriverDelegateAction';
+import { moonbeam } from 'utils/moonbeam/network';
 import { Hex } from 'viem';
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { moonriverUndelegateAction } from '../../utils/moonbeam/moonriverUndelegateAction';
 import { polkassemblyProposalUrl } from '../../utils/moonbeam/polkassembly';
 import ABI from './ABI.json';
@@ -102,6 +102,7 @@ const config: IDAOConfig = {
       http: RPCS.moonbeam,
     }),
   }),
+  ENABLE_HANDLES_EDIT: ['github'],
 };
 
 const dark: IDAOTheme = {

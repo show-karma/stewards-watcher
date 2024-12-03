@@ -58,6 +58,7 @@ const config: IDAOConfig = {
   DAO_DISCORD_CHANNEL:
     'https://discord.com/channels/723834989506068561/1075280542808936549',
   DAO_CATEGORIES_TYPE: 'workstreams',
+  ENABLE_HANDLES_EDIT: ['github'],
 };
 
 const dark: IDAOTheme = {

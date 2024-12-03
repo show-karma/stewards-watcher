@@ -1,7 +1,7 @@
 import { IDAOConfig, IDAOTheme } from 'types';
 import { onChainOptimismVotesProvider } from 'utils/optimism';
-import { optimism } from 'wagmi/chains';
 import { Hex } from 'viem';
+import { optimism } from 'wagmi/chains';
 import ABI from './ABI.json';
 
 const config: IDAOConfig = {
@@ -62,6 +62,7 @@ const config: IDAOConfig = {
       '0xc6c2cf252c4B5465c07CF6bE8BE8408B3d78a174',
     NETWORK: 420,
   },
+  ENABLE_HANDLES_EDIT: ['github'],
 };
 
 const dark: IDAOTheme = {

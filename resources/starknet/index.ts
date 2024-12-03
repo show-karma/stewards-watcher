@@ -62,6 +62,7 @@ const config: IDAOConfig = {
   DAO_SUPPORTS_TOA: true,
   DEFAULT_TOA,
   DAO_CATEGORIES_TYPE: 'workstreams',
+  ENABLE_HANDLES_EDIT: ['github'],
 };
 
 const dark: IDAOTheme = {
