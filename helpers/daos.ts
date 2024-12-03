@@ -22,4 +22,5 @@ export const daosDictionary: Record<string, string> = {
   moonbase: 'moonbase',
   arbitrum: 'arbitrum',
   cowswap: 'cowswap',
+  rari: 'rari',
 };

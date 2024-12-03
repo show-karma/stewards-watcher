@@ -251,6 +251,7 @@ export const HeaderHat: FC<IHeaderHat> = ({
                       h="10"
                       objectFit="contain"
                       src={theme.logo || config.DAO_LOGO}
+                      rounded={theme.isLogoRounded ? '9999px' : undefined}
                     />
                   </ChakraLink>
                   {daoInfo.config.ECOSYSTEM && <EcosystemDropdown />}

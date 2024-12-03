@@ -2,22 +2,22 @@ import { Divider, Flex, Text, useDisclosure } from '@chakra-ui/react';
 import { useDAO, useVotes, useWallet } from 'contexts';
 import { FC, useMemo, useState } from 'react';
 
-import { IChainRow, IProfile } from 'types';
-import { formatNumber } from 'utils';
 import { VotingReasonModal } from 'components/VotingReason/VotingReasonModal';
-import { SelectedProposal } from 'types/voting-reason';
-import { VotingReasonPayload } from 'utils/voting-reason/save-voting-reason';
 import { useToasty, useVoteReason } from 'hooks';
-import { optimismGoerli, optimism } from 'viem/chains';
-import { useAccount, useSwitchNetwork } from 'wagmi';
+import { IChainRow, IProfile } from 'types';
+import { SelectedProposal } from 'types/voting-reason';
+import { formatNumber } from 'utils';
 import { walletClientToSigner } from 'utils/eas/useSigner';
+import { VotingReasonPayload } from 'utils/voting-reason/save-voting-reason';
+import { optimism, optimismGoerli } from 'viem/chains';
+import { useAccount, useSwitchNetwork } from 'wagmi';
 import { ContrarionIndexComponent } from './ContrarionIndex';
 import { DelegatedVotesChanges } from './DelegatedVotesChanges';
 import { Navigation } from './Navigation';
-import { ProposalVote } from './ProposalVote';
-import { SearchProposalInput } from './SearchProposalInput';
 import { OffChainVotingBreakdown } from './OffChainVotingBreakdown';
 import { OnChainVotingBreakdown } from './OnChainVotingBreakdown';
+import { ProposalVote } from './ProposalVote';
+import { SearchProposalInput } from './SearchProposalInput';
 
 interface IVotingHistory {
   profile: IProfile;

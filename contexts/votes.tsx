@@ -1,13 +1,13 @@
-import { useOffChainVotes, useOnChainVotes } from 'hooks';
-import React, { useContext, createContext, useMemo, useState } from 'react';
-import { IChainRow, IProfile, IVoteBreakdown } from 'types';
-import debounce from 'lodash.debounce';
-import moment from 'moment';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { useOffChainVotes, useOnChainVotes } from 'hooks';
+import debounce from 'lodash.debounce';
+import moment from 'moment';
+import React, { createContext, useContext, useMemo, useState } from 'react';
+import { IChainRow, IProfile, IVoteBreakdown } from 'types';
 import { checkDecision } from 'utils';
-import { useDelegates } from './delegates';
 import { useDAO } from './dao';
+import { useDelegates } from './delegates';
 
 interface IVotesProps {
   isLoading: boolean;

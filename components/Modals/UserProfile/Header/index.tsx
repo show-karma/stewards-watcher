@@ -1,7 +1,7 @@
 import {
   Button,
-  Icon,
   Flex,
+  Icon,
   Img,
   Spinner,
   Text,
@@ -10,12 +10,14 @@ import {
 } from '@chakra-ui/react';
 import {
   DelegateButton,
-  ForumIcon,
-  TwitterIcon,
   DiscordIcon,
-  WebsiteIcon,
+  ForumIcon,
   ThreadIcon,
+  TwitterIcon,
+  WebsiteIcon,
 } from 'components';
+import { AddToRegistryButton } from 'components/DelegateRegistry/AddToRegistryButton';
+import { EndorseModal } from 'components/Modals/Endorse';
 import {
   useDAO,
   useDelegates,
@@ -29,13 +31,11 @@ import { FC, useMemo, useState } from 'react';
 import { IoCopy } from 'react-icons/io5';
 import { IActiveTab, IProfile } from 'types';
 import { convertHexToRGBA, truncateAddress } from 'utils';
-import { EndorseModal } from 'components/Modals/Endorse';
-import { AddToRegistryButton } from 'components/DelegateRegistry/AddToRegistryButton';
 import { NameEditable, PictureEditable } from '../EditProfile';
+import { StatsRow } from '../Stats';
 import { MediaIcon } from './MediaIcon';
 import { NavigatorRow } from './NavigatorRow';
 import { ProxySwitch } from './ProxySwitch';
-import { StatsRow } from '../Stats';
 
 const SocialMedias: FC<{
   profile: IProfile;
@@ -114,11 +114,18 @@ const DelegateCases: FC<{ status?: string; fullAddress: string }> = ({
             text="Select as Delegate"
             isDisabled
             disabled
+            w="max-content"
           />
         </Flex>
       </Tooltip>
     );
-  return <DelegateButton delegated={fullAddress} text="Select as Delegate" />;
+  return (
+    <DelegateButton
+      delegated={fullAddress}
+      text="Select as Delegate"
+      w="max-content"
+    />
+  );
 };
 
 interface IUserSection {
@@ -348,26 +355,36 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
             ) : null}
 
             {isEditing ? (
-              <Button
-                background={theme.branding}
-                px={['4', '6']}
-                py={['3', '6']}
-                h="10"
-                fontSize={['md']}
-                fontWeight="medium"
-                onClick={saveEdit}
-                _hover={{
-                  backgroundColor: convertHexToRGBA(theme.branding, 0.8),
-                }}
-                _focus={{}}
-                _active={{}}
-                color={theme.buttonText}
+              <Flex
+                {...(theme.brandingImageColor && {
+                  style: {
+                    backgroundImage: theme.brandingImageColor,
+                    padding: '2px',
+                    borderRadius: '6px',
+                  },
+                })}
               >
-                <Flex gap="2" align="center">
-                  {isEditSaving && <Spinner />}
-                  Save profile
-                </Flex>
-              </Button>
+                <Button
+                  background={theme.branding}
+                  px={['4', '6']}
+                  py={['3', '6']}
+                  h="10"
+                  fontSize={['md']}
+                  fontWeight="medium"
+                  onClick={saveEdit}
+                  _hover={{
+                    backgroundColor: convertHexToRGBA(theme.branding, 0.8),
+                  }}
+                  _focus={{}}
+                  _active={{}}
+                  color={theme.buttonText}
+                >
+                  <Flex gap="2" align="center">
+                    {isEditSaving && <Spinner />}
+                    Save profile
+                  </Flex>
+                </Button>
+              </Flex>
             ) : (
               <DelegateCases
                 fullAddress={fullAddress}

@@ -1,21 +1,21 @@
 import {
-  Flex,
-  Text,
-  Link,
   Button,
-  Skeleton,
-  Icon,
   Collapse,
+  Flex,
+  Icon,
+  Link,
+  Skeleton,
+  Text,
 } from '@chakra-ui/react';
 import { useDAO, useDelegates } from 'contexts';
 import { FC, useState } from 'react';
-import { IDAOTheme } from 'types';
 import { IoClose } from 'react-icons/io5';
 import { TbExternalLink } from 'react-icons/tb';
+import { IDAOTheme } from 'types';
 import { formatNumber, getTimeFromNow } from 'utils';
+import { DelegationPool } from './DelegationPool';
 import { Filters } from './Filters';
 import { SortBy } from './Filters/SortBy';
-import { DelegationPool } from './DelegationPool';
 
 const DelegatesCounter: FC<{
   isLoading: boolean;
@@ -176,10 +176,20 @@ export const BodyTitle: FC = () => {
                   isExternal
                   _hover={{}}
                   w={{ base: 'full', md: 'max-content' }}
+                  {...(theme.brandingImageColor && {
+                    style: {
+                      backgroundImage: theme.brandingImageColor,
+                      padding: '2px',
+                      borderRadius: '6px',
+                    },
+                  })}
                 >
                   <Button
                     px={{ base: '3', md: '6' }}
-                    py={{ base: '4', md: '6' }}
+                    py={{
+                      base: theme.brandingImageColor ? '14px' : '4',
+                      md: theme.brandingImageColor ? '22px' : '6',
+                    }}
                     justifyContent={{ base: 'space-between', lg: 'center' }}
                     borderRadius="base"
                     borderWidth="1px"

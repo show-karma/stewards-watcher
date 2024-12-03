@@ -1,8 +1,9 @@
 import { Button, ButtonProps, Flex } from '@chakra-ui/react';
+import { ChakraLink } from 'components/ChakraLink';
 import { useDAO, useDelegates, useWallet } from 'contexts';
 import { useDelegation, useMixpanel, useToasty } from 'hooks';
-import { convertHexToRGBA } from 'utils';
 import { FC, useEffect, useState } from 'react';
+import { convertHexToRGBA } from 'utils';
 import { useAccount, useSwitchNetwork } from 'wagmi';
 
 interface IDelegateButton extends ButtonProps {
@@ -87,26 +88,100 @@ export const DelegateButton: FC<IDelegateButton> = ({
     return write?.();
   };
 
+  if (config.DAO_DELEGATION_URL) {
+    // return(
+    //   <Button
+    //   background={theme.branding}
+    //   px={{ base: '3', sm: '4', md: '6' }}
+    //   py={['6']}
+    //   h="10"
+    //   fontSize={['sm', 'md']}
+    //   fontWeight="medium"
+    //   // onClick={handleCase}
+    //   _hover={{
+    //     backgroundColor: convertHexToRGBA(theme.branding, 0.8),
+    //   }}
+    //   _focus={{}}
+    //   _active={{}}
+    //   disabled={isLoading}
+    //   color={theme.buttonText}
+    //   isLoading={isLoading}
+    //   {...props}
+    // >
+    //   <Flex gap="2">{text}</Flex>
+    // </Button>
+    // )
+    return (
+      <Flex
+        {...(theme.brandingImageColor && {
+          style: {
+            backgroundImage: theme.brandingImageColor,
+            padding: '2px',
+            borderRadius: '6px',
+          },
+        })}
+      >
+        <ChakraLink
+          background={theme.branding}
+          px={{ base: '3', sm: '4', md: '6' }}
+          py={theme.brandingImageColor ? '22px' : '6'}
+          h="10"
+          fontSize={['sm', 'md']}
+          fontWeight="medium"
+          _hover={{
+            backgroundColor: convertHexToRGBA(theme.branding, 0.8),
+          }}
+          _focus={{}}
+          _active={{}}
+          disabled={isLoading}
+          color={theme.buttonText}
+          isLoading={isLoading}
+          href={config.DAO_DELEGATION_URL}
+          isExternal
+          rounded="md"
+          alignItems="center"
+          justifyContent="center"
+          display="flex"
+          w="full"
+          maxW="max-content"
+          {...(props as any)}
+        >
+          <Flex gap="2">{text}</Flex>
+        </ChakraLink>
+      </Flex>
+    );
+  }
+
   return config.DAO_DELEGATE_CONTRACT || config.ALLOW_BULK_DELEGATE ? (
-    <Button
-      background={theme.branding}
-      px={{ base: '3', sm: '4', md: '6' }}
-      py={['6']}
-      h="10"
-      fontSize={['sm', 'md']}
-      fontWeight="medium"
-      onClick={handleCase}
-      _hover={{
-        backgroundColor: convertHexToRGBA(theme.branding, 0.8),
-      }}
-      _focus={{}}
-      _active={{}}
-      disabled={isLoading}
-      color={theme.buttonText}
-      isLoading={isLoading}
-      {...props}
+    <Flex
+      {...(theme.brandingImageColor && {
+        style: {
+          backgroundImage: theme.brandingImageColor,
+          padding: '2px',
+          borderRadius: '6px',
+        },
+      })}
     >
-      <Flex gap="2">{text}</Flex>
-    </Button>
+      <Button
+        background={theme.branding}
+        px={{ base: '3', sm: '4', md: '6' }}
+        py={theme.brandingImageColor ? '22px' : '6'}
+        h="10"
+        fontSize={['sm', 'md']}
+        fontWeight="medium"
+        onClick={handleCase}
+        _hover={{
+          backgroundColor: convertHexToRGBA(theme.branding, 0.8),
+        }}
+        _focus={{}}
+        _active={{}}
+        disabled={isLoading}
+        color={theme.buttonText}
+        isLoading={isLoading}
+        {...props}
+      >
+        <Flex gap="2">{text}</Flex>
+      </Button>
+    </Flex>
   ) : null;
 };

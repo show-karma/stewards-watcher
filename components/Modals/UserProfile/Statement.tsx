@@ -7,10 +7,10 @@ import {
   Spinner,
   Text,
 } from '@chakra-ui/react';
-import { FC, useEffect, useState } from 'react';
 import { useDAO, useEditProfile } from 'contexts';
-import { ICustomFields } from 'types';
 import dynamic from 'next/dynamic';
+import { FC, useEffect, useState } from 'react';
+import { ICustomFields } from 'types';
 import { convertHexToRGBA } from 'utils';
 import { Sidebar } from '../Sidebar';
 import { NoStatement } from './NoStatement';
@@ -174,27 +174,38 @@ export const Statement: FC = () => {
                 maxW={['100%', '100%', '50%']}
                 mt={['5', '5', '0']}
               >
-                <Button
-                  background={theme.branding}
-                  px={['4', '6']}
-                  py={['3', '6']}
-                  h="10"
-                  fontSize={['md']}
-                  fontWeight="medium"
-                  onClick={handleOnClick}
-                  _hover={{
-                    backgroundColor: convertHexToRGBA(theme.branding, 0.8),
-                  }}
-                  _focus={{}}
-                  _active={{}}
-                  isDisabled={isEditSaving}
-                  color={theme.buttonText}
+                <Flex
+                  {...(theme.brandingImageColor && {
+                    style: {
+                      backgroundImage: theme.brandingImageColor,
+                      padding: '2px',
+                      borderRadius: '6px',
+                    },
+                  })}
+                  h="max-content"
                 >
-                  <Flex gap="2" align="center">
-                    {isEditSaving && <Spinner size="sm" color="white" />}
-                    Save profile
-                  </Flex>
-                </Button>
+                  <Button
+                    background={theme.branding}
+                    px={['4', '6']}
+                    py={['3', '3']}
+                    h="10"
+                    fontSize={['md']}
+                    fontWeight="medium"
+                    onClick={handleOnClick}
+                    _hover={{
+                      backgroundColor: convertHexToRGBA(theme.branding, 0.8),
+                    }}
+                    _focus={{}}
+                    _active={{}}
+                    isDisabled={isEditSaving}
+                    color={theme.buttonText}
+                  >
+                    <Flex gap="2" align="center">
+                      {isEditSaving && <Spinner size="sm" color="white" />}
+                      Save profile
+                    </Flex>
+                  </Button>
+                </Flex>
               </Flex>
             )}
           </Flex>
