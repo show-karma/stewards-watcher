@@ -190,7 +190,7 @@ const DelegateProposalsWrapped = ({
       title: 'Onchain Proposals',
       proposals: onChainProposals,
     },
-  ];
+  ].filter(table => table.proposals.some(item => item.voted));
 
   const renderValidIcon = (valid?: boolean) => {
     if (valid === true) {
