@@ -12,6 +12,7 @@ export type ParticipationRateVotes = {
     startDate: string;
     timestamp: string;
   };
+  timestamp: string;
   support: number;
 };
 export type ParticipationRateRows = {

@@ -35,7 +35,7 @@ export const getPRBreakdown = async (
       rows.push({
         id: proposal.id,
         discussion: proposal.discussion,
-        votedOn: voteFound?.proposal.timestamp || undefined,
+        votedOn: voteFound?.timestamp || undefined,
         link: undefined,
       });
     });
