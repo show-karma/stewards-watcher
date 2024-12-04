@@ -22,7 +22,6 @@ import {
   useDelegates,
   useEditProfile,
   useHandles,
-  useWallet,
 } from 'contexts';
 import { YOUTUBE_LINKS } from 'helpers';
 import dynamic from 'next/dynamic';
@@ -351,13 +350,12 @@ export const Handles: FC = () => {
     githubOnOpen,
   } = useHandles();
   const { profileSelected } = useDelegates();
-  const { address } = useWallet();
 
   const { data: profile, refetch } = useQuery(
-    ['profile', address?.toLowerCase() as string],
+    ['profile', profileSelected?.address?.toLowerCase() as string],
     {
-      queryFn: () => getProfile(address as string),
-      enabled: !!address,
+      queryFn: () => getProfile(profileSelected?.address as string),
+      enabled: !!profileSelected?.address,
       refetchOnWindowFocus: true,
     }
   );
