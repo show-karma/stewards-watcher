@@ -10,6 +10,8 @@ import {
 export const getPRBreakdown = async (
   address?: string,
   daoName?: string,
+  month?: string | number,
+  year?: string | number,
   period = 'arbitrum-incentive'
 ) => {
   if (!address || !daoName) return { proposals: [], votes: [], rows: [] };
@@ -20,7 +22,7 @@ export const getPRBreakdown = async (
         votes: ParticipationRateVotes[];
       };
     }> = await api.get(
-      `/delegate/${daoName}/${address}/voting-history?period=${period}`
+      `/delegate/${daoName}/${address}/voting-history?period=${period}&month=${month}&year=${year}`
     );
     const proposals = response?.data?.data?.proposals;
     if (!proposals) throw new Error('No proposals');

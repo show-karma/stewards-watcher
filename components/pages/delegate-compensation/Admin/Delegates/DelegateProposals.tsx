@@ -97,7 +97,8 @@ const DelegateProposalsWrapped = ({
   onChainProposals: ProposalAndBreakdownRow[];
   selectRationale: (rationale: ProposalAndBreakdownRow) => void;
 }) => {
-  const { delegateInfo, refreshDelegateInfo } = useDelegateCompensation();
+  const { delegateInfo, refreshDelegateInfo, selectedDate } =
+    useDelegateCompensation();
   const { daoInfo, theme } = useDAO();
   const { authToken, isDaoAdmin: isAuthorized } = useAuth();
 
@@ -112,8 +113,17 @@ const DelegateProposalsWrapped = ({
     ],
     initialData: { proposals: [], votes: [], rows: [] },
     queryFn: () =>
-      getPRBreakdown(delegateInfo?.publicAddress, daoInfo.config.DAO_KARMA_ID),
-    enabled: !!delegateInfo?.publicAddress && !!daoInfo.config.DAO_KARMA_ID,
+      getPRBreakdown(
+        delegateInfo?.publicAddress,
+        daoInfo.config.DAO_KARMA_ID,
+        selectedDate?.value.month,
+        selectedDate?.value.year
+      ),
+    enabled:
+      !!delegateInfo?.publicAddress &&
+      !!daoInfo.config.DAO_KARMA_ID &&
+      !!selectedDate?.value.year &&
+      !!selectedDate?.value.month,
     refetchOnWindowFocus: false,
   });
 

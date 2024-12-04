@@ -14,7 +14,7 @@ import { DelegateFinalScoreModal } from './DelegateFinalScore';
 import { DelegatePeriodIndicator } from './DelegatePeriodIndicator';
 
 export const DelegateStats = () => {
-  const { delegateInfo } = useDelegateCompensation();
+  const { delegateInfo, selectedDate } = useDelegateCompensation();
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [isFinalScoreModalOpen, setIsFinalScoreModalOpen] = useState(false);
   const { theme, daoInfo } = useDAO();
@@ -27,8 +27,17 @@ export const DelegateStats = () => {
       daoInfo.config.DAO_KARMA_ID,
     ],
     queryFn: () =>
-      getPRBreakdown(delegateInfo?.publicAddress, daoInfo.config.DAO_KARMA_ID),
-    enabled: !!delegateInfo?.publicAddress && !!daoInfo.config.DAO_KARMA_ID,
+      getPRBreakdown(
+        delegateInfo?.publicAddress,
+        daoInfo.config.DAO_KARMA_ID,
+        selectedDate?.value.month,
+        selectedDate?.value.year
+      ),
+    enabled:
+      !!delegateInfo?.publicAddress &&
+      !!daoInfo.config.DAO_KARMA_ID &&
+      !!selectedDate?.value.year &&
+      !!selectedDate?.value.month,
   });
 
   return (
