@@ -125,4 +125,4 @@ const useOnChainVotes = (
   });
 };
 
-export { useOnChainVotes, fetchOnChainProposalVotes, fetchOnChainProposals };
+export { fetchOnChainProposals, fetchOnChainProposalVotes, useOnChainVotes };

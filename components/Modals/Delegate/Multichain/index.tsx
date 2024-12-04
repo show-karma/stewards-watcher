@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import { useDAO, useDelegates, useGovernanceVotes, useWallet } from 'contexts';
 import { Button, Flex, Icon, Image, Radio, Text } from '@chakra-ui/react';
-import { IDelegate, MultiChainResult } from 'types';
 import { ImgWithFallback } from 'components/ImgWithFallback';
+import { useDAO, useDelegates, useGovernanceVotes, useWallet } from 'contexts';
+import { useMixpanel, useToasty } from 'hooks';
+import React, { useState } from 'react';
 import { IoAlertCircleOutline } from 'react-icons/io5';
+import { IDelegate, MultiChainResult } from 'types';
 import { formatNumber, truncateAddress } from 'utils';
 import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
-import { useMixpanel, useToasty } from 'hooks';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
   prepareWriteContract,
-  writeContract,
   waitForTransaction,
+  writeContract,
 } from '@wagmi/core';
 import { zeroAddress } from 'viem';
-import { DelegateModalHeader } from '../DelegateModalHeader';
 import { DelegateModalBody } from '../DelegateModalBody';
+import { DelegateModalHeader } from '../DelegateModalHeader';
 
 interface StepProps {
   handleModal: () => void;

@@ -1,8 +1,8 @@
-import { useContractWrite, useNetwork, usePrepareContractWrite } from 'wagmi';
 import { useDAO } from 'contexts';
 import { IDelegation } from 'types';
-import { useToasty } from './useToasty';
+import { useContractWrite, useNetwork, usePrepareContractWrite } from 'wagmi';
 import { useMixpanel } from './useMixpanel';
+import { useToasty } from './useToasty';
 
 export const useDelegation = (args: IDelegation) => {
   const { delegatee, onSuccessFunction } = args;

@@ -1,28 +1,29 @@
 import { IDAOInfo } from 'types';
 import aave from './aave';
+import apecoin from './apecoin';
+import arbitrum from './arbitrum';
+import compound from './compound';
+import ERC20ABI from './contracts/ERC20_ABI.json';
+import snapshotABI from './contracts/snapshotABI.json';
+import cowswap from './cowswap';
+import developer from './developer';
+import dimo from './dimo';
+import dydx from './dydx';
+import elementFinance from './element-finance';
+import everclear from './everclear';
+import gitcoin from './gitcoin';
+import moonbase from './moonbase';
+import moonbeam from './moonbeam';
+import moonriver from './moonriver';
 import op from './op';
 import optimism from './optimism';
 import pooltogether from './pooltogether';
-import yamfinance from './yamfinance';
-import ssvnetwork from './ssvnetwork';
-import dydx from './dydx';
-import dimo from './dimo';
-import compound from './compound';
-import gitcoin from './gitcoin';
-import elementFinance from './element-finance';
-import starknet from './starknet';
-import developer from './developer';
-import apecoin from './apecoin';
-import safe from './safe';
+import rari from './rari';
 import rocketpool from './rocketpool';
-import moonriver from './moonriver';
-import moonbeam from './moonbeam';
-import moonbase from './moonbase';
-import everclear from './everclear';
-import arbitrum from './arbitrum';
-import cowswap from './cowswap';
-import snapshotABI from './contracts/snapshotABI.json';
-import ERC20ABI from './contracts/ERC20_ABI.json';
+import safe from './safe';
+import ssvnetwork from './ssvnetwork';
+import starknet from './starknet';
+import yamfinance from './yamfinance';
 
 interface ISupportedDAOs {
   [key: string]: IDAOInfo;
@@ -181,5 +182,12 @@ export const supportedDAOs: ISupportedDAOs = {
     dark: cowswap.dark,
     light: cowswap.light,
     TOKEN_ABI: ERC20ABI,
+  },
+  rari: {
+    config: rari.config,
+    dark: rari.dark,
+    light: rari.light,
+    DELEGATE_ABI: rari.ABI,
+    TOKEN_ABI: rari.ABI,
   },
 };

@@ -123,11 +123,18 @@ const DelegateCases: FC<{ status?: string; fullAddress: string }> = ({
             text="Select as Delegate"
             isDisabled
             disabled
+            w="max-content"
           />
         </Flex>
       </Tooltip>
     );
-  return <DelegateButton delegated={fullAddress} text="Select as Delegate" />;
+  return (
+    <DelegateButton
+      delegated={fullAddress}
+      text="Select as Delegate"
+      w="max-content"
+    />
+  );
 };
 
 interface IUserSection {
@@ -357,26 +364,36 @@ const UserSection: FC<IUserSection> = ({ profile, changeTab }) => {
             ) : null}
 
             {isEditing ? (
-              <Button
-                background={theme.branding}
-                px={['4', '6']}
-                py={['3', '6']}
-                h="10"
-                fontSize={['md']}
-                fontWeight="medium"
-                onClick={saveEdit}
-                _hover={{
-                  backgroundColor: convertHexToRGBA(theme.branding, 0.8),
-                }}
-                _focus={{}}
-                _active={{}}
-                color={theme.buttonText}
+              <Flex
+                {...(theme.brandingImageColor && {
+                  style: {
+                    backgroundImage: theme.brandingImageColor,
+                    padding: '2px',
+                    borderRadius: '6px',
+                  },
+                })}
               >
-                <Flex gap="2" align="center">
-                  {isEditSaving && <Spinner />}
-                  Save profile
-                </Flex>
-              </Button>
+                <Button
+                  background={theme.branding}
+                  px={['4', '6']}
+                  py={['3', '6']}
+                  h="10"
+                  fontSize={['md']}
+                  fontWeight="medium"
+                  onClick={saveEdit}
+                  _hover={{
+                    backgroundColor: convertHexToRGBA(theme.branding, 0.8),
+                  }}
+                  _focus={{}}
+                  _active={{}}
+                  color={theme.buttonText}
+                >
+                  <Flex gap="2" align="center">
+                    {isEditSaving && <Spinner />}
+                    Save profile
+                  </Flex>
+                </Button>
+              </Flex>
             ) : (
               <DelegateCases
                 fullAddress={fullAddress}

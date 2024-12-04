@@ -6,19 +6,19 @@ import {
   Text,
   useMediaQuery,
 } from '@chakra-ui/react';
+import {
+  ArcElement,
+  ChartData,
+  Chart as ChartJS,
+  ChartOptions,
+  Legend,
+  Tooltip,
+} from 'chart.js';
+import { InfoIcon } from 'components/Icons';
 import { useDAO, useVotes } from 'contexts';
 import { FC, useEffect, useState } from 'react';
 import { Doughnut } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  Tooltip,
-  Legend,
-  ChartOptions,
-  ChartData,
-  ArcElement,
-} from 'chart.js';
 import { formatNumber, formatNumberPercentage } from 'utils';
-import { InfoIcon } from 'components/Icons';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 

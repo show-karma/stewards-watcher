@@ -1,6 +1,8 @@
 export interface IDAOTheme {
   logo?: string;
+  isLogoRounded?: boolean;
   background: string;
+  brandingImageColor?: string;
   secondBg?: string;
   bodyBg: string;
   bodyShadow?: string;

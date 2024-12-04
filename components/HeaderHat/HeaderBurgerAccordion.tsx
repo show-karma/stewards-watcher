@@ -63,6 +63,7 @@ export const HeaderBurgerAccordion: FC<IHeaderBurgerAccordionProps> = ({
                       h="10"
                       objectFit="contain"
                       src={config.DAO_LOGO}
+                      rounded={theme.isLogoRounded ? '9999px' : undefined}
                     />
                   </ChakraLink>
                 </Flex>

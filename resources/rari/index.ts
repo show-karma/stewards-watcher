@@ -1,100 +1,73 @@
 import { IDAOConfig, IDAOTheme } from 'types';
-import { onChainArbitrumVotesProvider } from 'utils';
-import { arbitrum } from 'wagmi/chains';
+import { onChainRariVotesProvider } from 'utils/rari/onChainRariVotesProvider';
+import { mainnet } from 'wagmi/chains';
 import ABI from './ABI.json';
 
 const config: IDAOConfig = {
-  DAO: 'arbitrum',
-  DAO_DESCRIPTION: `The Delegates of Arbitrum DAO play a vital role in driving the Arbitrum ecosystem forward through their work in governance and workstreams.`,
-  DAO_SUBDESCRIPTION: `This site will help boost transparency with health cards for each Delegate that display metrics and links on their involvement and engagement in the DAO.`,
-  DAO_URL: 'https://arbitrum.io',
-  GOVERNANCE_FORUM: 'https://forum.arbitrum.foundation/',
-  DAO_KARMA_ID: 'arbitrum',
+  DAO: 'Rari',
+  DAO_DESCRIPTION: `The Delegates of Rari DAO play a vital role in driving the Rari ecosystem forward through their work in governance.`,
+  DAO_SUBDESCRIPTION: `This site will help boost transparency by displaying delegate contribution to indicate their involvement and engagement in the DAO.`,
+  DAO_URL: 'https://rari.foundation/',
+  GOVERNANCE_FORUM: 'https://forum.rari.foundation',
+  DAO_KARMA_ID: 'rarifoundation',
   IMAGE_PREFIX_URL: 'https://cdn.stamp.fyi/avatar/eth:',
-  DAO_LOGO: '/daos/arbitrum/logo.svg',
+  DAO_LOGO: '/daos/rari/logo.jpg',
   METATAGS: {
-    TITLE: `Delegates of Arbitrum DAO`,
-    DESCRIPTION: `Find all the active delegates in Arbitrum DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
-    IMAGE_DISCORD:
-      'https://arbitrum.karmahq.xyz/daos/arbitrum/preview-discord.png',
-    IMAGE_TWITTER:
-      'https://arbitrum.karmahq.xyz/daos/arbitrum/preview-twitter.png',
-    FAVICON: '/daos/arbitrum/favicon.ico',
-    URL: `https://arbitrum.karmahq.xyz`,
+    TITLE: `Delegates of Rari DAO`,
+    DESCRIPTION: `Find all the active delegates in Rari DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
+    IMAGE_DISCORD: 'https://rari.karmahq.xyz/daos/rari/preview-discord.png',
+    IMAGE_TWITTER: 'https://rari.karmahq.xyz/daos/rari/preview-twitter.png',
+    FAVICON: '/daos/rari/favicon.jpg',
+    URL: `https://rari.karmahq.xyz`,
   },
-  DAO_CHAINS: [arbitrum],
   DAO_DEFAULT_SETTINGS: {
-    TIMEPERIOD: 'lifetime',
-    ORDERSTAT: 'karmaScore',
+    FAQ: false,
   },
+  DAO_CHAINS: [mainnet],
   DAO_TOKEN_CONTRACT: [
     {
-      contractAddress: '0x912ce59144191c1204e64559fe8253a0e49e6548',
+      contractAddress: '0x096Bd9a7a2e703670088C05035e23c7a9F428496',
       method: 'balanceOf',
-      chain: arbitrum,
+      chain: mainnet,
     },
   ],
   DAO_DELEGATE_CONTRACT: [
-    {
-      contractAddress: '0x912ce59144191c1204e64559fe8253a0e49e6548',
-      chain: arbitrum,
-    },
+    //   {
+    //     contractAddress: '0x096Bd9a7a2e703670088C05035e23c7a9F428496',
+    //     chain: mainnet,
+    //   },
   ],
+  DAO_DELEGATION_URL: 'https://rari.foundation/lock',
+  DAO_EXT_VOTES_PROVIDER: {
+    onChain: onChainRariVotesProvider,
+  },
   DAO_FORUM_TYPE: 'discourse',
   DAO_GTAG: 'G-67LDHT697P',
-  DAO_EXT_VOTES_PROVIDER: {
-    onChain: onChainArbitrumVotesProvider,
-  },
-  EXCLUDED_CARD_FIELDS: ['healthScore', 'discordScore'],
-  EXCLUDED_VOTING_HISTORY_COLUMN: [],
-  ENABLE_DELEGATE_TRACKER: true,
-  DAO_HAS_COMPENSATION_PROGRAM: true,
   DAO_CATEGORIES_TYPE: 'workstreams',
+  EXCLUDED_VOTING_HISTORY_COLUMN: ['offChainVoteBreakdown'],
   ENABLE_HANDLES_EDIT: ['github'],
+  EXCLUDED_CARD_FIELDS: ['healthScore', 'discordScore', 'offChainVotesPct'],
 };
 
 const dark: IDAOTheme = {
-  background: '#000000',
-  bodyBg: '#000000',
+  isLogoRounded: true,
+  background: '#0C0C0C',
+  bodyBg: '#0C0C0C',
   title: '#FFFFFF',
   subtitle: '#a0aec0',
   text: '#FFFFFF',
-  branding: '#0E88CC',
+  branding: '#090909',
+  brandingImageColor:
+    'linear-gradient(to right, rgb(154, 116, 241), rgb(254, 111, 55) 50%, rgb(255, 248, 122) 100%)',
   buttonText: '#FFFFFF',
   buttonTextSec: '#FFFFFF',
-  headerBg: '#1A1C1D',
+  headerBg: 'black',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
-  collapse: { text: '#FFFFFF', subtext: '#ADB8C0' },
-  compensation: {
-    bg: '#1A1C1D',
-    card: {
-      bg: '#222429',
-      text: '#FFFFFF',
-      secondaryText: '#ADB8C0',
-      success: '#079455',
-      error: '#B42318',
-      link: '#0E88CC',
-      divider: '#EAECF0',
-      input: {
-        bg: '#1A1C1D',
-        text: '#FFFFFF',
-      },
-      dropdown: {
-        bg: '#1A1C1D',
-        text: '#FFFFFF',
-        border: '#98A2B3',
-      },
-    },
-    icons: {
-      snapshot: '#cabf88',
-      onchain: '#1E2833',
-      delegateFeedback: '#2A2433',
-      rationale: '#332620',
-      bonusPoint: '#1F2D28',
-      participationRate: '#332831',
-      finalScore: '#393d3b',
-    },
+  collapse: {
+    text: '#FFFFFF',
+    subtext: '#ADB8C0',
+    bg: 'black',
   },
   hat: {
     text: {
@@ -106,36 +79,36 @@ const dark: IDAOTheme = {
   },
   filters: {
     head: '#ADB8C0',
-    border: '#ADB8C033',
+    border: 'white',
     title: 'white',
-    bg: '#1A1C1D',
-    listBg: '#1A1C1D',
+    bg: '#0C0C0C',
+    listBg: 'black',
     listText: 'white',
     activeBg: 'rgba(102, 102, 102, 0.15)',
   },
   card: {
     icon: '#ADB8C0',
-    background: '#1A1C1D',
+    background: 'black',
     statBg: 'rgba(102, 102, 102, 0.15)',
     divider: 'rgba(173, 184, 192, 0.2)',
     text: { primary: '#FFFFFF', secondary: '#ADB8C0' },
-    border: 'rgba(87, 93, 104, 0.25)',
+    border: '#403E4F',
     common: '#727B81',
     interests: { bg: 'rgba(255, 255, 255, 0.05)', text: '#ADB8C0' },
     workstream: { bg: '#FFFFFF', text: '#222429' },
     socialMedia: '#FFFFFF',
   },
   loginModal: {
-    background: '#1A1C1D',
+    background: '#0C0C0C',
     text: '#FFFFFF',
-    footer: { bg: 'rgba(102, 102, 102, 0.15)', text: '#FFFFFF' },
+    footer: { bg: 'black', text: '#FFFFFF' },
     button: {
-      bg: '#0E88CC',
-      text: '#FFFFFF',
+      bg: 'white',
+      text: 'black',
     },
   },
   modal: {
-    background: '#1A1C1D',
+    background: '#0C0C0C',
     header: {
       border: '#ADB8C0',
       title: '#FFFFFF',
@@ -144,9 +117,9 @@ const dark: IDAOTheme = {
       divider: 'rgba(173, 184, 192, 0.2)',
     },
     buttons: {
-      selectBg: '#0E88CC',
+      selectBg: '#C80925',
       selectText: '#FFFFFF',
-      navBg: '#152C4E',
+      navBg: '#34383f',
       navText: '#FFFFFF',
       navUnselectedText: '#ADB8C0',
       navBorder: '#FFFFFF',
@@ -199,13 +172,6 @@ const dark: IDAOTheme = {
     votingHistory: {
       headline: '#FFFFFF',
       divider: '#E6E6E6',
-      modules: {
-        chart: {
-          point: '#B999FF',
-          openGradient: '#8E6ADC',
-          endGradient: '#152C4E',
-        },
-      },
       proposal: {
         title: '#FFFFFF',
         type: '#ADB8C0',
@@ -213,7 +179,14 @@ const dark: IDAOTheme = {
         result: '#FFFFFF',
         verticalDivider: 'rgba(173, 184, 192, 0.5)',
         divider: 'rgba(173, 184, 192, 0.2)',
-        bg: '#152C4E',
+        bg: '#34383f',
+      },
+      modules: {
+        chart: {
+          point: '#FFFFFF',
+          openGradient: '#666e7a',
+          endGradient: '#34383f',
+        },
       },
       reason: {
         title: '#FFFFFF',
@@ -221,20 +194,20 @@ const dark: IDAOTheme = {
         divider: 'rgba(173, 184, 192, 0.2)',
       },
       navigation: {
-        color: '#FFFFFF',
+        color: '#ADB8C0',
         buttons: {
-          selectedBg: '#152C4E',
-          selectedText: '#FFFFFF',
+          selectedBg: '#ADB8C0',
+          selectedText: '#222429',
           unSelectedBg: 'transparent',
-          unSelectedText: '#FFFFFF',
+          unSelectedText: '#ADB8C0',
         },
       },
     },
   },
   tokenHolders: {
     border: '#34383f',
-    bg: '#152C4E',
-    stepsColor: '#0E88CC',
+    bg: '#000001',
+    stepsColor: '#FFFFFF',
     list: {
       text: {
         primary: '#FFFFFF',
@@ -260,7 +233,7 @@ const dark: IDAOTheme = {
           placeholder: '#88939F',
           text: '#FFFFFF',
         },
-        button: '#0E0333',
+        button: '#090B10',
       },
       border: {
         input: '#88939F',
@@ -277,9 +250,9 @@ const dark: IDAOTheme = {
         },
         legend: {
           text: '#F5F5F5',
-          bg: '#3A295F',
+          bg: '#17181D',
           pillText: '#F5F5F5',
-          pillBg: '#152C4E',
+          pillBg: '#1B2030',
         },
         columns: {
           text: '#F5F5F5',
@@ -290,7 +263,7 @@ const dark: IDAOTheme = {
           stats: {
             primary: '#F5F5F5',
             secondary: '#ADB8C0',
-            leftBorder: '#0E88CC',
+            leftBorder: '#FFFFFF',
             border: '#DBDFE3',
           },
           voting: {
@@ -301,7 +274,7 @@ const dark: IDAOTheme = {
               hyperlink: '#b3a1dd',
               description: '#ADB8C0',
               sort: {
-                bg: '#152C4E',
+                bg: '#000001',
                 border: '#FFFFFF',
                 text: '#F5F5F5',
                 label: '#ADB8C0',
@@ -335,71 +308,42 @@ const dark: IDAOTheme = {
         },
       },
       bg: {
-        primary: '#1A1C1D',
+        primary: '#090B10',
         secondary: '#1B2030',
-        tertiary: '#0E88CC',
+        tertiary: '#FFFFFF',
       },
     },
   },
 };
 
 const light: IDAOTheme = {
+  isLogoRounded: true,
   background: '#F2F4F9',
   bodyBg: '#F2F4F9',
   title: '#222429',
   subtitle: '#666666',
   text: '#222429',
-  branding: '#0E88CC',
+  branding: 'black',
   buttonText: '#FFFFFF',
   buttonTextSec: '#222429',
-  headerBg: '#1A1C1D',
+  headerBg: '#212328',
   gradientBall: '#ADB8C0',
   themeIcon: '#ADB8C0',
-  collapse: { text: '#1A1C1D', subtext: '#222429', bg: '#FFFFFF' },
-  compensation: {
-    bg: '#F2F4F7',
-    card: {
-      bg: '#FFF',
-      text: '#1D2939',
-      secondaryText: '#667085',
-      success: '#079455',
-      error: '#B42318',
-      link: '#0E88CC',
-      divider: '#EAECF0',
-      input: {
-        bg: '#F2F4F7',
-        text: '#1D2939',
-      },
-      dropdown: {
-        bg: '#FFF',
-        text: '#667085',
-        border: '#98A2B3',
-      },
-    },
-    icons: {
-      snapshot: '#FFF3D4',
-      onchain: '#E1F1FF',
-      delegateFeedback: '#F4EFFF',
-      rationale: '#FFE6D5',
-      bonusPoint: '#DDF9F2',
-      participationRate: '#FFEDFA',
-      finalScore: '#EFFFF5',
-    },
-  },
+  collapse: { text: '#212328', subtext: '#212328', bg: '#FFFFFF' },
   hat: {
     text: {
       primary: '#FFFFFF',
       secondary: '#ADB8C0',
-      madeBy: '#FFFFFF',
-      lastUpdated: '#595A5E',
+      madeBy: '#ADB8C0',
+      lastUpdated: '#666666',
     },
   },
   filters: {
     head: '#666666',
     border: '#ADB8C033',
     title: '#666666',
-    bg: '#FFFFFF',
-    listBg: '#FFFFFF',
+    bg: 'transparent',
+    listBg: '#F2F4F9',
     listText: '#666666',
     activeBg: '#EBEDEF',
     shadow: '0px 0px 4px rgba(0, 0, 0, 0.1)',
@@ -407,9 +351,9 @@ const light: IDAOTheme = {
   card: {
     icon: '#ADB8C0',
     background: '#FFFFFF',
+    statBg: '#EBEDEF',
     divider: 'rgba(102, 102, 102, 0.5)',
     text: { primary: '#212328', secondary: '#666666' },
-    statBg: '#EBEDEF',
     border: 'none',
     shadow: '0px 0px 4px rgba(0, 0, 0, 0.1)',
     common: '#727B81',
@@ -418,13 +362,13 @@ const light: IDAOTheme = {
     socialMedia: '#595A5E',
   },
   loginModal: {
-    logo: 'daos/arbitrum/logo_black.svg',
+    logo: 'daos/rari/logo_black.svg',
     background: '#FFFFFF',
     text: '#212328',
     footer: { bg: '#EBEDEF', text: '#212328' },
     button: {
-      bg: '#0E88CC',
-      text: '#0E0333',
+      bg: 'white',
+      text: 'black',
     },
   },
   modal: {
@@ -437,12 +381,26 @@ const light: IDAOTheme = {
       divider: 'rgba(173, 184, 192, 0.2)',
     },
     buttons: {
-      selectBg: '#0E88CC',
+      selectBg: '#C80925',
       selectText: '#FFFFFF',
-      navBg: '#111214',
+      navBg: '#34383f',
       navText: '#FFFFFF',
       navUnselectedText: '#ADB8C0',
       navBorder: '#FFFFFF',
+    },
+    statement: {
+      headline: '#FFFFFF',
+      text: '#ADB8C0',
+      sidebar: {
+        section: '#FFFFFF',
+        subsection: '#FFFFFF',
+        text: '#ADB8C0',
+        item: {
+          bg: 'transparent',
+          text: '#FFFFFF',
+          border: '#ADB8C0',
+        },
+      },
     },
     delegateTo: {
       bg: '#FFFFFF',
@@ -475,30 +433,9 @@ const light: IDAOTheme = {
         },
       },
     },
-    statement: {
-      headline: '#FFFFFF',
-      text: '#ADB8C0',
-      sidebar: {
-        section: '#FFFFFF',
-        subsection: '#FFFFFF',
-        text: '#ADB8C0',
-        item: {
-          bg: 'transparent',
-          text: '#FFFFFF',
-          border: '#ADB8C0',
-        },
-      },
-    },
     votingHistory: {
       headline: '#FFFFFF',
       divider: '#E6E6E6',
-      modules: {
-        chart: {
-          point: '#B999FF',
-          openGradient: '#8E6ADC',
-          endGradient: '#152C4E',
-        },
-      },
       proposal: {
         title: '#FFFFFF',
         type: '#ADB8C0',
@@ -506,7 +443,14 @@ const light: IDAOTheme = {
         result: '#FFFFFF',
         verticalDivider: 'rgba(173, 184, 192, 0.5)',
         divider: 'rgba(173, 184, 192, 0.2)',
-        bg: '#152C4E',
+        bg: '#34383f',
+      },
+      modules: {
+        chart: {
+          point: '#FFFFFF',
+          openGradient: '#666e7a',
+          endGradient: '#34383f',
+        },
       },
       reason: {
         title: '#FFFFFF',
@@ -525,17 +469,17 @@ const light: IDAOTheme = {
     },
   },
   tokenHolders: {
-    border: '#1A1C1D',
+    border: '#34383f',
     bg: '#F2F4F9',
-    stepsColor: '#1A1C1D',
+    stepsColor: '#34383f',
     list: {
       text: {
         primary: '#FFFFFF',
-        secondary: '#ADB8C0',
+        secondary: '#78828c',
       },
       bg: {
         primary: '#FFFFFF',
-        secondary: '#1A1C1D',
+        secondary: '#34383f',
       },
     },
     delegations: {
@@ -548,7 +492,7 @@ const light: IDAOTheme = {
       },
       text: {
         primary: '#000000',
-        secondary: '#88939F',
+        secondary: '#78828c',
 
         input: {
           placeholder: '#88939F',
@@ -576,15 +520,15 @@ const light: IDAOTheme = {
           pillBg: '#88939F33',
         },
         columns: {
-          text: '#1A1C1D',
+          text: '#34383f',
           icon: {
             bg: '#F0EBFA',
-            text: '#1A1C1D',
+            text: '#34383f',
           },
           stats: {
-            primary: '#4A269B',
+            primary: '#212328',
             secondary: '#4F5D6C',
-            leftBorder: '#1A1C1D',
+            leftBorder: '#34383f',
             border: '#DBDFE3',
           },
           voting: {
@@ -610,12 +554,12 @@ const light: IDAOTheme = {
                 },
               },
               navigation: {
-                color: '#152C4E',
+                color: '#222429',
                 buttons: {
-                  selectedBg: '#152C4E',
+                  selectedBg: '#222429',
                   selectedText: '#FFFFFF',
                   unSelectedBg: 'transparent',
-                  unSelectedText: '#152C4E',
+                  unSelectedText: '#222429',
                 },
               },
             },
@@ -630,8 +574,8 @@ const light: IDAOTheme = {
       },
       bg: {
         primary: '#FFFFFF',
-        secondary: '#152C4E',
-        tertiary: '#24114F',
+        secondary: '#222429',
+        tertiary: '#222429',
       },
     },
   },

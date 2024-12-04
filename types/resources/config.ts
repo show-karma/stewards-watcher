@@ -1,14 +1,14 @@
 import { IFilterPeriod, IStatusOptions } from 'types/contexts';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { writeContract } from '@wagmi/core';
-import { Chain } from 'wagmi';
 import { IChainRow } from 'types/IChainRow';
-import { IConvictionOption, Hex } from 'types/votes';
+import { Hex, IConvictionOption } from 'types/votes';
 import { IActiveDelegatedTracks, MoonbeamWSC } from 'utils';
+import { Chain } from 'wagmi';
 import { IForumType } from './forum';
-import { IStats, IStatsID } from './stats';
-import { IVotingHistoryColumn } from './modal';
 import { IForDelegates } from './header';
+import { IVotingHistoryColumn } from './modal';
+import { IStats, IStatsID } from './stats';
 
 type JsonRpcProviderConfig = {
   rpc: (chain: Chain) => {
@@ -48,6 +48,7 @@ export interface IDAOConfig {
     chain: Chain;
     ABI?: any;
   }[];
+  DAO_DELEGATION_URL?: string;
   DAO_TOKEN_CONTRACT?: {
     contractAddress: `0x${string}`;
     method: string;

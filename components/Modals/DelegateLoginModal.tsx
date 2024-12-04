@@ -1,19 +1,19 @@
-import { FC } from 'react';
 import {
+  Button,
+  Flex,
+  Grid,
+  Img,
   Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
   ModalBody,
   ModalCloseButton,
-  Flex,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
   Text,
-  Img,
-  Button,
-  Grid,
 } from '@chakra-ui/react';
-import { useAuth } from 'contexts/auth';
 import { useDAO } from 'contexts';
+import { useAuth } from 'contexts/auth';
+import { FC } from 'react';
 
 interface IDelegateLogin {
   isOpen: boolean;
@@ -77,6 +77,7 @@ export const DelegateLoginModal: FC<IDelegateLogin> = ({ isOpen, onClose }) => {
               color="white"
               fill="white"
               src={theme.loginModal.logo || config.DAO_LOGO}
+              rounded={theme.isLogoRounded ? '9999px' : undefined}
             />
           </Flex>
         </ModalHeader>
