@@ -1,35 +1,35 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { DebouncedFunc } from 'lodash';
 import { useDisclosure } from '@chakra-ui/react';
+import { ITrackBadgeProps } from 'components/DelegationPool/TrackBadge';
+import { api, LINKS } from 'helpers';
+import { useMixpanel, useToasty } from 'hooks';
+import { DebouncedFunc } from 'lodash';
 import debounce from 'lodash.debounce';
-import React, {
-  useContext,
-  createContext,
-  useState,
-  useMemo,
-  useEffect,
-} from 'react';
 import { useRouter } from 'next/router';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import {
+  IActiveTab,
   IDelegate,
+  IDelegateFromAPI,
   IFilterOrder,
   IFilterPeriod,
-  IDelegateFromAPI,
   IStatOptions,
-  IVoteInfo,
-  IActiveTab,
-  IStatusOptions,
-  IWorkstream,
   IStatsID,
+  IStatusOptions,
   ITracks,
+  IVoteInfo,
+  IWorkstream,
 } from 'types';
-import { useMixpanel, useToasty } from 'hooks';
-import { api, LINKS } from 'helpers';
-import { useAccount } from 'wagmi';
-import { IBulkDelegatePayload } from 'utils/moonbeam/moonriverDelegateAction';
-import { ITrackBadgeProps } from 'components/DelegationPool/TrackBadge';
-import { numberToWords } from 'utils/numberToWords';
 import { checkRealAddress } from 'utils';
+import { IBulkDelegatePayload } from 'utils/moonbeam/moonriverDelegateAction';
+import { numberToWords } from 'utils/numberToWords';
+import { useAccount } from 'wagmi';
 import { useDAO } from './dao';
 
 interface IDelegateProps {
@@ -356,6 +356,7 @@ export const DelegatesProvider: React.FC<ProviderProps> = ({
         return {
           address: item.publicAddress,
           ensName: item.ensName,
+          githubHandle: item.githubHandle,
           delegatorCount: item.delegatorCount || 0,
           forumActivity: fetchedPeriod?.forumActivityScore || 0,
           discordScore: fetchedPeriod?.discordScore || 0,
