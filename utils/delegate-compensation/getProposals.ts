@@ -21,7 +21,8 @@ export const getProposals = async (
       .filter(([key, value]) => value.type === 'onChain')
       .map(([key, value]) => ({
         id: key,
-        name: value.title,
+        name:
+          value.title.slice(0, 2) === '# ' ? value.title.slice(2) : value.title,
         link: `https://www.tally.xyz/gov/${daoName}/proposal/${BigInt(
           key.split('-')[1]
         ).toString()}`,

@@ -34,7 +34,10 @@ export const getPRBreakdown = async (
       );
       rows.push({
         id: proposal.id,
-        discussion: proposal.discussion,
+        discussion:
+          proposal.discussion.slice(0, 2) === '# '
+            ? proposal.discussion.slice(2)
+            : proposal.discussion,
         votedOn: voteFound?.timestamp || undefined,
         link: undefined,
       });
