@@ -26,6 +26,7 @@ export interface IDelegateFromAPI {
   realName?: string;
   website?: string;
   profilePicture?: string;
+  githubHandle?: string;
   voteWeight?: number;
   status: string;
   userCreatedAt?: string;
