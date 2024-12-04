@@ -9,7 +9,7 @@ import {
   Tooltip,
 } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
-import { useDAO, useHandles, useWallet } from 'contexts';
+import { useDAO, useDelegates, useHandles, useWallet } from 'contexts';
 import { FC, ReactNode } from 'react';
 import { IActiveTab, IMedias, IProfile } from 'types';
 import { getUserForumUrl } from 'utils';
@@ -44,13 +44,13 @@ export const MediaIcon: FC<IMediaIcon> = ({
   const { config } = daoInfo;
   const { forumOnOpen, twitterOnOpen } = useHandles();
 
-  const { address } = useWallet();
+  const { profileSelected } = useDelegates();
 
   const { data: fetchedProfile } = useQuery(
-    ['profile', address?.toLowerCase() as string],
+    ['profile', profileSelected?.address?.toLowerCase() as string],
     {
-      queryFn: () => getProfile(address as string),
-      enabled: !!address,
+      queryFn: () => getProfile(profileSelected?.address as string),
+      enabled: !!profileSelected?.address,
       refetchOnWindowFocus: true,
     }
   );

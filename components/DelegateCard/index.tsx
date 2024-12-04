@@ -1,31 +1,43 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 import {
+  Box,
   Button,
   Divider,
   Flex,
+  Icon,
   Link,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
   Skeleton,
   SkeletonCircle,
   SkeletonText,
   Text,
-  useClipboard,
-  Icon,
-  Box,
   Tooltip,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverArrow,
-  PopoverBody,
+  useClipboard,
 } from '@chakra-ui/react';
-import { FC, useState, useMemo } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { BsChat } from 'react-icons/bs';
 
-import { IoCopy, IoPersonOutline } from 'react-icons/io5';
-import { IoIosCheckboxOutline } from 'react-icons/io';
-import { AiOutlineThunderbolt } from 'react-icons/ai';
-import { ICardStat, ICustomFields, IDelegate } from 'types';
+import { GithubIcon } from 'components/Icons/GithubIcon';
+import {
+  DelegatedTokensByNetwork,
+  DelegatedTokensByTrack,
+} from 'components/Popovers';
 import { useDAO, useDelegates } from 'contexts';
+import { IBreakdownProps } from 'contexts/scoreBreakdown';
+import { DELEGATOR_TRACKER_NOT_SUPPORTED_DAOS } from 'helpers';
+import { useToasty } from 'hooks';
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
+import { AiOutlineThunderbolt } from 'react-icons/ai';
+import { FaDiscord } from 'react-icons/fa';
+import { HiUserGroup } from 'react-icons/hi';
+import { IoIosCheckboxOutline } from 'react-icons/io';
+import { IoCopy, IoPersonOutline } from 'react-icons/io5';
+import { ICardStat, ICustomFields, IDelegate } from 'types';
 import {
   convertHexToRGBA,
   formatDate,
@@ -34,20 +46,9 @@ import {
   getUserForumUrl,
   truncateAddress,
 } from 'utils';
-import { useRouter } from 'next/router';
-import { useToasty } from 'hooks';
-import { IBreakdownProps } from 'contexts/scoreBreakdown';
-import { DELEGATOR_TRACKER_NOT_SUPPORTED_DAOS } from 'helpers';
-import { HiUserGroup } from 'react-icons/hi';
-import dynamic from 'next/dynamic';
-import { FaDiscord } from 'react-icons/fa';
-import {
-  DelegatedTokensByNetwork,
-  DelegatedTokensByTrack,
-} from 'components/Popovers';
-import { ImgWithFallback } from '../ImgWithFallback';
 import { DelegateButton } from '../DelegateButton';
 import { ForumIcon, ThreadIcon, TwitterIcon, WebsiteIcon } from '../Icons';
+import { ImgWithFallback } from '../ImgWithFallback';
 import { ExpandableCardText } from './ExpandableCardText';
 
 const DelegateStat = dynamic(() =>
@@ -920,6 +921,22 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                       <WebsiteIcon w="17px" h="17px" />
                     </Link>
                   )}
+                {data?.githubHandle && (
+                  <Link
+                    href={`https://github.com/${data.githubHandle}`}
+                    isExternal
+                    color={theme.card.socialMedia}
+                    _hover={{
+                      transform: 'scale(1.25)',
+                    }}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    h="max-content"
+                  >
+                    <GithubIcon w="17px" h="17px" />
+                  </Link>
+                )}
                 {data?.twitterHandle && (
                   <Link
                     href={`https://twitter.com/${data.twitterHandle}`}

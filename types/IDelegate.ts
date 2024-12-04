@@ -29,6 +29,7 @@ export interface IDelegateStats {
 export interface IDelegate {
   address: string;
   ensName?: string;
+  githubHandle?: string;
   delegateSince?: string;
   forumActivity: number;
   votingWeight?: number;
