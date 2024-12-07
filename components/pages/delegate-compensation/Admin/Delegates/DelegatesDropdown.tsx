@@ -32,12 +32,29 @@ export const DelegatesDropdown = () => {
       selectedDate?.value.month,
       selectedDate?.value.year,
     ],
-    () =>
-      getDelegateInfo(
+    async () => {
+      const delegates = await getDelegateInfo(
         daoInfo.config.DAO_KARMA_ID,
         selectedDate?.value.month,
         selectedDate?.value.year
-      ),
+      );
+      // Sort delegates alphabetically by name, ensName, or address
+      return delegates.sort((d1, d2) => {
+        const nameA = (
+          d1.name ||
+          d1.ensName ||
+          d1.publicAddress ||
+          ''
+        ).toLowerCase();
+        const nameB = (
+          d2.name ||
+          d2.ensName ||
+          d2.publicAddress ||
+          ''
+        ).toLowerCase();
+        return nameA.localeCompare(nameB);
+      });
+    },
     {
       enabled: !!selectedDate?.value.month && !!selectedDate?.value.year,
     }
