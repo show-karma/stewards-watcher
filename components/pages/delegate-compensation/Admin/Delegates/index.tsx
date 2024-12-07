@@ -1,10 +1,11 @@
 /* eslint-disable no-nested-ternary */
 import { Flex, Spinner } from '@chakra-ui/react';
-import { useDAO } from 'contexts';
+import { useAuth } from 'contexts';
 import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import { DelegateCompensationAdminLayout } from 'layouts/delegateCompensationAdmin';
 import { useEffect } from 'react';
 import { DelegatePeriod } from '../DelegatePeriod';
+import { DelegateOptSwitch } from './DelegateOptSwitch';
 import { DelegateProposals } from './DelegateProposals';
 import { DelegateStats } from './DelegateStats';
 
@@ -18,7 +19,7 @@ export const DelegateCompensationAdminDelegates = ({
   isPublic?: boolean;
 }) => {
   const { selectedDate } = useDelegateCompensation();
-  const { theme } = useDAO();
+  const { isDaoAdmin } = useAuth();
 
   const {
     delegateInfo,
@@ -56,6 +57,7 @@ export const DelegateCompensationAdminDelegates = ({
             gap="4"
             w="full"
           >
+            {isDaoAdmin && <DelegateOptSwitch />}
             <DelegateStats />
             {delegateInfo?.stats ? (
               <DelegateProposals delegateVotes={delegateVotes} />
