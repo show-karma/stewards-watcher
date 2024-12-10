@@ -52,7 +52,6 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
 
     const isOldVersion = router.asPath.includes('delegate-compensation-old');
     const isAdmin = router.asPath.includes('/admin');
-    // const lastPath = router.asPath.split('/')?.at(-1);
     const isDelegatePages =
       router.asPath.includes('delegate/') ||
       (router.asPath.includes('delegate-compensation') && !isOldVersion);
