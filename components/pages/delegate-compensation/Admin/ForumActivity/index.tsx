@@ -367,15 +367,19 @@ export const DelegateCompensationAdminForumActivity = ({
                     >
                       Date
                     </Th>
-                    {columns.map(item => (
-                      <Th
-                        borderBottom="1px solid"
-                        borderBottomColor={theme.compensation?.card.dropdown}
-                        key={item.id}
-                      >
-                        {item.title}
-                      </Th>
-                    ))}
+                    {isAuthorized
+                      ? columns.map(item => (
+                          <Th
+                            borderBottom="1px solid"
+                            borderBottomColor={
+                              theme.compensation?.card.dropdown
+                            }
+                            key={item.id}
+                          >
+                            {item.title}
+                          </Th>
+                        ))
+                      : null}
                   </Tr>
                 </Thead>
 
@@ -458,9 +462,94 @@ export const DelegateCompensationAdminForumActivity = ({
                         >
                           {formatDate(post?.createdAt, 'MMM D, YYYY')}
                         </Td>
-                        {columns.map(item => {
-                          if (item.type === 'read-only' || !isAuthorized) {
-                            if (item.id === 'status') {
+                        {isAuthorized
+                          ? columns.map(item => {
+                              if (item.type === 'read-only' || !isAuthorized) {
+                                if (item.id === 'status') {
+                                  return (
+                                    <Td
+                                      key={item.id + post.id}
+                                      borderBottom="1px solid"
+                                      borderBottomColor={
+                                        theme.compensation?.card.dropdown
+                                      }
+                                    >
+                                      {post.status === 'valid' ? (
+                                        <TrueIcon
+                                          w="24px"
+                                          h="24px"
+                                          color={
+                                            theme.compensation?.card.success
+                                          }
+                                        />
+                                      ) : (
+                                        <FalseIcon
+                                          w="24px"
+                                          h="24px"
+                                          color={theme.compensation?.card.error}
+                                        />
+                                      )}
+                                    </Td>
+                                  );
+                                }
+                                const stat =
+                                  post?.[
+                                    item.id as keyof ForumActivityBreakdown
+                                  ];
+                                return (
+                                  <Td
+                                    key={item.id + post.id}
+                                    borderBottom="1px solid"
+                                    borderBottomColor={
+                                      theme.compensation?.card.dropdown
+                                    }
+                                  >
+                                    <Text
+                                      fontSize="20px"
+                                      fontWeight={700}
+                                      color={
+                                        theme.compensation?.card.secondaryText
+                                      }
+                                      lineHeight="32px"
+                                      minW="60px"
+                                      minH="32px"
+                                      bg="transparent"
+                                      textAlign="end"
+                                      px="1"
+                                    >
+                                      {post.status === 'invalid' ? '-' : stat}
+                                    </Text>
+                                  </Td>
+                                );
+                              }
+                              if (item.id === 'status') {
+                                return (
+                                  <Td
+                                    key={item.id + post.id}
+                                    borderBottom="1px solid"
+                                    borderBottomColor={
+                                      theme.compensation?.card.dropdown
+                                    }
+                                  >
+                                    <Switch
+                                      isChecked={post.status === 'valid'}
+                                      defaultChecked={post.status === 'valid'}
+                                      onChange={() => {
+                                        const newArray = [...rows];
+                                        newArray[index].status =
+                                          newArray[index].status === 'valid'
+                                            ? 'invalid'
+                                            : 'valid';
+                                        newArray[index].totalScore = 0;
+                                        setRows(newArray);
+                                        setIsModified(true);
+                                      }}
+                                      isDisabled={isSaving}
+                                      disabled={isSaving}
+                                    />
+                                  </Td>
+                                );
+                              }
                               return (
                                 <Td
                                   key={item.id + post.id}
@@ -469,332 +558,271 @@ export const DelegateCompensationAdminForumActivity = ({
                                     theme.compensation?.card.dropdown
                                   }
                                 >
-                                  {post.status === 'valid' ? (
-                                    <TrueIcon
-                                      w="24px"
-                                      h="24px"
-                                      color={theme.compensation?.card.success}
+                                  <Editable
+                                    defaultValue={String(
+                                      post?.[
+                                        item.id as keyof ForumActivityBreakdown
+                                      ]
+                                    )}
+                                    maxW="60px"
+                                    w="60px"
+                                  >
+                                    <EditablePreview
+                                      fontSize="20px"
+                                      fontWeight={700}
+                                      color={
+                                        theme.compensation?.card.secondaryText
+                                      }
+                                      lineHeight="32px"
+                                      cursor="pointer"
+                                      textDecor="underline"
+                                      minW="60px"
+                                      minH="32px"
+                                      bg="transparent"
+                                      textAlign="end"
+                                      px="1"
                                     />
-                                  ) : (
-                                    <FalseIcon
-                                      w="24px"
-                                      h="24px"
-                                      color={theme.compensation?.card.error}
+                                    <EditableInput
+                                      onChange={event => {
+                                        handleInputChange(
+                                          index,
+                                          item.id,
+                                          event.target.value
+                                        );
+                                      }}
+                                      type="number"
+                                      min={0}
+                                      max={4}
+                                      mr={2}
+                                      bg={theme.compensation?.card.bg}
+                                      w="full"
+                                      fontSize="20px"
+                                      fontWeight={700}
+                                      color={
+                                        theme.compensation?.card.secondaryText
+                                      }
+                                      lineHeight="32px"
+                                      px="2"
+                                      textAlign="end"
                                     />
-                                  )}
+                                  </Editable>
                                 </Td>
                               );
-                            }
-                            const stat =
-                              post?.[item.id as keyof ForumActivityBreakdown];
-                            return (
-                              <Td
-                                key={item.id + post.id}
-                                borderBottom="1px solid"
-                                borderBottomColor={
-                                  theme.compensation?.card.dropdown
-                                }
+                            })
+                          : null}
+                      </Tr>
+                    );
+                  })}
+                  {isAuthorized ? (
+                    <Tr key="averages" w="full">
+                      <Td border="none" />
+                      <Td border="none" />
+                      <Td border="none" />
+                      {columns.map(item => {
+                        const stat = averages[item.id as keyof typeof averages];
+                        if (item.id === 'status') {
+                          return (
+                            <Td key={`${item.id}-total`} border="none">
+                              <Flex
+                                flexDir="column"
+                                gap="0"
+                                alignItems="center"
                               >
                                 <Text
                                   fontSize="20px"
                                   fontWeight={700}
                                   color={theme.compensation?.card.secondaryText}
                                   lineHeight="32px"
-                                  minW="60px"
                                   minH="32px"
                                   bg="transparent"
                                   textAlign="end"
                                   px="1"
                                 >
-                                  {post.status === 'invalid' ? '-' : stat}
+                                  Total
                                 </Text>
-                              </Td>
-                            );
-                          }
-                          if (item.id === 'status') {
-                            return (
-                              <Td
-                                key={item.id + post.id}
-                                borderBottom="1px solid"
-                                borderBottomColor={
-                                  theme.compensation?.card.dropdown
-                                }
-                              >
-                                <Switch
-                                  isChecked={post.status === 'valid'}
-                                  defaultChecked={post.status === 'valid'}
-                                  onChange={() => {
-                                    const newArray = [...rows];
-                                    newArray[index].status =
-                                      newArray[index].status === 'valid'
-                                        ? 'invalid'
-                                        : 'valid';
-                                    newArray[index].totalScore = 0;
-                                    setRows(newArray);
-                                    setIsModified(true);
-                                  }}
-                                  isDisabled={isSaving}
-                                  disabled={isSaving}
-                                />
-                              </Td>
-                            );
-                          }
-                          return (
-                            <Td
-                              key={item.id + post.id}
-                              borderBottom="1px solid"
-                              borderBottomColor={
-                                theme.compensation?.card.dropdown
-                              }
-                            >
-                              <Editable
-                                defaultValue={String(
-                                  post?.[
-                                    item.id as keyof ForumActivityBreakdown
-                                  ]
-                                )}
-                                maxW="60px"
-                                w="60px"
-                              >
-                                <EditablePreview
+                                <Text
                                   fontSize="20px"
                                   fontWeight={700}
                                   color={theme.compensation?.card.secondaryText}
                                   lineHeight="32px"
-                                  cursor="pointer"
-                                  textDecor="underline"
-                                  minW="60px"
                                   minH="32px"
                                   bg="transparent"
                                   textAlign="end"
                                   px="1"
-                                />
-                                <EditableInput
-                                  onChange={event => {
-                                    handleInputChange(
-                                      index,
-                                      item.id,
-                                      event.target.value
-                                    );
-                                  }}
-                                  type="number"
-                                  min={0}
-                                  max={4}
-                                  mr={2}
-                                  bg={theme.compensation?.card.bg}
-                                  w="full"
-                                  fontSize="20px"
-                                  fontWeight={700}
-                                  color={theme.compensation?.card.secondaryText}
-                                  lineHeight="32px"
-                                  px="2"
-                                  textAlign="end"
-                                />
-                              </Editable>
+                                >
+                                  {sumAverages}
+                                </Text>
+                              </Flex>
                             </Td>
                           );
-                        })}
-                      </Tr>
-                    );
-                  })}
-                  <Tr key="averages" w="full">
-                    <Td border="none" />
-                    <Td border="none" />
-                    <Td border="none" />
-                    {columns.map(item => {
-                      const stat = averages[item.id as keyof typeof averages];
-                      if (item.id === 'status') {
+                        }
                         return (
-                          <Td key={`${item.id}-total`} border="none">
-                            <Flex flexDir="column" gap="0" alignItems="center">
-                              <Text
-                                fontSize="20px"
-                                fontWeight={700}
-                                color={theme.compensation?.card.secondaryText}
-                                lineHeight="32px"
-                                minH="32px"
-                                bg="transparent"
-                                textAlign="end"
-                                px="1"
-                              >
-                                Total
-                              </Text>
-                              <Text
-                                fontSize="20px"
-                                fontWeight={700}
-                                color={theme.compensation?.card.secondaryText}
-                                lineHeight="32px"
-                                minH="32px"
-                                bg="transparent"
-                                textAlign="end"
-                                px="1"
-                              >
-                                {sumAverages}
-                              </Text>
-                            </Flex>
+                          <Td key={`${item.id}-average`} border="none">
+                            <Text
+                              fontSize="20px"
+                              fontWeight={700}
+                              color={theme.compensation?.card.secondaryText}
+                              lineHeight="32px"
+                              w="60px"
+                              minH="32px"
+                              bg="transparent"
+                              textAlign="end"
+                              px="1"
+                            >
+                              {stat || '-'}
+                            </Text>
                           </Td>
                         );
-                      }
-                      return (
-                        <Td key={`${item.id}-average`} border="none">
-                          <Text
-                            fontSize="20px"
-                            fontWeight={700}
-                            color={theme.compensation?.card.secondaryText}
-                            lineHeight="32px"
-                            w="60px"
-                            minH="32px"
-                            bg="transparent"
-                            textAlign="end"
-                            px="1"
-                          >
-                            {stat || '-'}
-                          </Text>
-                        </Td>
-                      );
-                    })}
-                  </Tr>
+                      })}
+                    </Tr>
+                  ) : null}
                 </Tbody>
               </Table>
             </Flex>
-            <Flex flexDir="column" gap="2" justify="center" alignItems="end">
-              {proposalsData.finished ? null : (
-                <Flex w="full" justify="flex-end" align="flex-end">
-                  <Text fontSize="medium" color={theme.compensation?.card.text}>
-                    ⚠️ These scores are subject to change and not finalized yet.
-                  </Text>
-                </Flex>
-              )}
-              <Flex flexDir="column" gap="1" alignItems="flex-end">
-                <Flex flexDir="row" gap="1" justify="flex-end">
-                  <Tooltip
-                    placement="top"
-                    label={
+            {isAuthorized ? (
+              <Flex flexDir="column" gap="2" justify="center" alignItems="end">
+                {proposalsData.finished ? null : (
+                  <Flex w="full" justify="flex-end" align="flex-end">
+                    <Text
+                      fontSize="medium"
+                      color={theme.compensation?.card.text}
+                    >
+                      ⚠️ These scores are subject to change and not finalized
+                      yet.
+                    </Text>
+                  </Flex>
+                )}
+
+                <Flex flexDir="column" gap="1" alignItems="flex-end">
+                  <Flex flexDir="row" gap="1" justify="flex-end">
+                    <Tooltip
+                      placement="top"
+                      label={
+                        <Text
+                          fontSize="16px"
+                          fontWeight={600}
+                          color={theme.compensation?.card.secondaryText}
+                        >
+                          Final Score formula: Total * 30/20 * Presence
+                          Multiplier
+                        </Text>
+                      }
+                      hasArrow
+                      bgColor={theme.compensation?.card.bg}
+                      color={theme.compensation?.card.text}
+                      fontWeight="normal"
+                      fontSize="sm"
+                      borderRadius={10}
+                      p="3"
+                    >
                       <Text
                         fontSize="16px"
                         fontWeight={600}
                         color={theme.compensation?.card.secondaryText}
                       >
-                        Final Score formula: Total * 30/20 * Presence Multiplier
+                        Final score formula:
                       </Text>
-                    }
-                    hasArrow
-                    bgColor={theme.compensation?.card.bg}
-                    color={theme.compensation?.card.text}
-                    fontWeight="normal"
-                    fontSize="sm"
-                    borderRadius={10}
-                    p="3"
-                  >
-                    <Text
-                      fontSize="16px"
-                      fontWeight={600}
-                      color={theme.compensation?.card.secondaryText}
-                    >
-                      Final score formula:
-                    </Text>
-                  </Tooltip>
-                  <Tooltip
-                    placement="top"
-                    label="Total"
-                    hasArrow
-                    bgColor={theme.compensation?.card.bg}
-                    color={theme.compensation?.card.text}
-                    fontWeight="normal"
-                    fontSize="sm"
-                    borderRadius={10}
-                    p="3"
-                  >
-                    <Text
-                      fontSize="16px"
-                      fontWeight={600}
-                      color={theme.compensation?.card.secondaryText}
-                    >
-                      {sumAverages}
-                    </Text>
-                  </Tooltip>
-                  <Text
-                    fontSize="16px"
-                    fontWeight={600}
-                    color={theme.compensation?.card.secondaryText}
-                  >
-                    *
-                  </Text>
-                  <Tooltip
-                    placement="top"
-                    label={
-                      <Flex flexDir="column" gap="2">
-                        <Text
-                          fontSize="14px"
-                          fontWeight={400}
-                          color={theme.compensation?.card.text}
-                        >
-                          Delegates Feedback (DF) - Weight 30
-                        </Text>
-                        <Text
-                          fontSize="14px"
-                          fontWeight={400}
-                          color={theme.compensation?.card.text}
-                        >
-                          Max Initial Score - Weight 20
-                        </Text>
-                      </Flex>
-                    }
-                    hasArrow
-                    bgColor={theme.compensation?.card.bg}
-                    color={theme.compensation?.card.text}
-                    fontWeight="normal"
-                    fontSize="sm"
-                    borderRadius={10}
-                    p="3"
-                  >
-                    <Text
-                      fontSize="16px"
-                      fontWeight={600}
-                      color={theme.compensation?.card.secondaryText}
-                    >
-                      30/20
-                    </Text>
-                  </Tooltip>
-                  <Text
-                    fontSize="16px"
-                    fontWeight={600}
-                    color={theme.compensation?.card.secondaryText}
-                  >
-                    *
-                  </Text>
-                  <Tooltip
-                    placement="top"
-                    label="Presence Multiplier"
-                    hasArrow
-                    bgColor={theme.compensation?.card.bg}
-                    color={theme.compensation?.card.text}
-                    fontWeight="normal"
-                    fontSize="sm"
-                    borderRadius={10}
-                    p="3"
-                  >
-                    <Text
-                      fontSize="16px"
-                      fontWeight={400}
+                    </Tooltip>
+                    <Tooltip
+                      placement="top"
+                      label="Total"
+                      hasArrow
+                      bgColor={theme.compensation?.card.bg}
                       color={theme.compensation?.card.text}
+                      fontWeight="normal"
+                      fontSize="sm"
+                      borderRadius={10}
+                      p="3"
                     >
-                      {presenceMultiplier}
+                      <Text
+                        fontSize="16px"
+                        fontWeight={600}
+                        color={theme.compensation?.card.secondaryText}
+                      >
+                        {sumAverages}
+                      </Text>
+                    </Tooltip>
+                    <Text
+                      fontSize="16px"
+                      fontWeight={600}
+                      color={theme.compensation?.card.secondaryText}
+                    >
+                      *
                     </Text>
-                  </Tooltip>
+                    <Tooltip
+                      placement="top"
+                      label={
+                        <Flex flexDir="column" gap="2">
+                          <Text
+                            fontSize="14px"
+                            fontWeight={400}
+                            color={theme.compensation?.card.text}
+                          >
+                            Delegates Feedback (DF) - Weight 30
+                          </Text>
+                          <Text
+                            fontSize="14px"
+                            fontWeight={400}
+                            color={theme.compensation?.card.text}
+                          >
+                            Max Initial Score - Weight 20
+                          </Text>
+                        </Flex>
+                      }
+                      hasArrow
+                      bgColor={theme.compensation?.card.bg}
+                      color={theme.compensation?.card.text}
+                      fontWeight="normal"
+                      fontSize="sm"
+                      borderRadius={10}
+                      p="3"
+                    >
+                      <Text
+                        fontSize="16px"
+                        fontWeight={600}
+                        color={theme.compensation?.card.secondaryText}
+                      >
+                        30/20
+                      </Text>
+                    </Tooltip>
+                    <Text
+                      fontSize="16px"
+                      fontWeight={600}
+                      color={theme.compensation?.card.secondaryText}
+                    >
+                      *
+                    </Text>
+                    <Tooltip
+                      placement="top"
+                      label="Presence Multiplier"
+                      hasArrow
+                      bgColor={theme.compensation?.card.bg}
+                      color={theme.compensation?.card.text}
+                      fontWeight="normal"
+                      fontSize="sm"
+                      borderRadius={10}
+                      p="3"
+                    >
+                      <Text
+                        fontSize="16px"
+                        fontWeight={400}
+                        color={theme.compensation?.card.text}
+                      >
+                        {presenceMultiplier}
+                      </Text>
+                    </Tooltip>
+                  </Flex>
+                  <Text
+                    fontSize="16px"
+                    fontWeight={700}
+                    color={theme.compensation?.card.secondaryText}
+                  >
+                    Final Score: {` `}
+                    {calculateFinalScore({
+                      ...averages,
+                    })}
+                  </Text>
                 </Flex>
-                <Text
-                  fontSize="16px"
-                  fontWeight={700}
-                  color={theme.compensation?.card.secondaryText}
-                >
-                  Final Score: {` `}
-                  {calculateFinalScore({
-                    ...averages,
-                  })}
-                </Text>
-              </Flex>
-              {isAuthorized ? (
                 <Flex flexDir="row" gap="8" justify="flex-end" mt="4">
                   <Flex flexDir="row" gap="2" alignItems="center">
                     <Text
@@ -833,8 +861,8 @@ export const DelegateCompensationAdminForumActivity = ({
                     Save
                   </Button>
                 </Flex>
-              ) : null}
-            </Flex>
+              </Flex>
+            ) : null}
           </Flex>
         ) : (
           <Flex py="4">
