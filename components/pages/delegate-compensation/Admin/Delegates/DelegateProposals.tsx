@@ -763,7 +763,7 @@ export const DelegateProposals = ({
     ProposalAndBreakdownRow | undefined
   >(undefined);
   const {
-    data: proposals,
+    data: dataFromAPI,
     isLoading: proposalsLoading,
     isFetching: proposalsFetching,
   } = useQuery({
@@ -777,13 +777,7 @@ export const DelegateProposals = ({
         daoInfo.config.DAO_KARMA_ID,
         selectedDate?.value.month as string | number,
         selectedDate?.value.year as string | number
-      ).then(res => {
-        const { proposals: proposalsFromAPI } = res;
-        const mappedProposals = proposalsFromAPI
-          ?.flatMap(category => category.items)
-          .filter(item => item.isValid);
-        return mappedProposals;
-      }),
+      ),
     enabled:
       !!selectedDate?.value.month &&
       !!selectedDate?.value.year &&
@@ -792,6 +786,8 @@ export const DelegateProposals = ({
   });
 
   const setupProposalsAndVotes = () => {
+    const proposals =
+      dataFromAPI?.proposals?.flatMap(category => category.items) || [];
     if (!proposals) return [];
     return proposals?.map(proposal => {
       const getVote = () => {
