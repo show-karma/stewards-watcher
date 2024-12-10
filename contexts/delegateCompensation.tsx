@@ -40,119 +40,85 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
   const { daoInfo, rootPathname } = useDAO();
 
   const [selectedDate, setSelectedDate] = useState(() => {
+    const DATES = {
+      OLD_VERSION_MAX: new Date('2024-10-10'),
+      NEW_VERSION_MIN: new Date('2024-11-10'),
+      NEW_VERSION_MAX: new Date('2024-11-10'),
+    };
+
     const queryString = router.asPath.split('?')[1];
     const monthQuery = queryString?.match(/(?<=month=)[^&]*/i)?.[0];
     const yearQuery = Number(queryString?.match(/(?<=year=)[^&]*/i)?.[0]);
-    const currentDate = new Date();
-    const currentDay = currentDate.getDate();
+
     const isOldVersion = router.asPath.includes('delegate-compensation-old');
     const isAdmin = router.asPath.includes('/admin');
-    let date = new Date(
-      currentDate.getFullYear(),
-      currentDay >= 10 ? currentDate.getMonth() : currentDate.getMonth() - 1,
-      10
-    );
+    const isDelegatePages =
+      router.asPath.includes('delegate/') ||
+      (router.asPath.includes('delegate-compensation') && !isOldVersion);
 
-    if (date >= new Date('2024-10-10')) {
-      date = new Date('2024-11-11');
+    let targetDate = new Date();
+
+    // Handle old version path
+    if (isOldVersion) {
+      targetDate =
+        targetDate > DATES.OLD_VERSION_MAX ? DATES.OLD_VERSION_MAX : targetDate;
+    }
+    // Handle admin path
+    else if (isAdmin) {
+      targetDate =
+        targetDate < DATES.NEW_VERSION_MIN ? DATES.NEW_VERSION_MIN : targetDate;
+    }
+    // Handle delegate paths
+    else if (isDelegatePages) {
+      targetDate = DATES.NEW_VERSION_MAX;
     }
 
-    const isDelegateIndividualPages = router.asPath.includes('delegate/');
-    if (
-      (isAdmin || isDelegateIndividualPages) &&
-      date <= new Date('2024-11-11')
-    ) {
-      date = new Date('2024-11-11');
-    }
-
-    const currentMonth = date.getMonth() + 1;
-    const currentYear = date.getFullYear();
-    const startYear = 2024;
-    const lastPath = router.asPath.split('/')?.at(-1);
+    // Handle query params if present
     if (monthQuery || yearQuery) {
-      let year = yearQuery || currentYear;
-      let month = monthQuery
-        ? new Date(`${monthQuery} 1, ${year}`).getMonth()
-        : currentMonth;
-      if (lastPath?.includes('delegate-compensation')) {
-        if (year > 2024 || (year === 2024 && month >= 10)) {
-          if (isOldVersion) {
-            router.push(
-              {
-                pathname: `${rootPathname}/delegate-compensation-old`,
-                query: {
-                  month: 'october',
-                  year: 2024,
-                },
-              },
-              undefined,
-              { shallow: true }
-            );
-            month = 9;
-            year = 2024;
-          }
-        } else if (!isOldVersion && !isAdmin) {
-          router.push(
-            {
-              pathname: `${rootPathname}/delegate-compensation`,
-              query: {
-                month: 'november',
-                year: 2024,
-              },
-            },
-            undefined,
-            { shallow: true }
-          );
-          month = 10;
-          year = 2024;
-        }
-      }
+      const queryDate = new Date(
+        yearQuery || targetDate.getFullYear(),
+        monthQuery
+          ? new Date(
+              `10 ${monthQuery} ${yearQuery || targetDate.getFullYear()}`
+            ).getMonth()
+          : targetDate.getMonth(),
+        10
+      );
 
-      let correctMonth = month > currentMonth ? currentMonth : month + 1;
-      let correctYear =
-        year > currentYear || year < startYear ? currentYear : year;
-      if (year > currentYear || year < startYear) {
-        // get last available month of the year
-        const lastAvailableMonth = currentMonth === 12 ? 12 : currentMonth;
-        return {
-          name: new Date(correctYear, lastAvailableMonth - 1, 1).toLocaleString(
-            'en-US',
-            {
-              month: 'long',
-            }
-          ),
-          value: {
-            month: lastAvailableMonth,
-            year: correctYear,
-          },
-        };
-      }
-
-      if (isAdmin) {
-        if ((correctMonth < 11 && correctYear === 2024) || correctYear < 2024) {
-          correctYear = 2024;
-          correctMonth = 11;
-        }
-      }
-
-      return {
-        name: new Date(correctYear, correctMonth - 1, 1).toLocaleString(
-          'en-US',
+      if (isOldVersion && queryDate > DATES.OLD_VERSION_MAX) {
+        targetDate = DATES.OLD_VERSION_MAX;
+        router.push(
           {
-            month: 'long',
-          }
-        ),
-        value: {
-          month: correctMonth,
-          year: correctYear,
-        },
-      };
+            pathname: `${rootPathname}/delegate-compensation-old`,
+            query: { month: 'october', year: 2024 },
+          },
+          undefined,
+          { shallow: true }
+        );
+      } else if (
+        !isOldVersion &&
+        !isAdmin &&
+        queryDate !== DATES.NEW_VERSION_MAX
+      ) {
+        targetDate = DATES.NEW_VERSION_MAX;
+        router.push(
+          {
+            pathname: `${rootPathname}/delegate-compensation`,
+            query: { month: 'november', year: 2024 },
+          },
+          undefined,
+          { shallow: true }
+        );
+      } else {
+        targetDate = queryDate;
+      }
     }
+
     return {
-      name: date.toLocaleString('en-US', { month: 'long' }),
+      name: targetDate.toLocaleString('en-US', { month: 'long' }),
       value: {
-        month: currentMonth,
-        year: currentYear,
+        month: targetDate.getMonth() + 1,
+        year: targetDate.getFullYear(),
       },
     };
   });
