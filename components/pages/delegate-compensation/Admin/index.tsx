@@ -38,38 +38,37 @@ export const DelegateCompensationAdmin = () => {
   const { authToken } = useAuth();
   const { toast } = useToasty();
 
-  const { data, isLoading, isFetching } = useQuery(
-    [
+  const { data, isLoading, isFetching } = useQuery({
+    queryKey: [
       'delegate-compensation-proposals',
       selectedDate?.value.month,
       selectedDate?.value.year,
     ],
-    () =>
+    queryFn: () =>
       getProposals(
         daoInfo.config.DAO_KARMA_ID,
         selectedDate?.value.month as string | number,
         selectedDate?.value.year as string | number
       ),
-    {
-      initialData: {
-        proposals: [
-          {
-            name: 'Onchain Proposals',
-            items: [],
-          },
-          {
-            name: 'Snapshot Proposals',
-            items: [],
-          },
-        ],
-        finished: false,
-      },
-      enabled:
-        !!selectedDate?.value.month &&
-        !!selectedDate?.value.year &&
-        !!daoInfo.config.DAO_KARMA_ID,
-    }
-  );
+    initialData: {
+      proposals: [
+        {
+          name: 'Onchain Proposals',
+          items: [],
+        },
+        {
+          name: 'Snapshot Proposals',
+          items: [],
+        },
+      ],
+      finished: false,
+    },
+    enabled:
+      !!selectedDate?.value.month &&
+      !!selectedDate?.value.year &&
+      !!daoInfo.config.DAO_KARMA_ID,
+    refetchOnWindowFocus: false,
+  });
 
   const { proposals, finished } = data;
 
