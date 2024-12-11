@@ -790,7 +790,7 @@ export const DelegateProposals = ({
       dataFromAPI?.proposals?.flatMap(category => category.items) || [];
     if (!proposals) return [];
     return proposals
-      .filter(item => item.isValid)
+      ?.filter(item => item?.isValid)
       ?.map(proposal => {
         const getVote = () => {
           if (!delegateVotes) return undefined;
