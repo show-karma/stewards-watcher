@@ -321,6 +321,14 @@ export const DelegateCompensationAdminForumActivity = ({
     0
   );
 
+  const listToHide = [
+    '0x1b686ee8e31c5959d9f5bbd8122a58682788eead',
+    '0x8326d18edfc50b4335113c33b25116ec268ff3fe',
+    '0xd4879f876ee383067f80acadbe283b93141908e9',
+    '0x8b37a5af68d315cf5a64097d96621f64b5502a22',
+    '0xa2d590fee197c0b614fe7c3e10303327f38c0dc3',
+  ].map(item => item.toLowerCase());
+
   return (
     <DelegateCompensationAdminLayout>
       <Box w="full">
@@ -367,7 +375,9 @@ export const DelegateCompensationAdminForumActivity = ({
                     >
                       Date
                     </Th>
-                    {isAuthorized
+                    {!listToHide.includes(
+                      delegateInfo?.publicAddress?.toLowerCase() || ''
+                    ) || isAuthorized
                       ? columns.map(item => (
                           <Th
                             borderBottom="1px solid"
@@ -395,7 +405,9 @@ export const DelegateCompensationAdminForumActivity = ({
                         key={index}
                         w="full"
                         opacity={
-                          isAuthorized
+                          !listToHide.includes(
+                            delegateInfo?.publicAddress?.toLowerCase() || ''
+                          ) || isAuthorized
                             ? post.status === 'valid'
                               ? 1
                               : 0.75
@@ -468,7 +480,9 @@ export const DelegateCompensationAdminForumActivity = ({
                         >
                           {formatDate(post?.createdAt, 'MMM D, YYYY')}
                         </Td>
-                        {isAuthorized
+                        {!listToHide.includes(
+                          delegateInfo?.publicAddress?.toLowerCase() || ''
+                        ) || isAuthorized
                           ? columns.map(item => {
                               if (item.type === 'read-only' || !isAuthorized) {
                                 if (item.id === 'status') {
@@ -619,7 +633,9 @@ export const DelegateCompensationAdminForumActivity = ({
                       </Tr>
                     );
                   })}
-                  {isAuthorized ? (
+                  {!listToHide.includes(
+                    delegateInfo?.publicAddress?.toLowerCase() || ''
+                  ) || isAuthorized ? (
                     <Tr key="averages" w="full">
                       <Td border="none" />
                       <Td border="none" />
@@ -685,7 +701,9 @@ export const DelegateCompensationAdminForumActivity = ({
                 </Tbody>
               </Table>
             </Flex>
-            {isAuthorized ? (
+            {!listToHide.includes(
+              delegateInfo?.publicAddress?.toLowerCase() || ''
+            ) || isAuthorized ? (
               <Flex flexDir="column" gap="2" justify="center" alignItems="end">
                 {proposalsData.finished ? null : (
                   <Flex w="full" justify="flex-end" align="flex-end">
@@ -843,6 +861,8 @@ export const DelegateCompensationAdminForumActivity = ({
                       onChange={event => {
                         changePresenceMultiplier(event.target.value);
                       }}
+                      isDisabled={!isAuthorized}
+                      disabled={!isAuthorized}
                       type="number"
                       min={0}
                       max={2}
@@ -852,20 +872,24 @@ export const DelegateCompensationAdminForumActivity = ({
                       textAlign="center"
                     />
                   </Flex>
-                  <Button
-                    isDisabled={!isModified || isSaving}
-                    disabled={!isModified || isSaving}
-                    isLoading={isSaving}
-                    w="max-content"
-                    alignSelf="flex-end"
-                    onClick={() => {
-                      saveFeedback();
-                    }}
-                    bgColor={theme.compensation?.card.bg}
-                    color={theme.compensation?.card.text}
-                  >
-                    Save
-                  </Button>
+                  {isAuthorized ? (
+                    <Button
+                      isDisabled={!isModified || isSaving || !isAuthorized}
+                      disabled={!isModified || isSaving || !isAuthorized}
+                      isLoading={isSaving}
+                      w="max-content"
+                      alignSelf="flex-end"
+                      onClick={() => {
+                        saveFeedback();
+                      }}
+                      bgColor={theme.compensation?.card.bg}
+                      color={theme.compensation?.card.text}
+                    >
+                      Save
+                    </Button>
+                  ) : (
+                    false
+                  )}
                 </Flex>
               </Flex>
             ) : null}
