@@ -55,7 +55,9 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
     const isDelegatePages =
       router.asPath.includes('delegate/') ||
       (router.asPath.includes('delegate-compensation') && !isOldVersion);
-
+    const lastPath = router.asPath.split('/')?.at(-1);
+    const delegateCompensationPage =
+      lastPath?.includes('delegate-compensation') && !isOldVersion;
     let targetDate = new Date();
 
     // Handle old version path
@@ -96,8 +98,7 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
           { shallow: true }
         );
       } else if (
-        !isOldVersion &&
-        !isAdmin &&
+        delegateCompensationPage &&
         queryDate !== DATES.NEW_VERSION_MAX
       ) {
         targetDate = DATES.NEW_VERSION_MAX;
