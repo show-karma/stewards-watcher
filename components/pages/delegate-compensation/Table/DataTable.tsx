@@ -7,6 +7,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { useDAO } from 'contexts';
 import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import { useState } from 'react';
 import { DelegateCompensationStats } from 'types';
@@ -34,6 +35,7 @@ export const DataTable = <Data extends object>({
     },
   });
   const { selectedDate } = useDelegateCompensation();
+  const { theme } = useDAO();
   return (
     <>
       <Table>
@@ -48,6 +50,8 @@ export const DataTable = <Data extends object>({
                     key={header.id}
                     onClick={header.column.getToggleSortingHandler()}
                     textAlign={index === 0 ? 'left' : 'center'}
+                    borderBottom="1px solid"
+                    borderBottomColor={theme.filters.border}
                   >
                     {flexRender(
                       header.column.columnDef.header,
@@ -88,6 +92,8 @@ export const DataTable = <Data extends object>({
                     paddingX={{ base: '4px', '2xl': '8px' }}
                     key={cell.id}
                     textAlign="center"
+                    borderBottom="1px solid"
+                    borderBottomColor={theme.filters.border}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </Td>

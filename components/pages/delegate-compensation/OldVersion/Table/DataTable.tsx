@@ -1,20 +1,21 @@
 import {
   Table,
-  Thead,
   Tbody,
-  Tr,
-  Th,
   Td,
+  Th,
+  Thead,
+  Tr,
   useDisclosure,
 } from '@chakra-ui/react';
 import {
-  useReactTable,
-  flexRender,
-  getCoreRowModel,
   ColumnDef,
   SortingState,
+  flexRender,
+  getCoreRowModel,
   getSortedRowModel,
+  useReactTable,
 } from '@tanstack/react-table';
+import { useDAO } from 'contexts';
 import { useState } from 'react';
 import { DelegateCompensationStats } from 'types';
 import { BreakdownModal } from './BreakdownModal';
@@ -49,6 +50,7 @@ export const DataTable = <Data extends object>({
     setSelectedDelegate(delegate);
     onOpen();
   };
+  const { theme } = useDAO();
 
   return (
     <>
@@ -64,6 +66,8 @@ export const DataTable = <Data extends object>({
                     key={header.id}
                     onClick={header.column.getToggleSortingHandler()}
                     textAlign={index === 0 ? 'left' : 'center'}
+                    borderBottom="1px solid"
+                    borderBottomColor={theme.filters.border}
                   >
                     {flexRender(
                       header.column.columnDef.header,
@@ -94,6 +98,8 @@ export const DataTable = <Data extends object>({
                     paddingX={{ base: '4px', '2xl': '8px' }}
                     key={cell.id}
                     textAlign="center"
+                    borderBottom="1px solid"
+                    borderBottomColor={theme.filters.border}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </Td>
