@@ -9,6 +9,7 @@ import {
   Heading,
   Icon,
   Input,
+  Skeleton,
   Spinner,
   Switch,
   Table,
@@ -38,7 +39,7 @@ import {
   ForumActivityBreakdown,
   ForumPosts,
 } from 'types/delegate-compensation/forumActivity';
-import { formatDate, formatNumber } from 'utils';
+import { formatDate, formatNumber, formatSimpleNumber } from 'utils';
 import { getForumActivity } from 'utils/delegate-compensation/getForumActivity';
 import { getProposals } from 'utils/delegate-compensation/getProposals';
 import { DelegatePeriod } from '../DelegatePeriod';
@@ -172,7 +173,7 @@ export const DelegateCompensationAdminForumActivity = ({
       ).toFixed(1)
     );
     const finalScore = 1.5 * multiplier * initialScore;
-    return finalScore > 30 ? 30 : finalScore;
+    return finalScore > 30 ? 30 : Number(finalScore.toFixed(2));
   };
 
   const handleInputChange = (index: number, field: string, value: string) => {
@@ -288,6 +289,7 @@ export const DelegateCompensationAdminForumActivity = ({
   };
 
   const validRows = rows.filter(row => row.status === 'valid');
+  const invalidRows = rows.filter(row => row.status !== 'valid');
 
   const averages = {
     relevance:
@@ -316,10 +318,9 @@ export const DelegateCompensationAdminForumActivity = ({
       ) || 0,
   };
 
-  const sumAverages = Object.values(averages).reduce(
-    (acc, curr) => acc + curr,
-    0
-  );
+  const sumAverages = Object.values(averages)
+    .reduce((acc, curr) => acc + curr, 0)
+    .toFixed(2);
 
   const listToHide = [
     '0x1b686ee8e31c5959d9f5bbd8122a58682788eead',
@@ -343,6 +344,45 @@ export const DelegateCompensationAdminForumActivity = ({
           minimumPeriod={new Date('2024-10-30')}
           maximumPeriod={isPublic ? undefined : new Date()}
         />
+        <Flex
+          flexDir="row"
+          gap="4"
+          alignItems="center"
+          justify="flex-start"
+          my="4"
+          flexWrap="wrap"
+        >
+          <Flex flexDir="column" gap="1" align="flex-start">
+            <Text fontSize="18px" fontWeight={400}>
+              Total posts
+            </Text>
+            <Skeleton isLoaded={!isLoading || !isFetching} w="64px" h="24px">
+              <Text fontSize="16px" fontWeight={600}>
+                {formatSimpleNumber(rows.length)}
+              </Text>
+            </Skeleton>
+          </Flex>
+          <Flex flexDir="column" gap="1" align="flex-start">
+            <Text fontSize="18px" fontWeight={400}>
+              Valid posts
+            </Text>
+            <Skeleton isLoaded={!isLoading || !isFetching} w="64px" h="24px">
+              <Text fontSize="16px" fontWeight={600}>
+                {formatSimpleNumber(validRows.length)}
+              </Text>
+            </Skeleton>
+          </Flex>
+          <Flex flexDir="column" gap="1" align="flex-start">
+            <Text fontSize="18px" fontWeight={400}>
+              Ignored posts
+            </Text>
+            <Skeleton isLoaded={!isLoading || !isFetching} w="64px" h="24px">
+              <Text fontSize="16px" fontWeight={600}>
+                {formatSimpleNumber(invalidRows.length)}
+              </Text>
+            </Skeleton>
+          </Flex>
+        </Flex>
         {isLoading || isFetching ? (
           <Flex py="4">
             <Spinner />
@@ -842,9 +882,11 @@ export const DelegateCompensationAdminForumActivity = ({
                     color={theme.compensation?.card.secondaryText}
                   >
                     Final Score: {` `}
-                    {calculateFinalScore({
-                      ...averages,
-                    })}
+                    {formatSimpleNumber(
+                      calculateFinalScore({
+                        ...averages,
+                      })
+                    )}
                   </Text>
                 </Flex>
                 <Flex flexDir="row" gap="8" justify="flex-end" mt="4">
