@@ -394,7 +394,13 @@ export const DelegateCompensationAdminForumActivity = ({
                       <Tr
                         key={index}
                         w="full"
-                        opacity={post.status === 'valid' ? 1 : 0.75}
+                        opacity={
+                          isAuthorized
+                            ? post.status === 'valid'
+                              ? 1
+                              : 0.75
+                            : 1
+                        }
                       >
                         <Td
                           borderBottom="1px solid"
