@@ -789,27 +789,29 @@ export const DelegateProposals = ({
     const proposals =
       dataFromAPI?.proposals?.flatMap(category => category.items) || [];
     if (!proposals) return [];
-    return proposals?.map(proposal => {
-      const getVote = () => {
-        if (!delegateVotes) return undefined;
-        const votesArray = Object.entries(delegateVotes);
-        const findProposal = votesArray.find(([key]) =>
-          proposal.type === 'snapshot'
-            ? key.includes(proposal.id)
-            : key.includes(proposal.name)
-        );
-        return {
-          ...findProposal?.[1],
-          proposal: findProposal?.[0],
+    return proposals
+      .filter(item => item.isValid)
+      ?.map(proposal => {
+        const getVote = () => {
+          if (!delegateVotes) return undefined;
+          const votesArray = Object.entries(delegateVotes);
+          const findProposal = votesArray.find(([key]) =>
+            proposal.type === 'snapshot'
+              ? key.includes(proposal.id)
+              : key.includes(proposal.name)
+          );
+          return {
+            ...findProposal?.[1],
+            proposal: findProposal?.[0],
+          };
         };
-      };
-      const delegateVote = getVote();
-      return {
-        ...proposal,
-        ...delegateVote,
-        postId: delegateVote?.proposal,
-      } as ProposalAndBreakdownRow;
-    });
+        const delegateVote = getVote();
+        return {
+          ...proposal,
+          ...delegateVote,
+          postId: delegateVote?.proposal,
+        } as ProposalAndBreakdownRow;
+      });
   };
 
   const proposalsAndVotes: ProposalAndBreakdownRow[] =
