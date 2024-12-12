@@ -1,4 +1,4 @@
-import { Flex, Icon, Img, Text } from '@chakra-ui/react';
+import { Button, Flex, Icon, Img, Text } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { ChakraLink } from 'components/ChakraLink';
 import { useAuth, useDAO } from 'contexts';
@@ -9,12 +9,13 @@ import { FaExternalLinkAlt } from 'react-icons/fa';
 import { formatSimpleNumber } from 'utils';
 import { getPRBreakdown } from 'utils/delegate-compensation/getPRBreakdown';
 import { DelegateBP } from './DelegateBP';
-import { DelegateFeedbackCard } from './DelegateFeedbackCard';
+import { DelegateFeedback } from './DelegateFeedback';
 import { DelegateFinalScoreModal } from './DelegateFinalScore';
 import { DelegatePeriodIndicator } from './DelegatePeriodIndicator';
 
 export const DelegateStats = () => {
   const { delegateInfo, selectedDate } = useDelegateCompensation();
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [isFinalScoreModalOpen, setIsFinalScoreModalOpen] = useState(false);
   const { theme, daoInfo } = useDAO();
   const { isDaoAdmin: isAuthorized } = useAuth();
@@ -41,6 +42,13 @@ export const DelegateStats = () => {
 
   return (
     <Flex flexDir="column" w="full" gap="5">
+      {/* Delegate Feedback Modal */}
+      {isFeedbackModalOpen ? (
+        <DelegateFeedback
+          isModalOpen={isFeedbackModalOpen}
+          setIsModalOpen={setIsFeedbackModalOpen}
+        />
+      ) : null}
       {/* Delegate Feedback Modal */}
       {isFinalScoreModalOpen ? (
         <DelegateFinalScoreModal
@@ -323,9 +331,35 @@ export const DelegateStats = () => {
             justify="center"
             align="flex-start"
             minW="120px"
-            w="full"
           >
-            <DelegateFeedbackCard />
+            <Button
+              p="0"
+              bg="transparent"
+              borderRadius="0"
+              h="24px"
+              _hover={{ opacity: 0.8 }}
+              _focus={{ opacity: 0.8 }}
+              _focusVisible={{ opacity: 0.8 }}
+              _focusWithin={{ opacity: 0.8 }}
+              fontSize="16px"
+              fontWeight="600"
+              color={theme.compensation?.card.text}
+              borderBottom="1px solid"
+              borderBottomColor={theme.compensation?.card.text}
+              onClick={() => setIsFeedbackModalOpen(true)}
+            >
+              Delegate Feedback
+            </Button>
+            <Text
+              fontSize="24px"
+              fontWeight={700}
+              color={theme.compensation?.card.secondaryText}
+              lineHeight="32px"
+            >
+              {formatSimpleNumber(
+                delegateInfo?.stats?.delegateFeedback?.finalScore || 0
+              )}
+            </Text>
           </Flex>
         </Flex>
         <Flex
