@@ -386,7 +386,7 @@ export const DelegateStats = () => {
               h="24px"
             />
           </Flex>
-          <Flex flexDir="column" gap="2" justify="center" align="flex-start">
+          <Flex flexDir="column" gap="1" justify="center" align="flex-start">
             <Text
               fontSize="16px"
               fontWeight="600"
