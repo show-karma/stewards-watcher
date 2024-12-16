@@ -167,7 +167,7 @@ export const ScoringSystemCarousel = ({ items }: ItemCarouselProps) => (
         isSnapPoint={isSnapPoint}
         flexProps={{
           width: ['full'],
-          height: ['full'],
+          height: ['max-content'],
         }}
       >
         {item.component}
