@@ -61,6 +61,7 @@ export type DelegateStatsFromAPI = {
 
 export type DelegateCompensationStats = {
   id: number;
+  stats: DelegateStatsFromAPI['stats'];
   delegate: {
     name?: string;
     ensName?: string;
