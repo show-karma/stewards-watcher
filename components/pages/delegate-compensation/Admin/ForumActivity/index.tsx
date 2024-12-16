@@ -9,6 +9,7 @@ import {
   Heading,
   Icon,
   Input,
+  Skeleton,
   Spinner,
   Switch,
   Table,
@@ -38,7 +39,7 @@ import {
   ForumActivityBreakdown,
   ForumPosts,
 } from 'types/delegate-compensation/forumActivity';
-import { formatDate, formatNumber } from 'utils';
+import { formatDate, formatNumber, formatSimpleNumber } from 'utils';
 import { getForumActivity } from 'utils/delegate-compensation/getForumActivity';
 import { getProposals } from 'utils/delegate-compensation/getProposals';
 import { DelegatePeriod } from '../DelegatePeriod';
@@ -172,7 +173,7 @@ export const DelegateCompensationAdminForumActivity = ({
       ).toFixed(1)
     );
     const finalScore = 1.5 * multiplier * initialScore;
-    return finalScore > 30 ? 30 : finalScore;
+    return finalScore > 30 ? 30 : Number(finalScore.toFixed(2));
   };
 
   const handleInputChange = (index: number, field: string, value: string) => {
@@ -288,6 +289,7 @@ export const DelegateCompensationAdminForumActivity = ({
   };
 
   const validRows = rows.filter(row => row.status === 'valid');
+  const invalidRows = rows.filter(row => row.status !== 'valid');
 
   const averages = {
     relevance:
@@ -316,10 +318,17 @@ export const DelegateCompensationAdminForumActivity = ({
       ) || 0,
   };
 
-  const sumAverages = Object.values(averages).reduce(
-    (acc, curr) => acc + curr,
-    0
-  );
+  const sumAverages = Object.values(averages)
+    .reduce((acc, curr) => acc + curr, 0)
+    .toFixed(2);
+
+  const listToHide = [
+    '0x1b686ee8e31c5959d9f5bbd8122a58682788eead',
+    '0x8326d18edfc50b4335113c33b25116ec268ff3fe',
+    '0xd4879f876ee383067f80acadbe283b93141908e9',
+    '0x8b37a5af68d315cf5a64097d96621f64b5502a22',
+    '0xa2d590fee197c0b614fe7c3e10303327f38c0dc3',
+  ].map(item => item.toLowerCase());
 
   return (
     <DelegateCompensationAdminLayout>
@@ -335,6 +344,45 @@ export const DelegateCompensationAdminForumActivity = ({
           minimumPeriod={new Date('2024-10-30')}
           maximumPeriod={isPublic ? undefined : new Date()}
         />
+        <Flex
+          flexDir="row"
+          gap="4"
+          alignItems="center"
+          justify="flex-start"
+          my="4"
+          flexWrap="wrap"
+        >
+          <Flex flexDir="column" gap="1" align="flex-start">
+            <Text fontSize="18px" fontWeight={400}>
+              Total posts
+            </Text>
+            <Skeleton isLoaded={!isLoading || !isFetching} w="64px" h="24px">
+              <Text fontSize="16px" fontWeight={600}>
+                {formatSimpleNumber(rows.length)}
+              </Text>
+            </Skeleton>
+          </Flex>
+          <Flex flexDir="column" gap="1" align="flex-start">
+            <Text fontSize="18px" fontWeight={400}>
+              Valid posts
+            </Text>
+            <Skeleton isLoaded={!isLoading || !isFetching} w="64px" h="24px">
+              <Text fontSize="16px" fontWeight={600}>
+                {formatSimpleNumber(validRows.length)}
+              </Text>
+            </Skeleton>
+          </Flex>
+          <Flex flexDir="column" gap="1" align="flex-start">
+            <Text fontSize="18px" fontWeight={400}>
+              Ignored posts
+            </Text>
+            <Skeleton isLoaded={!isLoading || !isFetching} w="64px" h="24px">
+              <Text fontSize="16px" fontWeight={600}>
+                {formatSimpleNumber(invalidRows.length)}
+              </Text>
+            </Skeleton>
+          </Flex>
+        </Flex>
         {isLoading || isFetching ? (
           <Flex py="4">
             <Spinner />
@@ -367,7 +415,9 @@ export const DelegateCompensationAdminForumActivity = ({
                     >
                       Date
                     </Th>
-                    {isAuthorized
+                    {!listToHide.includes(
+                      delegateInfo?.publicAddress?.toLowerCase() || ''
+                    ) || isAuthorized
                       ? columns.map(item => (
                           <Th
                             borderBottom="1px solid"
@@ -395,7 +445,9 @@ export const DelegateCompensationAdminForumActivity = ({
                         key={index}
                         w="full"
                         opacity={
-                          isAuthorized
+                          !listToHide.includes(
+                            delegateInfo?.publicAddress?.toLowerCase() || ''
+                          ) || isAuthorized
                             ? post.status === 'valid'
                               ? 1
                               : 0.75
@@ -468,7 +520,9 @@ export const DelegateCompensationAdminForumActivity = ({
                         >
                           {formatDate(post?.createdAt, 'MMM D, YYYY')}
                         </Td>
-                        {isAuthorized
+                        {!listToHide.includes(
+                          delegateInfo?.publicAddress?.toLowerCase() || ''
+                        ) || isAuthorized
                           ? columns.map(item => {
                               if (item.type === 'read-only' || !isAuthorized) {
                                 if (item.id === 'status') {
@@ -619,7 +673,9 @@ export const DelegateCompensationAdminForumActivity = ({
                       </Tr>
                     );
                   })}
-                  {isAuthorized ? (
+                  {!listToHide.includes(
+                    delegateInfo?.publicAddress?.toLowerCase() || ''
+                  ) || isAuthorized ? (
                     <Tr key="averages" w="full">
                       <Td border="none" />
                       <Td border="none" />
@@ -685,7 +741,9 @@ export const DelegateCompensationAdminForumActivity = ({
                 </Tbody>
               </Table>
             </Flex>
-            {isAuthorized ? (
+            {!listToHide.includes(
+              delegateInfo?.publicAddress?.toLowerCase() || ''
+            ) || isAuthorized ? (
               <Flex flexDir="column" gap="2" justify="center" alignItems="end">
                 {proposalsData.finished ? null : (
                   <Flex w="full" justify="flex-end" align="flex-end">
@@ -824,9 +882,11 @@ export const DelegateCompensationAdminForumActivity = ({
                     color={theme.compensation?.card.secondaryText}
                   >
                     Final Score: {` `}
-                    {calculateFinalScore({
-                      ...averages,
-                    })}
+                    {formatSimpleNumber(
+                      calculateFinalScore({
+                        ...averages,
+                      })
+                    )}
                   </Text>
                 </Flex>
                 <Flex flexDir="row" gap="8" justify="flex-end" mt="4">
@@ -843,6 +903,8 @@ export const DelegateCompensationAdminForumActivity = ({
                       onChange={event => {
                         changePresenceMultiplier(event.target.value);
                       }}
+                      isDisabled={!isAuthorized}
+                      disabled={!isAuthorized}
                       type="number"
                       min={0}
                       max={2}
@@ -852,20 +914,24 @@ export const DelegateCompensationAdminForumActivity = ({
                       textAlign="center"
                     />
                   </Flex>
-                  <Button
-                    isDisabled={!isModified || isSaving}
-                    disabled={!isModified || isSaving}
-                    isLoading={isSaving}
-                    w="max-content"
-                    alignSelf="flex-end"
-                    onClick={() => {
-                      saveFeedback();
-                    }}
-                    bgColor={theme.compensation?.card.bg}
-                    color={theme.compensation?.card.text}
-                  >
-                    Save
-                  </Button>
+                  {isAuthorized ? (
+                    <Button
+                      isDisabled={!isModified || isSaving || !isAuthorized}
+                      disabled={!isModified || isSaving || !isAuthorized}
+                      isLoading={isSaving}
+                      w="max-content"
+                      alignSelf="flex-end"
+                      onClick={() => {
+                        saveFeedback();
+                      }}
+                      bgColor={theme.compensation?.card.bg}
+                      color={theme.compensation?.card.text}
+                    >
+                      Save
+                    </Button>
+                  ) : (
+                    false
+                  )}
                 </Flex>
               </Flex>
             ) : null}

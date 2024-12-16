@@ -36,6 +36,7 @@ export const DataTable = <Data extends object>({
     },
   });
   const { selectedDate } = useDelegateCompensation();
+  const { theme } = useDAO();
   return (
     <Flex
       backgroundColor={theme.card.background}

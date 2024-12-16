@@ -4,6 +4,7 @@ import {
   EditableInput,
   EditablePreview,
   Flex,
+  Input,
   Text,
 } from '@chakra-ui/react';
 import axios from 'axios';
@@ -16,7 +17,7 @@ import { useState } from 'react';
 export const DelegateBP = () => {
   const { delegateInfo, refreshDelegateInfo } = useDelegateCompensation();
   const [bonusPoints, setBonusPoints] = useState(
-    delegateInfo?.stats?.bonusPoint || 0
+    delegateInfo?.stats?.bonusPoint || '0'
   );
   const { theme, daoInfo } = useDAO();
   const { authToken } = useAuth();
@@ -72,7 +73,7 @@ export const DelegateBP = () => {
       <Flex gap="4" justify="space-between" flexDir="row" w="full">
         <Editable
           defaultValue={bonusPoints.toString()}
-          value={bonusPoints.toString() || '0'}
+          value={bonusPoints.toString()}
         >
           <EditablePreview
             fontSize="24px"
@@ -81,17 +82,21 @@ export const DelegateBP = () => {
             lineHeight="32px"
             cursor="pointer"
             textDecor="underline"
+            bg="transparent"
+            border="2px solid"
+            borderColor={
+              bonusPoints.toString() === ''
+                ? theme.compensation?.card.link
+                : 'transparent'
+            }
+            w={bonusPoints.toString() === '' ? '32px' : 'auto'}
+            h={bonusPoints.toString() === '' ? '40px' : 'auto'}
           />
-          <EditableInput
+          <Input
+            as={EditableInput}
             type="number"
-            min={0}
-            max={30}
             onChange={event => {
-              if (+event.target.value >= 30) {
-                setBonusPoints(30);
-              } else {
-                setBonusPoints(+event.target.value);
-              }
+              setBonusPoints(event.target.value);
             }}
             placeholder="Enter bonus points"
             mr={2}
@@ -105,7 +110,13 @@ export const DelegateBP = () => {
           />
         </Editable>
 
-        <Button onClick={handleSaveBonusPoints}>Save</Button>
+        <Button
+          isDisabled={bonusPoints.toString() === ''}
+          disabled={bonusPoints.toString() === ''}
+          onClick={handleSaveBonusPoints}
+        >
+          Save
+        </Button>
       </Flex>
     </Flex>
   );
