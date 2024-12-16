@@ -22,6 +22,15 @@ export interface IDAOTheme {
   };
   compensation?: {
     bg: string;
+    modal: {
+      block: string;
+      emphasis: string;
+      emphasisBg: string;
+      blockText: string;
+      text: string;
+      closeBtn: string;
+      closeBtnBg: string;
+    };
     card: {
       bg: string;
       text: string;
@@ -48,6 +57,20 @@ export interface IDAOTheme {
       bonusPoint: string;
       participationRate: string;
       finalScore: string;
+    };
+    performanceOverview: {
+      header: {
+        text: string;
+        bg: {
+          optedIn: string;
+          greaterThan50kVP: string;
+          averageParticipationRate: string;
+          averageVotingPower: string;
+          discord: string;
+          scoringSystem: string;
+          card: string;
+        };
+      };
     };
   };
   collapse: {

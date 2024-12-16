@@ -1,4 +1,4 @@
-import { Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
+import { Flex, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
 import {
   ColumnDef,
   SortingState,
@@ -7,6 +7,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { useDAO } from 'contexts';
 import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import { useState } from 'react';
 import { DelegateCompensationStats } from 'types';
@@ -22,6 +23,7 @@ export const DataTable = <Data extends object>({
   columns,
   refreshFn,
 }: DataTableProps<Data>) => {
+  const { theme } = useDAO();
   const [sorting, setSorting] = useState<SortingState>([]);
   const table = useReactTable({
     columns,
@@ -35,7 +37,11 @@ export const DataTable = <Data extends object>({
   });
   const { selectedDate } = useDelegateCompensation();
   return (
-    <>
+    <Flex
+      backgroundColor={theme.card.background}
+      rounded="8px"
+      overflowX="scroll"
+    >
       <Table>
         <Thead>
           {table.getHeaderGroups().map(headerGroup => (
@@ -44,10 +50,15 @@ export const DataTable = <Data extends object>({
                 const { meta } = header.column.columnDef;
                 return (
                   <Th
-                    paddingX={{ base: '4px', '2xl': '8px' }}
+                    paddingX={{ base: '8px', '2xl': '16px' }}
                     key={header.id}
                     onClick={header.column.getToggleSortingHandler()}
-                    textAlign={index === 0 ? 'left' : 'center'}
+                    textAlign="left"
+                    color={theme.text}
+                    textTransform="none"
+                    fontSize="14px"
+                    fontWeight="700"
+                    lineHeight="20px"
                   >
                     {flexRender(
                       header.column.columnDef.header,
@@ -85,9 +96,9 @@ export const DataTable = <Data extends object>({
                 const { meta } = cell.column.columnDef;
                 return (
                   <Td
-                    paddingX={{ base: '4px', '2xl': '8px' }}
+                    paddingX={{ base: '8px', '2xl': '16px' }}
                     key={cell.id}
-                    textAlign="center"
+                    textAlign="left"
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </Td>
@@ -97,6 +108,6 @@ export const DataTable = <Data extends object>({
           ))}
         </Tbody>
       </Table>
-    </>
+    </Flex>
   );
 };
