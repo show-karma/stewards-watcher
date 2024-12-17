@@ -34,6 +34,7 @@ const Card = ({ iconUrl, iconBg, title, value, isLoading }: CardProps) => {
       borderRadius="8px"
       w={['max-content']}
       minW={{ base: '240px', xl: '210px' }}
+      flex={{ base: 'none', xl: '1' }}
       h={{ base: '136px', sm: '160px', xl: '184px' }}
     >
       <Flex
@@ -177,7 +178,7 @@ export const DelegatePerformanceOverviewHeader = () => {
           .averageParticipationRate,
       title: 'Average Participation Rate',
       value: formatSimpleNumber(averageParticipationRate || 0),
-      isLoading: isDelegatesLoading || isDelegatesFetching,
+      isLoading: isDelegatesLoading || !averageParticipationRate,
     },
     {
       iconUrl: '/icons/delegate-compensation/flexArm.png',
@@ -185,11 +186,15 @@ export const DelegatePerformanceOverviewHeader = () => {
         theme.compensation?.performanceOverview.header.bg.averageVotingPower,
       title: 'Average Voting Power',
       value: formatNumber(averageVotingPower || 0),
-      isLoading: isDelegatesLoading || isDelegatesFetching,
+      isLoading: isDelegatesLoading || !averageVotingPower,
     },
   ];
   return (
-    <Flex flexDir="column" alignItems="flex-start" gap="4">
+    <Flex
+      flexDir="column"
+      alignItems="flex-start"
+      gap={{ base: '2', '2xl': '5' }}
+    >
       {selectedDate ? (
         <Text fontSize="24px" fontWeight="600">
           {selectedDate.name} {selectedDate.value.year}
@@ -307,6 +312,7 @@ export const DelegatePerformanceOverviewHeader = () => {
                   py={{ base: '5' }}
                   borderRadius="8px"
                   w={['260px']}
+                  flex={{ base: 'none', xl: '1' }}
                   minW={{ base: '240px', xl: '210px' }}
                   h={{ base: '136px', sm: '160px', xl: '184px' }}
                 >
