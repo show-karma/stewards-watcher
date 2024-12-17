@@ -492,7 +492,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
 
   const getDataStatusColor = (status: string) => {
     if (status === 'inactive' || status === 'withdrawn') return '#F4EB0F';
-    return '#30E320';
+    return '#59CE7B';
   };
 
   const handleAddToDelegatePool = (delegate: IDelegate) => {
@@ -533,40 +533,80 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
         px={{ base: '14px', lg: '5', xl: '4' }}
         pt={{ base: '5', lg: '5' }}
       >
-        {isLoaded && data ? (
-          <Flex
-            minH={['42px', '48px', '54px']}
-            minW={['42px', '48px', '54px']}
-            h={['42px', '48px', '54px']}
-            w={['42px', '48px', '54px']}
-          >
-            <ImgWithFallback
+        <Flex
+          h={['42px', '48px', '54px']}
+          w={['42px', '48px', '54px']}
+          position="relative"
+        >
+          {isLoaded && data ? (
+            <Flex
+              minH={['42px', '48px', '54px']}
+              minW={['42px', '48px', '54px']}
               h={['42px', '48px', '54px']}
               w={['42px', '48px', '54px']}
-              borderRadius="full"
-              src={
-                data.profilePicture ||
-                `${config.IMAGE_PREFIX_URL}${data.address}`
-              }
-              fallback={data.address}
-              onClick={() => selectProfile(data, 'overview')}
-              cursor="pointer"
-            />
-          </Flex>
-        ) : (
-          <Flex
-            minH={['48px', '54px']}
-            minW={['48px', '54px']}
-            h={['48px', '54px']}
-            w={['48px', '54px']}
-          >
-            <SkeletonCircle
+            >
+              <ImgWithFallback
+                h={['42px', '48px', '54px']}
+                w={['42px', '48px', '54px']}
+                borderRadius="full"
+                src={
+                  data.profilePicture ||
+                  `${config.IMAGE_PREFIX_URL}${data.address}`
+                }
+                fallback={data.address}
+                onClick={() => selectProfile(data, 'overview')}
+                cursor="pointer"
+              />
+            </Flex>
+          ) : (
+            <Flex
+              minH={['48px', '54px']}
+              minW={['48px', '54px']}
               h={['48px', '54px']}
               w={['48px', '54px']}
+            >
+              <SkeletonCircle
+                h={['48px', '54px']}
+                w={['48px', '54px']}
+                borderRadius="full"
+              />
+            </Flex>
+          )}
+          <Tooltip
+            label={
+              data?.status ? (
+                <Flex gap="1" align="center">
+                  <Text fontWeight="400" fontSize="13px" color={theme.title}>
+                    {data?.status
+                      ? `${data?.status
+                          .charAt(0)
+                          .toUpperCase()}${data?.status.slice(1)}`
+                      : 'Active'}
+                  </Text>
+                </Flex>
+              ) : null
+            }
+            color={theme.card.interests.text}
+            bg={theme.background}
+            hasArrow
+            placement="top"
+            boxShadow="2xl"
+            border="1px solid"
+            borderColor={theme.card.border}
+            arrowShadowColor={theme.card.border}
+          >
+            <Flex
               borderRadius="full"
+              w="12px"
+              h="12px"
+              backgroundColor={getDataStatusColor(data?.status || 'active')}
+              position="absolute"
+              top={['4px']}
+              right={{ base: '0px', md: '2px' }}
+              border="2px solid white"
             />
-          </Flex>
-        )}
+          </Tooltip>
+        </Flex>
         <Flex
           w="full"
           justifyContent="space-between"
@@ -635,22 +675,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                     </Flex>
                   )}
                 </Flex>
-                <Flex gap="1" align="center">
-                  <Flex
-                    borderRadius="full"
-                    w="7px"
-                    h="7px"
-                    backgroundColor={getDataStatusColor(
-                      data.status || 'active'
-                    )}
-                  />
-                  <Text fontWeight="400" fontSize="13px" color={theme.title}>
-                    {data.status
-                      ? data.status.charAt(0).toUpperCase() +
-                        data.status.slice(1)
-                      : 'Active'}
-                  </Text>
-                </Flex>
+
                 <Flex
                   flexDir="row"
                   gap="1.5"

@@ -94,6 +94,7 @@ export const DelegateCompensationOld = () => {
 
           return {
             id: delegate.id,
+            stats: delegate.stats,
             delegate: {
               publicAddress: delegate.publicAddress as `0x${string}`,
               name: delegate.name,
