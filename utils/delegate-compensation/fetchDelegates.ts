@@ -6,7 +6,8 @@ export const fetchDelegates = async (
   daoName: string,
   onlyOptIn: boolean,
   month: number,
-  year: number
+  year: number,
+  simplified = false
 ) => {
   try {
     const response = await api.get(
@@ -26,6 +27,10 @@ export const fetchDelegates = async (
     if (responseDelegates.length === 0) {
       return [];
     }
+    if (simplified) {
+      return responseDelegates;
+    }
+
     const orderDelegates = responseDelegates.sort(
       (itemA: DelegateStatsFromAPI, itemB: DelegateStatsFromAPI) =>
         +itemB.stats.totalParticipation - +itemA.stats.totalParticipation

@@ -15,8 +15,6 @@ import { FaTelegram } from 'react-icons/fa';
 import { DelegateCompensationStats } from 'types';
 import { formatNumber, formatSimpleNumber } from 'utils';
 import { fetchDelegates } from 'utils/delegate-compensation/fetchDelegates';
-import { getOptInCounter } from 'utils/delegate-compensation/getOptInCounter';
-import { getPowerfulDelegates } from 'utils/delegate-compensation/getPowerfulDelegates';
 import { HeaderCarousel } from '../../../Carousels';
 import { ScoringSystemAccordion } from './Accordion';
 import { ScoringSystemModal } from './ScoringSystemModal';
@@ -83,43 +81,36 @@ export const DelegatePerformanceOverviewHeader = () => {
   const { theme, daoInfo } = useDAO();
   const { isOpen, onToggle } = useDisclosure();
 
-  const { data: optInCounter, isLoading: isLoadingOptInCounter } = useQuery({
-    queryKey: [
-      'optInCounter',
-      daoInfo.config.DAO_KARMA_ID,
-      selectedDate?.value.month,
-      selectedDate?.value.year,
-    ],
-    queryFn: () =>
-      getOptInCounter(
-        daoInfo.config.DAO_KARMA_ID,
-        selectedDate?.value.month as number,
-        selectedDate?.value.year as number
-      ),
-    enabled:
-      !!daoInfo.config.DAO_KARMA_ID &&
-      !!selectedDate?.value.month &&
-      !!selectedDate?.value.year,
-  });
-  const { data: powerfulDelegates, isLoading: isLoadingPowerfulDelegates } =
-    useQuery({
+  const { data: optInDelegates, isLoading: isLoadingOptInDelegates } = useQuery(
+    {
       queryKey: [
-        'powerfulDelegates',
+        'optInCounter',
         daoInfo.config.DAO_KARMA_ID,
         selectedDate?.value.month,
         selectedDate?.value.year,
       ],
       queryFn: () =>
-        getPowerfulDelegates(
+        fetchDelegates(
           daoInfo.config.DAO_KARMA_ID,
+          true,
           selectedDate?.value.month as number,
-          selectedDate?.value.year as number
+          selectedDate?.value.year as number,
+          true
         ),
       enabled:
         !!daoInfo.config.DAO_KARMA_ID &&
         !!selectedDate?.value.month &&
         !!selectedDate?.value.year,
-    });
+    }
+  );
+
+  const optInCounter = optInDelegates?.length;
+
+  const powerfulDelegates =
+    optInDelegates?.filter(
+      (delegate: any) => delegate.votingPower && +delegate.votingPower >= 50000
+    )?.length || 0;
+
   const {
     data: delegates,
     isLoading: isDelegatesLoading,
@@ -169,7 +160,7 @@ export const DelegatePerformanceOverviewHeader = () => {
       iconBg: theme.compensation?.performanceOverview.header.bg.optedIn,
       title: 'Delegates Opted in',
       value: formatSimpleNumber(optInCounter || 0),
-      isLoading: isLoadingOptInCounter,
+      isLoading: isLoadingOptInDelegates,
     },
     {
       iconUrl: '/icons/delegate-compensation/trophy.png',
@@ -177,7 +168,7 @@ export const DelegatePerformanceOverviewHeader = () => {
         theme.compensation?.performanceOverview.header.bg.greaterThan50kVP,
       title: 'Delegates with >50k VP',
       value: formatSimpleNumber(powerfulDelegates || 0),
-      isLoading: isLoadingPowerfulDelegates,
+      isLoading: isLoadingOptInDelegates,
     },
     {
       iconUrl: '/icons/delegate-compensation/lookUp.png',
