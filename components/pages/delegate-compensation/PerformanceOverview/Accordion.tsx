@@ -1,14 +1,7 @@
-import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  Flex,
-  Image,
-  Text,
-} from '@chakra-ui/react';
+import { Button, Flex, Icon, Image, Text } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
+import { useState } from 'react';
+import { BiChevronDown, BiChevronRight } from 'react-icons/bi';
 import { ScoringSystemCarousel } from './Carousel';
 import { scoringStats } from './helper';
 
@@ -20,14 +13,14 @@ export const ScoringSystemAccordion = () => {
       <Flex
         key={scoringStat.title}
         p="3"
-        flex="1"
         style={{
           border: `1px solid ${theme.compensation?.card.divider}`,
         }}
         borderRadius="8px"
-        h="full"
+        h="max-content"
+        w="full"
       >
-        <Flex flexDir="column" gap="4" flex="1">
+        <Flex flexDir="column" gap="4" w="full">
           <Flex
             alignItems={['flex-start']}
             flexDir={['row']}
@@ -79,7 +72,7 @@ export const ScoringSystemAccordion = () => {
             width="full"
             flexDir="column"
             justify="space-between"
-            flex="1"
+            w="full"
             gap="4"
           >
             <Flex flexDir="column" gap="0">
@@ -149,51 +142,64 @@ export const ScoringSystemAccordion = () => {
       </Flex>
     ),
   }));
+  const [isOpen, setIsOpen] = useState(false);
   return (
-    <Accordion w="full" allowToggle>
-      <AccordionItem
+    <Flex
+      w="full"
+      border="none"
+      p="3"
+      bg={theme.compensation?.performanceOverview.header.bg.card}
+      borderRadius="8px"
+      flexDir="column"
+      gap="4"
+    >
+      <Button
+        bg="transparent"
         w="full"
-        border="none"
-        p="3"
-        bg={theme.compensation?.performanceOverview.header.bg.card}
-        borderRadius="8px"
+        p="0"
+        onClick={() => setIsOpen(!isOpen)}
+        _hover={{}}
+        _focus={{}}
+        _focusVisible={{}}
+        _focusWithin={{}}
+        _active={{}}
       >
-        <AccordionButton w="full" p="0">
-          <Flex as="span" flex="1" gap="2" align="center" textAlign="left">
-            <Flex
-              bg={
-                theme.compensation?.performanceOverview.header.bg.scoringSystem
-              }
-              borderRadius="4px"
-              p="1"
-              width="32px"
-              height="32px"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <Image
-                alt="Learn how our Scoring System works"
-                src="/icons/delegate-compensation/brain.png"
-                width="24px"
-                height="24px"
-              />
-            </Flex>
-            <Text
-              fontSize={{ base: '14px' }}
-              fontWeight={600}
-              color={theme.compensation?.performanceOverview.header.text}
-            >
-              Learn how our Scoring System works
-            </Text>
+        <Flex as="span" w="full" gap="2" align="center" textAlign="left">
+          <Flex
+            bg={theme.compensation?.performanceOverview.header.bg.scoringSystem}
+            borderRadius="4px"
+            p="1"
+            width="32px"
+            height="32px"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Image
+              alt="Learn how our Scoring System works"
+              src="/icons/delegate-compensation/brain.png"
+              width="24px"
+              height="24px"
+            />
           </Flex>
-          <AccordionIcon />
-        </AccordionButton>
-        <AccordionPanel p="0" pb={4} mt="3">
-          <Flex w="full">
-            {stats ? <ScoringSystemCarousel items={stats} /> : null}
-          </Flex>
-        </AccordionPanel>
-      </AccordionItem>
-    </Accordion>
+          <Text
+            fontSize={{ base: '14px' }}
+            fontWeight={600}
+            color={theme.compensation?.performanceOverview.header.text}
+          >
+            Learn how our Scoring System works
+          </Text>
+        </Flex>
+        {!isOpen ? (
+          <Icon boxSize="18px" as={BiChevronRight} />
+        ) : (
+          <Icon boxSize="18px" as={BiChevronDown} />
+        )}
+      </Button>
+      {isOpen ? (
+        <Flex w="full">
+          {stats ? <ScoringSystemCarousel items={stats} /> : null}
+        </Flex>
+      ) : null}
+    </Flex>
   );
 };
