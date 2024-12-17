@@ -11,6 +11,7 @@ import { ChakraLink } from 'components/ChakraLink';
 import { DiscordIcon } from 'components/Icons';
 import { useDAO } from 'contexts';
 import { useDelegateCompensation } from 'contexts/delegateCompensation';
+import { useState } from 'react';
 import { FaTelegram } from 'react-icons/fa';
 import { DelegateCompensationStats } from 'types';
 import { formatNumber, formatSimpleNumber } from 'utils';
@@ -80,6 +81,8 @@ export const DelegatePerformanceOverviewHeader = () => {
   const { selectedDate } = useDelegateCompensation();
   const { theme, daoInfo } = useDAO();
   const { isOpen, onToggle } = useDisclosure();
+  const [averageParticipationRate, setAverageParticipationRate] = useState(0);
+  const [averageVotingPower, setAverageVotingPower] = useState(0);
 
   const { data: optInDelegates, isLoading: isLoadingOptInDelegates } = useQuery(
     {
@@ -111,11 +114,9 @@ export const DelegatePerformanceOverviewHeader = () => {
       (delegate: any) => delegate.votingPower && +delegate.votingPower >= 50000
     )?.length || 0;
 
-  const {
-    data: delegates,
-    isLoading: isDelegatesLoading,
-    isFetching: isDelegatesFetching,
-  } = useQuery<DelegateCompensationStats[]>({
+  const { isLoading: isDelegatesLoading } = useQuery<
+    DelegateCompensationStats[]
+  >({
     queryKey: [
       'delegate-compensation',
       daoInfo.config.DAO_KARMA_ID,
@@ -123,36 +124,43 @@ export const DelegatePerformanceOverviewHeader = () => {
       selectedDate?.value.year,
       true,
     ],
-    queryFn: () =>
-      fetchDelegates(
+    queryFn: async () => {
+      const fetchedDelegates = await fetchDelegates(
         daoInfo.config.DAO_KARMA_ID,
         true,
         selectedDate?.value.month as number,
         selectedDate?.value.year as number
-      ),
+      ).then((responseDelegates: any) => {
+        const averageParticipationRateCalculated = responseDelegates?.length
+          ? responseDelegates.reduce((acc: any, delegate: any) => {
+              const participationRate = delegate.stats?.participationRate
+                ? parseFloat(delegate.stats.participationRate)
+                : 0;
+              return acc + participationRate;
+            }, 0) / responseDelegates.length
+          : 0;
+
+        setAverageParticipationRate(averageParticipationRateCalculated);
+
+        const averageVotingPowerCalculated = responseDelegates?.length
+          ? responseDelegates.reduce((acc: any, delegate: any) => {
+              const currentVotingPower = delegate.votingPower
+                ? delegate.votingPower
+                : 0;
+              return acc + currentVotingPower;
+            }, 0) / responseDelegates.length
+          : 0;
+
+        setAverageVotingPower(averageVotingPowerCalculated);
+        return responseDelegates as DelegateCompensationStats[];
+      });
+      return fetchedDelegates;
+    },
     enabled:
       !!selectedDate?.value.month &&
       !!selectedDate?.value.year &&
       !!daoInfo.config.DAO_KARMA_ID,
   });
-
-  const averageParticipationRate = delegates?.length
-    ? delegates.reduce((acc, delegate) => {
-        const participationRate = delegate.stats?.participationRate
-          ? parseFloat(delegate.stats.participationRate)
-          : 0;
-        return acc + participationRate;
-      }, 0) / delegates.length
-    : 0;
-
-  const averageVotingPower = delegates?.length
-    ? delegates.reduce((acc, delegate) => {
-        const currentVotingPower = delegate.votingPower
-          ? delegate.votingPower
-          : 0;
-        return acc + currentVotingPower;
-      }, 0) / delegates.length
-    : 0;
 
   const dataPoints = [
     {
