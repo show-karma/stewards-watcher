@@ -9690,6 +9690,11 @@ react-remove-scroll@^2.5.6:
     use-callback-ref "^1.3.0"
     use-sidecar "^1.1.2"
 
+react-snap-carousel@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/react-snap-carousel/-/react-snap-carousel-0.5.0.tgz#c1caa781b1fbae6113bcd0c7d444fd1e59c01835"
+  integrity sha512-AmrvBD2xV5HkI011+WzBQKvJv9sBGXR/biJ2g25qctm51m3cxq2oQHMYgZeihwVnmCBJS/h4FKkMp0+B/hMdmQ==
+
 react-style-singleton@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/react-style-singleton/-/react-style-singleton-2.2.1.tgz#f99e420492b2d8f34d38308ff660b60d0b1205b4"

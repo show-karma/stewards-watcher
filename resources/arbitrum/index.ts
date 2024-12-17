@@ -68,6 +68,15 @@ const dark: IDAOTheme = {
   collapse: { text: '#FFFFFF', subtext: '#ADB8C0' },
   compensation: {
     bg: '#1A1C1D',
+    modal: {
+      block: '#34393c',
+      emphasis: '#0E88CC',
+      emphasisBg: '#1E2833',
+      blockText: '#FFFFFF',
+      text: '#FFFFFF',
+      closeBtn: '#FFFFFF',
+      closeBtnBg: '#0E101B',
+    },
     card: {
       bg: '#222429',
       text: '#FFFFFF',
@@ -94,6 +103,20 @@ const dark: IDAOTheme = {
       bonusPoint: '#1F2D28',
       participationRate: '#332831',
       finalScore: '#393d3b',
+    },
+    performanceOverview: {
+      header: {
+        text: '#EAECF0',
+        bg: {
+          optedIn: '#DDF9F2',
+          greaterThan50kVP: '#E1F1FF',
+          averageParticipationRate: '#FFEDFA',
+          averageVotingPower: '#FFF3D4',
+          scoringSystem: '#FFEDFA',
+          discord: '#7839EE',
+          card: '#1A1C1D',
+        },
+      },
     },
   },
   hat: {
@@ -358,6 +381,15 @@ const light: IDAOTheme = {
   collapse: { text: '#1A1C1D', subtext: '#222429', bg: '#FFFFFF' },
   compensation: {
     bg: '#F2F4F7',
+    modal: {
+      block: '#F2F4F7',
+      emphasis: '#155EEF',
+      emphasisBg: '#F5F8FF',
+      blockText: '#344054',
+      text: '#1D2939',
+      closeBtn: '#FFFFFF',
+      closeBtnBg: '#0E101B',
+    },
     card: {
       bg: '#FFF',
       text: '#1D2939',
@@ -384,6 +416,20 @@ const light: IDAOTheme = {
       bonusPoint: '#DDF9F2',
       participationRate: '#FFEDFA',
       finalScore: '#EFFFF5',
+    },
+    performanceOverview: {
+      header: {
+        text: '#1D2939',
+        bg: {
+          optedIn: '#DDF9F2',
+          greaterThan50kVP: '#E1F1FF',
+          averageParticipationRate: '#FFEDFA',
+          averageVotingPower: '#FFF3D4',
+          discord: '#7839EE',
+          scoringSystem: '#FFEDFA',
+          card: '#FFFFFF',
+        },
+      },
     },
   },
   hat: {
