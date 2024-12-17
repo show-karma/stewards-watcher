@@ -10,7 +10,7 @@ export const getPowerfulDelegates = async (
       `/delegate/${daoName}/incentive-programs-stats`,
       {
         params: {
-          incentiveOptedIn: false,
+          // incentiveOptedIn: undefined,
           month: month || undefined,
           year: year || undefined,
         },
@@ -20,7 +20,10 @@ export const getPowerfulDelegates = async (
       return 0;
     }
     const responseDelegates = response.data.data.delegates;
-    return responseDelegates.length;
+    const powerfulDelegates = responseDelegates.filter(
+      (delegate: any) => delegate.votingPower >= 50000
+    );
+    return powerfulDelegates.length;
   } catch (error) {
     return 0;
   }

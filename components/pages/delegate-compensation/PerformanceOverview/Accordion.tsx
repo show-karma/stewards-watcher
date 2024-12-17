@@ -2,7 +2,7 @@ import { Button, Flex, Icon, Image, Text } from '@chakra-ui/react';
 import { useDAO } from 'contexts';
 import { useState } from 'react';
 import { BiChevronDown, BiChevronRight } from 'react-icons/bi';
-import { ScoringSystemCarousel } from './Carousel';
+import { ScoringSystemCarousel } from '../../../Carousels';
 import { scoringStats } from './helper';
 
 export const ScoringSystemAccordion = () => {
@@ -176,7 +176,7 @@ export const ScoringSystemAccordion = () => {
             justifyContent="center"
           >
             <Image
-              alt="Learn how our Scoring System works"
+              alt="Learn how Scoring System works"
               src="/icons/delegate-compensation/brain.png"
               width="24px"
               height="24px"
@@ -187,7 +187,7 @@ export const ScoringSystemAccordion = () => {
             fontWeight={600}
             color={theme.compensation?.performanceOverview.header.text}
           >
-            Learn how our Scoring System works
+            Learn how Scoring System works
           </Text>
         </Flex>
         {!isOpen ? (

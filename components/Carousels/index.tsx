@@ -137,7 +137,7 @@ export const CarouselItem = ({
   </Flex>
 );
 
-interface ItemCarouselProps {
+export interface ItemCarouselProps {
   items: { id: string; component: React.ReactNode }[];
   controlStyle?: CSSProperties;
 }

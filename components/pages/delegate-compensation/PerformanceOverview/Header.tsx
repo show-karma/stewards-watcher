@@ -1,16 +1,24 @@
-import { Flex, Image, Skeleton, Text, useDisclosure } from '@chakra-ui/react';
+import {
+  Flex,
+  Icon,
+  Image,
+  Skeleton,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { ChakraLink } from 'components/ChakraLink';
 import { DiscordIcon } from 'components/Icons';
 import { useDAO } from 'contexts';
 import { useDelegateCompensation } from 'contexts/delegateCompensation';
+import { FaTelegram } from 'react-icons/fa';
 import { DelegateCompensationStats } from 'types';
 import { formatNumber, formatSimpleNumber } from 'utils';
 import { fetchDelegates } from 'utils/delegate-compensation/fetchDelegates';
 import { getOptInCounter } from 'utils/delegate-compensation/getOptInCounter';
 import { getPowerfulDelegates } from 'utils/delegate-compensation/getPowerfulDelegates';
+import { HeaderCarousel } from '../../../Carousels';
 import { ScoringSystemAccordion } from './Accordion';
-import { HeaderCarousel } from './Carousel';
 import { ScoringSystemModal } from './ScoringSystemModal';
 
 type CardProps = {
@@ -148,10 +156,10 @@ export const DelegatePerformanceOverviewHeader = () => {
 
   const averageVotingPower = delegates?.length
     ? delegates.reduce((acc, delegate) => {
-        const totalParticipation = delegate.votingPower
+        const currentVotingPower = delegate.votingPower
           ? delegate.votingPower
           : 0;
-        return acc + totalParticipation;
+        return acc + currentVotingPower;
       }, 0) / delegates.length
     : 0;
 
@@ -232,7 +240,7 @@ export const DelegatePerformanceOverviewHeader = () => {
             alignItems="center"
             justifyContent="center"
           >
-            <DiscordIcon width="24px" height="24px" color="white" />
+            <Icon as={FaTelegram} width="24px" height="24px" color="white" />
           </Flex>
           <Flex flexDir="column" alignItems="start" gap="2">
             <Text
@@ -273,7 +281,7 @@ export const DelegatePerformanceOverviewHeader = () => {
             justifyContent="center"
           >
             <Image
-              alt="Learn how our Scoring System works"
+              alt="Learn how Scoring System works"
               src="/icons/delegate-compensation/brain.png"
               width="32px"
               height="32px"
@@ -288,7 +296,7 @@ export const DelegatePerformanceOverviewHeader = () => {
               onClick={onToggle}
               cursor="pointer"
             >
-              Learn how our Scoring System works
+              Learn how Scoring System works
             </Text>
           </Flex>
         </Flex>
