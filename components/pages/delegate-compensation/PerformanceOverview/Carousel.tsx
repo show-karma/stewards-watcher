@@ -73,11 +73,13 @@ interface CarouselProps<T> {
   readonly renderItem: (
     props: CarouselRenderItemProps<T>
   ) => React.ReactElement<CarouselItemProps>;
+  controlStyle?: CSSProperties;
 }
 
 export const Carousel = <T extends any>({
   items,
   renderItem,
+  controlStyle,
 }: CarouselProps<T>) => {
   const {
     scrollRef,
@@ -100,7 +102,7 @@ export const Carousel = <T extends any>({
           })
         )}
       </ul>
-      <div style={styles.controls} aria-hidden>
+      <div style={{ ...styles.controls, ...controlStyle }} aria-hidden>
         {pages.map((_, pageIndex) => (
           <button
             type="button"
@@ -137,11 +139,13 @@ export const CarouselItem = ({
 
 interface ItemCarouselProps {
   items: { id: string; component: React.ReactNode }[];
+  controlStyle?: CSSProperties;
 }
 
-export const HeaderCarousel = ({ items }: ItemCarouselProps) => (
+export const HeaderCarousel = ({ items, controlStyle }: ItemCarouselProps) => (
   <Carousel
     items={items}
+    controlStyle={controlStyle}
     renderItem={({ item, isSnapPoint }) => (
       <CarouselItem
         key={item.id}
@@ -158,16 +162,20 @@ export const HeaderCarousel = ({ items }: ItemCarouselProps) => (
   />
 );
 
-export const ScoringSystemCarousel = ({ items }: ItemCarouselProps) => (
+export const ScoringSystemCarousel = ({
+  items,
+  controlStyle,
+}: ItemCarouselProps) => (
   <Carousel
     items={items}
+    controlStyle={controlStyle}
     renderItem={({ item, isSnapPoint }) => (
       <CarouselItem
         key={item.id}
         isSnapPoint={isSnapPoint}
         flexProps={{
           width: ['full'],
-          height: ['max-content'],
+          height: ['310px'],
         }}
       >
         {item.component}

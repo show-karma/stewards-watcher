@@ -17,8 +17,9 @@ export const ScoringSystemAccordion = () => {
           border: `1px solid ${theme.compensation?.card.divider}`,
         }}
         borderRadius="8px"
-        h="max-content"
+        h="full"
         w="full"
+        mx="0.5"
       >
         <Flex flexDir="column" gap="4" w="full">
           <Flex
@@ -197,7 +198,14 @@ export const ScoringSystemAccordion = () => {
       </Button>
       {isOpen ? (
         <Flex w="full">
-          {stats ? <ScoringSystemCarousel items={stats} /> : null}
+          {stats ? (
+            <ScoringSystemCarousel
+              controlStyle={{
+                marginTop: '24px',
+              }}
+              items={stats}
+            />
+          ) : null}
         </Flex>
       ) : null}
     </Flex>
