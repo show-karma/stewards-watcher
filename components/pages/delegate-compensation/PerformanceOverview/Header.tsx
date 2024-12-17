@@ -111,9 +111,11 @@ export const DelegatePerformanceOverviewHeader = () => {
         !!selectedDate?.value.month &&
         !!selectedDate?.value.year,
     });
-  const { data: delegates, isLoading: isDelegatesLoading } = useQuery<
-    DelegateCompensationStats[]
-  >({
+  const {
+    data: delegates,
+    isLoading: isDelegatesLoading,
+    isFetching: isDelegatesFetching,
+  } = useQuery<DelegateCompensationStats[]>({
     queryKey: [
       'delegate-compensation',
       daoInfo.config.DAO_KARMA_ID,
@@ -175,7 +177,7 @@ export const DelegatePerformanceOverviewHeader = () => {
           .averageParticipationRate,
       title: 'Average Participation Rate',
       value: formatSimpleNumber(averageParticipationRate || 0),
-      isLoading: isDelegatesLoading,
+      isLoading: isDelegatesLoading || isDelegatesFetching,
     },
     {
       iconUrl: '/icons/delegate-compensation/flexArm.png',
@@ -183,7 +185,7 @@ export const DelegatePerformanceOverviewHeader = () => {
         theme.compensation?.performanceOverview.header.bg.averageVotingPower,
       title: 'Average Voting Power',
       value: formatNumber(averageVotingPower || 0),
-      isLoading: isDelegatesLoading,
+      isLoading: isDelegatesLoading || isDelegatesFetching,
     },
   ];
   return (
@@ -198,7 +200,7 @@ export const DelegatePerformanceOverviewHeader = () => {
         alignItems="center"
         gap={{ base: '2', '2xl': '5' }}
         w="full"
-        justifyContent="flex-start"
+        justifyContent="space-between"
         display={{ base: 'none', xl: 'flex' }}
         flexWrap="wrap"
       >
