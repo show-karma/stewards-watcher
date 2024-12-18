@@ -14,7 +14,7 @@ interface IMonthDropdown {
 }
 
 export const MonthDropdown: FC<IMonthDropdown> = ({
-  minimumPeriod = new Date(COMPENSATION_DATES.NEW_VERSION_MIN),
+  minimumPeriod = new Date(COMPENSATION_DATES.OLD_VERSION_MIN),
   maximumPeriod = new Date(COMPENSATION_DATES.NEW_VERSION_MAX),
 }) => {
   const router = useRouter();

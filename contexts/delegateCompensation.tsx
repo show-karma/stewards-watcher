@@ -33,8 +33,9 @@ interface ProviderProps {
   children: React.ReactNode;
 }
 export const COMPENSATION_DATES = {
+  OLD_VERSION_MIN: new Date('2024-02-11'),
   OLD_VERSION_MAX: new Date('2024-10-10'),
-  NEW_VERSION_MIN: new Date('2024-11-10'),
+  NEW_VERSION_MIN: new Date('2024-10-11'),
   NEW_VERSION_MAX: new Date('2024-12-10'),
 };
 
