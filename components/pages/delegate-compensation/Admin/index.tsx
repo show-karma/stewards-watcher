@@ -18,7 +18,10 @@ import axios from 'axios';
 import { ChakraLink } from 'components/ChakraLink';
 import { LinkIcon } from 'components/Icons/Compensation/LinkIcon';
 import { useAuth, useDAO } from 'contexts';
-import { useDelegateCompensation } from 'contexts/delegateCompensation';
+import {
+  COMPENSATION_DATES,
+  useDelegateCompensation,
+} from 'contexts/delegateCompensation';
 import { KARMA_API } from 'helpers';
 import { useToasty } from 'hooks';
 import { DelegateCompensationAdminLayout } from 'layouts/delegateCompensationAdmin';
@@ -167,7 +170,7 @@ export const DelegateCompensationAdmin = () => {
       <DelegatePeriod
         delegate="none"
         period
-        minimumPeriod={new Date('2024-11-01')}
+        minimumPeriod={new Date(COMPENSATION_DATES.NEW_VERSION_MIN)}
         maximumPeriod={new Date()}
       />
       <Flex my="8" flexDir="row" align="center" gap="4">

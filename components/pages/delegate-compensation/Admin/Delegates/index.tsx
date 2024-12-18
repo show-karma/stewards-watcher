@@ -1,7 +1,10 @@
 /* eslint-disable no-nested-ternary */
 import { Flex, Spinner } from '@chakra-ui/react';
 import { useAuth } from 'contexts';
-import { useDelegateCompensation } from 'contexts/delegateCompensation';
+import {
+  COMPENSATION_DATES,
+  useDelegateCompensation,
+} from 'contexts/delegateCompensation';
 import { DelegateCompensationAdminLayout } from 'layouts/delegateCompensationAdmin';
 import { useEffect } from 'react';
 import { DelegatePeriod } from '../DelegatePeriod';
@@ -42,7 +45,7 @@ export const DelegateCompensationAdminDelegates = ({
       <Flex align="stretch" flex={1} w="full" flexDirection="column" gap="8">
         <DelegatePeriod
           delegate={shouldShowDelegate}
-          minimumPeriod={new Date('2024-11-01')}
+          minimumPeriod={new Date(COMPENSATION_DATES.NEW_VERSION_MIN)}
           maximumPeriod={isPublic ? undefined : new Date()}
         />
         {isFetchingDelegateInfo || isLoadingDelegateInfo ? (
