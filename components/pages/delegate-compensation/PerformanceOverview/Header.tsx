@@ -14,7 +14,7 @@ import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import { useState } from 'react';
 import { FaTelegram } from 'react-icons/fa';
 import { DelegateCompensationStats } from 'types';
-import { formatNumber, formatSimpleNumber } from 'utils';
+import { formatSimpleNumber } from 'utils';
 import { fetchDelegates } from 'utils/delegate-compensation/fetchDelegates';
 import { HeaderCarousel } from '../../../Carousels';
 import { ScoringSystemAccordion } from './Accordion';
@@ -82,7 +82,6 @@ export const DelegatePerformanceOverviewHeader = () => {
   const { theme, daoInfo } = useDAO();
   const { isOpen, onToggle } = useDisclosure();
   const [averageParticipationRate, setAverageParticipationRate] = useState(0);
-  const [averageVotingPower, setAverageVotingPower] = useState(0);
 
   const { data: optInDelegates, isLoading: isLoadingOptInDelegates } = useQuery(
     {
@@ -106,11 +105,35 @@ export const DelegatePerformanceOverviewHeader = () => {
         !!selectedDate?.value.year,
     }
   );
+  const {
+    data: allDelegatesOfPeriod,
+    isLoading: isLoadingAllDelegatesOfPeriod,
+  } = useQuery({
+    queryKey: [
+      'delegate-compensation',
+      daoInfo.config.DAO_KARMA_ID,
+      selectedDate?.value.month,
+      selectedDate?.value.year,
+      false,
+    ],
+    queryFn: () =>
+      fetchDelegates(
+        daoInfo.config.DAO_KARMA_ID,
+        false,
+        selectedDate?.value.month as number,
+        selectedDate?.value.year as number,
+        false
+      ),
+    enabled:
+      !!daoInfo.config.DAO_KARMA_ID &&
+      !!selectedDate?.value.month &&
+      !!selectedDate?.value.year,
+  });
 
   const optInCounter = optInDelegates?.length;
 
   const powerfulDelegates =
-    optInDelegates?.filter(
+    allDelegatesOfPeriod?.filter(
       (delegate: any) => delegate.votingPower && +delegate.votingPower >= 50000
     )?.length || 0;
 
@@ -141,17 +164,6 @@ export const DelegatePerformanceOverviewHeader = () => {
           : 0;
 
         setAverageParticipationRate(averageParticipationRateCalculated);
-
-        const averageVotingPowerCalculated = responseDelegates?.length
-          ? responseDelegates.reduce((acc: any, delegate: any) => {
-              const currentVotingPower = delegate.votingPower
-                ? delegate.votingPower
-                : 0;
-              return acc + currentVotingPower;
-            }, 0) / responseDelegates.length
-          : 0;
-
-        setAverageVotingPower(averageVotingPowerCalculated);
         return responseDelegates as DelegateCompensationStats[];
       });
       return fetchedDelegates;
@@ -176,7 +188,7 @@ export const DelegatePerformanceOverviewHeader = () => {
         theme.compensation?.performanceOverview.header.bg.greaterThan50kVP,
       title: 'Delegates with >50k VP',
       value: formatSimpleNumber(powerfulDelegates || 0),
-      isLoading: isLoadingOptInDelegates,
+      isLoading: isLoadingAllDelegatesOfPeriod,
     },
     {
       iconUrl: '/icons/delegate-compensation/lookUp.png',
@@ -187,15 +199,6 @@ export const DelegatePerformanceOverviewHeader = () => {
       value: formatSimpleNumber(averageParticipationRate || 0),
       isLoading:
         isDelegatesLoading || (!averageParticipationRate && isDelegatesLoading),
-    },
-    {
-      iconUrl: '/icons/delegate-compensation/flexArm.png',
-      iconBg:
-        theme.compensation?.performanceOverview.header.bg.averageVotingPower,
-      title: 'Average Voting Power',
-      value: formatNumber(averageVotingPower || 0),
-      isLoading:
-        isDelegatesLoading || (!averageVotingPower && isDelegatesLoading),
     },
   ];
   return (
