@@ -185,7 +185,8 @@ export const DelegatePerformanceOverviewHeader = () => {
           .averageParticipationRate,
       title: 'Average Participation Rate',
       value: formatSimpleNumber(averageParticipationRate || 0),
-      isLoading: isDelegatesLoading || !averageParticipationRate,
+      isLoading:
+        isDelegatesLoading || (!averageParticipationRate && isDelegatesLoading),
     },
     {
       iconUrl: '/icons/delegate-compensation/flexArm.png',
@@ -193,7 +194,8 @@ export const DelegatePerformanceOverviewHeader = () => {
         theme.compensation?.performanceOverview.header.bg.averageVotingPower,
       title: 'Average Voting Power',
       value: formatNumber(averageVotingPower || 0),
-      isLoading: isDelegatesLoading || !averageVotingPower,
+      isLoading:
+        isDelegatesLoading || (!averageVotingPower && isDelegatesLoading),
     },
   ];
   return (
