@@ -1,10 +1,15 @@
+import { FlexProps } from '@chakra-ui/react';
 import {
   Carousel,
   CarouselItem,
   ItemCarouselProps,
 } from 'components/Carousels';
 
-export const StatsCarousel = ({ items, controlStyle }: ItemCarouselProps) => (
+export const StatsCarousel = ({
+  items,
+  controlStyle,
+  flexProps,
+}: ItemCarouselProps & { flexProps?: FlexProps }) => (
   <Carousel
     items={items}
     controlStyle={controlStyle}
@@ -14,7 +19,8 @@ export const StatsCarousel = ({ items, controlStyle }: ItemCarouselProps) => (
         isSnapPoint={isSnapPoint}
         flexProps={{
           width: ['full'],
-          height: ['310px'],
+          height: ['max-content'],
+          ...flexProps,
         }}
       >
         {item.component}

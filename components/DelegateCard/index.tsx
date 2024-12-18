@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-no-useless-fragment */
 import {
   Box,
@@ -9,7 +10,9 @@ import {
   Popover,
   PopoverArrow,
   PopoverBody,
+  PopoverCloseButton,
   PopoverContent,
+  PopoverHeader,
   PopoverTrigger,
   Skeleton,
   SkeletonCircle,
@@ -32,6 +35,7 @@ import { DELEGATOR_TRACKER_NOT_SUPPORTED_DAOS } from 'helpers';
 import { useToasty } from 'hooks';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import pluralize from 'pluralize';
 import { AiOutlineThunderbolt } from 'react-icons/ai';
 import { FaDiscord } from 'react-icons/fa';
 import { HiUserGroup } from 'react-icons/hi';
@@ -50,6 +54,7 @@ import { DelegateButton } from '../DelegateButton';
 import { ForumIcon, ThreadIcon, TwitterIcon, WebsiteIcon } from '../Icons';
 import { ImgWithFallback } from '../ImgWithFallback';
 import { ExpandableCardText } from './ExpandableCardText';
+import { StatsCarousel } from './StatsCarousel';
 
 const DelegateStat = dynamic(() =>
   import('./DelegateStat').then(module => module.DelegateStat)
@@ -89,10 +94,14 @@ const StatCases: FC<IStatCasesProps> = ({
       <Link
         background="transparent"
         href={`https://karmahq.xyz/dao/${daoName}/delegators/${delegateAddress}`}
-        _hover={{}}
         h="max-content"
         isExternal
         cursor="pointer"
+        w="full"
+        maxW="max-content"
+        _hover={{
+          opacity: 0.75,
+        }}
       >
         <DelegateStat stat={statItem} />
       </Link>
@@ -348,72 +357,61 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
 
     if (type === 'tracks')
       return (
-        <Flex
-          overflowX="hidden"
-          textOverflow="ellipsis"
-          whiteSpace="nowrap"
-          gap="1"
-          flex="1"
-        >
-          {data?.tracks?.map((track, index) => (
-            <Tooltip
-              key={+index}
-              label={
-                daoInfo.config.TRACKS_DICTIONARY &&
-                daoInfo.config.TRACKS_DICTIONARY[track.name]
-                  ? daoInfo.config.TRACKS_DICTIONARY[track.name].description
-                  : undefined
-              }
-              bg={theme.collapse.bg || theme.card.background}
-              color={theme.collapse.text}
+        <Popover>
+          <PopoverTrigger>
+            <Button
+              textDecoration="underline"
+              color={theme.card.workstream.text}
+              bgColor={theme.card.workstream.bg}
+              px="2"
+              py="1"
+              borderRadius="md"
+              fontSize="12px"
+              fontWeight="medium"
+              _hover={{
+                backgroundColor: convertHexToRGBA(theme.title, 0.8),
+              }}
+              h="26px"
             >
-              <Flex
-                flexDir="row"
-                gap="1"
-                bgColor={theme.card.workstream.bg}
-                px="2"
-                py="1"
-                borderRadius="md"
-                align="center"
-                w="max-content"
-                minW="min-content"
-                textOverflow="ellipsis"
-                whiteSpace="nowrap"
-                overflow="hidden"
-                flex="1"
-              >
-                <Text
-                  color={theme.card.workstream.text}
-                  fontSize="10px"
-                  fontWeight="medium"
-                  _hover={{
-                    backgroundColor: convertHexToRGBA(theme.title, 0.8),
-                  }}
-                  w="max-content"
-                  minW="max-content"
-                >
-                  {daoInfo.config.TRACKS_DICTIONARY &&
-                  daoInfo.config.TRACKS_DICTIONARY[track.name]
-                    ? daoInfo.config.TRACKS_DICTIONARY[track.name].emoji
-                    : undefined}
-                </Text>
-                <Text
-                  color={theme.card.workstream.text}
-                  bgColor={theme.card.workstream.bg}
-                  fontSize="10px"
-                  fontWeight="medium"
-                  _hover={{
-                    backgroundColor: convertHexToRGBA(theme.title, 0.8),
-                  }}
-                  w="max-content"
-                  minW="max-content"
-                >
-                  {track.name}
-                </Text>
-              </Flex>
-            </Tooltip>
-          ))}
-        </Flex>
+              {data?.tracks?.length}{' '}
+              {pluralize('Track', data?.tracks?.length || 0)}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent bg={theme.card.background}>
+            <PopoverArrow bg={theme.card.border} />
+            <PopoverCloseButton color={theme.card.text.primary} />
+            <Flex flexDir="row" gap="2" w="full">
+              <StatsCarousel
+                items={
+                  data?.tracks?.map(track => ({
+                    id: track.id.toString(),
+                    component: (
+                      <Flex flexDir="column" gap="2" w="full" key={track.id}>
+                        <PopoverHeader borderBottom="none">
+                          {daoInfo.config.TRACKS_DICTIONARY &&
+                          daoInfo.config.TRACKS_DICTIONARY[track.name]
+                            ? daoInfo.config.TRACKS_DICTIONARY[track.name].emoji
+                            : undefined}{' '}
+                          {track.name}
+                        </PopoverHeader>
+                        <PopoverBody>
+                          {daoInfo.config.TRACKS_DICTIONARY &&
+                          daoInfo.config.TRACKS_DICTIONARY[track.name]
+                            ? daoInfo.config.TRACKS_DICTIONARY[track.name]
+                                .description
+                            : undefined}
+                        </PopoverBody>
+                      </Flex>
+                    ),
+                  })) || []
+                }
+                controlStyle={{
+                  marginTop: '16px',
+                }}
+              />
+            </Flex>
+          </PopoverContent>
+        </Popover>
       );
 
     return (
@@ -423,8 +421,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
         px="2"
         py="1"
         borderRadius="md"
-        fontSize="10px"
+        fontSize="12px"
         fontWeight="medium"
+        h="26px"
         _hover={{
           backgroundColor: convertHexToRGBA(theme.title, 0.8),
         }}
@@ -452,14 +451,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     ? findStatement[0]
     : findStatement;
 
-  const columnsCalculator = () => {
-    if (stats.length < 4) return stats.length;
-    return 4;
-  };
-
-  const firstRowStats = stats.slice(0, columnsCalculator());
-  const restRowStats = stats.slice(columnsCalculator(), stats.length);
-
   const { toast } = useToasty();
   const copyText = () => {
     onCopy();
@@ -470,24 +461,21 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     });
   };
 
-  const statBorderWidth = (index: number) => {
-    if (index === firstRowStats.length - 1) {
-      if (index === 0) return '1px 1px 1px 1px';
-      if (index === 1) return '1px';
-      return '1px 1px 1px 0';
-    }
-    if (index === 0) return '1px 0 1px 1px';
-    if (index === 1) return '1px';
-    return '1px 1px 1px 0';
-  };
+  const statRows = () => {
+    const FIRST_ROW_LENGTH = 2;
+    const SEQUENTIAL_ROWS_LENGTH = 3;
 
-  const statBorderRadius = (index: number) => {
-    if (index === firstRowStats.length - 1) {
-      if (index === 0) return '8px 8px 8px 8px';
-      return '0 8px 8px 0';
+    const firstRow = stats.slice(0, FIRST_ROW_LENGTH);
+    const rows = [firstRow];
+
+    // split stats after FIRST_ROW_LENGTH
+    const restStats = stats.slice(FIRST_ROW_LENGTH, stats.length);
+
+    for (let i = 0; i < restStats.length; i += SEQUENTIAL_ROWS_LENGTH) {
+      rows.push(restStats.slice(i, i + SEQUENTIAL_ROWS_LENGTH));
     }
-    if (index === 0) return '8px 0 0 8px';
-    return '0 0 0 0';
+
+    return rows;
   };
 
   const getDataStatusColor = (status: string) => {
@@ -685,64 +673,73 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                 >
                   {renderCategory()}
                   {!isLoaded ? (
-                    <Flex h="21px" />
+                    <Flex h="26px" w="full" />
+                  ) : !interests.value.length ? (
+                    <Flex h="26px" w="full" />
                   ) : (
                     <Flex
                       w="full"
                       gap="1"
                       overflowX="hidden"
                       width="100%"
-                      // maxW={{ base: '160px' }}
                       flex="1"
+                      minH="26px"
+                      h="full"
                     >
-                      {interests.value.length > 0 &&
-                        (interests.value.slice(0, 3) as string[]).map(
-                          (interest, index) => (
-                            <Tooltip
-                              label={interest}
-                              key={+index}
-                              color={theme.card.interests.text}
-                              bg={theme.background}
-                              hasArrow
-                              placement="top"
-                              boxShadow="2xl"
-                              border="1px solid"
-                              borderColor={theme.card.border}
-                              arrowShadowColor={theme.card.border}
-                            >
-                              <Text
-                                color={theme.card.interests.text}
-                                bgColor={theme.card.interests.bg}
-                                px="2"
-                                py="1"
-                                borderRadius="md"
-                                fontSize="10px"
-                                fontWeight="medium"
-                                key={+index}
-                                h="max-content"
-                                maxW="20"
-                                textOverflow="ellipsis"
-                                whiteSpace="nowrap"
-                                overflow="hidden"
-                                _hover={{
-                                  backgroundColor: () => {
-                                    if (theme.card.statBg.includes('rgba'))
-                                      return theme.card.statBg.replace(
-                                        '0.15',
-                                        '0.30'
-                                      );
-                                    return convertHexToRGBA(
-                                      theme.card.statBg,
-                                      0.1
-                                    );
-                                  },
-                                }}
-                              >
-                                {interest}
-                              </Text>
-                            </Tooltip>
-                          )
-                        )}
+                      <Tooltip
+                        label={
+                          <Flex
+                            flexDir="column"
+                            gap="1"
+                            py="1"
+                            borderRadius="lg"
+                          >
+                            {typeof interests.value === 'string' ? (
+                              <Text>{interests.value}</Text>
+                            ) : (
+                              interests.value?.map?.(interest => (
+                                <Text key={interest}>{interest}</Text>
+                              ))
+                            )}
+                          </Flex>
+                        }
+                        color={theme.card.interests.text}
+                        bgColor={theme.card.background}
+                        hasArrow
+                        placement="top"
+                        boxShadow="2xl"
+                        border="1px solid"
+                        borderColor={theme.card.border}
+                        arrowShadowColor={theme.card.border}
+                      >
+                        <Text
+                          color={theme.card.interests.text}
+                          bgColor={theme.card.statBg}
+                          px="2"
+                          py="1"
+                          borderRadius="md"
+                          fontSize="12px"
+                          fontWeight="medium"
+                          h="full"
+                          maxH="26px"
+                          textOverflow="ellipsis"
+                          whiteSpace="nowrap"
+                          overflow="hidden"
+                          _hover={{
+                            backgroundColor: () => {
+                              if (theme.card.statBg.includes('rgba'))
+                                return theme.card.statBg.replace(
+                                  '0.15',
+                                  '0.30'
+                                );
+                              return convertHexToRGBA(theme.card.statBg, 0.1);
+                            },
+                          }}
+                        >
+                          {interests.value.length}{' '}
+                          {pluralize('interest', interests.value.length)}
+                        </Text>
+                      </Tooltip>
                     </Flex>
                   )}
                 </Flex>
@@ -799,9 +796,10 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
           justify="space-between"
           h="full"
           px={{ base: '3', lg: '5', xl: '4' }}
+          flex="1"
         >
           {isLoaded ? (
-            <Flex mb="4">
+            <Flex mb="4" flex="1">
               {userStatement ? (
                 <Flex h="full" align="flex-start">
                   <ExpandableCardText
@@ -825,52 +823,53 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
             <>
               {isLoaded ? (
                 <>
-                  {stats.length > 0 && (
-                    <Flex flexDir="column" w="full" align="center">
-                      <Flex
-                        gridColumnGap="0"
-                        bgColor={theme.card.statBg}
-                        borderRadius="8px"
-                        h="full"
-                        w="full"
-                        flexDir="row"
-                        justifyContent="space-between"
-                        alignItems="center"
-                        position="relative"
-                        boxShadow="0px 0px 6px rgba(255, 255, 255, 0.03)"
-                      >
-                        {firstRowStats.map((statItem, index) => (
+                  <Flex
+                    flexDir="column"
+                    w="full"
+                    align="center"
+                    overflowX="auto"
+                    gap="1"
+                  >
+                    <StatsCarousel
+                      controlStyle={{
+                        marginTop: '12px',
+                      }}
+                      items={statRows()?.map((item, index) => ({
+                        id: index.toString(),
+                        component: (
                           <Flex
+                            key={index}
+                            flexDir="row"
+                            w="full"
                             align="center"
                             justify="center"
-                            key={+index}
-                            flex="1"
-                            borderStyle="solid"
-                            borderColor={theme.card.border}
+                            gap="4"
+                            bgColor={theme.card.statBg}
+                            borderRadius="8px"
+                            boxShadow="0px 0px 6px rgba(255, 255, 255, 0.03)"
                             py="2"
                             px="1.5"
-                            borderWidth={statBorderWidth(index)}
-                            borderRadius={statBorderRadius(index)}
                             maxW="full"
                           >
-                            <StatCases
-                              statItem={statItem}
-                              canShowBreakdown={
-                                !!data?.discourseHandle &&
-                                !!daoData?.socialLinks.forum &&
-                                !!config.DAO_FORUM_TYPE
-                              }
-                              daoName={config.DAO_KARMA_ID}
-                              delegateAddress={data.address}
-                            />
+                            {item.map((statItem, itemIndex) => (
+                              <StatCases
+                                key={itemIndex}
+                                statItem={statItem}
+                                canShowBreakdown={
+                                  !!data?.discourseHandle &&
+                                  !!daoData?.socialLinks.forum &&
+                                  !!config.DAO_FORUM_TYPE
+                                }
+                                daoName={config.DAO_KARMA_ID}
+                                delegateAddress={data.address}
+                              />
+                            ))}
                           </Flex>
-                        ))}
-                        {restRowStats.length > 0 && (
-                          <StatPopover stats={restRowStats} data={data} />
-                        )}
-                      </Flex>
-                    </Flex>
-                  )}
+                        ),
+                      }))}
+                    />
+                  </Flex>
+                  {stats.length ? <Flex /> : <Skeleton w="full" h="full" />}
                 </>
               ) : (
                 <Skeleton w="full" h="full" />
