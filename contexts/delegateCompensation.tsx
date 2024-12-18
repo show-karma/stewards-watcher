@@ -98,19 +98,6 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
           undefined,
           { shallow: true }
         );
-      } else if (
-        delegateCompensationPage &&
-        queryDate !== DATES.NEW_VERSION_MAX
-      ) {
-        targetDate = DATES.NEW_VERSION_MAX;
-        router.push(
-          {
-            pathname: `${rootPathname}/delegate-compensation`,
-            query: { month: 'november', year: 2024 },
-          },
-          undefined,
-          { shallow: true }
-        );
       } else {
         targetDate = queryDate;
       }
