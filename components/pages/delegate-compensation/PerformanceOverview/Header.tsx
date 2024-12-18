@@ -86,10 +86,11 @@ export const DelegatePerformanceOverviewHeader = () => {
   const { data: optInDelegates, isLoading: isLoadingOptInDelegates } = useQuery(
     {
       queryKey: [
-        'optInCounter',
+        'delegate-compensation',
         daoInfo.config.DAO_KARMA_ID,
         selectedDate?.value.month,
         selectedDate?.value.year,
+        true,
       ],
       queryFn: () =>
         fetchDelegates(
@@ -97,7 +98,7 @@ export const DelegatePerformanceOverviewHeader = () => {
           true,
           selectedDate?.value.month as number,
           selectedDate?.value.year as number,
-          true
+          false
         ),
       enabled:
         !!daoInfo.config.DAO_KARMA_ID &&
