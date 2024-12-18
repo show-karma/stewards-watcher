@@ -27,7 +27,10 @@ import { ChakraLink } from 'components/ChakraLink';
 import { FalseIcon } from 'components/Icons/Compensation/FalseIcon';
 import { TrueIcon } from 'components/Icons/Compensation/TrueIcon';
 import { useAuth, useDAO } from 'contexts';
-import { useDelegateCompensation } from 'contexts/delegateCompensation';
+import {
+  COMPENSATION_DATES,
+  useDelegateCompensation,
+} from 'contexts/delegateCompensation';
 import { API_ROUTES, KARMA_API } from 'helpers';
 import { useToasty } from 'hooks';
 import { DelegateCompensationAdminLayout } from 'layouts/delegateCompensationAdmin';
@@ -341,7 +344,7 @@ export const DelegateCompensationAdminForumActivity = ({
         <DelegatePeriod
           delegate="block"
           period
-          minimumPeriod={new Date('2024-10-30')}
+          minimumPeriod={new Date(COMPENSATION_DATES.OLD_VERSION_MAX)}
           maximumPeriod={isPublic ? undefined : new Date()}
         />
         <Flex

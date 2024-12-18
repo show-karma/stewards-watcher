@@ -1,7 +1,10 @@
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { DownChevron } from 'components/Icons';
 import { useDAO } from 'contexts';
-import { useDelegateCompensation } from 'contexts/delegateCompensation';
+import {
+  COMPENSATION_DATES,
+  useDelegateCompensation,
+} from 'contexts/delegateCompensation';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 
@@ -11,8 +14,8 @@ interface IMonthDropdown {
 }
 
 export const MonthDropdown: FC<IMonthDropdown> = ({
-  minimumPeriod = new Date('2024-02-11'),
-  maximumPeriod = new Date('2024-11-20'),
+  minimumPeriod = new Date(COMPENSATION_DATES.NEW_VERSION_MIN),
+  maximumPeriod = new Date(COMPENSATION_DATES.NEW_VERSION_MAX),
 }) => {
   const router = useRouter();
   const { rootPathname } = useDAO();

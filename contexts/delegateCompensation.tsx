@@ -32,6 +32,11 @@ const DelegateCompensationContext = createContext(
 interface ProviderProps {
   children: React.ReactNode;
 }
+export const COMPENSATION_DATES = {
+  OLD_VERSION_MAX: new Date('2024-10-10'),
+  NEW_VERSION_MIN: new Date('2024-11-10'),
+  NEW_VERSION_MAX: new Date('2024-12-10'),
+};
 
 export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
   children,
@@ -40,12 +45,7 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
   const { daoInfo, rootPathname } = useDAO();
 
   const [selectedDate, setSelectedDate] = useState(() => {
-    const DATES = {
-      OLD_VERSION_MAX: new Date('2024-10-10'),
-      NEW_VERSION_MIN: new Date('2024-11-10'),
-      NEW_VERSION_MAX: new Date('2024-11-10'),
-    };
-
+    const DATES = COMPENSATION_DATES;
     const queryString = router.asPath.split('?')[1];
     const monthQuery = queryString?.match(/(?<=month=)[^&]*/i)?.[0];
     const yearQuery = Number(queryString?.match(/(?<=year=)[^&]*/i)?.[0]);
