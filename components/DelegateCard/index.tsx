@@ -713,8 +713,8 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                         arrowShadowColor={theme.card.border}
                       >
                         <Text
-                          color={theme.card.interests.text}
-                          bgColor={theme.card.statBg}
+                          color={theme.card.workstream.text}
+                          bgColor={theme.card.workstream.bg}
                           px="2"
                           py="1"
                           borderRadius="md"
@@ -737,7 +737,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                           }}
                         >
                           {interests.value.length}{' '}
-                          {pluralize('interest', interests.value.length)}
+                          {pluralize('Interest', interests.value.length)}
                         </Text>
                       </Tooltip>
                     </Flex>
