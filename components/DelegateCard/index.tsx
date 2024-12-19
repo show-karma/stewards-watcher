@@ -355,46 +355,55 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     const type = daoInfo.config.DAO_CATEGORIES_TYPE;
     const categoryName = data?.[type]?.[0]?.name;
 
-    if (type === 'tracks')
-      return (
-        <Popover>
-          <PopoverTrigger>
-            <Button
-              textDecoration="underline"
-              color={theme.card.workstream.text}
-              bgColor={theme.card.workstream.bg}
-              px="2"
-              py="1"
-              borderRadius="md"
-              fontSize="12px"
-              fontWeight="medium"
-              _hover={{
-                backgroundColor: convertHexToRGBA(theme.title, 0.8),
-              }}
-              h="26px"
-            >
-              {data?.tracks?.length}{' '}
-              {pluralize('Track', data?.tracks?.length || 0)}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent bg={theme.card.background}>
-            <PopoverArrow bg={theme.card.border} />
-            <PopoverCloseButton color={theme.card.text.primary} />
-            <Flex flexDir="row" gap="2" w="full">
+    return (
+      <Popover>
+        <PopoverTrigger>
+          <Button
+            textDecoration="underline"
+            color={theme.card.workstream.text}
+            bgColor={theme.card.workstream.bg}
+            px="2"
+            py="1"
+            borderRadius="md"
+            fontSize="12px"
+            fontWeight="medium"
+            _hover={{
+              backgroundColor: convertHexToRGBA(theme.title, 0.8),
+            }}
+            h="26px"
+            w="full"
+            maxW="max-content"
+          >
+            {data?.[type]?.length === 1
+              ? data?.[type]?.[0]?.name
+              : `${data?.[type]?.length}${' '}${pluralize(
+                  type.slice(0, 1).toUpperCase() + type.slice(1),
+                  data?.[type]?.length || 0
+                )}`}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent bg={theme.card.background}>
+          <PopoverArrow bg={theme.card.border} />
+          <PopoverCloseButton color={theme.card.text.primary} />
+          <Flex flexDir="row" gap="2" w="full">
+            {type === 'tracks' ? (
               <StatsCarousel
                 items={
                   data?.tracks?.map(track => ({
                     id: track.id.toString(),
                     component: (
                       <Flex flexDir="column" gap="2" w="full" key={track.id}>
-                        <PopoverHeader borderBottom="none">
+                        <PopoverHeader
+                          borderBottom="none"
+                          color={theme.card.text.primary}
+                        >
                           {daoInfo.config.TRACKS_DICTIONARY &&
                           daoInfo.config.TRACKS_DICTIONARY[track.name]
                             ? daoInfo.config.TRACKS_DICTIONARY[track.name].emoji
                             : undefined}{' '}
                           {track.name}
                         </PopoverHeader>
-                        <PopoverBody>
+                        <PopoverBody color={theme.card.text.primary}>
                           {daoInfo.config.TRACKS_DICTIONARY &&
                           daoInfo.config.TRACKS_DICTIONARY[track.name]
                             ? daoInfo.config.TRACKS_DICTIONARY[track.name]
@@ -409,27 +418,34 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   marginTop: '16px',
                 }}
               />
-            </Flex>
-          </PopoverContent>
-        </Popover>
-      );
-
-    return (
-      <Text
-        color={theme.card.workstream.text}
-        bgColor={theme.card.workstream.bg}
-        px="2"
-        py="1"
-        borderRadius="md"
-        fontSize="12px"
-        fontWeight="medium"
-        h="26px"
-        _hover={{
-          backgroundColor: convertHexToRGBA(theme.title, 0.8),
-        }}
-      >
-        {categoryName}
-      </Text>
+            ) : (
+              <StatsCarousel
+                items={
+                  data?.[type]?.map(item => ({
+                    id: item.id.toString(),
+                    component: (
+                      <Flex flexDir="column" gap="2" w="full" key={item.id}>
+                        <PopoverHeader
+                          borderBottom="none"
+                          color={theme.card.text.primary}
+                        >
+                          {item.name}
+                        </PopoverHeader>
+                        <PopoverBody color={theme.card.text.primary}>
+                          {item.description}
+                        </PopoverBody>
+                      </Flex>
+                    ),
+                  })) || []
+                }
+                controlStyle={{
+                  marginTop: '16px',
+                }}
+              />
+            )}
+          </Flex>
+        </PopoverContent>
+      </Popover>
     );
   };
 
@@ -670,6 +686,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   overflowX="hidden"
                   width="100%"
                   maxW={{ base: '280px' }}
+                  w="full"
                 >
                   {renderCategory()}
                   {!isLoaded ? (
@@ -726,14 +743,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                           whiteSpace="nowrap"
                           overflow="hidden"
                           _hover={{
-                            backgroundColor: () => {
-                              if (theme.card.statBg.includes('rgba'))
-                                return theme.card.statBg.replace(
-                                  '0.15',
-                                  '0.30'
-                                );
-                              return convertHexToRGBA(theme.card.statBg, 0.1);
-                            },
+                            opacity: 0.8,
                           }}
                         >
                           {interests.value.length}{' '}
