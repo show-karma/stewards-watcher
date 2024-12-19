@@ -889,7 +889,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                             borderRadius="8px"
                             boxShadow="0px 0px 6px rgba(255, 255, 255, 0.03)"
                             py="2"
-                            px="1.5"
                             maxW="full"
                           >
                             {item.map((statItem, itemIndex) => (
@@ -910,7 +909,6 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                       }))}
                     />
                   </Flex>
-                  {stats.length ? <Flex /> : <Skeleton w="full" h="full" />}
                 </>
               ) : (
                 <Skeleton w="full" h="full" />
