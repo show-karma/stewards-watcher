@@ -78,7 +78,6 @@
         "tsx": "never"
       }
     ],
-    "no-bitwise": ["error", { "allow": ["~"] }],
-    "id-length": ["error", { "min": 2, "max": 40, "exceptions": ["_"] }]
+    "no-bitwise": ["error", { "allow": ["~"] }]
   }
 }

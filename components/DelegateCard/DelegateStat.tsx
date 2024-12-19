@@ -25,7 +25,8 @@ export const DelegateStat: FC<{
         justifyContent="center"
         maxH="max-content"
         h="max-content"
-        w="max-content"
+        w="full"
+        maxW="max-content"
       >
         <Text
           color={theme.card.text.primary}
@@ -34,7 +35,8 @@ export const DelegateStat: FC<{
           fontWeight="bold"
           textAlign="center"
           h="max-content"
-          w="max-content"
+          w="full"
+          maxW="max-content"
         >
           {stat.value}
         </Text>
@@ -43,7 +45,8 @@ export const DelegateStat: FC<{
           fontSize={{ base: '10px', md: '11px' }}
           fontWeight="light"
           h="max-content"
-          w={{ base: 'max-content' }}
+          w="full"
+          maxW="max-content"
         >
           {stat.title}
         </Text>

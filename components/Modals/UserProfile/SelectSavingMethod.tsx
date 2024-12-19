@@ -38,8 +38,8 @@ const SelectBox: React.FC<{
   >
     <Box>
       <Box
-        height="21px"
-        width="21px"
+        height="22px"
+        width="22px"
         borderRadius="10px"
         border={`2px solid ${selected ? '#0FAC85' : 'white'}`}
         display="flex"
