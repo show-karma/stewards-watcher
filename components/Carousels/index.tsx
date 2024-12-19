@@ -2,12 +2,16 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 // Carousel.tsx
 import { Flex, FlexProps } from '@chakra-ui/react';
+import { useDAO } from 'contexts';
 import React, { CSSProperties } from 'react';
 import { useSnapCarousel } from 'react-snap-carousel';
 
 const hideScrollbarStyles: any = {
   msOverflowStyle: 'none', // IE and Edge
   scrollbarWidth: 'none', // Firefox
+  '&::WebkitScrollbar': {
+    display: 'none', // Chrome, Safari and Opera
+  },
   '&::-webkit-scrollbar': {
     display: 'none', // Chrome, Safari and Opera
   },
@@ -92,6 +96,7 @@ export const Carousel = <T extends any>({
     goTo,
     snapPointIndexes,
   } = useSnapCarousel();
+  const { theme } = useDAO();
   return (
     <div style={styles.root}>
       <ul style={{ ...styles.scroll, ...hideScrollbarStyles }} ref={scrollRef}>
@@ -111,6 +116,11 @@ export const Carousel = <T extends any>({
               ...styles.paginationButton,
               ...(activePageIndex === pageIndex
                 ? styles.paginationButtonActive
+                : {}),
+              ...(activePageIndex === pageIndex
+                ? {
+                    background: theme.brandingImageColor || theme.branding,
+                  }
                 : {}),
             }}
             onClick={() => goTo(pageIndex)}
