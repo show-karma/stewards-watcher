@@ -75,14 +75,16 @@ const SocialMedias: FC<{
       >
         <GithubIcon boxSize={iconSize} color={theme.modal.header.title} />
       </MediaIcon>
-      <MediaIcon
-        profile={profile}
-        media="discord"
-        changeTab={changeTab}
-        isSamePerson={isSamePerson}
-      >
-        <DiscordIcon boxSize={iconSize} color={theme.modal.header.title} />
-      </MediaIcon>
+      {(daoInfo.config.DAO_DISCORD_CHANNEL || profile.discordUsername) && (
+        <MediaIcon
+          profile={profile}
+          media="discord"
+          changeTab={changeTab}
+          isSamePerson={isSamePerson}
+        >
+          <DiscordIcon boxSize={iconSize} color={theme.modal.header.title} />
+        </MediaIcon>
+      )}
       <MediaIcon
         profile={profile}
         media="website"
