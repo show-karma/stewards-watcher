@@ -717,11 +717,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                       >
                         <PopoverTrigger>
                           <Box
-                            color={theme.card.interests.text}
+                            color={theme.card.text.primary}
                             bgColor={theme.card.background}
                             boxShadow="2xl"
-                            border="1px solid"
-                            borderColor={theme.card.border}
                             pointerEvents="all"
                             onMouseEnter={() => setIsInterestsOpen(true)}
                             onMouseLeave={() => setIsInterestsOpen(false)}
@@ -762,12 +760,21 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                               gap="1"
                               py="1"
                               borderRadius="lg"
+                              color={theme.card.text.primary}
+                              bgColor={theme.card.background}
                             >
                               {typeof interests.value === 'string' ? (
-                                <Text>{interests.value}</Text>
+                                <Text color={theme.card.text.primary}>
+                                  {interests.value}
+                                </Text>
                               ) : (
                                 interests.value?.map?.(interest => (
-                                  <Text key={interest}>{interest}</Text>
+                                  <Text
+                                    key={interest}
+                                    color={theme.card.text.primary}
+                                  >
+                                    {interest}
+                                  </Text>
                                 ))
                               )}
                             </Flex>
