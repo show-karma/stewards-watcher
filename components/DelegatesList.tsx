@@ -193,7 +193,7 @@ export const DelegatesList: FC<IDelegatesList> = ({ pathUser }) => {
             alignItems="center"
             justifyContent="space-between"
             mb="8"
-            px={{ base: '0', lg: '0' }}
+            px={{ base: '4', lg: '0' }}
           >
             <DelegatesCases
               delegates={delegates}
