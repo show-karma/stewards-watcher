@@ -9,6 +9,9 @@ import { useSnapCarousel } from 'react-snap-carousel';
 const hideScrollbarStyles: any = {
   msOverflowStyle: 'none', // IE and Edge
   scrollbarWidth: 'none', // Firefox
+  '&::WebkitScrollbar': {
+    display: 'none', // Chrome, Safari and Opera
+  },
   '&::-webkit-scrollbar': {
     display: 'none', // Chrome, Safari and Opera
   },

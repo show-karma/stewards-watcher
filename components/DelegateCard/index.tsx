@@ -37,7 +37,6 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import pluralize from 'pluralize';
 import { AiOutlineThunderbolt } from 'react-icons/ai';
-import { FaDiscord } from 'react-icons/fa';
 import { HiUserGroup } from 'react-icons/hi';
 import { IoIosCheckboxOutline } from 'react-icons/io';
 import { IoCopy, IoPersonOutline } from 'react-icons/io5';
@@ -157,6 +156,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   const { daoInfo, theme, daoData } = useDAO();
   const { selectProfile, period, setSelectedProfileData } = useDelegates();
   const { onCopy } = useClipboard(data?.address || '');
+  const [isInterestsOpen, setIsInterestsOpen] = useState(false);
 
   const { config } = daoInfo;
   const isLoaded = !!data;
@@ -396,6 +396,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                         <PopoverHeader
                           borderBottom="none"
                           color={theme.card.text.primary}
+                          fontWeight={600}
                         >
                           {daoInfo.config.TRACKS_DICTIONARY &&
                           daoInfo.config.TRACKS_DICTIONARY[track.name]
@@ -416,6 +417,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                 }
                 controlStyle={{
                   marginTop: '16px',
+                  marginBottom: '8px',
                 }}
               />
             ) : (
@@ -440,6 +442,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                 }
                 controlStyle={{
                   marginTop: '16px',
+                  marginBottom: '8px',
                 }}
               />
             )}
@@ -687,6 +690,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   width="100%"
                   maxW={{ base: '280px' }}
                   w="full"
+                  align="center"
                 >
                   {renderCategory()}
                   {!isLoaded ? (
@@ -702,54 +706,74 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                       flex="1"
                       minH="26px"
                       h="full"
+                      cursor="pointer"
                     >
-                      <Tooltip
-                        label={
-                          <Flex
-                            flexDir="column"
-                            gap="1"
-                            py="1"
-                            borderRadius="lg"
-                          >
-                            {typeof interests.value === 'string' ? (
-                              <Text>{interests.value}</Text>
-                            ) : (
-                              interests.value?.map?.(interest => (
-                                <Text key={interest}>{interest}</Text>
-                              ))
-                            )}
-                          </Flex>
-                        }
-                        color={theme.card.interests.text}
-                        bgColor={theme.card.background}
-                        hasArrow
-                        placement="top"
-                        boxShadow="2xl"
-                        border="1px solid"
-                        borderColor={theme.card.border}
-                        arrowShadowColor={theme.card.border}
+                      <Popover
+                        isOpen={isInterestsOpen}
+                        onOpen={() => setIsInterestsOpen(true)}
+                        onClose={() => setIsInterestsOpen(false)}
+                        closeOnEsc
+                        closeOnBlur
                       >
-                        <Text
-                          color={theme.card.workstream.text}
-                          bgColor={theme.card.workstream.bg}
-                          px="2"
-                          py="1"
-                          borderRadius="md"
-                          fontSize="12px"
-                          fontWeight="medium"
-                          h="full"
-                          maxH="26px"
-                          textOverflow="ellipsis"
-                          whiteSpace="nowrap"
-                          overflow="hidden"
-                          _hover={{
-                            opacity: 0.8,
-                          }}
-                        >
-                          {interests.value.length}{' '}
-                          {pluralize('Interest', interests.value.length)}
-                        </Text>
-                      </Tooltip>
+                        <PopoverTrigger>
+                          <Box
+                            color={theme.card.interests.text}
+                            bgColor={theme.card.background}
+                            boxShadow="2xl"
+                            border="1px solid"
+                            borderColor={theme.card.border}
+                            pointerEvents="all"
+                            onMouseEnter={() => setIsInterestsOpen(true)}
+                            onMouseLeave={() => setIsInterestsOpen(false)}
+                            transition="all 0.2s ease-in-out"
+                            onClick={() => setIsInterestsOpen(true)}
+                            userSelect="none"
+                          >
+                            <Text
+                              color={theme.card.workstream.text}
+                              bgColor={theme.card.workstream.bg}
+                              px="2"
+                              py="1"
+                              borderRadius="md"
+                              fontSize="12px"
+                              fontWeight="medium"
+                              h="full"
+                              maxH="26px"
+                              textOverflow="ellipsis"
+                              whiteSpace="nowrap"
+                              overflow="hidden"
+                              _hover={{
+                                opacity: 0.8,
+                              }}
+                            >
+                              {interests.value.length}{' '}
+                              {pluralize('Interest', interests.value.length)}
+                            </Text>
+                          </Box>
+                        </PopoverTrigger>
+                        <PopoverContent w="max-content">
+                          <PopoverArrow
+                            color={theme.card.interests.text}
+                            bg={theme.background}
+                          />
+                          <PopoverBody bg={theme.card.background}>
+                            <Flex
+                              flexDir="column"
+                              gap="1"
+                              py="1"
+                              borderRadius="lg"
+                            >
+                              {typeof interests.value === 'string' ? (
+                                <Text>{interests.value}</Text>
+                              ) : (
+                                interests.value?.map?.(interest => (
+                                  <Text key={interest}>{interest}</Text>
+                                ))
+                              )}
+                            </Flex>
+                          </PopoverBody>
+                        </PopoverContent>
+                      </Popover>
                     </Flex>
                   )}
                 </Flex>
@@ -1030,9 +1054,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                         _active={{}}
                         _focus={{}}
                         _focusWithin={{}}
-                      >
-                        <Icon as={FaDiscord} w="17px" h="17px" />
-                      </Button>
+                      />
                     </PopoverTrigger>
                     <PopoverContent
                       w="max-content"
