@@ -118,7 +118,9 @@ export const Carousel = <T extends any>({
                 ? styles.paginationButtonActive
                 : {}),
               ...(activePageIndex === pageIndex
-                ? { background: theme.branding }
+                ? {
+                    background: theme.brandingImageColor || theme.branding,
+                  }
                 : {}),
             }}
             onClick={() => goTo(pageIndex)}
