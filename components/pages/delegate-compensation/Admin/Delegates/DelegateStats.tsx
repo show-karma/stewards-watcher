@@ -430,27 +430,8 @@ export const DelegateStats = () => {
               h="24px"
             />
           </Flex>
-          {!isAuthorized ? (
-            <Flex flexDir="column" gap="2" justify="center" align="flex-start">
-              <Text
-                fontSize="16px"
-                fontWeight="600"
-                color={theme.compensation?.card.text}
-              >
-                Bonus Points
-              </Text>
-              <Text
-                fontSize="24px"
-                fontWeight={700}
-                color={theme.compensation?.card.secondaryText}
-                lineHeight="32px"
-              >
-                +{formatSimpleNumber(delegateInfo?.stats?.bonusPoint || 0)}
-              </Text>
-            </Flex>
-          ) : (
-            <DelegateBP />
-          )}
+
+          <DelegateBP />
         </Flex>
 
         <Flex

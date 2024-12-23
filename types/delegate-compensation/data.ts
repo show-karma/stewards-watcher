@@ -56,6 +56,9 @@ export type DelegateStatsFromAPI = {
     };
     totalParticipation: string;
     participationRatePercent: number;
+    contributions: number;
+    biweeklyCalls: number;
+    monthlyCalls: number;
   };
 };
 

@@ -1,7 +1,9 @@
 import {
   Box,
+  Button,
   Flex,
   Heading,
+  Input,
   Spinner,
   Switch,
   Table,
@@ -26,7 +28,7 @@ import { KARMA_API } from 'helpers';
 import { useToasty } from 'hooks';
 import { DelegateCompensationAdminLayout } from 'layouts/delegateCompensationAdmin';
 import { queryClient } from 'pages/_app';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AiFillQuestionCircle } from 'react-icons/ai';
 import { formatDate } from 'utils';
 import { getProposals } from 'utils/delegate-compensation/getProposals';
@@ -73,7 +75,25 @@ export const DelegateCompensationAdmin = () => {
     refetchOnWindowFocus: false,
   });
 
-  const { proposals, finished } = data;
+  const {
+    proposals,
+    finished,
+    biweeklyCalls: biweeklyCallsData,
+    monthlyCalls: monthlyCallsData,
+  } = data;
+
+  const [monthlyCalls, setMonthlyCalls] = useState<number | undefined>(
+    monthlyCallsData || 0
+  );
+  const [biweeklyCalls, setBiWeeklyCalls] = useState<number | undefined>(
+    biweeklyCallsData || 0
+  );
+
+  useEffect(() => {
+    console.log(monthlyCallsData, biweeklyCallsData);
+    setMonthlyCalls(monthlyCallsData || 0);
+    setBiWeeklyCalls(biweeklyCallsData || 0);
+  }, [monthlyCallsData, biweeklyCallsData]);
 
   const toggleInclude = async (proposalId: string, proposalChoice: boolean) => {
     try {
@@ -165,6 +185,49 @@ export const DelegateCompensationAdmin = () => {
     }
   };
 
+  const saveCalls = async () => {
+    try {
+      setActionsLoading({ calls: true });
+      const authorizedAPI = axios.create({
+        timeout: 30000,
+        baseURL: KARMA_API.base_url,
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: authToken ? `Bearer ${authToken}` : '',
+        },
+      });
+      await authorizedAPI
+        .put(
+          `/incentive-settings/${daoInfo.config.DAO_KARMA_ID}/${selectedDate?.value.month}/${selectedDate?.value.year}`,
+          {
+            biweeklyCalls,
+            monthlyCalls,
+          }
+        )
+        .then(() => {
+          setTimeout(() => {
+            toast({
+              title: `No. of monthly and bi-weekly calls have been saved.`,
+              status: 'success',
+            });
+            queryClient
+              .invalidateQueries([
+                'delegate-compensation-proposals',
+                selectedDate?.value.month,
+                selectedDate?.value.year,
+              ])
+              .then(() => {
+                setActionsLoading({ calls: false });
+              });
+          }, 250);
+        });
+    } catch (error) {
+      console.log(error);
+      setActionsLoading({ calls: false });
+    }
+  };
+
   return (
     <DelegateCompensationAdminLayout>
       <DelegatePeriod
@@ -184,6 +247,76 @@ export const DelegateCompensationAdmin = () => {
         </Text>
         {actionsLoading.finished && <Spinner size="xs" />}
       </Flex>
+      <Flex flexDir="column" gap="1" mb="4" w="full" maxW="max-content">
+        <Flex flexDir="row" gap="4" align="center" justify="space-between">
+          <Text color={theme.compensation?.card.text} w="max-content">
+            No. of bi-weekly calls
+          </Text>
+          <Input
+            type="number"
+            defaultValue={biweeklyCalls}
+            value={biweeklyCalls}
+            onChange={event => {
+              if (event.target.value === '') {
+                setBiWeeklyCalls(undefined);
+              } else {
+                setBiWeeklyCalls(
+                  Math.max(0, Math.floor(Number(event.target.value)))
+                );
+              }
+            }}
+            placeholder="Enter no. of attendances"
+            w="48px"
+            fontSize="18px"
+            fontWeight={400}
+            color={theme.compensation?.card.text}
+            lineHeight="32px"
+            px="2"
+            py="0"
+          />
+        </Flex>
+        <Flex flexDir="row" gap="4" align="center" justify="space-between">
+          <Text color={theme.compensation?.card.text} w="max-content">
+            No. of monthly calls
+          </Text>
+          <Input
+            type="number"
+            defaultValue={monthlyCalls}
+            value={monthlyCalls}
+            onChange={event => {
+              if (event.target.value === '') {
+                setMonthlyCalls(undefined);
+              } else {
+                setMonthlyCalls(
+                  Math.max(0, Math.floor(Number(event.target.value)))
+                );
+              }
+            }}
+            placeholder="Enter no. of attendances"
+            w="48px"
+            fontSize="18px"
+            fontWeight={400}
+            color={theme.compensation?.card.text}
+            lineHeight="32px"
+            px="2"
+            py="0"
+          />
+        </Flex>
+        <Button
+          flex="1"
+          color={theme.compensation?.card.text}
+          onClick={saveCalls}
+          bg={theme.compensation?.card.bg}
+          py="3"
+          px="2"
+          isDisabled={actionsLoading.calls || !monthlyCalls || !biweeklyCalls}
+          disabled={actionsLoading.calls || !monthlyCalls || !biweeklyCalls}
+          isLoading={actionsLoading.calls}
+        >
+          Save
+        </Button>
+      </Flex>
+
       <Flex align="stretch" flex={1} w="full" flexDirection="column" gap="8">
         {(isLoading || isFetching) && proposals.length === 0 ? (
           <Flex w="full" justify="center" align="center">
