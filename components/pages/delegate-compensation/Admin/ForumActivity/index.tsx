@@ -97,6 +97,8 @@ export const DelegateCompensationAdminForumActivity = ({
     }
   );
 
+  const isMonthFinished = proposalsData?.finished || false;
+
   const {
     data: posts,
     isLoading,
@@ -420,7 +422,8 @@ export const DelegateCompensationAdminForumActivity = ({
                     </Th>
                     {!listToHide.includes(
                       delegateInfo?.publicAddress?.toLowerCase() || ''
-                    ) || isAuthorized
+                    ) &&
+                    (isAuthorized || isMonthFinished)
                       ? columns.map(item => (
                           <Th
                             borderBottom="1px solid"
@@ -450,7 +453,8 @@ export const DelegateCompensationAdminForumActivity = ({
                         opacity={
                           !listToHide.includes(
                             delegateInfo?.publicAddress?.toLowerCase() || ''
-                          ) || isAuthorized
+                          ) &&
+                          (isAuthorized || isMonthFinished)
                             ? post.status === 'valid'
                               ? 1
                               : 0.75
@@ -525,7 +529,8 @@ export const DelegateCompensationAdminForumActivity = ({
                         </Td>
                         {!listToHide.includes(
                           delegateInfo?.publicAddress?.toLowerCase() || ''
-                        ) || isAuthorized
+                        ) &&
+                        (isAuthorized || isMonthFinished)
                           ? columns.map(item => {
                               if (item.type === 'read-only' || !isAuthorized) {
                                 if (item.id === 'status') {
@@ -678,7 +683,8 @@ export const DelegateCompensationAdminForumActivity = ({
                   })}
                   {!listToHide.includes(
                     delegateInfo?.publicAddress?.toLowerCase() || ''
-                  ) || isAuthorized ? (
+                  ) &&
+                  (isAuthorized || isMonthFinished) ? (
                     <Tr key="averages" w="full">
                       <Td border="none" />
                       <Td border="none" />
@@ -746,7 +752,8 @@ export const DelegateCompensationAdminForumActivity = ({
             </Flex>
             {!listToHide.includes(
               delegateInfo?.publicAddress?.toLowerCase() || ''
-            ) || isAuthorized ? (
+            ) &&
+            (isAuthorized || isMonthFinished) ? (
               <Flex flexDir="column" gap="2" justify="center" alignItems="end">
                 {proposalsData.finished ? null : (
                   <Flex w="full" justify="flex-end" align="flex-end">

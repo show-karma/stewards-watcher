@@ -13,6 +13,10 @@ export interface ProposalsFromAPI {
     }
   >;
   finished?: boolean;
+  additionalSettings?: {
+    monthlyCalls?: number;
+    biweeklyCalls?: number;
+  };
 }
 
 export interface ProposalItem {

@@ -9,6 +9,8 @@ export const getProposals = async (
 ): Promise<{
   proposals: Proposal[];
   finished?: boolean;
+  monthlyCalls?: number;
+  biweeklyCalls?: number;
 }> => {
   try {
     const axiosClient: AxiosResponse<{ data: ProposalsFromAPI }> =
@@ -51,6 +53,8 @@ export const getProposals = async (
         },
       ] as Proposal[],
       finished: data.finished,
+      monthlyCalls: data?.additionalSettings?.monthlyCalls,
+      biweeklyCalls: data?.additionalSettings?.biweeklyCalls,
     };
   } catch (error) {
     console.log(error);
