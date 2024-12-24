@@ -38,7 +38,7 @@ export const DelegateBP = () => {
     delegateInfo?.stats?.bonusPoint || '0'
   );
   const { theme, daoInfo } = useDAO();
-  const { authToken } = useAuth();
+  const { authToken, isDaoAdmin: isAuthorized } = useAuth();
   const { toast } = useToasty();
   const [isSaving, setIsSaving] = useState(false);
 
@@ -86,6 +86,7 @@ export const DelegateBP = () => {
           delegateInfo.stats?.bonusPoint?.toString() ||
           '0'
       );
+      setTotalBonusPoints(delegateInfo.stats?.bonusPoint?.toString() || '0');
     }
   }, [delegateInfo]);
 
@@ -440,26 +441,28 @@ export const DelegateBP = () => {
                   </Tbody>
                 </Table>
 
-                <Flex w="full" justify="center" mt="3">
-                  <Button
-                    isDisabled={
-                      attendancesBiWeekly.toString() === '' ||
-                      attendancesMonthly.toString() === '' ||
-                      contributionPoints.toString() === ''
-                    }
-                    disabled={
-                      attendancesBiWeekly.toString() === '' ||
-                      attendancesMonthly.toString() === '' ||
-                      contributionPoints.toString() === ''
-                    }
-                    onClick={handleSaveBonusPoints}
-                    color={theme.compensation?.card.secondaryText}
-                    bg={theme.compensation?.bg}
-                    isLoading={isSaving}
-                  >
-                    Save
-                  </Button>
-                </Flex>
+                {isAuthorized ? (
+                  <Flex w="full" justify="center" mt="3">
+                    <Button
+                      isDisabled={
+                        attendancesBiWeekly.toString() === '' ||
+                        attendancesMonthly.toString() === '' ||
+                        contributionPoints.toString() === ''
+                      }
+                      disabled={
+                        attendancesBiWeekly.toString() === '' ||
+                        attendancesMonthly.toString() === '' ||
+                        contributionPoints.toString() === ''
+                      }
+                      onClick={handleSaveBonusPoints}
+                      color={theme.compensation?.card.secondaryText}
+                      bg={theme.compensation?.bg}
+                      isLoading={isSaving}
+                    >
+                      Save
+                    </Button>
+                  </Flex>
+                ) : null}
               </Flex>
             </PopoverBody>
           </PopoverContent>
