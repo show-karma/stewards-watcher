@@ -145,55 +145,86 @@ export const DelegateBP = () => {
     if (+totalAttendancesBiWeekly) {
       return (
         <Tr>
-          <Td p="0" textAlign="left">
+          <Td
+            p="0"
+            textAlign="left"
+            borderBottomColor={theme.compensation?.card.divider}
+            borderBottom="1px solid"
+          >
             No. of Attendances Bi-Weekly
           </Td>
-          <Td p="0" textAlign="center">
-            <Editable
-              defaultValue={attendancesBiWeekly.toString()}
-              value={attendancesBiWeekly.toString()}
-            >
-              <EditablePreview
-                fontSize="22px"
-                fontWeight={700}
-                color={theme.compensation?.card.secondaryText}
-                lineHeight="32px"
-                cursor="pointer"
-                textDecor="underline"
-                bg="transparent"
-                border="2px solid"
-                borderColor={
-                  attendancesBiWeekly.toString() === ''
-                    ? theme.compensation?.card.link
-                    : 'transparent'
-                }
-                w={attendancesBiWeekly.toString() === '' ? '32px' : 'auto'}
-                h={attendancesBiWeekly.toString() === '' ? '40px' : 'auto'}
-              />
-              <Input
-                as={EditableInput}
-                type="number"
-                onChange={event => {
-                  if (Number(event.target.value) >= totalAttendancesBiWeekly) {
-                    setAttendancesBiWeekly(totalAttendancesBiWeekly.toString());
-                  } else {
-                    setAttendancesBiWeekly(event.target.value);
+          <Td
+            p="0"
+            textAlign="center"
+            borderBottomColor={theme.compensation?.card.divider}
+            borderBottom="1px solid"
+          >
+            {isAuthorized ? (
+              <Editable
+                defaultValue={attendancesBiWeekly.toString()}
+                value={attendancesBiWeekly.toString()}
+              >
+                <EditablePreview
+                  fontSize="22px"
+                  fontWeight={700}
+                  color={theme.compensation?.card.secondaryText}
+                  lineHeight="32px"
+                  cursor="pointer"
+                  textDecor="underline"
+                  bg="transparent"
+                  border="2px solid"
+                  borderColor={
+                    attendancesBiWeekly.toString() === ''
+                      ? theme.compensation?.card.link
+                      : 'transparent'
                   }
-                }}
-                placeholder="Enter no. of attendances"
-                bg="transparent"
-                w="36px"
+                  w={attendancesBiWeekly.toString() === '' ? '32px' : 'auto'}
+                  h={attendancesBiWeekly.toString() === '' ? '40px' : 'auto'}
+                />
+                <Input
+                  as={EditableInput}
+                  type="number"
+                  onChange={event => {
+                    if (
+                      Number(event.target.value) >= totalAttendancesBiWeekly
+                    ) {
+                      setAttendancesBiWeekly(
+                        totalAttendancesBiWeekly.toString()
+                      );
+                    } else {
+                      setAttendancesBiWeekly(event.target.value);
+                    }
+                  }}
+                  placeholder="Enter no. of attendances"
+                  bg="transparent"
+                  w="36px"
+                  fontSize="22px"
+                  fontWeight={700}
+                  color={theme.compensation?.card.secondaryText}
+                  lineHeight="32px"
+                  px="2"
+                  py="0"
+                  border="none"
+                />
+              </Editable>
+            ) : (
+              <Text
                 fontSize="22px"
                 fontWeight={700}
                 color={theme.compensation?.card.secondaryText}
                 lineHeight="32px"
-                px="2"
-                py="0"
-                border="none"
-              />
-            </Editable>
+                bg="transparent"
+              >
+                {attendancesBiWeekly}
+              </Text>
+            )}
           </Td>
-          <Td p="0" textAlign="center">
+          <Td
+            p="0"
+            textAlign="center"
+            borderBottomColor={theme.compensation?.card.divider}
+            borderBottom="1px solid"
+          >
             <Text
               fontSize="22px"
               fontWeight={700}
@@ -214,55 +245,82 @@ export const DelegateBP = () => {
     if (+totalAttendancesMonthly) {
       return (
         <Tr>
-          <Td p="0" textAlign="left">
+          <Td
+            p="0"
+            textAlign="left"
+            borderBottomColor={theme.compensation?.card.divider}
+            borderBottom="1px solid"
+          >
             No. of Attendances Monthly
           </Td>
-          <Td p="0" textAlign="center">
-            <Editable
-              defaultValue={attendancesMonthly.toString()}
-              value={attendancesMonthly.toString()}
-            >
-              <EditablePreview
-                fontSize="22px"
-                fontWeight={700}
-                color={theme.compensation?.card.secondaryText}
-                lineHeight="32px"
-                cursor="pointer"
-                textDecor="underline"
-                bg="transparent"
-                border="2px solid"
-                borderColor={
-                  attendancesMonthly.toString() === ''
-                    ? theme.compensation?.card.link
-                    : 'transparent'
-                }
-                w={attendancesMonthly.toString() === '' ? '32px' : 'auto'}
-                h={attendancesMonthly.toString() === '' ? '40px' : 'auto'}
-              />
-              <Input
-                as={EditableInput}
-                type="number"
-                onChange={event => {
-                  if (Number(event.target.value) >= totalAttendancesMonthly) {
-                    setAttendancesMonthly(totalAttendancesMonthly.toString());
-                  } else {
-                    setAttendancesMonthly(event.target.value);
+          <Td
+            p="0"
+            textAlign="center"
+            borderBottomColor={theme.compensation?.card.divider}
+            borderBottom="1px solid"
+          >
+            {isAuthorized ? (
+              <Editable
+                defaultValue={attendancesMonthly.toString()}
+                value={attendancesMonthly.toString()}
+              >
+                <EditablePreview
+                  fontSize="22px"
+                  fontWeight={700}
+                  color={theme.compensation?.card.secondaryText}
+                  lineHeight="32px"
+                  cursor="pointer"
+                  textDecor="underline"
+                  bg="transparent"
+                  border="2px solid"
+                  borderColor={
+                    attendancesMonthly.toString() === ''
+                      ? theme.compensation?.card.link
+                      : 'transparent'
                   }
-                }}
-                placeholder="Enter no. of attendances"
-                bg="transparent"
-                w="36px"
+                  w={attendancesMonthly.toString() === '' ? '32px' : 'auto'}
+                  h={attendancesMonthly.toString() === '' ? '40px' : 'auto'}
+                />
+                <Input
+                  as={EditableInput}
+                  type="number"
+                  onChange={event => {
+                    if (Number(event.target.value) >= totalAttendancesMonthly) {
+                      setAttendancesMonthly(totalAttendancesMonthly.toString());
+                    } else {
+                      setAttendancesMonthly(event.target.value);
+                    }
+                  }}
+                  placeholder="Enter no. of attendances"
+                  bg="transparent"
+                  w="36px"
+                  fontSize="22px"
+                  fontWeight={700}
+                  color={theme.compensation?.card.secondaryText}
+                  lineHeight="32px"
+                  px="2"
+                  py="0"
+                  border="none"
+                />
+              </Editable>
+            ) : (
+              <Text
                 fontSize="22px"
                 fontWeight={700}
                 color={theme.compensation?.card.secondaryText}
                 lineHeight="32px"
-                px="2"
-                py="0"
-                border="none"
-              />
-            </Editable>
+                bg="transparent"
+              >
+                {attendancesMonthly}
+              </Text>
+            )}
           </Td>
-          <Td p="0" textAlign="center">
+          <Td
+            p="0"
+            textAlign="center"
+            borderBottomColor={theme.compensation?.card.divider}
+            borderBottom="1px solid"
+          >
             <Text
               fontSize="22px"
               fontWeight={700}
@@ -331,78 +389,109 @@ export const DelegateBP = () => {
                 <Table>
                   <Thead>
                     <Tr>
-                      <Th />
-                      <Th px="2">Value</Th>
-                      <Th px="2">MAX</Th>
+                      <Th borderColor={theme.compensation?.card.divider} />
+                      <Th px="2" borderColor={theme.compensation?.card.divider}>
+                        Value
+                      </Th>
+                      <Th px="2" borderColor={theme.compensation?.card.divider}>
+                        MAX
+                      </Th>
                     </Tr>
                   </Thead>
                   <Tbody>
                     {renderBiWeekly()}
                     {renderMonthly()}
                     <Tr>
-                      <Td p="0" textAlign="left">
+                      <Td
+                        p="0"
+                        textAlign="left"
+                        borderBottomColor={theme.compensation?.card.divider}
+                        borderBottom="1px solid"
+                      >
                         Contributions
                       </Td>
-                      <Td p="0" textAlign="center">
-                        <Editable
-                          defaultValue={contributionPoints.toString()}
-                          value={contributionPoints.toString()}
-                        >
-                          <EditablePreview
-                            fontSize="22px"
-                            fontWeight={700}
-                            color={theme.compensation?.card.secondaryText}
-                            lineHeight="32px"
-                            cursor="pointer"
-                            textDecor="underline"
-                            bg="transparent"
-                            border="2px solid"
-                            borderColor={
-                              contributionPoints.toString() === ''
-                                ? theme.compensation?.card.link
-                                : 'transparent'
-                            }
-                            w={
-                              contributionPoints.toString() === ''
-                                ? '36px'
-                                : 'auto'
-                            }
-                            h={
-                              contributionPoints.toString() === ''
-                                ? '40px'
-                                : 'auto'
-                            }
-                          />
-                          <Input
-                            as={EditableInput}
-                            type="number"
-                            onChange={event => {
-                              if (
-                                Number(event.target.value) >
-                                maxContributionPossible
-                              ) {
-                                setContributionPoints(
-                                  maxContributionPossible.toString()
-                                );
-                              } else {
-                                setContributionPoints(event.target.value);
+                      <Td
+                        p="0"
+                        textAlign="center"
+                        borderBottomColor={theme.compensation?.card.divider}
+                        borderBottom="1px solid"
+                      >
+                        {isAuthorized ? (
+                          <Editable
+                            defaultValue={contributionPoints.toString()}
+                            value={contributionPoints.toString()}
+                          >
+                            <EditablePreview
+                              fontSize="22px"
+                              fontWeight={700}
+                              color={theme.compensation?.card.secondaryText}
+                              lineHeight="32px"
+                              cursor="pointer"
+                              textDecor="underline"
+                              bg="transparent"
+                              border="2px solid"
+                              borderColor={
+                                contributionPoints.toString() === ''
+                                  ? theme.compensation?.card.link
+                                  : 'transparent'
                               }
-                            }}
-                            placeholder="Enter no. of attendances"
-                            bg="transparent"
-                            w="min-content"
-                            maxW="64px"
+                              w={
+                                contributionPoints.toString() === ''
+                                  ? '36px'
+                                  : 'auto'
+                              }
+                              h={
+                                contributionPoints.toString() === ''
+                                  ? '40px'
+                                  : 'auto'
+                              }
+                            />
+                            <Input
+                              as={EditableInput}
+                              type="number"
+                              onChange={event => {
+                                if (
+                                  Number(event.target.value) >
+                                  maxContributionPossible
+                                ) {
+                                  setContributionPoints(
+                                    maxContributionPossible.toString()
+                                  );
+                                } else {
+                                  setContributionPoints(event.target.value);
+                                }
+                              }}
+                              placeholder="Enter no. of attendances"
+                              bg="transparent"
+                              w="min-content"
+                              maxW="64px"
+                              fontSize="22px"
+                              fontWeight={700}
+                              color={theme.compensation?.card.secondaryText}
+                              lineHeight="32px"
+                              px="2"
+                              py="0"
+                              border="none"
+                            />
+                          </Editable>
+                        ) : (
+                          <Text
                             fontSize="22px"
                             fontWeight={700}
                             color={theme.compensation?.card.secondaryText}
                             lineHeight="32px"
-                            px="2"
-                            py="0"
-                            border="none"
-                          />
-                        </Editable>
+                            bg="transparent"
+                          >
+                            {contributionPoints}
+                          </Text>
+                        )}
                       </Td>
-                      <Td p="0" textAlign="center">
+                      <Td
+                        p="0"
+                        textAlign="center"
+                        borderBottomColor={theme.compensation?.card.divider}
+                        borderBottom="1px solid"
+                      >
                         <Text
                           fontSize="22px"
                           fontWeight={700}
@@ -415,11 +504,21 @@ export const DelegateBP = () => {
                       </Td>
                     </Tr>
                     <Tr>
-                      <Td p="0" textAlign="left">
+                      <Td
+                        p="0"
+                        textAlign="left"
+                        borderBottomColor={theme.compensation?.card.divider}
+                        borderBottom="1px solid"
+                      >
                         Total Bonus Points
                       </Td>
-                      <Td p="0" textAlign="center" />
-                      <Td p="0" textAlign="center">
+
+                      <Td
+                        p="0"
+                        textAlign="center"
+                        borderBottomColor={theme.compensation?.card.divider}
+                        borderBottom="1px solid"
+                      >
                         <Text
                           fontSize="22px"
                           fontWeight={700}
@@ -435,6 +534,22 @@ export const DelegateBP = () => {
                             ),
                             30
                           )}
+                        </Text>
+                      </Td>
+                      <Td
+                        p="0"
+                        textAlign="center"
+                        borderBottomColor={theme.compensation?.card.divider}
+                        borderBottom="1px solid"
+                      >
+                        <Text
+                          fontSize="22px"
+                          fontWeight={700}
+                          color={theme.compensation?.card.secondaryText}
+                          lineHeight="32px"
+                          bg="transparent"
+                        >
+                          {maxBonusPoints}
                         </Text>
                       </Td>
                     </Tr>
