@@ -125,13 +125,18 @@ export const DelegateCompensationAdminForumActivity = ({
 
   useEffect(() => {
     if (!posts?.length) return;
+    const checkIfCommunicationThread = (postTitle: string) =>
+      postTitle.toLowerCase().includes('communication thread');
     const setupRows = () => {
       const newRows =
         posts?.map((item: ForumPosts) => {
           const post = forumPosts.find(forumPost => forumPost.id === item.id);
           return {
             id: item.id,
-            status: post?.status || 'valid',
+            status:
+              post?.status || checkIfCommunicationThread(item.topic)
+                ? 'invalid'
+                : 'valid',
             relevance: post?.relevance || 0,
             depthOfAnalysis: post?.depthOfAnalysis || 0,
             timing: post?.timing || 0,
