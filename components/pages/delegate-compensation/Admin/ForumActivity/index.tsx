@@ -134,9 +134,8 @@ export const DelegateCompensationAdminForumActivity = ({
           return {
             id: item.id,
             status:
-              post?.status || checkIfCommunicationThread(item.topic)
-                ? 'invalid'
-                : 'valid',
+              post?.status ||
+              (checkIfCommunicationThread(item?.topic) ? 'invalid' : 'valid'),
             relevance: post?.relevance || 0,
             depthOfAnalysis: post?.depthOfAnalysis || 0,
             timing: post?.timing || 0,
