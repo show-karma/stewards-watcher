@@ -40,7 +40,7 @@ export const AdminGuard: FC<AdminGuardProps> = ({
         h="full"
         w="full"
       >
-        <Text>You are not authorized to access this page</Text>;
+        <Text>You are not authorized to access this page</Text>
       </Flex>
     );
   }
