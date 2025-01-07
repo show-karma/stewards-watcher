@@ -1,18 +1,18 @@
 import axios from 'axios';
 import { cookieNames } from 'helpers';
+import { useToasty } from 'hooks';
 import jwtDecode from 'jwt-decode';
 import React, {
-  useContext,
   createContext,
+  useContext,
+  useEffect,
   useMemo,
   useState,
-  useEffect,
 } from 'react';
 import { IExpirationStatus, ISession } from 'types';
 import Cookies from 'universal-cookie';
 import { checkExpirationStatus } from 'utils';
 import { useAccount, useDisconnect, useSignMessage } from 'wagmi';
-import { useToasty } from 'hooks';
 import { useDAO } from './dao';
 import { useDelegates } from './delegates';
 import { useWallet } from './wallet';
@@ -194,6 +194,9 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
     if (isConnected && isAuthenticating && !isAuthenticated) {
       authenticate();
     }
+    if (!isConnected) {
+      setIsDaoAdmin(false);
+    }
   }, [isConnected, daoData]);
 
   useEffect(() => {
@@ -226,6 +229,7 @@ export const AuthProvider: React.FC<ProviderProps> = ({ children }) => {
       disconnect,
       isDaoAdmin,
       isLoadingSign,
+      isConnected,
     ]
   );
 
