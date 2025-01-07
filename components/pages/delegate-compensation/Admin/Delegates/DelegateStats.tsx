@@ -63,6 +63,7 @@ export const DelegateStats = () => {
         !!selectedDate?.value.month &&
         !!selectedDate?.value.year &&
         !!daoInfo.config.DAO_KARMA_ID,
+      refetchOnWindowFocus: false,
     }
   );
 

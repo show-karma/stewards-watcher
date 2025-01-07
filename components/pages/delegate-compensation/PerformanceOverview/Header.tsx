@@ -130,6 +130,7 @@ export const DelegatePerformanceOverviewHeader = () => {
       !!daoInfo.config.DAO_KARMA_ID &&
       !!selectedDate?.value.month &&
       !!selectedDate?.value.year,
+    refetchOnWindowFocus: false,
   });
 
   const optInCounter = optInDelegates?.length;
