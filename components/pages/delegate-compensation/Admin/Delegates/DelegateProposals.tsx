@@ -43,6 +43,7 @@ import { formatDate } from 'utils';
 import { getPRBreakdown } from 'utils/delegate-compensation/getPRBreakdown';
 import { getProposals } from 'utils/delegate-compensation/getProposals';
 import * as yup from 'yup';
+import { MonthNotFinishedTooltip } from '../../MonthNotFinishedTooltip';
 import { Expandable } from './Expandable';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -91,11 +92,13 @@ const DelegateProposalsWrapped = ({
   snapshotProposals,
   onChainProposals,
   selectRationale,
+  isMonthFinished,
 }: {
   defaultValueBreakdown: DefaultValueBreakdown[];
   snapshotProposals: ProposalAndBreakdownRow[];
   onChainProposals: ProposalAndBreakdownRow[];
   selectRationale: (rationale: ProposalAndBreakdownRow) => void;
+  isMonthFinished: boolean;
 }) => {
   const { delegateInfo, refreshDelegateInfo, selectedDate } =
     useDelegateCompensation();
@@ -449,52 +452,58 @@ const DelegateProposalsWrapped = ({
                           justify="flex-start"
                           minW="200px"
                         >
-                          {isAuthorized ? (
-                            <Input
-                              defaultValue={item.post || ''}
-                              bg={theme.compensation?.card.input.bg}
-                              color={theme.compensation?.card.input.text}
-                              disabled={isSaving}
-                              _active={{}}
-                              _focus={{
-                                bg: theme.compensation?.card.input.bg,
-                              }}
-                              _focusVisible={{}}
-                              _focusWithin={{}}
-                              w="180px"
-                              h="32px"
-                              px="1"
-                              border={
-                                formState.errors.communicatingRationale
-                                  ?.breakdown?.[item.index]?.post
-                                  ? '1px solid red'
-                                  : 'none'
-                              }
-                              onChange={(
-                                event: React.ChangeEvent<HTMLInputElement>
-                              ) => {
-                                onChangeDebounce(
-                                  event.target.value,
-                                  item.index
-                                );
-                              }}
-                            />
-                          ) : item.post ? (
-                            <ChakraLink
-                              href={item.post}
-                              isExternal
-                              color="blue.500"
-                              maxW="240px"
-                              wordBreak="break-all"
-                              w="full"
-                              noOfLines={2}
-                            >
-                              {item.post.length > 40
-                                ? `${item.post.slice(0, 40)}...`
-                                : item.post}
-                            </ChakraLink>
+                          {isMonthFinished || isAuthorized ? (
+                            isAuthorized ? (
+                              <Input
+                                defaultValue={item.post || ''}
+                                bg={theme.compensation?.card.input.bg}
+                                color={theme.compensation?.card.input.text}
+                                disabled={isSaving}
+                                _active={{}}
+                                _focus={{
+                                  bg: theme.compensation?.card.input.bg,
+                                }}
+                                _focusVisible={{}}
+                                _focusWithin={{}}
+                                w="180px"
+                                h="32px"
+                                px="1"
+                                border={
+                                  formState.errors.communicatingRationale
+                                    ?.breakdown?.[item.index]?.post
+                                    ? '1px solid red'
+                                    : 'none'
+                                }
+                                onChange={(
+                                  event: React.ChangeEvent<HTMLInputElement>
+                                ) => {
+                                  onChangeDebounce(
+                                    event.target.value,
+                                    item.index
+                                  );
+                                }}
+                              />
+                            ) : item.post ? (
+                              <ChakraLink
+                                href={item.post}
+                                isExternal
+                                color="blue.500"
+                                maxW="240px"
+                                wordBreak="break-all"
+                                w="full"
+                                noOfLines={2}
+                              >
+                                {item.post.length > 40
+                                  ? `${item.post.slice(0, 40)}...`
+                                  : item.post}
+                              </ChakraLink>
+                            ) : (
+                              <Text color={theme.compensation?.card.text}>
+                                -
+                              </Text>
+                            )
                           ) : (
-                            <Text color={theme.compensation?.card.text}>-</Text>
+                            <MonthNotFinishedTooltip />
                           )}
                           {item.rationale ? (
                             <Flex
@@ -525,63 +534,71 @@ const DelegateProposalsWrapped = ({
                         color={theme.compensation?.card.text}
                         borderColor={theme.compensation?.card.divider}
                       >
-                        {isAuthorized ? (
-                          <Switch
-                            isChecked={watch(
-                              `communicatingRationale.breakdown.${item.index}.validRationale`
-                            )}
-                            onChange={() => {
-                              setValue(
-                                `communicatingRationale.breakdown.${item.index}.validRationale`,
-                                !watch(
-                                  `communicatingRationale.breakdown.${item.index}.validRationale`
-                                ),
-                                {
-                                  shouldDirty: true,
-                                  shouldValidate: true,
-                                }
-                              );
-                              setValue(
-                                `communicatingRationale.breakdown.${item.index}.modified`,
-                                true
-                              );
-                            }}
-                            isDisabled={isSaving}
-                            disabled={isSaving}
-                          />
-                        ) : (
-                          renderValidIcon(
-                            watch(
-                              `communicatingRationale.breakdown.${item.index}.validRationale`
+                        {isMonthFinished || isAuthorized ? (
+                          isAuthorized ? (
+                            <Switch
+                              isChecked={watch(
+                                `communicatingRationale.breakdown.${item.index}.validRationale`
+                              )}
+                              onChange={() => {
+                                setValue(
+                                  `communicatingRationale.breakdown.${item.index}.validRationale`,
+                                  !watch(
+                                    `communicatingRationale.breakdown.${item.index}.validRationale`
+                                  ),
+                                  {
+                                    shouldDirty: true,
+                                    shouldValidate: true,
+                                  }
+                                );
+                                setValue(
+                                  `communicatingRationale.breakdown.${item.index}.modified`,
+                                  true
+                                );
+                              }}
+                              isDisabled={isSaving}
+                              disabled={isSaving}
+                            />
+                          ) : (
+                            renderValidIcon(
+                              watch(
+                                `communicatingRationale.breakdown.${item.index}.validRationale`
+                              )
                             )
                           )
+                        ) : (
+                          <MonthNotFinishedTooltip />
                         )}
                       </Td>
                       <Td
                         color={theme.compensation?.card.text}
                         borderColor={theme.compensation?.card.divider}
                       >
-                        {item?.updated === 'manually' && isAuthorized ? (
-                          <Tooltip label="Manually updated">
-                            <Flex
-                              bg={theme.compensation?.card.input.bg}
-                              p="1"
-                              rounded="full"
-                              width="24px"
-                              height="24px"
-                              alignItems="center"
-                              justify="center"
-                            >
-                              <Text
-                                fontSize="small"
-                                color={theme.compensation?.card.text}
+                        {isMonthFinished || isAuthorized ? (
+                          item?.updated === 'manually' && isAuthorized ? (
+                            <Tooltip label="Manually updated">
+                              <Flex
+                                bg={theme.compensation?.card.input.bg}
+                                p="1"
+                                rounded="full"
+                                width="24px"
+                                height="24px"
+                                alignItems="center"
+                                justify="center"
                               >
-                                M
-                              </Text>
-                            </Flex>
-                          </Tooltip>
+                                <Text
+                                  fontSize="small"
+                                  color={theme.compensation?.card.text}
+                                >
+                                  M
+                                </Text>
+                              </Flex>
+                            </Tooltip>
+                          ) : (
+                            <Flex width="24px" height="24px" />
+                          )
                         ) : (
-                          <Flex width="24px" height="24px" />
+                          <MonthNotFinishedTooltip />
                         )}
                       </Td>
                     </Tr>
@@ -785,6 +802,8 @@ export const DelegateProposals = ({
     refetchOnWindowFocus: false,
   });
 
+  const isMonthFinished = dataFromAPI?.finished || false;
+
   const setupProposalsAndVotes = () => {
     const proposals =
       dataFromAPI?.proposals?.flatMap(category => category.items) || [];
@@ -889,6 +908,7 @@ export const DelegateProposals = ({
           snapshotProposals={snapshotProposals}
           onChainProposals={onChainProposals}
           selectRationale={setRationaleSelected}
+          isMonthFinished={isMonthFinished}
         />
       )}
     </Flex>
