@@ -5,6 +5,7 @@ import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import { useState } from 'react';
 import { DelegateCompensationStats } from 'types';
 import { fetchDelegates } from 'utils/delegate-compensation/fetchDelegates';
+import { getProposals } from 'utils/delegate-compensation/getProposals';
 import { MonthDropdown } from './MonthDropdown';
 import { DelegatePerformanceOverviewHeader } from './PerformanceOverview/Header';
 import { Table } from './Table';
@@ -38,6 +39,32 @@ export const DelegateCompensation = () => {
       !!selectedDate?.value.year &&
       !!daoInfo.config.DAO_KARMA_ID,
   });
+
+  const { data: proposalsData } = useQuery(
+    [
+      'delegate-compensation-proposals',
+      selectedDate?.value.month,
+      selectedDate?.value.year,
+    ],
+    () =>
+      getProposals(
+        daoInfo.config.DAO_KARMA_ID,
+        selectedDate?.value.month as string | number,
+        selectedDate?.value.year as string | number
+      ),
+    {
+      initialData: {
+        proposals: [],
+        finished: false,
+      },
+      enabled:
+        !!selectedDate?.value.month &&
+        !!selectedDate?.value.year &&
+        !!daoInfo.config.DAO_KARMA_ID,
+    }
+  );
+
+  const isMonthFinished = proposalsData?.finished || false;
 
   return (
     <Flex
@@ -118,6 +145,7 @@ export const DelegateCompensation = () => {
             refreshFn={async () => {
               await refetch();
             }}
+            isMonthFinished={isMonthFinished}
           />
         )}
       </Flex>

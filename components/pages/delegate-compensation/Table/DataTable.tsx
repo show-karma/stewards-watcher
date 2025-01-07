@@ -23,7 +23,7 @@ export const DataTable = <Data extends object>({
   columns,
   refreshFn,
 }: DataTableProps<Data>) => {
-  const { theme } = useDAO();
+  const { theme, daoInfo } = useDAO();
   const [sorting, setSorting] = useState<SortingState>([]);
   const table = useReactTable({
     columns,
@@ -36,6 +36,7 @@ export const DataTable = <Data extends object>({
     },
   });
   const { selectedDate } = useDelegateCompensation();
+
   return (
     <Flex
       backgroundColor={theme.card.background}

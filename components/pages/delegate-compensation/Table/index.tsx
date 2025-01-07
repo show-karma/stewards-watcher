@@ -6,6 +6,7 @@ import { useDAO } from 'contexts';
 import * as React from 'react';
 import { DelegateCompensationStats } from 'types';
 import { formatNumber, formatSimpleNumber, truncateAddress } from 'utils';
+import { MonthNotFinishedTooltip } from '../MonthNotFinishedTooltip';
 import { DataTable } from './DataTable';
 
 const columnHelper = createColumnHelper<DelegateCompensationStats>();
@@ -13,10 +14,16 @@ const columnHelper = createColumnHelper<DelegateCompensationStats>();
 interface TableProps {
   delegates: DelegateCompensationStats[];
   refreshFn: () => Promise<void>;
+  isMonthFinished: boolean;
 }
 
-export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
+export const Table: React.FC<TableProps> = ({
+  delegates,
+  refreshFn,
+  isMonthFinished,
+}) => {
   const { theme } = useDAO();
+
   const columns = [
     columnHelper.accessor('delegate.shouldUse', {
       cell: info => (
@@ -147,6 +154,9 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
     }),
     columnHelper.accessor('communicatingRationale.score', {
       cell: info => {
+        if (!isMonthFinished) {
+          return <MonthNotFinishedTooltip />;
+        }
         if (info.getValue()) {
           return formatSimpleNumber(info.getValue());
         }
@@ -159,6 +169,9 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
     }),
     columnHelper.accessor('delegateFeedback.score', {
       cell: info => {
+        if (!isMonthFinished) {
+          return <MonthNotFinishedTooltip />;
+        }
         if (info.getValue()) {
           return formatSimpleNumber(info.getValue());
         }
@@ -171,6 +184,9 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
     }),
     columnHelper.accessor('totalParticipation', {
       cell: info => {
+        if (!isMonthFinished) {
+          return <MonthNotFinishedTooltip />;
+        }
         if (info.getValue()) {
           return formatSimpleNumber(info.getValue());
         }
@@ -183,6 +199,9 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
     }),
     columnHelper.accessor('bonusPoint', {
       cell: info => {
+        if (!isMonthFinished) {
+          return <MonthNotFinishedTooltip />;
+        }
         if (info.getValue()) {
           return formatSimpleNumber(info.getValue());
         }
@@ -238,5 +257,6 @@ export const Table: React.FC<TableProps> = ({ delegates, refreshFn }) => {
     //   },
     // }),
   ];
+
   return <DataTable refreshFn={refreshFn} columns={columns} data={delegates} />;
 };

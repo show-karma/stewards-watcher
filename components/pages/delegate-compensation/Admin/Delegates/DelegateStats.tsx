@@ -8,6 +8,8 @@ import { useState } from 'react';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 import { formatSimpleNumber } from 'utils';
 import { getPRBreakdown } from 'utils/delegate-compensation/getPRBreakdown';
+import { getProposals } from 'utils/delegate-compensation/getProposals';
+import { MonthNotFinishedTooltip } from '../../MonthNotFinishedTooltip';
 import { DelegateBP } from './DelegateBP';
 import { DelegateFeedback } from './DelegateFeedback';
 import { DelegateFinalScoreModal } from './DelegateFinalScore';
@@ -39,6 +41,32 @@ export const DelegateStats = () => {
       !!selectedDate?.value.year &&
       !!selectedDate?.value.month,
   });
+
+  const { data: proposalsData } = useQuery(
+    [
+      'delegate-compensation-proposals',
+      selectedDate?.value.month,
+      selectedDate?.value.year,
+    ],
+    () =>
+      getProposals(
+        daoInfo.config.DAO_KARMA_ID,
+        selectedDate?.value.month as string | number,
+        selectedDate?.value.year as string | number
+      ),
+    {
+      initialData: {
+        proposals: [],
+        finished: false,
+      },
+      enabled:
+        !!selectedDate?.value.month &&
+        !!selectedDate?.value.year &&
+        !!daoInfo.config.DAO_KARMA_ID,
+    }
+  );
+
+  const isMonthFinished = proposalsData?.finished || false;
 
   return (
     <Flex flexDir="column" w="full" gap="5">
@@ -255,6 +283,7 @@ export const DelegateStats = () => {
             </Flex>
           </Flex>
         </Flex>
+
         <Flex
           flexDir="column"
           bg={theme.compensation?.icons.finalScore}
@@ -279,21 +308,25 @@ export const DelegateStats = () => {
           >
             Final Score
           </Text>
-
-          <Text
-            fontSize="36px"
-            fontWeight={600}
-            color={theme.compensation?.card.success}
-            textDecoration="underline"
-            onClick={() => setIsFinalScoreModalOpen(true)}
-            cursor="pointer"
-          >
-            {formatSimpleNumber(delegateInfo?.stats?.totalParticipation || 0)}
-          </Text>
+          {isMonthFinished || isAuthorized ? (
+            <Text
+              fontSize="36px"
+              fontWeight={600}
+              color={theme.compensation?.card.success}
+              textDecoration="underline"
+              onClick={() => setIsFinalScoreModalOpen(true)}
+              cursor="pointer"
+            >
+              {formatSimpleNumber(delegateInfo?.stats?.totalParticipation || 0)}
+            </Text>
+          ) : (
+            <MonthNotFinishedTooltip />
+          )}
           {/* </Tooltip> */}
         </Flex>
       </Flex>
       {/* 4 blocks */}
+
       <Flex
         flexDir={['column', 'column', 'row']}
         flexWrap="wrap"
@@ -350,16 +383,20 @@ export const DelegateStats = () => {
             >
               Delegate Feedback
             </Button>
-            <Text
-              fontSize="24px"
-              fontWeight={700}
-              color={theme.compensation?.card.secondaryText}
-              lineHeight="32px"
-            >
-              {formatSimpleNumber(
-                delegateInfo?.stats?.delegateFeedback?.finalScore || 0
-              )}
-            </Text>
+            {isMonthFinished || isAuthorized ? (
+              <Text
+                fontSize="24px"
+                fontWeight={700}
+                color={theme.compensation?.card.secondaryText}
+                lineHeight="32px"
+              >
+                {formatSimpleNumber(
+                  delegateInfo?.stats?.delegateFeedback?.finalScore || 0
+                )}
+              </Text>
+            ) : (
+              <MonthNotFinishedTooltip />
+            )}
           </Flex>
         </Flex>
         <Flex
@@ -392,18 +429,21 @@ export const DelegateStats = () => {
               fontWeight="600"
               color={theme.compensation?.card.text}
             >
-              Communication Rationale2
+              Communication Rationale
             </Text>
-
-            <Text
-              fontSize="24px"
-              fontWeight={700}
-              color={theme.compensation?.card.secondaryText}
-            >
-              {formatSimpleNumber(
-                delegateInfo?.stats?.communicatingRationale.score || 0
-              )}
-            </Text>
+            {isMonthFinished || isAuthorized ? (
+              <Text
+                fontSize="24px"
+                fontWeight={700}
+                color={theme.compensation?.card.secondaryText}
+              >
+                {formatSimpleNumber(
+                  delegateInfo?.stats?.communicatingRationale.score || 0
+                )}
+              </Text>
+            ) : (
+              <MonthNotFinishedTooltip />
+            )}
           </Flex>
         </Flex>
         <Flex
@@ -431,7 +471,7 @@ export const DelegateStats = () => {
             />
           </Flex>
 
-          <DelegateBP />
+          <DelegateBP isMonthFinished={isMonthFinished} />
         </Flex>
 
         <Flex
@@ -466,43 +506,53 @@ export const DelegateStats = () => {
             >
               Participation Rate
             </Text>
-            <Flex flexDir="column" gap="0" justify="center" align="flex-start">
-              <Text
-                fontSize="24px"
-                fontWeight={700}
-                color={theme.compensation?.card.secondaryText}
+            {isMonthFinished || isAuthorized ? (
+              <Flex
+                flexDir="column"
+                gap="0"
+                justify="center"
+                align="flex-start"
               >
-                {formatSimpleNumber(
-                  delegateInfo?.stats?.participationRate || 0
-                )}
-              </Text>
-              <Flex flexDir="row" gap="2">
                 <Text
-                  fontSize="14px"
-                  fontWeight={400}
+                  fontSize="24px"
+                  fontWeight={700}
                   color={theme.compensation?.card.secondaryText}
-                  as="span"
                 >
-                  {prBreakdown?.proposals.length} Total{' '}
-                  {pluralize(
-                    'Proposals',
-                    +(prBreakdown?.proposals.length || 0)
+                  {formatSimpleNumber(
+                    delegateInfo?.stats?.participationRate || 0
                   )}
-                  ,
                 </Text>
-                <Text
-                  fontSize="14px"
-                  fontWeight={400}
-                  color={theme.compensation?.card.success}
-                  as="span"
-                >
-                  {prBreakdown?.votes.length} Voted On
-                </Text>
+                <Flex flexDir="row" gap="2">
+                  <Text
+                    fontSize="14px"
+                    fontWeight={400}
+                    color={theme.compensation?.card.secondaryText}
+                    as="span"
+                  >
+                    {prBreakdown?.proposals.length} Total{' '}
+                    {pluralize(
+                      'Proposals',
+                      +(prBreakdown?.proposals.length || 0)
+                    )}
+                    ,
+                  </Text>
+                  <Text
+                    fontSize="14px"
+                    fontWeight={400}
+                    color={theme.compensation?.card.success}
+                    as="span"
+                  >
+                    {prBreakdown?.votes.length} Voted On
+                  </Text>
+                </Flex>
               </Flex>
-            </Flex>
+            ) : (
+              <MonthNotFinishedTooltip />
+            )}
           </Flex>
         </Flex>
       </Flex>
+
       <Flex
         flexDir="column"
         bg={theme.compensation?.icons.finalScore}
@@ -528,16 +578,20 @@ export const DelegateStats = () => {
           Final Score
         </Text>
 
-        <Text
-          fontSize="36px"
-          fontWeight={600}
-          color={theme.compensation?.card.success}
-          textDecoration="underline"
-          onClick={() => setIsFinalScoreModalOpen(true)}
-          cursor="pointer"
-        >
-          {formatSimpleNumber(delegateInfo?.stats?.totalParticipation || 0)}
-        </Text>
+        {isMonthFinished || isAuthorized ? (
+          <Text
+            fontSize="36px"
+            fontWeight={600}
+            color={theme.compensation?.card.success}
+            textDecoration="underline"
+            onClick={() => setIsFinalScoreModalOpen(true)}
+            cursor="pointer"
+          >
+            {formatSimpleNumber(delegateInfo?.stats?.totalParticipation || 0)}
+          </Text>
+        ) : (
+          <MonthNotFinishedTooltip />
+        )}
         {/* </Tooltip> */}
       </Flex>
     </Flex>
