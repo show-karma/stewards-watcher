@@ -95,10 +95,24 @@ export const DelegateBP = () => {
   const maxBonusPoints = 30;
 
   const pointsPerAttendance = 2.5;
-  const maxContributionPossible =
-    maxBonusPoints -
-    (Number(totalAttendancesBiWeekly) * pointsPerAttendance +
-      Number(totalAttendancesMonthly) * pointsPerAttendance);
+
+  const partialBP =
+    +(delegateInfo?.stats?.totalParticipation ?? 0) *
+    (0.025 * (Number(attendancesMonthly) + Number(attendancesBiWeekly)));
+
+  function calculateBonusPoints() {
+    const totalBP =
+      +(delegateInfo?.stats?.totalParticipation ?? 0) *
+        (((Number(attendancesMonthly) + Number(attendancesBiWeekly)) /
+          (totalAttendancesBiWeekly + totalAttendancesMonthly)) *
+          0.05) +
+      Number(contributionPoints);
+    return Math.min(totalBP, 30).toFixed(2);
+  }
+
+  const maxContributionPossible = 25;
+
+  const currentTotalBP = calculateBonusPoints();
 
   const handleSaveBonusPoints = async () => {
     try {
@@ -526,14 +540,7 @@ export const DelegateBP = () => {
                           lineHeight="32px"
                           bg="transparent"
                         >
-                          {Math.min(
-                            +formatSimpleNumber(
-                              Number(attendancesBiWeekly) * 2.5 +
-                                Number(attendancesMonthly) * 2.5 +
-                                Number(contributionPoints)
-                            ),
-                            30
-                          )}
+                          {Math.min(+formatSimpleNumber(currentTotalBP), 30)}
                         </Text>
                       </Td>
                       <Td
