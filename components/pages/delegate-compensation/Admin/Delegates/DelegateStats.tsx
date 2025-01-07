@@ -392,7 +392,7 @@ export const DelegateStats = () => {
               fontWeight="600"
               color={theme.compensation?.card.text}
             >
-              Communication Rationale
+              Communication Rationale2
             </Text>
 
             <Text
