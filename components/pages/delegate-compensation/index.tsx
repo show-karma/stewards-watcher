@@ -61,6 +61,7 @@ export const DelegateCompensation = () => {
         !!selectedDate?.value.month &&
         !!selectedDate?.value.year &&
         !!daoInfo.config.DAO_KARMA_ID,
+      refetchOnWindowFocus: false,
     }
   );
 

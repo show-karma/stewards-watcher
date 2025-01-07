@@ -158,6 +158,7 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
       ).then(res => res[0]),
     {
       enabled: !!delegateAddress && !!selectedDate,
+      refetchOnWindowFocus: false,
     }
   );
 
