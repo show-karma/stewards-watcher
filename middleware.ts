@@ -17,7 +17,9 @@ export const config = {
 
 const getDAOName = (host: string) => host.split('.')[0];
 
-const devUrl = 'localhost';
+const devUrl = 'dapp.karmahq.xyz';
+// TODO: Use localhost for local development
+// const devUrl = 'localhost';
 const DAO_CUSTOM_DOMAIN: Record<string, string | string[]> = {
   [devUrl]: 'zksync',
   'daostewards.xyz': 'gitcoin',
