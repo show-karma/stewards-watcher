@@ -38,6 +38,8 @@ export const API_ROUTES = {
       `${KARMA_API.base_url}/delegate/${daoName}/${address}/assign-tracks`,
     CHANGE_INCENTIVE_PROGRAM_STATS: (daoName: string, id: string | number) =>
       `${KARMA_API.base_url}/delegate/${daoName}/${id}/incentive-programs-stats`,
+    CALCULATE_BONUS_POINTS: (daoName: string, month: number, year: number) =>
+      `${KARMA_API.base_url}/delegate/calculate-bonus-points/${daoName}/${month}/${year}`,
   },
 };
 

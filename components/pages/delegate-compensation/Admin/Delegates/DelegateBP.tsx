@@ -12,6 +12,7 @@ import {
   PopoverContent,
   PopoverHeader,
   PopoverTrigger,
+  Skeleton,
   Spinner,
   Table,
   Tbody,
@@ -77,6 +78,8 @@ export const DelegateBP = ({
   const [attendancesBiWeekly, setAttendancesBiWeekly] = useState('0');
   const [attendancesMonthly, setAttendancesMonthly] = useState('0');
   const [contributionPoints, setContributionPoints] = useState('0');
+  // const [isBPLoading, setIsBPLoading] = useState(true);
+  // const [currentBP, setCurrentBP] = useState('0');
 
   useEffect(() => {
     if (delegateInfo) {
@@ -99,24 +102,72 @@ export const DelegateBP = ({
   const totalAttendancesMonthly = proposalsData?.monthlyCalls || 0;
   const maxBonusPoints = 30;
 
-  function calculateBonusPoints() {
-    if (totalAttendancesBiWeekly + totalAttendancesMonthly === 0) {
-      return Math.min(Number(contributionPoints), 30).toFixed(2);
+  async function calculateBonusPoints(
+    participationMonthlyCalls: string,
+    participationBiweeklyCalls: string,
+    contributions: string
+  ) {
+    try {
+      const response = await axios
+        .post(
+          API_ROUTES.DELEGATE.CALCULATE_BONUS_POINTS(
+            daoInfo.config.DAO_KARMA_ID,
+            selectedDate?.value.month as number,
+            selectedDate?.value.year as number
+          ),
+          {
+            participationMonthlyCalls: +participationMonthlyCalls,
+            participationBiweeklyCalls: +participationBiweeklyCalls,
+            contributions: +contributions,
+            publicAddress: delegateInfo?.publicAddress,
+          }
+        )
+        .then(res => res.data?.data?.bonusPoints)
+        .catch(() => 0);
+      return response.toString();
+    } catch (error) {
+      console.log(error);
+      return '0';
     }
-
-    const totalBP =
-      +(delegateInfo?.stats?.totalParticipation ?? 0) *
-        ((Number(attendancesMonthly) + Number(attendancesBiWeekly)) /
-          (totalAttendancesBiWeekly + totalAttendancesMonthly)) *
-        0.05 +
-      Number(contributionPoints);
-
-    return Math.min(totalBP, 30).toFixed(2);
   }
+  const { data: rawBP, isLoading: isRawBPLoading } = useQuery(
+    [
+      'delegate-compensation-current-bp',
+      delegateInfo?.publicAddress,
+      +attendancesMonthly,
+      +attendancesBiWeekly,
+      0,
+    ],
+    () => calculateBonusPoints(attendancesMonthly, attendancesBiWeekly, '0'),
+    {
+      enabled: !!delegateInfo?.publicAddress,
+    }
+  );
 
-  const maxContributionPossible = 25;
+  const { data: currentBP, isLoading: isBPLoading } = useQuery(
+    [
+      'delegate-compensation-current-bp',
+      delegateInfo?.publicAddress,
+      +attendancesMonthly,
+      +attendancesBiWeekly,
+      +contributionPoints,
+    ],
+    () =>
+      calculateBonusPoints(
+        attendancesMonthly,
+        attendancesBiWeekly,
+        contributionPoints
+      ),
+    {
+      enabled: !!delegateInfo?.publicAddress,
+    }
+  );
 
-  const currentTotalBP = calculateBonusPoints() || 0;
+  const maxContributionPossible = rawBP
+    ? formatSimpleNumber(30 - +rawBP, {
+        mantissa: 3,
+      })
+    : 0;
 
   const handleSaveBonusPoints = async () => {
     try {
@@ -406,7 +457,7 @@ export const DelegateBP = ({
               >
                 Bonus Points
               </PopoverHeader>
-              <PopoverBody>
+              <PopoverBody w="360px">
                 <Flex flexDir="column" gap="1">
                   <Table>
                     <Thead>
@@ -480,7 +531,7 @@ export const DelegateBP = ({
                                 onChange={event => {
                                   if (
                                     Number(event.target.value) >
-                                    maxContributionPossible
+                                    +maxContributionPossible
                                   ) {
                                     setContributionPoints(
                                       maxContributionPossible.toString()
@@ -520,15 +571,19 @@ export const DelegateBP = ({
                           borderBottomColor={theme.compensation?.card.divider}
                           borderBottom="1px solid"
                         >
-                          <Text
-                            fontSize="22px"
-                            fontWeight={700}
-                            color={theme.compensation?.card.secondaryText}
-                            lineHeight="32px"
-                            bg="transparent"
-                          >
-                            {maxContributionPossible}
-                          </Text>
+                          {isRawBPLoading ? (
+                            <Skeleton w="32px" h="40px" />
+                          ) : (
+                            <Text
+                              fontSize="22px"
+                              fontWeight={700}
+                              color={theme.compensation?.card.secondaryText}
+                              lineHeight="32px"
+                              bg="transparent"
+                            >
+                              {maxContributionPossible}
+                            </Text>
+                          )}
                         </Td>
                       </Tr>
                       <Tr>
@@ -547,15 +602,24 @@ export const DelegateBP = ({
                           borderBottomColor={theme.compensation?.card.divider}
                           borderBottom="1px solid"
                         >
-                          <Text
-                            fontSize="22px"
-                            fontWeight={700}
-                            color={theme.compensation?.card.secondaryText}
-                            lineHeight="32px"
-                            bg="transparent"
-                          >
-                            {Math.min(+formatSimpleNumber(currentTotalBP), 30)}
-                          </Text>
+                          {isBPLoading ? (
+                            <Skeleton w="32px" h="40px" />
+                          ) : (
+                            <Text
+                              fontSize="22px"
+                              fontWeight={700}
+                              color={theme.compensation?.card.secondaryText}
+                              lineHeight="32px"
+                              bg="transparent"
+                            >
+                              {Math.min(
+                                +formatSimpleNumber(currentBP, {
+                                  mantissa: 3,
+                                }),
+                                30
+                              )}
+                            </Text>
+                          )}
                         </Td>
                         <Td
                           p="0"
