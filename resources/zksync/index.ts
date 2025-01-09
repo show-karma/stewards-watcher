@@ -1,6 +1,7 @@
 import { IDAOConfig, IDAOTheme } from 'types';
 import { onChainZkSyncVotesProvider } from 'utils';
 import { zkSync } from 'wagmi/chains';
+import { publicProvider } from 'wagmi/providers/public';
 import ABI from './ABI.json';
 
 const config: IDAOConfig = {
@@ -11,7 +12,7 @@ const config: IDAOConfig = {
   GOVERNANCE_FORUM: 'https://forum.zknation.io/',
   DAO_KARMA_ID: 'zksync',
   IMAGE_PREFIX_URL: 'https://cdn.stamp.fyi/avatar/eth:',
-  DAO_LOGO: '/daos/zksync/android-chrome-512x512.png',
+  DAO_LOGO: '/daos/zksync/logo-with-text.png',
   METATAGS: {
     TITLE: `Delegates of zksync DAO`,
     DESCRIPTION: `Find all the active delegates in zksync DAO along with governance stats across on-chain/off-chain voting, forum and discord.`,
@@ -49,7 +50,7 @@ const config: IDAOConfig = {
   DAO_HAS_COMPENSATION_PROGRAM: true,
   DAO_CATEGORIES_TYPE: 'workstreams',
   ENABLE_HANDLES_EDIT: ['github'],
-  CUSTOM_RPC: 'https://mainnet.era.zksync.io',
+  CUSTOM_RPC: publicProvider(),
 };
 
 const dark: IDAOTheme = {
