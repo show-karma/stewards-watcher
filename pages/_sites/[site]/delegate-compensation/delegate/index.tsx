@@ -4,6 +4,7 @@ import { DAOProvider } from 'contexts/dao';
 import { daosDictionary } from 'helpers';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
+import { compensation } from 'utils/compensation';
 
 interface PathProps extends ParsedUrlQuery {
   site: string;
@@ -32,7 +33,7 @@ export const getStaticProps: GetStaticProps<FAQProps, PathProps> = async ({
   const { site, delegateAddress } = params;
 
   const dao = daosDictionary[site];
-  const daosWithCompensation = ['arbitrum'];
+  const daosWithCompensation = compensation.daos;
   if (!dao || !daosWithCompensation.includes(dao)) {
     return {
       notFound: true,

@@ -27,10 +27,7 @@ import { ChakraLink } from 'components/ChakraLink';
 import { FalseIcon } from 'components/Icons/Compensation/FalseIcon';
 import { TrueIcon } from 'components/Icons/Compensation/TrueIcon';
 import { useAuth, useDAO } from 'contexts';
-import {
-  COMPENSATION_DATES,
-  useDelegateCompensation,
-} from 'contexts/delegateCompensation';
+import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import { API_ROUTES, KARMA_API } from 'helpers';
 import { useToasty } from 'hooks';
 import { DelegateCompensationAdminLayout } from 'layouts/delegateCompensationAdmin';
@@ -43,6 +40,7 @@ import {
   ForumPosts,
 } from 'types/delegate-compensation/forumActivity';
 import { formatDate, formatNumber, formatSimpleNumber } from 'utils';
+import { compensation } from 'utils/compensation';
 import { getForumActivity } from 'utils/delegate-compensation/getForumActivity';
 import { getProposals } from 'utils/delegate-compensation/getProposals';
 import { DelegatePeriod } from '../DelegatePeriod';
@@ -72,6 +70,10 @@ export const DelegateCompensationAdminForumActivity = ({
 
   const delegateFeedback = delegateInfo?.stats?.delegateFeedback;
   const forumPosts = delegateFeedback?.posts || [];
+  const COMPENSATION_DATES =
+    compensation.compensationDates[
+      daoInfo.config.DAO_KARMA_ID as keyof typeof compensation.compensationDates
+    ];
 
   const { data: proposalsData } = useQuery(
     [
@@ -350,8 +352,13 @@ export const DelegateCompensationAdminForumActivity = ({
         <DelegatePeriod
           delegate="block"
           period
-          minimumPeriod={new Date(COMPENSATION_DATES.OLD_VERSION_MAX)}
-          maximumPeriod={isPublic ? undefined : new Date()}
+          minimumPeriod={
+            COMPENSATION_DATES.OLD_VERSION_MAX ||
+            COMPENSATION_DATES.NEW_VERSION_MIN
+          }
+          maximumPeriod={
+            isPublic ? new Date(COMPENSATION_DATES.NEW_VERSION_MAX) : new Date()
+          }
         />
         <Flex
           flexDir="row"

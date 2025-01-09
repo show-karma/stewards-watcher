@@ -4,6 +4,7 @@ import { useDAO } from 'contexts';
 import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import { useState } from 'react';
 import { DelegateCompensationStats } from 'types';
+import { compensation } from 'utils/compensation';
 import { fetchDelegates } from 'utils/delegate-compensation/fetchDelegates';
 import { getProposals } from 'utils/delegate-compensation/getProposals';
 import { MonthDropdown } from './MonthDropdown';
@@ -66,6 +67,11 @@ export const DelegateCompensation = () => {
   );
 
   const isMonthFinished = proposalsData?.finished || false;
+
+  const COMPENSATION_DATES =
+    compensation.compensationDates[
+      daoInfo.config.DAO_KARMA_ID as keyof typeof compensation.compensationDates
+    ];
 
   return (
     <Flex
@@ -132,7 +138,13 @@ export const DelegateCompensation = () => {
               >
                 Month
               </Text>
-              <MonthDropdown />
+              <MonthDropdown
+                minimumPeriod={
+                  COMPENSATION_DATES.OLD_VERSION_MIN ||
+                  COMPENSATION_DATES.NEW_VERSION_MIN
+                }
+                maximumPeriod={COMPENSATION_DATES.NEW_VERSION_MAX}
+              />
             </Flex>
           </Flex>
         </Flex>

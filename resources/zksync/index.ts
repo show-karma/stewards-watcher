@@ -464,7 +464,7 @@ const light: IDAOTheme = {
     socialMedia: '#595A5E',
   },
   loginModal: {
-    logo: 'daos/arbitrum/logo_black.svg',
+    logo: '/daos/zksync/logo-with-text.png',
     background: '#FFFFFF',
     text: '#212328',
     footer: { bg: '#EBEDEF', text: '#212328' },

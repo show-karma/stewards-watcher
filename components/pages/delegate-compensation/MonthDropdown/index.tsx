@@ -1,26 +1,25 @@
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { DownChevron } from 'components/Icons';
 import { useDAO } from 'contexts';
-import {
-  COMPENSATION_DATES,
-  useDelegateCompensation,
-} from 'contexts/delegateCompensation';
+import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 
 interface IMonthDropdown {
-  minimumPeriod?: Date;
-  maximumPeriod?: Date;
+  minimumPeriod: Date;
+  maximumPeriod: Date;
 }
 
 export const MonthDropdown: FC<IMonthDropdown> = ({
-  minimumPeriod = new Date(COMPENSATION_DATES.OLD_VERSION_MIN),
-  maximumPeriod = new Date(COMPENSATION_DATES.NEW_VERSION_MAX),
+  minimumPeriod,
+  maximumPeriod,
 }) => {
   const router = useRouter();
   const { rootPathname } = useDAO();
   const { theme } = useDAO();
   const { selectedDate, setSelectedDate } = useDelegateCompensation();
+  const { daoInfo } = useDAO();
+
   const renderMonthList = () => {
     const supportedDates = [];
     const startYear = 2024;

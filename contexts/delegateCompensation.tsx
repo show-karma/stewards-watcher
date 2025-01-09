@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { queryClient } from 'pages/_app';
 import React, { createContext, useContext, useMemo, useState } from 'react';
 import { DelegateStatsFromAPI } from 'types';
+import { compensation } from 'utils/compensation';
 import { getDelegateInfo } from 'utils/delegate-compensation/getDelegateInfo';
 import { useQuery } from 'wagmi';
 import { useDAO } from './dao';
@@ -32,12 +33,6 @@ const DelegateCompensationContext = createContext(
 interface ProviderProps {
   children: React.ReactNode;
 }
-export const COMPENSATION_DATES = {
-  OLD_VERSION_MIN: new Date('2024-02-11'),
-  OLD_VERSION_MAX: new Date('2024-10-10'),
-  NEW_VERSION_MIN: new Date('2024-10-11'),
-  NEW_VERSION_MAX: new Date('2024-12-10'),
-};
 
 export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
   children,
@@ -46,7 +41,11 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
   const { daoInfo, rootPathname } = useDAO();
 
   const [selectedDate, setSelectedDate] = useState(() => {
-    const DATES = COMPENSATION_DATES;
+    const DATES =
+      compensation.compensationDates[
+        daoInfo.config
+          .DAO_KARMA_ID as keyof typeof compensation.compensationDates
+      ];
     const queryString = router.asPath.split('?')[1];
     const monthQuery = queryString?.match(/(?<=month=)[^&]*/i)?.[0];
     const yearQuery = Number(queryString?.match(/(?<=year=)[^&]*/i)?.[0]);
@@ -62,7 +61,7 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
     let targetDate = new Date();
 
     // Handle old version path
-    if (isOldVersion) {
+    if (isOldVersion && DATES.OLD_VERSION_MAX) {
       targetDate =
         targetDate > DATES.OLD_VERSION_MAX ? DATES.OLD_VERSION_MAX : targetDate;
     }
@@ -88,7 +87,11 @@ export const DelegateCompensationProvider: React.FC<ProviderProps> = ({
         10
       );
 
-      if (isOldVersion && queryDate > DATES.OLD_VERSION_MAX) {
+      if (
+        isOldVersion &&
+        DATES.OLD_VERSION_MAX &&
+        queryDate > DATES.OLD_VERSION_MAX
+      ) {
         targetDate = DATES.OLD_VERSION_MAX;
         router.push(
           {
