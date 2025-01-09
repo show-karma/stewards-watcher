@@ -24,6 +24,7 @@ import safe from './safe';
 import ssvnetwork from './ssvnetwork';
 import starknet from './starknet';
 import yamfinance from './yamfinance';
+import zksync from './zksync';
 
 interface ISupportedDAOs {
   [key: string]: IDAOInfo;
@@ -189,5 +190,12 @@ export const supportedDAOs: ISupportedDAOs = {
     light: rari.light,
     DELEGATE_ABI: rari.ABI,
     TOKEN_ABI: rari.ABI,
+  },
+  zksync: {
+    config: zksync.config,
+    dark: zksync.dark,
+    light: zksync.light,
+    DELEGATE_ABI: zksync.ABI,
+    TOKEN_ABI: zksync.ABI,
   },
 };

@@ -23,4 +23,5 @@ export const daosDictionary: Record<string, string> = {
   arbitrum: 'arbitrum',
   cowswap: 'cowswap',
   rari: 'rari',
+  zksync: 'zksync',
 };
