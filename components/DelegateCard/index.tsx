@@ -308,9 +308,9 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
     const order = [
       'delegatedVotes',
       'votingWeight',
+      'delegatorCount',
       'offChainVotesPct',
       'onChainVotesPct',
-      'delegatorCount',
       'forumScore',
       'karmaScore',
       'discordScore',
@@ -481,7 +481,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
   };
 
   const statRows = () => {
-    const FIRST_ROW_LENGTH = 2;
+    const FIRST_ROW_LENGTH = 3;
     const SEQUENTIAL_ROWS_LENGTH = 3;
 
     const firstRow = stats.slice(0, FIRST_ROW_LENGTH);

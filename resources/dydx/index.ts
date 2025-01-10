@@ -47,16 +47,6 @@ const config: IDAOConfig = {
       CUSTOM_STATUS: ['endorsed', 'active', 'inactive', 'withdrawn'],
     },
     ORDERSTAT: 'karmaScore',
-    SORT_ORDER: [
-      'delegatedVotes',
-      'offChainVotesPct',
-      'onChainVotesPct',
-      'delegatorCount',
-      'votingWeight',
-      'forumScore',
-      'karmaScore',
-      'discordScore',
-    ],
   },
   EXCLUDED_VOTING_HISTORY_COLUMN: [],
   DAO_EXT_VOTES_PROVIDER: {
