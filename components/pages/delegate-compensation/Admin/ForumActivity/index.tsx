@@ -109,18 +109,24 @@ export const DelegateCompensationAdminForumActivity = ({
   } = useQuery(
     [
       'delegate-compensation-forum-activity',
-      delegateInfo?.discourseHandle,
+      delegateInfo?.publicAddress,
+      daoInfo.config.DAO_KARMA_ID,
       selectedDate?.value.month,
       selectedDate?.value.year,
     ],
     () =>
       getForumActivity(
+        delegateInfo?.publicAddress as string,
+        daoInfo.config.DAO_KARMA_ID as string,
         selectedDate?.value.month,
-        selectedDate?.value.year,
-        delegateInfo?.discourseHandle
+        selectedDate?.value.year
       ),
     {
-      enabled: !!selectedDate?.value.year && !!selectedDate?.value.month,
+      enabled:
+        !!selectedDate?.value.year &&
+        !!selectedDate?.value.month &&
+        !!delegateInfo?.publicAddress &&
+        !!daoInfo.config.DAO_KARMA_ID,
       refetchOnWindowFocus: false,
     }
   );
