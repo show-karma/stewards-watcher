@@ -5,12 +5,13 @@ import { api } from 'helpers';
 import { useEffect, useState } from 'react';
 import { DelegateCompensationStats, DelegateStatsFromAPI } from 'types';
 import { formatSimpleNumber } from 'utils';
+import { compensation } from 'utils/compensation';
 import { ContactUs } from '../ContactUs';
 import { MonthDropdown } from '../MonthDropdown';
 import { Table } from './Table';
 
 export const DelegateCompensationOld = () => {
-  const { theme } = useDAO();
+  const { theme, daoInfo } = useDAO();
   const [delegates, setDelegates] = useState<DelegateCompensationStats[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [onlyOptIn, setOnlyOptIn] = useState(true);
@@ -187,6 +188,11 @@ export const DelegateCompensationOld = () => {
     getPowerfulDelegates();
   }, [selectedDate]);
 
+  const COMPENSATION_DATES =
+    compensation.compensationDates[
+      daoInfo.config.DAO_KARMA_ID as keyof typeof compensation.compensationDates
+    ];
+
   return (
     <Flex
       flexDir={{ base: 'column', lg: 'row' }}
@@ -251,7 +257,13 @@ export const DelegateCompensationOld = () => {
             <Text color={theme.card.text} fontSize="lg">
               Month
             </Text>
-            <MonthDropdown />
+            <MonthDropdown
+              minimumPeriod={
+                COMPENSATION_DATES.OLD_VERSION_MIN ||
+                COMPENSATION_DATES.NEW_VERSION_MIN
+              }
+              maximumPeriod={COMPENSATION_DATES.NEW_VERSION_MAX}
+            />
           </Flex>
           <Switch
             display="flex"

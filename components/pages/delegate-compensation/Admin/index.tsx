@@ -20,10 +20,7 @@ import axios from 'axios';
 import { ChakraLink } from 'components/ChakraLink';
 import { LinkIcon } from 'components/Icons/Compensation/LinkIcon';
 import { useAuth, useDAO } from 'contexts';
-import {
-  COMPENSATION_DATES,
-  useDelegateCompensation,
-} from 'contexts/delegateCompensation';
+import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import { KARMA_API } from 'helpers';
 import { useToasty } from 'hooks';
 import { DelegateCompensationAdminLayout } from 'layouts/delegateCompensationAdmin';
@@ -31,6 +28,7 @@ import { queryClient } from 'pages/_app';
 import { useEffect, useState } from 'react';
 import { AiFillQuestionCircle } from 'react-icons/ai';
 import { formatDate } from 'utils';
+import { compensation } from 'utils/compensation';
 import { getProposals } from 'utils/delegate-compensation/getProposals';
 import { DelegatePeriod } from './DelegatePeriod';
 
@@ -227,6 +225,11 @@ export const DelegateCompensationAdmin = () => {
       setActionsLoading({ calls: false });
     }
   };
+
+  const COMPENSATION_DATES =
+    compensation.compensationDates[
+      daoInfo.config.DAO_KARMA_ID as keyof typeof compensation.compensationDates
+    ];
 
   return (
     <DelegateCompensationAdminLayout>

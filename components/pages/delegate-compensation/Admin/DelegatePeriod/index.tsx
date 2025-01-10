@@ -12,8 +12,8 @@ export const DelegatePeriod = ({
 }: {
   delegate?: 'block' | 'dropdown' | 'none';
   period?: boolean;
-  minimumPeriod?: Date;
-  maximumPeriod?: Date;
+  minimumPeriod: Date;
+  maximumPeriod: Date;
 }) => {
   const { theme } = useDAO();
   const renderDelegate = () => {
@@ -41,6 +41,7 @@ export const DelegatePeriod = ({
       );
     return null;
   };
+
   return (
     <Flex
       flexDir="row"

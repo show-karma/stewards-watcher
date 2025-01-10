@@ -4,15 +4,17 @@ import { api } from 'helpers';
 import { ForumPosts } from 'types/delegate-compensation/forumActivity';
 
 export const getForumActivity = async (
+  address: string,
+  daoName: string,
   month?: string | number,
-  year?: string | number,
-  forumHandle?: string
+  year?: string | number
 ) => {
-  if (!forumHandle) return [];
   try {
     const response: AxiosResponse<{
       data: { posts: ForumPosts[] };
-    }> = await api.get(`/delegate/${forumHandle}/forum-posts/${month}/${year}`);
+    }> = await api.get(
+      `/delegate/${daoName}/${address}/forum-posts/${month}/${year}`
+    );
     const posts = response?.data?.data?.posts;
     if (!posts) throw new Error('No posts');
     posts.forEach(post => {
