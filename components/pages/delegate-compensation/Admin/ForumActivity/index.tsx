@@ -339,14 +339,6 @@ export const DelegateCompensationAdminForumActivity = ({
     .reduce((acc, curr) => acc + curr, 0)
     .toFixed(2);
 
-  const listToHide = [
-    '0x1b686ee8e31c5959d9f5bbd8122a58682788eead',
-    '0x8326d18edfc50b4335113c33b25116ec268ff3fe',
-    '0xd4879f876ee383067f80acadbe283b93141908e9',
-    '0x8b37a5af68d315cf5a64097d96621f64b5502a22',
-    '0xa2d590fee197c0b614fe7c3e10303327f38c0dc3',
-  ].map(item => item.toLowerCase());
-
   return (
     <DelegateCompensationAdminLayout>
       <Box w="full">
@@ -437,10 +429,7 @@ export const DelegateCompensationAdminForumActivity = ({
                     >
                       Date
                     </Th>
-                    {!listToHide.includes(
-                      delegateInfo?.publicAddress?.toLowerCase() || ''
-                    ) &&
-                    (isAuthorized || isMonthFinished)
+                    {isAuthorized || isMonthFinished
                       ? columns.map(item => (
                           <Th
                             borderBottom="1px solid"
@@ -468,10 +457,7 @@ export const DelegateCompensationAdminForumActivity = ({
                         key={index}
                         w="full"
                         opacity={
-                          !listToHide.includes(
-                            delegateInfo?.publicAddress?.toLowerCase() || ''
-                          ) &&
-                          (isAuthorized || isMonthFinished)
+                          isAuthorized || isMonthFinished
                             ? post.status === 'valid'
                               ? 1
                               : 0.75
@@ -544,10 +530,7 @@ export const DelegateCompensationAdminForumActivity = ({
                         >
                           {formatDate(post?.createdAt, 'MMM D, YYYY')}
                         </Td>
-                        {!listToHide.includes(
-                          delegateInfo?.publicAddress?.toLowerCase() || ''
-                        ) &&
-                        (isAuthorized || isMonthFinished)
+                        {isAuthorized || isMonthFinished
                           ? columns.map(item => {
                               if (item.type === 'read-only' || !isAuthorized) {
                                 if (item.id === 'status') {
@@ -698,10 +681,7 @@ export const DelegateCompensationAdminForumActivity = ({
                       </Tr>
                     );
                   })}
-                  {!listToHide.includes(
-                    delegateInfo?.publicAddress?.toLowerCase() || ''
-                  ) &&
-                  (isAuthorized || isMonthFinished) ? (
+                  {isAuthorized || isMonthFinished ? (
                     <Tr key="averages" w="full">
                       <Td border="none" />
                       <Td border="none" />
@@ -767,10 +747,7 @@ export const DelegateCompensationAdminForumActivity = ({
                 </Tbody>
               </Table>
             </Flex>
-            {!listToHide.includes(
-              delegateInfo?.publicAddress?.toLowerCase() || ''
-            ) &&
-            (isAuthorized || isMonthFinished) ? (
+            {isAuthorized || isMonthFinished ? (
               <Flex flexDir="column" gap="2" justify="center" alignItems="end">
                 {proposalsData.finished ? null : (
                   <Flex w="full" justify="flex-end" align="flex-end">
