@@ -1,13 +1,13 @@
-import React, { useContext, createContext, useMemo, useState } from 'react';
-import { useIsMounted } from 'hooks/useIsMounted';
-import { useToasty } from 'hooks';
-import { ICustomFields, IProfile } from 'types';
-import { api, API_ROUTES, KARMA_API } from 'helpers';
-import { useAccount } from 'wagmi';
 import axios from 'axios';
-import { useDelegates } from './delegates';
-import { useDAO } from './dao';
+import { api, API_ROUTES, KARMA_API } from 'helpers';
+import { useToasty } from 'hooks';
+import { useIsMounted } from 'hooks/useIsMounted';
+import React, { createContext, useContext, useMemo, useState } from 'react';
+import { ICustomFields, IProfile } from 'types';
+import { useAccount } from 'wagmi';
 import { useAuth } from './auth';
+import { useDAO } from './dao';
+import { useDelegates } from './delegates';
 import { useProxy } from './proxy';
 
 interface IEditProfileProps {
@@ -114,7 +114,7 @@ export const EditProfileProvider: React.FC<ProviderProps> = ({ children }) => {
       `${config.IMAGE_PREFIX_URL}${profileSelected?.address}` ||
       '',
     ensName: profileSelected?.ensName || '',
-    twitter: profileSelected?.twitterHandle || '',
+    // twitter: profileSelected?.twitterHandle || '',
     aboutMe: profileSelected?.aboutMe || '',
     realName: profileSelected?.realName || '',
     website: profileSelected?.website || '',
