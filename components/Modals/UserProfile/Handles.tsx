@@ -8,13 +8,7 @@ import {
   Tooltip,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import {
-  ChakraLink,
-  DiscordIcon,
-  ForumIcon,
-  TwitterIcon,
-  WebsiteIcon,
-} from 'components';
+import { ChakraLink, DiscordIcon, ForumIcon, WebsiteIcon } from 'components';
 import { GithubIcon } from 'components/Icons/GithubIcon';
 import {
   useAuth,
@@ -366,25 +360,25 @@ export const Handles: FC = () => {
     lessThanDays(profileSelected?.userCreatedAt, 100);
 
   const socialMedias = [
-    {
-      icon: TwitterIcon,
-      name: 'Twitter',
-      disabledCondition:
-        notShowCondition ||
-        daoInfo.config.ENABLE_HANDLES_EDIT?.includes('twitter') === false,
-      actionType: 'button',
-      action: () => {
-        twitterOnOpen();
-      },
-      handle: profileSelected?.twitterHandle
-        ? `@${profileSelected?.twitterHandle}`
-        : undefined,
-      canAdminEdit: true,
-      hideCondition:
-        !daoInfo.config.ENABLE_HANDLES_EDIT?.includes('twitter') ||
-        (!daoInfo.config.ENABLE_HANDLES_EDIT?.includes('twitter') &&
-          !profileSelected?.twitterHandle),
-    },
+    // {
+    //   icon: TwitterIcon,
+    //   name: 'Twitter',
+    //   disabledCondition:
+    //     notShowCondition ||
+    //     daoInfo.config.ENABLE_HANDLES_EDIT?.includes('twitter') === false,
+    //   actionType: 'button',
+    //   action: () => {
+    //     twitterOnOpen();
+    //   },
+    //   handle: profileSelected?.twitterHandle
+    //     ? `@${profileSelected?.twitterHandle}`
+    //     : undefined,
+    //   canAdminEdit: true,
+    //   hideCondition:
+    //     !daoInfo.config.ENABLE_HANDLES_EDIT?.includes('twitter') ||
+    //     (!daoInfo.config.ENABLE_HANDLES_EDIT?.includes('twitter') &&
+    //       !profileSelected?.twitterHandle),
+    // },
     {
       icon: GithubIcon,
       name: 'Github',
@@ -508,11 +502,11 @@ export const Handles: FC = () => {
         }}
         onClose={githubOnClose}
       />
-      <TwitterModal
+      {/* <TwitterModal
         open={twitterIsOpen}
         handleModal={twitterOnToggle}
         onClose={twitterOnClose}
-      />
+      /> */}
       {daoData?.forumTopicURL && (
         <DiscourseModal
           open={forumIsOpen}

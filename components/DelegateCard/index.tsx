@@ -50,7 +50,7 @@ import {
   truncateAddress,
 } from 'utils';
 import { DelegateButton } from '../DelegateButton';
-import { ForumIcon, ThreadIcon, TwitterIcon, WebsiteIcon } from '../Icons';
+import { ForumIcon, ThreadIcon, WebsiteIcon } from '../Icons';
 import { ImgWithFallback } from '../ImgWithFallback';
 import { ExpandableCardText } from './ExpandableCardText';
 import { StatsCarousel } from './StatsCarousel';
@@ -1000,7 +1000,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                     <GithubIcon w="17px" h="17px" />
                   </Link>
                 )}
-                {data?.twitterHandle && (
+                {/* {data?.twitterHandle && (
                   <Link
                     href={`https://twitter.com/${data.twitterHandle}`}
                     isExternal
@@ -1015,7 +1015,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                   >
                     <TwitterIcon w="17px" h="17px" />
                   </Link>
-                )}
+                )} */}
                 {data?.discourseHandle &&
                   daoData?.socialLinks.forum &&
                   config.DAO_FORUM_TYPE && (

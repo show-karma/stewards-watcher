@@ -56,12 +56,12 @@ export const MediaIcon: FC<IMediaIcon> = ({
   );
 
   const medias: IMediasObj = {
-    twitter: {
-      url: `https://twitter.com/${profile.twitter}`,
-      value: profile.twitter,
-      disabledCondition:
-        !daoInfo.config.ENABLE_HANDLES_EDIT?.includes('twitter'),
-    },
+    // twitter: {
+    //   url: `https://twitter.com/${profile.twitter}`,
+    //   value: profile.twitter,
+    //   disabledCondition:
+    //     !daoInfo.config.ENABLE_HANDLES_EDIT?.includes('twitter'),
+    // },
     thread: {
       url: profile.discussionThread || '',
       value: profile.discussionThread,

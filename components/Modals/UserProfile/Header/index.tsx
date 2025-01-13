@@ -13,7 +13,6 @@ import {
   DiscordIcon,
   ForumIcon,
   ThreadIcon,
-  TwitterIcon,
   WebsiteIcon,
 } from 'components';
 import { AddToRegistryButton } from 'components/DelegateRegistry/AddToRegistryButton';
@@ -47,7 +46,7 @@ const SocialMedias: FC<{
   const { theme, daoData, daoInfo } = useDAO();
   return (
     <Flex flexDir="row" gap="4">
-      {daoInfo.config.SHOULD_NOT_SHOW !== 'handles' && (
+      {/* {daoInfo.config.SHOULD_NOT_SHOW !== 'handles' && (
         <MediaIcon
           profile={profile}
           media="twitter"
@@ -56,7 +55,7 @@ const SocialMedias: FC<{
         >
           <TwitterIcon boxSize={iconSize} color={theme.modal.header.title} />
         </MediaIcon>
-      )}
+      )} */}
       {daoData?.forumTopicURL && (
         <MediaIcon
           profile={profile}
