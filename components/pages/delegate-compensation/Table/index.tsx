@@ -15,12 +15,14 @@ interface TableProps {
   delegates: DelegateCompensationStats[];
   refreshFn: () => Promise<void>;
   isMonthFinished: boolean;
+  isAuthorized: boolean;
 }
 
 export const Table: React.FC<TableProps> = ({
   delegates,
   refreshFn,
   isMonthFinished,
+  isAuthorized,
 }) => {
   const { theme } = useDAO();
 
@@ -154,7 +156,7 @@ export const Table: React.FC<TableProps> = ({
     }),
     columnHelper.accessor('communicatingRationale.score', {
       cell: info => {
-        if (!isMonthFinished) {
+        if (!isMonthFinished && !isAuthorized) {
           return <MonthNotFinishedTooltip />;
         }
         if (info.getValue()) {
@@ -169,7 +171,7 @@ export const Table: React.FC<TableProps> = ({
     }),
     columnHelper.accessor('delegateFeedback.score', {
       cell: info => {
-        if (!isMonthFinished) {
+        if (!isMonthFinished && !isAuthorized) {
           return <MonthNotFinishedTooltip />;
         }
         if (info.getValue()) {
@@ -184,7 +186,7 @@ export const Table: React.FC<TableProps> = ({
     }),
     columnHelper.accessor('totalParticipation', {
       cell: info => {
-        if (!isMonthFinished) {
+        if (!isMonthFinished && !isAuthorized) {
           return <MonthNotFinishedTooltip />;
         }
         if (info.getValue()) {
@@ -199,7 +201,7 @@ export const Table: React.FC<TableProps> = ({
     }),
     columnHelper.accessor('bonusPoint', {
       cell: info => {
-        if (!isMonthFinished) {
+        if (!isMonthFinished && !isAuthorized) {
           return <MonthNotFinishedTooltip />;
         }
         if (info.getValue()) {

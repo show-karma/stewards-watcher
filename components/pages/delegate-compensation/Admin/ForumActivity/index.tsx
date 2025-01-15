@@ -452,13 +452,15 @@ export const DelegateCompensationAdminForumActivity = ({
                       .slice(0, -1)
                       .join('/')}/`;
 
+                    const isValid = post.status === 'valid';
+
                     return (
                       <Tr
                         key={index}
                         w="full"
                         opacity={
                           isAuthorized || isMonthFinished
-                            ? post.status === 'valid'
+                            ? isValid
                               ? 1
                               : 0.75
                             : 1
@@ -532,6 +534,8 @@ export const DelegateCompensationAdminForumActivity = ({
                         </Td>
                         {isAuthorized || isMonthFinished
                           ? columns.map(item => {
+                              const stat =
+                                post?.[item.id as keyof ForumActivityBreakdown];
                               if (item.type === 'read-only' || !isAuthorized) {
                                 if (item.id === 'status') {
                                   return (
@@ -560,10 +564,7 @@ export const DelegateCompensationAdminForumActivity = ({
                                     </Td>
                                   );
                                 }
-                                const stat =
-                                  post?.[
-                                    item.id as keyof ForumActivityBreakdown
-                                  ];
+
                                 return (
                                   <Td
                                     key={item.id + post.id}
@@ -585,7 +586,7 @@ export const DelegateCompensationAdminForumActivity = ({
                                       textAlign="end"
                                       px="1"
                                     >
-                                      {post.status === 'invalid' ? '-' : stat}
+                                      {!isValid ? '-' : stat}
                                     </Text>
                                   </Td>
                                 );
@@ -618,6 +619,35 @@ export const DelegateCompensationAdminForumActivity = ({
                                   </Td>
                                 );
                               }
+                              if (!isValid) {
+                                return (
+                                  <Td
+                                    key={item.id + post.id}
+                                    borderBottom="1px solid"
+                                    borderBottomColor={
+                                      theme.compensation?.card.dropdown
+                                    }
+                                  >
+                                    <Flex align="center" justify="center">
+                                      <Text
+                                        fontSize="20px"
+                                        fontWeight={700}
+                                        color={
+                                          theme.compensation?.card.secondaryText
+                                        }
+                                        lineHeight="32px"
+                                        minW="60px"
+                                        minH="32px"
+                                        bg="transparent"
+                                        textAlign="center"
+                                        px="1"
+                                      >
+                                        {stat}
+                                      </Text>
+                                    </Flex>
+                                  </Td>
+                                );
+                              }
                               return (
                                 <Td
                                   key={item.id + post.id}
@@ -626,54 +656,55 @@ export const DelegateCompensationAdminForumActivity = ({
                                     theme.compensation?.card.dropdown
                                   }
                                 >
-                                  <Editable
-                                    defaultValue={String(
-                                      post?.[
-                                        item.id as keyof ForumActivityBreakdown
-                                      ]
-                                    )}
-                                    maxW="60px"
-                                    w="60px"
-                                  >
-                                    <EditablePreview
-                                      fontSize="20px"
-                                      fontWeight={700}
-                                      color={
-                                        theme.compensation?.card.secondaryText
-                                      }
-                                      lineHeight="32px"
-                                      cursor="pointer"
-                                      textDecor="underline"
-                                      minW="60px"
-                                      minH="32px"
-                                      bg="transparent"
-                                      textAlign="end"
-                                      px="1"
-                                    />
-                                    <EditableInput
-                                      onChange={event => {
-                                        handleInputChange(
-                                          index,
-                                          item.id,
-                                          event.target.value
-                                        );
-                                      }}
-                                      type="number"
-                                      min={0}
-                                      max={4}
-                                      mr={2}
-                                      bg={theme.compensation?.card.bg}
-                                      w="full"
-                                      fontSize="20px"
-                                      fontWeight={700}
-                                      color={
-                                        theme.compensation?.card.secondaryText
-                                      }
-                                      lineHeight="32px"
-                                      px="2"
-                                      textAlign="end"
-                                    />
-                                  </Editable>
+                                  <Flex align="center" justify="center">
+                                    <Editable
+                                      defaultValue={String(
+                                        post?.[
+                                          item.id as keyof ForumActivityBreakdown
+                                        ]
+                                      )}
+                                      maxW="60px"
+                                      w="60px"
+                                    >
+                                      <EditablePreview
+                                        fontSize="20px"
+                                        fontWeight={700}
+                                        color={
+                                          theme.compensation?.card.secondaryText
+                                        }
+                                        lineHeight="32px"
+                                        cursor="pointer"
+                                        textDecor="underline"
+                                        minW="60px"
+                                        minH="32px"
+                                        bg="transparent"
+                                        textAlign="center"
+                                      />
+                                      <EditableInput
+                                        onChange={event => {
+                                          handleInputChange(
+                                            index,
+                                            item.id,
+                                            event.target.value
+                                          );
+                                        }}
+                                        type="number"
+                                        min={0}
+                                        max={4}
+                                        mr={2}
+                                        bg={theme.compensation?.card.bg}
+                                        w="full"
+                                        fontSize="20px"
+                                        fontWeight={700}
+                                        color={
+                                          theme.compensation?.card.secondaryText
+                                        }
+                                        lineHeight="32px"
+                                        px="2"
+                                        textAlign="center"
+                                      />
+                                    </Editable>
+                                  </Flex>
                                 </Td>
                               );
                             })

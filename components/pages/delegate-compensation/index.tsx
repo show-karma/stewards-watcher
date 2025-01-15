@@ -1,6 +1,6 @@
 import { Flex, Spinner, Switch, Text } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
-import { useDAO } from 'contexts';
+import { useAuth, useDAO } from 'contexts';
 import { useDelegateCompensation } from 'contexts/delegateCompensation';
 import { useState } from 'react';
 import { DelegateCompensationStats } from 'types';
@@ -72,6 +72,8 @@ export const DelegateCompensation = () => {
     compensation.compensationDates[
       daoInfo.config.DAO_KARMA_ID as keyof typeof compensation.compensationDates
     ];
+
+  const { isDaoAdmin: isAuthorized } = useAuth();
 
   return (
     <Flex
@@ -159,6 +161,7 @@ export const DelegateCompensation = () => {
               await refetch();
             }}
             isMonthFinished={isMonthFinished}
+            isAuthorized={isAuthorized}
           />
         )}
       </Flex>
