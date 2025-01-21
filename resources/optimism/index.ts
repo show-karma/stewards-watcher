@@ -27,14 +27,14 @@ const config: IDAOConfig = {
   DAO_CHAINS: [optimism],
   DAO_TOKEN_CONTRACT: [
     {
-      contractAddress: '0x4200000000000000000000000000000000000042',
-      method: 'balanceOf',
+      contractAddress: ['0x4200000000000000000000000000000000000042'],
+      method: ['balanceOf'],
       chain: optimism,
     },
   ],
   DAO_DELEGATE_CONTRACT: [
     {
-      contractAddress: '0x4200000000000000000000000000000000000042',
+      contractAddress: ['0x4200000000000000000000000000000000000042'],
       chain: optimism,
     },
   ],

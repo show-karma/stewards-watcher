@@ -32,7 +32,7 @@ const config: IDAOConfig = {
   DAO_CHAINS: [mainnet],
   DAO_DELEGATE_CONTRACT: [
     {
-      contractAddress: '0x469788fe6e9e9681c6ebf3bf78e7fd26fc015446',
+      contractAddress: ['0x469788fe6e9e9681c6ebf3bf78e7fd26fc015446'],
       chain: mainnet,
     },
   ],
@@ -42,8 +42,8 @@ const config: IDAOConfig = {
   DAO_CHECK_DELEGATION_ARGS: [getIdBySnapshotId('starknet.eth')],
   DAO_TOKEN_CONTRACT: [
     {
-      contractAddress: '0xCa14007Eff0dB1f8135f4C25B34De49AB0d42766',
-      method: 'balanceOf',
+      contractAddress: ['0xCa14007Eff0dB1f8135f4C25B34De49AB0d42766'],
+      method: ['balanceOf'],
       chain: mainnet,
     },
   ],
