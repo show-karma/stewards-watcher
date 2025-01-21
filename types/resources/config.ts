@@ -44,16 +44,17 @@ export interface IDAOConfig {
   };
   DAO_CHAINS: Chain[];
   DAO_DELEGATE_CONTRACT?: {
-    contractAddress: `0x${string}`;
+    contractAddress: `0x${string}`[];
     chain: Chain;
-    ABI?: any;
+    ABI?: any[];
+    method?: string[];
   }[];
   DAO_DELEGATION_URL?: string;
   DAO_TOKEN_CONTRACT?: {
-    contractAddress: `0x${string}`;
-    method: string;
+    contractAddress: `0x${string}`[];
+    method: string[];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ABI?: any;
+    ABI?: any[];
     chain: Chain;
   }[];
   DAO_DELEGATE_ACTION?: () => void;

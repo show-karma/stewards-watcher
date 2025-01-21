@@ -24,6 +24,11 @@ interface StepProps {
   walletAddress?: string;
 }
 
+interface TokenSelection {
+  chainId: number;
+  contractAddress: string;
+}
+
 export const MultiChain: React.FC<StepProps> = ({
   handleModal,
   votes,
@@ -32,8 +37,11 @@ export const MultiChain: React.FC<StepProps> = ({
 }) => {
   const { daoInfo, daoData } = useDAO();
   const { config } = daoInfo;
-  const { delegatedBefore } = useGovernanceVotes();
-  const [chainToDelegate, setChainsToDelegate] = useState<number>(0);
+  const { delegatedBefore, symbol, getVotes, getDelegatedBefore } =
+    useGovernanceVotes();
+  const [selectedToken, setSelectedToken] = useState<TokenSelection | null>(
+    null
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [isDelegating, setIsDelegating] = useState(false);
 
@@ -44,8 +52,8 @@ export const MultiChain: React.FC<StepProps> = ({
   const { mixpanel } = useMixpanel();
   const { toast } = useToasty();
 
-  const handleChainToDelegate = (chainId: number) => {
-    setChainsToDelegate(chainId);
+  const handleTokenSelection = (chainId: number, contractAddress: string) => {
+    setSelectedToken({ chainId, contractAddress });
   };
 
   const modalSpacing = {
@@ -55,15 +63,23 @@ export const MultiChain: React.FC<StepProps> = ({
   const { switchNetworkAsync } = useSwitchNetwork();
   const { chain } = useNetwork();
 
-  const delegate = async (chainId: number) => {
+  const delegate = async (chainId: number, contractAddress: string) => {
+    const delegateContract = config.DAO_DELEGATE_CONTRACT?.find(
+      contract => contract.chain.id === chainId
+    );
+
+    if (!delegateContract) {
+      throw new Error('Delegate contract not found');
+    }
+
+    const contractAddressHex = contractAddress as `0x${string}`;
+
     const prepareConfig = await prepareWriteContract({
-      address: config.DAO_DELEGATE_CONTRACT?.find(
-        contract => contract.chain.id === chainId
-      )?.contractAddress as `0x${string}`,
+      address: contractAddressHex,
       functionName: daoInfo.config.DAO_DELEGATE_FUNCTION || 'delegate',
       args: [delegatedUser.address],
       abi: daoInfo.DELEGATE_ABI,
-      chainId: chainToDelegate,
+      chainId,
     });
 
     mixpanel.reportEvent({
@@ -72,19 +88,24 @@ export const MultiChain: React.FC<StepProps> = ({
 
     const { hash } = await writeContract(prepareConfig);
     await waitForTransaction({
-      confirmations: 3,
+      confirmations: 1,
       hash,
-    }).then(() => {
+    }).then(async () => {
       toast({
         title: 'Success',
-        description: `You have successfully delegated to ${delegatedUser.ensName} on ${chain?.name}`,
+        description: `You have successfully delegated to ${
+          delegatedUser.ensName || delegatedUser.address
+        } on ${chain?.name}`,
         status: 'success',
       });
+      handleModal();
+      // Refresh delegated info and votes
+      await getDelegatedBefore();
     });
   };
 
   const multiChainDelegate = async () => {
-    if (!chainToDelegate) return;
+    if (!selectedToken) return;
     try {
       setIsLoading(true);
       setIsDelegating(false);
@@ -105,23 +126,79 @@ export const MultiChain: React.FC<StepProps> = ({
         return;
       }
 
-      if (chain.id !== chainToDelegate) {
-        await switchNetworkAsync?.(chainToDelegate).then(async ({ id }) => {
-          await delegate(id);
-        });
+      if (chain.id !== selectedToken.chainId) {
+        await switchNetworkAsync?.(selectedToken.chainId).then(
+          async ({ id }) => {
+            await delegate(id, selectedToken.contractAddress);
+          }
+        );
         return;
       }
 
       if (!config.DAO_DELEGATE_CONTRACT)
         throw new Error('No DELEGATE_CONTRACT in config');
 
-      await delegate(chain.id);
+      await delegate(selectedToken.chainId, selectedToken.contractAddress);
     } catch (error) {
       console.log(error);
     } finally {
       setIsLoading(false);
     }
   };
+
+  // Group tokens by chain
+  const tokensByChain = config.DAO_TOKEN_CONTRACT?.reduce((acc, contract) => {
+    const chainId = contract.chain.id;
+    const chainTokens: Array<{
+      address: string;
+      symbol: string;
+      value: string;
+      delegatedTo?: string;
+    }> = [];
+
+    contract.contractAddress.forEach(address => {
+      // Get symbol from the symbols state
+      const symbolResult = symbol.find(
+        s => s.chain.id === chainId && s.contractAddress === address
+      );
+
+      // Try to get symbol from the token contract config first
+      const contractConfig = config.DAO_TOKEN_CONTRACT?.find(
+        c => c.chain.id === chainId && c.contractAddress.includes(address)
+      );
+
+      // Get the actual token symbol
+      let tokenSymbol = 'TOKEN';
+      if (symbolResult?.value && typeof symbolResult.value === 'string') {
+        tokenSymbol = symbolResult.value;
+      }
+
+      const tokenVote = votes.find(
+        v => v.chain.id === chainId && v.contractAddress === address
+      );
+      const voteValue = tokenVote?.value || '0';
+
+      const delegatedTo = delegatedBefore.find(
+        d => d.chain.id === chainId && d.contractAddress === address
+      )?.value;
+
+      if (+voteValue > 0) {
+        chainTokens.push({
+          address,
+          symbol: tokenSymbol,
+          value: voteValue,
+          delegatedTo,
+        });
+      }
+    });
+
+    // Only add the chain if it has tokens with balance
+    if (chainTokens.length > 0) {
+      acc[chainId] = chainTokens;
+    }
+
+    return acc;
+  }, {} as Record<number, Array<{ address: string; symbol: string; value: string; delegatedTo?: string }>>);
 
   if (!daoData) return null;
   const { name: daoName, socialLinks } = daoData;
@@ -143,7 +220,7 @@ export const MultiChain: React.FC<StepProps> = ({
           paddingBottom: 7,
         }}
       >
-        {votes.every(vote => !(+vote.value > 0)) ? (
+        {Object.keys(tokensByChain || {}).length === 0 ? (
           <Flex
             background="rgba(244, 171, 104, 0.11)"
             borderRadius="4px"
@@ -230,64 +307,83 @@ export const MultiChain: React.FC<StepProps> = ({
               </Flex>
             </Flex>
           </Flex>
-          <Flex flexDir="column" gap="2" mb="6">
-            {votes
-              .filter(vote => +vote.value !== 0)
-              .map((item, index) => {
-                const before = delegatedBefore.find(
-                  delegated => delegated.chain.id === item.chain.id
-                )?.value;
-                return (
+          <Flex flexDir="column" gap="4" mb="6">
+            {Object.entries(tokensByChain || {}).map(([chainId, tokens]) => (
+              <Flex
+                key={chainId}
+                flexDir="column"
+                gap="2"
+                backgroundColor="gray.50"
+                p="4"
+                borderRadius="lg"
+              >
+                <Flex alignItems="center" gap="2" mb="2">
+                  <Image
+                    src={`/images/chains/${
+                      config.DAO_TOKEN_CONTRACT?.find(
+                        c => c.chain.id === +chainId
+                      )?.chain.network
+                    }.svg`}
+                    alt={
+                      config.DAO_TOKEN_CONTRACT?.find(
+                        c => c.chain.id === +chainId
+                      )?.chain.name
+                    }
+                    boxSize="24px"
+                    borderRadius="full"
+                  />
+                  <Text fontWeight="600">
+                    {
+                      config.DAO_TOKEN_CONTRACT?.find(
+                        c => c.chain.id === +chainId
+                      )?.chain.name
+                    }
+                  </Text>
+                </Flex>
+                {tokens.map(token => (
                   <Flex
+                    key={token.address}
                     flexDir="row"
-                    flexWrap="wrap"
-                    key={+index}
                     alignItems="center"
-                    gap="2"
-                    backgroundColor="gray.100"
-                    px="4"
-                    py="2"
-                    borderRadius="lg"
-                    justifyContent="flex-start"
+                    gap="3"
+                    backgroundColor="white"
+                    p="3"
+                    borderRadius="md"
                   >
                     <Radio
-                      defaultChecked={false}
-                      isChecked={chainToDelegate === item.chain.id}
-                      onChange={() => handleChainToDelegate(item.chain.id)}
+                      isChecked={
+                        selectedToken?.chainId === +chainId &&
+                        selectedToken?.contractAddress === token.address
+                      }
+                      onChange={() =>
+                        handleTokenSelection(+chainId, token.address)
+                      }
                       colorScheme="blue"
-                      backgroundColor="gray.300"
+                      backgroundColor="gray.100"
                     />
-                    <Image
-                      src={`/images/chains/${item.chain.network}.svg`}
-                      alt={item.chain.name}
-                      boxSize="24px"
-                      borderRadius="full"
-                    />
-                    <Text
-                      color="black"
-                      fontStyle="normal"
-                      fontWeight="500"
-                      fontSize="14px"
-                    >
-                      {item.chain.name}: {formatNumber(item.value)}{' '}
-                      {before !== zeroAddress
-                        ? `(currently delegating to: ${truncateAddress(
-                            before
-                          )})`
-                        : ''}
-                    </Text>
+                    <Flex flexDir="column" flex="1">
+                      <Text fontSize="14px" fontWeight="500">
+                        {token.symbol}
+                      </Text>
+                      <Text fontSize="12px" color="gray.600">
+                        Balance: {formatNumber(token.value)}
+                      </Text>
+                    </Flex>
+                    {token.delegatedTo && token.delegatedTo !== zeroAddress && (
+                      <Text fontSize="12px" color="gray.500">
+                        Currently delegated to:{' '}
+                        {truncateAddress(token.delegatedTo)}
+                      </Text>
+                    )}
                   </Flex>
-                );
-              })}
+                ))}
+              </Flex>
+            ))}
           </Flex>
         </Flex>
-        {/* <ModalDelegateButton
-          delegated={delegatedUser.address}
-          votes={votes[0].value}
-        /> */}
         <Button
-          disabled={!chainToDelegate}
-          isDisabled={!chainToDelegate}
+          disabled={!selectedToken}
+          isDisabled={!selectedToken}
           bgColor="black"
           color="white"
           _focus={{ opacity: 0.8 }}

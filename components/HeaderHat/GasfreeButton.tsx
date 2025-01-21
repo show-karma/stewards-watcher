@@ -70,7 +70,7 @@ export const GasfreeButton: React.FC<GasfreeButtonProps> = ({
         setEditSaving(true);
         const payload = await contract.registerDelegateBySig(address as Hex, {
           profile,
-          tokenAddress: DAO_DELEGATE_CONTRACT[0].contractAddress,
+          tokenAddress: DAO_DELEGATE_CONTRACT[0].contractAddress[0],
           tokenChainId: NETWORK,
         });
 

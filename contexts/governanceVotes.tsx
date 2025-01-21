@@ -1,16 +1,17 @@
 import React, {
-  useContext,
   createContext,
+  useContext,
+  useEffect,
   useMemo,
   useState,
-  useEffect,
 } from 'react';
-import { Chain } from 'wagmi';
+import { Chain, erc20ABI } from 'wagmi';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { readContracts, readContract } from '@wagmi/core';
-import { formatEther } from 'utils';
-import { BigNumber } from 'ethers';
+import { readContract } from '@wagmi/core';
+import { BigNumber, ethers } from 'ethers';
 import { Hex, IBalanceOverview, MultiChainResult } from 'types';
+import { formatEther } from 'utils';
+import { zeroAddress } from 'viem';
 import { useDAO } from './dao';
 import { useWallet } from './wallet';
 
@@ -22,6 +23,7 @@ interface IGovernanceVotesProps {
   symbol: MultiChainResult[];
   walletAddress?: string;
   getVotes: () => Promise<void>;
+  getDelegatedBefore: () => Promise<void>;
   loadedVotes: boolean;
 }
 
@@ -53,14 +55,16 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
 
   const groupContractsByChain = daoInfo.config.DAO_TOKEN_CONTRACT?.reduce(
     (acc, contract) => {
-      if (!acc[contract.chain.id]) acc[contract.chain.id] = [];
-      acc[contract.chain.id].push(contract);
+      const chainId = contract.chain.id.toString();
+      if (!acc[chainId]) acc[chainId] = [];
+      acc[chainId].push(contract);
       return acc;
     },
-    {} as Record<string, any[]>
+    {} as Record<string, typeof daoInfo.config.DAO_TOKEN_CONTRACT>
   );
+
   const chainKeys = groupContractsByChain
-    ? Object.keys(groupContractsByChain as object)
+    ? Object.keys(groupContractsByChain)
     : null;
 
   const getVotes = async () => {
@@ -71,47 +75,134 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
         throw new Error(`No Token contract found`);
       if (!chainKeys) throw new Error(`No chain keys found`);
 
+      // Clear previous symbols
+      setSymbol([]);
+
+      // First, collect all symbols
+      let symbolsToSet: MultiChainResult[] = [];
+
       const multiChainAmounts = await Promise.all(
-        chainKeys.map(async key => {
-          const data = await readContracts({
-            contracts: groupContractsByChain[key].map(contract => ({
-              address: contract.contractAddress,
-              abi: contract.ABI || daoInfo.TOKEN_ABI,
-              functionName: contract.method,
-              args: walletAddress ? [walletAddress] : undefined,
-              chainId: contract.chain.id,
-            })),
+        chainKeys.map(async chainId => {
+          const contracts = groupContractsByChain[chainId];
+          const chain = contracts[0].chain as Chain;
+
+          // Get votes and symbols in parallel for all contracts on this chain
+          const [balanceResults, _] = await Promise.all([
+            Promise.all(
+              contracts.flatMap(contract =>
+                contract.contractAddress.map(async address => {
+                  const args = walletAddress ? [walletAddress] : [];
+                  const balance = await readContract({
+                    address: address as Hex,
+                    abi: contract.ABI || daoInfo.TOKEN_ABI,
+                    functionName: contract.method[0],
+                    args,
+                    chainId: contract.chain.id,
+                  });
+                  const fromWeiAmount = balance
+                    ? formatEther(BigNumber.from(balance))
+                    : '0';
+                  return {
+                    chain,
+                    value: fromWeiAmount,
+                    contractAddress: address,
+                  } as MultiChainResult;
+                })
+              )
+            ),
+            Promise.all(
+              contracts.flatMap(contract =>
+                contract.contractAddress.map(async address => {
+                  try {
+                    // First try with the token's own ABI
+                    const symbolValue = await readContract({
+                      address: address as Hex,
+                      abi: contract.ABI || daoInfo.TOKEN_ABI,
+                      functionName: 'symbol',
+                      args: [],
+                      chainId: contract.chain.id,
+                    });
+
+                    symbolsToSet = [
+                      ...symbolsToSet,
+                      {
+                        chain,
+                        value: String(symbolValue),
+                        contractAddress: address,
+                      },
+                    ];
+                  } catch (error) {
+                    // Try with standard ERC20 ABI if the first attempt fails
+                    try {
+                      const symbolValue = await readContract({
+                        address: address as Hex,
+                        abi: erc20ABI,
+                        functionName: 'symbol',
+                        args: undefined,
+                        chainId: contract.chain.id,
+                      });
+                      symbolsToSet = [
+                        ...symbolsToSet,
+                        {
+                          chain,
+                          value: String(symbolValue),
+                          contractAddress: address,
+                        },
+                      ];
+                    } catch (err) {
+                      console.error('Error fetching symbol for', address, err);
+                      symbolsToSet = [
+                        ...symbolsToSet,
+                        {
+                          chain,
+                          value: 'TOKEN',
+                          contractAddress: address,
+                        },
+                      ];
+                    }
+                  }
+                })
+              )
+            ),
+          ]);
+
+          // Update total token balance
+          const totalAmount = balanceResults.reduce((acc, balance) => {
+            if (balance.value) {
+              return acc.add(
+                BigNumber.from(ethers.utils.parseEther(balance.value))
+              );
+            }
+            return acc;
+          }, BigNumber.from('0'));
+
+          setTokenBalance(prev => {
+            const currentBalance = BigNumber.from(
+              ethers.utils.parseEther(prev || '0')
+            );
+            return formatEther(currentBalance.add(totalAmount));
           });
-
-          const amountsBN = data.map(amount => {
-            if (amount && amount.result)
-              return BigNumber.from(amount.result).toString();
-            return '0';
-          });
-          const chain = daoInfo.config.DAO_TOKEN_CONTRACT?.find(
-            contract => contract.chain.id === +key
-          )?.chain as Chain;
-
-          const sumBNs = amountsBN.reduce(
-            (acc, amount) => acc.add(BigNumber.from(amount)),
-            BigNumber.from('0')
-          );
-
-          const fromWeiAmount = formatEther(sumBNs.toString());
-          setTokenBalance(fromWeiAmount);
 
           if (daoInfo.config.GET_LOCKED_TOKENS_ACTION) {
             const { GET_LOCKED_TOKENS_ACTION: getLocked } = daoInfo.config;
             const lockedVotes = await getLocked(walletAddress as Hex);
-            return { chain, value: (+fromWeiAmount + +lockedVotes).toString() };
+            // Add locked votes to each token balance
+            return balanceResults.map(balance => ({
+              ...balance,
+              value: (+balance.value + +lockedVotes).toString(),
+            }));
           }
 
-          return { chain, value: fromWeiAmount };
+          return balanceResults;
         })
       );
 
-      setVotes(multiChainAmounts);
-    } catch {
+      // Update symbols state with all collected symbols
+      setSymbol(symbolsToSet);
+
+      // Flatten the array since we now have multiple tokens per chain
+      setVotes(multiChainAmounts.flat());
+    } catch (error) {
       setVotes([]);
     } finally {
       setLoadedVotes(true);
@@ -140,10 +231,10 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
       if (!daoInfo.config.DAO_DELEGATE_CONTRACT || !groupContractsByChain)
         return;
 
-      const promises = daoInfo.config.DAO_DELEGATE_CONTRACT.map(
-        async contract => {
+      const promises = daoInfo.config.DAO_DELEGATE_CONTRACT.flatMap(contract =>
+        contract.contractAddress.map(async address => {
           const result = await readContract({
-            address: contract.contractAddress,
+            address: address as Hex,
             abi: daoInfo.DELEGATE_ABI,
             functionName:
               daoInfo.config.DAO_CHECK_DELEGATION_FUNCTION || 'delegates',
@@ -151,9 +242,13 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
               ? [walletAddress].concat(daoInfo.config.DAO_CHECK_DELEGATION_ARGS)
               : [walletAddress],
             chainId: contract.chain.id,
-          });
-          return { chain: contract.chain, value: result };
-        }
+          }).catch(() => zeroAddress);
+          return {
+            chain: contract.chain,
+            value: result as string,
+            contractAddress: address,
+          } as MultiChainResult;
+        })
       );
       const promisedResults = await Promise.all(promises);
       setDelegatedBefore(promisedResults);
@@ -173,16 +268,24 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
     try {
       if (!daoInfo.config.DAO_TOKEN_CONTRACT || !groupContractsByChain) return;
 
-      const promises = daoInfo.config.DAO_TOKEN_CONTRACT.map(async contract => {
-        const result = await readContract({
-          address: contract.contractAddress,
-          abi: daoInfo.TOKEN_ABI,
-          functionName: 'symbol',
-          args: [],
-          chainId: contract.chain.id,
-        }).then(value => value);
-        return { chain: contract.chain, value: result };
-      });
+      const promises = daoInfo.config.DAO_TOKEN_CONTRACT.flatMap(contract =>
+        contract.contractAddress.map(async address => {
+          const result = await readContract({
+            address: address as Hex,
+            abi: daoInfo.TOKEN_ABI,
+            functionName: 'symbol',
+            args: [],
+            chainId: contract.chain.id,
+          })
+            .then(value => value)
+            .catch(() => undefined);
+          return {
+            chain: contract.chain,
+            value: result || address,
+            contractAddress: address,
+          } as MultiChainResult;
+        })
+      );
 
       const promisedResults = await Promise.all(promises);
       setSymbol(promisedResults);
@@ -207,6 +310,7 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
       walletAddress,
       getVotes,
       loadedVotes,
+      getDelegatedBefore,
     }),
     [
       votes,
@@ -218,6 +322,7 @@ export const GovernanceVotesProvider: React.FC<ProviderProps> = ({
       walletAddress,
       getVotes,
       loadedVotes,
+      getDelegatedBefore,
     ]
   );
 
