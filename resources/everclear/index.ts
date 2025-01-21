@@ -2,6 +2,7 @@ import { IDAOConfig, IDAOTheme } from 'types';
 import { customGnosis } from 'utils/customChains';
 import { arbitrum, bsc, mainnet, optimism, polygon } from 'wagmi/chains';
 // import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
+import { customEverclear } from 'utils/customChains/everclear';
 import { publicProvider } from 'wagmi/providers/public';
 import ABI from './ABI.json';
 
@@ -24,62 +25,90 @@ const config: IDAOConfig = {
     FAVICON: '/daos/everclear/favicon.png',
     URL: `https://delegate.connext.network`,
   },
-  DAO_CHAINS: [mainnet, arbitrum, optimism, polygon, customGnosis, bsc],
+  DAO_CHAINS: [
+    mainnet,
+    arbitrum,
+    optimism,
+    polygon,
+    customGnosis,
+    bsc,
+    customEverclear,
+  ],
   DAO_TOKEN_CONTRACT: [
     {
-      contractAddress: '0xFE67A4450907459c3e1FFf623aA927dD4e28c67a',
-      method: 'balanceOf',
+      contractAddress: [
+        '0xFE67A4450907459c3e1FFf623aA927dD4e28c67a',
+        '0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8',
+      ],
+      method: ['balanceOf'],
       chain: mainnet,
     },
     {
-      contractAddress: '0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8',
-      method: 'balanceOf',
+      contractAddress: ['0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8'],
+      method: ['balanceOf'],
+      chain: customEverclear,
+    },
+    // {
+    //   contractAddress: ['0x1150F8902f051258A584897125269034f0246310'],
+    //   method: ['balanceOf'],
+    //   chain: customEverclear,
+    // },
+    {
+      contractAddress: ['0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8'],
+      method: ['balanceOf'],
       chain: arbitrum,
     },
     {
-      contractAddress: '0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8',
-      method: 'balanceOf',
+      contractAddress: ['0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8'],
+      method: ['balanceOf'],
       chain: optimism,
     },
     {
-      contractAddress: '0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8',
-      method: 'balanceOf',
+      contractAddress: ['0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8'],
+      method: ['balanceOf'],
       chain: polygon,
     },
     {
-      contractAddress: '0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8',
-      method: 'balanceOf',
+      contractAddress: ['0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8'],
+      method: ['balanceOf'],
       chain: customGnosis,
     },
     {
-      contractAddress: '0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8',
-      method: 'balanceOf',
+      contractAddress: ['0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8'],
+      method: ['balanceOf'],
       chain: bsc,
     },
   ],
   DAO_DELEGATE_CONTRACT: [
     {
-      contractAddress: '0xFE67A4450907459c3e1FFf623aA927dD4e28c67a',
+      contractAddress: [
+        '0xFE67A4450907459c3e1FFf623aA927dD4e28c67a',
+        '0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8',
+      ],
       chain: mainnet,
     },
     {
-      contractAddress: '0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8',
+      contractAddress: ['0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8'],
+      chain: customEverclear,
+    },
+    {
+      contractAddress: ['0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8'],
       chain: arbitrum,
     },
     {
-      contractAddress: '0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8',
+      contractAddress: ['0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8'],
       chain: optimism,
     },
     {
-      contractAddress: '0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8',
+      contractAddress: ['0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8'],
       chain: polygon,
     },
     {
-      contractAddress: '0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8',
+      contractAddress: ['0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8'],
       chain: customGnosis,
     },
     {
-      contractAddress: '0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8',
+      contractAddress: ['0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8'],
       chain: bsc,
     },
   ],

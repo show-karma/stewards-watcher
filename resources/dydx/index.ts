@@ -23,14 +23,14 @@ const config: IDAOConfig = {
   DAO_CHAINS: [mainnet],
   DAO_TOKEN_CONTRACT: [
     {
-      contractAddress: '0x92D6C1e31e14520e676a687F0a93788B716BEff5',
-      method: 'balanceOf',
+      contractAddress: ['0x92D6C1e31e14520e676a687F0a93788B716BEff5'],
+      method: ['balanceOf'],
       chain: mainnet,
     },
   ],
   DAO_DELEGATE_CONTRACT: [
     {
-      contractAddress: '0x92D6C1e31e14520e676a687F0a93788B716BEff5',
+      contractAddress: ['0x92D6C1e31e14520e676a687F0a93788B716BEff5'],
       chain: mainnet,
     },
   ],

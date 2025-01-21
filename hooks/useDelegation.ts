@@ -5,7 +5,7 @@ import { useMixpanel } from './useMixpanel';
 import { useToasty } from './useToasty';
 
 export const useDelegation = (args: IDelegation) => {
-  const { delegatee, onSuccessFunction } = args;
+  const { delegatee, onSuccessFunction, chosenContract } = args;
   const { daoInfo } = useDAO();
 
   const getArgs = () => {
@@ -19,9 +19,11 @@ export const useDelegation = (args: IDelegation) => {
   const { chain } = useNetwork();
 
   const { config } = usePrepareContractWrite({
-    address: daoInfo.config.DAO_DELEGATE_CONTRACT?.find(
-      contract => contract.chain.id === (args.network || chain?.id)
-    )?.contractAddress,
+    address:
+      chosenContract ||
+      daoInfo.config.DAO_DELEGATE_CONTRACT?.find(
+        contract => contract.chain.id === (args.network || chain?.id)
+      )?.contractAddress[0],
     abi: daoInfo.DELEGATE_ABI,
     functionName: daoInfo.config.DAO_DELEGATE_FUNCTION || 'delegate',
     args: getArgs(),

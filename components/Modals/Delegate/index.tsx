@@ -1,14 +1,14 @@
+import { useDAO, useGovernanceVotes } from 'contexts';
 import React, { useState } from 'react';
 import { IDelegate } from 'types';
-import { useDAO, useGovernanceVotes } from 'contexts';
 
 import { Modal, ModalContent, ModalOverlay } from '@chakra-ui/react';
 import { ESteps } from './ESteps';
+import { MultiChain } from './Multichain';
 import { Step1 } from './Step1';
 import { Step2 } from './Step2';
-import { TrackDelegation } from './TrackDelegation';
-import { MultiChain } from './Multichain';
 import { StepChange } from './StepChange';
+import { TrackDelegation } from './TrackDelegation';
 
 interface IModal {
   open: boolean;
@@ -48,7 +48,11 @@ export const DelegateModal: React.FC<IModal> = ({
     if (step === ESteps.DONE)
       return <Step2 handleModal={closeModal} delegatedUser={delegateData} />;
 
-    if (daoInfo.config.DAO_CHAINS.length > 1) {
+    const isMultiTokens = daoInfo.config.DAO_DELEGATE_CONTRACT?.some(
+      contract => contract.contractAddress.length > 1
+    );
+
+    if (daoInfo.config.DAO_CHAINS.length > 1 || isMultiTokens) {
       return (
         <MultiChain
           handleModal={closeModal}

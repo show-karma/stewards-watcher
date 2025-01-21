@@ -1,8 +1,8 @@
 import { Button, Flex, Spinner, Text } from '@chakra-ui/react';
-import React, { useMemo, useState } from 'react';
-import { VotingReasonPayload } from 'utils/voting-reason/save-voting-reason';
 import { useDAO } from 'contexts';
 import { useToasty } from 'hooks';
+import React, { useMemo, useState } from 'react';
+import { VotingReasonPayload } from 'utils/voting-reason/save-voting-reason';
 
 export interface VotingReasonFormProps {
   proposalId: string;
@@ -30,7 +30,7 @@ export const VotingReasonForm: React.FC<VotingReasonFormProps> = ({
   const { toast } = useToasty();
 
   const [form, setForm] = useState<VotingReasonPayload>({
-    daoName: `${DAO_TOKEN_CONTRACT?.[0]?.contractAddress}_${DAO_TOKEN_CONTRACT?.[0]?.chain.id}`,
+    daoName: `${DAO_TOKEN_CONTRACT?.[0]?.contractAddress[0]}_${DAO_TOKEN_CONTRACT?.[0]?.chain.id}`,
     delegateAddress,
     proposalId,
     source,

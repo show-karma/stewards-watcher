@@ -29,14 +29,14 @@ const config: IDAOConfig = {
   },
   DAO_TOKEN_CONTRACT: [
     {
-      contractAddress: '0x912ce59144191c1204e64559fe8253a0e49e6548',
-      method: 'balanceOf',
+      contractAddress: ['0x912ce59144191c1204e64559fe8253a0e49e6548'],
+      method: ['balanceOf'],
       chain: arbitrum,
     },
   ],
   DAO_DELEGATE_CONTRACT: [
     {
-      contractAddress: '0x912ce59144191c1204e64559fe8253a0e49e6548',
+      contractAddress: ['0x912ce59144191c1204e64559fe8253a0e49e6548'],
       chain: arbitrum,
     },
   ],

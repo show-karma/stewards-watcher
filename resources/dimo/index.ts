@@ -21,14 +21,14 @@ const config: IDAOConfig = {
   DAO_CHAINS: [polygon],
   DAO_TOKEN_CONTRACT: [
     {
-      contractAddress: '0xE261D618a959aFfFd53168Cd07D12E37B26761db',
-      method: 'balanceOf',
+      contractAddress: ['0xE261D618a959aFfFd53168Cd07D12E37B26761db'],
+      method: ['balanceOf'],
       chain: polygon,
     },
   ],
   DAO_DELEGATE_CONTRACT: [
     {
-      contractAddress: '0xE261D618a959aFfFd53168Cd07D12E37B26761db',
+      contractAddress: ['0xE261D618a959aFfFd53168Cd07D12E37B26761db'],
       chain: polygon,
     },
   ],

@@ -1,4 +1,5 @@
 import { IDAOInfo } from 'types';
+import { erc20ABI } from 'wagmi';
 import aave from './aave';
 import apecoin from './apecoin';
 import arbitrum from './arbitrum';
@@ -66,7 +67,7 @@ export const supportedDAOs: ISupportedDAOs = {
     light: everclear.light,
     dark: everclear.dark,
     DELEGATE_ABI: everclear.ABI,
-    TOKEN_ABI: everclear.ABI,
+    TOKEN_ABI: erc20ABI,
   },
   aave: {
     config: aave.config,

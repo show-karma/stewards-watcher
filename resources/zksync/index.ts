@@ -28,14 +28,14 @@ const config: IDAOConfig = {
   },
   DAO_TOKEN_CONTRACT: [
     {
-      contractAddress: '0x5A7d6b2F92C77FAD6CCaBd7EE0624E64907Eaf3E',
-      method: 'balanceOf',
+      contractAddress: ['0x5A7d6b2F92C77FAD6CCaBd7EE0624E64907Eaf3E'],
+      method: ['balanceOf'],
       chain: zkSync,
     },
   ],
   DAO_DELEGATE_CONTRACT: [
     {
-      contractAddress: '0x5A7d6b2F92C77FAD6CCaBd7EE0624E64907Eaf3E',
+      contractAddress: ['0x5A7d6b2F92C77FAD6CCaBd7EE0624E64907Eaf3E'],
       chain: zkSync,
     },
   ],

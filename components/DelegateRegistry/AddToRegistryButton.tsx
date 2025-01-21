@@ -18,11 +18,11 @@ import {
 } from 'types/delegate-regsitry/IDelegateRegistryStats';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { writeContract } from '@wagmi/core';
+import { useToasty } from 'hooks';
+import { startCase } from 'lodash';
 import ABI from 'utils/delegate-registry/ABI-STATS.json';
 import { Hex, createPublicClient, http } from 'viem';
 import { optimism, optimismGoerli } from 'viem/chains';
-import { startCase } from 'lodash';
-import { useToasty } from 'hooks';
 import { useSwitchNetwork } from 'wagmi';
 
 const buttonStyle = {
@@ -151,9 +151,7 @@ export const AddToRegistryButton: React.FC<Props> = ({ profile }) => {
     () =>
       isDelegateInRegistry &&
       isCurrentProfile &&
-      DAO_TOKEN_CONTRACT &&
-      DAO_TOKEN_CONTRACT?.length > 0 &&
-      DAO_TOKEN_CONTRACT[0]?.contractAddress?.length > 0 &&
+      DAO_TOKEN_CONTRACT?.some(contract => contract.contractAddress?.length) &&
       registryStats,
     [DAO_TOKEN_CONTRACT, registryStats, isDelegateInRegistry, isCurrentProfile]
   );
@@ -163,7 +161,7 @@ export const AddToRegistryButton: React.FC<Props> = ({ profile }) => {
 
     const args = [
       profile.address,
-      DAO_TOKEN_CONTRACT?.[0].contractAddress,
+      DAO_TOKEN_CONTRACT?.[0].contractAddress[0],
       DAO_TOKEN_CONTRACT?.[0].chain.id,
     ];
 
@@ -193,7 +191,7 @@ export const AddToRegistryButton: React.FC<Props> = ({ profile }) => {
       setIsLoading(true);
       const args = [
         registryStats,
-        DAO_TOKEN_CONTRACT?.[0].contractAddress,
+        DAO_TOKEN_CONTRACT?.[0].contractAddress[0],
         DAO_TOKEN_CONTRACT?.[0].chain.id,
       ];
 

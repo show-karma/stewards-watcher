@@ -10,4 +10,8 @@ export type IVoteBreakdown = {
   contrarionIndex: number;
 };
 
-export type MultiChainResult = { chain: Chain; value: any };
+export type MultiChainResult = {
+  chain: Chain;
+  value: string;
+  contractAddress?: string;
+};
