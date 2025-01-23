@@ -20,7 +20,7 @@ export const compensation: ICompensationDates = {
       OLD_VERSION_MIN: new Date('2024-02-11'),
       OLD_VERSION_MAX: new Date('2024-10-10'),
       NEW_VERSION_MIN: new Date('2024-10-11'),
-      NEW_VERSION_MAX: new Date('2024-12-10'),
+      NEW_VERSION_MAX: new Date('2025-01-10'),
     },
     zksync: {
       NEW_VERSION_MIN: new Date('2024-12-31'),
