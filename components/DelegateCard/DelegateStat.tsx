@@ -6,7 +6,8 @@ import { ICardStat } from 'types';
 export const DelegateStat: FC<{
   stat: ICardStat;
   disableTooltip?: boolean;
-}> = ({ stat, disableTooltip }) => {
+  underline?: boolean;
+}> = ({ stat, disableTooltip, underline }) => {
   const { theme } = useDAO();
   return (
     <Tooltip
@@ -47,6 +48,7 @@ export const DelegateStat: FC<{
           h="max-content"
           w="full"
           maxW="max-content"
+          textDecoration={underline ? 'underline' : 'none'}
         >
           {stat.title}
         </Text>
