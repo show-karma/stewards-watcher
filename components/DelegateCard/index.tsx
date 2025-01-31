@@ -139,7 +139,7 @@ const StatCases: FC<IStatCasesProps> = ({
         _hover={{}}
         h="max-content"
       >
-        <DelegateStat stat={statItem} />
+        <DelegateStat stat={statItem} underline={canShowBreakdown} />
       </Box>
     );
 
@@ -896,7 +896,7 @@ export const DelegateCard: FC<IDelegateCardProps> = props => {
                                 key={itemIndex}
                                 statItem={statItem}
                                 canShowBreakdown={
-                                  !!data?.discourseHandle &&
+                                  !!data?.forumActivity &&
                                   !!daoData?.socialLinks.forum &&
                                   !!config.DAO_FORUM_TYPE
                                 }
